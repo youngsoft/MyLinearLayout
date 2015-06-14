@@ -9,6 +9,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MyLayout.h"
 
 
 
@@ -68,20 +69,13 @@ typedef enum : NSUInteger {
  
  注意：如果使用这个类请关闭XIB中的自动布局功能。或者父视图的自动布局功能。
  */
-@interface MyLinearLayout : UIView
+@interface MyLinearLayout : MyLayout
 
 //方向，默认是纵向的
 @property(nonatomic,assign) LineViewOrientation orientation;
 
 //所谓对齐方式就是布局方向的另外一边的对齐形式，如果是垂直布局则是默认和左中右对齐，如果是水平布局则是默认和上中下对齐，这里的默认是指不调整子视图的原来的非布局方向的位置。
 @property(nonatomic,assign) LineViewAlign align;  //布局时的对齐方式默认是不处理:LVALIGN_DEFAULT
-
-@property(nonatomic,assign) UIEdgeInsets padding;  //用来描述里面的子视图的离自己的边距，默认上下左右都是0
-//这个是上面属性的简化设置版本。
-@property(nonatomic, assign) CGFloat topPadding;
-@property(nonatomic, assign) CGFloat leftPadding;
-@property(nonatomic, assign) CGFloat bottomPadding;
-@property(nonatomic, assign) CGFloat rightPadding;
 
 
 //本视图的非布局方向的尺寸是否跟子视图里面最大尺寸保持一致。默认是NO,假如是垂直布局则表示宽度是否和子视图里面最宽的子视图的宽度保持一致。
@@ -109,14 +103,6 @@ typedef enum : NSUInteger {
 
 
 
-//布局时是否调用基类的布局方法，这个属性设置的作用体现在当自身的高度或者宽度调整时而且里面的子视图又设置了autoresizingMask时
-//优先进行子视图的位置和高度宽度的拉升缩放，属性默认是NO
-@property(nonatomic, assign) BOOL priorAutoresizingMask;
-
-
-//设置自动布局前后的处理块，主要用于动画处理，可以在这两个函数中添加动画的代码。,如果为nil
-@property(nonatomic,copy) void (^beginLayoutBlock)();
-@property(nonatomic,copy) void (^endLayoutBlock)();
 
 
 

@@ -110,47 +110,18 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
 
 
 @implementation MyLinearLayout
-{
-    BOOL _isLayouting;   //防止递归调用
-}
+
 
 -(void)construct
 {
-   // self.backgroundColor = [UIColor clearColor];
+    [super construct];
     _orientation = LVORIENTATION_VERT;
-    _isLayouting = NO;
     _adjustScrollViewContentSize = NO;
     _autoAdjustSize = YES;
     _gravity = LVALIGN_DEFAULT;
     _autoAdjustDir = LVAUTOADJUSTDIR_TAIL;
     _align = LVALIGN_DEFAULT;
-    _padding = UIEdgeInsetsZero;
     _wrapContent = NO;
-    _priorAutoresizingMask = NO;
-    self.backgroundColor = [UIColor clearColor];
-    _beginLayoutBlock = nil;
-    _endLayoutBlock = nil;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    if (self)
-    {
-        [self construct];
-    }
-    return self;
-}
-
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-        [self construct];
-    }
-    return self;
 }
 
 
@@ -211,55 +182,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
     }
 }
 
--(void)setPadding:(UIEdgeInsets)padding
-{
-    if (!UIEdgeInsetsEqualToEdgeInsets(_padding, padding))
-    {
-        _padding = padding;
-        [self setNeedsLayout];
-    }
-}
-
--(void)setLeftPadding:(CGFloat)leftPadding
-{
-   [self setPadding:UIEdgeInsetsMake(_padding.top, leftPadding, _padding.bottom,_padding.right)];
-}
-
--(CGFloat)leftPadding
-{
-    return _padding.left;
-}
-
--(void)setTopPadding:(CGFloat)topPadding
-{
-    [self setPadding:UIEdgeInsetsMake(topPadding, _padding.left, _padding.bottom,_padding.right)];
-}
-
--(CGFloat)topPadding
-{
-    return _padding.top;
-}
-
--(void)setRightPadding:(CGFloat)rightPadding
-{
-    [self setPadding:UIEdgeInsetsMake(_padding.top, _padding.left, _padding.bottom,rightPadding)];
-}
-
--(CGFloat)rightPadding
-{
-    return _padding.right;
-}
-
--(void)setBottomPadding:(CGFloat)bottomPadding
-{
-    [self setPadding:UIEdgeInsetsMake(_padding.top, _padding.left, bottomPadding,_padding.right)];
-}
-
--(CGFloat)bottomPadding
-{
-    return _padding.bottom;
-}
-
 
 
 
@@ -272,42 +194,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
 }
 */
 
-#pragma mark -- KVO
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(UIView*)object change:(NSDictionary *)change context:(void *)context
-{
-    if (!_isLayouting && [self.subviews containsObject:object])
-    {
-        [self setNeedsLayout];
-    }
-}
-
-
-- (void)didAddSubview:(UIView *)subview
-{
-    [super didAddSubview:subview];   //只要加入进来后就修改其默认的实现，而改用我们的实现，这里包括隐藏,调整大小，
-    
-    //添加hidden, frame, bounds, center的属性通知。
-    [subview addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
-    [subview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-    [subview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
-    [subview addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:nil];
-
-    
-    [self setNeedsLayout];
-}
-
-- (void)willRemoveSubview:(UIView *)subview
-{
-    [super willRemoveSubview:subview];  //删除后恢复其原来的实现。
-    
-    [subview removeObserver:self forKeyPath:@"hidden"];
-    [subview removeObserver:self forKeyPath:@"frame"];
-    [subview removeObserver:self forKeyPath:@"bounds"];
-    [subview removeObserver:self forKeyPath:@"center"];
-    
-    [self setNeedsLayout];
-}
 
 
 -(void)layoutSubviewsForVert
@@ -349,21 +235,21 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
     
     
     //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
-    floatingHeight = selfHeight - fixedHeight - _padding.top - _padding.bottom;
+    floatingHeight = selfHeight - fixedHeight - self.padding.top - self.padding.bottom;
     if (floatingHeight <= 0 || floatingHeight == -0.0)
         floatingHeight = 0;
     
     
     if (self.wrapContent)
     {
-        selfWidth = maxSubViewWidth + _padding.left + _padding.right;
+        selfWidth = maxSubViewWidth + self.padding.left + self.padding.right;
         CGRect rectSelf = self.frame;
         rectSelf.size.width = selfWidth;
         self.frame = rectSelf;
     }
     
 
-    CGFloat pos = _padding.top;
+    CGFloat pos = self.padding.top;
     for (int i = 0; i < sbs.count; i++) {
         
         UIView *v = [sbs objectAtIndex:i];
@@ -389,32 +275,32 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
             {
                 if (v.matchParent < 0)
                 {
-                    rect.size.width = selfWidth + 2 * v.matchParent - _padding.left - _padding.right;
+                    rect.size.width = selfWidth + 2 * v.matchParent - self.padding.left - self.padding.right;
                 }
                 else
                 {
-                    rect.size.width = selfWidth * v.matchParent - _padding.left - _padding.right;
+                    rect.size.width = selfWidth * v.matchParent - self.padding.left - self.padding.right;
                 }
                 
-                rect.origin.x = (selfWidth - rect.size.width - _padding.left - _padding.right)/2;
+                rect.origin.x = (selfWidth - rect.size.width - self.padding.left - self.padding.right)/2;
             }
             
             
             if (_align == LVALIGN_CENTER)
             {
-                rect.origin.x = (selfWidth - rect.size.width - _padding.left - _padding.right)/2.0 + _padding.left;
+                rect.origin.x = (selfWidth - rect.size.width - self.padding.left - self.padding.right)/2.0 + self.padding.left;
             }
             else if (_align == LVALIGN_LEFT)
             {
-                rect.origin.x =  _padding.left;
+                rect.origin.x =  self.padding.left;
             }
             else if (_align == LVALIGN_RIGHT)
             {
-                rect.origin.x = selfWidth - _padding.right - rect.size.width;
+                rect.origin.x = selfWidth - self.padding.right - rect.size.width;
             }
             else
             {
-                rect.origin.x += _padding.left;
+                rect.origin.x += self.padding.left;
             }
             
             v.frame = rect;
@@ -428,31 +314,31 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
             {
                 if (v.matchParent < 0)
                 {
-                    rect.size.width = selfWidth + 2 * v.matchParent - _padding.left - _padding.right;
+                    rect.size.width = selfWidth + 2 * v.matchParent - self.padding.left - self.padding.right;
                 }
                 else
                 {
-                    rect.size.width = selfWidth * v.matchParent - _padding.left - _padding.right;
+                    rect.size.width = selfWidth * v.matchParent - self.padding.left - self.padding.right;
                 }
                 
-                rect.origin.x = (selfWidth - rect.size.width - _padding.left - _padding.right)/2;
+                rect.origin.x = (selfWidth - rect.size.width - self.padding.left - self.padding.right)/2;
             }
             
             if (_align == LVALIGN_CENTER)
             {
-                rect.origin.x = (selfWidth - rect.size.width - _padding.left - _padding.right)/2.0 + _padding.left;
+                rect.origin.x = (selfWidth - rect.size.width - self.padding.left - self.padding.right)/2.0 + self.padding.left;
             }
             else if (_align == LVALIGN_LEFT)
             {
-                rect.origin.x =  _padding.left;
+                rect.origin.x =  self.padding.left;
             }
             else if (_align == LVALIGN_RIGHT)
             {
-                rect.origin.x = selfWidth - _padding.right - rect.size.width;
+                rect.origin.x = selfWidth - self.padding.right - rect.size.width;
             }
             else
             {
-                rect.origin.x += _padding.left;
+                rect.origin.x += self.padding.left;
             }
 
             
@@ -464,7 +350,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
         pos += v.tailMargin;
     }
     
-    pos += _padding.bottom;
+    pos += self.padding.bottom;
     
     if (self.autoAdjustSize)
     {
@@ -530,21 +416,21 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
     }
     
     //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
-    floatingWidth = selfWidth - fixedWidth - _padding.left - _padding.right;
+    floatingWidth = selfWidth - fixedWidth - self.padding.left - self.padding.right;
     if (floatingWidth <= 0 || floatingWidth == -0.0)
         floatingWidth = 0;
     
     //调整自己的高度
     if (self.wrapContent)
     {
-        selfHeight = maxSubViewHeight + _padding.top + _padding.bottom;
+        selfHeight = maxSubViewHeight + self.padding.top + self.padding.bottom;
         CGRect rectSelf = self.frame;
         rectSelf.size.height = selfHeight;
         self.frame = rectSelf;
     }
     
     
-    CGFloat pos = _padding.left;
+    CGFloat pos = self.padding.left;
     
     for (int i = 0; i < sbs.count; i++) {
         
@@ -571,30 +457,30 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
             if (v.matchParent != 0)
             {
                 if (v.matchParent < 0)
-                    rect.size.height = selfHeight + 2 *v.matchParent - _padding.top - _padding.bottom;
+                    rect.size.height = selfHeight + 2 *v.matchParent - self.padding.top - self.padding.bottom;
                 else
-                    rect.size.height = selfHeight * v.matchParent - _padding.top - _padding.bottom;
+                    rect.size.height = selfHeight * v.matchParent - self.padding.top - self.padding.bottom;
                 
-                rect.origin.y = (selfHeight - rect.size.height - _padding.top - _padding.bottom)/2;
+                rect.origin.y = (selfHeight - rect.size.height - self.padding.top - self.padding.bottom)/2;
             }
             
             
             
             if (_align == LVALIGN_CENTER)
             {
-                rect.origin.y = (selfHeight - rect.size.height -_padding.top - _padding.bottom)/2.0 + _padding.top;
+                rect.origin.y = (selfHeight - rect.size.height -self.padding.top - self.padding.bottom)/2.0 + self.padding.top;
             }
             else if (_align == LVALIGN_TOP)
             {
-                rect.origin.y = _padding.top;
+                rect.origin.y = self.padding.top;
             }
             else if (_align == LVALIGN_BOTTOM)
             {
-                rect.origin.y = selfHeight - _padding.bottom - rect.size.height;
+                rect.origin.y = selfHeight - self.padding.bottom - rect.size.height;
             }
             else
             {
-                rect.origin.y += _padding.top;
+                rect.origin.y += self.padding.top;
             }
 
             v.frame = rect;
@@ -607,30 +493,30 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
             if (v.matchParent != 0)
             {
                 if (v.matchParent < 0)
-                    rect.size.height = selfHeight + 2 *v.matchParent - _padding.top - _padding.bottom;
+                    rect.size.height = selfHeight + 2 *v.matchParent - self.padding.top - self.padding.bottom;
                 else
-                    rect.size.height = selfHeight * v.matchParent - _padding.top - _padding.bottom;
+                    rect.size.height = selfHeight * v.matchParent - self.padding.top - self.padding.bottom;
                 
-                rect.origin.y = (selfHeight - rect.size.height - _padding.top - _padding.bottom)/2;
+                rect.origin.y = (selfHeight - rect.size.height - self.padding.top - self.padding.bottom)/2;
             }
             
             
             
             if (_align == LVALIGN_CENTER)
             {
-                rect.origin.y = (selfHeight - rect.size.height -_padding.top - _padding.bottom)/2.0 + _padding.top;
+                rect.origin.y = (selfHeight - rect.size.height -self.padding.top - self.padding.bottom)/2.0 + self.padding.top;
             }
             else if (_align == LVALIGN_TOP)
             {
-                rect.origin.y = _padding.top;
+                rect.origin.y = self.padding.top;
             }
             else if (_align == LVALIGN_BOTTOM)
             {
-                rect.origin.y = selfHeight - _padding.bottom - rect.size.height;
+                rect.origin.y = selfHeight - self.padding.bottom - rect.size.height;
             }
             else
             {
-                rect.origin.y += _padding.top;
+                rect.origin.y += self.padding.top;
             }
 
             v.frame = rect;
@@ -641,7 +527,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
         pos += v.tailMargin;
     }
     
-    pos += _padding.right;
+    pos += self.padding.right;
 
     if (self.autoAdjustSize)
     {
@@ -700,7 +586,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
     //调整自己的宽度。
     if (self.wrapContent)
     {
-        selfWidth = maxSubViewWidth + _padding.left + _padding.right;
+        selfWidth = maxSubViewWidth + self.padding.left + self.padding.right;
         CGRect rectSelf = self.frame;
         rectSelf.size.width = selfWidth;
         self.frame = rectSelf;
@@ -712,16 +598,16 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
     
     if (_gravity == LVALIGN_TOP)
     {
-        pos = _padding.top;
+        pos = self.padding.top;
     }
     else if (_gravity == LVALIGN_CENTER)
     {
-        pos = (self.bounds.size.height - totalHeight - _padding.bottom - _padding.top)/2.0;
-        pos += _padding.top;
+        pos = (self.bounds.size.height - totalHeight - self.padding.bottom - self.padding.top)/2.0;
+        pos += self.padding.top;
     }
     else
     {
-        pos = self.bounds.size.height - totalHeight - _padding.bottom;
+        pos = self.bounds.size.height - totalHeight - self.padding.bottom;
     }
     
     
@@ -739,32 +625,32 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
         {
             if (v.matchParent < 0)
             {
-                rect.size.width = selfWidth + 2 * v.matchParent - _padding.left - _padding.right;
+                rect.size.width = selfWidth + 2 * v.matchParent - self.padding.left - self.padding.right;
             }
             else
             {
-                rect.size.width = selfWidth * v.matchParent - _padding.left - _padding.right;
+                rect.size.width = selfWidth * v.matchParent - self.padding.left - self.padding.right;
             }
             
-            rect.origin.x = (selfWidth - rect.size.width - _padding.left - _padding.right)/2;
+            rect.origin.x = (selfWidth - rect.size.width - self.padding.left - self.padding.right)/2;
         }
 
         
         if (_align == LVALIGN_CENTER)
         {
-            rect.origin.x = (selfWidth - rect.size.width - _padding.left - _padding.right)/2.0 + _padding.left;
+            rect.origin.x = (selfWidth - rect.size.width - self.padding.left - self.padding.right)/2.0 + self.padding.left;
         }
         else if (_align == LVALIGN_LEFT)
         {
-            rect.origin.x =  _padding.left;
+            rect.origin.x =  self.padding.left;
         }
         else if (_align == LVALIGN_RIGHT)
         {
-            rect.origin.x = selfWidth - _padding.right - rect.size.width;
+            rect.origin.x = selfWidth - self.padding.right - rect.size.width;
         }
         else
         {
-            rect.origin.x += _padding.left;
+            rect.origin.x += self.padding.left;
         }
 
         v.frame = rect;
@@ -802,7 +688,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
     //调整自己的高度
     if (self.wrapContent)
     {
-        selfHeight = maxSubViewHeight + _padding.top + _padding.bottom;
+        selfHeight = maxSubViewHeight + self.padding.top + self.padding.bottom;
         CGRect rectSelf = self.frame;
         rectSelf.size.height = selfHeight;
         self.frame = rectSelf;
@@ -812,16 +698,16 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
     CGFloat pos = 0;
     if (_gravity == LVALIGN_LEFT)
     {
-        pos = _padding.left;
+        pos = self.padding.left;
     }
     else if (_gravity == LVALIGN_CENTER)
     {
-        CGFloat pos = (self.bounds.size.width - totalWidth - _padding.left - _padding.right)/2.0;
-        pos += _padding.left;
+        CGFloat pos = (self.bounds.size.width - totalWidth - self.padding.left - self.padding.right)/2.0;
+        pos += self.padding.left;
     }
     else
     {
-        pos = self.bounds.size.width - totalWidth - _padding.right;
+        pos = self.bounds.size.width - totalWidth - self.padding.right;
     }
 
     
@@ -838,30 +724,30 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
         if (v.matchParent != 0)
         {
             if (v.matchParent < 0)
-                rect.size.height = selfHeight + 2 *v.matchParent - _padding.top - _padding.bottom;
+                rect.size.height = selfHeight + 2 *v.matchParent - self.padding.top - self.padding.bottom;
             else
-                rect.size.height = selfHeight * v.matchParent - _padding.top - _padding.bottom;
+                rect.size.height = selfHeight * v.matchParent - self.padding.top - self.padding.bottom;
             
-            rect.origin.y = (selfHeight - rect.size.height - _padding.top - _padding.bottom)/2;
+            rect.origin.y = (selfHeight - rect.size.height - self.padding.top - self.padding.bottom)/2;
         }
         
         
         
         if (_align == LVALIGN_CENTER)
         {
-            rect.origin.y = (selfHeight - rect.size.height -_padding.top - _padding.bottom)/2.0 + _padding.top;
+            rect.origin.y = (selfHeight - rect.size.height -self.padding.top - self.padding.bottom)/2.0 + self.padding.top;
         }
         else if (_align == LVALIGN_TOP)
         {
-            rect.origin.y = _padding.top;
+            rect.origin.y = self.padding.top;
         }
         else if (_align == LVALIGN_BOTTOM)
         {
-            rect.origin.y = selfHeight - _padding.bottom - rect.size.height;
+            rect.origin.y = selfHeight - self.padding.bottom - rect.size.height;
         }
         else
         {
-            rect.origin.y += _padding.top;
+            rect.origin.y += self.padding.top;
         }
         
         v.frame = rect;
@@ -889,20 +775,11 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
 }
 
 
--(void)layoutSubviews
+-(void)doLayoutSubviews
 {
-    NSLog(@"layoutSubviews");
     
-    
-    if (_beginLayoutBlock != nil)
-        _beginLayoutBlock();
-    
-    _isLayouting = YES;
-    
-    if (_priorAutoresizingMask)
-        [super layoutSubviews];
-    
-    
+    [super doLayoutSubviews];
+  
     if (_gravity != LVALIGN_DEFAULT)
     {
         [self layoutSubviewAlign];
@@ -934,15 +811,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
             
             
         }
-
-        
     }
-    
-
-    _isLayouting = NO;
-    
-    if (_endLayoutBlock != nil)
-        _endLayoutBlock();
 }
 
 
