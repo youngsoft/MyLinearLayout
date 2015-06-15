@@ -199,7 +199,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
 -(void)layoutSubviewsForVert
 {
     
-    //先计算高度，如果有子视图的weight > 0则以父视图的高
+
     NSArray *sbs = self.subviews;
     
     CGFloat fixedHeight = 0;   //计算固定部分的高度

@@ -359,8 +359,6 @@
     
     UIView *v1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
     v1.backgroundColor = [UIColor redColor];
-   // v1.matchParent = 1;
-    //v1.weight = 0.5;
     v1.headMargin = 0.3;
     v1.tailMargin = 0.2;
     

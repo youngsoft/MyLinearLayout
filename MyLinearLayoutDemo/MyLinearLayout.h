@@ -21,7 +21,7 @@
 @property(nonatomic, assign) CGFloat headMargin;
 
 //距离后面兄弟视图的距离，如果后面没有兄弟视图则是距离MyLinearLayout尾部的距离,如果为0则表示没有头部距离，如果设置为0> <1之间则
-//表示为相对头部距离也就是头部距离是浮动的跟weight的意义相似了
+//表示为相对头部距离也就是头部距离是浮动的跟weight的意义相似了。可以实现不同屏幕之间的布局
 @property(nonatomic, assign) CGFloat tailMargin;
 
 //比重，指定自定的高度或者宽度在父视图的比重。取值为>=0 <=1,这个特性用于平均分配高宽度或者按比例分配高宽度
