@@ -349,6 +349,27 @@
     
 }
 
+//支持浮动间距。
+-(void)test8
+{
+    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(100, 100, 100,200)];
+    ll.orientation = LVORIENTATION_VERT;
+     ll.backgroundColor = [UIColor grayColor];
+
+    
+    UIView *v1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
+    v1.backgroundColor = [UIColor redColor];
+   // v1.matchParent = 1;
+    //v1.weight = 0.5;
+    v1.headMargin = 0.3;
+    v1.tailMargin = 0.2;
+    
+    [ll addSubview:v1];
+    
+    [self.view addSubview:ll];
+    
+}
+
 
 /* UIView *v = [[UIView alloc] initWithFrame:CGRectMake(10, 100, 10, 200)];
  v.backgroundColor = [UIColor blackColor];
@@ -385,8 +406,9 @@
 -(void)loadView
 {
     [super loadView];
-    [self test7];
+    //[self test7];
    
+    [self test8];
 }
 
 

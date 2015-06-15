@@ -16,10 +16,12 @@
 //用于线性布局的子视图的属性，描述离兄弟视图的间隔距离，以及在父视图中的比重。
 @interface UIView(LinearLayoutExtra)
 
-//距离前面兄弟视图的距离，如果前面没有兄弟视图则是距离MyLinearLayout头部的距离
+//距离前面兄弟视图的距离，如果前面没有兄弟视图则是距离MyLinearLayout头部的距离,如果为0则表示没有头部距离，如果设置为0> <1之间则
+//表示为相对头部距离也就是头部距离是浮动的跟weight的意义相似了
 @property(nonatomic, assign) CGFloat headMargin;
 
-//距离后面兄弟视图的距离，如果后面没有兄弟视图则是距离MyLinearLayout尾部的距离
+//距离后面兄弟视图的距离，如果后面没有兄弟视图则是距离MyLinearLayout尾部的距离,如果为0则表示没有头部距离，如果设置为0> <1之间则
+//表示为相对头部距离也就是头部距离是浮动的跟weight的意义相似了
 @property(nonatomic, assign) CGFloat tailMargin;
 
 //比重，指定自定的高度或者宽度在父视图的比重。取值为>=0 <=1,这个特性用于平均分配高宽度或者按比例分配高宽度

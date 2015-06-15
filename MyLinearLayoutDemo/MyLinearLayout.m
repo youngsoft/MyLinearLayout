@@ -216,8 +216,15 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
         if (v.isHidden)
             continue;
         
-        fixedHeight += v.headMargin;
-        fixedHeight += v.tailMargin;
+        if (v.headMargin > 0 && v.headMargin < 1)
+            totalWeight += v.headMargin;
+        else
+            fixedHeight += v.headMargin;
+        
+        if (v.tailMargin > 0 && v.tailMargin < 1)
+            totalWeight += v.tailMargin;
+        else
+            fixedHeight += v.tailMargin;
         
         if (v.frame.size.width > maxSubViewWidth)
             maxSubViewWidth = v.frame.size.width;
@@ -256,7 +263,16 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
         if (v.isHidden)
             continue;
         
-        pos += v.headMargin;
+        if (v.headMargin >0 && v.headMargin < 1)
+        {
+            CGFloat hh = (v.headMargin / totalWeight) * floatingHeight;
+            if (hh <= 0 || hh == -0.0)
+                hh = 0;
+            
+            pos += hh;
+        }
+        else
+            pos += v.headMargin;
         
         
         CGRect rect = CGRectZero;
@@ -347,12 +363,23 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
         
      
         pos += rect.size.height;
-        pos += v.tailMargin;
+        
+        if (v.tailMargin > 0 && v.tailMargin < 1)
+        {
+            CGFloat th = (v.tailMargin / totalWeight) * floatingHeight;
+            if (th <= 0 || th == -0.0)
+                th = 0;
+            
+            pos += th;
+            
+        }
+        else
+            pos += v.tailMargin;
     }
     
     pos += self.padding.bottom;
     
-    if (self.autoAdjustSize)
+    if (self.autoAdjustSize && totalWeight == 0)
     {
         CGRect rectSelf = self.frame;
         
@@ -397,8 +424,15 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
         if (v.isHidden)
             continue;
         
-        fixedWidth += v.headMargin;
-        fixedWidth += v.tailMargin;
+        if (v.headMargin > 0 && v.headMargin < 1)
+            totalWeight += v.headMargin;
+        else
+            fixedWidth += v.headMargin;
+        
+        if (v.tailMargin > 0 && v.tailMargin < 1)
+            totalWeight += v.tailMargin;
+        else
+            fixedWidth += v.tailMargin;
         
         
         if (maxSubViewHeight < v.frame.size.height)
@@ -439,20 +473,29 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
             continue;
         
       
-        pos += v.headMargin;
+        if (v.headMargin >0 && v.headMargin < 1)
+        {
+            CGFloat hw = (v.headMargin / totalWeight) * floatingWidth;
+            if (hw <= 0 || hw == -0.0)
+                hw = 0;
+            
+            pos += hw;
+        }
+        else
+            pos += v.headMargin;
         
         
         CGRect rect = CGRectZero;
         if (v.weight > 0)
         {
             //计算宽度
-            CGFloat h = (v.weight / totalWeight) * floatingWidth;
-            if (h <= 0 || h == -0.0)
-                h = 0;
+            CGFloat w = (v.weight / totalWeight) * floatingWidth;
+            if (w <= 0 || w == -0.0)
+                w = 0;
             
             rect = v.frame;
             rect.origin.x = pos;
-            rect.size.width = h;
+            rect.size.width = w;
             
             if (v.matchParent != 0)
             {
@@ -524,12 +567,22 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
         
       
         pos += rect.size.width;
-        pos += v.tailMargin;
+        
+        if (v.tailMargin >0 && v.tailMargin < 1)
+        {
+            CGFloat tw = (v.tailMargin / totalWeight) * floatingWidth;
+            if (tw <= 0 || tw == -0.0)
+                tw = 0;
+            
+            pos += tw;
+        }
+        else
+            pos += v.tailMargin;
     }
     
     pos += self.padding.right;
 
-    if (self.autoAdjustSize)
+    if (self.autoAdjustSize && totalWeight == 0)
     {
         CGRect rectSelf = self.frame;
 
@@ -805,7 +858,18 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
             CGRect newRect = self.bounds;
             if (newRect.size.height != oldRect.size.height || newRect.size.width != oldRect.size.width)
             {
-                scrolv.contentSize = self.bounds.size;
+                CGSize contsize = scrolv.contentSize;
+                
+                if (_orientation == LVORIENTATION_VERT)
+                {
+                    contsize.height = self.bounds.size.height;
+                }
+                else
+                {
+                    contsize.width = self.bounds.size.width;
+                }
+                
+                scrolv.contentSize = contsize;
                 
             }
             
