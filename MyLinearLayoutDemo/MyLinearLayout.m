@@ -755,7 +755,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENT = "associatedobject_key_matc
     }
     else if (_gravity == LVALIGN_CENTER)
     {
-        CGFloat pos = (self.bounds.size.width - totalWidth - self.padding.left - self.padding.right)/2.0;
+        pos = (self.bounds.size.width - totalWidth - self.padding.left - self.padding.right)/2.0;
         pos += self.padding.left;
     }
     else
