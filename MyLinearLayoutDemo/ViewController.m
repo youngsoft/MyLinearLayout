@@ -10,6 +10,18 @@
 #import "MyLinearLayout.h"
 #import "MyFrameLayout.h"
 
+#import "Test1ViewController.h"
+#import "Test2ViewController.h"
+#import "Test3ViewController.h"
+#import "Test4ViewController.h"
+#import "Test5ViewController.h"
+#import "Test6ViewController.h"
+#import "Test7ViewController.h"
+#import "Test8ViewController.h"
+#import "Test9ViewController.h"
+#import "Test10ViewController.h"
+#import "Test11ViewController.h"
+
 @interface ViewController ()
 
 @end
@@ -18,401 +30,11 @@
 @implementation ViewController
 
 
--(void)test1:(BOOL)autoAdjustSize autoAdjustDir:(LineViewAutoAdjustDir)autoAdjustDir x:(CGFloat)x
-{
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(x, 100, 100,200)];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.autoAdjustSize = autoAdjustSize;
-    ll.autoAdjustDir = autoAdjustDir;
-    ll.backgroundColor = [UIColor grayColor];
-    
-    //不再需要指定y的偏移值了。
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(10, 0, 60, 40)];
-    v1.backgroundColor = [UIColor redColor];
-    v1.headMargin = 4;
-    [ll addSubview:v1];
-    
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(20, 0, 40, 60)];
-    v2.backgroundColor = [UIColor greenColor];
-    v2.headMargin = 6;
-    [ll addSubview:v2];
-    
-    
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(15, 0, 75, 30)];
-    v3.backgroundColor = [UIColor blueColor];
-    v3.headMargin = 3;
-    v3.tailMargin = 4;
-    [ll addSubview:v3];
-
-    [self.view addSubview:ll];
-
-}
-
--(void)test2:(LineViewAlign)align padding:(UIEdgeInsets)padding x:(CGFloat)x
-{
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(x, 100, 100,200)];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.align = align;
-    ll.padding = padding;
-    ll.backgroundColor = [UIColor grayColor];
-    
-    //不再需要指定y的偏移值了。
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 40)];
-    v1.backgroundColor = [UIColor redColor];
-    v1.headMargin = 4;
-    [ll addSubview:v1];
-    
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
-    v2.backgroundColor = [UIColor greenColor];
-    v2.headMargin = 6;
-    [ll addSubview:v2];
-    
-    
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
-    v3.backgroundColor = [UIColor blueColor];
-    v3.headMargin = 3;
-    v3.tailMargin = 4;
-    [ll addSubview:v3];
-    
-    [self.view addSubview:ll];
-    
-    
-}
-
--(void)test3:(CGFloat)relativeMeasure x:(CGFloat)x
-{
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(x, 100, 100,200)];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.backgroundColor = [UIColor grayColor];
-    
-    //不再需要指定y的偏移值了。
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 40)];
-    v1.backgroundColor = [UIColor redColor];
-    v1.headMargin = 4;
-    v1.matchParent = relativeMeasure;
-    [ll addSubview:v1];
-    
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
-    v2.backgroundColor = [UIColor greenColor];
-    v2.headMargin = 6;
-    [ll addSubview:v2];
-    
-    
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
-    v3.backgroundColor = [UIColor blueColor];
-    v3.headMargin = 3;
-    v3.tailMargin = 4;
-    [ll addSubview:v3];
-    
-    [self.view addSubview:ll];
-    
-}
-
-
--(void)test4:(LineViewAlign)gravity x:(CGFloat)x
-{
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(x, 100, 100,200)];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.gravity = gravity;
-    ll.backgroundColor = [UIColor grayColor];
-    
-    //不再需要指定y的偏移值了。
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 40)];
-    v1.backgroundColor = [UIColor redColor];
-    v1.headMargin = 4;
-    v1.matchParent = 1.0;
-    [ll addSubview:v1];
-    
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
-    v2.backgroundColor = [UIColor greenColor];
-    v2.headMargin = 6;
-    [ll addSubview:v2];
-    
-    
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
-    v3.backgroundColor = [UIColor blueColor];
-    v3.headMargin = 3;
-    v3.tailMargin = 4;
-    [ll addSubview:v3];
-    
-    [self.view addSubview:ll];
-    
-    
-}
-
--(void)test5
-{
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:self.view.bounds];
-    //保证容器和视图控制的视图的大小进行伸缩调整。
-    ll.autoresizingMask =  UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    ll.orientation = LVORIENTATION_VERT;
-    ll.padding = UIEdgeInsetsMake(20, 20, 20, 20);
-    ll.backgroundColor = [UIColor grayColor];
-    
-    MyLinearLayout *topll = MyLinearLayout.new;
-    topll.orientation = LVORIENTATION_HORZ;
-    topll.weight = 0.5;
-    topll.matchParent = 1;
-    
-    UIView *topLeft = UIView.new;
-    topLeft.backgroundColor = [UIColor redColor];
-    topLeft.weight = 0.5;
-    topLeft.matchParent = 1.0;
-    [topll addSubview:topLeft];
-    
-    UIView *topRight = UIView.new;
-    topRight.backgroundColor = [UIColor greenColor];
-    topRight.weight = 0.5;
-    topRight.matchParent = 1.0;
-    topRight.headMargin = 20;
-    [topll addSubview:topRight];
-    
-    [ll addSubview:topll];
-    
-    
-    UIView *bottom = UIView.new;
-    bottom.backgroundColor = [UIColor blueColor];
-    bottom.weight = 0.5;
-    bottom.matchParent = 1.0;
-    bottom.headMargin = 20;
-    [ll addSubview:bottom];
-
-    
-    [self.view addSubview:ll];
-    
-    
-    
-    
-}
-
--(void)test6
-{
-    
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(100, 100, 0,0)];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.wrapContent = YES;
-    ll.backgroundColor = [UIColor grayColor];
-    
-    //不再需要指定y的偏移值了。
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 90, 40)];
-    v1.backgroundColor = [UIColor redColor];
-    v1.headMargin = 4;
-    [ll addSubview:v1];
-    
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
-    v2.backgroundColor = [UIColor greenColor];
-    v2.headMargin = 6;
-    [ll addSubview:v2];
-    
-    
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
-    v3.backgroundColor = [UIColor blueColor];
-    v3.headMargin = 3;
-    v3.tailMargin = 4;
-    [ll addSubview:v3];
-    
-    [self.view addSubview:ll];
-
-    
-}
-
--(void)test7
-{
-    //建立9个子视图。并进行布局
-    
-    MyFrameLayout *fl = [[MyFrameLayout alloc] initWithFrame:self.view.bounds];
-    fl.autoresizingMask =  UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    fl.padding = UIEdgeInsetsMake(20, 20, 20, 20);
-    fl.backgroundColor = [UIColor grayColor];
-    
-    //显示全屏
-    UILabel *fill = UILabel.new;
-    fill.text = @"                fill";
-   // fill.textAlignment = NSTextAlignmentCenter;
-    fill.backgroundColor = [UIColor blueColor];
-    fill.marginGravity = MGRAVITY_FILL;
-    [fl addSubview:fill];
-    
-    
-    
-    //左右填充。
-    UILabel *horzFill = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 120)];
-    horzFill.text = @"Horz Fill";
-    horzFill.textAlignment = NSTextAlignmentCenter;
-    horzFill.backgroundColor = [UIColor greenColor];
-    horzFill.marginGravity = MGRAVITY_HORZ_FILL;
-    [fl addSubview:horzFill];
-    
-    
-    //左右居中
-    UILabel *horzCenter = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
-    horzCenter.text = @"Horz Center";
-    horzCenter.backgroundColor = [UIColor whiteColor];
-    horzCenter.marginGravity = MGRAVITY_HORZ_CENTER;
-    [fl addSubview:horzCenter];
-
-    
-    //左上
-    UILabel *topLeft = UILabel.new;
-    topLeft.text = @"topLeft";
-    [topLeft sizeToFit];
-    topLeft.backgroundColor = [UIColor whiteColor];
-    topLeft.marginGravity = MGRAVITY_HORZ_LEFT | MGRAVITY_VERT_TOP;
-    [fl addSubview:topLeft];
-    
-    //左中
-    UILabel *centerLeft = UILabel.new;
-    centerLeft.text = @"centerLeft";
-    [centerLeft sizeToFit];
-    centerLeft.backgroundColor = [UIColor whiteColor];
-    centerLeft.marginGravity = MGRAVITY_HORZ_LEFT | MGRAVITY_VERT_CENTER;
-    [fl addSubview:centerLeft];
-    
-    
-    //左下
-    UILabel *bottomLeft = UILabel.new;
-    bottomLeft.text = @"bottomLeft";
-    [bottomLeft sizeToFit];
-    bottomLeft.backgroundColor = [UIColor whiteColor];
-    bottomLeft.marginGravity = MGRAVITY_HORZ_LEFT | MGRAVITY_VERT_BOTTOM;
-    [fl addSubview:bottomLeft];
-    
-    
-    //中上
-    UILabel *topCenter = UILabel.new;
-    topCenter.text = @"topCenter";
-    [topCenter sizeToFit];
-    topCenter.backgroundColor = [UIColor greenColor];
-    topCenter.marginGravity = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_TOP;
-    [fl addSubview:topCenter];
-    
-    
-    //中中。
-    UILabel *centerCenter = UILabel.new;
-    centerCenter.text = @"centerCenter";
-    [centerCenter sizeToFit];
-    centerCenter.backgroundColor = [UIColor greenColor];
-    centerCenter.marginGravity = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_CENTER;
-    [fl addSubview:centerCenter];
-    
-    
-    //中下
-    UILabel *bottomCenter = UILabel.new;
-    bottomCenter.text = @"bottomCenter";
-    [bottomCenter sizeToFit];
-    bottomCenter.backgroundColor = [UIColor greenColor];
-    bottomCenter.marginGravity = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_BOTTOM;
-    [fl addSubview:bottomCenter];
-
-    
-    //右上
-    UILabel *topRight = UILabel.new;
-    topRight.text = @"topRight";
-    [topRight sizeToFit];
-    topRight.backgroundColor = [UIColor greenColor];
-    topRight.marginGravity = MGRAVITY_HORZ_RIGHT | MGRAVITY_VERT_TOP;
-    [fl addSubview:topRight];
-    
-    
-    //右中
-    UILabel *centerRight = UILabel.new;
-    centerRight.text = @"centerRight";
-    [centerRight sizeToFit];
-    centerRight.backgroundColor = [UIColor greenColor];
-    centerRight.marginGravity = MGRAVITY_HORZ_RIGHT | MGRAVITY_VERT_CENTER;
-    [fl addSubview:centerRight];
-
-    
-    UILabel *bottomRight = UILabel.new;
-    bottomRight.text = @"bottomRight";
-    [bottomRight sizeToFit];
-    bottomRight.backgroundColor = [UIColor greenColor];
-    bottomRight.marginGravity = MGRAVITY_HORZ_RIGHT | MGRAVITY_VERT_BOTTOM;
-    [fl addSubview:bottomRight];
-    
-
-    //居中显示。
-    UILabel *center = UILabel.new;
-    center.text = @"center";
-    [center sizeToFit];
-    center.backgroundColor = [UIColor redColor];
-    center.marginGravity = MGRAVITY_CENTER;
-    center.leftMargin = 30;
-    center.rightMargin = 30;
-    center.topMargin = 30;
-    center.bottomMargin = 30;
-    [fl addSubview:center];
-
-    
-    [self.view addSubview:fl];
-    
-    
-}
-
-//支持浮动间距。
--(void)test8
-{
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(100, 100, 100,200)];
-    ll.orientation = LVORIENTATION_VERT;
-     ll.backgroundColor = [UIColor grayColor];
-
-    
-    UIView *v1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
-    v1.backgroundColor = [UIColor redColor];
-    v1.headMargin = 0.3;
-    v1.tailMargin = 0.2;
-    
-    [ll addSubview:v1];
-    
-    [self.view addSubview:ll];
-    
-}
-
-
-/* UIView *v = [[UIView alloc] initWithFrame:CGRectMake(10, 100, 10, 200)];
- v.backgroundColor = [UIColor blackColor];
- [self.view addSubview:v];
- 
- [self test1:NO autoAdjustDir:LVAUTOADJUSTDIR_TAIL x:60];
- [self test1:YES autoAdjustDir:LVAUTOADJUSTDIR_TAIL x:60 + 100 + 20];
- [self test1:YES autoAdjustDir:LVAUTOADJUSTDIR_CENTER x:60 + (100 + 20)*2];
- [self test1:YES autoAdjustDir:LVAUTOADJUSTDIR_HEAD x:60 + (100 + 20)*3];*/
-
-/*
- [self test2:LVALIGN_LEFT padding:UIEdgeInsetsMake(5, 5, 5, 5) x:60];
- [self test2:LVALIGN_CENTER padding:UIEdgeInsetsMake(5, 5, 5, 5) x:60 + 100 + 20];
- [self test2:LVALIGN_RIGHT padding:UIEdgeInsetsMake(5, 5, 5, 5) x:60 + (100 + 20)*2];
- */
-
-/*
- 
- [self test3:1.0 x:60];
- [self test3:0.8 x:60 + 100 + 20];
- [self test3:-20 x:60 + (100 + 20)*2];
- */
-
-/*
- 
- [self test4:LVALIGN_TOP x:60];
- [self test4:LVALIGN_CENTER x:60 + 100 + 20];
- [self test4:LVALIGN_BOTTOM x:60 + (100 + 20)*2];
- */
-
-//[self test5];
-// [self test6];
-
--(void)loadView
-{
-    [super loadView];
-    //[self test7];
-   
-    [self test8];
-}
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    self.title = @"目录";
     
     
 }
@@ -421,5 +43,110 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark -- UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 11;
+}
+
+// Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
+// Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"test"];
+    switch (indexPath.row) {
+        case 0:
+            cell.textLabel.text = @"子视图间距设置以及自动调整大小的属性1";
+            break;
+        case 1:
+            cell.textLabel.text = @"子视图的隐藏显示以及UIScrollView的自动调整";
+            break;
+        case 2:
+            cell.textLabel.text = @"布局内视图停靠1";
+            break;
+        case 3:
+            cell.textLabel.text = @"布局内视图停靠2";
+            break;
+        case 4:
+            cell.textLabel.text = @"布局内视图停靠3";
+            break;
+        case 5:
+            cell.textLabel.text = @"子视图的尺寸由父视图决定";
+            break;
+        case 6:
+            cell.textLabel.text = @"相对视图尺寸";
+            break;
+        case 7:
+            cell.textLabel.text = @"布局视图尺寸由子视图决定";
+            break;
+        case 8:
+            cell.textLabel.text = @"视图之间的浮动间距";
+            break;
+        case 9:
+            cell.textLabel.text = @"均分视图和间距";
+            break;
+        case 10:
+            cell.textLabel.text = @"框架布局";
+            break;
+        default:
+            break;
+    }
+    
+    return cell;
+    
+}
+
+#pragma mark -- UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIViewController *vc = nil;
+    switch (indexPath.row) {
+        case 0:
+            vc = [Test1ViewController new];
+            break;
+        case 1:
+            vc = [Test2ViewController new];
+            break;
+        case 2:
+            vc = [Test3ViewController new];
+            break;
+        case 3:
+            vc = [Test4ViewController new];
+            break;
+        case 4:
+            vc = [Test5ViewController new];
+            break;
+        case 5:
+            vc = [Test6ViewController new];
+            break;
+        case 6:
+            vc = [Test7ViewController new];
+            break;
+        case 7:
+            vc = [Test8ViewController new];
+            break;
+        case 8:
+            vc = [Test9ViewController new];
+            break;
+        case 9:
+            vc = [Test10ViewController new];
+            break;
+        case 10:
+            vc = [Test11ViewController new];
+            break;
+        default:
+            break;
+    }
+    
+    
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+
+
 
 @end

@@ -13,22 +13,10 @@
 
 
 
-//用于线性布局的子视图的属性，描述离兄弟视图的间隔距离，以及在父视图中的比重。
 @interface UIView(LinearLayoutExtra)
-
-//距离前面兄弟视图的距离，如果前面没有兄弟视图则是距离MyLinearLayout头部的距离,如果为0则表示没有头部距离，如果设置为0> <1之间则
-//表示为相对头部距离也就是头部距离是浮动的跟weight的意义相似了
-@property(nonatomic, assign) CGFloat headMargin;
-
-//距离后面兄弟视图的距离，如果后面没有兄弟视图则是距离MyLinearLayout尾部的距离,如果为0则表示没有头部距离，如果设置为0> <1之间则
-//表示为相对头部距离也就是头部距离是浮动的跟weight的意义相似了。可以实现不同屏幕之间的布局
-@property(nonatomic, assign) CGFloat tailMargin;
 
 //比重，指定自定的高度或者宽度在父视图的比重。取值为>=0 <=1,这个特性用于平均分配高宽度或者按比例分配高宽度
 @property(nonatomic, assign) CGFloat weight;
-
-//相对尺寸如果为0则视图使用绝对的高度或宽度；值的范围是0-1表示自身的高度或者宽度是linearlayout的高度和宽度的百分比，如果是垂直布局则是宽度，如果是水平布局则是高度,如果是1则表示和linearlayout是一样的高度和宽度；如果为负数则表示本视图离linearlayout的两边的边距是多少。
-@property(nonatomic,assign) CGFloat matchParent;
 
 @end
 
@@ -38,17 +26,6 @@ typedef enum : NSUInteger {
     LVORIENTATION_VERT,
     LVORIENTATION_HORZ,
 } LineViewOrientation;
-
-//里面子视图的对齐方式
-typedef enum : NSUInteger{
-
-  LVALIGN_DEFAULT = 0,   //默认，不改变对齐方式
-  LVALIGN_LEFT = 1,     //用于垂直布局，左对齐
-  LVALIGN_RIGHT = 2,     //用于垂直布局，右对齐
-  LVALIGN_TOP = 1,      //用于水平布局，顶对齐
-  LVALIGN_BOTTOM = 2,   //用于水平布局，底部对齐
-  LVALIGN_CENTER = 3,    //居中对齐
-}LineViewAlign;
 
 
 //调整大小时伸缩的方向
@@ -76,9 +53,6 @@ typedef enum : NSUInteger {
 //方向，默认是纵向的
 @property(nonatomic,assign) LineViewOrientation orientation;
 
-//所谓对齐方式就是布局方向的另外一边的对齐形式，如果是垂直布局则是默认和左中右对齐，如果是水平布局则是默认和上中下对齐，这里的默认是指不调整子视图的原来的非布局方向的位置。
-@property(nonatomic,assign) LineViewAlign align;  //布局时的对齐方式默认是不处理:LVALIGN_DEFAULT
-
 
 //本视图的非布局方向的尺寸是否跟子视图里面最大尺寸保持一致。默认是NO,假如是垂直布局则表示宽度是否和子视图里面最宽的子视图的宽度保持一致。
 //假如是水平布局则表示高度是否和子视图里面最高的子视图的高度保持一致。
@@ -90,20 +64,24 @@ typedef enum : NSUInteger {
 @property(nonatomic, assign, getter = isAdjustScrollViewContentSize) BOOL adjustScrollViewContentSize;
 
 
-//align的值是非布局方向的对齐方式，而gravity是方向上的布局，默认是LVALIGN_DEFAULT，如果如果这个属性的值不是LVALIGN_DEFAULT
+//里面的所有子视图的停靠位置，默认是MGRAVITY_NONE，如果如果这个属性的值不是MGRAVITY_NONE
 //则autoAdjustSize不起作用了。而且如果子视图里面有weight了也不起作用了，里面的子视图将在方向按上中下或者左中右依次排列
 //
-@property(nonatomic, assign) LineViewAlign gravity;
+@property(nonatomic, assign) MarignGravity gravity;
 
 
 //是否调整自己的大小，默认是YES的.如果设置为NO的话则adjustScrollViewContentSize就没有实际的意思了。
-//注意这里是调整自己布局方向的大小,不会影响maxSubViewMeasure
+//注意这里是调整自己布局方向的大小,不会影响wrapContent
 @property(nonatomic, assign, getter =isAutoAdjustSize) BOOL autoAdjustSize;
 
 //当调整自己大小时是的伸缩方向，默认是LVAUTOADJUST_TAIL，这个属性只有在autoAdjustSize为YES时才有效。
 @property(nonatomic,assign) LineViewAutoAdjustDir autoAdjustDir;
 
 
+//均分子视图和间距,布局会根据里面的子视图的数量来平均分配子视图的高度或者宽度以及间距。
+//这个函数只对已经加入布局的视图有效，函数调用后加入的子视图无效。
+//centered属性描述是否所有子视图居中，当居中时顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
+-(void)averageSubviews:(BOOL)centered;
 
 
 
