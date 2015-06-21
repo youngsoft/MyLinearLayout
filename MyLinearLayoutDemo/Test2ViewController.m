@@ -40,7 +40,7 @@
     [btn addTarget:self action:@selector(handleLabelShow:) forControlEvents:UIControlEventTouchUpInside];
     [ll addSubview:btn];
     
-    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 400)];
+    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 800)];
     bottomView.backgroundColor = [UIColor greenColor];
     bottomView.matchParentWidth = 1;
     [ll addSubview:bottomView];
