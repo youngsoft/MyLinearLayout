@@ -443,7 +443,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     }
     else
     {
-         pRect->origin.y = self.padding.top + topMargin;
+        // pRect->origin.y = self.padding.top + topMargin;
     }
     
 
@@ -485,7 +485,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     }
     else
     {
-         pRect->origin.x = self.padding.left + leftMargin;
+        // pRect->origin.x = self.padding.left + leftMargin;
     }
 }
 

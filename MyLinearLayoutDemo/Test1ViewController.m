@@ -26,24 +26,21 @@
     ll.backgroundColor = [UIColor grayColor];
     
     //不再需要指定y的偏移值了。
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 40)];
+    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(10, 0, 60, 40)];
     v1.backgroundColor = [UIColor redColor];
     v1.topMargin = 4;
-    v1.leftMargin = 10;
     [ll addSubview:v1];
     
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
+    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(20, 0, 40, 60)];
     v2.backgroundColor = [UIColor greenColor];
     v2.topMargin = 6;
-    v2.leftMargin = 20;
     [ll addSubview:v2];
     
     
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
+    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(15, 0, 75, 30)];
     v3.backgroundColor = [UIColor blueColor];
     v3.topMargin = 3;
     v3.bottomMargin = 4;
-    v3.leftMargin = 15;
     [ll addSubview:v3];
     
     return ll;

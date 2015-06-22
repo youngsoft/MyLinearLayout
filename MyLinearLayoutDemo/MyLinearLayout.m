@@ -157,9 +157,13 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             continue;
         
         //计算最大子视图的尺寸
-        if (self.wrapContent)
+        if (self.wrapContent && v.matchParentWidth == 0)
         {
-            maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth subviewMeasure:v.frame.size.width headMargin:v.leftMargin tailMargin:v.rightMargin];
+            //如果不用停靠则采用原始的origin.x的值。
+            if ((v.marginGravity & 0x0F) == MGRAVITY_NONE && (self.gravity & 0x0F) == MGRAVITY_NONE)
+                maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth subviewMeasure:v.frame.size.width headMargin:v.frame.origin.x - self.leftPadding - self.padding.right tailMargin:0];
+            else
+                maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth subviewMeasure:v.frame.size.width headMargin:v.leftMargin tailMargin:v.rightMargin];
         }
     }
     
@@ -439,8 +443,14 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         }
         
         //计算最高的高度。
-        if (self.wrapContent)
-            maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:v.topMargin tailMargin:v.bottomMargin];
+        if (self.wrapContent && v.matchParentHeight == 0)
+        {
+            if ((v.marginGravity & 0xF0) == MGRAVITY_NONE && (self.gravity & 0xF0) == MGRAVITY_NONE)
+                maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:rect.origin.y - self.topPadding - self.bottomPadding tailMargin:0];
+            else
+                maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:v.topMargin tailMargin:v.bottomMargin];
+            
+        }
         
         v.frame = rect;
     }
@@ -537,8 +547,13 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             continue;
         
         //计算最大子视图的尺寸
-        if (self.wrapContent)
-            maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth subviewMeasure:v.frame.size.width headMargin:v.leftMargin tailMargin:v.rightMargin];
+        if (self.wrapContent && v.matchParentWidth == 0)
+        {
+            if ((v.marginGravity & 0x0F) == MGRAVITY_NONE && (self.gravity & 0x0F) == MGRAVITY_NONE)
+                maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth subviewMeasure:v.frame.size.width headMargin:v.frame.origin.x - self.leftPadding - self.padding.right tailMargin:0];
+            else
+                maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth subviewMeasure:v.frame.size.width headMargin:v.leftMargin tailMargin:v.rightMargin];
+        }
     }
     
     //调整自己的宽度
@@ -693,8 +708,13 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         
         
         //计算以子视图为大小的情况
-        if (self.wrapContent)
-            maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:topMargin tailMargin:bottomMargin];
+        if (self.wrapContent && v.matchParentHeight == 0)
+        {
+            if ((v.marginGravity & 0xF0) == MGRAVITY_NONE && (self.gravity & 0xF0) == MGRAVITY_NONE)
+                maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:rect.origin.y - self.topPadding - self.bottomPadding tailMargin:0];
+            else
+                maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:topMargin tailMargin:bottomMargin];
+        }
         
         if ([self isRelativeMargin:v.leftMargin])
             totalWidth += floatingWidth * v.leftMargin;
