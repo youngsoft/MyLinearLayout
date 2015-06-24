@@ -109,9 +109,21 @@
     l1.bottomMargin = 4;
     [l1 addSubview:lb];
     
+    l1.highlightedBackgroundColor = [UIColor redColor];
+    [l1 setTarget:self action:@selector(handleAction:)];
+    
     [_myll addSubview:l1];
 
     
+}
+
+-(void)handleAction:(id)sender
+{
+    NSLog(@"触摸:%@",sender);
+    
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"test" message:@"触摸" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    
+    [av show];
 }
 
 -(void)handleDel:(UIButton*)id

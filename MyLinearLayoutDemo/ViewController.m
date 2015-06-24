@@ -93,7 +93,7 @@
             cell.textLabel.text = @"框架布局";
             break;
         case 11:
-            cell.textLabel.text = @"边框的线以及布局动画";
+            cell.textLabel.text = @"边框的线以及布局动画,触摸事件";
             break;
         default:
             break;
@@ -106,6 +106,7 @@
 #pragma mark -- UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+        
     UIViewController *vc = nil;
     switch (indexPath.row) {
         case 0:

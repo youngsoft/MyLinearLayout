@@ -116,7 +116,17 @@ typedef enum : unsigned char {
 @property(nonatomic, strong) MyBorderLineDraw *boundBorderLine;
 
 
-//派生类重载这个函数进行构造。
+//下面的功能支持在布局视图中的触摸功能。
+
+//高亮的背景色,我们支持在布局中执行单击的事件，用户按下时背景会高亮.只有设置了事件才会高亮
+@property(nonatomic,strong) UIColor *highlightedBackgroundColor;
+
+//设置单击触摸的事件，如果target为nil则取消事件。
+-(void)setTarget:(id)target action:(SEL)action;
+
+
+
+//内部使用函数，外部不需要调用。。
 -(void)construct;
 
 //派生类重载这个函数进行布局

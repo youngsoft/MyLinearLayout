@@ -22,6 +22,7 @@
     
     MyLinearLayout *ll = [MyLinearLayout new];
     ll.backgroundColor = [UIColor grayColor];
+    
     ll.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     ll.matchParentWidth = 1; //宽度和UIScrollView保持一致
     ll.adjustScrollViewContentSize = YES;

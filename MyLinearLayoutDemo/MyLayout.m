@@ -246,8 +246,18 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 
 @end
 
+@interface MyLayout()<UIGestureRecognizerDelegate>
+
+@end
 
 @implementation MyLayout
+{
+    __weak id _target;
+    SEL   _action;
+    UIColor *_oldBackgroundColor;
+    BOOL _hasBegin;
+    BOOL _canTouch;
+}
 
 
 -(void)construct
@@ -262,6 +272,11 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     _rightBorderLine = nil;
     _bottomBorderLine = nil;
     _topBorderLine = nil;
+    _oldBackgroundColor = nil;
+    _target = nil;
+    _action = nil;
+    _hasBegin = NO;
+    _canTouch = YES;
 }
 
 -(void)doLayoutSubviews
@@ -361,6 +376,88 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return self.leftBorderLine;
 }
 
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (_target != nil && _canTouch)
+    {
+        _hasBegin = YES;
+        if (_highlightedBackgroundColor != nil)
+        {
+            _oldBackgroundColor = self.backgroundColor;
+            self.backgroundColor = _highlightedBackgroundColor;
+        }
+    }
+    
+    [super touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (_target != nil && _hasBegin)
+    {
+        //这里不做处理。
+    }
+
+    [super touchesMoved:touches withEvent:event];
+}
+
+-(void)doTargetAction:(UITouch*)touch
+{
+    if (_highlightedBackgroundColor != nil)
+    {
+        self.backgroundColor = _oldBackgroundColor;
+    }
+    
+    CGPoint pt = [touch locationInView:self];
+    if (CGRectContainsPoint(self.bounds, pt) && _action != nil)
+    {
+        [_target performSelector:_action withObject:self];
+    }
+    
+    _canTouch = YES;
+    
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"end");
+    
+    if (_target != nil && _hasBegin)
+    {
+        //设置一个延时.
+        _canTouch = NO;
+        [self performSelector:@selector(doTargetAction:) withObject:[touches anyObject] afterDelay:0.15];
+    }
+    
+    _hasBegin = NO;
+
+    [super touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"touchesCancelled");
+    
+    if (_target != nil && _hasBegin)
+    {
+        if (_highlightedBackgroundColor != nil)
+        {
+            self.backgroundColor = _oldBackgroundColor;
+        }
+        
+    }
+    
+    _hasBegin = NO;
+
+    [super touchesCancelled:touches withEvent:event];
+}
+
+-(void)setTarget:(id)target action:(SEL)action
+{
+    _target = target;
+    _action = action;
+}
 
 
 
