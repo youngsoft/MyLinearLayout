@@ -29,7 +29,7 @@
     
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 90, 40)]; //这个子视图最宽
     v1.backgroundColor = [UIColor redColor];
-    v1.marginGravity = MGRAVITY_HORZ_LEFT;
+    v1.marginGravity = MGRAVITY_HORZ_LEFT; //如果不设置这个属性则左右margin无效
     v1.leftMargin = 10;
     v1.rightMargin = 20; //父视图宽度会是90+10+20
     v1.topMargin = 4;

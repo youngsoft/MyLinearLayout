@@ -215,6 +215,37 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 
 @end
 
+@implementation MyBorderLineDraw
+
+-(id)init
+{
+    self = [super init];
+    if (self != nil)
+    {
+        _color = [UIColor blackColor];
+        _insetColor = nil;
+        _thick = 1;
+        _headIndent = 0;
+        _tailIndent = 0;
+        _dash  = 0;
+    }
+    
+    return self;
+}
+
+-(id)initWithColor:(UIColor *)color
+{
+    self = [self init];
+    if (self != nil)
+    {
+        _color = color;
+    }
+    
+    return self;
+}
+
+@end
+
 
 @implementation MyLayout
 
@@ -227,6 +258,10 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     _beginLayoutBlock = nil;
     _endLayoutBlock = nil;
     self.backgroundColor = [UIColor clearColor];
+    _leftBorderLine = nil;
+    _rightBorderLine = nil;
+    _bottomBorderLine = nil;
+    _topBorderLine = nil;
 }
 
 -(void)doLayoutSubviews
@@ -311,6 +346,22 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 {
     return _padding.bottom;
 }
+
+-(void)setBoundBorderLine:(MyBorderLineDraw *)boundBorderLine
+{
+    self.leftBorderLine = boundBorderLine;
+    self.rightBorderLine = boundBorderLine;
+    self.topBorderLine = boundBorderLine;
+    self.bottomBorderLine = boundBorderLine;
+    [self setNeedsDisplay];
+}
+
+-(MyBorderLineDraw*)boundBorderLine
+{
+    return self.leftBorderLine;
+}
+
+
 
 
 
@@ -543,12 +594,162 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 }
 
 
-/*
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
     // Drawing code
+    
+    if (self.leftBorderLine)
+    {
+        //绘制内容。
+        CGContextRef ctx =  UIGraphicsGetCurrentContext();
+        CGContextSaveGState(ctx);
+        
+        if (self.leftBorderLine.dash != 0)
+        {
+            CGFloat lengths[2];
+            lengths[0] = self.leftBorderLine.dash;
+            lengths[1] = self.leftBorderLine.dash;
+            CGContextSetLineDash(ctx, self.leftBorderLine.dash/2, lengths, 2);
+        }
+        
+        if (self.leftBorderLine.insetColor != nil)
+        {
+            CGContextSetStrokeColorWithColor(ctx, self.leftBorderLine.insetColor.CGColor);
+            CGContextSetLineWidth(ctx, self.leftBorderLine.thick);
+        
+            CGContextMoveToPoint(ctx, 1, self.leftBorderLine.headIndent);
+            CGContextAddLineToPoint(ctx, 1, rect.size.height - self.leftBorderLine.tailIndent - self.leftBorderLine.headIndent);
+            CGContextStrokePath(ctx);
+        }
+        
+        CGContextSetStrokeColorWithColor(ctx, self.leftBorderLine.color.CGColor);
+        CGContextSetLineWidth(ctx, self.leftBorderLine.thick);
+        
+        CGContextMoveToPoint(ctx, 0, self.leftBorderLine.headIndent);
+        CGContextAddLineToPoint(ctx, 0, rect.size.height - self.leftBorderLine.tailIndent - self.leftBorderLine.headIndent);
+        CGContextStrokePath(ctx);
+ 
+        CGContextRestoreGState(ctx);
+        
+    }
+    
+    if (self.rightBorderLine)
+    {
+        CGContextRef ctx =  UIGraphicsGetCurrentContext();
+        
+        CGContextSaveGState(ctx);
+        
+        if (self.rightBorderLine.dash != 0)
+        {
+            CGFloat lengths[2];
+            lengths[0] = self.rightBorderLine.dash;
+            lengths[1] = self.rightBorderLine.dash;
+            CGContextSetLineDash(ctx, self.rightBorderLine.dash/2, lengths, 2);
+        }
+
+        CGFloat inset = self.rightBorderLine.insetColor == nil ? 0 : 1;
+        
+        CGContextSetStrokeColorWithColor(ctx, self.rightBorderLine.color.CGColor);
+        CGContextSetLineWidth(ctx, self.rightBorderLine.thick);
+        
+        CGContextMoveToPoint(ctx, rect.size.width - inset, self.rightBorderLine.headIndent);
+        CGContextAddLineToPoint(ctx, rect.size.width - inset, rect.size.height - self.rightBorderLine.tailIndent - self.rightBorderLine.headIndent);
+        CGContextStrokePath(ctx);
+        
+        if (self.rightBorderLine.insetColor != nil)
+        {
+            CGContextSetStrokeColorWithColor(ctx, self.rightBorderLine.insetColor.CGColor);
+            CGContextSetLineWidth(ctx, self.rightBorderLine.thick);
+        
+            CGContextMoveToPoint(ctx, rect.size.width, self.rightBorderLine.headIndent);
+            CGContextAddLineToPoint(ctx, rect.size.width, rect.size.height - self.rightBorderLine.tailIndent - self.rightBorderLine.headIndent);
+            CGContextStrokePath(ctx);
+        }
+        
+
+        CGContextRestoreGState(ctx);
+        
+    }
+    
+    if (self.topBorderLine)
+    {
+        CGContextRef ctx =  UIGraphicsGetCurrentContext();
+        
+        CGContextSaveGState(ctx);
+        
+        if (self.topBorderLine.dash != 0)
+        {
+            CGFloat lengths[2];
+            lengths[0] = self.topBorderLine.dash;
+            lengths[1] = self.topBorderLine.dash;
+            CGContextSetLineDash(ctx, self.topBorderLine.dash/2, lengths, 2);
+        }
+        
+        if (self.topBorderLine.insetColor != nil)
+        {
+            CGContextSetStrokeColorWithColor(ctx, self.topBorderLine.insetColor.CGColor);
+            CGContextSetLineWidth(ctx, self.topBorderLine.thick);
+        
+            CGContextMoveToPoint(ctx, self.topBorderLine.headIndent, 1);
+            CGContextAddLineToPoint(ctx,rect.size.width - self.topBorderLine.tailIndent - self.topBorderLine.tailIndent, 1);
+            CGContextStrokePath(ctx);
+        }
+
+        
+        CGContextSetStrokeColorWithColor(ctx, self.topBorderLine.color.CGColor);
+        CGContextSetLineWidth(ctx, self.topBorderLine.thick);
+        
+        CGContextMoveToPoint(ctx, self.topBorderLine.headIndent, 0);
+        CGContextAddLineToPoint(ctx,rect.size.width - self.topBorderLine.tailIndent - self.topBorderLine.headIndent, 0);
+        CGContextStrokePath(ctx);
+        
+        CGContextRestoreGState(ctx);
+
+        
+    }
+
+    if (self.bottomBorderLine)
+    {
+        CGContextRef ctx =  UIGraphicsGetCurrentContext();
+        
+        CGContextSaveGState(ctx);
+        
+        if (self.bottomBorderLine.dash != 0)
+        {
+            CGFloat lengths[2];
+            lengths[0] = self.bottomBorderLine.dash;
+            lengths[1] = self.bottomBorderLine.dash;
+            CGContextSetLineDash(ctx, self.bottomBorderLine.dash/2, lengths, 2);
+        }
+        
+
+        
+        CGContextSetStrokeColorWithColor(ctx, self.bottomBorderLine.color.CGColor);
+        CGContextSetLineWidth(ctx, self.bottomBorderLine.thick);
+        
+        CGFloat inset = self.bottomBorderLine.insetColor == nil ? 0 : 1;
+        
+        CGContextMoveToPoint(ctx, self.bottomBorderLine.headIndent, rect.size.height - inset);
+        CGContextAddLineToPoint(ctx,rect.size.width - self.bottomBorderLine.tailIndent - self.bottomBorderLine.tailIndent, rect.size.height - inset);
+        CGContextStrokePath(ctx);
+        
+        
+        if (self.bottomBorderLine.insetColor != nil)
+        {
+        CGContextSetStrokeColorWithColor(ctx, self.bottomBorderLine.insetColor.CGColor);
+        CGContextSetLineWidth(ctx, self.bottomBorderLine.thick);
+        
+        CGContextMoveToPoint(ctx, self.bottomBorderLine.headIndent, rect.size.height);
+        CGContextAddLineToPoint(ctx,rect.size.width - self.bottomBorderLine.tailIndent - self.bottomBorderLine.tailIndent, rect.size.height);
+        CGContextStrokePath(ctx);
+        }
+
+        CGContextRestoreGState(ctx);        
+    }
+    
 }
-*/
+
 
 @end

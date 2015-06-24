@@ -65,6 +65,21 @@ typedef enum : unsigned char {
 @end
 
 
+/**画线用于布局的四周的线的绘制**/
+@interface MyBorderLineDraw : NSObject
+
+@property(nonatomic) UIColor *color;             //颜色
+@property(nonatomic) UIColor *insetColor;        //嵌入颜色，用于实现立体效果
+@property(nonatomic,assign) CGFloat thick;       //厚度,默认为1
+@property(nonatomic,assign) CGFloat headIndent;  //头部缩进
+@property(nonatomic, assign) CGFloat tailIndent;  //尾部缩进
+@property(nonatomic, assign) CGFloat dash;        //虚线的点数如果为0则是实线。
+
+-(id)initWithColor:(UIColor*)color;
+
+
+@end
+
 
 
 @interface MyLayout : UIView
@@ -76,8 +91,6 @@ typedef enum : unsigned char {
 @property(nonatomic, assign) CGFloat bottomPadding;
 @property(nonatomic, assign) CGFloat rightPadding;
 
-
-//布局加入到父亲时的高宽度指定。
 
 
 //布局时是否调用基类的布局方法，这个属性设置的作用体现在当自身的高度或者宽度调整时而且里面的子视图又设置了autoresizingMask时
@@ -91,6 +104,17 @@ typedef enum : unsigned char {
 
 
 @property(nonatomic,assign) BOOL isLayouting;
+
+
+//指定四个边界线的绘制。
+@property(nonatomic, strong) MyBorderLineDraw *leftBorderLine;
+@property(nonatomic, strong) MyBorderLineDraw *rightBorderLine;
+@property(nonatomic, strong) MyBorderLineDraw *topBorderLine;
+@property(nonatomic, strong) MyBorderLineDraw *bottomBorderLine;
+
+//同时设置4个边界线。
+@property(nonatomic, strong) MyBorderLineDraw *boundBorderLine;
+
 
 //派生类重载这个函数进行构造。
 -(void)construct;
