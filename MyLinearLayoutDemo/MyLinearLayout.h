@@ -83,6 +83,9 @@ typedef enum : NSUInteger {
 //centered属性描述是否所有子视图居中，当居中时顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
 -(void)averageSubviews:(BOOL)centered;
 
+//均分子视图的间距，上面函数会使子视图和间距的尺寸保持一致，而这个函数则是子视图的尺寸保持不变而间距自动平均分配。
+//centered的意义同上。
+-(void)averageMargin:(BOOL)centered;
 
 
 

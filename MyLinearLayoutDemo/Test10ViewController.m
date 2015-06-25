@@ -20,7 +20,6 @@
 -(void)loadView
 {
     
-    
     MyLinearLayout *ll = [MyLinearLayout new];
     ll.backgroundColor = [UIColor grayColor];
     ll.autoAdjustSize  = NO;
@@ -28,33 +27,32 @@
     ll.leftPadding = 10;
     ll.rightPadding = 10;
     
-    UIView *v1 = [UIView new];
+    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 100)];
     v1.backgroundColor = [UIColor redColor];
     v1.matchParentWidth = 1;
-    v1.topMargin = 1.0/7;
-    v1.weight = 1.0/7;
+    
     
     [ll addSubview:v1];
    
     
-    UIView *v2 = [UIView new];
+    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
     v2.backgroundColor = [UIColor greenColor];
     v2.matchParentWidth = 1;
-    v2.topMargin =1.0/7;
-    v2.weight = 1.0/7;
+   
     [ll addSubview:v2];
 
     
     
-    UIView *v3 = [UIView new];
+    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 70)];
     v3.backgroundColor = [UIColor blueColor];
     v3.matchParentWidth = 1;
-    v3.topMargin =1.0/7;
-    v3.bottomMargin =1.0/7;
-    v3.weight = 1.0/7;
     [ll addSubview:v3];
 
-   //或者你可以调用这个函数不需要设置各比例值。 [ll averageSubviews:YES];
+   
+    //每个视图的高度保持原始值，剩余的部分平分间距
+    //[ll averageMargin:YES];
+    //会把视图和间距都平分，即使设置了高度也无效。
+    [ll averageSubviews:YES];
     
     self.view = ll;
     

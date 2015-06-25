@@ -24,7 +24,7 @@
     //布局视图中不需要指定宽度，而是由最大子视图决定宽度
     MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(100, 100, 0,0)];
     ll.orientation = LVORIENTATION_VERT;
-    ll.wrapContent = YES;
+    ll.wrapContent = YES;  //这句话表示非布局方向的尺寸由最大的子视图决定。
     ll.backgroundColor = [UIColor grayColor];
     
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 90, 40)]; //这个子视图最宽

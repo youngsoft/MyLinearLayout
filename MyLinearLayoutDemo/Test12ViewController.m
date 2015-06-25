@@ -20,12 +20,15 @@
 
 -(void)loadView
 {
-    [super loadView];
+    self.view = [UIScrollView new];
     
     
-    _myll =  [[MyLinearLayout alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
+    _myll =  [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     _myll.backgroundColor = [UIColor grayColor];
-    _myll.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    _myll.padding = UIEdgeInsetsMake(10, 2, 10, 2);
+    _myll.matchParentWidth = 1;
+    _myll.adjustScrollViewContentSize = YES;
+
     
     MyLinearLayout *l1 = [MyLinearLayout new];
     l1.orientation = LVORIENTATION_HORZ;
@@ -33,8 +36,6 @@
     l1.matchParentWidth = 1;
     l1.wrapContent = YES;
     l1.padding = UIEdgeInsetsMake(4, 4, 4, 4);
-    l1.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
- //   l1.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
     
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
     button.weight = 1;
@@ -76,7 +77,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"边框的线和动画";
+    self.title = @"边框的线以及布局动画,触摸事件";
     
     
 }
@@ -101,14 +102,16 @@
    
     UILabel *lb = [UILabel new];
     lb.matchParentWidth = 1;
-    lb.text = @"这是一个新的行";
-    [lb sizeToFit];
+    lb.text = @"有了这个功能后就可以放弃用UITableView来做静态的线性布局了";
+    lb.flexedHeight = YES;
+    lb.numberOfLines = 0;
     
     
     l1.topMargin = 4;
     l1.bottomMargin = 4;
     [l1 addSubview:lb];
     
+    //这里设置触摸事件
     l1.highlightedBackgroundColor = [UIColor redColor];
     [l1 setTarget:self action:@selector(handleAction:)];
     

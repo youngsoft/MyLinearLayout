@@ -121,6 +121,18 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     }
 }
 
+-(void)averageMargin:(BOOL)centered
+{
+    if (_orientation == LVORIENTATION_VERT)
+    {
+        [self averageMarginForVert:centered];
+    }
+    else
+    {
+        [self averageMarginForHorz:centered];
+    }
+}
+
 
 
 
@@ -938,6 +950,55 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 }
 
+
+-(void)averageMarginForVert:(BOOL)centered
+{
+    NSArray *sbs = self.subviews;
+    //如果居中和不居中则拆分出来的片段是不一样的。
+    CGFloat fragments = centered ? sbs.count + 1 : sbs.count - 1;
+    CGFloat scale = 1 / fragments;
+    
+    for (int i = 0; i < sbs.count; i++)
+    {
+        UIView *v = [sbs objectAtIndex:i];
+        
+        v.topMargin = scale;
+        
+        if (i == 0 && !centered)
+            v.topMargin = 0;
+        
+        if (i == sbs.count - 1 && centered)
+            v.bottomMargin = scale;
+    }
+    
+    [self setNeedsLayout];
+    
+    
+}
+
+-(void)averageMarginForHorz:(BOOL)centered
+{
+    NSArray *sbs = self.subviews;
+    //如果居中和不居中则拆分出来的片段是不一样的。
+    CGFloat fragments = centered ? sbs.count + 1 : sbs.count - 1;
+    CGFloat scale = 1 / fragments;
+    
+    for (int i = 0; i < sbs.count; i++)
+    {
+        UIView *v = [sbs objectAtIndex:i];
+        
+        v.leftMargin = scale;
+        
+        if (i == 0 && !centered)
+            v.leftMargin = 0;
+        
+        if (i == sbs.count - 1 && centered)
+            v.rightMargin = scale;
+    }
+    
+    [self setNeedsLayout];
+
+}
 
 
 
