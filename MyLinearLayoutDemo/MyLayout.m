@@ -257,6 +257,8 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     UIColor *_oldBackgroundColor;
     BOOL _hasBegin;
     BOOL _canTouch;
+    BOOL _canCallAction;
+    CGPoint _beginPoint;
 }
 
 
@@ -277,6 +279,8 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     _action = nil;
     _hasBegin = NO;
     _canTouch = YES;
+    _canCallAction = NO;
+    _beginPoint = CGPointZero;
 }
 
 -(void)doLayoutSubviews
@@ -382,6 +386,8 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     if (_target != nil && _canTouch)
     {
         _hasBegin = YES;
+        _canCallAction = YES;
+        _beginPoint = [((UITouch*)[touches anyObject]) locationInView:self];
         if (_highlightedBackgroundColor != nil)
         {
             _oldBackgroundColor = self.backgroundColor;
@@ -396,7 +402,12 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 {
     if (_target != nil && _hasBegin)
     {
-        //这里不做处理。
+        if (_canCallAction)
+        {
+            CGPoint pt = [((UITouch*)[touches anyObject]) locationInView:self];
+            if (fabs(pt.x - _beginPoint.x) > 2 || fabs(pt.y - _beginPoint.y) > 2)
+                _canCallAction = NO;
+        }
     }
 
     [super touchesMoved:touches withEvent:event];
@@ -409,8 +420,9 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         self.backgroundColor = _oldBackgroundColor;
     }
     
+    //距离太远则不会处理
     CGPoint pt = [touch locationInView:self];
-    if (CGRectContainsPoint(self.bounds, pt) && _action != nil)
+    if (CGRectContainsPoint(self.bounds, pt) && _action != nil && _canCallAction)
     {
         [_target performSelector:_action withObject:self];
     }
@@ -421,13 +433,12 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"end");
     
     if (_target != nil && _hasBegin)
     {
         //设置一个延时.
         _canTouch = NO;
-        [self performSelector:@selector(doTargetAction:) withObject:[touches anyObject] afterDelay:0.15];
+        [self performSelector:@selector(doTargetAction:) withObject:[touches anyObject] afterDelay:0.12];
     }
     
     _hasBegin = NO;

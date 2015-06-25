@@ -112,7 +112,7 @@
     [l1 addSubview:lb];
     
     //这里设置触摸事件
-    l1.highlightedBackgroundColor = [UIColor redColor];
+    l1.highlightedBackgroundColor = [UIColor darkGrayColor];
     [l1 setTarget:self action:@selector(handleAction:)];
     
     [_myll addSubview:l1];
