@@ -108,6 +108,24 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     }
 }
 
+-(void)setMatchParentWidth:(CGFloat)matchParentWidth
+{
+    if (matchParentWidth != 0 && self.orientation == LVORIENTATION_HORZ)
+        self.autoAdjustSize = NO;
+    
+    [super setMatchParentWidth:matchParentWidth];
+}
+
+-(void)setMatchParentHeight:(CGFloat)matchParentHeight
+{
+    if (matchParentHeight != 0 && self.orientation == LVORIENTATION_VERT)
+        self.autoAdjustSize = NO;
+    
+    [super setMatchParentHeight:matchParentHeight];
+}
+
+
+
 
 -(void)averageSubviews:(BOOL)centered
 {

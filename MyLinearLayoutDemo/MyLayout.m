@@ -10,6 +10,190 @@
 #import <objc/runtime.h>
 
 
+@implementation MyMaker
+{
+    __weak UIView *_myView;
+    NSMutableArray *_keys;
+}
+
+-(id)initWithView:(UIView *)v
+{
+    self = [self init];
+    if (self != nil)
+    {
+        _myView = v;
+        _keys = [[NSMutableArray alloc] init];
+    }
+    
+    return self;
+}
+
+-(MyMaker*)topMargin
+{
+    [_keys addObject:@"topMargin"];
+    return self;
+}
+
+-(MyMaker*)leftMargin
+{
+    [_keys addObject:@"leftMargin"];
+    return self;
+}
+
+-(MyMaker*)bottomMargin
+{
+    [_keys addObject:@"bottomMargin"];
+    return self;
+}
+
+-(MyMaker*)rightMargin
+{
+    [_keys addObject:@"rightMargin"];
+    return self;
+}
+
+-(MyMaker*)margin
+{
+    [_keys addObject:@"margin"];
+    return self;
+}
+
+-(MyMaker*)marginGravity
+{
+    [_keys addObject:@"marginGravity"];
+    return self;
+}
+
+-(MyMaker*)matchParentWidth
+{
+    [_keys addObject:@"matchParentWidth"];
+    return self;
+}
+
+-(MyMaker*)matchParentHeight
+{
+    [_keys addObject:@"matchParentHeight"];
+    return self;
+}
+
+-(MyMaker*)flexedHeight
+{
+    [_keys addObject:@"flexedHeight"];
+    return self;
+}
+
+-(MyMaker*)height
+{
+    [_keys addObject:@"height"];
+    return self;
+}
+
+-(MyMaker*)width
+{
+    [_keys addObject:@"width"];
+    return self;
+}
+
+-(MyMaker*)size
+{
+    [_keys addObject:@"size"];
+    return self;
+}
+
+-(MyMaker*)topPadding
+{
+    [_keys addObject:@"topPadding"];
+    return self;
+}
+
+-(MyMaker*)leftPadding
+{
+    [_keys addObject:@"leftPadding"];
+    return self;
+}
+
+-(MyMaker*)bottomPadding
+{
+    [_keys addObject:@"bottomPadding"];
+    return self;
+}
+
+-(MyMaker*)rightPadding
+{
+    [_keys addObject:@"rightPadding"];
+    return self;
+}
+
+
+//布局独有
+-(MyMaker*)orientation
+{
+    [_keys addObject:@"orientation"];
+    return self;
+}
+
+-(MyMaker*)wrapContent
+{
+    [_keys addObject:@"wrapContent"];
+    return self;
+}
+
+-(MyMaker*)adjustScrollViewContentSize
+{
+    [_keys addObject:@"adjustScrollViewContentSize"];
+    return self;
+}
+
+-(MyMaker*)gravity
+{
+    [_keys addObject:@"gravity"];
+    return self;
+}
+
+-(MyMaker*)autoAdjustSize
+{
+    [_keys addObject:@"autoAdjustSize"];
+    return self;
+}
+
+
+-(MyMaker*)autoAdjustDir
+{
+    [_keys addObject:@"autoAdjustDir"];
+    return self;
+}
+
+
+
+-(MyMaker* (^)(id val))equalTo
+{
+    
+     return ^id(id val) {
+         
+         for (NSString *key in _keys)
+         {
+             id vv = val;
+             
+             if ([val isKindOfClass:[UIView class]])
+             {
+                 UIView *v = val;
+                 vv = [v valueForKey:key];
+             }
+             
+             [_myView setValue:vv forKey:key];
+         }
+         
+         [_keys removeAllObjects];
+         return self;
+     };
+}
+
+
+
+@end
+
+
+
 @implementation UIView(LayoutExtra)
 
 
@@ -211,6 +395,50 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return num.boolValue;
 }
 
+-(CGFloat)height
+{
+    return self.frame.size.height;
+}
+
+-(void)setHeight:(CGFloat)height
+{
+    CGRect rect = self.frame;
+    rect.size.height = height;
+    self.frame = rect;
+}
+
+
+-(CGFloat)width
+{
+    return self.frame.size.width;
+}
+
+-(void)setWidth:(CGFloat)width
+{
+    CGRect rect = self.frame;
+    rect.size.width = width;
+    self.frame = rect;
+}
+
+-(CGSize)size
+{
+    return self.frame.size;
+}
+
+-(void)setSize:(CGSize)size
+{
+    CGRect rect = self.frame;
+    rect.size.width = size.width;
+    rect.size.height = size.height;
+    
+    self.frame = rect;
+}
+
+-(void)makeLayout:(void(^)(MyMaker *make))layoutMaker
+{
+    MyMaker *mymaker = [[MyMaker alloc] initWithView:self];
+    layoutMaker(mymaker);
+}
 
 
 @end

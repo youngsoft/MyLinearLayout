@@ -25,16 +25,37 @@
     ll.autoAdjustDir = autoAdjustDir;
     ll.backgroundColor = [UIColor grayColor];
     
+   /* [ll makeLayout:^(MyMaker *make) {
+        make.width.equalTo(@(100)).height.equalTo(@(200));
+        make.leftMargin.equalTo(@(10));
+        make.orientation.equalTo(@(LVORIENTATION_VERT));
+        make.autoAdjustSize.equalTo(@(autoAdjustSize));
+        make.autoAdjustDir.equalTo(@(autoAdjustDir));
+    }];*/
+    
+    
     //不再需要指定y的偏移值了。
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(10, 0, 60, 40)];
     v1.backgroundColor = [UIColor redColor];
     v1.topMargin = 4;
     [ll addSubview:v1];
     
+    
+   /* [v1 makeLayout:^(MyMaker *make) {
+        
+        make.topMargin.equalTo(@(4));
+    }];*/
+    
+    
     UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(20, 0, 40, 60)];
     v2.backgroundColor = [UIColor greenColor];
     v2.topMargin = 6;
     [ll addSubview:v2];
+    
+    /*[v2 makeLayout:^(MyMaker *make) {
+        
+        make.topMargin.equalTo(@(6));
+    }];*/
     
     
     UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(15, 0, 75, 30)];
@@ -42,6 +63,12 @@
     v3.topMargin = 3;
     v3.bottomMargin = 4;
     [ll addSubview:v3];
+    
+    //您也可以这样设置。
+   /* [v3 makeLayout:^(MyMaker *make) {
+        make.topMargin.equalTo(@(3)).bottomMargin.equalTo(@(4));
+    }];
+    */
     
     return ll;
 }

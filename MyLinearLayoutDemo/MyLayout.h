@@ -9,6 +9,43 @@
 #import <UIKit/UIKit.h>
 
 
+/*专门为布局设置的简化操作类，以便在统一的地方进行布局设置*/
+@interface MyMaker : NSObject
+
+-(MyMaker*)topMargin;
+-(MyMaker*)leftMargin;
+-(MyMaker*)bottomMargin;
+-(MyMaker*)rightMargin;
+-(MyMaker*)margin;
+-(MyMaker*)marginGravity;
+-(MyMaker*)matchParentWidth;
+-(MyMaker*)matchParentHeight;
+-(MyMaker*)flexedHeight;
+-(MyMaker*)height;
+-(MyMaker*)width;
+-(MyMaker*)size;
+
+//布局独有
+-(MyMaker*)topPadding;
+-(MyMaker*)leftPadding;
+-(MyMaker*)bottomPadding;
+-(MyMaker*)rightPadding;
+
+-(MyMaker*)orientation;
+-(MyMaker*)wrapContent;
+-(MyMaker*)adjustScrollViewContentSize;
+-(MyMaker*)gravity;
+-(MyMaker*)autoAdjustSize;
+-(MyMaker*)autoAdjustDir;
+
+
+//赋值操支持NSNumber,以及UIView的值。
+-(MyMaker* (^)(id val))equalTo;
+
+@end
+
+
+
 //视图自身在父视图的停靠位置
 typedef enum : unsigned char {
     MGRAVITY_NONE = 0,
@@ -35,7 +72,6 @@ typedef enum : unsigned char {
     
 } MarignGravity;
 
-
 @interface UIView(LayoutExt)
 
 //下面4个属性用于指定视图跟他相关视图之间的间距，如果为0则是没有间距，如果>0 <1则是相对间距,比如父视图是100，而左间距是0.1则值是10。如果大于等于1则是绝对间距
@@ -61,6 +97,15 @@ typedef enum : unsigned char {
 //设定视图的高度在宽度是固定的情况下根据内容的大小而浮动,如果内容无法容纳的话则自动拉升视图的高度,如果原始高度高于内容则会缩小视图的高度。默认为NO, 这个属性主要用UILabel,UITextView的多行的情况。
 @property(nonatomic, assign, getter=isFlexedHeight) BOOL flexedHeight;
 
+
+//设置视图的高度和宽度,取代初始化时的frame的设置
+@property(nonatomic,assign) CGFloat height;
+@property(nonatomic,assign) CGFloat width;
+@property(nonatomic,assign) CGSize size;
+
+
+//对视图进行统一的布局，方便操作，跟masonry库的设置一致，请参考DEMO1中的设置。
+-(void)makeLayout:(void(^)(MyMaker *make))layoutMaker;
 
 @end
 
