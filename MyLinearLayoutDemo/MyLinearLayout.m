@@ -71,6 +71,16 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)setAutoAdjustSize:(BOOL)autoAdjustSize
 {
+
+    if (autoAdjustSize)
+    {
+        if (_orientation == LVORIENTATION_VERT && self.matchParentHeight != 0)
+            autoAdjustSize = NO;
+        
+        if (_orientation == LVORIENTATION_HORZ && self.matchParentWidth != 0)
+            autoAdjustSize = NO;
+    }
+    
     if (_autoAdjustSize != autoAdjustSize)
     {
         
@@ -101,6 +111,16 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)setWrapContent:(BOOL)wrapContent
 {
+    if (wrapContent)
+    {
+        if (self.orientation == LVORIENTATION_VERT && self.matchParentWidth != 0)
+            wrapContent = NO;
+        
+        if (self.orientation == LVORIENTATION_HORZ && self.matchParentHeight != 0)
+            wrapContent = NO;
+        
+    }
+    
     if (_wrapContent != wrapContent)
     {
         _wrapContent = wrapContent;
@@ -113,6 +133,9 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     if (matchParentWidth != 0 && self.orientation == LVORIENTATION_HORZ)
         self.autoAdjustSize = NO;
     
+    if (self.wrapContent && self.orientation == LVORIENTATION_VERT && matchParentWidth != 0)
+        self.wrapContent = NO;
+    
     [super setMatchParentWidth:matchParentWidth];
 }
 
@@ -120,6 +143,9 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 {
     if (matchParentHeight != 0 && self.orientation == LVORIENTATION_VERT)
         self.autoAdjustSize = NO;
+    
+    if (self.wrapContent && self.orientation == LVORIENTATION_HORZ && matchParentHeight != 0)
+        self.wrapContent = NO;
     
     [super setMatchParentHeight:matchParentHeight];
 }
