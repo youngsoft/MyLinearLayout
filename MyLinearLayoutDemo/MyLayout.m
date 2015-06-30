@@ -82,6 +82,12 @@
     return self;
 }
 
+-(MyMaker*)weight
+{
+    [_keys addObject:@"weight"];
+    return self;
+}
+
 -(MyMaker*)height
 {
     [_keys addObject:@"height"];

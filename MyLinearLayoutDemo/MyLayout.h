@@ -21,6 +21,7 @@
 -(MyMaker*)matchParentWidth;
 -(MyMaker*)matchParentHeight;
 -(MyMaker*)flexedHeight;
+-(MyMaker*)weight;
 -(MyMaker*)height;
 -(MyMaker*)width;
 -(MyMaker*)size;
