@@ -7,8 +7,7 @@
 //
 
 #import "Test1ViewController.h"
-#import "MyFrameLayout.h"
-#import "MyLinearLayout.h"
+#import "MyLayout.h"
 
 @interface Test1ViewController ()
 
@@ -19,20 +18,20 @@
 -(UIView*)createView:(BOOL)autoAdjustSize autoAdjustDir:(LineViewAutoAdjustDir)autoAdjustDir
 {
     MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.leftMargin = 10;
     ll.orientation = LVORIENTATION_VERT;
+    ll.leftMargin = 10;
     ll.autoAdjustSize = autoAdjustSize;
     ll.autoAdjustDir = autoAdjustDir;
     ll.backgroundColor = [UIColor grayColor];
     
    /* [ll makeLayout:^(MyMaker *make) {
-        make.width.equalTo(@(100)).height.equalTo(@(200));
-        make.leftMargin.equalTo(@(10));
         make.orientation.equalTo(@(LVORIENTATION_VERT));
+        make.width.equalTo(@100).height.equalTo(@200);
+        make.left.equalTo(@10);
         make.autoAdjustSize.equalTo(@(autoAdjustSize));
         make.autoAdjustDir.equalTo(@(autoAdjustDir));
-    }];*/
-    
+    }];
+    */
     
     //不再需要指定y的偏移值了。
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(10, 0, 60, 40)];
@@ -43,7 +42,7 @@
     
    /* [v1 makeLayout:^(MyMaker *make) {
         
-        make.topMargin.equalTo(@(4));
+        make.top.equalTo(@4);
     }];*/
     
     
@@ -54,7 +53,7 @@
     
     /*[v2 makeLayout:^(MyMaker *make) {
         
-        make.topMargin.equalTo(@(6));
+        make.top.equalTo(@6);
     }];*/
     
     
@@ -66,7 +65,7 @@
     
     //您也可以这样设置。
    /* [v3 makeLayout:^(MyMaker *make) {
-        make.topMargin.equalTo(@(3)).bottomMargin.equalTo(@(4));
+        make.top.equalTo(@3).bottom.equalTo(@4);
     }];
     */
     

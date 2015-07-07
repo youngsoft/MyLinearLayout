@@ -7,102 +7,75 @@
 //
 
 #import "Test13ViewController.h"
-#import "MyLinearLayout.h"
-#import "Masonry.h"
+#import "MyLayout.h"
+
 
 @implementation Test13ViewController
 
 -(void)loadView
 {
-    [super loadView];
-    self.view.backgroundColor  = [UIColor whiteColor];
     
-    UILabel *lab=[UILabel new];
-    lab.text=@"高级信息";
-    [self.view addSubview:lab];
-    [lab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(@10);
-        make.centerX.equalTo(@0);
-    }];
+    MyRelativeLayout *rl = [MyRelativeLayout new];
+    rl.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    rl.backgroundColor = [UIColor grayColor];
+    self.view = rl;
     
-    UILabel *lab2=[UILabel new];
-    lab2.text=@"222222";
-    [self.view addSubview:lab2];
+    UILabel *lb1 = [UILabel new];
+    [rl addSubview:lb1];
+    lb1.text = @"你好";
+    [lb1 sizeToFit];
+    lb1.backgroundColor = [UIColor blueColor];
+   
     
-    UITextField *textField=[UITextField new];
-    textField.backgroundColor=[UIColor greenColor];
-    [self.view addSubview:textField];
+    lb1.leftPos.equalTo(rl.leftPos); //和父视图左边一致
+    lb1.topPos.equalTo(rl.topPos).offset(10); //和父视图顶部一致并偏移10
+    lb1.widthDime.equalTo(@60); //固定宽度
     
-    [lab2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(textField).offset(-5);
-        make.left.greaterThanOrEqualTo(@10).priorityLow();
-        make.right.equalTo(textField.mas_left).offset(-15);
-    }];
-    [textField mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(lab.mas_bottom).offset(10);
-        make.left.equalTo(lab2.mas_right).offset(15);
-        make.right.equalTo(@-20);
-        make.height.equalTo(@40);
-        make.width.greaterThanOrEqualTo(@150).priorityLow();
-    }];
+    UILabel *lb2 = [UILabel new];
+    [rl addSubview:lb2];
+    lb2.text = @"我好 hello";
+    lb2.backgroundColor = [UIColor redColor];
     
-   /*
+    lb2.leftPos.equalTo(lb1.rightPos);
+    lb2.topPos.equalTo(lb1.bottomPos);
+    lb2.widthDime.equalTo(lb1.widthDime).add(30); //宽度是lb1的宽度加30
+    lb2.heightDime.equalTo(lb1.heightDime).multiply(2).add(-10); //高度是lb1高度的2倍再-10
     
-    MyLinearLayout *ll =  [MyLinearLayout new];
-    ll.backgroundColor = [UIColor whiteColor];
-    self.view = ll;
+    UILabel *lb3 = [UILabel new];
+    lb3.text = @"中间";
+    lb3.backgroundColor = [UIColor greenColor];
+    [rl addSubview:lb3];
+    
+    lb3.centerXPos.equalTo(rl.centerXPos);
+    lb3.centerYPos.equalTo(rl.centerYPos);
+    lb3.widthDime.equalTo(rl.widthDime).multiply(0.2);
+    lb3.heightDime.equalTo(rl.heightDime).multiply(0.1);
+    
+    UILabel *lb4 = [UILabel new];
+    lb4.text = @"他好";
+    lb4.backgroundColor = [UIColor orangeColor];
+    [rl addSubview:lb4];
+    
+    //宽度和高度由左右决定
+    lb4.leftPos.equalTo(rl.leftPos);
+    lb4.rightPos.equalTo(rl.rightPos);
+    lb4.topPos.equalTo(@100);
+    lb4.bottomPos.equalTo(@120);
+   
+    
+   /* [lb4 makeLayout:^(MyMaker *make) {
+        make.left.right.equalTo(rl);
+        make.top.equalTo(@100);
+        make.bottom.equalTo(@120);
+    }];*/
     
     
-    UILabel *labe = [UILabel new];
-    labe.text = @"高级信息";
-    labe.marginGravity = MGRAVITY_HORZ_CENTER;
-    labe.topMargin = 10;
-    [labe sizeToFit];
-    
-    [ll addSubview:labe];
-    
-    
-    MyLinearLayout *O1 = [MyLinearLayout new];
-    O1.gravity = MGRAVITY_VERT_BOTTOM;
-    O1.orientation = LVORIENTATION_HORZ;
-    O1.topMargin = 10;
-    O1.matchParentWidth = 1;
-    O1.wrapContent = YES;
-    O1.topPadding = 3;
-    O1.bottomPadding = 3;
-    
-    MyBorderLineDraw *topDraw = [[MyBorderLineDraw alloc] initWithColor:[UIColor grayColor]];
-    
-    MyBorderLineDraw *bottomDraw = [[MyBorderLineDraw alloc] initWithColor:[UIColor grayColor]];
-    bottomDraw.headIndent = 20;
-    O1.topBorderLine = topDraw;
-    O1.bottomBorderLine = bottomDraw;
-    
+}
 
-    UILabel *lb = [UILabel new];
-    lb.text = @"税后月收入";
-    [lb sizeToFit];
-    lb.leftMargin = 10;
-    
-    [O1 addSubview:lb];
-    
-    UITextField *txtFiled = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    txtFiled.text = @"asfasfasfasfasdf";
-    txtFiled.leftMargin = 2;
-    txtFiled.weight = 1;
-    txtFiled.rightMargin = 10;
-    txtFiled.matchParentHeight = 1;
-    
-    [O1 addSubview:txtFiled];
-    
-    [ll addSubview:O1];
-    
-    
-    */
-    
-    
-    
-    
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.title = @"相对布局1-视图之间的依赖";
 }
 
 @end

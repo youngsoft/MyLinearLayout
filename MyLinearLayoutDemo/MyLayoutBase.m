@@ -1,202 +1,14 @@
 //
-//  MyLayout.m
+//  MyLayoutBase.m
 //  MyLinearLayoutDemo
 //
 //  Created by apple on 15/6/14.
 //  Copyright (c) 2015年 SunnadaSoft. All rights reserved.
 //
 
-#import "MyLayout.h"
+#import "MyLayoutBase.h"
 #import <objc/runtime.h>
 
-
-@implementation MyMaker
-{
-    __weak UIView *_myView;
-    NSMutableArray *_keys;
-}
-
--(id)initWithView:(UIView *)v
-{
-    self = [self init];
-    if (self != nil)
-    {
-        _myView = v;
-        _keys = [[NSMutableArray alloc] init];
-    }
-    
-    return self;
-}
-
--(MyMaker*)topMargin
-{
-    [_keys addObject:@"topMargin"];
-    return self;
-}
-
--(MyMaker*)leftMargin
-{
-    [_keys addObject:@"leftMargin"];
-    return self;
-}
-
--(MyMaker*)bottomMargin
-{
-    [_keys addObject:@"bottomMargin"];
-    return self;
-}
-
--(MyMaker*)rightMargin
-{
-    [_keys addObject:@"rightMargin"];
-    return self;
-}
-
--(MyMaker*)margin
-{
-    [_keys addObject:@"margin"];
-    return self;
-}
-
--(MyMaker*)marginGravity
-{
-    [_keys addObject:@"marginGravity"];
-    return self;
-}
-
--(MyMaker*)matchParentWidth
-{
-    [_keys addObject:@"matchParentWidth"];
-    return self;
-}
-
--(MyMaker*)matchParentHeight
-{
-    [_keys addObject:@"matchParentHeight"];
-    return self;
-}
-
--(MyMaker*)flexedHeight
-{
-    [_keys addObject:@"flexedHeight"];
-    return self;
-}
-
--(MyMaker*)weight
-{
-    [_keys addObject:@"weight"];
-    return self;
-}
-
--(MyMaker*)height
-{
-    [_keys addObject:@"height"];
-    return self;
-}
-
--(MyMaker*)width
-{
-    [_keys addObject:@"width"];
-    return self;
-}
-
--(MyMaker*)size
-{
-    [_keys addObject:@"size"];
-    return self;
-}
-
--(MyMaker*)topPadding
-{
-    [_keys addObject:@"topPadding"];
-    return self;
-}
-
--(MyMaker*)leftPadding
-{
-    [_keys addObject:@"leftPadding"];
-    return self;
-}
-
--(MyMaker*)bottomPadding
-{
-    [_keys addObject:@"bottomPadding"];
-    return self;
-}
-
--(MyMaker*)rightPadding
-{
-    [_keys addObject:@"rightPadding"];
-    return self;
-}
-
-
-//布局独有
--(MyMaker*)orientation
-{
-    [_keys addObject:@"orientation"];
-    return self;
-}
-
--(MyMaker*)wrapContent
-{
-    [_keys addObject:@"wrapContent"];
-    return self;
-}
-
--(MyMaker*)adjustScrollViewContentSize
-{
-    [_keys addObject:@"adjustScrollViewContentSize"];
-    return self;
-}
-
--(MyMaker*)gravity
-{
-    [_keys addObject:@"gravity"];
-    return self;
-}
-
--(MyMaker*)autoAdjustSize
-{
-    [_keys addObject:@"autoAdjustSize"];
-    return self;
-}
-
-
--(MyMaker*)autoAdjustDir
-{
-    [_keys addObject:@"autoAdjustDir"];
-    return self;
-}
-
-
-
--(MyMaker* (^)(id val))equalTo
-{
-    
-     return ^id(id val) {
-         
-         for (NSString *key in _keys)
-         {
-             id vv = val;
-             
-             if ([val isKindOfClass:[UIView class]])
-             {
-                 UIView *v = val;
-                 vv = [v valueForKey:key];
-             }
-             
-             [_myView setValue:vv forKey:key];
-         }
-         
-         [_keys removeAllObjects];
-         return self;
-     };
-}
-
-
-
-@end
 
 
 
@@ -440,11 +252,6 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     self.frame = rect;
 }
 
--(void)makeLayout:(void(^)(MyMaker *make))layoutMaker
-{
-    MyMaker *mymaker = [[MyMaker alloc] initWithView:self];
-    layoutMaker(mymaker);
-}
 
 
 @end
@@ -480,11 +287,11 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 
 @end
 
-@interface MyLayout()<UIGestureRecognizerDelegate>
+@interface MyLayoutBase()<UIGestureRecognizerDelegate>
 
 @end
 
-@implementation MyLayout
+@implementation MyLayoutBase
 {
     __weak id _target;
     SEL   _action;
@@ -515,6 +322,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     _canTouch = YES;
     _canCallAction = NO;
     _beginPoint = CGPointZero;
+    _hideSubviewReLayout = YES;
 }
 
 -(void)doLayoutSubviews
@@ -599,6 +407,17 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 {
     return _padding.bottom;
 }
+
+-(void)setHideSubviewReLayout:(BOOL)hideSubviewReLayout
+{
+    if (_hideSubviewReLayout != hideSubviewReLayout)
+    {
+        _hideSubviewReLayout = hideSubviewReLayout;
+        [self setNeedsLayout];
+    }
+    
+}
+
 
 -(void)setBoundBorderLine:(MyBorderLineDraw *)boundBorderLine
 {
@@ -750,7 +569,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     //将要添加到父视图时，如果不是MyLayout派生则则跟父视图保持一致并
     if (self.matchParentHeight != 0 || self.matchParentWidth != 0)
     {
-        if (![newSuperview isKindOfClass:[MyLayout class]])
+        if (![newSuperview isKindOfClass:[MyLayoutBase class]])
         {
             CGRect rectSuper = newSuperview.bounds;
             CGRect rectSelf = self.frame;

@@ -209,7 +209,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         //计算最大子视图的尺寸
@@ -236,7 +236,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         CGRect rect = v.frame;
@@ -302,7 +302,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++) {
         
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         CGFloat topMargin = v.topMargin;
@@ -404,7 +404,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         if ([self isRelativeMargin:v.leftMargin])
@@ -438,7 +438,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++) {
         
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         CGFloat leftMargin = v.leftMargin;
@@ -524,7 +524,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++) {
         
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         CGFloat topMargin = v.topMargin;
@@ -599,7 +599,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         //计算最大子视图的尺寸
@@ -626,7 +626,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         CGRect rect = v.frame;
@@ -699,7 +699,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
        CGFloat topMargin = v.topMargin;
@@ -746,7 +746,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         CGFloat topMargin = v.topMargin;
@@ -817,7 +817,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden)
+        if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
         CGFloat leftMargin = v.leftMargin;
@@ -946,7 +946,18 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)averageSubviewsForVert:(BOOL)centered
 {
-    NSArray *sbs = self.subviews;
+    NSArray *arr = self.subviews;
+    
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:arr.count];
+    for (UIView *v in arr)
+    {
+        if (v.isHidden && self.hideSubviewReLayout)
+            continue;
+        
+        [sbs addObject:v];
+        
+    }
+    
     //如果居中和不居中则拆分出来的片段是不一样的。
     CGFloat fragments = centered ? sbs.count * 2 + 1 : sbs.count * 2 - 1;
     CGFloat scale = 1 / fragments;
@@ -971,7 +982,18 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)averageSubviewsForHorz:(BOOL)centered
 {
-    NSArray *sbs = self.subviews;
+    NSArray *arr = self.subviews;
+    
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:arr.count];
+    for (UIView *v in arr)
+    {
+        if (v.isHidden && self.hideSubviewReLayout)
+            continue;
+        
+        [sbs addObject:v];
+        
+    }
+
     //如果居中和不居中则拆分出来的片段是不一样的。
     CGFloat fragments = centered ? sbs.count * 2 + 1 : sbs.count * 2 - 1;
     CGFloat scale = 1 / fragments;
@@ -997,7 +1019,18 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)averageMarginForVert:(BOOL)centered
 {
-    NSArray *sbs = self.subviews;
+    NSArray *arr = self.subviews;
+    
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:arr.count];
+    for (UIView *v in arr)
+    {
+        if (v.isHidden && self.hideSubviewReLayout)
+            continue;
+        
+        [sbs addObject:v];
+        
+    }
+
     //如果居中和不居中则拆分出来的片段是不一样的。
     CGFloat fragments = centered ? sbs.count + 1 : sbs.count - 1;
     CGFloat scale = 1 / fragments;
@@ -1022,7 +1055,18 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)averageMarginForHorz:(BOOL)centered
 {
-    NSArray *sbs = self.subviews;
+    NSArray *arr = self.subviews;
+    
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:arr.count];
+    for (UIView *v in arr)
+    {
+        if (v.isHidden && self.hideSubviewReLayout)
+            continue;
+        
+        [sbs addObject:v];
+        
+    }
+
     //如果居中和不居中则拆分出来的片段是不一样的。
     CGFloat fragments = centered ? sbs.count + 1 : sbs.count - 1;
     CGFloat scale = 1 / fragments;

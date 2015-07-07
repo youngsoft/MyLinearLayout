@@ -20,8 +20,8 @@
 -(UIView*)createView:(MarignGravity)gravity padding:(UIEdgeInsets)padding
 {
     MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.leftMargin = 10;
     ll.orientation = LVORIENTATION_VERT;
+    ll.leftMargin = 10;
     ll.gravity = gravity;
     ll.padding = padding;
     ll.backgroundColor = [UIColor grayColor];

@@ -20,8 +20,8 @@
 -(UIView*)createView
 {
     MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.leftMargin = 10;
     ll.orientation = LVORIENTATION_VERT;
+    ll.leftMargin = 10;
     ll.backgroundColor = [UIColor grayColor];
     
     //不再需要指定y的偏移值了。

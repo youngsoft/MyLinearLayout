@@ -9,6 +9,7 @@
 #import "Test7ViewController.h"
 #import "MyFrameLayout.h"
 #import "MyLinearLayout.h"
+#import "MyRelativeLayout.h"
 
 @interface Test7ViewController ()
 
@@ -18,9 +19,9 @@
 
 -(void)loadView
 {
+    //线性布局实现相对子视图
     MyLinearLayout *ll = [MyLinearLayout new];
     //保证容器和视图控制的视图的大小进行伸缩调整。
-    ll.autoresizingMask =  UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     ll.orientation = LVORIENTATION_VERT;
     ll.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     ll.backgroundColor = [UIColor grayColor];
@@ -55,6 +56,38 @@
     
     
     self.view = ll;
+
+    //下面是采用相对布局的方式进行布局，可以看到相对布局的代码比较少一些，缺点是在进行布局时需要对视图之间的关系要非常清楚
+    //采用线性布局的优点是不需要考虑视图之间的关系，但代码多了一些。
+ /*   MyRelativeLayout *ll = [MyRelativeLayout new];
+    ll.padding = UIEdgeInsetsMake(20, 20, 20, 20);
+    ll.backgroundColor = [UIColor grayColor];
+    
+    UIView *topLeft = [UIView new];
+    topLeft.backgroundColor = [UIColor redColor];
+    
+    UIView *topRight = [UIView new];
+    topRight.backgroundColor = [UIColor greenColor];
+    
+    UIView *bottom = [UIView new];
+    bottom.backgroundColor = [UIColor blueColor];
+    
+    [ll addSubview:topLeft];
+    [ll addSubview:topRight];
+    [ll addSubview:bottom];
+    
+    //上下高度平分，高度等于 = 父视图高度 - 20 再平分
+    topLeft.heightDime.equalTo(@[bottom.heightDime]).add(-20);
+    topLeft.widthDime.equalTo(@[topRight.widthDime]).add(-20);
+    topRight.leftPos.equalTo(topLeft.rightPos).offset(20);
+    topRight.heightDime.equalTo(topLeft.heightDime);
+    bottom.topPos.equalTo(topLeft.bottomPos).offset(20);
+    bottom.leftPos.equalTo(ll.leftPos);
+    bottom.rightPos.equalTo(ll.rightPos);
+    
+    
+    self.view = ll;*/
+    
 
 }
 

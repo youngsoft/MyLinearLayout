@@ -22,6 +22,9 @@
 #import "Test10ViewController.h"
 #import "Test11ViewController.h"
 #import "Test12ViewController.h"
+#import "Test13ViewController.h"
+#import "Test14ViewController.h"
+#import "Test15ViewController.h"
 
 @interface ViewController ()
 
@@ -45,11 +48,18 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+}
+
+
 #pragma mark -- UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 12;
+    return 15;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -95,6 +105,16 @@
         case 11:
             cell.textLabel.text = @"边框的线以及布局动画,触摸事件";
             break;
+        case 12:
+            cell.textLabel.text = @"相对布局1-视图之间的依赖";
+            break;
+        case 13:
+            cell.textLabel.text = @"相对布局2-子视图之间尺寸分配";
+            break;
+        case 14:
+            cell.textLabel.text = @"相对布局3-父视图高宽由子视图决定";
+            break;
+
         default:
             break;
     }
@@ -145,6 +165,16 @@
         case 11:
             vc = [Test12ViewController new];
             break;
+        case 12:
+            vc = [Test13ViewController new];
+            break;
+        case 13:
+            vc = [Test14ViewController new];
+            break;
+        case 14:
+            vc = [Test15ViewController new];
+            break;
+
         default:
             break;
     }

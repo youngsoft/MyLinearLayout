@@ -9,7 +9,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MyLayout.h"
+#import "MyLayoutBase.h"
 
 
 
@@ -48,7 +48,7 @@ typedef enum : NSUInteger {
  
  注意：如果使用这个类请关闭XIB中的自动布局功能。或者父视图的自动布局功能。
  */
-@interface MyLinearLayout : MyLayout
+@interface MyLinearLayout : MyLayoutBase
 
 //方向，默认是纵向的
 @property(nonatomic,assign) LineViewOrientation orientation;
