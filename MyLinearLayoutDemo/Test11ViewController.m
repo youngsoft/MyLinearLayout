@@ -44,7 +44,7 @@
     horzFill.text = @"Horz Fill";
     horzFill.textAlignment = NSTextAlignmentCenter;
     horzFill.backgroundColor = [UIColor greenColor];
-    horzFill.marginGravity = MGRAVITY_HORZ_FILL;
+    horzFill.marginGravity = MGRAVITY_HORZ_FILL | MGRAVITY_VERT_TOP;
     [fl addSubview:horzFill];
     
     
@@ -52,7 +52,7 @@
     UILabel *horzCenter = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
     horzCenter.text = @"Horz Center";
     horzCenter.backgroundColor = [UIColor whiteColor];
-    horzCenter.marginGravity = MGRAVITY_HORZ_CENTER;
+    horzCenter.marginGravity = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_TOP;
     [fl addSubview:horzCenter];
     
     
