@@ -67,6 +67,9 @@
 //对视图进行统一的布局，方便操作，跟masonry库的设置一致，请参考DEMO1中的设置。
 -(void)makeLayout:(void(^)(MyMaker *make))layoutMaker;
 
+//布局内所有子视图的布局构造，会影响到有所的子视图。
+-(void)allSubviewMakeLayout:(void(^)(MyMaker *make))layoutMaker;
+
 
 @end
 
