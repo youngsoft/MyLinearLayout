@@ -1022,30 +1022,40 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             
             CGFloat totalWidth = 0;
             
-            [self calcWidth:sbv];
-            totalWidth += sbv.absPos.width + sbv.leftMargin;
+            if (!(sbv.isHidden && self.hideSubviewReLayout))
+            {
+                [self calcWidth:sbv];
+                totalWidth += sbv.absPos.width + sbv.leftMargin;
+            }
             
             
             for (MyRelativePos *p in arr)
             {
-                [self calcWidth:p.view];
-                totalWidth += p.view.absPos.width + p.view.leftMargin;
+                if (!(p.view.isHidden && self.hideSubviewReLayout))
+                {
+                    [self calcWidth:p.view];
+                    totalWidth += p.view.absPos.width + p.view.leftMargin;
+                }
             }
             
             //所有宽度算出后，再分别设置
             CGFloat leftOffset = (self.width - self.leftPadding - self.rightPadding - totalWidth) / 2;
-            if (leftOffset < 0)
-                leftOffset = 0;
-            
             leftOffset += self.leftPadding;
             
-            sbv.leftPos.equalTo(@(leftOffset));
+            id prev = @(leftOffset);
+            if (!(sbv.isHidden && self.hideSubviewReLayout))
+            {
+                sbv.leftPos.equalTo(prev);
+                prev = sbv.rightPos;
+            }
             
-            MyRelativePos *prev = sbv.rightPos;
             for (MyRelativePos *p in arr)
             {
-                p.view.leftPos.equalTo(prev);
-                prev = p.view.rightPos;
+                if (!(p.view.isHidden && self.hideSubviewReLayout))
+                {
+                    p.view.leftPos.equalTo(prev);
+                    prev = p.view.rightPos;
+                }
             }
         }
         
@@ -1057,35 +1067,43 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             
             CGFloat totalHeight = 0;
             
-            [self calcHeight:sbv];
-            totalHeight += sbv.absPos.height + sbv.topMargin;
+            if (!(sbv.isHidden && self.hideSubviewReLayout))
+            {
+                [self calcHeight:sbv];
+                totalHeight += sbv.absPos.height + sbv.topMargin;
+            }
             
             
             for (MyRelativePos *p in arr)
             {
-                [self calcHeight:p.view];
-                totalHeight += p.view.absPos.height + p.view.topMargin;
+                if (!(p.view.isHidden && self.hideSubviewReLayout))
+                {
+                    [self calcHeight:p.view];
+                    totalHeight += p.view.absPos.height + p.view.topMargin;
+                }
             }
             
             //所有宽度算出后，再分别设置
             CGFloat topOffset = (self.height - self.topPadding - self.topPadding - totalHeight) / 2;
-            if (topOffset < 0)
-                topOffset = 0;
-            
             topOffset += self.topPadding;
             
-            sbv.topPos.equalTo(@(topOffset));
+            id prev = @(topOffset);
+            if (!(sbv.isHidden && self.hideSubviewReLayout))
+            {
+                sbv.topPos.equalTo(prev);
+                prev = sbv.bottomPos;
+            }
             
-            MyRelativePos *prev = sbv.bottomPos;
             for (MyRelativePos *p in arr)
             {
-                p.view.topPos.equalTo(prev);
-                prev = p.view.bottomPos;
+                if (!(p.view.isHidden && self.hideSubviewReLayout))
+                {
+                    p.view.topPos.equalTo(prev);
+                    prev = p.view.bottomPos;
+                }
             }
         }
 
-        
-        
         
     }
     
