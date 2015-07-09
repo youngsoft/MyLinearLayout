@@ -1,0 +1,113 @@
+//
+//  Test16ViewController.m
+//  MyLinearLayoutDemo
+//
+//  Created by apple on 15/7/9.
+//  Copyright (c) 2015年 SunnadaSoft. All rights reserved.
+//
+
+#import "Test16ViewController.h"
+#import "MyRelativeLayout.h"
+#import "MyMaker.h"
+
+@interface Test16ViewController ()
+
+@end
+
+@implementation Test16ViewController
+
+-(void)loadView
+{
+    
+    MyRelativeLayout *rl = [MyRelativeLayout new];
+    rl.backgroundColor = [UIColor grayColor];
+    self.view = rl;
+    
+    //一组视图水平居中。
+    UILabel *lb1 = [UILabel new];
+    lb1.text = @"abcdefg";
+    [lb1 sizeToFit];
+    lb1.backgroundColor = [UIColor redColor];
+    lb1.topPos.offset(100);
+    [rl addSubview:lb1];
+    
+    UILabel *lb2 = [UILabel new];
+    lb2.text = @"abcdefgfd";
+    [lb2 sizeToFit];
+    lb2.backgroundColor = [UIColor blueColor];
+    lb2.topPos.offset(100);
+    [rl addSubview:lb2];
+    
+    
+    UILabel *lb3 = [UILabel new];
+    lb3.text = @"abc";
+    [lb3 sizeToFit];
+    lb3.backgroundColor = [UIColor greenColor];
+    lb3.topPos.offset(100);
+    [rl addSubview:lb3];
+    
+    
+    //lb1, lb2, lb3 三个视图组成一个组在父视图,lb2离lb15的间隔，lb3离lb210的间隔。如果要3个整体往右移则设置
+    //lb1的offset。
+    lb1.centerXPos.equalTo(@[lb2.centerXPos.offset(5), lb3.centerXPos.offset(10)]);
+    
+    //对照。
+    UILabel *lb4 = [UILabel new];
+    lb4.text = @"你好";
+    [lb4 sizeToFit];
+    lb4.backgroundColor = [UIColor orangeColor];
+    [rl addSubview:lb4];
+    lb4.leftPos.equalTo(lb1.leftPos);
+    lb4.topPos.equalTo(lb2.bottomPos).offset(10);
+    
+    
+    //一组视图垂直居中
+    UILabel *lb5 = [UILabel new];
+    lb5.text = @"abcdefg";
+    [lb5 sizeToFit];
+    lb5.backgroundColor = [UIColor redColor];
+    lb5.centerXPos.equalTo(rl.centerXPos);
+    [rl addSubview:lb5];
+    
+    UILabel *lb6 = [UILabel new];
+    lb6.text = @"abcdefgfd";
+    [lb6 sizeToFit];
+    lb6.backgroundColor = [UIColor blueColor];
+    lb6.centerXPos.equalTo(rl.centerXPos);
+    [rl addSubview:lb6];
+    
+    
+    UILabel *lb7 = [UILabel new];
+    lb7.text = @"abc";
+    [lb7 sizeToFit];
+    lb7.backgroundColor = [UIColor greenColor];
+    lb7.centerXPos.equalTo(rl.centerXPos);
+    [rl addSubview:lb7];
+    
+    lb5.centerYPos.equalTo(@[lb6.centerYPos.offset(5), lb7.centerYPos.offset(10)]);
+
+    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    self.title = @"相对布局4-一组视图居中";
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

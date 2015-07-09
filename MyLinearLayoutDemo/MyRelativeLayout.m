@@ -34,6 +34,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
 @property(nonatomic, readonly) NSNumber *posNumVal;
 @property(nonatomic, readonly) MyRelativePos *posRelaVal;
+@property(nonatomic, readonly) NSArray *posArrVal;
 
 @end
 
@@ -74,6 +75,18 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     
     return nil;
 
+}
+
+-(MyRelativePos*)posArrVal
+{
+    if (_posVal == nil)
+        return nil;
+    
+    if ((_pos == MGRAVITY_HORZ_CENTER || _pos == MGRAVITY_VERT_CENTER) && [_posVal isKindOfClass:[NSArray class]])
+        return _posVal;
+    
+    return nil;
+    
 }
 
 -(MyRelativePos* (^)(CGFloat val))offset
@@ -529,43 +542,8 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
     
     //先检测宽度,如果宽度是父亲的宽度则宽度和左右都确定
-    if (sbv.absPos.width == CGFLOAT_MIN)
-    {
-        if (sbv.widthDime.dimeRelaVal != nil)
-        {
-
-            sbv.absPos.width = [self calcSubView:sbv.widthDime.dimeRelaVal.view gravity:sbv.widthDime.dimeRelaVal.dime] * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
-        }
-        else if (sbv.widthDime.dimeNumVal != nil)
-        {
-            sbv.absPos.width = sbv.widthDime.dimeNumVal.floatValue * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
-        }
-        else;
-        
-        if (sbv.leftPos.posRelaVal != nil && sbv.rightPos.posRelaVal != nil)
-        {
-            sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos] + sbv.leftMargin;
-            sbv.absPos.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos] - sbv.rightMargin;
-            sbv.absPos.width = sbv.absPos.rightPos - sbv.absPos.leftPos;
-            
-            return;
-        }
-        
-        if (sbv.leftPos.posNumVal != nil && sbv.rightPos.posNumVal != nil)
-        {
-            sbv.absPos.leftPos = sbv.leftPos.posNumVal.floatValue + sbv.leftMargin;
-            sbv.absPos.rightPos = sbv.rightPos.posNumVal.floatValue - sbv.rightMargin;
-            sbv.absPos.width = sbv.absPos.rightPos - sbv.absPos.leftPos;
-            
-            return;
-        }
-        
-        
-        if (sbv.absPos.width == CGFLOAT_MIN)
-        {
-            sbv.absPos.width = sbv.width;
-        }
-    }
+    if ([self calcWidth:sbv])
+        return;
     
     
     if (sbv.centerXPos.posRelaVal != nil)
@@ -624,44 +602,8 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     
     
     //先检测宽度,如果宽度是父亲的宽度则宽度和左右都确定
-    if (sbv.absPos.height == CGFLOAT_MIN)
-    {
-        if (sbv.heightDime.dimeRelaVal != nil)
-        {
-            
-            sbv.absPos.height = [self calcSubView:sbv.heightDime.dimeRelaVal.view gravity:sbv.heightDime.dimeRelaVal.dime] * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
-        }
-        else if (sbv.heightDime.dimeNumVal != nil)
-        {
-            sbv.absPos.height = sbv.heightDime.dimeNumVal.floatValue * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
-        }
-        else;
-        
-        if (sbv.topPos.posRelaVal != nil && sbv.bottomPos.posRelaVal != nil)
-        {
-            sbv.absPos.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos] + sbv.topMargin;
-            sbv.absPos.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos] - sbv.bottomMargin;
-            sbv.absPos.height = sbv.absPos.bottomPos - sbv.absPos.topPos;
-            
-            return;
-        }
-        
-        if (sbv.topPos.posNumVal != nil && sbv.bottomPos.posNumVal != nil)
-        {
-            sbv.absPos.topPos = sbv.topPos.posNumVal.floatValue + sbv.topMargin;
-            sbv.absPos.bottomPos = sbv.bottomPos.posNumVal.floatValue - sbv.bottomMargin;
-            sbv.absPos.height = sbv.absPos.bottomPos - sbv.absPos.topPos;
-            
-            return;
-        }
-        
-        
-        if (sbv.absPos.height == CGFLOAT_MIN)
-        {
-            sbv.absPos.height = sbv.height;
-        }
-    }
-    
+    if ([self calcHeight:sbv])
+        return;
     
     if (sbv.centerYPos.posRelaVal != nil)
     {
@@ -885,6 +827,95 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 }
 
 
+-(BOOL)calcWidth:(UIView*)sbv
+{
+    if (sbv.absPos.width == CGFLOAT_MIN)
+    {
+        if (sbv.widthDime.dimeRelaVal != nil)
+        {
+            
+            sbv.absPos.width = [self calcSubView:sbv.widthDime.dimeRelaVal.view gravity:sbv.widthDime.dimeRelaVal.dime] * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+        }
+        else if (sbv.widthDime.dimeNumVal != nil)
+        {
+            sbv.absPos.width = sbv.widthDime.dimeNumVal.floatValue * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+        }
+        else;
+        
+        if (sbv.leftPos.posRelaVal != nil && sbv.rightPos.posRelaVal != nil)
+        {
+            sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos] + sbv.leftMargin;
+            sbv.absPos.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos] - sbv.rightMargin;
+            sbv.absPos.width = sbv.absPos.rightPos - sbv.absPos.leftPos;
+            
+            return YES;
+        }
+        
+        if (sbv.leftPos.posNumVal != nil && sbv.rightPos.posNumVal != nil)
+        {
+            sbv.absPos.leftPos = sbv.leftPos.posNumVal.floatValue + sbv.leftMargin;
+            sbv.absPos.rightPos = sbv.rightPos.posNumVal.floatValue - sbv.rightMargin;
+            sbv.absPos.width = sbv.absPos.rightPos - sbv.absPos.leftPos;
+            
+            return YES;
+        }
+        
+        
+        if (sbv.absPos.width == CGFLOAT_MIN)
+        {
+            sbv.absPos.width = sbv.width;
+        }
+    }
+    
+    return NO;
+}
+
+
+-(BOOL)calcHeight:(UIView*)sbv
+{
+    if (sbv.absPos.height == CGFLOAT_MIN)
+    {
+        if (sbv.heightDime.dimeRelaVal != nil)
+        {
+            
+            sbv.absPos.height = [self calcSubView:sbv.heightDime.dimeRelaVal.view gravity:sbv.heightDime.dimeRelaVal.dime] * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        }
+        else if (sbv.heightDime.dimeNumVal != nil)
+        {
+            sbv.absPos.height = sbv.heightDime.dimeNumVal.floatValue * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        }
+        else;
+        
+        if (sbv.topPos.posRelaVal != nil && sbv.bottomPos.posRelaVal != nil)
+        {
+            sbv.absPos.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos] + sbv.topMargin;
+            sbv.absPos.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos] - sbv.bottomMargin;
+            sbv.absPos.height = sbv.absPos.bottomPos - sbv.absPos.topPos;
+            
+            return YES;
+        }
+        
+        if (sbv.topPos.posNumVal != nil && sbv.bottomPos.posNumVal != nil)
+        {
+            sbv.absPos.topPos = sbv.topPos.posNumVal.floatValue + sbv.topMargin;
+            sbv.absPos.bottomPos = sbv.bottomPos.posNumVal.floatValue - sbv.bottomMargin;
+            sbv.absPos.height = sbv.absPos.bottomPos - sbv.absPos.topPos;
+            
+            return YES;
+        }
+        
+        
+        if (sbv.absPos.height == CGFLOAT_MIN)
+        {
+            sbv.absPos.height = sbv.height;
+        }
+    }
+    
+    return NO;
+
+}
+
+
 -(CGSize)calcLayout:(BOOL*)pRecalc
 {
     *pRecalc = NO;
@@ -981,6 +1012,80 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
                 }
             }
         }
+        
+        
+        //表示视图数组水平居中
+        if (sbv.centerXPos.posArrVal != nil)
+        {
+            //先算出所有关联视图的宽度。再计算出关联视图的左边和右边的绝对值。
+            NSArray *arr = sbv.centerXPos.posArrVal;
+            
+            CGFloat totalWidth = 0;
+            
+            [self calcWidth:sbv];
+            totalWidth += sbv.absPos.width + sbv.leftMargin;
+            
+            
+            for (MyRelativePos *p in arr)
+            {
+                [self calcWidth:p.view];
+                totalWidth += p.view.absPos.width + p.view.leftMargin;
+            }
+            
+            //所有宽度算出后，再分别设置
+            CGFloat leftOffset = (self.width - self.leftPadding - self.rightPadding - totalWidth) / 2;
+            if (leftOffset < 0)
+                leftOffset = 0;
+            
+            leftOffset += self.leftPadding;
+            
+            sbv.leftPos.equalTo(@(leftOffset));
+            
+            MyRelativePos *prev = sbv.rightPos;
+            for (MyRelativePos *p in arr)
+            {
+                p.view.leftPos.equalTo(prev);
+                prev = p.view.rightPos;
+            }
+        }
+        
+        //表示视图数组垂直居中
+        if (sbv.centerYPos.posArrVal != nil)
+        {
+            //先算出所有关联视图的宽度。再计算出关联视图的左边和右边的绝对值。
+            NSArray *arr = sbv.centerYPos.posArrVal;
+            
+            CGFloat totalHeight = 0;
+            
+            [self calcHeight:sbv];
+            totalHeight += sbv.absPos.height + sbv.topMargin;
+            
+            
+            for (MyRelativePos *p in arr)
+            {
+                [self calcHeight:p.view];
+                totalHeight += p.view.absPos.height + p.view.topMargin;
+            }
+            
+            //所有宽度算出后，再分别设置
+            CGFloat topOffset = (self.height - self.topPadding - self.topPadding - totalHeight) / 2;
+            if (topOffset < 0)
+                topOffset = 0;
+            
+            topOffset += self.topPadding;
+            
+            sbv.topPos.equalTo(@(topOffset));
+            
+            MyRelativePos *prev = sbv.bottomPos;
+            for (MyRelativePos *p in arr)
+            {
+                p.view.topPos.equalTo(prev);
+                prev = p.view.bottomPos;
+            }
+        }
+
+        
+        
         
     }
     

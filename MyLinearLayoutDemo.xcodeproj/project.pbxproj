@@ -26,6 +26,7 @@
 		184082A11B2C46E8003F378B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1840829F1B2C46E8003F378B /* LaunchScreen.xib */; };
 		184082AD1B2C46E8003F378B /* MyLinearLayoutDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 184082AC1B2C46E8003F378B /* MyLinearLayoutDemoTests.m */; };
 		184082BB1B2C9C60003F378B /* MyLinearLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 184082BA1B2C9C60003F378B /* MyLinearLayout.m */; };
+		184CEC221B4E8B2900E97C7E /* Test16ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184CEC211B4E8B2900E97C7E /* Test16ViewController.m */; };
 		187C6A4E1B47C94700A6949A /* MyRelativeLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C6A4B1B47C94700A6949A /* MyRelativeLayout.m */; };
 		187C6A4F1B47C94700A6949A /* Test13ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C6A4D1B47C94700A6949A /* Test13ViewController.m */; };
 		187C6A521B49879400A6949A /* MyMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C6A511B49879400A6949A /* MyMaker.m */; };
@@ -85,6 +86,8 @@
 		184082AC1B2C46E8003F378B /* MyLinearLayoutDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyLinearLayoutDemoTests.m; sourceTree = "<group>"; };
 		184082B91B2C9C60003F378B /* MyLinearLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLinearLayout.h; sourceTree = "<group>"; };
 		184082BA1B2C9C60003F378B /* MyLinearLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLinearLayout.m; sourceTree = "<group>"; };
+		184CEC201B4E8B2900E97C7E /* Test16ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test16ViewController.h; sourceTree = "<group>"; };
+		184CEC211B4E8B2900E97C7E /* Test16ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test16ViewController.m; sourceTree = "<group>"; };
 		187C6A4A1B47C94700A6949A /* MyRelativeLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRelativeLayout.h; sourceTree = "<group>"; };
 		187C6A4B1B47C94700A6949A /* MyRelativeLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRelativeLayout.m; sourceTree = "<group>"; };
 		187C6A4C1B47C94700A6949A /* Test13ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test13ViewController.h; sourceTree = "<group>"; };
@@ -194,6 +197,8 @@
 				1889AEAD1B4A69130001F871 /* Test14ViewController.m */,
 				18FAC1881B4ABD10005FD4E0 /* Test15ViewController.h */,
 				18FAC1891B4ABD10005FD4E0 /* Test15ViewController.m */,
+				184CEC201B4E8B2900E97C7E /* Test16ViewController.h */,
+				184CEC211B4E8B2900E97C7E /* Test16ViewController.m */,
 			);
 			path = MyLinearLayoutDemo;
 			sourceTree = "<group>";
@@ -332,6 +337,7 @@
 				183AB2EB1B36CB75003E999F /* Test10ViewController.m in Sources */,
 				18970C241B2D330A00A475CC /* MyFrameLayout.m in Sources */,
 				183AB2D91B36ACC1003E999F /* Test4ViewController.m in Sources */,
+				184CEC221B4E8B2900E97C7E /* Test16ViewController.m in Sources */,
 				183AB2E51B36CB41003E999F /* Test8ViewController.m in Sources */,
 				183AB2D31B36714F003E999F /* Test2ViewController.m in Sources */,
 				18FAC18A1B4ABD10005FD4E0 /* Test15ViewController.m in Sources */,

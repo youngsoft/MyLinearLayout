@@ -25,6 +25,8 @@
 #import "Test13ViewController.h"
 #import "Test14ViewController.h"
 #import "Test15ViewController.h"
+#import "Test16ViewController.h"
+
 
 @interface ViewController ()
 
@@ -59,7 +61,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 15;
+    return 16;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -113,6 +115,9 @@
             break;
         case 14:
             cell.textLabel.text = @"相对布局3-父视图高宽由子视图决定";
+            break;
+        case 15:
+            cell.textLabel.text = @"相对布局4-一组视图居中";
             break;
 
         default:
@@ -173,6 +178,9 @@
             break;
         case 14:
             vc = [Test15ViewController new];
+            break;
+        case 15:
+            vc = [Test16ViewController new];
             break;
 
         default:

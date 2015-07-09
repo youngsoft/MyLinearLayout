@@ -14,7 +14,9 @@
 //偏移
 -(MyRelativePos* (^)(CGFloat val))offset;
 
-//NSNumber, MyRelativePos对象
+//NSNumber, MyRelativePos对象,如果是centerXPos或者centerYPos则可以传NSArray，数组里面里面也必须是centerXPos，表示指定的视图数组
+//在父视图中居中，比如： A.centerXPos.equalTo(@[B.centerXPos.offset(20)].offset(20)
+//表示A和B在父视图中居中往下偏移20，B在A的右边，间隔20。
 -(MyRelativePos* (^)(id val))equalTo;
 
 @end
@@ -53,6 +55,8 @@
 
 
 @end
+
+//如何让某几个视图成组。形成一个虚拟视图。先查找
 
 
 /*相对布局视图，里面的所有子视图都需要指定位置和尺寸的依赖关系*/
