@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-//视图自身在父视图的停靠位置
+//视图的停靠属性
 typedef enum : unsigned char {
     MGRAVITY_NONE = 0,
     
@@ -35,39 +35,63 @@ typedef enum : unsigned char {
     
 } MarignGravity;
 
-@interface UIView(LayoutExt)
-
-//下面4个属性用于指定视图跟他相关视图之间的间距，如果为0则是没有间距，如果>0 <1则是相对间距,比如父视图是100，而左间距是0.1则值是10。如果大于等于1则是绝对间距
-//一般当使用相对间距时主要用图是子视图的宽度和高度是固定的，只是边距随父视图的大小而调整。
-@property(nonatomic,assign) CGFloat topMargin;
-@property(nonatomic,assign) CGFloat leftMargin;
-@property(nonatomic,assign) CGFloat bottomMargin;
-@property(nonatomic,assign) CGFloat rightMargin;
-
-@property(nonatomic,assign) UIEdgeInsets margin; //上面四个边距
-
-//用于指定边距的停靠位置，也就是在父视图中的停靠策略，如果设置为MGRAVITY_NONE则不使用停靠策略而是使用frame中x,y来定位视图的位置。
-@property(nonatomic, assign) MarignGravity marginGravity;
 
 
-//视图的相对尺寸，如果为0则视图使用绝对的高度或宽度。值的范围是0-1表示自身的高度或者宽度是父视图高度和宽度的百分比，如果是1则表示和父视图是一样的高度和宽度
-//如果为负数则表示子视图离父视图的两边的边距。
-@property(nonatomic,assign) CGFloat matchParentWidth;
-@property(nonatomic,assign) CGFloat matchParentHeight;
+/*布局位置对象*/
+@interface MyLayoutPos : NSObject
+
+//偏移
+-(MyLayoutPos* (^)(CGFloat val))offset;
+
+//NSNumber, MyLayoutPos对象,如果是centerXPos或者centerYPos则可以传NSArray，数组里面里面也必须是centerXPos，表示指定的视图数组
+//在父视图中居中，比如： A.centerXPos.equalTo(@[B.centerXPos.offset(20)].offset(20)
+//表示A和B在父视图中居中往下偏移20，B在A的右边，间隔20。
+//如果是NSNumber值则表示离布局视图的特定方向的边界值，对于线性布局来说如果大于0小于1则表示间距是相对值。
+//如果是MyLayoutPos则是相对于另外一个视图的边界值
+//如果是NSArray则是视图成组后的值。
+-(MyLayoutPos* (^)(id val))equalTo;
+
+@end
 
 
+/*布局尺寸对象*/
+@interface MyLayoutDime : NSObject
+
+//乘
+-(MyLayoutDime* (^)(CGFloat val))multiply;
+
+//加,用这个和equalTo的数组功能可以实现均分子视图宽度以及间隔的设定。
+-(MyLayoutDime* (^)(CGFloat val))add;
+
+
+//NSNumber, MyLayoutDime以及MyLayoutDime数组，数组的概念就是所有数组里面的子视图的尺寸平分父视图的尺寸。
+-(MyLayoutDime* (^)(id val))equalTo;
+
+
+@end
+
+
+@interface UIView(MyLayoutExt)
+
+//边界位置
+@property(nonatomic, readonly)  MyLayoutPos *leftPos;
+@property(nonatomic, readonly)  MyLayoutPos *topPos;
+@property(nonatomic, readonly)  MyLayoutPos *rightPos;
+@property(nonatomic, readonly)  MyLayoutPos *bottomPos;
+@property(nonatomic, readonly)  MyLayoutPos *centerXPos;
+@property(nonatomic, readonly)  MyLayoutPos *centerYPos;
+
+
+//尺寸,如果设置了尺寸则以设置尺寸优先，否则以视图自身的frame的高宽为基准
+@property(nonatomic, readonly)  MyLayoutDime *widthDime;
+@property(nonatomic, readonly)  MyLayoutDime *heightDime;
 
 //设定视图的高度在宽度是固定的情况下根据内容的大小而浮动,如果内容无法容纳的话则自动拉升视图的高度,如果原始高度高于内容则会缩小视图的高度。默认为NO, 这个属性主要用UILabel,UITextView的多行的情况。
 @property(nonatomic, assign, getter=isFlexedHeight) BOOL flexedHeight;
 
 
-//设置视图的高度和宽度,取代初始化时的frame的设置
-@property(nonatomic,assign) CGFloat height;
-@property(nonatomic,assign) CGFloat width;
-@property(nonatomic,assign) CGSize size;
-
-
 @end
+
 
 
 /**画线用于布局的四周的线的绘制**/
@@ -82,7 +106,6 @@ typedef enum : unsigned char {
 
 -(id)initWithColor:(UIColor*)color;
 
-
 @end
 
 
@@ -95,6 +118,16 @@ typedef enum : unsigned char {
 @property(nonatomic, assign) CGFloat leftPadding;
 @property(nonatomic, assign) CGFloat bottomPadding;
 @property(nonatomic, assign) CGFloat rightPadding;
+
+
+//高宽是否由子视图决定，这两个属性只对线性和相对布局有效，框架布局无效
+@property(nonatomic,assign) BOOL wrapContentWidth;
+@property(nonatomic,assign) BOOL wrapContentHeight;
+
+
+//如果布局的父视图是UIScrollView或者子类则在布局的位置调整后是否调整滚动视图的contentsize,默认是NO
+//这个属性适合与整个布局作为滚动视图的唯一子视图来使用。
+@property(nonatomic, assign, getter = isAdjustScrollViewContentSize) BOOL adjustScrollViewContentSize;
 
 
 
@@ -111,7 +144,7 @@ typedef enum : unsigned char {
 @property(nonatomic,copy) void (^beginLayoutBlock)();
 @property(nonatomic,copy) void (^endLayoutBlock)();
 
-
+//当前是否正在布局中。
 @property(nonatomic,assign) BOOL isLayouting;
 
 
@@ -124,7 +157,6 @@ typedef enum : unsigned char {
 //同时设置4个边界线。
 @property(nonatomic, strong) MyBorderLineDraw *boundBorderLine;
 
-
 //下面的功能支持在布局视图中的触摸功能。
 
 //高亮的背景色,我们支持在布局中执行单击的事件，用户按下时背景会高亮.只有设置了事件才会高亮
@@ -132,6 +164,8 @@ typedef enum : unsigned char {
 
 //设置单击触摸的事件，如果target为nil则取消事件。
 -(void)setTarget:(id)target action:(SEL)action;
+
+
 
 
 
@@ -144,21 +178,10 @@ typedef enum : unsigned char {
 //判断margin是否是相对margin
 -(BOOL)isRelativeMargin:(CGFloat)margin;
 
--(void)vertGravity:(MarignGravity)vert
-        selfHeight:(CGFloat)selfHeight
-         topMargin:(CGFloat)topMargin
-      bottomMargin:(CGFloat)bottomMargin
-              rect:(CGRect*)pRect;
 
--(void)horzGravity:(MarignGravity)horz
-         selfWidth:(CGFloat)selfWidth
-        leftMargin:(CGFloat)leftMargin
-       rightMargin:(CGFloat)rightMargin
-              rect:(CGRect*)pRect;
+-(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect superView:(UIView*)newSuperview;
 
--(void)calcMatchParentWidth:(CGFloat)matchParent selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect;
-
--(void)calcMatchParentHeight:(CGFloat)matchParent selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect;
+-(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect superView:(UIView*)newSuperview;
 
 
 

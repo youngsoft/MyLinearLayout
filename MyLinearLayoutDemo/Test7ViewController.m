@@ -29,19 +29,19 @@
     MyLinearLayout *topll = MyLinearLayout.new;
     topll.orientation = LVORIENTATION_HORZ;
     topll.weight = 0.5;
-    topll.matchParentWidth = 1;
+    topll.widthDime.equalTo(ll.widthDime);
     
     UIView *topLeft = UIView.new;
     topLeft.backgroundColor = [UIColor redColor];
     topLeft.weight = 0.5;
-    topLeft.matchParentHeight = 1.0;
+    topLeft.heightDime.equalTo(topll.heightDime);
     [topll addSubview:topLeft];
     
     UIView *topRight = UIView.new;
     topRight.backgroundColor = [UIColor greenColor];
     topRight.weight = 0.5;
-    topRight.matchParentHeight = 1.0;
-    topRight.leftMargin = 20;
+    topRight.heightDime.equalTo(topll.heightDime);
+    topRight.leftPos.equalTo(@20);
     [topll addSubview:topRight];
     
     [ll addSubview:topll];
@@ -50,8 +50,8 @@
     UIView *bottom = UIView.new;
     bottom.backgroundColor = [UIColor blueColor];
     bottom.weight = 0.5;
-    bottom.matchParentWidth = 1.0;
-    bottom.topMargin = 20;
+    bottom.widthDime.equalTo(ll.widthDime);
+    bottom.topPos.equalTo(@20);
     [ll addSubview:bottom];
     
     

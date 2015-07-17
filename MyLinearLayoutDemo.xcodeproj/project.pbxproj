@@ -97,6 +97,7 @@
 		187C6A531B49887500A6949A /* MyLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayout.h; sourceTree = "<group>"; };
 		1889AEAC1B4A69130001F871 /* Test14ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test14ViewController.h; sourceTree = "<group>"; };
 		1889AEAD1B4A69130001F871 /* Test14ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test14ViewController.m; sourceTree = "<group>"; };
+		1895C0B31B4FCA5B001D6A49 /* MyLayoutInner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutInner.h; sourceTree = "<group>"; };
 		18970C221B2D330A00A475CC /* MyFrameLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFrameLayout.h; sourceTree = "<group>"; };
 		18970C231B2D330A00A475CC /* MyFrameLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFrameLayout.m; sourceTree = "<group>"; };
 		18970C251B2D3F4200A475CC /* MyLayoutBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutBase.h; sourceTree = "<group>"; };
@@ -150,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				187C6A531B49887500A6949A /* MyLayout.h */,
+				1895C0B31B4FCA5B001D6A49 /* MyLayoutInner.h */,
 				18970C251B2D3F4200A475CC /* MyLayoutBase.h */,
 				18970C261B2D3F4200A475CC /* MyLayoutBase.m */,
 				187C6A501B49879400A6949A /* MyMaker.h */,

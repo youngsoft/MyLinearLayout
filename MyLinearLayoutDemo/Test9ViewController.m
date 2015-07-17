@@ -22,7 +22,7 @@
     
     MyLinearLayout *ll = [MyLinearLayout new];
     ll.backgroundColor = [UIColor grayColor];
-    ll.autoAdjustSize  = NO;
+    ll.wrapContentHeight = NO;
     ll.gravity = MGRAVITY_HORZ_CENTER;
     
     //头像
@@ -31,7 +31,7 @@
     imgView.backgroundColor = [UIColor whiteColor];
     [imgView sizeToFit];
     
-    imgView.topMargin = 0.45;
+    imgView.topPos.equalTo(@0.45);
     
     [ll addSubview:imgView];
     
@@ -42,12 +42,13 @@
     txtField.placeholder = @"请输入用户名称";
     txtField.backgroundColor = [UIColor whiteColor];
     
-    txtField.topMargin = 0.1;
-    txtField.bottomMargin = 0.45;
+    
+    txtField.topPos.equalTo(@0.1);
+    txtField.bottomPos.equalTo(@0.45);
     [ll addSubview:txtField];
     
     UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    lab.bottomMargin = 20;
+    lab.bottomPos.equalTo(@20);
     lab.text = @"版权所有 XXX 公司";
     [lab sizeToFit];
     

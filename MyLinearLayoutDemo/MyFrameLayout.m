@@ -7,8 +7,36 @@
 //
 
 #import "MyFrameLayout.h"
+#import "MyLayoutInner.h"
+#import <objc/runtime.h>
 
 
+@implementation UIView(MyFrameLayoutExt)
+
+const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_margingravity";
+
+-(MarignGravity)marginGravity
+{
+    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MARGINGRAVITY);
+    if (num == nil)
+        return MGRAVITY_VERT_TOP | MGRAVITY_HORZ_LEFT;
+    return num.unsignedCharValue;
+}
+
+
+-(void)setMarginGravity:(MarignGravity)marginGravity
+{
+    MarignGravity oldVal = [self marginGravity];
+    if (oldVal != marginGravity)
+    {
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MARGINGRAVITY, [NSNumber numberWithUnsignedChar:marginGravity], OBJC_ASSOCIATION_RETAIN);
+        
+        if (self.superview != nil)
+            [self.superview setNeedsLayout];
+    }
+}
+
+@end
 
 @implementation MyFrameLayout
 
@@ -20,29 +48,34 @@
 }
 */
 
+
+
+
 -(void)doLayoutSubviews
 {
     [super doLayoutSubviews];
     
-    CGFloat selfWidth = self.bounds.size.width;
-    CGFloat selfHeight = self.bounds.size.height;
+    CGFloat selfWidth = self.frame.size.width;
+    CGFloat selfHeight = self.frame.size.height;
     
     //有限布局填充，再布局
     NSArray *sbs = self.subviews;
     for (UIView *v in sbs)
     {
         CGRect rect = v.frame;
-        MarignGravity gravity = v.marginGravity;
-        CGFloat topMargin = v.topMargin;
-        CGFloat leftMargin = v.leftMargin;
-        CGFloat rightMargin = v.rightMargin;
-        CGFloat bottomMargin = v.bottomMargin;
         
-        //分别计算出左右部分和中间不分的值。
+        MarignGravity gravity = v.marginGravity;
         MarignGravity vert = gravity & 0xF0;
         MarignGravity horz = gravity & 0x0F;
         
-        [self horzGravity:horz selfWidth:selfWidth leftMargin:leftMargin rightMargin:rightMargin rect:&rect];
+        //优先用设定的宽度尺寸。
+        if (v.widthDime.dimeNumVal != nil)
+            rect.size.width = v.widthDime.measure;
+        
+        if (v.heightDime.dimeNumVal != nil)
+            rect.size.height = v.heightDime.measure;
+        
+        [self horzGravity:horz selfWidth:selfWidth leftMargin:v.leftPos.margin rightMargin:v.rightPos.margin rect:&rect];
         
         if (v.isFlexedHeight)
         {
@@ -50,8 +83,7 @@
             rect.size.height = sz.height;
         }
         
-        [self vertGravity:vert selfHeight:selfHeight topMargin:topMargin bottomMargin:bottomMargin rect:&rect];
-        
+        [self vertGravity:vert selfHeight:selfHeight topMargin:v.topPos.margin bottomMargin:v.bottomPos.margin rect:&rect];
         
         
         v.frame = rect;

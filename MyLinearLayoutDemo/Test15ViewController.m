@@ -20,6 +20,7 @@
     [super loadView];
     
     MyRelativeLayout *rl = [[MyRelativeLayout alloc] initWithFrame:CGRectMake(10, 10, 0, 0)];
+    rl.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [self.view addSubview:rl];
     rl.wrapContentWidth = YES;
     rl.wrapContentHeight = YES; //设置宽度和高度由所有子视图包裹

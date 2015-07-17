@@ -16,61 +16,47 @@
 
 @implementation Test5ViewController
 
-
--(UIView*)createView
+-(void)loadView
 {
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
+    MyLinearLayout *ll = [MyLinearLayout new];
     ll.orientation = LVORIENTATION_VERT;
-    ll.leftMargin = 10;
+    ll.gravity = MGRAVITY_VERT_CENTER;
     ll.backgroundColor = [UIColor grayColor];
+    self.view = ll;
     
     //不再需要指定y的偏移值了。
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 40)];
+    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
     v1.backgroundColor = [UIColor redColor];
-    v1.topMargin = 4;
-    v1.marginGravity = MGRAVITY_HORZ_LEFT;
+
+    v1.topPos.equalTo(@10);
+    v1.leftPos.equalTo(@10); //左边偏移10
     [ll addSubview:v1];
     
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
+    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
     v2.backgroundColor = [UIColor greenColor];
-    v2.topMargin = 6;
-    v2.marginGravity = MGRAVITY_HORZ_CENTER;
+    v2.topPos.equalTo(@10);
+    v2.centerXPos.equalTo(ll.centerXPos);  //水平居中
     [ll addSubview:v2];
     
     
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
+    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
     v3.backgroundColor = [UIColor blueColor];
-    v3.topMargin = 3;
-    v3.marginGravity = MGRAVITY_HORZ_RIGHT;
+    v3.topPos.equalTo(@10);
+    v3.rightPos.equalTo(@10); //右对齐偏移10
     [ll addSubview:v3];
     
-    UIView *v4 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
+    UIView *v4 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
     v4.backgroundColor = [UIColor yellowColor];
-    v4.topMargin = 3;
-    v4.bottomMargin = 4;
-    v4.marginGravity = MGRAVITY_HORZ_RIGHT;
-    v4.rightMargin = 10;
+    v4.topPos.equalTo(@10);
+    v4.bottomPos.equalTo(@10);
+    //同时设置左边和右边形成填充效果和v4.widthDime.equalTo(ll.widthDime)的效果一致
+    v4.leftPos.equalTo(@0).offset(5);
+    v4.rightPos.equalTo(@0).offset(5);
     [ll addSubview:v4];
     
     
-    
-    return ll;
-    
-}
 
--(void)loadView
-{
     
-    self.view = [MyFrameLayout new];
-    
-    MyLinearLayout *test1ll = [MyLinearLayout new];
-    test1ll.orientation = LVORIENTATION_HORZ; //水平布局
-    test1ll.marginGravity = MGRAVITY_CENTER;  //本视图在父视图中居中
-    test1ll.gravity = MGRAVITY_HORZ_CENTER;   //本视图里面的所有子视图整体水平居中停靠
-    test1ll.wrapContent = YES;  //本视图的高度由子视图中最高的决定。
-    [self.view addSubview:test1ll];
-    
-    [test1ll addSubview:[self createView]];
 }
 
 - (void)viewDidLoad {

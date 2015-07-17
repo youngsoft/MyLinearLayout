@@ -72,7 +72,7 @@
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"test"];
     switch (indexPath.row) {
         case 0:
-            cell.textLabel.text = @"子视图间距设置以及自动调整大小的属性1";
+            cell.textLabel.text = @"子视图布局和自动调整大小";
             break;
         case 1:
             cell.textLabel.text = @"子视图的隐藏显示以及UIScrollView的自动调整";

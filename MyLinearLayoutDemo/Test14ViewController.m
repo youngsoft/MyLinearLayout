@@ -74,6 +74,7 @@
     v5.leftPos.equalTo(v4.rightPos).offset(10);
     v6.leftPos.equalTo(v5.rightPos).offset(10);
     
+    
  
     
     /**子视图按比例平分**/

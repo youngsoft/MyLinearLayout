@@ -11,7 +11,6 @@
 
 @implementation MyMaker
 {
-    // __weak UIView *_myView;
     NSArray *_myViews;
     NSMutableArray *_keys;
     BOOL  _clear;
@@ -40,47 +39,48 @@
     return self;
 }
 
--(MyMaker*)topMargin
+
+
+-(MyMaker*)top
 {
-    return [self addMethod:@"topMargin"];
+    return [self addMethod:@"topPos"];
 }
 
--(MyMaker*)leftMargin
+-(MyMaker*)left
 {
-    return [self addMethod:@"leftMargin"];
+    return [self addMethod:@"leftPos"];
 }
 
--(MyMaker*)bottomMargin
+-(MyMaker*)bottom
 {
-    return [self addMethod:@"bottomMargin"];
+    return [self addMethod:@"bottomPos"];
 }
 
--(MyMaker*)rightMargin
+-(MyMaker*)right
 {
-    return [self addMethod:@"rightMargin"];
+    return [self addMethod:@"rightPos"];
 }
 
 -(MyMaker*)margin
 {
-    return [self addMethod:@"margin"];
+    [self top];
+    [self left];
+    [self right];
+   return [self bottom];
 }
 
--(MyMaker*)marginGravity
+
+-(MyMaker*)height
 {
-    return [self addMethod:@"marginGravity"];
+    return [self addMethod:@"heightDime"];
 }
 
--(MyMaker*)matchParentWidth
+-(MyMaker*)width
 {
-    
-    return [self addMethod:@"matchParentWidth"];
-    
+    return [self addMethod:@"widthDime"];
 }
 
--(MyMaker*)matchParentHeight
-{
-    return [self addMethod:@"matchParentHeight"];
-}
+
 
 -(MyMaker*)flexedHeight
 {
@@ -88,65 +88,23 @@
     
 }
 
+-(MyMaker*)wrapContentHeight
+{
+    return [self addMethod:@"wrapContentHeight"];
+}
+
+-(MyMaker*)wrapContentWidth
+{
+    return [self addMethod:@"wrapContentWidth"];
+}
+
+
 -(MyMaker*)weight
 {
     return [self addMethod:@"weight"];
     
 }
 
--(MyMaker*)height
-{
-    if (_myViews.count == 0)
-        return self;
-    
-    UIView *myView = [_myViews lastObject];
-    
-    if (myView.superview == nil || ![myView.superview isKindOfClass:[MyRelativeLayout class]])
-    {
-        return [self addMethod:@"height"];
-    }
-    else
-    {
-        return [self addMethod:@"heightDime"];
-    }
-}
-
--(MyMaker*)width
-{
-    if (_myViews.count == 0)
-        return self;
-    
-    UIView *myView = [_myViews lastObject];
-    
-    if (myView.superview == nil || ![myView.superview isKindOfClass:[MyRelativeLayout class]])
-    {
-        return [self addMethod:@"width"];
-    }
-    else
-    {
-        return [self addMethod:@"widthDime"];
-    }
-    
-}
-
--(MyMaker*)size
-{
-    if (_myViews.count == 0)
-        return self;
-    
-    UIView *myView = [_myViews lastObject];
-    
-    if (myView.superview == nil || ![myView.superview isKindOfClass:[MyRelativeLayout class]])
-    {
-        return [self addMethod:@"size"];
-    }
-    else
-    {
-        [self width];
-        return [self height];
-    }
-    
-}
 
 -(MyMaker*)topPadding
 {
@@ -182,141 +140,30 @@
     
 }
 
--(MyMaker*)wrapContent
-{
-    return [self addMethod:@"wrapContent"];
-}
-
--(MyMaker*)adjustScrollViewContentSize
-{
-    
-    return [self addMethod:@"adjustScrollViewContentSize"];
-    
-}
-
 -(MyMaker*)gravity
 {
     return [self addMethod:@"gravity"];
     
 }
 
--(MyMaker*)autoAdjustSize
-{
-    return [self addMethod:@"autoAdjustSize"];
-    
-}
-
-
--(MyMaker*)autoAdjustDir
-{
-    return [self addMethod:@"autoAdjustDir"];
-}
-
--(MyMaker*)top
-{
-    if (_myViews.count == 0)
-        return self;
-    
-    UIView *myView = [_myViews lastObject];
-    
-    if (myView.superview == nil || ![myView.superview isKindOfClass:[MyRelativeLayout class]])
-        return [self topMargin];
-    else
-        return [self addMethod:@"topPos"];
-    
-}
-
--(MyMaker*)left
-{
-    if (_myViews.count == 0)
-        return self;
-    
-    UIView *myView = [_myViews lastObject];
-    
-    if (myView.superview == nil || ![myView.superview isKindOfClass:[MyRelativeLayout class]])
-        return [self leftMargin];
-    else
-        return [self addMethod:@"leftPos"];
-}
-
--(MyMaker*)bottom
-{
-    if (_myViews.count == 0)
-        return self;
-    
-    UIView *myView = [_myViews lastObject];
-    
-    if (myView.superview == nil || ![myView.superview isKindOfClass:[MyRelativeLayout class]])
-        return [self bottomMargin];
-    else
-        return [self addMethod:@"bottomPos"];
-}
-
--(MyMaker*)right
-{
-    if (_myViews.count == 0)
-        return self;
-    
-    UIView *myView = [_myViews lastObject];
-    
-    if (myView.superview == nil || ![myView.superview isKindOfClass:[MyRelativeLayout class]])
-        return [self rightMargin];
-    else
-        return [self addMethod:@"rightPos"];
-}
-
 
 -(MyMaker*)centerX
 {
-    if (_myViews.count == 0)
-        return self;
-    
-    UIView *myView = [_myViews lastObject];
-    
-    if (myView.superview == nil || ![myView.superview isKindOfClass:[MyRelativeLayout class]])
-    {
-        
-        for (UIView *v in _myViews)
-            v.marginGravity |= MGRAVITY_HORZ_CENTER;
-        
-        return [self addMethod:@"leftMargin"];
-    }
-    else
-    {
-        return [self addMethod:@"centerXPos"];
-    }
-    
-    
+  return [self addMethod:@"centerXPos"];
 }
 
 -(MyMaker*)centerY
 {
-    if (_myViews.count == 0)
-        return self;
-    
-    UIView *myView = [_myViews lastObject];
-    
-    if (myView.superview == nil || ![myView.superview isKindOfClass:[MyRelativeLayout class]])
-    {
-        for (UIView *v in _myViews)
-            v.marginGravity |= MGRAVITY_VERT_CENTER;
-        
-        
-        return [self addMethod:@"topMargin"];
-    }
-    else
-    {
-        return [self addMethod:@"centerYPos"];
-        
-    }
-    
+    return [self addMethod:@"centerYPos"];
 }
 
--(MyMaker*)center
+-(MyMaker*)marginGravity
 {
-    [self centerX];
-    return [self centerY];
+    return [self addMethod:@"marginGravity"];
+
 }
+
+
 
 
 -(MyMaker* (^)(id val))equalTo
@@ -334,39 +181,39 @@
                 if ([val isKindOfClass:[NSNumber class]])
                 {
                     id oldVal = [myView valueForKey:key];
-                    if ([oldVal isKindOfClass:[MyRelativePos class]])
+                    if ([oldVal isKindOfClass:[MyLayoutPos class]])
                     {
-                        ((MyRelativePos*)oldVal).equalTo(val);
+                        ((MyLayoutPos*)oldVal).equalTo(val);
                     }
-                    else if ([oldVal isKindOfClass:[MyRelativeDime class]])
+                    else if ([oldVal isKindOfClass:[MyLayoutDime class]])
                     {
-                        ((MyRelativeDime*)oldVal).equalTo(val);
+                        ((MyLayoutDime*)oldVal).equalTo(val);
                     }
                     else
                         [myView setValue:val forKey:key];
                 }
-                else if ([val isKindOfClass:[MyRelativePos class]])
+                else if ([val isKindOfClass:[MyLayoutPos class]])
                 {
-                    ((MyRelativePos*)[myView valueForKey:key]).equalTo(val);
+                    ((MyLayoutPos*)[myView valueForKey:key]).equalTo(val);
                 }
-                else if ([val isKindOfClass:[MyRelativeDime class]])
+                else if ([val isKindOfClass:[MyLayoutDime class]])
                 {
-                    ((MyRelativeDime*)[myView valueForKey:key]).equalTo(val);
+                    ((MyLayoutDime*)[myView valueForKey:key]).equalTo(val);
                 }
                 else if ([val isKindOfClass:[NSArray class]])
                 {
-                    ((MyRelativeDime*)[myView valueForKey:key]).equalTo(val);
+                    ((MyLayoutDime*)[myView valueForKey:key]).equalTo(val);
                 }
                 else if ([val isKindOfClass:[UIView class]])
                 {
                     id oldVal = [val valueForKey:key];
-                    if ([oldVal isKindOfClass:[MyRelativePos class]])
+                    if ([oldVal isKindOfClass:[MyLayoutPos class]])
                     {
-                        ((MyRelativePos*)[myView valueForKey:key]).equalTo(oldVal);
+                        ((MyLayoutPos*)[myView valueForKey:key]).equalTo(oldVal);
                     }
-                    else if ([oldVal isKindOfClass:[MyRelativeDime class]])
+                    else if ([oldVal isKindOfClass:[MyLayoutDime class]])
                     {
-                        ((MyRelativeDime*)[myView valueForKey:key]).equalTo(oldVal);
+                        ((MyLayoutDime*)[myView valueForKey:key]).equalTo(oldVal);
                         
                     }
                     else
@@ -393,7 +240,7 @@
             for (UIView *myView in _myViews)
             {
                 
-                ((MyRelativePos*)[myView valueForKey:key]).offset(val);
+                ((MyLayoutPos*)[myView valueForKey:key]).offset(val);
             }
         }
         
@@ -411,7 +258,7 @@
             for (UIView *myView in _myViews)
             {
                 
-                ((MyRelativeDime*)[myView valueForKey:key]).multiply(val);
+                ((MyLayoutDime*)[myView valueForKey:key]).multiply(val);
             }
         }
         return self;
@@ -430,7 +277,7 @@
             for (UIView *myView in _myViews)
             {
                 
-                ((MyRelativeDime*)[myView valueForKey:key]).add(val);
+                ((MyLayoutDime*)[myView valueForKey:key]).add(val);
             }
         }
         return self;

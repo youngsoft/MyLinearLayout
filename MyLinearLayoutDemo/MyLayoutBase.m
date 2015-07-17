@@ -7,189 +7,148 @@
 //
 
 #import "MyLayoutBase.h"
+#import "MyLayoutInner.h"
 #import <objc/runtime.h>
 
+@implementation UIView(MyLayoutExt)
 
+const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_LEFT = "associatedobject_key_relativeleft";
+const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_TOP = "associatedobject_key_relativetop";
+const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_RIGHT = "associatedobject_key_relativeright";
+const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_BOTTOM = "associatedobject_key_relativebottom";
+const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_WIDTH = "associatedobject_key_relativewidth";
+const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_HEIGHT = "associatedobject_key_relativeheight";
 
+const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERX = "associatedobject_key_relativecenterx";
+const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERY = "associatedobject_key_relativecentery";
 
-@implementation UIView(LayoutExtra)
-
-
-const char * const ASSOCIATEDOBJECT_KEY_TOPMARGIN = "associatedobject_key_topmargin";
-const char * const ASSOCIATEDOBJECT_KEY_LEFTMARGIN = "associatedobject_key_leftmargin";
-const char * const ASSOCIATEDOBJECT_KEY_BOTTOMMARGIN = "associatedobject_key_bottommargin";
-const char * const ASSOCIATEDOBJECT_KEY_RIGHTMARGIN = "associatedobject_key_rightmargin";
-const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_margingravity";
-const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENTHEIGHT = "associatedobject_key_matchparentheight";
-const char * const ASSOCIATEDOBJECT_KEY_MATCHPARENTWIDTH = "associatedobject_key_matchparentwidth";
 const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_flexedheight";
 
 
--(CGFloat)topMargin
-{
-    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_TOPMARGIN);
-    if (num == nil)
-        return 0;
-    return num.floatValue;
-}
 
--(void)setTopMargin:(CGFloat)topMargin
+-(MyLayoutPos*)leftPos
 {
-    CGFloat oldVal = [self topMargin];
-    if (oldVal != topMargin)
+    MyLayoutPos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_LEFT);
+    if (pos == nil)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_TOPMARGIN, [NSNumber numberWithFloat:topMargin], OBJC_ASSOCIATION_RETAIN);
+        pos = [MyLayoutPos new];
+        pos.view = self;
+        pos.pos = MGRAVITY_HORZ_LEFT;
         
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_LEFT, pos, OBJC_ASSOCIATION_RETAIN);
     }
+    return pos;
 }
 
--(CGFloat)leftMargin
-{
-    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_LEFTMARGIN);
-    if (num == nil)
-        return 0;
-    return num.floatValue;
-}
 
--(void)setLeftMargin:(CGFloat)leftMargin
+
+-(MyLayoutPos*)topPos
 {
-    CGFloat oldVal = [self leftMargin];
-    if (oldVal != leftMargin)
+    MyLayoutPos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_TOP);
+    if (pos == nil)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_LEFTMARGIN, [NSNumber numberWithFloat:leftMargin], OBJC_ASSOCIATION_RETAIN);
+        pos = [MyLayoutPos new];
+        pos.view = self;
+        pos.pos = MGRAVITY_VERT_TOP;
         
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_TOP, pos, OBJC_ASSOCIATION_RETAIN);
     }
+    return pos;
 }
 
--(CGFloat)bottomMargin
-{
-    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_BOTTOMMARGIN);
-    if (num == nil)
-        return 0;
-    return num.floatValue;
-}
 
--(void)setBottomMargin:(CGFloat)bottomMargin
+-(MyLayoutPos*)rightPos
 {
-    CGFloat oldVal = [self bottomMargin];
-    if (oldVal != bottomMargin)
+    MyLayoutPos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_RIGHT);
+    if (pos == nil)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_BOTTOMMARGIN, [NSNumber numberWithFloat:bottomMargin], OBJC_ASSOCIATION_RETAIN);
+        pos = [MyLayoutPos new];
+        pos.view = self;
+        pos.pos = MGRAVITY_HORZ_RIGHT;
         
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_RIGHT, pos, OBJC_ASSOCIATION_RETAIN);
     }
+    return pos;
 }
 
--(CGFloat)rightMargin
-{
-    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RIGHTMARGIN);
-    if (num == nil)
-        return 0;
-    return num.floatValue;
-}
 
--(void)setRightMargin:(CGFloat)rightMargin
+-(MyLayoutPos*)bottomPos
 {
-    CGFloat oldVal = [self rightMargin];
-    if (oldVal != rightMargin)
+    MyLayoutPos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_BOTTOM);
+    if (pos == nil)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RIGHTMARGIN, [NSNumber numberWithFloat:rightMargin], OBJC_ASSOCIATION_RETAIN);
+        pos = [MyLayoutPos new];
+        pos.view = self;
+        pos.pos = MGRAVITY_VERT_BOTTOM;
         
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_BOTTOM, pos, OBJC_ASSOCIATION_RETAIN);
     }
-}
-
--(void)setMargin:(UIEdgeInsets)margin
-{
-    self.topMargin = margin.top;
-    self.leftMargin = margin.left;
-    self.bottomMargin = margin.bottom;
-    self.rightMargin = margin.right;
-}
-
--(UIEdgeInsets)margin
-{
-    return  UIEdgeInsetsMake(self.topMargin, self.leftMargin, self.bottomMargin, self.rightMargin);
-}
-
--(MarignGravity)marginGravity
-{
-    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MARGINGRAVITY);
-    if (num == nil)
-        return 0;
-    return num.unsignedCharValue;
+    return pos;
 }
 
 
--(void)setMarginGravity:(MarignGravity)marginGravity
+
+
+-(MyLayoutDime*)widthDime
 {
-    MarignGravity oldVal = [self marginGravity];
-    if (oldVal != marginGravity)
+    MyLayoutDime *dime = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_WIDTH);
+    if (dime == nil)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MARGINGRAVITY, [NSNumber numberWithUnsignedChar:marginGravity], OBJC_ASSOCIATION_RETAIN);
+        dime = [MyLayoutDime new];
+        dime.view = self;
+        dime.dime = MGRAVITY_HORZ_FILL;
         
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_WIDTH, dime, OBJC_ASSOCIATION_RETAIN);
     }
+    return dime;
 }
 
 
-
--(CGFloat)matchParentHeight
+-(MyLayoutDime*)heightDime
 {
-    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MATCHPARENTHEIGHT);
-    if (num == nil)
-        return 0;
-    return num.floatValue;
-}
-
--(void)setMatchParentHeight:(CGFloat)matchParentHeight
-{
-    if (matchParentHeight > 1)
-        return;
-    
-    CGFloat oldVal = [self matchParentHeight];
-    if (oldVal != matchParentHeight)
+    MyLayoutDime *dime = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_HEIGHT);
+    if (dime == nil)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MATCHPARENTHEIGHT, [NSNumber numberWithFloat:matchParentHeight], OBJC_ASSOCIATION_RETAIN);
+        dime = [MyLayoutDime new];
+        dime.view = self;
+        dime.dime = MGRAVITY_VERT_FILL;
         
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_HEIGHT, dime, OBJC_ASSOCIATION_RETAIN);
     }
+    return dime;
 }
 
 
--(CGFloat)matchParentWidth
-{
-    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MATCHPARENTWIDTH);
-    if (num == nil)
-        return 0;
-    return num.floatValue;
-}
 
--(void)setMatchParentWidth:(CGFloat)matchParentWidth
+-(MyLayoutPos*)centerXPos
 {
-    if (matchParentWidth > 1)
-        return;
-    
-    CGFloat oldVal = [self matchParentWidth];
-    if (oldVal != matchParentWidth)
+    MyLayoutPos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERX);
+    if (pos == nil)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MATCHPARENTWIDTH, [NSNumber numberWithFloat:matchParentWidth], OBJC_ASSOCIATION_RETAIN);
+        pos = [MyLayoutPos new];
+        pos.view = self;
+        pos.pos = MGRAVITY_HORZ_CENTER;
         
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERX, pos, OBJC_ASSOCIATION_RETAIN);
     }
+    return pos;
 }
 
 
 
+-(MyLayoutPos*)centerYPos
+{
+    MyLayoutPos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERY);
+    if (pos == nil)
+    {
+        pos = [MyLayoutPos new];
+        pos.view = self;
+        pos.pos = MGRAVITY_VERT_CENTER;
+        
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERY, pos, OBJC_ASSOCIATION_RETAIN);
+    }
+    return pos;
+}
 
 
 -(void)setFlexedHeight:(BOOL)flexedHeight
@@ -213,48 +172,223 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return num.boolValue;
 }
 
--(CGFloat)height
-{
-    return self.frame.size.height;
-}
-
--(void)setHeight:(CGFloat)height
-{
-    CGRect rect = self.frame;
-    rect.size.height = height;
-    self.frame = rect;
-}
 
 
--(CGFloat)width
-{
-    return self.frame.size.width;
-}
 
--(void)setWidth:(CGFloat)width
-{
-    CGRect rect = self.frame;
-    rect.size.width = width;
-    self.frame = rect;
-}
 
--(CGSize)size
-{
-    return self.frame.size;
-}
+@end
 
--(void)setSize:(CGSize)size
+
+
+
+@implementation MyLayoutPos
+
+-(id)init
 {
-    CGRect rect = self.frame;
-    rect.size.width = size.width;
-    rect.size.height = size.height;
+    self = [super init];
+    if (self != nil)
+    {
+        _view = nil;
+        _pos = MGRAVITY_NONE;
+        _posVal = nil;
+        _posValType = MyLayoutValueType_NULL;
+        _offsetVal = 0;
+    }
     
-    self.frame = rect;
+    return self;
+}
+
+-(NSNumber*)posNumVal
+{
+    if (_posVal == nil)
+        return nil;
+    
+    if (_posValType == MyLayoutValueType_NSNumber)
+        return _posVal;
+    
+    return nil;
+    
+}
+
+-(MyLayoutPos*)posRelaVal
+{
+    if (_posVal == nil)
+        return nil;
+    
+    if (_posValType == MyLayoutValueType_Layout)
+        return _posVal;
+    
+    return nil;
+    
+}
+
+-(MyLayoutPos*)posArrVal
+{
+    if (_posVal == nil)
+        return nil;
+    
+    if (_posValType == MyLayoutValueType_Array)
+        return _posVal;
+    
+    return nil;
+    
+}
+
+-(CGFloat)margin
+{
+    if (self.posNumVal == nil)
+        return _offsetVal;
+    else
+        return self.posNumVal.floatValue + _offsetVal;
+}
+
+
+-(MyLayoutPos* (^)(CGFloat val))offset
+{
+    return ^id(CGFloat val){
+        
+        _offsetVal = val;
+        
+        return self;
+    };
+}
+
+-(MyLayoutPos* (^)(id val))equalTo
+{
+    return ^id(id val){
+        
+        _posVal = val;
+       if ([val isKindOfClass:[NSNumber class]])
+            _posValType = MyLayoutValueType_NSNumber;
+        else if ([val isKindOfClass:[MyLayoutPos class]])
+            _posValType = MyLayoutValueType_Layout;
+        else if ([val isKindOfClass:[NSArray class]])
+            _posValType = MyLayoutValueType_Array;
+        else
+            _posValType = MyLayoutValueType_NULL;
+        
+        return self;
+    };
+    
+}
+
+
+@end
+
+
+
+@implementation MyLayoutDime
+
+-(id)init
+{
+    self= [super init];
+    if (self !=nil)
+    {
+        _view = nil;
+        _dime = MGRAVITY_NONE;
+        _addVal = 0;
+        _mutilVal = 1;
+        _dimeVal = nil;
+        _dimeValType = MyLayoutValueType_NULL;
+    }
+    
+    return self;
+}
+
+//乘
+-(MyLayoutDime* (^)(CGFloat val))multiply
+{
+    return ^id(CGFloat val){
+        
+        _mutilVal = val;
+        return self;
+    };
+    
+}
+
+//加
+-(MyLayoutDime* (^)(CGFloat val))add
+{
+    return ^id(CGFloat val){
+        
+        _addVal = val;
+        return self;
+        
+    };
+    
+}
+
+-(MyLayoutDime* (^)(id val))equalTo
+{
+    return ^id(id val){
+        
+        _dimeVal = val;
+        
+        if ([val isKindOfClass:[NSNumber class]])
+            _dimeValType = MyLayoutValueType_NSNumber;
+        else if ([val isKindOfClass:[MyLayoutDime class]])
+            _dimeValType = MyLayoutValueType_Layout;
+        else if ([val isKindOfClass:[NSArray class]])
+            _dimeValType = MyLayoutValueType_Array;
+        else
+            _dimeValType = MyLayoutValueType_NULL;
+
+        
+        return self;
+    };
+    
+}
+
+-(NSNumber*)dimeNumVal
+{
+    if (_dimeVal == nil)
+        return nil;
+    if (_dimeValType == MyLayoutValueType_NSNumber)
+        return _dimeVal;
+    return nil;
+}
+
+-(NSArray*)dimeArrVal
+{
+    if (_dimeVal == nil)
+        return nil;
+    if (_dimeValType == MyLayoutValueType_Array)
+        return _dimeVal;
+    return nil;
+    
+}
+
+-(MyLayoutDime*)dimeRelaVal
+{
+    if (_dimeVal == nil)
+        return nil;
+    if (_dimeValType == MyLayoutValueType_Layout)
+        return _dimeVal;
+    return nil;
+    
+}
+
+-(BOOL)isMatchParent
+{
+    return self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview;
+}
+
+-(BOOL)isMatchView:(UIView*)v
+{
+    return self.dimeRelaVal != nil && self.dimeRelaVal.view == v;
+}
+
+
+-(CGFloat) measure
+{
+    return self.dimeNumVal.floatValue * _mutilVal + _addVal;
 }
 
 
 
 @end
+
+
 
 @implementation MyBorderLineDraw
 
@@ -287,7 +421,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 
 @end
 
-@interface MyLayoutBase()<UIGestureRecognizerDelegate>
+@interface MyLayoutBase()
 
 @end
 
@@ -323,6 +457,8 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     _canCallAction = NO;
     _beginPoint = CGPointZero;
     _hideSubviewReLayout = YES;
+    _wrapContentHeight = NO;
+    _wrapContentWidth = NO;
 }
 
 -(void)doLayoutSubviews
@@ -501,7 +637,6 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"touchesCancelled");
     
     if (_target != nil && _hasBegin)
     {
@@ -564,24 +699,24 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 }
 
 
-- (void)willMoveToSuperview:(UIView *)newSuperview
+- (void)willMoveToSuperview:(UIView*)newSuperview
 {
     //将要添加到父视图时，如果不是MyLayout派生则则跟父视图保持一致并
-    if (self.matchParentHeight != 0 || self.matchParentWidth != 0)
+    if ([self.heightDime isMatchView:newSuperview] || [self.widthDime isMatchView:newSuperview])
     {
         if (![newSuperview isKindOfClass:[MyLayoutBase class]])
         {
             CGRect rectSuper = newSuperview.bounds;
             CGRect rectSelf = self.frame;
             self.autoresizingMask = UIViewAutoresizingNone;
-             if (self.matchParentWidth != 0)
+             if ([self.widthDime isMatchView:newSuperview])
              {
-                 [self calcMatchParentWidth:self.matchParentWidth selfWidth:rectSuper.size.width leftMargin:self.leftMargin rightMargin:self.rightMargin leftPadding:0 rightPadding:0 rect:&rectSelf];
+                 [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf superView:newSuperview];
                  self.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
              }
-            if (self.matchParentHeight != 0)
+            if ([self.heightDime isMatchView:newSuperview])
             {
-                [self calcMatchParentHeight:self.matchParentHeight selfHeight:rectSuper.size.height topMargin:self.topMargin bottomMargin:self.bottomMargin topPadding:0 bottomPadding:0 rect:&rectSelf];
+                [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf superView:newSuperview];
                 self.autoresizingMask |= UIViewAutoresizingFlexibleHeight;
             }
             
@@ -617,6 +752,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 
 #pragma mark -- helperMethod
 
+
 -(void)vertGravity:(MarignGravity)vert
         selfHeight:(CGFloat)selfHeight
          topMargin:(CGFloat)topMargin
@@ -631,7 +767,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     if ([self isRelativeMargin:bottomMargin])
         bottomMargin = (selfHeight - fixedHeight) * bottomMargin;
     
-
+    
     
     if (vert == MGRAVITY_VERT_FILL)
     {
@@ -655,10 +791,10 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     }
     else
     {
-        // pRect->origin.y = self.padding.top + topMargin;
+        pRect->origin.y = self.padding.top + topMargin;
     }
     
-
+    
 }
 
 -(void)horzGravity:(MarignGravity)horz
@@ -678,7 +814,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     
     if (horz == MGRAVITY_HORZ_FILL)
     {
-
+        
         pRect->origin.x = self.padding.left + leftMargin;
         pRect->size.width = selfWidth - self.padding.right - rightMargin - pRect->origin.x;
     }
@@ -697,23 +833,26 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     }
     else
     {
-        // pRect->origin.x = self.padding.left + leftMargin;
+        pRect->origin.x = self.padding.left + leftMargin;
     }
 }
 
 
--(void)calcMatchParentWidth:(CGFloat)matchParent selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect
+
+-(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect superView:(UIView*)newSuperview
 {
+    BOOL ok = NO;
+    if (newSuperview == nil)
+        ok = [match isMatchParent];
+    else
+        ok = [match isMatchView:newSuperview];
     
-    if (matchParent != 0)
+    if (ok)
     {
         
         CGFloat vTotalWidth = 0;
         
-        if (matchParent < 0)
-            vTotalWidth = selfWidth - leftPadding - rightPadding + 2*matchParent;
-        else
-            vTotalWidth = (selfWidth - leftPadding - rightPadding)*matchParent;
+        vTotalWidth = (selfWidth - leftPadding - rightPadding)*match.mutilVal + match.addVal;
         
         if ([self isRelativeMargin:leftMargin])
             leftMargin = vTotalWidth * leftMargin;
@@ -728,18 +867,19 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     
 }
 
--(void)calcMatchParentHeight:(CGFloat)matchParent selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect
+-(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect superView:(UIView*)newSuperview
 {
     
-    if (matchParent != 0)
+    BOOL ok = NO;
+    if (newSuperview == nil)
+        ok = [match isMatchParent];
+    else
+        ok = [match isMatchView:newSuperview];
+    
+    if (ok)
     {
         
-        CGFloat vTotalHeight = 0;
-        
-        if (matchParent < 0)
-            vTotalHeight = selfHeight - topPadding - bottomPadding + 2 *matchParent;
-        else
-            vTotalHeight = (selfHeight - topPadding - bottomPadding)*matchParent;
+        CGFloat vTotalHeight = (selfHeight - topPadding - bottomPadding)*match.mutilVal + match.addVal;
         
         if ([self isRelativeMargin:topMargin])
             topMargin = vTotalHeight * topMargin;

@@ -36,7 +36,7 @@
     lb2.text = @"我好 hello";
     lb2.backgroundColor = [UIColor redColor];
     
-    lb2.leftPos.equalTo(lb1.rightPos);
+    lb2.rightPos.equalTo(lb1.leftPos);
     lb2.topPos.equalTo(lb1.bottomPos);
     lb2.widthDime.equalTo(lb1.widthDime).add(30); //宽度是lb1的宽度加30
     lb2.heightDime.equalTo(lb1.heightDime).multiply(2).add(-10); //高度是lb1高度的2倍再-10
@@ -62,14 +62,6 @@
     lb4.topPos.equalTo(@100);
     lb4.bottomPos.equalTo(@120);
    
-    
-   /* [lb4 makeLayout:^(MyMaker *make) {
-        make.left.right.equalTo(rl);
-        make.top.equalTo(@100);
-        make.bottom.equalTo(@120);
-    }];*/
-    
-    
 }
 
 -(void)viewDidLoad

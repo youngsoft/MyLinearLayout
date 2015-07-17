@@ -17,60 +17,47 @@
 @implementation Test6ViewController
 
 
--(UIView*)createView
-{
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.backgroundColor = [UIColor grayColor];
-    
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 40)];
-    v1.backgroundColor = [UIColor redColor];
-    v1.topMargin = 4;
-    v1.matchParentWidth = 1.0;
-    [ll addSubview:v1];
-    
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 60)];
-    v2.backgroundColor = [UIColor greenColor];
-    v2.topMargin = 6;
-    v2.matchParentWidth = 0.8;
-    [ll addSubview:v2];
-    
-    
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
-    v3.backgroundColor = [UIColor blueColor];
-    v3.topMargin = 3;
-    v3.matchParentWidth = -20;
-    [ll addSubview:v3];
-    
-    UIView *v4 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
-    v4.backgroundColor = [UIColor yellowColor];
-    v4.topMargin = 3;
-    v4.bottomMargin = 4;
-    v4.matchParentWidth = 1;
-    v4.leftMargin = 10;
-    v4.rightMargin = 30;
-    [ll addSubview:v4];
-    
-    
-    
-    return ll;
-    
-}
-
-
 -(void)loadView
 {
     
     self.view = [MyFrameLayout new];
     
-    MyLinearLayout *test1ll = [MyLinearLayout new];
-    test1ll.orientation = LVORIENTATION_HORZ; //水平布局
-    test1ll.marginGravity = MGRAVITY_CENTER;  //本视图在父视图中居中
-    test1ll.gravity = MGRAVITY_HORZ_CENTER;   //本视图里面的所有子视图整体水平居中停靠
-    test1ll.wrapContent = YES;  //本视图的高度由子视图中最高的决定。
-    [self.view addSubview:test1ll];
+    MyLinearLayout *ll = [MyLinearLayout new];
+    ll.orientation = LVORIENTATION_VERT;
+    ll.gravity = MGRAVITY_VERT_CENTER;
+    ll.backgroundColor = [UIColor grayColor];
+    self.view = ll;
     
-    [test1ll addSubview:[self createView]];
+    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
+    v1.backgroundColor = [UIColor redColor];
+    v1.topPos.equalTo(@10);
+    v1.widthDime.equalTo(ll.widthDime);
+    [ll addSubview:v1];
+    
+    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
+    v2.backgroundColor = [UIColor greenColor];
+    v2.topPos.equalTo(@10);
+    v2.widthDime.equalTo(ll.widthDime).multiply(0.8);  //父视图的宽度的0.8
+    [ll addSubview:v2];
+    
+    
+    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
+    v3.backgroundColor = [UIColor blueColor];
+    v3.topPos.equalTo(@10);
+    v3.widthDime.equalTo(ll.widthDime).add(-20);  //父视图的宽度-20
+    [ll addSubview:v3];
+    
+    UIView *v4 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
+    v4.backgroundColor = [UIColor yellowColor];
+    
+    v4.topPos.equalTo(@10);
+    v4.bottomPos.equalTo(@10);
+    v4.widthDime.equalTo(ll.widthDime);
+    v4.leftPos.equalTo(@10); //设置了左偏移
+    [ll addSubview:v4];
+    
+
+    
 }
 
 

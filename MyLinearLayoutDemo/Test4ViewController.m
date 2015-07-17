@@ -20,27 +20,32 @@
 -(UIView*)createView:(MarignGravity)gravity
 {
     MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.leftMargin = 10;
+    ll.leftPos.equalTo(@10);
     ll.orientation = LVORIENTATION_VERT;
     ll.gravity = gravity;
     ll.backgroundColor = [UIColor grayColor];
     
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 40)];
+    UIView *v1 = [UIView new];
     v1.backgroundColor = [UIColor redColor];
-    v1.topMargin = 4;
-    v1.matchParentWidth = 1.0;
+    v1.topPos.equalTo(@4);
+    v1.widthDime.equalTo(ll.widthDime);
+    v1.heightDime.equalTo(@40);
     [ll addSubview:v1];
     
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
+    UIView *v2 = [UIView new];
     v2.backgroundColor = [UIColor greenColor];
-    v2.topMargin = 6;
+    v2.topPos.equalTo(@6);
+    v2.widthDime.equalTo(@40);
+    v2.heightDime.equalTo(@60);
     [ll addSubview:v2];
     
     
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
+    UIView *v3 = [UIView new];
     v3.backgroundColor = [UIColor blueColor];
-    v3.topMargin = 3;
-    v3.bottomMargin = 4;
+    v3.topPos.equalTo(@3);
+    v3.bottomPos.equalTo(@4);
+    v3.widthDime.equalTo(@75);
+    v3.heightDime.equalTo(@30);
     [ll addSubview:v3];
     
     return ll;
@@ -50,14 +55,12 @@
 
 -(void)loadView
 {
-    self.view = [MyFrameLayout new];
     
     MyLinearLayout *test1ll = [MyLinearLayout new];
     test1ll.orientation = LVORIENTATION_HORZ; //水平布局
-    test1ll.marginGravity = MGRAVITY_CENTER;  //本视图在父视图中居中
-    test1ll.gravity = MGRAVITY_HORZ_CENTER;   //本视图里面的所有子视图整体水平居中停靠
-    test1ll.wrapContent = YES;  //本视图的高度由子视图中最高的决定。
-    [self.view addSubview:test1ll];
+    test1ll.gravity = MGRAVITY_CENTER;   //本视图里面的所有子视图整体水平居中停靠
+    self.view = test1ll;
+    
     
     [test1ll addSubview:[self createView:MGRAVITY_VERT_TOP]];
     [test1ll addSubview:[self createView:MGRAVITY_VERT_CENTER]];

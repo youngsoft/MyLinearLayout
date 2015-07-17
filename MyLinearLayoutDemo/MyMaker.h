@@ -12,41 +12,40 @@
 /*专门为布局设置的简化操作类，以便在统一的地方进行布局设置*/
 @interface MyMaker : NSObject
 
--(MyMaker*)topMargin;
--(MyMaker*)leftMargin;
--(MyMaker*)bottomMargin;
--(MyMaker*)rightMargin;
+-(MyMaker*)top;
+-(MyMaker*)left;
+-(MyMaker*)bottom;
+-(MyMaker*)right;
 -(MyMaker*)margin;
--(MyMaker*)marginGravity;
--(MyMaker*)matchParentWidth;
--(MyMaker*)matchParentHeight;
--(MyMaker*)flexedHeight;
--(MyMaker*)weight;
+
 -(MyMaker*)height;
 -(MyMaker*)width;
--(MyMaker*)size;
+-(MyMaker*)flexedHeight;
+
 -(MyMaker*)centerX;
 -(MyMaker*)centerY;
--(MyMaker*)center;
+
 
 //布局独有
 -(MyMaker*)topPadding;
 -(MyMaker*)leftPadding;
 -(MyMaker*)bottomPadding;
 -(MyMaker*)rightPadding;
+-(MyMaker*)wrapContentHeight;
+-(MyMaker*)wrapContentWidth;
 
+
+
+//框架布局子视图独有
+-(MyMaker*)marginGravity;
+
+//线性布局独有
 -(MyMaker*)orientation;
--(MyMaker*)wrapContent;
--(MyMaker*)adjustScrollViewContentSize;
 -(MyMaker*)gravity;
--(MyMaker*)autoAdjustSize;
--(MyMaker*)autoAdjustDir;
 
-//相对布局子视图独有
--(MyMaker*)top;
--(MyMaker*)left;
--(MyMaker*)bottom;
--(MyMaker*)right;
+//线性布局子视图独有
+-(MyMaker*)weight;
+
 
 
 

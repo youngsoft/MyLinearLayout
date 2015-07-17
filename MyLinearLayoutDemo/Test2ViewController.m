@@ -24,26 +24,27 @@
     ll.backgroundColor = [UIColor grayColor];
     
     ll.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    ll.matchParentWidth = 1; //宽度和UIScrollView保持一致
-    ll.adjustScrollViewContentSize = YES;
+    ll.widthDime.equalTo(scrollView.widthDime);
     
     UILabel *label = [UILabel new];
-    label.matchParentWidth = 1;
+    label.widthDime.equalTo(ll.widthDime);
     label.flexedHeight = YES;  //这个属性会控制在固定宽度下自动调整视图的高度。
     label.numberOfLines = 0;
     label.backgroundColor = [UIColor blueColor];
     label.text = @"这是一段可以隐藏的字符串，点击下面的按钮就可以实现文本的显示和隐藏，同时可以支持根据文字内容动态调整高度，这需要把flexedHeight设置为YES";
     [ll addSubview:label];
     
-    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 60)];
-    btn.matchParentWidth = 1;
+    UIButton *btn = [UIButton new];
+    btn.widthDime.equalTo(ll.widthDime);
+    btn.heightDime.equalTo(@60);
     [btn setTitle:@"点击按钮显示隐藏文本" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(handleLabelShow:) forControlEvents:UIControlEventTouchUpInside];
     [ll addSubview:btn];
     
-    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 800)];
+    UIView *bottomView = [UIView new];
     bottomView.backgroundColor = [UIColor greenColor];
-    bottomView.matchParentWidth = 1;
+    bottomView.widthDime.equalTo(ll.widthDime);
+    bottomView.heightDime.equalTo(@800);
     [ll addSubview:bottomView];
     
     

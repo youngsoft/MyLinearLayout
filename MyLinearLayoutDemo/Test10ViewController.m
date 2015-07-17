@@ -22,14 +22,14 @@
     
     MyLinearLayout *ll = [MyLinearLayout new];
     ll.backgroundColor = [UIColor grayColor];
-    ll.autoAdjustSize  = NO;
+    ll.wrapContentHeight  = NO;
     ll.gravity = MGRAVITY_HORZ_CENTER;
     ll.leftPadding = 10;
     ll.rightPadding = 10;
     
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 100)];
     v1.backgroundColor = [UIColor redColor];
-    v1.matchParentWidth = 1;
+    v1.widthDime.equalTo(ll.widthDime);
     
     
     [ll addSubview:v1];
@@ -37,7 +37,7 @@
     
     UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
     v2.backgroundColor = [UIColor greenColor];
-    v2.matchParentWidth = 1;
+    v2.widthDime.equalTo(ll.widthDime);
    
     [ll addSubview:v2];
 
@@ -45,7 +45,7 @@
     
     UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 70)];
     v3.backgroundColor = [UIColor blueColor];
-    v3.matchParentWidth = 1;
+    v3.widthDime.equalTo(ll.widthDime);
     [ll addSubview:v3];
 
    
