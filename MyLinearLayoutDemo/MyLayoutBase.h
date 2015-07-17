@@ -73,7 +73,7 @@ typedef enum : unsigned char {
 
 @interface UIView(MyLayoutExt)
 
-//边界位置
+//视图四周的边界值,主要用于相对布局的设置，也可以用于线性布局和框架布局
 @property(nonatomic, readonly)  MyLayoutPos *leftPos;
 @property(nonatomic, readonly)  MyLayoutPos *topPos;
 @property(nonatomic, readonly)  MyLayoutPos *rightPos;
@@ -89,6 +89,34 @@ typedef enum : unsigned char {
 //设定视图的高度在宽度是固定的情况下根据内容的大小而浮动,如果内容无法容纳的话则自动拉升视图的高度,如果原始高度高于内容则会缩小视图的高度。默认为NO, 这个属性主要用UILabel,UITextView的多行的情况。
 @property(nonatomic, assign, getter=isFlexedHeight) BOOL flexedHeight;
 
+
+/*
+ 下面四个属性是上面leftPos,topPos,rightPos,bottomPos的equalTo设置NSNumber类型的值时的简化版本主要用在线性布局和框架布局里面，
+ 表示距布局视图或者兄弟视图四周的边界值
+ 比如：
+   v.leftMargin = 10   <==>   v.leftPos.equalTo(@10)
+ 
+ 对于线性布局和框架布局来说当边界值设置为>0 并且<1时表示的相对的边界值，而为0和大于等于1时表示的是决定边界值。比如：
+ v.leftMargin = 10;  表示视图v离左边10个距离的位置
+ v.leftMargin = 0.1; 则表示视图v的左边距占用布局视图宽度的10%,如果布局视图宽度为200则左边距为20
+*/
+@property(nonatomic, assign) CGFloat leftMargin;
+@property(nonatomic, assign) CGFloat topMargin;
+@property(nonatomic, assign) CGFloat rightMargin;
+@property(nonatomic, assign) CGFloat bottomMargin;
+
+
+/*
+ 下面三个属性是上面widthDime,heightDime的equalTo设置NSNumber类型值的简化版本，主要用在线性布局和框架布局里面
+ 表示设置视图的宽度和高度，需要注意的是设置这三个值并不是直接设置frame里面的size的宽度和高度，而是设置的布局的高度和宽度值。
+ 也就是说设置和获取值并不一定是最终视图在布局时的真实高度和宽度
+ 
+ v.width = 10    <=>   v.widthDime.equalTo(@10)
+ 
+ */
+@property(nonatomic,assign) CGFloat width;
+@property(nonatomic,assign) CGFloat height;
+@property(nonatomic,assign) CGSize size;
 
 @end
 

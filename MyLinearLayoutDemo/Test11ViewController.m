@@ -22,17 +22,17 @@
 {
     [super loadView];
     
-    //建立9个子视图。并进行布局
+    //建立13个子视图。并进行布局
     
-    MyFrameLayout *fl = [[MyFrameLayout alloc] initWithFrame:self.view.bounds];
-    fl.autoresizingMask =  UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    MyFrameLayout *fl = [MyFrameLayout new];
+    fl.widthDime.equalTo(self.view.widthDime);
+    fl.heightDime.equalTo(self.view.heightDime);
     fl.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     fl.backgroundColor = [UIColor grayColor];
     
     //显示全屏
     UILabel *fill = UILabel.new;
     fill.text = @"                fill";
-    // fill.textAlignment = NSTextAlignmentCenter;
     fill.backgroundColor = [UIColor blueColor];
     fill.marginGravity = MGRAVITY_FILL;
     [fl addSubview:fill];
@@ -40,17 +40,20 @@
     
     
     //左右填充。
-    UILabel *horzFill = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 120)];
+    UILabel *horzFill = UILabel.new;
     horzFill.text = @"Horz Fill";
+    [horzFill sizeToFit];
     horzFill.textAlignment = NSTextAlignmentCenter;
     horzFill.backgroundColor = [UIColor greenColor];
     horzFill.marginGravity = MGRAVITY_HORZ_FILL | MGRAVITY_VERT_TOP;
+    horzFill.topMargin = 40;
     [fl addSubview:horzFill];
     
     
     //左右居中
-    UILabel *horzCenter = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
+    UILabel *horzCenter = UILabel.new;
     horzCenter.text = @"Horz Center";
+    [horzCenter sizeToFit];
     horzCenter.backgroundColor = [UIColor whiteColor];
     horzCenter.marginGravity = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_TOP;
     [fl addSubview:horzCenter];
@@ -141,11 +144,11 @@
     [center sizeToFit];
     center.backgroundColor = [UIColor orangeColor];
     center.marginGravity = MGRAVITY_CENTER;
-    center.leftPos.equalTo(@30);
-    center.rightPos.equalTo(@30);
-    center.topPos.equalTo(@30);
-    center.bottomPos.equalTo(@30);
-    [fl addSubview:center];
+  //  center.leftPos.equalTo(@30);
+  //  center.rightPos.equalTo(@30);
+  //  center.topPos.equalTo(@30);
+  //  center.bottomPos.equalTo(@30);
+   // [fl addSubview:center];
     
     
     [self.view addSubview:fl];

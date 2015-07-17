@@ -87,6 +87,47 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 }
 
 
+-(CGFloat)leftMargin
+{
+    return self.leftPos.margin;
+}
+
+-(void)setLeftMargin:(CGFloat)leftMargin
+{
+    self.leftPos.equalTo(@(leftMargin));
+
+}
+
+-(CGFloat)topMargin
+{
+    return self.topPos.margin;
+}
+
+-(void)setTopMargin:(CGFloat)topMargin
+{
+    self.topPos.equalTo(@(topMargin));
+}
+
+-(CGFloat)rightMargin
+{
+    return self.rightPos.margin;
+}
+
+-(void)setRightMargin:(CGFloat)rightMargin
+{
+    self.rightPos.equalTo(@(rightMargin));
+}
+
+-(CGFloat)bottomMargin
+{
+    return self.bottomPos.margin;
+}
+
+-(void)setBottomMargin:(CGFloat)bottomMargin
+{
+    self.bottomPos.equalTo(@(bottomMargin));
+}
+
 
 
 -(MyLayoutDime*)widthDime
@@ -118,6 +159,36 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return dime;
 }
 
+-(CGFloat)width
+{
+    return self.widthDime.measure;
+}
+
+-(void)setWidth:(CGFloat)width
+{
+    self.widthDime.equalTo(@(width));
+}
+
+-(CGFloat)height
+{
+    return self.heightDime.measure;
+}
+
+-(void)setHeight:(CGFloat)height
+{
+    self.heightDime.equalTo(@(height));
+}
+
+-(CGSize)size
+{
+    return CGSizeMake(self.width, self.height);
+}
+
+-(void)setSize:(CGSize)size
+{
+    self.width = size.width;
+    self.height = size.height;
+}
 
 
 -(MyLayoutPos*)centerXPos

@@ -18,20 +18,20 @@
 -(UIView*)createView:(BOOL)wrapContentHeight
 {
     MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.leftPos.equalTo(@10);
-    ll.wrapContentHeight = wrapContentHeight;
     ll.backgroundColor = [UIColor grayColor];
+
+    ll.orientation = LVORIENTATION_VERT;
+    ll.leftMargin = 10;
+    ll.wrapContentHeight = wrapContentHeight;
     
 
-    //不需要设置frame值了
     UIView *v1 = [UIView new];
     v1.backgroundColor = [UIColor redColor];
-    v1.topPos.equalTo(@4);
-    v1.leftPos.equalTo(@10);
-    v1.widthDime.equalTo(@60);
-    v1.heightDime.equalTo(@40);
     [ll addSubview:v1];
+
+    v1.topMargin = 4;
+    v1.leftMargin = 10;
+    v1.size = CGSizeMake(60, 40);
     
    /* [v1 makeLayout:^(MyMaker *make) {
        
@@ -45,19 +45,20 @@
     
     UIView *v2 = [UIView new];
     v2.backgroundColor = [UIColor greenColor];
-    v2.topPos.equalTo(@6);
-    v2.leftPos.equalTo(@20);
-    v2.widthDime.equalTo(@40);
-    v2.heightDime.equalTo(@60);
     [ll addSubview:v2];
+
+    v2.topMargin = 6;
+    v2.leftMargin = 20;
+    v2.size = CGSizeMake(40, 60);
+
     
-    
-    //您也可以不设置widthDime,heightDime而是直接设置frame的宽度和高度
+    //您也可以不设置width,height而是直接设置frame的宽度和高度
     UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
     v3.backgroundColor = [UIColor blueColor];
-    v3.topPos.equalTo(@3);
-    v3.leftPos.equalTo(@15);
-    v3.bottomPos.equalTo(@4);
+    v3.topMargin = 3;
+    v3.leftMargin = 15;
+    v3.bottomMargin = 4;
+    
     [ll addSubview:v3];
     
     
@@ -76,8 +77,7 @@
     //标尺视图
     UIView *v = [UIView new];
     v.backgroundColor = [UIColor blackColor];
-    v.widthDime.equalTo(@10);
-    v.heightDime.equalTo(@200);
+    v.size = CGSizeMake(10, 200);
     [test1ll addSubview:v];
     
     [test1ll addSubview:[self createView:NO]];

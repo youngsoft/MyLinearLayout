@@ -19,9 +19,7 @@
 
 -(void)loadView
 {
-    
-    self.view = [MyFrameLayout new];
-    
+        
     MyLinearLayout *ll = [MyLinearLayout new];
     ll.orientation = LVORIENTATION_VERT;
     ll.gravity = MGRAVITY_VERT_CENTER;
