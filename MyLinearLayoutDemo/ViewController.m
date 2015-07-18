@@ -78,13 +78,13 @@
             cell.textLabel.text = @"子视图的隐藏显示以及UIScrollView的自动调整";
             break;
         case 2:
-            cell.textLabel.text = @"布局内视图停靠1";
+            cell.textLabel.text = @"布局内视图停靠1-左中右";
             break;
         case 3:
-            cell.textLabel.text = @"布局内视图停靠2";
+            cell.textLabel.text = @"布局内视图停靠2-上中下";
             break;
         case 4:
-            cell.textLabel.text = @"布局内视图停靠3";
+            cell.textLabel.text = @"布局内视图停靠3-自定义";
             break;
         case 5:
             cell.textLabel.text = @"子视图的尺寸由父视图决定";
