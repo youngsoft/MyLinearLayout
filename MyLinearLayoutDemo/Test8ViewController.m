@@ -29,22 +29,21 @@
     
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 90, 40)]; //这个子视图最宽 10+90+20 父视图的宽度为110
     v1.backgroundColor = [UIColor redColor];
-    v1.leftPos.equalTo(@10);
-    v1.rightPos.equalTo(@20);
-    v1.topPos.equalTo(@4);
+    v1.leftMargin = 10;
+    v1.rightMargin = 20;
+    v1.topMargin = 4;
     [ll addSubview:v1];
     
     UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
     v2.backgroundColor = [UIColor greenColor];
-    v2.topPos.equalTo(@6);
+    v2.topMargin = 6;
     [ll addSubview:v2];
     
     
     UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
     v3.backgroundColor = [UIColor blueColor];
-    v3.topPos.equalTo(@3);
-    v3.bottomPos.equalTo(@4);
-   
+    v3.topMargin = 3;
+    v3.bottomMargin = 4;
     [ll addSubview:v3];
     
     [self.view addSubview:ll];

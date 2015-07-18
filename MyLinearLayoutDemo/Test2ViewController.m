@@ -24,10 +24,12 @@
     ll.backgroundColor = [UIColor grayColor];
     
     ll.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    ll.widthDime.equalTo(scrollView.widthDime);
+    ll.leftMargin = 0;
+    ll.rightMargin = 0;
     
     UILabel *label = [UILabel new];
-    label.widthDime.equalTo(ll.widthDime);
+    label.leftMargin = 0;
+    label.rightMargin = 0;
     label.flexedHeight = YES;  //这个属性会控制在固定宽度下自动调整视图的高度。
     label.numberOfLines = 0;
     label.backgroundColor = [UIColor blueColor];
@@ -35,16 +37,18 @@
     [ll addSubview:label];
     
     UIButton *btn = [UIButton new];
-    btn.widthDime.equalTo(ll.widthDime);
-    btn.heightDime.equalTo(@60);
+    btn.leftMargin = 0;
+    btn.rightMargin = 0;
+    btn.height = 60;
     [btn setTitle:@"点击按钮显示隐藏文本" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(handleLabelShow:) forControlEvents:UIControlEventTouchUpInside];
     [ll addSubview:btn];
     
     UIView *bottomView = [UIView new];
     bottomView.backgroundColor = [UIColor greenColor];
-    bottomView.widthDime.equalTo(ll.widthDime);
-    bottomView.heightDime.equalTo(@800);
+    bottomView.leftMargin = 0;
+    bottomView.rightMargin = 0;
+    bottomView.height = 800;
     [ll addSubview:bottomView];
     
     

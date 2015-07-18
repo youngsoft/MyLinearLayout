@@ -105,6 +105,17 @@ typedef enum : unsigned char {
 @property(nonatomic, assign) CGFloat rightMargin;
 @property(nonatomic, assign) CGFloat bottomMargin;
 
+/*
+ 下面两个属性是上面centerXPos,centerYPos的equalTo设置NSNumber类型的值时的简化版本，主要用在线性布局和相对布局里面表示距离布局视图
+ 中心的偏移量，如果设置为0则表示在布局视图的中间
+ 
+ v.centerXOffset = 0  <==> v.centerXPos.equalTo(@0)
+ 
+ */
+@property(nonatomic, assign) CGFloat centerXOffset;
+@property(nonatomic, assign) CGFloat centerYOffset;
+@property(nonatomic, assign) CGPoint centerOffset;
+
 
 /*
  下面三个属性是上面widthDime,heightDime的equalTo设置NSNumber类型值的简化版本，主要用在线性布局和框架布局里面
@@ -207,9 +218,9 @@ typedef enum : unsigned char {
 -(BOOL)isRelativeMargin:(CGFloat)margin;
 
 
--(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect superView:(UIView*)newSuperview;
+-(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect;
 
--(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect superView:(UIView*)newSuperview;
+-(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect;
 
 
 

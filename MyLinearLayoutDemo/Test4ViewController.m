@@ -20,32 +20,34 @@
 -(UIView*)createView:(MarignGravity)gravity
 {
     MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.leftPos.equalTo(@10);
+    ll.leftMargin = 10;
     ll.orientation = LVORIENTATION_VERT;
     ll.gravity = gravity;
     ll.backgroundColor = [UIColor grayColor];
     
     UIView *v1 = [UIView new];
     v1.backgroundColor = [UIColor redColor];
-    v1.topPos.equalTo(@4);
-    v1.widthDime.equalTo(ll.widthDime);
-    v1.heightDime.equalTo(@40);
+    v1.topMargin = 4;
+    v1.leftMargin = v1.rightMargin = 0;
+    v1.height = 40;
     [ll addSubview:v1];
     
     UIView *v2 = [UIView new];
     v2.backgroundColor = [UIColor greenColor];
-    v2.topPos.equalTo(@6);
-    v2.widthDime.equalTo(@40);
-    v2.heightDime.equalTo(@60);
+    v2.topMargin = 6;
+    v2.width = 40;
+    v2.height = 60;
     [ll addSubview:v2];
     
     
     UIView *v3 = [UIView new];
     v3.backgroundColor = [UIColor blueColor];
-    v3.topPos.equalTo(@3);
-    v3.bottomPos.equalTo(@4);
-    v3.widthDime.equalTo(@75);
-    v3.heightDime.equalTo(@30);
+    
+    v3.topMargin = 3;
+    v3.bottomMargin = 4;
+    v3.width = 75;
+    v3.height = 30;
+    
     [ll addSubview:v3];
     
     return ll;

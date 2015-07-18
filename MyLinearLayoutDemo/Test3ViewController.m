@@ -22,26 +22,26 @@
     //我们可以设置widthDime也可以设置
     MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
     ll.orientation = LVORIENTATION_VERT;
-    ll.leftPos.equalTo(@10);
+    ll.leftMargin = 10;
     ll.gravity = gravity;
     ll.padding = padding;
     ll.backgroundColor = [UIColor grayColor];
     
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 40)];
     v1.backgroundColor = [UIColor redColor];
-    v1.topPos.equalTo(@4);
+    v1.topMargin = 4;
     [ll addSubview:v1];
     
     UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
     v2.backgroundColor = [UIColor greenColor];
-    v2.topPos.equalTo(@6);
+    v2.topMargin = 6;
     [ll addSubview:v2];
     
     
     UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
     v3.backgroundColor = [UIColor blueColor];
-    v3.topPos.equalTo(@3);
-    v3.bottomPos.equalTo(@4);
+    v3.topMargin = 3;
+    v3.bottomMargin = 4;
     [ll addSubview:v3];
     
     return ll;

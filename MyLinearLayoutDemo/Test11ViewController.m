@@ -25,8 +25,8 @@
     //建立13个子视图。并进行布局
     
     MyFrameLayout *fl = [MyFrameLayout new];
-    fl.widthDime.equalTo(self.view.widthDime);
-    fl.heightDime.equalTo(self.view.heightDime);
+    fl.leftMargin = fl.rightMargin = 0;
+    fl.topMargin = fl.bottomMargin = 0;
     fl.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     fl.backgroundColor = [UIColor grayColor];
     
@@ -144,12 +144,7 @@
     [center sizeToFit];
     center.backgroundColor = [UIColor orangeColor];
     center.marginGravity = MGRAVITY_CENTER;
-  //  center.leftPos.equalTo(@30);
-  //  center.rightPos.equalTo(@30);
-  //  center.topPos.equalTo(@30);
-  //  center.bottomPos.equalTo(@30);
-   // [fl addSubview:center];
-    
+ 
     
     [self.view addSubview:fl];
     

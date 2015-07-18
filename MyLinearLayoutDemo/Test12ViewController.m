@@ -26,14 +26,14 @@
     _myll =  [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     _myll.backgroundColor = [UIColor grayColor];
     _myll.padding = UIEdgeInsetsMake(10, 2, 10, 2);
-    _myll.widthDime.equalTo(self.view.widthDime);
+    _myll.leftMargin = _myll.rightMargin = 0;
     _myll.adjustScrollViewContentSize = YES;
 
     
     MyLinearLayout *l1 = [MyLinearLayout new];
     l1.orientation = LVORIENTATION_HORZ;
     l1.backgroundColor = [UIColor whiteColor];
-    l1.widthDime.equalTo(_myll.widthDime);
+    l1.leftMargin = l1.rightMargin = 0;
     l1.wrapContentHeight = YES;
     l1.padding = UIEdgeInsetsMake(4, 4, 4, 4);
     
@@ -85,9 +85,8 @@
     
     MyLinearLayout *l1 = [MyLinearLayout new];
     l1.backgroundColor = [UIColor whiteColor];
-    l1.leftPos.equalTo(@0);
-    l1.rightPos.equalTo(@0);
-    l1.padding = UIEdgeInsetsMake(4, 4, 4, 4);
+    l1.leftMargin = l1.rightMargin = 0;
+     l1.padding = UIEdgeInsetsMake(4, 4, 4, 4);
     
     MyBorderLineDraw   *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor colorWithRed:(rand() % 256)/256.0 green:(rand() % 256)/256.0 blue:(rand() % 256)/256.0 alpha:1]];
 
@@ -100,15 +99,13 @@
     l1.bottomBorderLine = bld;
    
     UILabel *lb = [UILabel new];
-    lb.leftPos.equalTo(@0);
-    lb.rightPos.equalTo(@0);
-    lb.text = @"有了这个功能后就可以放弃用UITableView来做静态的线性布局了";
+    lb.leftMargin = lb.rightMargin = 0;
+    lb.text = @"有了这个功能后就可以放弃用UITableView来做静态的线性布局了,点击一下我试试";
     lb.flexedHeight = YES;
     lb.numberOfLines = 0;
     
     
-    l1.topPos.equalTo(@4);
-    l1.bottomPos.equalTo(@4);
+    l1.topMargin = l1.bottomMargin = 4;
     [l1 addSubview:lb];
     
     //这里设置触摸事件

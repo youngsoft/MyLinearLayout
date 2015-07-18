@@ -28,31 +28,31 @@
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
     v1.backgroundColor = [UIColor redColor];
 
-    v1.topPos.equalTo(@10);
-    v1.leftPos.equalTo(@10); //左边偏移10
+    v1.topMargin = 10;
+    v1.leftMargin = 10;
     [ll addSubview:v1];
     
     UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
     v2.backgroundColor = [UIColor greenColor];
-    v2.topPos.equalTo(@10);
-    v2.centerXPos.equalTo(ll.centerXPos);  //水平居中
+    v2.topMargin = 10;
+    v2.centerXOffset = 0;
+    
     [ll addSubview:v2];
     
     
     UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
     v3.backgroundColor = [UIColor blueColor];
-    v3.topPos.equalTo(@10);
-    v3.rightPos.equalTo(@10); //右对齐偏移10
+    v3.topMargin = 10;
+    v3.rightMargin = 10;
     [ll addSubview:v3];
     
     UIView *v4 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
     v4.backgroundColor = [UIColor yellowColor];
-    v4.topPos.equalTo(@10);
-    v4.bottomPos.equalTo(@10);
-    //同时设置左边和右边形成填充效果和v4.widthDime.equalTo(ll.widthDime)的效果一致
-    v4.leftPos.equalTo(@0).offset(5);
-    v4.rightPos.equalTo(@0).offset(5);
-    [ll addSubview:v4];
+    v4.topMargin = 10;
+    v4.bottomMargin = 10;
+    v4.leftMargin = 5;
+    v4.rightMargin = 5;
+     [ll addSubview:v4];
     
     
 

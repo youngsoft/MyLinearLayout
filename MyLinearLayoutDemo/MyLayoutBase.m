@@ -222,6 +222,41 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 }
 
 
+-(CGFloat)centerXOffset
+{
+    return self.centerXPos.margin;
+}
+
+-(void)setCenterXOffset:(CGFloat)centerXOffset
+{
+    self.centerXPos.equalTo(@(centerXOffset));
+}
+
+-(CGFloat)centerYOffset
+{
+    return self.centerYPos.margin;
+}
+
+-(void)setCenterYOffset:(CGFloat)centerYOffset
+{
+    self.centerYPos.equalTo(@(centerYOffset));
+}
+
+
+-(CGPoint)centerOffset
+{
+    return CGPointMake(self.centerXOffset, self.centerYOffset);
+}
+
+-(void)setCenterOffset:(CGPoint)centerOffset
+{
+    self.centerXOffset = centerOffset.x;
+    self.centerYOffset = centerOffset.y;
+}
+
+
+
+
 -(void)setFlexedHeight:(BOOL)flexedHeight
 {
     BOOL oldVal = [self isFlexedHeight];
@@ -773,26 +808,34 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 - (void)willMoveToSuperview:(UIView*)newSuperview
 {
     //将要添加到父视图时，如果不是MyLayout派生则则跟父视图保持一致并
-    if ([self.heightDime isMatchView:newSuperview] || [self.widthDime isMatchView:newSuperview])
+    if (newSuperview != nil && ![newSuperview isKindOfClass:[MyLayoutBase class]])
     {
-        if (![newSuperview isKindOfClass:[MyLayoutBase class]])
+
+        //如果同时设置了左边和右边值则
+        if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) ||
+            [self.widthDime isMatchView:newSuperview] ||
+            (self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) ||
+            [self.heightDime isMatchView:newSuperview])
         {
             CGRect rectSuper = newSuperview.bounds;
             CGRect rectSelf = self.frame;
             self.autoresizingMask = UIViewAutoresizingNone;
-             if ([self.widthDime isMatchView:newSuperview])
-             {
-                 [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf superView:newSuperview];
-                 self.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
-             }
-            if ([self.heightDime isMatchView:newSuperview])
+            
+            if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) || [self.widthDime isMatchView:newSuperview])
             {
-                [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf superView:newSuperview];
-                self.autoresizingMask |= UIViewAutoresizingFlexibleHeight;
+                [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf];
+                self.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
             }
             
-            self.frame = rectSelf;
             
+            if ((self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) || [self.heightDime isMatchView:newSuperview])
+            {
+                [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf];
+                self.autoresizingMask |= UIViewAutoresizingFlexibleHeight;
+            }
+
+            
+            self.frame = rectSelf;
         }
     }
     
@@ -910,58 +953,41 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 
 
 
--(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect superView:(UIView*)newSuperview
+-(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect
 {
-    BOOL ok = NO;
-    if (newSuperview == nil)
-        ok = [match isMatchParent];
-    else
-        ok = [match isMatchView:newSuperview];
     
-    if (ok)
-    {
-        
-        CGFloat vTotalWidth = 0;
-        
-        vTotalWidth = (selfWidth - leftPadding - rightPadding)*match.mutilVal + match.addVal;
-        
-        if ([self isRelativeMargin:leftMargin])
-            leftMargin = vTotalWidth * leftMargin;
-        
-        
-        if ([self isRelativeMargin:rightMargin])
-            rightMargin = vTotalWidth * rightMargin;
-        
-        pRect->size.width = vTotalWidth - leftMargin - rightMargin;
-        pRect->origin.x = (selfWidth - pRect->size.width - leftPadding - rightPadding - leftMargin - rightMargin )/2 + leftPadding + leftMargin;
-    }
+    CGFloat vTotalWidth = 0;
+    
+    vTotalWidth = (selfWidth - leftPadding - rightPadding)*match.mutilVal + match.addVal;
+    
+    if ([self isRelativeMargin:leftMargin])
+        leftMargin = vTotalWidth * leftMargin;
+    
+    
+    if ([self isRelativeMargin:rightMargin])
+        rightMargin = vTotalWidth * rightMargin;
+    
+    pRect->size.width = vTotalWidth - leftMargin - rightMargin;
+    pRect->origin.x = (selfWidth - pRect->size.width - leftPadding - rightPadding - leftMargin - rightMargin )/2 + leftPadding + leftMargin;
     
 }
 
--(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect superView:(UIView*)newSuperview
+-(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect
 {
     
-    BOOL ok = NO;
-    if (newSuperview == nil)
-        ok = [match isMatchParent];
-    else
-        ok = [match isMatchView:newSuperview];
     
-    if (ok)
-    {
-        
-        CGFloat vTotalHeight = (selfHeight - topPadding - bottomPadding)*match.mutilVal + match.addVal;
-        
-        if ([self isRelativeMargin:topMargin])
-            topMargin = vTotalHeight * topMargin;
-        
-        
-        if ([self isRelativeMargin:bottomMargin])
-            bottomMargin = vTotalHeight * bottomMargin;
-        
-        pRect->size.height = vTotalHeight - topMargin - bottomMargin;
-        pRect->origin.y = (selfHeight - pRect->size.height - topPadding - bottomPadding - topMargin - bottomMargin )/2 + topPadding + topMargin;
-    }
+    CGFloat vTotalHeight = (selfHeight - topPadding - bottomPadding)*match.mutilVal + match.addVal;
+    
+    if ([self isRelativeMargin:topMargin])
+        topMargin = vTotalHeight * topMargin;
+    
+    
+    if ([self isRelativeMargin:bottomMargin])
+        bottomMargin = vTotalHeight * bottomMargin;
+    
+    pRect->size.height = vTotalHeight - topMargin - bottomMargin;
+    pRect->origin.y = (selfHeight - pRect->size.height - topPadding - bottomPadding - topMargin - bottomMargin )/2 + topPadding + topMargin;
+    
     
 }
 

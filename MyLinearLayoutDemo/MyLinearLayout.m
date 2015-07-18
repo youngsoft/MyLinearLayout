@@ -139,18 +139,9 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 
 
--(void)layoutSubviewsForVert
+- (CGFloat)AdjustSelfWidth:(NSArray *)sbs
 {
-    
-
-    NSArray *sbs = self.subviews;
-    
-    CGFloat fixedHeight = 0;   //计算固定部分的高度
-    CGFloat floatingHeight = 0; //浮动的高度。
-    CGFloat totalWeight = 0;
-    
-    CGFloat selfHeight = self.frame.size.height;
-    CGFloat selfWidth = self.frame.size.width;
+    CGFloat selfWidth=self.frame.size.width;
     CGFloat maxSubviewWidth = 0;
     
     //计算最宽的子视图的宽度
@@ -160,17 +151,21 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
+        
         //计算最大的视图的宽度
         if (self.wrapContentWidth &&  !v.widthDime.isMatchParent)
         {
+            CGFloat leftMargin =  (v.centerXPos.posVal != nil) ? v.centerXPos.margin : v.leftPos.margin;
+            CGFloat rightMargin = (v.centerXPos.posVal != nil) ? 0 : v.rightPos.margin;
+            
             CGFloat vWidth = v.frame.size.width;
             if (v.widthDime.dimeNumVal != nil)
                 vWidth = v.widthDime.measure;
             
-                maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth
-                                         subviewMeasure:vWidth
-                                             headMargin:v.leftPos.margin
-                                             tailMargin:v.rightPos.margin];
+            maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth
+                                     subviewMeasure:vWidth
+                                         headMargin:leftMargin
+                                         tailMargin:rightMargin];
             
             //左边 + 宽度 + 右边
             
@@ -185,6 +180,21 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         rectSelf.size.width = selfWidth;
         self.frame = rectSelf;
     }
+    return selfWidth;
+}
+
+-(void)layoutSubviewsForVert
+{
+    
+
+    NSArray *sbs = self.subviews;
+    
+    CGFloat fixedHeight = 0;   //计算固定部分的高度
+    CGFloat floatingHeight = 0; //浮动的高度。
+    CGFloat totalWeight = 0;
+    
+    CGFloat selfHeight = self.frame.size.height;
+    CGFloat selfWidth = [self AdjustSelfWidth:sbs];
     
     //调整子视图的宽度。并根据情况调整子视图的高度。并计算出固定高度和浮动高度。
     for (int i = 0; i < sbs.count; i++)
@@ -194,8 +204,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             continue;
         
         CGRect rect = v.frame;
-        CGFloat leftMargin = v.leftPos.margin;
-        CGFloat rightMargin = v.rightPos.margin;
+        CGFloat leftMargin =  (v.centerXPos.posVal != nil) ? v.centerXPos.margin : v.leftPos.margin;
+        CGFloat rightMargin = (v.centerXPos.posVal != nil) ? 0 : v.rightPos.margin;
         CGFloat topMargin = v.topPos.margin;
         CGFloat bottomMargin = v.bottomPos.margin;
         BOOL isFlexedHeight = v.isFlexedHeight && v.weight == 0;
@@ -208,7 +218,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         
         
         //调整子视图的宽度，如果子视图为matchParent的话
-        [self calcMatchParentWidth:v.widthDime selfWidth:selfWidth leftMargin:leftMargin rightMargin:rightMargin leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect superView:nil];
+        if (v.widthDime.isMatchParent)
+            [self calcMatchParentWidth:v.widthDime selfWidth:selfWidth leftMargin:leftMargin rightMargin:rightMargin leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect];
         
         
         MarignGravity mg = MGRAVITY_HORZ_LEFT;
@@ -460,7 +471,10 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         //计算最高的高度。
         if (self.wrapContentHeight && !v.heightDime.isMatchParent)
         {
-            maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:v.topPos.margin tailMargin:v.bottomPos.margin];
+            CGFloat topMargin = (v.centerYPos.posVal != nil) ? v.centerYPos.margin : v.topPos.margin;
+            CGFloat bottomMargin = (v.centerYPos.posVal != nil) ? 0 : v.bottomPos.margin;
+            
+            maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:topMargin tailMargin:bottomMargin];
             
         }
         
@@ -483,12 +497,13 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
-        CGFloat topMargin = v.topPos.margin;
-        CGFloat bottomMargin = v.bottomPos.margin;
+        CGFloat topMargin = (v.centerYPos.posVal != nil) ? v.centerYPos.margin : v.topPos.margin;
+        CGFloat bottomMargin = (v.centerYPos.posVal != nil) ? 0 : v.bottomPos.margin;
         CGRect rect = v.frame;
         
         //布局高度
-        [self calcMatchParentHeight:v.heightDime selfHeight:selfHeight topMargin:topMargin bottomMargin:bottomMargin topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect superView:nil];
+        if (v.heightDime.isMatchParent)
+            [self calcMatchParentHeight:v.heightDime selfHeight:selfHeight topMargin:topMargin bottomMargin:bottomMargin topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect];
         
         //优先以容器中的指定为标准
         
@@ -533,42 +548,11 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     
     
     CGFloat selfHeight = self.frame.size.height;
-    CGFloat selfWidth = self.frame.size.width;
-    CGFloat maxSubviewWidth = 0;
+    CGFloat selfWidth = [self AdjustSelfWidth:sbs];
    
     CGFloat floatingHeight = selfHeight - self.padding.top - self.padding.bottom;
     if (floatingHeight <=0)
         floatingHeight = 0;
-    
-    
-    
-    //计算最宽的子视图的宽度
-    for (int i = 0; i < sbs.count; i++)
-    {
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
-        
-        //计算最大子视图的尺寸
-        if (self.wrapContentWidth && !v.widthDime.isMatchParent)
-        {
-            CGFloat vWidth = v.frame.size.width;
-            if (v.widthDime.dimeNumVal != nil)
-                vWidth = v.widthDime.measure;
-            
-                maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth subviewMeasure:vWidth headMargin:v.leftPos.margin tailMargin:v.rightPos.margin];
-        }
-    }
-    
-    //调整自己的宽度
-    if (self.wrapContentWidth)
-    {
-        selfWidth = maxSubviewWidth + self.padding.left + self.padding.right;
-        CGRect rectSelf = self.frame;
-        rectSelf.size.width = selfWidth;
-        self.frame = rectSelf;
-    }
-
     
     //调整子视图的宽度。并根据情况调整子视图的高度。并计算出固定高度和浮动高度。
     for (int i = 0; i < sbs.count; i++)
@@ -578,8 +562,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             continue;
         
         CGRect rect = v.frame;
-        CGFloat leftMargin = v.leftPos.margin;
-        CGFloat rightMargin = v.rightPos.margin;
+        CGFloat leftMargin =  (v.centerXPos.posVal != nil) ? v.centerXPos.margin : v.leftPos.margin;
+        CGFloat rightMargin = (v.centerXPos.posVal != nil) ? 0 : v.rightPos.margin;
         CGFloat topMargin = v.topPos.margin;
         CGFloat bottomMargin = v.bottomPos.margin;
         BOOL isFlexedHeight = v.isFlexedHeight && v.weight == 0;
@@ -591,7 +575,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         
         
         //调整子视图的宽度，如果子视图为matchParent的话
-        [self calcMatchParentWidth:v.widthDime selfWidth:selfWidth leftMargin:leftMargin rightMargin:rightMargin leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect superView:nil];
+        if (v.widthDime.isMatchParent)
+            [self calcMatchParentWidth:v.widthDime selfWidth:selfWidth leftMargin:leftMargin rightMargin:rightMargin leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect];
         
         //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
         MarignGravity mg = MGRAVITY_HORZ_LEFT;
@@ -709,8 +694,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
-        CGFloat topMargin = v.topPos.margin;
-        CGFloat bottomMargin = v.bottomPos.margin;
+        CGFloat topMargin =  (v.centerYPos.posVal != nil) ? v.centerYPos.margin : v.topPos.margin;
+        CGFloat bottomMargin = (v.centerYPos.posVal != nil) ? 0 : v.bottomPos.margin;
         CGRect rect = v.frame;
         BOOL isFlexedHeight = v.isFlexedHeight && !v.heightDime.isMatchParent;
         
@@ -784,8 +769,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         
         CGFloat leftMargin = v.leftPos.margin;
         CGFloat rightMargin = v.rightPos.margin;
-        CGFloat topMargin = v.topPos.margin;
-        CGFloat bottomMargin = v.bottomPos.margin;
+        CGFloat topMargin =  (v.centerYPos.posVal != nil) ? v.centerYPos.margin : v.topPos.margin;
+        CGFloat bottomMargin = (v.centerYPos.posVal != nil) ? 0 : v.bottomPos.margin;
         
         if ([self isRelativeMargin:leftMargin])
             pos += floatingWidth * v.leftPos.margin;
@@ -796,7 +781,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         rect.origin.x = pos;
         
         //计算高度
-        [self calcMatchParentHeight:v.heightDime selfHeight:selfHeight topMargin:topMargin bottomMargin:bottomMargin topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect superView:nil];
+        if (v.heightDime.isMatchParent)
+            [self calcMatchParentHeight:v.heightDime selfHeight:selfHeight topMargin:topMargin bottomMargin:bottomMargin topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect];
         
       
         MarignGravity mg = MGRAVITY_VERT_TOP;

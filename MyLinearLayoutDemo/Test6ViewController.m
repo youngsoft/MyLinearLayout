@@ -28,30 +28,29 @@
     
     UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
     v1.backgroundColor = [UIColor redColor];
-    v1.topPos.equalTo(@10);
-    v1.widthDime.equalTo(ll.widthDime);
+    v1.topMargin = 10;
+    v1.leftMargin = v1.rightMargin = 0;
     [ll addSubview:v1];
     
     UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
     v2.backgroundColor = [UIColor greenColor];
-    v2.topPos.equalTo(@10);
+    v2.topMargin = 10;
     v2.widthDime.equalTo(ll.widthDime).multiply(0.8);  //父视图的宽度的0.8
     [ll addSubview:v2];
     
     
     UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
     v3.backgroundColor = [UIColor blueColor];
-    v3.topPos.equalTo(@10);
+    v3.topMargin = 10;
     v3.widthDime.equalTo(ll.widthDime).add(-20);  //父视图的宽度-20
     [ll addSubview:v3];
     
     UIView *v4 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
     v4.backgroundColor = [UIColor yellowColor];
-    
-    v4.topPos.equalTo(@10);
-    v4.bottomPos.equalTo(@10);
-    v4.widthDime.equalTo(ll.widthDime);
-    v4.leftPos.equalTo(@10); //设置了左偏移
+    v4.topMargin = 10;
+    v4.bottomMargin = 10;
+    v4.leftMargin = 10;
+    v4.rightMargin = 10;
     [ll addSubview:v4];
     
 
