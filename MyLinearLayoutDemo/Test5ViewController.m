@@ -35,7 +35,7 @@
     UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
     v2.backgroundColor = [UIColor greenColor];
     v2.topMargin = 10;
-    v2.centerXOffset = 0;
+    v2.centerXOffset = 0;  //这里是居中
     
     [ll addSubview:v2];
     
