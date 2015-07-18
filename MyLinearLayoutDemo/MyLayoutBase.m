@@ -106,7 +106,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 -(void)setTopMargin:(CGFloat)topMargin
 {
     self.topPos.equalTo(@(topMargin));
-}
+ }
 
 -(CGFloat)rightMargin
 {
@@ -304,6 +304,18 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return self;
 }
 
+-(void)setNeedLayout
+{
+    if (_view.superview != nil && [_view.superview isKindOfClass:[MyLayoutBase class]])
+    {
+        MyLayoutBase* lb = (MyLayoutBase*)_view.superview;
+        if (!lb.isLayouting)
+            [_view.superview setNeedsLayout];
+    }
+    
+}
+
+
 -(NSNumber*)posNumVal
 {
     if (_posVal == nil)
@@ -355,6 +367,8 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         
         _offsetVal = val;
         
+        [self setNeedLayout];
+        
         return self;
     };
 }
@@ -372,6 +386,8 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
             _posValType = MyLayoutValueType_Array;
         else
             _posValType = MyLayoutValueType_NULL;
+        
+        [self setNeedLayout];        
         
         return self;
     };
@@ -401,12 +417,26 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return self;
 }
 
+-(void)setNeedLayout
+{
+    if (_view.superview != nil && [_view.superview isKindOfClass:[MyLayoutBase class]])
+    {
+        MyLayoutBase* lb = (MyLayoutBase*)_view.superview;
+        if (!lb.isLayouting)
+            [_view.superview setNeedsLayout];
+    }
+
+}
+
 //乘
 -(MyLayoutDime* (^)(CGFloat val))multiply
 {
     return ^id(CGFloat val){
         
         _mutilVal = val;
+        
+        [self setNeedLayout];
+        
         return self;
     };
     
@@ -418,6 +448,9 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return ^id(CGFloat val){
         
         _addVal = val;
+        
+        [self setNeedLayout];
+        
         return self;
         
     };
@@ -439,6 +472,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         else
             _dimeValType = MyLayoutValueType_NULL;
 
+        [self setNeedLayout];
         
         return self;
     };
@@ -788,8 +822,6 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     [subview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
     [subview addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:nil];
     
-    
-    [self setNeedsLayout];
 }
 
 - (void)willRemoveSubview:(UIView *)subview
@@ -800,8 +832,6 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     [subview removeObserver:self forKeyPath:@"frame"];
     [subview removeObserver:self forKeyPath:@"bounds"];
     [subview removeObserver:self forKeyPath:@"center"];
-    
-    [self setNeedsLayout];
 }
 
 
@@ -848,19 +878,26 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     if (self.beginLayoutBlock != nil)
         self.beginLayoutBlock();
     
-    self.isLayouting = YES;
+    if (!self.isLayouting)
+    {
+        self.isLayouting = YES;
     
-    if (self.priorAutoresizingMask)
-        [super layoutSubviews];
+        if (self.priorAutoresizingMask)
+            [super layoutSubviews];
     
     
-    [self doLayoutSubviews];
+        [self doLayoutSubviews];
     
     
-    self.isLayouting = NO;
+        self.isLayouting = NO;
+    }
     
     if (self.endLayoutBlock != nil)
+    {
         self.endLayoutBlock();
+        self.beginLayoutBlock = nil;
+        self.endLayoutBlock = nil;
+    }
 }
 
 

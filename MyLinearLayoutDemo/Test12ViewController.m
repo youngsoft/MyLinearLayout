@@ -59,16 +59,6 @@
     
     [self.view addSubview:_myll];
     
-    _myll.beginLayoutBlock = ^()
-    {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.5];
-    };
-    
-    _myll.endLayoutBlock = ^()
-    {
-        [UIView commitAnimations];
-    };
     
 }
 
@@ -113,6 +103,18 @@
     [l1 setTarget:self action:@selector(handleAction:)];
     
     [_myll addSubview:l1];
+    
+    _myll.beginLayoutBlock = ^()
+    {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.5];
+    };
+    
+    _myll.endLayoutBlock = ^()
+    {
+        [UIView commitAnimations];
+    };
+
 
     
 }

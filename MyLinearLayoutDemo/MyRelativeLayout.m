@@ -285,7 +285,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     switch (gravity) {
         case MGRAVITY_HORZ_LEFT:
         {
-            if (sbv == self)
+            if (sbv == self || sbv == nil)
                 return self.leftPadding;
             
             
@@ -301,7 +301,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             break;
         case MGRAVITY_HORZ_RIGHT:
         {
-            if (sbv == self)
+            if (sbv == self || sbv == nil)
                 return self.frame.size.width - self.rightPadding;
             
             if (sbv.isHidden && self.hideSubviewReLayout)
@@ -326,7 +326,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             break;
         case MGRAVITY_VERT_TOP:
         {
-            if (sbv == self)
+            if (sbv == self || sbv == nil)
                 return self.topPadding;
             
             
@@ -341,7 +341,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             break;
         case MGRAVITY_VERT_BOTTOM:
         {
-            if (sbv == self)
+            if (sbv == self || sbv == nil)
                 return self.frame.size.height - self.bottomPadding;
             
             if (sbv.isHidden && self.hideSubviewReLayout)
@@ -366,7 +366,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             break;
         case MGRAVITY_HORZ_FILL:
         {
-            if (sbv == self)
+            if (sbv == self || sbv == nil)
                 return self.frame.size.width - self.leftPadding - self.rightPadding;
             
     
@@ -381,7 +381,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             break;
         case MGRAVITY_VERT_FILL:
         {
-            if (sbv == self)
+            if (sbv == self || sbv == nil)
                 return self.frame.size.height - self.topPadding - self.bottomPadding;
             
             
@@ -395,7 +395,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             break;
         case MGRAVITY_HORZ_CENTER:
         {
-            if (sbv == self)
+            if (sbv == self || sbv == nil)
                 return (self.frame.size.width - self.leftPadding - self.rightPadding) / 2 + self.leftPadding;
             
             if (sbv.isHidden && self.hideSubviewReLayout)
@@ -421,7 +421,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             
         case MGRAVITY_VERT_CENTER:
         {
-            if (sbv == self)
+            if (sbv == self || sbv == nil)
                 return (self.frame.size.height - self.topPadding - self.bottomPadding) / 2 + self.topPadding;
             
             if (sbv.isHidden && self.hideSubviewReLayout)
@@ -466,22 +466,23 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         }
         else;
         
-        if (sbv.leftPos.posRelaVal != nil && sbv.rightPos.posRelaVal != nil)
-        {
-            sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos] + sbv.leftPos.margin;
-            sbv.absPos.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos] - sbv.rightPos.margin;
-            sbv.absPos.width = sbv.absPos.rightPos - sbv.absPos.leftPos;
-            
-            return YES;
-        }
         
-        if (sbv.leftPos.posNumVal != nil && sbv.rightPos.posNumVal != nil)
+        if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
         {
-            sbv.absPos.leftPos = sbv.leftPos.margin + self.leftPadding;
-            sbv.absPos.rightPos = self.frame.size.width - sbv.rightPos.margin - self.rightPadding;
+            if (sbv.leftPos.posRelaVal != nil)
+                 sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos] + sbv.leftPos.margin;
+            else
+                sbv.absPos.leftPos = sbv.leftPos.margin + self.leftPadding;
+            
+            if (sbv.rightPos.posRelaVal != nil)
+                sbv.absPos.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos] - sbv.rightPos.margin;
+            else
+                sbv.absPos.rightPos = self.frame.size.width - sbv.rightPos.margin - self.rightPadding;
+            
             sbv.absPos.width = sbv.absPos.rightPos - sbv.absPos.leftPos;
             
             return YES;
+
         }
         
         
@@ -510,22 +511,22 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         }
         else;
         
-        if (sbv.topPos.posRelaVal != nil && sbv.bottomPos.posRelaVal != nil)
+        if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
         {
-            sbv.absPos.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos] + sbv.topPos.margin;
-            sbv.absPos.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos] - sbv.bottomPos.margin;
+            if (sbv.topPos.posRelaVal != nil)
+                sbv.absPos.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos] + sbv.topPos.margin;
+            else
+                sbv.absPos.topPos = sbv.topPos.margin + self.topPadding;
+            
+            if (sbv.bottomPos.posRelaVal != nil)
+                sbv.absPos.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos] - sbv.bottomPos.margin;
+            else
+                sbv.absPos.bottomPos = self.frame.size.height - sbv.bottomPos.margin - self.bottomPadding;
+            
             sbv.absPos.height = sbv.absPos.bottomPos - sbv.absPos.topPos;
             
             return YES;
-        }
-        
-        if (sbv.topPos.posNumVal != nil && sbv.bottomPos.posNumVal != nil)
-        {
-            sbv.absPos.topPos = sbv.topPos.margin + self.topPadding;
-            sbv.absPos.bottomPos = self.frame.size.height - sbv.bottomPos.margin - self.bottomPadding;
-            sbv.absPos.height = sbv.absPos.bottomPos - sbv.absPos.topPos;
             
-            return YES;
         }
         
         

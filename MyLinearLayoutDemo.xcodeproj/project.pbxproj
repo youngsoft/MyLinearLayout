@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		181385BF1B5A617500DEA407 /* Test17ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181385BE1B5A617500DEA407 /* Test17ViewController.m */; };
 		183AB2D01B3664DB003E999F /* Test1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2CF1B3664DB003E999F /* Test1ViewController.m */; };
 		183AB2D31B36714F003E999F /* Test2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2D21B36714F003E999F /* Test2ViewController.m */; };
 		183AB2D61B36A9FA003E999F /* Test3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2D51B36A9FA003E999F /* Test3ViewController.m */; };
@@ -49,6 +50,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		181385BD1B5A617500DEA407 /* Test17ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test17ViewController.h; sourceTree = "<group>"; };
+		181385BE1B5A617500DEA407 /* Test17ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test17ViewController.m; sourceTree = "<group>"; };
 		183AB2CE1B3664DB003E999F /* Test1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test1ViewController.h; sourceTree = "<group>"; };
 		183AB2CF1B3664DB003E999F /* Test1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test1ViewController.m; sourceTree = "<group>"; };
 		183AB2D11B36714F003E999F /* Test2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test2ViewController.h; sourceTree = "<group>"; };
@@ -201,6 +204,8 @@
 				18FAC1891B4ABD10005FD4E0 /* Test15ViewController.m */,
 				184CEC201B4E8B2900E97C7E /* Test16ViewController.h */,
 				184CEC211B4E8B2900E97C7E /* Test16ViewController.m */,
+				181385BD1B5A617500DEA407 /* Test17ViewController.h */,
+				181385BE1B5A617500DEA407 /* Test17ViewController.m */,
 			);
 			path = MyLinearLayoutDemo;
 			sourceTree = "<group>";
@@ -346,6 +351,7 @@
 				183AB2F01B36F8F8003E999F /* Test11ViewController.m in Sources */,
 				183AB2DC1B36B183003E999F /* Test5ViewController.m in Sources */,
 				1889AEAE1B4A69130001F871 /* Test14ViewController.m in Sources */,
+				181385BF1B5A617500DEA407 /* Test17ViewController.m in Sources */,
 				183AB2D61B36A9FA003E999F /* Test3ViewController.m in Sources */,
 				18970C271B2D3F4200A475CC /* MyLayoutBase.m in Sources */,
 				187C6A4F1B47C94700A6949A /* Test13ViewController.m in Sources */,
