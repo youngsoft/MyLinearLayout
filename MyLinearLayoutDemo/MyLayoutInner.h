@@ -71,6 +71,7 @@ typedef enum : unsigned char
 -(void)vertGravity:(MarignGravity)vert
         selfHeight:(CGFloat)selfHeight
          topMargin:(CGFloat)topMargin
+      centerMargin:(CGFloat)centerMargin
       bottomMargin:(CGFloat)bottomMargin
               rect:(CGRect*)pRect;
 
@@ -78,6 +79,7 @@ typedef enum : unsigned char
 -(void)horzGravity:(MarignGravity)horz
          selfWidth:(CGFloat)selfWidth
         leftMargin:(CGFloat)leftMargin
+      centerMargin:(CGFloat)centerMargin
        rightMargin:(CGFloat)rightMargin
               rect:(CGRect*)pRect;
 

@@ -853,14 +853,14 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
             
             if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) || [self.widthDime isMatchView:newSuperview])
             {
-                [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf];
+                [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin centerMargin:0  rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf];
                 self.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
             }
             
             
             if ((self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) || [self.heightDime isMatchView:newSuperview])
             {
-                [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf];
+                [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin centerMargin:0 bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf];
                 self.autoresizingMask |= UIViewAutoresizingFlexibleHeight;
             }
 
@@ -907,6 +907,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 -(void)vertGravity:(MarignGravity)vert
         selfHeight:(CGFloat)selfHeight
          topMargin:(CGFloat)topMargin
+         centerMargin:(CGFloat)centerMargin
       bottomMargin:(CGFloat)bottomMargin
               rect:(CGRect*)pRect
 {
@@ -914,6 +915,10 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     
     if ([self isRelativeMargin:topMargin])
         topMargin = (selfHeight - fixedHeight) * topMargin;
+    
+    if ([self isRelativeMargin:centerMargin])
+        centerMargin = (selfHeight - fixedHeight) * centerMargin;
+
     
     if ([self isRelativeMargin:bottomMargin])
         bottomMargin = (selfHeight - fixedHeight) * bottomMargin;
@@ -929,7 +934,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     else if (vert == MGRAVITY_VERT_CENTER)
     {
         
-        pRect->origin.y = (selfHeight - self.padding.top - self.padding.bottom - topMargin - bottomMargin - pRect->size.height)/2 + self.padding.top + topMargin;
+        pRect->origin.y = (selfHeight - self.padding.top - self.padding.bottom - topMargin - bottomMargin - pRect->size.height)/2 + self.padding.top + topMargin + centerMargin;
     }
     else if (vert == MGRAVITY_VERT_BOTTOM)
     {
@@ -951,6 +956,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 -(void)horzGravity:(MarignGravity)horz
          selfWidth:(CGFloat)selfWidth
         leftMargin:(CGFloat)leftMargin
+      centerMargin:(CGFloat)centerMargin
        rightMargin:(CGFloat)rightMargin
               rect:(CGRect*)pRect
 {
@@ -958,6 +964,10 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     CGFloat fixedWidth = self.padding.left + self.padding.right;
     if ([self isRelativeMargin:leftMargin])
         leftMargin = (selfWidth - fixedWidth) * leftMargin;
+    
+    if ([self isRelativeMargin:centerMargin])
+        centerMargin = (selfWidth - fixedWidth) * centerMargin;
+
     
     if ([self isRelativeMargin:rightMargin])
         rightMargin = (selfWidth - fixedWidth) * rightMargin;
@@ -971,7 +981,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     }
     else if (horz == MGRAVITY_HORZ_CENTER)
     {
-        pRect->origin.x = (selfWidth - self.padding.left - self.padding.right - leftMargin - rightMargin - pRect->size.width)/2 + self.padding.left + leftMargin;
+        pRect->origin.x = (selfWidth - self.padding.left - self.padding.right - leftMargin - rightMargin - pRect->size.width)/2 + self.padding.left + leftMargin + centerMargin;
     }
     else if (horz == MGRAVITY_HORZ_RIGHT)
     {
@@ -990,7 +1000,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 
 
 
--(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect
+-(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin centerMargin:(CGFloat)centerMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect
 {
     
     CGFloat vTotalWidth = 0;
@@ -1000,16 +1010,18 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     if ([self isRelativeMargin:leftMargin])
         leftMargin = vTotalWidth * leftMargin;
     
+    if ([self isRelativeMargin:centerMargin])
+        centerMargin = vTotalWidth * centerMargin;
     
     if ([self isRelativeMargin:rightMargin])
         rightMargin = vTotalWidth * rightMargin;
     
-    pRect->size.width = vTotalWidth - leftMargin - rightMargin;
-    pRect->origin.x = (selfWidth - pRect->size.width - leftPadding - rightPadding - leftMargin - rightMargin )/2 + leftPadding + leftMargin;
+    pRect->size.width = vTotalWidth - leftMargin - centerMargin - rightMargin;
+    pRect->origin.x = (selfWidth - pRect->size.width - leftPadding - rightPadding - leftMargin - rightMargin )/2 + leftPadding + leftMargin + centerMargin;
     
 }
 
--(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect
+-(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin centerMargin:(CGFloat)centerMargin  bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect
 {
     
     
@@ -1018,12 +1030,15 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     if ([self isRelativeMargin:topMargin])
         topMargin = vTotalHeight * topMargin;
     
+    if ([self isRelativeMargin:centerMargin])
+        centerMargin = vTotalHeight * centerMargin;
+
     
     if ([self isRelativeMargin:bottomMargin])
         bottomMargin = vTotalHeight * bottomMargin;
     
-    pRect->size.height = vTotalHeight - topMargin - bottomMargin;
-    pRect->origin.y = (selfHeight - pRect->size.height - topPadding - bottomPadding - topMargin - bottomMargin )/2 + topPadding + topMargin;
+    pRect->size.height = vTotalHeight - topMargin - centerMargin - bottomMargin;
+    pRect->origin.y = (selfHeight - pRect->size.height - topPadding - bottomPadding - topMargin - bottomMargin )/2 + topPadding + topMargin + centerMargin;
     
     
 }

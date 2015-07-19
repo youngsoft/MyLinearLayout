@@ -144,6 +144,7 @@
     [center sizeToFit];
     center.backgroundColor = [UIColor orangeColor];
     center.marginGravity = MGRAVITY_CENTER;
+   [fl addSubview:center];
  
     
     [self.view addSubview:fl];

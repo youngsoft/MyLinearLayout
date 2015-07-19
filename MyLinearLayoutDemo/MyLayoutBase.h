@@ -43,12 +43,17 @@ typedef enum : unsigned char {
 //偏移
 -(MyLayoutPos* (^)(CGFloat val))offset;
 
-//NSNumber, MyLayoutPos对象,如果是centerXPos或者centerYPos则可以传NSArray，数组里面里面也必须是centerXPos，表示指定的视图数组
-//在父视图中居中，比如： A.centerXPos.equalTo(@[B.centerXPos.offset(20)].offset(20)
-//表示A和B在父视图中居中往下偏移20，B在A的右边，间隔20。
-//如果是NSNumber值则表示离布局视图的特定方向的边界值，对于线性布局来说如果大于0小于1则表示间距是相对值。
-//如果是MyLayoutPos则是相对于另外一个视图的边界值
-//如果是NSArray则是视图成组后的值。
+
+/*
+ val的取值可以是NSNumber,MyLayoutPos,NSArray类型的对象。
+ **如果是NSNumber类型的值表示在这个方向相对父视图或者兄弟视图(线性布局)的偏移值，比如：
+   v.leftPos.equalTo(@10) 表示视图v左边偏移父视图或者兄弟视图10个点的位置。
+   v.centerXPos.equalTo(@10) 表示视图v的水平中心点在父视图的水平中心点并偏移10个点的位置
+   v.leftPos.equalTo(@0.1) 如果值被设置为大于0小于1则只在框架布局和线性布局里面有效表示左边距的值占用父视图宽度的10%
+ **如果是MyLayoutPos类型的值则表示这个方向的值是相对于另外一个视图的边界值，比如：
+   v1.leftPos.equal(v2.rightPos) 表示视图v1的左边边界值等于v2的右边边界值
+ **如果是NSArray类型的值则只能用在相对布局的centerXPos,centerYPos中，数组里面里面也必须是centerXPos，表示指定的视图数组在父视图中居中，比如： A.centerXPos.equalTo(@[B.centerXPos.offset(20)].offset(20)  表示A和B在父视图中居中往下偏移20，B在A的右边，间隔20。
+ */
 -(MyLayoutPos* (^)(id val))equalTo;
 
 @end
@@ -73,7 +78,10 @@ typedef enum : unsigned char {
 
 @interface UIView(MyLayoutExt)
 
-//视图四周的边界值,主要用于相对布局的设置，也可以用于线性布局和框架布局
+/*
+ 视图四周的边界值,主要用于相对布局的设置，也可以用于线性布局和框架布局
+ 如果这些值设置为NSNumber类型表示对应的方向上的偏移值
+ */
 @property(nonatomic, readonly)  MyLayoutPos *leftPos;
 @property(nonatomic, readonly)  MyLayoutPos *topPos;
 @property(nonatomic, readonly)  MyLayoutPos *rightPos;
@@ -94,11 +102,13 @@ typedef enum : unsigned char {
  下面四个属性是上面leftPos,topPos,rightPos,bottomPos的equalTo设置NSNumber类型的值时的简化版本主要用在线性布局和框架布局里面，
  表示距布局视图或者兄弟视图四周的边界值
  比如：
-   v.leftMargin = 10   <==>   v.leftPos.equalTo(@10)
+   v.leftMargin = 10   <==>   v.leftPos.equalTo(@10)  表示左边偏移10
  
  对于线性布局和框架布局来说当边界值设置为>0 并且<1时表示的相对的边界值，而为0和大于等于1时表示的是决定边界值。比如：
  v.leftMargin = 10;  表示视图v离左边10个距离的位置
  v.leftMargin = 0.1; 则表示视图v的左边距占用布局视图宽度的10%,如果布局视图宽度为200则左边距为20
+ 
+ 这四个属性的值最好别用于读取，而只是单纯用于设置
 */
 @property(nonatomic, assign) CGFloat leftMargin;
 @property(nonatomic, assign) CGFloat topMargin;
@@ -107,7 +117,7 @@ typedef enum : unsigned char {
 
 /*
  下面两个属性是上面centerXPos,centerYPos的equalTo设置NSNumber类型的值时的简化版本，主要用在线性布局和相对布局里面表示距离布局视图
- 中心的偏移量，如果设置为0则表示在布局视图的中间
+ 中心的偏移量，如果设置为0则表示在布局视图的中间, 这三个属性的值最好别用于读取，而只是单纯用于设置
  
  v.centerXOffset = 0  <==> v.centerXPos.equalTo(@0)
  
@@ -179,7 +189,8 @@ typedef enum : unsigned char {
 @property(nonatomic, assign) BOOL hideSubviewReLayout;
 
 
-//设置自动布局前后的处理块，主要用于动画处理，可以在这两个函数中添加动画的代码。,如果为nil
+//设置自动布局前后的处理块，主要用于动画处理，可以在这两个函数中添加动画的代码。
+//如果设置这两个函数则会在每次布局完成之后函数都将会置为nil
 @property(nonatomic,copy) void (^beginLayoutBlock)();
 @property(nonatomic,copy) void (^endLayoutBlock)();
 
@@ -218,9 +229,23 @@ typedef enum : unsigned char {
 -(BOOL)isRelativeMargin:(CGFloat)margin;
 
 
--(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect;
+-(void)calcMatchParentWidth:(MyLayoutDime*)match
+                  selfWidth:(CGFloat)selfWidth
+                 leftMargin:(CGFloat)leftMargin
+               centerMargin:(CGFloat)centerMargin
+                rightMargin:(CGFloat)rightMargin
+                leftPadding:(CGFloat)leftPadding
+               rightPadding:(CGFloat)rightPadding
+                       rect:(CGRect*)pRect;
 
--(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect;
+-(void)calcMatchParentHeight:(MyLayoutDime*)match
+                  selfHeight:(CGFloat)selfHeight
+                   topMargin:(CGFloat)topMargin
+                centerMargin:(CGFloat)centerMargin
+                bottomMargin:(CGFloat)bottomMargin
+                  topPadding:(CGFloat)topPadding
+               bottomPadding:(CGFloat)bottomPadding
+                        rect:(CGRect*)pRect;
 
 
 

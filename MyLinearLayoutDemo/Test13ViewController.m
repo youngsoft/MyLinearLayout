@@ -46,8 +46,12 @@
     lb3.backgroundColor = [UIColor greenColor];
     [rl addSubview:lb3];
     
-    lb3.centerXPos.equalTo(rl.centerXPos);
-    lb3.centerYPos.equalTo(rl.centerYPos);
+    //下面两种方式都是设置为居中
+   // lb3.centerXPos.equalTo(rl.centerXPos);
+   // lb3.centerYPos.equalTo(rl.centerYPos);
+    lb3.centerXPos.equalTo(@0);
+    lb3.centerYPos.equalTo(@0);
+    
     lb3.widthDime.equalTo(rl.widthDime).multiply(0.2);
     lb3.heightDime.equalTo(rl.heightDime).multiply(0.1);
     

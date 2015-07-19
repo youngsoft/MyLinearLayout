@@ -20,13 +20,8 @@
 
 -(void)handleBtn:(UIButton*)sender
 {
-   // self.testlabel.leftMargin += 20;
     
-    [self.testlabel removeFromSuperview];
-    self.testlabel = nil;
-    [self.ll setNeedsLayout];
-    
-   /* self.ll.beginLayoutBlock = ^()
+    self.ll.beginLayoutBlock = ^()
     {
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:0.5];
@@ -36,8 +31,10 @@
     {
         [UIView commitAnimations];
     };
-    */
     
+    self.testlabel.leftMargin += 20;
+    
+
     
 }
 

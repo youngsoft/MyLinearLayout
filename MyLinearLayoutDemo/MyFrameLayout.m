@@ -75,7 +75,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
         if (v.heightDime.dimeNumVal != nil)
             rect.size.height = v.heightDime.measure;
         
-        [self horzGravity:horz selfWidth:selfWidth leftMargin:v.leftPos.margin rightMargin:v.rightPos.margin rect:&rect];
+        [self horzGravity:horz selfWidth:selfWidth leftMargin:v.leftPos.margin centerMargin:v.centerXPos.margin rightMargin:v.rightPos.margin rect:&rect];
         
         if (v.isFlexedHeight)
         {
@@ -83,7 +83,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
             rect.size.height = sz.height;
         }
         
-        [self vertGravity:vert selfHeight:selfHeight topMargin:v.topPos.margin bottomMargin:v.bottomPos.margin rect:&rect];
+        [self vertGravity:vert selfHeight:selfHeight topMargin:v.topPos.margin centerMargin:v.centerYPos.margin bottomMargin:v.bottomPos.margin rect:&rect];
         
         
         v.frame = rect;

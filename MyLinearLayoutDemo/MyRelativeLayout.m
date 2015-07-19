@@ -178,7 +178,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     }
     else if (sbv.centerXPos.posNumVal != nil)
     {
-        sbv.absPos.leftPos = sbv.centerXPos.margin - sbv.absPos.width / 2;
+        sbv.absPos.leftPos = (self.frame.size.width - self.rightPadding - self.leftPadding - sbv.absPos.width) / 2 + self.leftPadding + sbv.centerXPos.margin;
         sbv.absPos.rightPos = sbv.absPos.leftPos + sbv.absPos.width;
         return;
     }
@@ -237,7 +237,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     }
     else if (sbv.centerYPos.posNumVal != nil)
     {
-        sbv.absPos.topPos = sbv.centerYPos.margin - sbv.absPos.height / 2;
+        sbv.absPos.topPos = (self.frame.size.height - self.topPadding - self.bottomPadding -  sbv.absPos.height) / 2 + self.topPadding + sbv.centerYPos.margin;
         sbv.absPos.bottomPos = sbv.absPos.topPos + sbv.absPos.height;
         return;
     }
