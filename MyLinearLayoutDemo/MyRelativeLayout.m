@@ -709,7 +709,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             }
             
             //所有宽度算出后，再分别设置
-            CGFloat topOffset = (self.frame.size.height - self.topPadding - self.topPadding - totalHeight) / 2;
+            CGFloat topOffset = (self.frame.size.height - self.topPadding - self.bottomPadding - totalHeight) / 2;
             topOffset += self.topPadding;
             
             id prev = @(topOffset);
