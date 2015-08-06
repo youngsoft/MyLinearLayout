@@ -29,7 +29,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
     MarignGravity oldVal = [self marginGravity];
     if (oldVal != marginGravity)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MARGINGRAVITY, [NSNumber numberWithUnsignedChar:marginGravity], OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MARGINGRAVITY, [NSNumber numberWithUnsignedChar:marginGravity], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         
         if (self.superview != nil)
             [self.superview setNeedsLayout];

@@ -35,12 +35,15 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         pos.view = self;
         pos.pos = MGRAVITY_HORZ_LEFT;
         
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_LEFT, pos, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_LEFT, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return pos;
 }
 
-
+-(void)setLeftPos:(MyLayoutPos *)leftPos
+{
+    NSAssert(0, @"oops");
+}
 
 -(MyLayoutPos*)topPos
 {
@@ -51,11 +54,16 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         pos.view = self;
         pos.pos = MGRAVITY_VERT_TOP;
         
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_TOP, pos, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_TOP, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return pos;
 }
 
+-(void)setTopPos:(MyLayoutPos *)topPos
+{
+    NSAssert(0, @"oops");
+
+}
 
 -(MyLayoutPos*)rightPos
 {
@@ -66,9 +74,15 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         pos.view = self;
         pos.pos = MGRAVITY_HORZ_RIGHT;
         
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_RIGHT, pos, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_RIGHT, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return pos;
+}
+
+-(void)setRightPos:(MyLayoutPos *)rightPos
+{
+    NSAssert(0, @"oops");
+
 }
 
 
@@ -81,9 +95,14 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         pos.view = self;
         pos.pos = MGRAVITY_VERT_BOTTOM;
         
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_BOTTOM, pos, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_BOTTOM, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return pos;
+}
+
+-(void)setBottomPos:(MyLayoutPos *)bottomPos
+{
+    NSAssert(0, @"oops");
 }
 
 
@@ -139,9 +158,14 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         dime.view = self;
         dime.dime = MGRAVITY_HORZ_FILL;
         
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_WIDTH, dime, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_WIDTH, dime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return dime;
+}
+
+-(void)setWidthDime:(MyLayoutDime *)widthDime
+{
+    NSAssert(0, @"oops");
 }
 
 
@@ -154,9 +178,14 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         dime.view = self;
         dime.dime = MGRAVITY_VERT_FILL;
         
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_HEIGHT, dime, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_HEIGHT, dime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return dime;
+}
+
+-(void)setHeightDime:(MyLayoutDime *)heightDime
+{
+    NSAssert(0, @"oops");
 }
 
 -(CGFloat)width
@@ -200,12 +229,16 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         pos.view = self;
         pos.pos = MGRAVITY_HORZ_CENTER;
         
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERX, pos, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERX, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return pos;
 }
 
 
+-(void)setCenterXPos:(MyLayoutPos *)centerXPos
+{
+    NSAssert(0, @"oops");
+}
 
 -(MyLayoutPos*)centerYPos
 {
@@ -216,9 +249,14 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         pos.view = self;
         pos.pos = MGRAVITY_VERT_CENTER;
         
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERY, pos, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERY, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return pos;
+}
+
+-(void)setCenterYPos:(MyLayoutPos *)centerYPos
+{
+    NSAssert(0, @"oops");
 }
 
 
@@ -262,7 +300,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     BOOL oldVal = [self isFlexedHeight];
     if (oldVal != flexedHeight)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT, [NSNumber numberWithBool:flexedHeight], OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT, [NSNumber numberWithBool:flexedHeight], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         
         if (self.superview != nil)
             [self.superview setNeedsLayout];
@@ -328,6 +366,12 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     
 }
 
+-(void)setPosNumVal:(NSNumber *)posNumVal
+{
+    NSAssert(0, @"oops");
+}
+
+
 -(MyLayoutPos*)posRelaVal
 {
     if (_posVal == nil)
@@ -339,6 +383,14 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return nil;
     
 }
+
+-(void)setPosRelaVal:(MyLayoutPos *)posRelaVal
+{
+    NSAssert(0, @"oops");
+
+}
+
+
 
 -(MyLayoutPos*)posArrVal
 {
@@ -352,12 +404,24 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     
 }
 
+-(void)setPosArrVal:(NSArray *)posArrVal
+{
+    NSAssert(0, @"oops");
+}
+
+
 -(CGFloat)margin
 {
     if (self.posNumVal == nil)
         return _offsetVal;
     else
         return self.posNumVal.floatValue + _offsetVal;
+}
+
+-(void)setMargin:(CGFloat)margin
+{
+    NSAssert(0, @"oops");
+
 }
 
 
@@ -391,6 +455,11 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         
         return self;
     };
+    
+}
+
+-(void)dealloc
+{
     
 }
 
@@ -488,6 +557,12 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return nil;
 }
 
+-(void)setDimeNumVal:(NSNumber *)dimeNumVal
+{
+    NSAssert(0, @"oops");
+}
+
+
 -(NSArray*)dimeArrVal
 {
     if (_dimeVal == nil)
@@ -496,6 +571,12 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
         return _dimeVal;
     return nil;
     
+}
+
+-(void)setDimeArrVal:(NSArray *)dimeArrVal
+{
+    NSAssert(0, @"oops");
+
 }
 
 -(MyLayoutDime*)dimeRelaVal
@@ -508,10 +589,22 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     
 }
 
+-(void)setDimeRelaVal:(MyLayoutDime *)dimeRelaVal
+{
+    NSAssert(0, @"oops");
+
+}
+
 -(BOOL)isMatchParent
 {
     return self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview;
 }
+
+-(void)setIsMatchParent:(BOOL)isMatchParent
+{
+    NSAssert(0, @"oops");
+}
+
 
 -(BOOL)isMatchView:(UIView*)v
 {
@@ -524,6 +617,11 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     return self.dimeNumVal.floatValue * _mutilVal + _addVal;
 }
 
+
+-(void)setMeasure:(CGFloat)measure
+{
+    NSAssert(0, @"oops");
+}
 
 
 @end

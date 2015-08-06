@@ -31,7 +31,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     CGFloat oldVal = [self weight];
     if (oldVal != weight)
     {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_WEIGHT, [NSNumber numberWithFloat:weight], OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_WEIGHT, [NSNumber numberWithFloat:weight], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         
         if (self.superview != nil)
             [self.superview setNeedsLayout];

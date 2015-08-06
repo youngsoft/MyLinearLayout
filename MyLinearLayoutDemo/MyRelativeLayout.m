@@ -73,14 +73,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     if (pos == nil)
     {
         pos = [MyAbsolutePos new];
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, pos, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return pos;
 }
 
 -(void)setAbsPos:(MyAbsolutePos *)absPos
 {
-    objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, absPos, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, absPos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
 }
 
