@@ -31,7 +31,8 @@
 
     v1.topMargin = 4;
     v1.leftMargin = 10;
-    v1.size = CGSizeMake(60, 40);
+    v1.width = 60;
+    v1.height = 40;
     
    /* [v1 makeLayout:^(MyMaker *make) {
        
@@ -49,7 +50,8 @@
 
     v2.topMargin = 6;
     v2.leftMargin = 20;
-    v2.size = CGSizeMake(40, 60);
+    v2.width = 40;
+    v2.height = 60;
 
     
     //您也可以不设置width,height而是直接设置frame的宽度和高度
@@ -77,7 +79,8 @@
     //标尺视图
     UIView *v = [UIView new];
     v.backgroundColor = [UIColor blackColor];
-    v.size = CGSizeMake(10, 200);
+    v.width = 10;
+    v.height = 200;
     [test1ll addSubview:v];
     
     [test1ll addSubview:[self createView:NO]];

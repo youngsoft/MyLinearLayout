@@ -128,7 +128,7 @@ typedef enum : unsigned char {
 
 
 /*
- 下面三个属性是上面widthDime,heightDime的equalTo设置NSNumber类型值的简化版本，主要用在线性布局和框架布局里面
+ 下面两个属性是上面widthDime,heightDime的equalTo设置NSNumber类型值的简化版本，主要用在线性布局和框架布局里面
  表示设置视图的宽度和高度，需要注意的是设置这三个值并不是直接设置frame里面的size的宽度和高度，而是设置的布局的高度和宽度值。
  也就是说设置和获取值并不一定是最终视图在布局时的真实高度和宽度，这三个属性的值最好别用于读取，而只是单纯用于设置
  
@@ -137,7 +137,6 @@ typedef enum : unsigned char {
  */
 @property(nonatomic,assign) CGFloat width;
 @property(nonatomic,assign) CGFloat height;
-@property(nonatomic,assign) CGSize size;
 
 @end
 

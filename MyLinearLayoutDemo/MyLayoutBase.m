@@ -208,6 +208,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     self.heightDime.equalTo(@(height));
 }
 
+/*
 -(CGSize)size
 {
     return CGSizeMake(self.width, self.height);
@@ -219,7 +220,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     self.height = size.height;
 }
 
-
+*/
 -(MyLayoutPos*)centerXPos
 {
     MyLayoutPos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERX);
