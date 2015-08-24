@@ -53,9 +53,9 @@ Pod::Spec.new do |s|
   #  profile URL.
   #
 
-  s.author             = { "youngsoft" => "obq0387_cn@sina.com" }
-  # Or just: s.author    = "youngsoft"
-  # s.authors            = { "youngsoft" => "obq0387_cn@sina.com" }
+  s.author             = { "欧阳大哥" => "obq0387_cn@sina.com" }
+  # Or just: s.author    = "欧阳大哥"
+  # s.authors            = { "欧阳大哥" => "obq0387_cn@sina.com" }
   # s.social_media_url   = "http://blog.csdn.net/yangtiang"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
