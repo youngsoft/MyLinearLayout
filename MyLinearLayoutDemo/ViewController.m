@@ -7,9 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "MyLinearLayout.h"
-#import "MyFrameLayout.h"
-
 #import "Test1ViewController.h"
 #import "Test2ViewController.h"
 #import "Test3ViewController.h"

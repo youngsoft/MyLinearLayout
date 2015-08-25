@@ -4,8 +4,6 @@
 //
 //  Created by oybq on 15/2/12.
 //  Copyright (c) 2015年. All rights reserved.
-//  Email:obq0387_cn@sina.com
-//  qq:156355113
 //
 
 #import <UIKit/UIKit.h>

@@ -1,9 +1,9 @@
 //
-//  MyLineView.m
-//  MiniClient
+//  MyLinearLayout.m
+//  MyLinearLayoutDemo
 //
 //  Created by apple on 15/2/12.
-//  Copyright (c) 2015年 SunnadaSoft. All rights reserved.
+//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
 //
 
 #import "MyLinearLayout.h"

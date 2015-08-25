@@ -2,8 +2,8 @@
 //  MyRelativeLayout.h
 //  MyLinearLayoutDemo
 //
-//  Created by fzy on 15/7/1.
-//  Copyright (c) 2015年 SunnadaSoft. All rights reserved.
+//  Created by apple on 15/7/1.
+//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
 //
 
 #import "MyLayoutBase.h"

@@ -3,11 +3,11 @@
 //  MyLinearLayoutDemo
 //
 //  Created by apple on 15/7/6.
-//  Copyright (c) 2015年 SunnadaSoft. All rights reserved.
+//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
 //
 
 #import "Test15ViewController.h"
-#import "MyRelativeLayout.h"
+#import "MyLayout.h"
 
 @interface Test15ViewController ()
 
