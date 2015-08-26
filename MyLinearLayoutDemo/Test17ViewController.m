@@ -149,7 +149,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = @"表格布局";
+    self.title = @"表格布局--垂直表格";
 }
 
 - (void)didReceiveMemoryWarning {

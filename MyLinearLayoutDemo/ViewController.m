@@ -25,6 +25,7 @@
 #import "Test16ViewController.h"
 #import "Test17ViewController.h"
 #import "Test18ViewController.h"
+#import "Test19ViewController.h"
 
 
 @interface ViewController ()
@@ -60,7 +61,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 18;
+    return 19;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -119,9 +120,12 @@
             cell.textLabel.text = @"相对布局4-一组视图居中";
             break;
         case 16:
-            cell.textLabel.text = @"表格布局-支持瀑布流式布局";
+            cell.textLabel.text = @"表格布局-垂直表格";
             break;
         case 17:
+            cell.textLabel.text = @"表格布局-水平表格(瀑布流)";
+            break;
+        case 18:
             cell.textLabel.text = @"其他";
             break;
         default:
@@ -191,6 +195,9 @@
             break;
         case 17:
             vc = [Test18ViewController new];
+            break;
+        case 19:
+            vc = [Test19ViewController new];
             break;
         default:
             break;

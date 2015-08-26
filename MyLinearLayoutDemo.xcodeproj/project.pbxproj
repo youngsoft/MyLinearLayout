@@ -35,6 +35,7 @@
 		186A56541B8D90D900C96A3D /* MyTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A56531B8D90D900C96A3D /* MyTableLayout.m */; };
 		186A56571B8DB25F00C96A3D /* Test18ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A56561B8DB25F00C96A3D /* Test18ViewController.m */; };
 		187C6A4F1B47C94700A6949A /* Test13ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C6A4D1B47C94700A6949A /* Test13ViewController.m */; };
+		187D8CD11B8E0E7E006EFF62 /* Test19ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D8CD01B8E0E7E006EFF62 /* Test19ViewController.m */; };
 		1889AEAE1B4A69130001F871 /* Test14ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1889AEAD1B4A69130001F871 /* Test14ViewController.m */; };
 		18A2C4FC1B3A8C1A00FDFF5D /* Test12ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A2C4FB1B3A8C1A00FDFF5D /* Test12ViewController.m */; };
 		18E8084D1B3A5D170059C410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8084C1B3A5D170059C410 /* QuartzCore.framework */; };
@@ -109,6 +110,8 @@
 		186A56561B8DB25F00C96A3D /* Test18ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test18ViewController.m; sourceTree = "<group>"; };
 		187C6A4C1B47C94700A6949A /* Test13ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test13ViewController.h; sourceTree = "<group>"; };
 		187C6A4D1B47C94700A6949A /* Test13ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test13ViewController.m; sourceTree = "<group>"; };
+		187D8CCF1B8E0E7E006EFF62 /* Test19ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test19ViewController.h; sourceTree = "<group>"; };
+		187D8CD01B8E0E7E006EFF62 /* Test19ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test19ViewController.m; sourceTree = "<group>"; };
 		1889AEAC1B4A69130001F871 /* Test14ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test14ViewController.h; sourceTree = "<group>"; };
 		1889AEAD1B4A69130001F871 /* Test14ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test14ViewController.m; sourceTree = "<group>"; };
 		18A2C4FA1B3A8C1A00FDFF5D /* Test12ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test12ViewController.h; sourceTree = "<group>"; };
@@ -203,6 +206,8 @@
 				181385BE1B5A617500DEA407 /* Test17ViewController.m */,
 				186A56551B8DB25F00C96A3D /* Test18ViewController.h */,
 				186A56561B8DB25F00C96A3D /* Test18ViewController.m */,
+				187D8CCF1B8E0E7E006EFF62 /* Test19ViewController.h */,
+				187D8CD01B8E0E7E006EFF62 /* Test19ViewController.m */,
 			);
 			path = MyLinearLayoutDemo;
 			sourceTree = "<group>";
@@ -370,6 +375,7 @@
 				1889AEAE1B4A69130001F871 /* Test14ViewController.m in Sources */,
 				181385BF1B5A617500DEA407 /* Test17ViewController.m in Sources */,
 				183AB2D61B36A9FA003E999F /* Test3ViewController.m in Sources */,
+				187D8CD11B8E0E7E006EFF62 /* Test19ViewController.m in Sources */,
 				187C6A4F1B47C94700A6949A /* Test13ViewController.m in Sources */,
 				184082991B2C46E8003F378B /* ViewController.m in Sources */,
 				186A55FB1B8C099600C96A3D /* MyLinearLayout.m in Sources */,

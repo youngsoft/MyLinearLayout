@@ -9,10 +9,12 @@
 #import "MyTableLayout.h"
 #import "MyLayoutInner.h"
 
+
+
 @interface MyTableRowLayout : MyLinearLayout
 
 
-+(id)rowWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth;
++(id)rowWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth orientation:(LineViewOrientation)orientation;
 
 @property(nonatomic,assign, readonly) CGFloat rowHeight;
 @property(nonatomic,assign, readonly) CGFloat colWidth;
@@ -25,40 +27,67 @@
    CGFloat _colWidth;
 }
 
--(id)initWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth
+-(id)initWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth orientation:(LineViewOrientation)orientation
 {
     self = [self init];
     if (self != nil)
     {
         _rowHeight = rowHeight;
         _colWidth = colWidth;
-        self.orientation = LVORIENTATION_HORZ;
+        self.orientation = orientation;
         
         if (rowHeight == 0)
             self.weight = 1;
         else if (rowHeight > 0)
-            self.height = rowHeight;
+        {
+            if (orientation == LVORIENTATION_HORZ)
+                self.height = rowHeight;
+            else
+                self.width = rowHeight;
+        }
         else
-            self.wrapContentHeight = YES;
+        {
+            if (orientation == LVORIENTATION_HORZ)
+                self.wrapContentHeight = YES;
+            else
+                self.wrapContentWidth = YES;
+        }
         
         if (colWidth == 0)
         {
-            self.wrapContentWidth = NO;
-            self.leftMargin = self.rightMargin = 0;
+            if (orientation == LVORIENTATION_HORZ)
+            {
+                self.wrapContentWidth = NO;
+                self.leftMargin = self.rightMargin = 0;
+            }
+            else
+            {
+                self.wrapContentHeight = NO;
+                self.topMargin = self.bottomMargin = 0;
+            }
+            
         }
         else if (colWidth == -2)
         {
-            self.wrapContentWidth = NO;
-            self.leftMargin = self.rightMargin = 0;
+            if (orientation == LVORIENTATION_HORZ)
+            {
+                self.wrapContentWidth = NO;
+                self.leftMargin = self.rightMargin = 0;
+            }
+            else
+            {
+                self.wrapContentHeight = NO;
+                self.topMargin = self.bottomMargin = 0;
+            }
         }
     }
     
     return self;
 }
 
-+(id)rowWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth;
++(id)rowWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth orientation:(LineViewOrientation)orientation
 {
-    return [[self alloc] initWith:rowHeight colWidth:colWidth];
+    return [[self alloc] initWith:rowHeight colWidth:colWidth orientation:orientation];
 }
 
 
@@ -96,7 +125,13 @@
 
 -(void)insertRow:(CGFloat)rowHeight colWidth:(CGFloat)colWidth atIndex:(NSInteger)rowIndex
 {
-    MyTableRowLayout *rowView = [MyTableRowLayout rowWith:rowHeight colWidth:colWidth];
+    LineViewOrientation ori = 0;
+    if (self.orientation == LVORIENTATION_VERT)
+        ori = LVORIENTATION_HORZ;
+    else
+        ori = LVORIENTATION_VERT;
+    
+    MyTableRowLayout *rowView = [MyTableRowLayout rowWith:rowHeight colWidth:colWidth orientation:ori];
     [super insertSubview:rowView atIndex:rowIndex];
 }
 
@@ -134,11 +169,27 @@
     if (rowView.colWidth == 0)
         colView.weight = 1;
     else if (rowView.colWidth > 0)
-        colView.width = rowView.colWidth;
-    
-    if (colView.frame.size.height == 0 && colView.heightDime.dimeVal == nil)
     {
-        colView.heightDime.equalTo(rowView.heightDime);
+        if (rowView.orientation == LVORIENTATION_HORZ)
+            colView.width = rowView.colWidth;
+        else
+            colView.height = rowView.colWidth;
+    }
+    
+    if (rowView.orientation == LVORIENTATION_HORZ)
+    {
+        if (colView.frame.size.height == 0 && colView.heightDime.dimeVal == nil)
+        {
+            colView.heightDime.equalTo(rowView.heightDime);
+        }
+    }
+    else
+    {
+        if (colView.frame.size.width == 0 && colView.widthDime.dimeVal == nil)
+        {
+            colView.widthDime.equalTo(rowView.widthDime);
+        }
+        
     }
     
     
@@ -171,6 +222,36 @@
 {
     return [self viewAtRowIndex:rowIndex].subviews.count;
 }
+
+
+#pragma mark -- Private Method
+
+- (void)calcScrollViewContentSize:(CGRect)oldRect autoAdjustSize:(BOOL)autoAdjustSize
+{
+    if (self.adjustScrollViewContentSize && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
+    {
+        UIScrollView *scrolv = (UIScrollView*)self.superview;
+        CGRect newRect = self.frame;
+        
+        CGSize contsize = scrolv.contentSize;
+        
+        if (newRect.size.height != oldRect.size.height)
+        {
+            contsize.height = newRect.size.height;
+            
+        }
+        
+        if(newRect.size.width != oldRect.size.width)
+        {
+            contsize.width = newRect.size.width;
+            
+        }
+        
+        scrolv.contentSize = contsize;
+
+    }
+}
+
 
 
 

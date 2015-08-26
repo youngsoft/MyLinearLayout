@@ -1,5 +1,5 @@
 //
-//  Test18ViewController.h
+//  Test19ViewController.h
 //  MyLinearLayoutDemo
 //
 //  Created by apple on 15/8/26.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface Test18ViewController : UIViewController
+@interface Test19ViewController : UIViewController
 
 @end

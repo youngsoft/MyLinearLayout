@@ -826,6 +826,30 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 
 
+- (void)calcScrollViewContentSize:(CGRect)oldRect autoAdjustSize:(BOOL)autoAdjustSize
+{
+    if (autoAdjustSize && self.adjustScrollViewContentSize && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
+    {
+        UIScrollView *scrolv = (UIScrollView*)self.superview;
+        CGRect newRect = self.frame;
+        
+        CGSize contsize = scrolv.contentSize;
+        
+        if (_orientation == LVORIENTATION_VERT && newRect.size.height != oldRect.size.height)
+        {
+            contsize.height = newRect.size.height;
+            scrolv.contentSize = contsize;
+            
+        }
+        else if(_orientation == LVORIENTATION_HORZ && newRect.size.width != oldRect.size.width)
+        {
+            contsize.width = newRect.size.width;
+            scrolv.contentSize = contsize;
+            
+        }
+    }
+}
+
 -(void)doLayoutSubviews
 {
     
@@ -859,26 +883,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     }
     
     
-    if (autoAdjustSize && self.adjustScrollViewContentSize && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
-    {
-        UIScrollView *scrolv = (UIScrollView*)self.superview;
-        CGRect newRect = self.frame;
-        
-        CGSize contsize = scrolv.contentSize;
-        
-        if (_orientation == LVORIENTATION_VERT && newRect.size.height != oldRect.size.height)
-        {
-            contsize.height = self.frame.size.height;
-            scrolv.contentSize = contsize;
-            
-        }
-        else if(_orientation == LVORIENTATION_HORZ && newRect.size.width != oldRect.size.width)
-        {
-            contsize.width = self.frame.size.width;
-            scrolv.contentSize = contsize;
-            
-        }
-    }
+    [self calcScrollViewContentSize:oldRect autoAdjustSize:autoAdjustSize];
 }
 
 #pragma mark -- Private Method
