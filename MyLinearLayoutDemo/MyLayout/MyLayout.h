@@ -37,6 +37,7 @@
 #import "MyLinearLayout.h"
 #import "MyFrameLayout.h"
 #import "MyRelativeLayout.h"
+#import "MyTableLayout.h"
 #import "MyMaker.h"
 
 #endif

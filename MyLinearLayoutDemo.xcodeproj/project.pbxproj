@@ -32,6 +32,8 @@
 		186A55FB1B8C099600C96A3D /* MyLinearLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A55F41B8C099600C96A3D /* MyLinearLayout.m */; };
 		186A55FC1B8C099600C96A3D /* MyMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A55F61B8C099600C96A3D /* MyMaker.m */; };
 		186A55FD1B8C099600C96A3D /* MyRelativeLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A55F81B8C099600C96A3D /* MyRelativeLayout.m */; };
+		186A56541B8D90D900C96A3D /* MyTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A56531B8D90D900C96A3D /* MyTableLayout.m */; };
+		186A56571B8DB25F00C96A3D /* Test18ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A56561B8DB25F00C96A3D /* Test18ViewController.m */; };
 		187C6A4F1B47C94700A6949A /* Test13ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C6A4D1B47C94700A6949A /* Test13ViewController.m */; };
 		1889AEAE1B4A69130001F871 /* Test14ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1889AEAD1B4A69130001F871 /* Test14ViewController.m */; };
 		18A2C4FC1B3A8C1A00FDFF5D /* Test12ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A2C4FB1B3A8C1A00FDFF5D /* Test12ViewController.m */; };
@@ -101,6 +103,10 @@
 		186A55F61B8C099600C96A3D /* MyMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMaker.m; sourceTree = "<group>"; };
 		186A55F71B8C099600C96A3D /* MyRelativeLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRelativeLayout.h; sourceTree = "<group>"; };
 		186A55F81B8C099600C96A3D /* MyRelativeLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRelativeLayout.m; sourceTree = "<group>"; };
+		186A56521B8D90D900C96A3D /* MyTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableLayout.h; sourceTree = "<group>"; };
+		186A56531B8D90D900C96A3D /* MyTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableLayout.m; sourceTree = "<group>"; };
+		186A56551B8DB25F00C96A3D /* Test18ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test18ViewController.h; sourceTree = "<group>"; };
+		186A56561B8DB25F00C96A3D /* Test18ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test18ViewController.m; sourceTree = "<group>"; };
 		187C6A4C1B47C94700A6949A /* Test13ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test13ViewController.h; sourceTree = "<group>"; };
 		187C6A4D1B47C94700A6949A /* Test13ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test13ViewController.m; sourceTree = "<group>"; };
 		1889AEAC1B4A69130001F871 /* Test14ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test14ViewController.h; sourceTree = "<group>"; };
@@ -195,6 +201,8 @@
 				184CEC211B4E8B2900E97C7E /* Test16ViewController.m */,
 				181385BD1B5A617500DEA407 /* Test17ViewController.h */,
 				181385BE1B5A617500DEA407 /* Test17ViewController.m */,
+				186A56551B8DB25F00C96A3D /* Test18ViewController.h */,
+				186A56561B8DB25F00C96A3D /* Test18ViewController.m */,
 			);
 			path = MyLinearLayoutDemo;
 			sourceTree = "<group>";
@@ -241,6 +249,8 @@
 				186A55F21B8C099600C96A3D /* MyLayoutInner.h */,
 				186A55F51B8C099600C96A3D /* MyMaker.h */,
 				186A55F61B8C099600C96A3D /* MyMaker.m */,
+				186A56521B8D90D900C96A3D /* MyTableLayout.h */,
+				186A56531B8D90D900C96A3D /* MyTableLayout.m */,
 			);
 			path = MyLayout;
 			sourceTree = "<group>";
@@ -364,6 +374,8 @@
 				184082991B2C46E8003F378B /* ViewController.m in Sources */,
 				186A55FB1B8C099600C96A3D /* MyLinearLayout.m in Sources */,
 				184082961B2C46E8003F378B /* AppDelegate.m in Sources */,
+				186A56541B8D90D900C96A3D /* MyTableLayout.m in Sources */,
+				186A56571B8DB25F00C96A3D /* Test18ViewController.m in Sources */,
 				186A55FA1B8C099600C96A3D /* MyLayoutBase.m in Sources */,
 				186A55FC1B8C099600C96A3D /* MyMaker.m in Sources */,
 				183AB2D01B3664DB003E999F /* Test1ViewController.m in Sources */,

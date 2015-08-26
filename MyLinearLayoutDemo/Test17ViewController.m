@@ -11,30 +11,136 @@
 
 @interface Test17ViewController ()
 
-@property(nonatomic, strong) UILabel *testlabel;
-@property(nonatomic, strong) MyRelativeLayout *ll;
-
 @end
 
 @implementation Test17ViewController
 
--(void)handleBtn:(UIButton*)sender
-{
-    
-    self.ll.beginLayoutBlock = ^()
-    {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.5];
-    };
-    
-    self.ll.endLayoutBlock = ^()
-    {
-        [UIView commitAnimations];
-    };
-    
-    self.testlabel.leftMargin += 20;
-    
 
+-(void)loadView
+{
+    [super loadView];
+    
+    /*
+     有的时候我们希望让一个布局视图放入到非布局视图中去，但又希望布局视图的宽高和非布局父视图宽高一致。
+     这时候我们可以设置height,width来指定自身的高宽，我们也可以通过leftMargin = 0,rightMargin = 0来让其跟父视图保持一样的宽度，但如果是这样的话还需要设置wrapContentWidth = NO. 设置高度同理。
+     */
+    MyTableLayout *tbll = [MyTableLayout new];
+    tbll.wrapContentHeight = NO;  //对于线性布局来说必须要设置为NO才能高度和非布局的父视图一样高
+    tbll.leftMargin = tbll.rightMargin = 0;  //宽度和非布局父视图一样宽
+    tbll.topMargin = tbll.bottomMargin = 0;  //高度和非布局父视图一样高
+    [self.view addSubview:tbll];
+
+    
+    //第一行固定高度固定宽度
+    [tbll addRow:30 colWidth:30];
+    [tbll viewAtRowIndex:0].backgroundColor = [UIColor colorWithWhite:0.1 alpha:1];
+    
+    UIView *colView = [UIView new];
+    colView.leftMargin = 10; //可以使用leftMargin,topMargin,rightMargin,bottomMargin来调整间隔
+    colView.topMargin = 5;
+    colView.bottomMargin = 5;
+    colView.rightMargin = 40;
+    
+    colView.backgroundColor = [UIColor redColor];
+    [tbll addCol:colView atRow:0];
+    
+    colView = [UIView new];
+    colView.leftMargin = 20;
+    colView.backgroundColor = [UIColor greenColor];
+    [tbll addCol:colView atRow:0];
+    
+    colView = [UIView new];
+    colView.backgroundColor = [UIColor blueColor];
+    [tbll addCol:colView atRow:0];
+    
+    //第二行固定高度，均分宽度
+    [tbll addRow:40 colWidth:0];
+    [tbll viewAtRowIndex:1].backgroundColor = [UIColor colorWithWhite:0.2 alpha:1];
+
+    
+    colView = [UIView new];
+    colView.backgroundColor = [UIColor redColor];
+    [tbll addCol:colView atRow:1];
+    
+    colView = [UIView new];
+    colView.backgroundColor = [UIColor greenColor];
+    [tbll addCol:colView atRow:1];
+    
+    colView = [UIView new];
+    colView.backgroundColor = [UIColor blueColor];
+    [tbll addCol:colView atRow:1];
+    
+    colView = [UIView new];
+    colView.backgroundColor = [UIColor yellowColor];
+    [tbll addCol:colView atRow:1];
+    
+    //第三行固定高度，子视图自己决定宽度。
+    [tbll addRow:30 colWidth:-1];
+    [tbll viewAtRowIndex:2].backgroundColor = [UIColor colorWithWhite:0.3 alpha:1];
+    colView = [UIView new];
+    colView.width = 100;
+    colView.backgroundColor = [UIColor redColor];
+    [tbll addCol:colView atRow:2];
+
+    colView = [UIView new];
+    colView.width = 200;
+    colView.backgroundColor = [UIColor greenColor];
+    [tbll addCol:colView atRow:2];
+    
+    //第四行固定高度，子视图自己决定宽度。
+    [tbll addRow:30 colWidth:-2];
+    [tbll viewAtRowIndex:3].backgroundColor = [UIColor colorWithWhite:0.4 alpha:1];
+    colView = [UIView new];
+    colView.width = 80;
+    colView.backgroundColor = [UIColor redColor];
+    [tbll addCol:colView atRow:3];
+    
+    colView = [UIView new];
+    colView.width = 200;
+    colView.backgroundColor = [UIColor greenColor];
+    [tbll addCol:colView atRow:3];
+    
+    //第五行高度均分.这里设置为0表示剩余高度再均分。宽度均分,
+    [tbll addRow:0 colWidth:0];
+    MyLinearLayout *row4 = [tbll viewAtRowIndex:4];
+    //可以设置行的属性.比如padding, 线条颜色，
+    row4.padding = UIEdgeInsetsMake(3, 3, 3, 3);
+    row4.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
+    row4.topBorderLine.thick = 2;
+    row4.backgroundColor = [UIColor colorWithWhite:0.5 alpha:1];
+
+    colView = [UIView new];
+    colView.backgroundColor = [UIColor redColor];
+    [tbll addCol:colView atRow:4];
+    
+    colView = [UIView new];
+    colView.backgroundColor = [UIColor greenColor];
+    [tbll addCol:colView atRow:4];
+    
+    //第六行高度由子视图决定，均分宽度
+    [tbll addRow:-1 colWidth:0];
+    [tbll viewAtRowIndex:5].backgroundColor = [UIColor colorWithWhite:0.6 alpha:1];
+    
+    colView = [UIView new];
+    colView.height = 80;
+    colView.backgroundColor = [UIColor redColor];
+    [tbll addCol:colView atRow:5];
+    
+    colView = [UIView new];
+    colView.height = 120;
+    colView.backgroundColor = [UIColor greenColor];
+    [tbll addCol:colView atRow:5];
+    
+    colView = [UIView new];
+    colView.height = 70;
+    colView.backgroundColor = [UIColor blueColor];
+    [tbll addCol:colView atRow:5];
+
+
+
+
+
+    
     
 }
 
@@ -43,49 +149,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
-    [btn setTitle:@"test" forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [btn addTarget:self action:@selector(handleBtn:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
-    
-    
-    self.ll  = [[MyRelativeLayout alloc] initWithFrame:CGRectMake(0, 70, 320, 500)];
-    self.ll.padding = UIEdgeInsetsMake(50, 50, 50, 50);
-    self.ll.backgroundColor = [UIColor grayColor];
-    [self.view addSubview:self.ll];
-
-    
-    //1依赖于左边视图，右边依赖于2的左边，2左边依赖于1的右边，右边依赖3的左边，3左边依赖于2的右边，右边依赖于右边。
-    
-    UILabel *lb1 = [UILabel new];
-    lb1.text = @"hello1";
-    lb1.backgroundColor = [UIColor redColor];
-    [lb1 sizeToFit];
-    
-    UILabel *lb2 = [UILabel new];
-    lb2.text = @"hello2";
-    lb2.backgroundColor = [UIColor blueColor];
-    [lb2 sizeToFit];
-    
-    self.testlabel = lb2;
-
-    UILabel *lb3 = [UILabel new];
-    lb3.text = @"hello3";
-    lb3.backgroundColor = [UIColor greenColor];
-    [lb3 sizeToFit];
-
-    [self.ll addSubview:lb1];
-    [self.ll addSubview:lb2];
-    [self.ll addSubview:lb3];
-    
-    lb1.leftPos.equalTo(@10);
-    lb1.rightPos.equalTo(lb2.leftPos).offset(10);
-    lb2.rightPos.equalTo(lb3.leftPos).offset(20);
-    lb3.rightPos.equalTo(@30);
-
-    
-    
+    self.title = @"表格布局";
 }
 
 - (void)didReceiveMemoryWarning {
