@@ -8,4 +8,4 @@ http://blog.csdn.net/yangtiang/article/details/46483999   线性布局
 http://blog.csdn.net/yangtiang/article/details/46795231   相对布局
 http://blog.csdn.net/yangtiang/article/details/46492083   框架布局
 
-![演示图](http://code.cocoachina.com/img/cc_cddefault.jpg?20140106)
+![演示图](http://cdn.cocimg.com/bbs/attachment/postcate/topic/16/319791_189_96f0143980087354c17bbc75c8a37.gif)
