@@ -196,7 +196,7 @@
         case 17:
             vc = [Test18ViewController new];
             break;
-        case 19:
+        case 18:
             vc = [Test19ViewController new];
             break;
         default:
