@@ -49,47 +49,82 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
 */
 
 
+-(void)calcSubView:(UIView*)subView pRect:(CGRect*)pRect inSize:(CGSize)selfSize
+{
+    
+    MarignGravity gravity = subView.marginGravity;
+    MarignGravity vert = gravity & 0xF0;
+    MarignGravity horz = gravity & 0x0F;
+    
+    //优先用设定的宽度尺寸。
+    if (subView.widthDime.dimeNumVal != nil)
+        pRect->size.width = subView.widthDime.measure;
+    
+    if (subView.heightDime.dimeNumVal != nil)
+        pRect->size.height = subView.heightDime.measure;
+    
+    
+    [self horzGravity:horz selfWidth:selfSize.width leftMargin:subView.leftPos.margin centerMargin:subView.centerXPos.margin rightMargin:subView.rightPos.margin rect:pRect];
+    
+    if (subView.isFlexedHeight)
+    {
+        CGSize sz = [subView sizeThatFits:CGSizeMake(pRect->size.width, pRect->size.height)];
+        pRect->size.height = sz.height;
+    }
+    
+    [self vertGravity:vert selfHeight:selfSize.height topMargin:subView.topPos.margin centerMargin:subView.centerYPos.margin bottomMargin:subView.bottomPos.margin rect:pRect];
+    
+}
+
+
+-(CGRect)estimateLayoutRect
+{
+    CGSize selfSize = self.frame.size;
+    
+    NSArray *sbs = self.subviews;
+    for (UIView *v in sbs)
+    {
+        CGRect rect = v.frame;
+        
+        //宽度等于另外视图的高度
+        if (v.widthDime.dimeRelaVal != nil && v.widthDime.dimeRelaVal.dime == MGRAVITY_VERT_FILL)
+        {
+            CGRect otherRect = v.widthDime.dimeRelaVal.view.frame;
+            [self calcSubView:v.widthDime.dimeRelaVal.view pRect:&otherRect inSize:selfSize];
+            rect.size.width = otherRect.size.height;
+        }
+        
+        //高度等于另外视图的宽度
+        if (v.heightDime.dimeRelaVal != nil && v.heightDime.dimeRelaVal.dime == MGRAVITY_HORZ_FILL)
+        {
+            CGRect otherRect = v.heightDime.dimeRelaVal.view.frame;
+            [self calcSubView:v.heightDime.dimeRelaVal.view pRect:&otherRect inSize:selfSize];
+            rect.size.height = otherRect.size.width;
+        }
+        
+        //计算自己的位置和高宽
+        [self calcSubView:v pRect:&rect inSize:selfSize];
+        v.absPos.frame = rect;
+        
+    }
+    
+    return self.frame;
+
+}
 
 
 -(void)doLayoutSubviews
 {
     [super doLayoutSubviews];
     
-    CGFloat selfWidth = self.frame.size.width;
-    CGFloat selfHeight = self.frame.size.height;
+    [self estimateLayoutRect];
     
-    //有限布局填充，再布局
     NSArray *sbs = self.subviews;
     for (UIView *v in sbs)
     {
-        CGRect rect = v.frame;
-        
-        MarignGravity gravity = v.marginGravity;
-        MarignGravity vert = gravity & 0xF0;
-        MarignGravity horz = gravity & 0x0F;
-        
-        //优先用设定的宽度尺寸。
-        if (v.widthDime.dimeNumVal != nil)
-            rect.size.width = v.widthDime.measure;
-        
-        if (v.heightDime.dimeNumVal != nil)
-            rect.size.height = v.heightDime.measure;
-        
-        [self horzGravity:horz selfWidth:selfWidth leftMargin:v.leftPos.margin centerMargin:v.centerXPos.margin rightMargin:v.rightPos.margin rect:&rect];
-        
-        if (v.isFlexedHeight)
-        {
-            CGSize sz = [v sizeThatFits:CGSizeMake(rect.size.width, rect.size.height)];
-            rect.size.height = sz.height;
-        }
-        
-        [self vertGravity:vert selfHeight:selfHeight topMargin:v.topPos.margin centerMargin:v.centerYPos.margin bottomMargin:v.bottomPos.margin rect:&rect];
-        
-        
-        v.frame = rect;
+        v.frame =  v.absPos.frame;
         
     }
-
 }
 
 @end

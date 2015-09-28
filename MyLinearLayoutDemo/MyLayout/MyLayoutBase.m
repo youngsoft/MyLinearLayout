@@ -10,6 +10,56 @@
 #import "MyLayoutInner.h"
 #import <objc/runtime.h>
 
+
+
+@implementation MyAbsolutePos
+
+-(id)init
+{
+    self = [super init];
+    if (self != nil)
+    {
+        _leftPos = CGFLOAT_MIN;
+        _rightPos = CGFLOAT_MIN;
+        _topPos = CGFLOAT_MIN;
+        _bottomPos = CGFLOAT_MIN;
+        _width = CGFLOAT_MIN;
+        _height = CGFLOAT_MIN;
+    }
+    
+    return self;
+}
+
+-(void)reset
+{
+    _leftPos = CGFLOAT_MIN;
+    _rightPos = CGFLOAT_MIN;
+    _topPos = CGFLOAT_MIN;
+    _bottomPos = CGFLOAT_MIN;
+    _width = CGFLOAT_MIN;
+    _height = CGFLOAT_MIN;
+}
+
+
+-(CGRect)frame
+{
+    return CGRectMake(_leftPos, _topPos, _width, _height);
+}
+
+-(void)setFrame:(CGRect)frame
+{
+    _leftPos = frame.origin.x;
+    _topPos = frame.origin.y;
+    _width  = frame.size.width;
+    _height = frame.size.height;
+    _rightPos = _leftPos + _width;
+    _bottomPos = _topPos + _height;
+}
+
+
+@end
+
+
 @implementation UIView(MyLayoutExt)
 
 const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_LEFT = "associatedobject_key_relativeleft";
@@ -23,6 +73,8 @@ const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERX = "associatedobject_key
 const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERY = "associatedobject_key_relativecentery";
 
 const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_flexedheight";
+
+
 
 
 
@@ -208,19 +260,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     self.heightDime.equalTo(@(height));
 }
 
-/*
--(CGSize)size
-{
-    return CGSizeMake(self.width, self.height);
-}
 
--(void)setSize:(CGSize)size
-{
-    self.width = size.width;
-    self.height = size.height;
-}
-
-*/
 -(MyLayoutPos*)centerXPos
 {
     MyLayoutPos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_RELATIVE_CENTERX);
@@ -318,11 +358,43 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 }
 
 
+-(CGRect)estimateRect
+{
+    CGRect rect = self.absPos.frame;
+    if (rect.origin.x == CGFLOAT_MIN || rect.origin.y == CGFLOAT_MIN)
+        return self.frame;
+    return rect;
+}
 
 
 
 @end
 
+
+@implementation UIView(MyLayoutExtInner)
+
+const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_absolutepos";
+
+
+-(MyAbsolutePos*)absPos
+{
+    MyAbsolutePos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS);
+    if (pos == nil)
+    {
+        pos = [MyAbsolutePos new];
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return pos;
+}
+
+-(void)setAbsPos:(MyAbsolutePos *)absPos
+{
+    objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, absPos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+}
+
+
+@end
 
 
 
@@ -674,6 +746,14 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
     BOOL _canCallAction;
     CGPoint _beginPoint;
 }
+
+
+//只获取计算得到尺寸，不进行真正的布局。
+-(CGRect)estimateLayoutRect;
+{
+    return self.frame;
+}
+
 
 
 -(void)construct

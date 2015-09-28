@@ -48,6 +48,24 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 @implementation MyLinearLayout
 
 
+-(id)initWithOrientation:(LineViewOrientation)orientation
+{
+    self = [self init];
+    if (self)
+    {
+        self.orientation = orientation;
+    }
+    
+    return self;
+}
+
++(id)linearLayoutWithOrientation:(LineViewOrientation)orientation
+{
+    return [[self new] initWithOrientation:orientation];
+}
+
+
+
 -(void)construct
 {
     [super construct];
@@ -159,7 +177,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             CGFloat rightMargin = v.rightPos.margin;
             CGFloat centerMargin = v.centerXPos.margin;
             
-            CGFloat vWidth = v.frame.size.width;
+            CGFloat vWidth = v.absPos.width; //v.frame.size.width;
             if (v.widthDime.dimeNumVal != nil)
                 vWidth = v.widthDime.measure;
             
@@ -205,7 +223,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
-        CGRect rect = v.frame;
+        CGRect rect = v.absPos.frame; //v.frame
         CGFloat leftMargin =  v.leftPos.margin;
         CGFloat rightMargin = v.rightPos.margin;
         CGFloat centerMargin = v.centerXPos.margin;
@@ -271,7 +289,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             fixedHeight += rect.size.height;
         }
         
-        v.frame = rect;  //这里调整宽度
+        v.absPos.frame = rect;
+       // v.frame = rect;  //这里调整宽度
     }
 
     //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
@@ -289,7 +308,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         CGFloat topMargin = v.topPos.margin;
         CGFloat bottomMargin = v.bottomPos.margin;
         CGFloat weight = v.weight;
-        CGRect rect = v.frame;
+        CGRect rect =  v.absPos.frame; //v.frame;
         
         //布局顶部边距
         if ([self isRelativeMargin:topMargin])
@@ -336,10 +355,18 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             pos += bottomMargin;
         
         
-        v.frame = rect;
+        v.absPos.frame = rect;
+       // v.frame = rect;
     }
     
     pos += self.padding.bottom;
+    
+    
+    for (UIView *sbv in self.subviews)
+    {
+        sbv.frame = sbv.absPos.frame;
+    }
+    
     
     if (self.wrapContentHeight && totalWeight == 0)
     {
@@ -392,7 +419,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             if (v.widthDime.dimeNumVal != nil)
                 fixedWidth += v.widthDime.measure;
             else
-                fixedWidth += v.frame.size.width;
+                fixedWidth += v.absPos.width; //v.frame.size.width;
         }
     }
     
@@ -413,7 +440,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         CGFloat rightMargin = v.rightPos.margin;
         CGFloat weight = v.weight;
         BOOL isFlexedHeight = v.isFlexedHeight && !v.heightDime.isMatchParent;
-        CGRect rect = v.frame;
+        CGRect rect =  v.absPos.frame; //v.frame;
         
         if (v.widthDime.dimeNumVal != nil)
             rect.size.width = v.widthDime.measure;
@@ -481,7 +508,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             
         }
         
-        v.frame = rect;
+       // v.frame = rect;
+        v.absPos.frame = rect;
     }
     
     if (self.wrapContentHeight)
@@ -504,7 +532,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         CGFloat centerMargin = v.centerYPos.margin;
         CGFloat bottomMargin = v.bottomPos.margin;
         
-        CGRect rect = v.frame;
+        CGRect rect = v.absPos.frame; // v.frame;
         
         //布局高度
         if (v.heightDime.isMatchParent)
@@ -529,10 +557,16 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         
         [self vertGravity:mg selfHeight:selfHeight topMargin:topMargin centerMargin:centerMargin bottomMargin:bottomMargin rect:&rect];
         
-        v.frame = rect;
+        v.absPos.frame = rect;
+       // v.frame = rect;
     }
     
     pos += self.padding.right;
+    
+    for (UIView *sbv in self.subviews)
+    {
+        sbv.frame = sbv.absPos.frame;
+    }
     
     if (self.wrapContentWidth && totalWeight == 0)
     {
@@ -566,7 +600,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         if (v.isHidden && self.hideSubviewReLayout)
             continue;
         
-        CGRect rect = v.frame;
+        CGRect rect =  v.absPos.frame; //v.frame;
         CGFloat leftMargin =   v.leftPos.margin;
         CGFloat centerMaring = v.centerXPos.margin;
         CGFloat rightMargin =  v.rightPos.margin;
@@ -625,8 +659,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
         
         
-        
-        v.frame = rect;  //这里调整宽度
+        v.absPos.frame = rect;
+       // v.frame = rect;  //这里调整宽度
     }
 
     
@@ -661,12 +695,13 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         else
             pos += topMargin;
         
-        CGRect rect = v.frame;
-        rect.origin.y = pos;
+       // CGRect rect = v.absPos.frame; //v.frame;
+        //rect.origin.y = pos;
         
-        v.frame = rect;
+        //v.frame = rect;
+        v.absPos.topPos = pos;
         
-        pos += rect.size.height;
+        pos +=  v.absPos.height; //rect.size.height;
         
         if ([self isRelativeMargin:bottomMargin])
             pos += floatingHeight * bottomMargin;
@@ -674,6 +709,11 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             pos += bottomMargin;
     }
     
+    
+    for (UIView *sbv in self.subviews)
+    {
+        sbv.frame = sbv.absPos.frame;
+    }
     
 }
 
@@ -703,7 +743,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         CGFloat topMargin =  v.topPos.margin;
         CGFloat centerMarin = v.centerYPos.margin;
         CGFloat bottomMargin = v.bottomPos.margin;
-        CGRect rect = v.frame;
+        CGRect rect = v.absPos.frame; //v.frame;
         BOOL isFlexedHeight = v.isFlexedHeight && !v.heightDime.isMatchParent;
         
         if (v.widthDime.dimeNumVal != nil)
@@ -738,7 +778,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         else
             totalWidth += v.rightPos.margin;
         
-        v.frame = rect;
+        v.absPos.frame = rect;
+        //v.frame = rect;
     }
     
     
@@ -785,7 +826,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         else
             pos += v.leftPos.margin;
         
-        CGRect rect = v.frame;
+        CGRect rect = v.absPos.frame; //v.frame;
         rect.origin.x = pos;
         
         //计算高度
@@ -810,7 +851,8 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         
         [self vertGravity:mg selfHeight:selfHeight topMargin:topMargin centerMargin:centerMargin bottomMargin:bottomMargin rect:&rect];
         
-        v.frame = rect;
+       // v.frame = rect;
+        v.absPos.frame = rect;
         
         pos += rect.size.width;
         
@@ -818,6 +860,11 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             pos += floatingWidth * rightMargin;
         else
             pos += rightMargin;
+    }
+    
+    for (UIView *sbv in self.subviews)
+    {
+        sbv.frame = sbv.absPos.frame;
     }
     
     
@@ -854,6 +901,12 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 {
     
     [super doLayoutSubviews];
+    
+    for (UIView *sbv in self.subviews)
+    {
+        sbv.absPos.frame = sbv.frame;
+    }
+
     
     CGRect oldRect = self.frame;
     BOOL autoAdjustSize = NO;

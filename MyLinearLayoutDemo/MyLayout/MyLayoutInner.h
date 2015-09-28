@@ -87,4 +87,32 @@ typedef enum : unsigned char
 @end
 
 
+
+//绝度位置
+@interface MyAbsolutePos : NSObject
+
+@property(nonatomic, assign) CGFloat leftPos;
+@property(nonatomic, assign) CGFloat rightPos;
+@property(nonatomic, assign) CGFloat topPos;
+@property(nonatomic, assign) CGFloat bottomPos;
+@property(nonatomic, assign) CGFloat width;
+@property(nonatomic, assign) CGFloat height;
+
+-(void)reset;
+
+@property(nonatomic,assign) CGRect frame;
+
+@end
+
+
+
+@interface UIView(MyLayoutExtInner)
+
+@property(nonatomic, strong) MyAbsolutePos *absPos;
+
+@end
+
+
+
+
 #endif

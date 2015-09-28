@@ -138,6 +138,11 @@ typedef enum : unsigned char {
 @property(nonatomic,assign) CGFloat width;
 @property(nonatomic,assign) CGFloat height;
 
+
+//得到视图的评估rect，在获取前请先调用父布局的-(CGRect)estimateLayoutRect;
+-(CGRect)estimateRect;
+
+
 @end
 
 
@@ -214,6 +219,9 @@ typedef enum : unsigned char {
 //设置单击触摸的事件，如果target为nil则取消事件。
 -(void)setTarget:(id)target action:(SEL)action;
 
+
+//评估布局的尺寸,这个方法并不会进行真正的布局，只是对布局的尺寸进行评估，得到的结果不一定是真实的在父视图中的尺寸。
+-(CGRect)estimateLayoutRect;
 
 
 

@@ -9,83 +9,6 @@
 #import "MyRelativeLayout.h"
 #import "MyLayoutInner.h"
 
-#import <objc/runtime.h>
-
-const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_absolutepos";
-
-
-
-//绝度位置
-@interface MyAbsolutePos : NSObject
-
-@property(nonatomic, assign) CGFloat leftPos;
-@property(nonatomic, assign) CGFloat rightPos;
-@property(nonatomic, assign) CGFloat topPos;
-@property(nonatomic, assign) CGFloat bottomPos;
-@property(nonatomic, assign) CGFloat width;
-@property(nonatomic, assign) CGFloat height;
-
-@end
-
-@implementation MyAbsolutePos
-
--(id)init
-{
-    self = [super init];
-    if (self != nil)
-    {
-        _leftPos = CGFLOAT_MIN;
-        _rightPos = CGFLOAT_MIN;
-        _topPos = CGFLOAT_MIN;
-        _bottomPos = CGFLOAT_MIN;
-        _width = CGFLOAT_MIN;
-        _height = CGFLOAT_MIN;
-    }
-    
-    return self;
-}
-
--(void)reset
-{
-    _leftPos = CGFLOAT_MIN;
-    _rightPos = CGFLOAT_MIN;
-    _topPos = CGFLOAT_MIN;
-    _bottomPos = CGFLOAT_MIN;
-    _width = CGFLOAT_MIN;
-    _height = CGFLOAT_MIN;
-}
-
-@end
-
-@interface UIView(MyRelativeLayoutAbsEx)
-
-@property(nonatomic, strong) MyAbsolutePos *absPos;
-
-@end
-
-
-
-@implementation UIView(MyRelativeLayoutAbsEx)
-
--(MyAbsolutePos*)absPos
-{
-    MyAbsolutePos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS);
-    if (pos == nil)
-    {
-        pos = [MyAbsolutePos new];
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    return pos;
-}
-
--(void)setAbsPos:(MyAbsolutePos *)absPos
-{
-    objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, absPos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
-}
-
-@end
-
 
 @implementation MyRelativeLayout
 
@@ -136,7 +59,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
 
 #pragma mark -- Private Method
--(void)calcSubViewLeftRight:(UIView*)sbv
+-(void)calcSubViewLeftRight:(UIView*)sbv selfRect:(CGRect)selfRect
 {
     
     
@@ -166,19 +89,19 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
     
     //先检测宽度,如果宽度是父亲的宽度则宽度和左右都确定
-    if ([self calcWidth:sbv])
+    if ([self calcWidth:sbv selfRect:selfRect])
         return;
     
     
     if (sbv.centerXPos.posRelaVal != nil)
     {
-        sbv.absPos.leftPos = [self calcSubView:sbv.centerXPos.posRelaVal.view gravity:sbv.centerXPos.posRelaVal.pos] - sbv.absPos.width / 2 + sbv.centerXPos.margin;
+        sbv.absPos.leftPos = [self calcSubView:sbv.centerXPos.posRelaVal.view gravity:sbv.centerXPos.posRelaVal.pos selfRect:selfRect] - sbv.absPos.width / 2 + sbv.centerXPos.margin;
         sbv.absPos.rightPos = sbv.absPos.leftPos + sbv.absPos.width;
         return;
     }
     else if (sbv.centerXPos.posNumVal != nil)
     {
-        sbv.absPos.leftPos = (self.frame.size.width - self.rightPadding - self.leftPadding - sbv.absPos.width) / 2 + self.leftPadding + sbv.centerXPos.margin;
+        sbv.absPos.leftPos = (selfRect.size.width - self.rightPadding - self.leftPadding - sbv.absPos.width) / 2 + self.leftPadding + sbv.centerXPos.margin;
         sbv.absPos.rightPos = sbv.absPos.leftPos + sbv.absPos.width;
         return;
     }
@@ -186,7 +109,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     {
         if (sbv.leftPos.posRelaVal != nil)
         {
-            sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos] + sbv.leftPos.margin;
+            sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos selfRect:selfRect] + sbv.leftPos.margin;
             sbv.absPos.rightPos = sbv.absPos.leftPos + sbv.absPos.width;
             return;
         }
@@ -200,14 +123,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         if (sbv.rightPos.posRelaVal != nil)
         {
             
-            sbv.absPos.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos] - sbv.rightPos.margin + sbv.leftPos.margin;
+            sbv.absPos.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos selfRect:selfRect] - sbv.rightPos.margin + sbv.leftPos.margin;
             sbv.absPos.leftPos = sbv.absPos.rightPos - sbv.absPos.width;
             
             return;
         }
         else if (sbv.rightPos.posNumVal != nil)
         {
-            sbv.absPos.rightPos = self.frame.size.width -  self.rightPadding -  sbv.rightPos.margin + sbv.leftPos.margin;
+            sbv.absPos.rightPos = selfRect.size.width -  self.rightPadding -  sbv.rightPos.margin + sbv.leftPos.margin;
             sbv.absPos.leftPos = sbv.absPos.rightPos - sbv.absPos.width;
             return;
         }
@@ -219,25 +142,25 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     
 }
 
--(void)calcSubViewTopBottom:(UIView*)sbv
+-(void)calcSubViewTopBottom:(UIView*)sbv selfRect:(CGRect)selfRect
 {
     if (sbv.absPos.topPos != CGFLOAT_MIN && sbv.absPos.bottomPos != CGFLOAT_MIN && sbv.absPos.height != CGFLOAT_MIN)
         return;
     
     
     //先检测宽度,如果宽度是父亲的宽度则宽度和左右都确定
-    if ([self calcHeight:sbv])
+    if ([self calcHeight:sbv selfRect:selfRect])
         return;
     
     if (sbv.centerYPos.posRelaVal != nil)
     {
-        sbv.absPos.topPos = [self calcSubView:sbv.centerYPos.posRelaVal.view gravity:sbv.centerYPos.posRelaVal.pos] - sbv.absPos.height / 2 + sbv.centerYPos.margin;
+        sbv.absPos.topPos = [self calcSubView:sbv.centerYPos.posRelaVal.view gravity:sbv.centerYPos.posRelaVal.pos selfRect:selfRect] - sbv.absPos.height / 2 + sbv.centerYPos.margin;
         sbv.absPos.bottomPos = sbv.absPos.topPos + sbv.absPos.height;
         return;
     }
     else if (sbv.centerYPos.posNumVal != nil)
     {
-        sbv.absPos.topPos = (self.frame.size.height - self.topPadding - self.bottomPadding -  sbv.absPos.height) / 2 + self.topPadding + sbv.centerYPos.margin;
+        sbv.absPos.topPos = (selfRect.size.height - self.topPadding - self.bottomPadding -  sbv.absPos.height) / 2 + self.topPadding + sbv.centerYPos.margin;
         sbv.absPos.bottomPos = sbv.absPos.topPos + sbv.absPos.height;
         return;
     }
@@ -245,7 +168,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     {
         if (sbv.topPos.posRelaVal != nil)
         {
-            sbv.absPos.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos] + sbv.topPos.margin;
+            sbv.absPos.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos selfRect:selfRect] + sbv.topPos.margin;
             sbv.absPos.bottomPos = sbv.absPos.topPos + sbv.absPos.height;
             return;
         }
@@ -259,14 +182,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         if (sbv.bottomPos.posRelaVal != nil)
         {
             
-            sbv.absPos.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos] - sbv.bottomPos.margin + sbv.topPos.margin;
+            sbv.absPos.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos selfRect:selfRect] - sbv.bottomPos.margin + sbv.topPos.margin;
             sbv.absPos.topPos = sbv.absPos.bottomPos - sbv.absPos.height;
             
             return;
         }
         else if (sbv.bottomPos.posNumVal != nil)
         {
-            sbv.absPos.bottomPos = self.frame.size.height -  sbv.bottomPos.margin - self.bottomPadding + sbv.topPos.margin;
+            sbv.absPos.bottomPos = selfRect.size.height -  sbv.bottomPos.margin - self.bottomPadding + sbv.topPos.margin;
             sbv.absPos.topPos = sbv.absPos.bottomPos - sbv.absPos.height;
             return;
         }
@@ -280,7 +203,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
 
 
--(CGFloat)calcSubView:(UIView*)sbv gravity:(MarignGravity)gravity
+-(CGFloat)calcSubView:(UIView*)sbv gravity:(MarignGravity)gravity selfRect:(CGRect)selfRect
 {
     switch (gravity) {
         case MGRAVITY_HORZ_LEFT:
@@ -293,7 +216,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
                 return sbv.absPos.leftPos - ((sbv.isHidden && self.hideSubviewReLayout) ? sbv.leftPos.margin : 0);
             
            
-            [self calcSubViewLeftRight:sbv];
+            [self calcSubViewLeftRight:sbv selfRect:selfRect];
             
             return sbv.absPos.leftPos - ((sbv.isHidden && self.hideSubviewReLayout) ? sbv.leftPos.margin : 0);
             
@@ -302,14 +225,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         case MGRAVITY_HORZ_RIGHT:
         {
             if (sbv == self || sbv == nil)
-                return self.frame.size.width - self.rightPadding;
+                return selfRect.size.width - self.rightPadding;
             
             if (sbv.isHidden && self.hideSubviewReLayout)
             {
                 if (sbv.absPos.leftPos != CGFLOAT_MIN)
                     return sbv.absPos.leftPos - sbv.leftPos.margin;
                 
-                [self calcSubViewLeftRight:sbv];
+                [self calcSubViewLeftRight:sbv selfRect:selfRect];
                 
                 return sbv.absPos.leftPos - sbv.leftPos.margin;
             }
@@ -318,7 +241,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             if (sbv.absPos.rightPos != CGFLOAT_MIN)
                 return sbv.absPos.rightPos;
             
-            [self calcSubViewLeftRight:sbv];
+            [self calcSubViewLeftRight:sbv selfRect:selfRect];
             
             return sbv.absPos.rightPos;
             
@@ -333,7 +256,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             if (sbv.absPos.topPos != CGFLOAT_MIN)
                 return sbv.absPos.topPos - ((sbv.isHidden && self.hideSubviewReLayout) ? sbv.topPos.margin : 0);
             
-            [self calcSubViewTopBottom:sbv];
+            [self calcSubViewTopBottom:sbv selfRect:selfRect];
             
             return sbv.absPos.topPos - ((sbv.isHidden && self.hideSubviewReLayout) ? sbv.topPos.margin : 0);
             
@@ -342,14 +265,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         case MGRAVITY_VERT_BOTTOM:
         {
             if (sbv == self || sbv == nil)
-                return self.frame.size.height - self.bottomPadding;
+                return selfRect.size.height - self.bottomPadding;
             
             if (sbv.isHidden && self.hideSubviewReLayout)
             {
                 if (sbv.absPos.topPos != CGFLOAT_MIN)
                     return sbv.absPos.topPos - sbv.topPos.margin;
                 
-                [self calcSubViewTopBottom:sbv];
+                [self calcSubViewTopBottom:sbv selfRect:selfRect];
                 
                 return sbv.absPos.topPos - sbv.topPos.margin;
             }
@@ -359,7 +282,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             if (sbv.absPos.bottomPos != CGFLOAT_MIN)
                 return sbv.absPos.bottomPos;
             
-            [self calcSubViewTopBottom:sbv];
+            [self calcSubViewTopBottom:sbv selfRect:selfRect];
             
             return sbv.absPos.bottomPos;
         }
@@ -367,13 +290,13 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         case MGRAVITY_HORZ_FILL:
         {
             if (sbv == self || sbv == nil)
-                return self.frame.size.width - self.leftPadding - self.rightPadding;
+                return selfRect.size.width - self.leftPadding - self.rightPadding;
             
     
             if (sbv.absPos.width != CGFLOAT_MIN)
                 return sbv.absPos.width;
             
-            [self calcSubViewLeftRight:sbv];
+            [self calcSubViewLeftRight:sbv selfRect:selfRect];
             
             return sbv.absPos.width;
             
@@ -382,13 +305,13 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         case MGRAVITY_VERT_FILL:
         {
             if (sbv == self || sbv == nil)
-                return self.frame.size.height - self.topPadding - self.bottomPadding;
+                return selfRect.size.height - self.topPadding - self.bottomPadding;
             
             
             if (sbv.absPos.height != CGFLOAT_MIN)
                 return sbv.absPos.height;
             
-            [self calcSubViewTopBottom:sbv];
+            [self calcSubViewTopBottom:sbv selfRect:selfRect];
             
             return sbv.absPos.height;
         }
@@ -396,14 +319,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         case MGRAVITY_HORZ_CENTER:
         {
             if (sbv == self || sbv == nil)
-                return (self.frame.size.width - self.leftPadding - self.rightPadding) / 2 + self.leftPadding;
+                return (selfRect.size.width - self.leftPadding - self.rightPadding) / 2 + self.leftPadding;
             
             if (sbv.isHidden && self.hideSubviewReLayout)
             {
                 if (sbv.absPos.leftPos != CGFLOAT_MIN)
                     return sbv.absPos.leftPos - sbv.leftPos.margin;
                 
-                [self calcSubViewLeftRight:sbv];
+                [self calcSubViewLeftRight:sbv selfRect:selfRect];
                 
                 return sbv.absPos.leftPos - sbv.leftPos.margin;
             }
@@ -412,7 +335,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             if (sbv.absPos.leftPos != CGFLOAT_MIN && sbv.absPos.rightPos != CGFLOAT_MIN &&  sbv.absPos.width != CGFLOAT_MIN)
                 return sbv.absPos.leftPos + sbv.absPos.width / 2;
             
-            [self calcSubViewLeftRight:sbv];
+            [self calcSubViewLeftRight:sbv selfRect:selfRect];
             
             return sbv.absPos.leftPos + sbv.absPos.width / 2;
             
@@ -422,14 +345,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         case MGRAVITY_VERT_CENTER:
         {
             if (sbv == self || sbv == nil)
-                return (self.frame.size.height - self.topPadding - self.bottomPadding) / 2 + self.topPadding;
+                return (selfRect.size.height - self.topPadding - self.bottomPadding) / 2 + self.topPadding;
             
             if (sbv.isHidden && self.hideSubviewReLayout)
             {
                 if (sbv.absPos.topPos != CGFLOAT_MIN)
                     return sbv.absPos.topPos - sbv.topPos.margin;
                 
-                [self calcSubViewTopBottom:sbv];
+                [self calcSubViewTopBottom:sbv selfRect:selfRect];
                 
                 return sbv.absPos.topPos - sbv.topPos.margin;
             }
@@ -438,7 +361,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             if (sbv.absPos.topPos != CGFLOAT_MIN && sbv.absPos.bottomPos != CGFLOAT_MIN &&  sbv.absPos.height != CGFLOAT_MIN)
                 return sbv.absPos.topPos + sbv.absPos.height / 2;
             
-            [self calcSubViewTopBottom:sbv];
+            [self calcSubViewTopBottom:sbv selfRect:selfRect];
             
             return sbv.absPos.topPos + sbv.absPos.height / 2;
         }
@@ -451,14 +374,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 }
 
 
--(BOOL)calcWidth:(UIView*)sbv
+-(BOOL)calcWidth:(UIView*)sbv selfRect:(CGRect)selfRect
 {
     if (sbv.absPos.width == CGFLOAT_MIN)
     {
         if (sbv.widthDime.dimeRelaVal != nil)
         {
             
-            sbv.absPos.width = [self calcSubView:sbv.widthDime.dimeRelaVal.view gravity:sbv.widthDime.dimeRelaVal.dime] * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            sbv.absPos.width = [self calcSubView:sbv.widthDime.dimeRelaVal.view gravity:sbv.widthDime.dimeRelaVal.dime selfRect:selfRect] * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         }
         else if (sbv.widthDime.dimeNumVal != nil)
         {
@@ -470,14 +393,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
         {
             if (sbv.leftPos.posRelaVal != nil)
-                 sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos] + sbv.leftPos.margin;
+                 sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos selfRect:selfRect] + sbv.leftPos.margin;
             else
                 sbv.absPos.leftPos = sbv.leftPos.margin + self.leftPadding;
             
             if (sbv.rightPos.posRelaVal != nil)
-                sbv.absPos.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos] - sbv.rightPos.margin;
+                sbv.absPos.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos selfRect:selfRect] - sbv.rightPos.margin;
             else
-                sbv.absPos.rightPos = self.frame.size.width - sbv.rightPos.margin - self.rightPadding;
+                sbv.absPos.rightPos = selfRect.size.width - sbv.rightPos.margin - self.rightPadding;
             
             sbv.absPos.width = sbv.absPos.rightPos - sbv.absPos.leftPos;
             
@@ -496,14 +419,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 }
 
 
--(BOOL)calcHeight:(UIView*)sbv
+-(BOOL)calcHeight:(UIView*)sbv selfRect:(CGRect)selfRect
 {
     if (sbv.absPos.height == CGFLOAT_MIN)
     {
         if (sbv.heightDime.dimeRelaVal != nil)
         {
             
-            sbv.absPos.height = [self calcSubView:sbv.heightDime.dimeRelaVal.view gravity:sbv.heightDime.dimeRelaVal.dime] * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            sbv.absPos.height = [self calcSubView:sbv.heightDime.dimeRelaVal.view gravity:sbv.heightDime.dimeRelaVal.dime selfRect:selfRect] * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         }
         else if (sbv.heightDime.dimeNumVal != nil)
         {
@@ -514,14 +437,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
         {
             if (sbv.topPos.posRelaVal != nil)
-                sbv.absPos.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos] + sbv.topPos.margin;
+                sbv.absPos.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos selfRect:selfRect] + sbv.topPos.margin;
             else
                 sbv.absPos.topPos = sbv.topPos.margin + self.topPadding;
             
             if (sbv.bottomPos.posRelaVal != nil)
-                sbv.absPos.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos] - sbv.bottomPos.margin;
+                sbv.absPos.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos selfRect:selfRect] - sbv.bottomPos.margin;
             else
-                sbv.absPos.bottomPos = self.frame.size.height - sbv.bottomPos.margin - self.bottomPadding;
+                sbv.absPos.bottomPos = selfRect.size.height - sbv.bottomPos.margin - self.bottomPadding;
             
             sbv.absPos.height = sbv.absPos.bottomPos - sbv.absPos.topPos;
             
@@ -541,7 +464,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 }
 
 
--(CGSize)calcLayout:(BOOL*)pRecalc
+-(CGSize)calcLayout:(BOOL*)pRecalc selfRect:(CGRect)selfRect
 {
     *pRecalc = NO;
     
@@ -578,7 +501,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
                 
             }
             
-            CGFloat floatWidth = self.frame.size.width - self.leftPadding - self.rightPadding + totalAdd;
+            CGFloat floatWidth = selfRect.size.width - self.leftPadding - self.rightPadding + totalAdd;
             if (floatWidth <= 0)
                 floatWidth = 0;
             
@@ -621,7 +544,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
                 
             }
             
-            CGFloat floatHeight = self.frame.size.height - self.topPadding - self.bottomPadding + totalAdd;
+            CGFloat floatHeight = selfRect.size.height - self.topPadding - self.bottomPadding + totalAdd;
             if (floatHeight <= 0)
                 floatHeight = 0;
             
@@ -649,7 +572,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             
             if (!(sbv.isHidden && self.hideSubviewReLayout))
             {
-                [self calcWidth:sbv];
+                [self calcWidth:sbv selfRect:selfRect];
                 totalWidth += sbv.absPos.width + sbv.centerXPos.margin;
             }
             
@@ -658,13 +581,13 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             {
                 if (!(p.view.isHidden && self.hideSubviewReLayout))
                 {
-                    [self calcWidth:p.view];
+                    [self calcWidth:p.view selfRect:selfRect];
                     totalWidth += p.view.absPos.width + p.view.centerXPos.margin;
                 }
             }
             
             //所有宽度算出后，再分别设置
-            CGFloat leftOffset = (self.frame.size.width - self.leftPadding - self.rightPadding - totalWidth) / 2;
+            CGFloat leftOffset = (selfRect.size.width - self.leftPadding - self.rightPadding - totalWidth) / 2;
             leftOffset += self.leftPadding;
             
             id prev = @(leftOffset);
@@ -694,7 +617,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             
             if (!(sbv.isHidden && self.hideSubviewReLayout))
             {
-                [self calcHeight:sbv];
+                [self calcHeight:sbv selfRect:selfRect];
                 totalHeight += sbv.absPos.height + sbv.centerYPos.margin;
             }
             
@@ -703,13 +626,13 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             {
                 if (!(p.view.isHidden && self.hideSubviewReLayout))
                 {
-                    [self calcHeight:p.view];
+                    [self calcHeight:p.view selfRect:selfRect];
                     totalHeight += p.view.absPos.height + p.view.centerYPos.margin;
                 }
             }
             
             //所有宽度算出后，再分别设置
-            CGFloat topOffset = (self.frame.size.height - self.topPadding - self.bottomPadding - totalHeight) / 2;
+            CGFloat topOffset = (selfRect.size.height - self.topPadding - self.bottomPadding - totalHeight) / 2;
             topOffset += self.topPadding;
             
             id prev = @(topOffset);
@@ -740,7 +663,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     {
         //左边检测。
         
-        [self calcSubViewLeftRight:sbv];
+        [self calcSubViewLeftRight:sbv selfRect:selfRect];
         
         if (sbv.rightPos.posRelaVal != nil && sbv.rightPos.posRelaVal.view == self)
             *pRecalc = YES;
@@ -749,13 +672,13 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         if (sbv.isFlexedHeight)
         {
             CGSize sz = [sbv sizeThatFits:CGSizeMake(sbv.absPos.width, 0)];
-            CGRect rectsbv = sbv.frame;
-            rectsbv.size.height = sz.height;
-            sbv.frame = rectsbv;
-            //sbv.h = sz.height;
+           // CGRect rectsbv = sbv.frame;
+           // rectsbv.size.height = sz.height;
+           // sbv.frame = rectsbv;
+            sbv.absPos.height = sz.height;
         }
         
-        [self calcSubViewTopBottom:sbv];
+        [self calcSubViewTopBottom:sbv selfRect:selfRect];
         
         if (sbv.bottomPos.posRelaVal != nil && sbv.bottomPos.posRelaVal.view == self)
             *pRecalc = YES;
@@ -777,21 +700,23 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     
 }
 
-
--(void)doLayoutSubviews
+-(CGRect)estimateLayoutRect
 {
-    [super doLayoutSubviews];
     
-    //第一次布局计算。检测时序
+    for (UIView *sbv in self.subviews)
+    {
+        [sbv.absPos reset];
+    }
+    
+    CGRect newRect = self.frame;
+    
     BOOL reCalc = NO;
-    CGSize maxSize = [self calcLayout:&reCalc];
+    CGSize maxSize = [self calcLayout:&reCalc selfRect:newRect];
     
     if (self.wrapContentWidth || self.wrapContentHeight)
     {
-        CGRect newRect = self.frame;
         if (newRect.size.height != maxSize.height || newRect.size.width != maxSize.width)
         {
-            CGRect oldRect = newRect;
             
             if (self.wrapContentWidth)
             {
@@ -803,9 +728,35 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
                 newRect.size.height = maxSize.height;
             }
             
-            
-            self.frame = newRect;
-            
+            //如果里面有需要重新计算的就重新计算布局
+            if (reCalc)
+            {
+                for (UIView *sbv in self.subviews)
+                {
+                    [sbv.absPos reset];
+                }
+                
+                [self calcLayout:&reCalc selfRect:newRect];
+            }
+        }
+        
+    }
+    
+    return newRect;
+
+}
+
+-(void)doLayoutSubviews
+{
+    [super doLayoutSubviews];
+    
+    CGRect oldRect = self.frame;
+    CGRect newRect = [self estimateLayoutRect];
+
+    if (self.wrapContentWidth || self.wrapContentHeight)
+    {
+        if (newRect.size.height != oldRect.size.height || newRect.size.width != oldRect.size.width)
+        {
             if (self.adjustScrollViewContentSize && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
             {
                 UIScrollView *scrolv = (UIScrollView*)self.superview;
@@ -827,29 +778,18 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
                 scrolv.contentSize = contsize;
                 
             }
-            
-            //如果里面有需要重新计算的就重新计算布局
-            if (reCalc)
-            {
-                for (UIView *sbv in self.subviews)
-                {
-                    [sbv.absPos reset];
-                }
-                
-                [self calcLayout:&reCalc];
-            }
         }
-
     }
+    
+    self.frame = newRect;
     
     for (UIView *sbv in self.subviews)
     {
             
-        CGRect rect = CGRectMake(sbv.absPos.leftPos, sbv.absPos.topPos, sbv.absPos.width, sbv.absPos.height);
-        sbv.frame = rect;
+        sbv.frame = sbv.absPos.frame;
             
         [sbv.absPos reset];
     }
-   }
+}
 
 @end

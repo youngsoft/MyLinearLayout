@@ -31,6 +31,13 @@ typedef enum : NSUInteger {
  */
 @interface MyLinearLayout : MyLayoutBase
 
+
+//用方向初始化一个线性布局
+-(id)initWithOrientation:(LineViewOrientation)orientation;
+
++(id)linearLayoutWithOrientation:(LineViewOrientation)orientation;
+
+
 //方向，默认是纵向的,请在布局视图建立后立即调用这个属性设置方向,对于垂直布局系统默认设置wrapContentHeight为YES，而对于水平布局则设置wrapContentWidth为YES
 @property(nonatomic,assign) LineViewOrientation orientation;
 
