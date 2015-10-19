@@ -19,10 +19,13 @@
 
 -(void)loadView
 {
-    self.view = [UIScrollView new];
+    [super loadView];
+    
+    self.view = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    self.view.backgroundColor = [UIColor redColor];
     
     
-    _myll =  [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    _myll =  [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
     _myll.backgroundColor = [UIColor grayColor];
     _myll.padding = UIEdgeInsetsMake(10, 2, 10, 2);
     _myll.leftMargin = _myll.rightMargin = 0;
@@ -72,12 +75,13 @@
 -(void)handleAdd:(UIButton*)id
 {
     
-    MyLinearLayout *l1 = [MyLinearLayout new];
+    MyLinearLayout *l1 = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    l1.tag = 100;
     l1.backgroundColor = [UIColor whiteColor];
     l1.leftMargin = l1.rightMargin = 0;
      l1.padding = UIEdgeInsetsMake(4, 4, 4, 4);
     
-    MyBorderLineDraw   *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor colorWithRed:(rand() % 256)/256.0 green:(rand() % 256)/256.0 blue:(rand() % 256)/256.0 alpha:1]];
+  /*  MyBorderLineDraw   *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor colorWithRed:(rand() % 256)/256.0 green:(rand() % 256)/256.0 blue:(rand() % 256)/256.0 alpha:1]];
 
     bld.headIndent = rand() % 4;
     bld.tailIndent = rand() % 3;
@@ -85,7 +89,13 @@
     bld.thick = rand()%4;
     
     l1.topBorderLine = bld;
-    l1.bottomBorderLine = bld;
+    l1.bottomBorderLine = bld;*/
+    
+    MyBorderLineDraw *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor blueColor]];
+    bld.insetColor = [UIColor redColor];
+    bld.thick = 3;
+    l1.boundBorderLine = bld;
+    
    
     UILabel *lb = [UILabel new];
     lb.leftMargin = lb.rightMargin = 0;

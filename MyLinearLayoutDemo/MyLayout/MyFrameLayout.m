@@ -53,8 +53,8 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
 {
     
     MarignGravity gravity = subView.marginGravity;
-    MarignGravity vert = gravity & 0xF0;
-    MarignGravity horz = gravity & 0x0F;
+    MarignGravity vert = gravity & MGRAVITY_HORZ_MASK;
+    MarignGravity horz = gravity & MGRAVITY_VERT_MASK;
     
     //优先用设定的宽度尺寸。
     if (subView.widthDime.dimeNumVal != nil)
@@ -76,15 +76,28 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
     
 }
 
-
--(CGRect)estimateLayoutRect
+-(CGRect)estimateLayoutRectHelper:(CGSize)size isLayout:(BOOL)isLayout
 {
-    CGSize selfSize = self.frame.size;
+    CGRect selfRect = [super estimateLayoutRect:size];
+    CGSize selfSize = selfRect.size;
     
     NSArray *sbs = self.subviews;
     for (UIView *v in sbs)
     {
-        CGRect rect = v.frame;
+        CGRect rect;
+        
+        if (isLayout)
+             rect = v.frame;
+        else
+        {
+            if ([v isKindOfClass:[MyLayoutBase class]])
+            {
+                MyLayoutBase *vl = (MyLayoutBase*)v;
+                rect = [vl estimateLayoutRect:CGSizeZero];
+            }
+            else
+                rect = v.frame;
+        }
         
         //宽度等于另外视图的高度
         if (v.widthDime.dimeRelaVal != nil && v.widthDime.dimeRelaVal.dime == MGRAVITY_VERT_FILL)
@@ -108,23 +121,19 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
         
     }
     
-    return self.frame;
+    return selfRect;
 
 }
 
-
--(void)doLayoutSubviews
+-(CGRect)estimateLayoutRect:(CGSize)size
 {
-    [super doLayoutSubviews];
-    
-    [self estimateLayoutRect];
-    
-    NSArray *sbs = self.subviews;
-    for (UIView *v in sbs)
-    {
-        v.frame =  v.absPos.frame;
-        
-    }
+    return [self estimateLayoutRectHelper:size isLayout:NO];
+}
+
+
+-(CGRect)doLayoutSubviews
+{
+    return [self estimateLayoutRectHelper:CGSizeZero isLayout:YES];
 }
 
 @end

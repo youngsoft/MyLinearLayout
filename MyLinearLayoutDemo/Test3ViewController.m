@@ -11,67 +11,177 @@
 
 @interface Test3ViewController ()
 
+@property(nonatomic, strong) MyLinearLayout *gravityLayout;
+
 @end
 
 @implementation Test3ViewController
 
 
--(UIView*)createView:(MarignGravity)gravity padding:(UIEdgeInsets)padding
+-(void)addSubLayout:(MyLinearLayout*)layout
 {
-    //我们可以设置widthDime也可以设置
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.leftMargin = 10;
-    ll.gravity = gravity;
-    ll.padding = padding;
-    ll.backgroundColor = [UIColor grayColor];
-    
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 40)];
+   
+    UIView *v1 = [UIView new];
     v1.backgroundColor = [UIColor redColor];
-    v1.topMargin = 4;
-    [ll addSubview:v1];
+    v1.topMargin = 10;
+    v1.leftMargin = 10;
+    v1.width = 80;
+    v1.height = 40;
+    [layout addSubview:v1];
     
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
+    UIView *v2 = [UIView new];
     v2.backgroundColor = [UIColor greenColor];
-    v2.topMargin = 6;
-    [ll addSubview:v2];
+    v2.topMargin = 10;
+    v2.centerXOffset = 0;
+    v2.width = 80;
+    v2.height = 40;
+    [layout addSubview:v2];
     
     
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
+    UIView *v3 = [UIView new];
     v3.backgroundColor = [UIColor blueColor];
-    v3.topMargin = 3;
-    v3.bottomMargin = 4;
-    [ll addSubview:v3];
+    v3.topMargin = 10;
+    v3.rightMargin = 10;
+    v3.width = 80;
+    v3.height = 40;
+    [layout addSubview:v3];
     
-    return ll;
+    UIView *v4 = [UIView new];
+    v4.backgroundColor = [UIColor orangeColor];
+    v4.topMargin = 10;
+    v4.bottomMargin = 10;
+    v4.leftMargin = 10;
+    v4.rightMargin = 10;
+    v4.width = 80;
+    v4.height = 40;
+    [layout addSubview:v4];
     
 }
 
+
+-(UIButton*)createActionButton:(NSString*)title tag:(NSInteger)tag
+{
+    UIButton *actionButton = [UIButton new];
+    [actionButton setTitle:title forState:UIControlStateNormal];
+    [actionButton sizeToFit];
+    [actionButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    actionButton.tag = tag;
+    [actionButton addTarget:self action:@selector(handleGravity:) forControlEvents:UIControlEventTouchUpInside];
+    return actionButton;
+}
 
 
 -(void)loadView
 {
     
-    MyLinearLayout *test1ll = [MyLinearLayout new];
-    test1ll.orientation = LVORIENTATION_HORZ; //水平布局
-    test1ll.gravity = MGRAVITY_CENTER;   //本视图里面的所有子视图整体水平居中停靠
-    self.view = test1ll;
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_HORZ];
+    rootLayout.wrapContentHeight = NO;
+    rootLayout.wrapContentWidth = NO;
+    rootLayout.gravity = MGRAVITY_VERT_CENTER;
+    self.view = rootLayout;
     
-    [test1ll addSubview:[self createView:MGRAVITY_HORZ_LEFT padding:UIEdgeInsetsMake(5, 5, 5, 5)]];
-    [test1ll addSubview:[self createView:MGRAVITY_HORZ_CENTER padding:UIEdgeInsetsMake(5, 5, 5, 5)]];
-    [test1ll addSubview:[self createView:MGRAVITY_HORZ_RIGHT padding:UIEdgeInsetsMake(5, 5, 5, 5)]];
+    
+    MyLinearLayout *leftLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    leftLayout.backgroundColor = [UIColor grayColor];
+    
+    leftLayout.padding = UIEdgeInsetsMake(0, 5, 0, 5);
+    leftLayout.wrapContentWidth = YES;
+    leftLayout.gravity = MGRAVITY_HORZ_CENTER;
+    [rootLayout addSubview:leftLayout];
+    
+    UILabel *label = [UILabel new];
+    label.text = @"点击选择停靠方式";
+    
+    [label sizeToFit];
+    [leftLayout addSubview:label];
+    
+    UIButton *topButton = [self createActionButton:@"上停靠" tag:100];
+    topButton.topMargin = 10;
+    [leftLayout addSubview:topButton];
+    
+    UIButton *centerYButton = [self createActionButton:@"垂直居中停靠" tag:200];
+    centerYButton.topMargin = 10;
+    [leftLayout addSubview:centerYButton];
+    
+    
+    UIButton *bottomButton = [self createActionButton:@"下停靠" tag:300];
+    bottomButton.topMargin = 10;
+    [leftLayout addSubview:bottomButton];
+    
+    
+    UIButton *leftButton = [self createActionButton:@"左停靠" tag:400];
+    leftButton.topMargin = 10;
+    [leftLayout addSubview:leftButton];
+    
+    UIButton *centerXButton = [self createActionButton:@"水平居中停靠" tag:500];
+    centerXButton.topMargin = 10;
+    [leftLayout addSubview:centerXButton];
+    
+    UIButton *rightButton = [self createActionButton:@"右停靠" tag:600];
+    rightButton.topMargin = 10;
+    [leftLayout addSubview:rightButton];
+    
+    UIButton *customButton = [self createActionButton:@"自定义停靠" tag:700];
+    customButton.topMargin = 10;
+    customButton.bottomMargin = 10;
+    [leftLayout addSubview:customButton];
+    
+    
+    MyLinearLayout *rightLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    rightLayout.backgroundColor = [UIColor lightGrayColor];
+    
+    rightLayout.leftMargin = 10;
+    //下面三行表示高度是父视图高度，宽度是剩余的宽度
+    rightLayout.topMargin = 0;
+    rightLayout.bottomMargin = 0;
+    rightLayout.weight = 1;
+    [rootLayout addSubview:rightLayout];
+
+    [self addSubLayout:rightLayout];
+    
+    
+    self.gravityLayout = rightLayout;
     
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"布局内视图的停靠1";
+    self.title = @"线性布局-子视图的位置停靠";
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)handleGravity:(UIButton*)button
+{
+    switch (button.tag) {
+        case 100:  //上
+            self.gravityLayout.gravity = (self.gravityLayout.gravity & MGRAVITY_VERT_MASK) | MGRAVITY_VERT_TOP;
+            break;
+        case 200:  //垂直
+            self.gravityLayout.gravity = (self.gravityLayout.gravity & MGRAVITY_VERT_MASK) | MGRAVITY_VERT_CENTER;
+            break;
+        case 300:   //下
+            self.gravityLayout.gravity = (self.gravityLayout.gravity & MGRAVITY_VERT_MASK) | MGRAVITY_VERT_BOTTOM;
+            break;
+        case 400:  //左
+            self.gravityLayout.gravity = (self.gravityLayout.gravity & MGRAVITY_HORZ_MASK) | MGRAVITY_HORZ_LEFT;
+            break;
+        case 500:  //水平
+            self.gravityLayout.gravity = (self.gravityLayout.gravity & MGRAVITY_HORZ_MASK) | MGRAVITY_HORZ_CENTER;
+            break;
+        case 600:   //右
+            self.gravityLayout.gravity = (self.gravityLayout.gravity & MGRAVITY_HORZ_MASK) | MGRAVITY_HORZ_RIGHT;
+            break;
+        case 700:   //自定义
+            self.gravityLayout.gravity = MGRAVITY_NONE;
+            break;
+        default:
+            break;
+    }
 }
 
 /*

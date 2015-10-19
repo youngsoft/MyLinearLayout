@@ -15,82 +15,175 @@
 
 @implementation Test1ViewController
 
--(UIView*)createView:(BOOL)wrapContentHeight
+-(void)addVertSubView:(MyLinearLayout*)vertLayout
 {
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.backgroundColor = [UIColor grayColor];
-
-    ll.orientation = LVORIENTATION_VERT;
-    ll.leftMargin = 10;
-    ll.wrapContentHeight = wrapContentHeight;
-    
-
-    UIView *v1 = [UIView new];
+   
+    UILabel *v1 = [UILabel new];
+    v1.text = @"左边边距";
+    v1.textAlignment = NSTextAlignmentCenter;
+    v1.adjustsFontSizeToFitWidth = YES;
     v1.backgroundColor = [UIColor redColor];
-    [ll addSubview:v1];
+    [vertLayout addSubview:v1];
 
-    v1.topMargin = 4;
-    v1.leftMargin = 10;
-    v1.width = 60;
-    v1.height = 40;
+    v1.topMargin = 10;
+    v1.leftMargin = 10; //左边边距10
+    v1.width = 200;
+    v1.height = 25;
     
-   /* [v1 makeLayout:^(MyMaker *make) {
+    
+   /*
+    您也可以采用如下的语法来专门设置布局属性，详情请参考MyMaker
+    [v1 makeLayout:^(MyMaker *make) {
        
-        make.top.equalTo(@4);
+        make.top.equalTo(@10);
         make.left.equalTo(@10);
-        make.width.equalTo(@60);
-        make.height.equalTo(@40);
-    }];*/
+        make.width.equalTo(@200);
+        make.height.equalTo(@30);
+    }];
+    */
     
     
     
-    UIView *v2 = [UIView new];
+    UILabel *v2 = [UILabel new];
+    v2.text = @"水平居中";
+    v2.textAlignment = NSTextAlignmentCenter;
+    v2.adjustsFontSizeToFitWidth = YES;
     v2.backgroundColor = [UIColor greenColor];
-    [ll addSubview:v2];
+    [vertLayout addSubview:v2];
 
-    v2.topMargin = 6;
-    v2.leftMargin = 20;
-    v2.width = 40;
-    v2.height = 60;
+    v2.topMargin = 10;
+    v2.centerXOffset = 0; //水平居中,如果不等于0则会产生偏移
+    v2.width = 200;
+    v2.height = 25;
 
     
-    //您也可以不设置width,height而是直接设置frame的宽度和高度
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
+    UILabel *v3 = [UILabel new];
+    v3.text = @"右边边距";
+    v3.textAlignment = NSTextAlignmentCenter;
+    v3.adjustsFontSizeToFitWidth = YES;
     v3.backgroundColor = [UIColor blueColor];
-    v3.topMargin = 3;
-    v3.leftMargin = 15;
-    v3.bottomMargin = 4;
+    [vertLayout addSubview:v3];
+
+    v3.topMargin = 10;
+    v3.rightMargin = 10; //右边边距10
+    v3.width = 200;
+    v3.height = 25;
+
     
-    [ll addSubview:v3];
     
+    UILabel *v4 = [UILabel new];
+    v4.text = @"左右边距";
+    v4.textAlignment = NSTextAlignmentCenter;
+    v4.adjustsFontSizeToFitWidth = YES;
+    v4.backgroundColor = [UIColor orangeColor];
+    [vertLayout addSubview:v4];
+
+    v4.topMargin = 10;
+    v4.bottomMargin = 10;
+    v4.leftMargin = 10;
+    v4.rightMargin = 10; //两边边距为10,如果设置了两边边距则不需要指定宽度了
+    v4.height = 25;
     
-    return ll;
 }
+
+-(void)addHorzSubView:(MyLinearLayout*)horzLayout
+{
+    
+    UILabel *v1 = [UILabel new];
+    v1.text = @"顶部边距";
+    v1.textAlignment = NSTextAlignmentCenter;
+    v1.adjustsFontSizeToFitWidth = YES;
+    v1.backgroundColor = [UIColor redColor];
+    [horzLayout addSubview:v1];
+    
+    v1.leftMargin = 10;
+    v1.topMargin = 10; //顶部边距10
+    v1.width = 60;
+    v1.height = 60;
+    
+    
+    UILabel *v2 = [UILabel new];
+    v2.text = @"垂直居中";
+    v2.textAlignment = NSTextAlignmentCenter;
+    v2.adjustsFontSizeToFitWidth = YES;
+    v2.backgroundColor = [UIColor greenColor];
+    [horzLayout addSubview:v2];
+    
+    v2.leftMargin = 10;
+    v2.centerYOffset = 0; //垂直居中，如果不等于0则会产生偏移
+    v2.width = 60;
+    v2.height = 60;
+    
+    
+    UILabel *v3 = [UILabel new];
+    v3.text = @"底部边距";
+    v3.textAlignment = NSTextAlignmentCenter;
+    v3.adjustsFontSizeToFitWidth = YES;
+    v3.backgroundColor = [UIColor blueColor];
+    [horzLayout addSubview:v3];
+
+    v3.leftMargin = 10;
+    v3.bottomMargin = 10; //底部边距10
+    v3.rightMargin = 5;
+    v3.width = 60;
+    v3.height = 60;
+    
+    
+    UILabel *v4 = [UILabel new];
+    v4.text = @"上下边距";
+    v4.textAlignment = NSTextAlignmentCenter;
+    v4.adjustsFontSizeToFitWidth = YES;
+    v4.backgroundColor = [UIColor orangeColor];
+    [horzLayout addSubview:v4];
+
+    v4.leftMargin = 10;
+    v4.rightMargin = 10;
+    v4.topMargin = 10;
+    v4.bottomMargin = 10; //两边边距为10,如果设置了则不需要指定高度了。
+    v4.width = 60;
+}
+
 
 -(void)loadView
 {
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    //如果布局作为视图控制器的视图则请设置wrapContentWidth和wrapContentHeight都为NO,
+    rootLayout.wrapContentHeight = NO;
+    rootLayout.wrapContentWidth = NO;
+    self.view = rootLayout;
     
-    MyLinearLayout *test1ll = [MyLinearLayout new];
-    test1ll.orientation = LVORIENTATION_HORZ; //水平布局
-    test1ll.gravity = MGRAVITY_HORZ_CENTER;   //本视图里面的所有子视图整体水平和垂直居中
-    self.view = test1ll;
-
+    UILabel *vertTitle = [UILabel new];
+    vertTitle.text = @"垂直布局(从上到下)";
+    [vertTitle sizeToFit];
+    vertTitle.centerXOffset = 0;  //水平居中
+    [rootLayout addSubview:vertTitle];
     
-    //标尺视图
-    UIView *v = [UIView new];
-    v.backgroundColor = [UIColor blackColor];
-    v.width = 10;
-    v.height = 200;
-    [test1ll addSubview:v];
+    MyLinearLayout *vertLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    vertLayout.backgroundColor = [UIColor lightGrayColor];
+    vertLayout.leftMargin = vertLayout.rightMargin = 0;  //宽度和父视图等宽
+    [rootLayout addSubview:vertLayout];
+    [self addVertSubView:vertLayout];
     
-    [test1ll addSubview:[self createView:NO]];
-    [test1ll addSubview:[self createView:YES]];
+    
+    
+    UILabel *horzTitle = [UILabel new];
+    horzTitle.text = @"水平布局(从左到右)";
+    [horzTitle sizeToFit];
+    horzTitle.centerXOffset = 0;  //水平居中
+    [rootLayout addSubview:horzTitle];
+    
+    MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_HORZ];
+    horzLayout.backgroundColor = [UIColor darkGrayColor];
+    horzLayout.weight = 1.0;                            //高度占用父视图的剩余高度
+    [rootLayout addSubview:horzLayout];
+    [self addHorzSubView:horzLayout];
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"子视图的布局和自动调整大小";
+    self.title = @"线性布局-垂直布局和水平布局";
 }
 
 - (void)didReceiveMemoryWarning {

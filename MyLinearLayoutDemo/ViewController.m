@@ -72,22 +72,22 @@
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"test"];
     switch (indexPath.row) {
         case 0:
-            cell.textLabel.text = @"子视图布局和自动调整大小";
+            cell.textLabel.text = @"线性布局-垂直布局和水平布局";
             break;
         case 1:
-            cell.textLabel.text = @"子视图的隐藏显示以及UIScrollView的自动调整";
+            cell.textLabel.text = @"线性布局-和UIScrollView的结合";
             break;
         case 2:
-            cell.textLabel.text = @"布局内视图停靠1-左中右";
+            cell.textLabel.text = @"线性布局-子视图的位置停靠";
             break;
         case 3:
-            cell.textLabel.text = @"布局内视图停靠2-上中下";
+            cell.textLabel.text = @"线性布局-布局尺寸由子视图决定1";
             break;
         case 4:
-            cell.textLabel.text = @"布局内视图停靠3-自定义";
+            cell.textLabel.text = @"线性布局-UITableViewCell动态高度";
             break;
         case 5:
-            cell.textLabel.text = @"子视图的尺寸由父视图决定";
+            cell.textLabel.text = @"线性布局-子视图尺寸由布局决定";
             break;
         case 6:
             cell.textLabel.text = @"相对视图尺寸";

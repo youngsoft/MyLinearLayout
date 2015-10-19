@@ -20,12 +20,16 @@ typedef enum : unsigned char {
     //水平填满
     MGRAVITY_HORZ_FILL = MGRAVITY_HORZ_LEFT | MGRAVITY_HORZ_CENTER | MGRAVITY_HORZ_RIGHT,
     
+    MGRAVITY_HORZ_MASK = 0xF0,     //设置水平前请跟这个值进行&操作再跟具体的水平|
+    
     //垂直
     MGRAVITY_VERT_TOP = 1 << 4,
     MGRAVITY_VERT_CENTER = 2 << 4,
     MGRAVITY_VERT_BOTTOM = 4 << 4,
     //垂直填满
     MGRAVITY_VERT_FILL = MGRAVITY_VERT_TOP | MGRAVITY_VERT_CENTER | MGRAVITY_VERT_BOTTOM,
+    
+    MGRAVITY_VERT_MASK = 0x0F,
     
     //居中
     MGRAVITY_CENTER = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_CENTER,
@@ -139,7 +143,7 @@ typedef enum : unsigned char {
 @property(nonatomic,assign) CGFloat height;
 
 
-//得到视图的评估rect，在获取前请先调用父布局的-(CGRect)estimateLayoutRect;
+//得到视图的评估rect，在调用前请先调用父布局的-(CGRect)estimateLayoutRect;
 -(CGRect)estimateRect;
 
 
@@ -193,6 +197,7 @@ typedef enum : unsigned char {
 @property(nonatomic, assign) BOOL hideSubviewReLayout;
 
 
+
 //设置自动布局前后的处理块，主要用于动画处理，可以在这两个函数中添加动画的代码。
 //如果设置这两个函数则会在每次布局完成之后函数都将会置为nil
 @property(nonatomic,copy) void (^beginLayoutBlock)();
@@ -211,51 +216,30 @@ typedef enum : unsigned char {
 //同时设置4个边界线。
 @property(nonatomic, strong) MyBorderLineDraw *boundBorderLine;
 
-//下面的功能支持在布局视图中的触摸功能。
 
 //高亮的背景色,我们支持在布局中执行单击的事件，用户按下时背景会高亮.只有设置了事件才会高亮
 @property(nonatomic,strong) UIColor *highlightedBackgroundColor;
+
+//设置背景图片，和高亮的背景图片.只有在布局中执行单击的事件按下时会有背景图片，只有设置了事件才会高亮。
+@property(nonatomic,strong) UIImage *backgroundImage;
+@property(nonatomic,strong) UIImage *highlightedBackgroundImage;
 
 //设置单击触摸的事件，如果target为nil则取消事件。
 -(void)setTarget:(id)target action:(SEL)action;
 
 
-//评估布局的尺寸,这个方法并不会进行真正的布局，只是对布局的尺寸进行评估，得到的结果不一定是真实的在父视图中的尺寸。
--(CGRect)estimateLayoutRect;
-
-
-
-
-//内部使用函数，外部不需要调用。。
--(void)construct;
-
-//派生类重载这个函数进行布局
--(void)doLayoutSubviews;
-
-//判断margin是否是相对margin
--(BOOL)isRelativeMargin:(CGFloat)margin;
-
-
--(void)calcMatchParentWidth:(MyLayoutDime*)match
-                  selfWidth:(CGFloat)selfWidth
-                 leftMargin:(CGFloat)leftMargin
-               centerMargin:(CGFloat)centerMargin
-                rightMargin:(CGFloat)rightMargin
-                leftPadding:(CGFloat)leftPadding
-               rightPadding:(CGFloat)rightPadding
-                       rect:(CGRect*)pRect;
-
--(void)calcMatchParentHeight:(MyLayoutDime*)match
-                  selfHeight:(CGFloat)selfHeight
-                   topMargin:(CGFloat)topMargin
-                centerMargin:(CGFloat)centerMargin
-                bottomMargin:(CGFloat)bottomMargin
-                  topPadding:(CGFloat)topPadding
-               bottomPadding:(CGFloat)bottomPadding
-                        rect:(CGRect*)pRect;
-
-
-
+/*
+ 评估布局的尺寸,这个方法并不会进行真正的布局，只是对布局的尺寸进行评估。
+ size指定期望的宽度或者高度，如果size中对应的值设置为0则根据布局自身的高度和宽度来进行评估，而设置为非0则固定指定的高度或者宽度来进行评估
+ 
+ estimateLayoutRect:CGSizeMake(0,0) 表示按布局的位置和尺寸根据布局的子视图来进行动态评估。
+ estimateLayoutRect:CGSizeMake(320,0) 表示布局的宽度固定为320,而高度则根据布局的子视图来进行动态评估。这个情况非常适用于UITableViewCell的动态高度的计算评估。
+ estimateLayoutRect:CGSizeMake(0,100) 表示布局的高度固定为100,而宽度则根据布局的子视图来进行动态评估。
+ 
+ 通过对布局进行尺寸的评估，可以在不进行布局的情况下动态的计算出布局的位置和大小，但需要注意的是这个评估值有可能不是真实显示的实际位置和尺寸。
+ 
+ */
+-(CGRect)estimateLayoutRect:(CGSize)size;
 
 
 @end

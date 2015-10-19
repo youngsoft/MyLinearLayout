@@ -11,73 +11,120 @@
 
 @interface Test4ViewController ()
 
+@property(nonatomic,strong) MyLinearLayout *rootLayout;
+
 @end
 
 @implementation Test4ViewController
 
 
--(UIView*)createView:(MarignGravity)gravity
+-(UIButton*)addActionButton:(NSString *)title tag:(NSInteger)tag
 {
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100,200)];
-    ll.leftMargin = 10;
-    ll.orientation = LVORIENTATION_VERT;
-    ll.gravity = gravity;
-    ll.backgroundColor = [UIColor grayColor];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.backgroundColor = [UIColor greenColor];
+    [button addTarget:self action:@selector(handleAction:) forControlEvents:UIControlEventTouchUpInside];
+    [button setTitle:title forState:UIControlStateNormal];
+    button.tag = tag;
+
     
-    UIView *v1 = [UIView new];
-    v1.backgroundColor = [UIColor redColor];
-    v1.topMargin = 4;
-    v1.leftMargin = v1.rightMargin = 0;
-    v1.height = 40;
-    [ll addSubview:v1];
+    button.height = 50;
+    button.width = 90;
+    button.leftMargin = 5;
+    button.topMargin = 5;
     
-    UIView *v2 = [UIView new];
-    v2.backgroundColor = [UIColor greenColor];
-    v2.topMargin = 6;
-    v2.width = 40;
-    v2.height = 60;
-    [ll addSubview:v2];
-    
-    
-    UIView *v3 = [UIView new];
-    v3.backgroundColor = [UIColor blueColor];
-    
-    v3.topMargin = 3;
-    v3.bottomMargin = 4;
-    v3.width = 75;
-    v3.height = 30;
-    
-    [ll addSubview:v3];
-    
-    return ll;
-    
-    
+    return button;
 }
+
+-(MyLinearLayout*)addActionLayout
+{
+    MyLinearLayout *actionLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_HORZ];
+    actionLayout.backgroundColor = [UIColor redColor];
+    
+    actionLayout.wrapContentHeight = YES;
+    actionLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
+    actionLayout.padding = UIEdgeInsetsMake(5, 0, 5, 5);
+    actionLayout.topMargin = 5;
+    
+    
+    MyLinearLayout *addLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    addLayout.backgroundColor = [UIColor blueColor];
+    
+    addLayout.padding = UIEdgeInsetsMake(0, 0, 5, 5);
+    addLayout.wrapContentWidth = YES;
+    addLayout.wrapContentHeight = YES;  //布局的高度和宽度由子视图决定
+    addLayout.leftMargin = 5;
+    [actionLayout addSubview:addLayout];
+    
+    
+    [addLayout addSubview:[self addActionButton:@"添加垂直布局" tag:100]];
+    [addLayout addSubview:[self addActionButton:@"添加垂直按钮" tag:500]];
+
+    
+    [actionLayout addSubview:[self addActionButton:@"添加水平按钮" tag:200]];
+    [actionLayout addSubview:[self addActionButton:@"删除自身布局" tag:300]];
+    
+    return actionLayout;
+}
+
 
 -(void)loadView
 {
+    UIScrollView *scrollView = [UIScrollView new];
+    self.view = scrollView;
     
-    MyLinearLayout *test1ll = [MyLinearLayout new];
-    test1ll.orientation = LVORIENTATION_HORZ; //水平布局
-    test1ll.gravity = MGRAVITY_CENTER;   //本视图里面的所有子视图整体水平居中停靠
-    self.view = test1ll;
+    self.rootLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    self.rootLayout.backgroundColor = [UIColor grayColor];
+    self.rootLayout.wrapContentHeight = YES;
+    self.rootLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
+    self.rootLayout.padding = UIEdgeInsetsMake(0, 5, 5, 5);
+    [self.view addSubview:self.rootLayout];
     
+    [self.rootLayout addSubview:[self addActionLayout]];
     
-    [test1ll addSubview:[self createView:MGRAVITY_VERT_TOP]];
-    [test1ll addSubview:[self createView:MGRAVITY_VERT_CENTER]];
-    [test1ll addSubview:[self createView:MGRAVITY_VERT_BOTTOM]];
 }
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"布局内视图停靠2";
+    self.title = @"线性布局-布局尺寸由子视图决定1";
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+-(void)handleAction:(UIButton*)sender
+{
+    
+    if (sender.tag == 100)
+    {
+        [self.rootLayout addSubview:[self addActionLayout]];
+    }
+    else if (sender.tag == 200)
+    {
+        MyLinearLayout*actionLayout = (MyLinearLayout*)sender.superview;
+        [actionLayout addSubview:[self addActionButton:@"删除自己" tag:400]];
+    }
+    else if (sender.tag == 300)
+    {
+         MyLinearLayout*actionLayout = (MyLinearLayout*)sender.superview;
+        [actionLayout removeFromSuperview];
+    }
+    else if (sender.tag == 400)
+    {
+        [sender removeFromSuperview];
+    }
+    else if (sender.tag == 500)
+    {
+        MyLinearLayout*addLayout = (MyLinearLayout*)sender.superview;
+        [addLayout addSubview:[self addActionButton:@"删除自己" tag:400]];
+
+    }
+}
+
+
 
 /*
 #pragma mark - Navigation

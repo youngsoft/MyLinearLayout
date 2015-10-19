@@ -6,13 +6,12 @@
 //  Copyright (c) 2015年. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "MyLayoutBase.h"
 
 
 @interface UIView(LinearLayoutExt)
 
-//比重，指定自定的高度或者宽度在父视图的比重。取值为>=0 <=1,这个特性用于平均分配高宽度或者按比例分配高宽度
+//比重，指定高度或者宽度在父视图的剩余空间中的比重，取值1>=weight>0。默认值是0表示不按比重来决定自身的高度或者宽度。当父视图是垂直布局时指定的是高度在父视图中的比重，而当父视图是水平布局时则指定的是宽度在父视图中的比重。
 @property(nonatomic, assign) CGFloat weight;
 
 @end

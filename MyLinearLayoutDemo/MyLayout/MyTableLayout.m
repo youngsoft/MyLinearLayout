@@ -112,12 +112,6 @@
 @implementation MyTableLayout
 
 
--(void)construct
-{
-    [super construct];
-}
-
-
 -(void)addRow:(CGFloat)rowHeight colWidth:(CGFloat)colWidth
 {
     [self insertRow:rowHeight colWidth:colWidth atIndex:self.countOfRow];
@@ -222,37 +216,6 @@
 {
     return [self viewAtRowIndex:rowIndex].subviews.count;
 }
-
-
-#pragma mark -- Private Method
-
-- (void)calcScrollViewContentSize:(CGRect)oldRect autoAdjustSize:(BOOL)autoAdjustSize
-{
-    if (self.adjustScrollViewContentSize && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
-    {
-        UIScrollView *scrolv = (UIScrollView*)self.superview;
-        CGRect newRect = self.frame;
-        
-        CGSize contsize = scrolv.contentSize;
-        
-        if (newRect.size.height != oldRect.size.height)
-        {
-            contsize.height = newRect.size.height;
-            
-        }
-        
-        if(newRect.size.width != oldRect.size.width)
-        {
-            contsize.width = newRect.size.width;
-            
-        }
-        
-        scrolv.contentSize = contsize;
-
-    }
-}
-
-
 
 
 //不能直接调用如下的函数。

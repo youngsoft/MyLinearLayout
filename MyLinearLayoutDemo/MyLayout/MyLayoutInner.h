@@ -68,6 +68,35 @@ typedef enum : unsigned char
 
 @interface MyLayoutBase()
 
+
+
+//派生类重载这个函数进行布局
+-(CGRect)doLayoutSubviews;
+
+//判断margin是否是相对margin
+-(BOOL)isRelativeMargin:(CGFloat)margin;
+
+
+-(void)calcMatchParentWidth:(MyLayoutDime*)match
+                  selfWidth:(CGFloat)selfWidth
+                 leftMargin:(CGFloat)leftMargin
+               centerMargin:(CGFloat)centerMargin
+                rightMargin:(CGFloat)rightMargin
+                leftPadding:(CGFloat)leftPadding
+               rightPadding:(CGFloat)rightPadding
+                       rect:(CGRect*)pRect;
+
+-(void)calcMatchParentHeight:(MyLayoutDime*)match
+                  selfHeight:(CGFloat)selfHeight
+                   topMargin:(CGFloat)topMargin
+                centerMargin:(CGFloat)centerMargin
+                bottomMargin:(CGFloat)bottomMargin
+                  topPadding:(CGFloat)topPadding
+               bottomPadding:(CGFloat)bottomPadding
+                        rect:(CGRect*)pRect;
+
+
+
 -(void)vertGravity:(MarignGravity)vert
         selfHeight:(CGFloat)selfHeight
          topMargin:(CGFloat)topMargin
@@ -82,6 +111,9 @@ typedef enum : unsigned char
       centerMargin:(CGFloat)centerMargin
        rightMargin:(CGFloat)rightMargin
               rect:(CGRect*)pRect;
+
+
+
 
 
 @end

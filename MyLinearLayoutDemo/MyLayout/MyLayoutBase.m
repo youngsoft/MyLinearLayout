@@ -19,12 +19,12 @@
     self = [super init];
     if (self != nil)
     {
-        _leftPos = CGFLOAT_MIN;
-        _rightPos = CGFLOAT_MIN;
-        _topPos = CGFLOAT_MIN;
-        _bottomPos = CGFLOAT_MIN;
-        _width = CGFLOAT_MIN;
-        _height = CGFLOAT_MIN;
+        _leftPos = CGFLOAT_MAX;
+        _rightPos = CGFLOAT_MAX;
+        _topPos = CGFLOAT_MAX;
+        _bottomPos = CGFLOAT_MAX;
+        _width = CGFLOAT_MAX;
+        _height = CGFLOAT_MAX;
     }
     
     return self;
@@ -32,12 +32,12 @@
 
 -(void)reset
 {
-    _leftPos = CGFLOAT_MIN;
-    _rightPos = CGFLOAT_MIN;
-    _topPos = CGFLOAT_MIN;
-    _bottomPos = CGFLOAT_MIN;
-    _width = CGFLOAT_MIN;
-    _height = CGFLOAT_MIN;
+    _leftPos = CGFLOAT_MAX;
+    _rightPos = CGFLOAT_MAX;
+    _topPos = CGFLOAT_MAX;
+    _bottomPos = CGFLOAT_MAX;
+    _width = CGFLOAT_MAX;
+    _height = CGFLOAT_MAX;
 }
 
 
@@ -361,7 +361,7 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 -(CGRect)estimateRect
 {
     CGRect rect = self.absPos.frame;
-    if (rect.origin.x == CGFLOAT_MIN || rect.origin.y == CGFLOAT_MIN)
+    if (rect.origin.x == CGFLOAT_MAX || rect.origin.y == CGFLOAT_MAX)
         return self.frame;
     return rect;
 }
@@ -524,7 +524,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         else
             _posValType = MyLayoutValueType_NULL;
         
-        [self setNeedLayout];        
+        [self setNeedLayout];
         
         return self;
     };
@@ -741,48 +741,37 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     __weak id _target;
     SEL   _action;
     UIColor *_oldBackgroundColor;
+    UIImage *_oldBackgroundImage;
     BOOL _hasBegin;
-    BOOL _canTouch;
+    BOOL _forbidTouch;
     BOOL _canCallAction;
     CGPoint _beginPoint;
 }
 
 
 //只获取计算得到尺寸，不进行真正的布局。
--(CGRect)estimateLayoutRect;
+-(CGRect)estimateLayoutRect:(CGSize)size;
 {
-    return self.frame;
-}
-
-
-
--(void)construct
-{
-    _isLayouting = NO;
-    _padding = UIEdgeInsetsZero;
-    _priorAutoresizingMask = NO;
-    _beginLayoutBlock = nil;
-    _endLayoutBlock = nil;
-    self.backgroundColor = [UIColor clearColor];
-    _leftBorderLine = nil;
-    _rightBorderLine = nil;
-    _bottomBorderLine = nil;
-    _topBorderLine = nil;
-    _oldBackgroundColor = nil;
-    _target = nil;
-    _action = nil;
-    _hasBegin = NO;
-    _canTouch = YES;
-    _canCallAction = NO;
-    _beginPoint = CGPointZero;
-    _hideSubviewReLayout = YES;
-    _wrapContentHeight = NO;
-    _wrapContentWidth = NO;
-}
-
--(void)doLayoutSubviews
-{
+    CGRect rect = self.frame;
+    if (size.width != 0)
+        rect.size.width = size.width;
+    if (size.height != 0)
+        rect.size.height = size.height;
     
+    return rect;
+}
+
+
+
+-(void)layoutConstruct
+{
+    _hideSubviewReLayout = YES;
+    self.opaque = NO;
+}
+
+-(CGRect)doLayoutSubviews
+{
+    return [self estimateLayoutRect:CGSizeZero];
 }
 
 -(BOOL)isRelativeMargin:(CGFloat)margin
@@ -796,7 +785,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     self = [super initWithCoder:aDecoder];
     if (self)
     {
-        [self construct];
+        [self layoutConstruct];
     }
     return self;
 }
@@ -807,9 +796,14 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        [self construct];
+        [self layoutConstruct];
     }
     return self;
+}
+
+-(void)dealloc
+{
+    
 }
 
 
@@ -863,6 +857,27 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     return _padding.bottom;
 }
 
+
+
+-(void)setWrapContentHeight:(BOOL)wrapContentHeight
+{
+    if (_wrapContentHeight != wrapContentHeight)
+    {
+        _wrapContentHeight = wrapContentHeight;
+        [self setNeedsLayout];
+    }
+}
+
+-(void)setWrapContentWidth:(BOOL)wrapContentWidth
+{
+    if (_wrapContentWidth != wrapContentWidth)
+    {
+        _wrapContentWidth = wrapContentWidth;
+        [self setNeedsLayout];
+    }
+}
+
+
 -(void)setHideSubviewReLayout:(BOOL)hideSubviewReLayout
 {
     if (_hideSubviewReLayout != hideSubviewReLayout)
@@ -888,10 +903,19 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     return self.leftBorderLine;
 }
 
+-(void)setBackgroundImage:(UIImage *)backgroundImage
+{
+    if (_backgroundImage != backgroundImage)
+    {
+        _backgroundImage = backgroundImage;
+        [self setNeedsDisplay];
+    }
+}
 
+#pragma mark -- touches event
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (_target != nil && _canTouch)
+    if (_target != nil && !_forbidTouch)
     {
         _hasBegin = YES;
         _canCallAction = YES;
@@ -900,6 +924,12 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         {
             _oldBackgroundColor = self.backgroundColor;
             self.backgroundColor = _highlightedBackgroundColor;
+        }
+        
+        if (_highlightedBackgroundImage != nil)
+        {
+            _oldBackgroundImage = self.backgroundImage;
+            self.backgroundImage = _highlightedBackgroundImage;
         }
     }
     
@@ -928,6 +958,11 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         self.backgroundColor = _oldBackgroundColor;
     }
     
+    if (_highlightedBackgroundImage != nil)
+    {
+        self.backgroundImage = _oldBackgroundImage;
+    }
+    
     //距离太远则不会处理
     CGPoint pt = [touch locationInView:self];
     if (CGRectContainsPoint(self.bounds, pt) && _action != nil && _canCallAction)
@@ -935,7 +970,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         [_target performSelector:_action withObject:self];
     }
     
-    _canTouch = YES;
+    _forbidTouch = NO;
     
 }
 
@@ -945,7 +980,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     if (_target != nil && _hasBegin)
     {
         //设置一个延时.
-        _canTouch = NO;
+        _forbidTouch = YES;
         [self performSelector:@selector(doTargetAction:) withObject:[touches anyObject] afterDelay:0.12];
     }
     
@@ -962,6 +997,11 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         if (_highlightedBackgroundColor != nil)
         {
             self.backgroundColor = _oldBackgroundColor;
+        }
+        
+        if (_highlightedBackgroundImage != nil)
+        {
+            self.backgroundImage = _oldBackgroundImage;
         }
         
     }
@@ -984,6 +1024,45 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(UIView*)object change:(NSDictionary *)change context:(void *)context
 {
+    if (object == self.superview)
+    {
+        //
+        
+        if (![object isKindOfClass:[MyLayoutBase class]])
+        {
+            
+            //如果同时设置了左边和右边值则
+            if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) ||
+                [self.widthDime isMatchView:object] ||
+                (self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) ||
+                [self.heightDime isMatchView:object])
+            {
+                CGRect rectSuper = object.bounds;
+                CGRect rectSelf = self.frame;
+                
+                if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) || [self.widthDime isMatchView:object])
+                {
+                    [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin centerMargin:0  rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf];
+                }
+                
+                
+                if ((self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) || [self.heightDime isMatchView:object])
+                {
+                    [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin centerMargin:0 bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf];
+                }
+                
+                
+                self.frame = rectSelf;
+                
+            }
+        }
+
+        
+        
+     //
+    }
+    
+    
     if (!_isLayouting && [self.subviews containsObject:object])
     {
         [self setNeedsLayout];
@@ -1016,6 +1095,8 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
 - (void)willMoveToSuperview:(UIView*)newSuperview
 {
+    [super willMoveToSuperview:newSuperview];
+    
     //将要添加到父视图时，如果不是MyLayout派生则则跟父视图保持一致并
     if (newSuperview != nil && ![newSuperview isKindOfClass:[MyLayoutBase class]])
     {
@@ -1028,25 +1109,34 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         {
             CGRect rectSuper = newSuperview.bounds;
             CGRect rectSelf = self.frame;
-            self.autoresizingMask = UIViewAutoresizingNone;
             
             if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) || [self.widthDime isMatchView:newSuperview])
             {
+                self.wrapContentWidth = NO;
                 [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin centerMargin:0  rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf];
-                self.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
             }
             
             
             if ((self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) || [self.heightDime isMatchView:newSuperview])
             {
+                self.wrapContentHeight = NO;
                 [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin centerMargin:0 bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf];
-                self.autoresizingMask |= UIViewAutoresizingFlexibleHeight;
             }
 
             
             self.frame = rectSelf;
+            
+            [newSuperview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+
         }
     }
+    
+    if (newSuperview == nil && self.superview != nil && ![self.superview isKindOfClass:[MyLayoutBase class]])
+    {
+        [self.superview removeObserver:self forKeyPath:@"frame"];
+        
+    }
+        
     
 }
 
@@ -1065,7 +1155,21 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
             [super layoutSubviews];
     
     
-        [self doLayoutSubviews];
+        CGRect oldSelfRect = self.frame;
+        
+        CGRect newSelfRect = [self doLayoutSubviews];
+        
+        
+        for (UIView *sbv in self.subviews)
+        {
+            sbv.frame = sbv.absPos.frame;
+            [sbv.absPos reset];
+        }
+        
+        if (!CGRectEqualToRect(oldSelfRect,newSelfRect))
+            self.frame = newSelfRect;
+        
+        [self calcScrollViewContentSize:newSelfRect];
     
     
         self.isLayouting = NO;
@@ -1226,8 +1330,15 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
+
 - (void)drawRect:(CGRect)rect {
     // Drawing code
+    
+    //先绘制背景图片。
+    if (self.backgroundImage != nil)
+    {
+        [self.backgroundImage drawInRect:rect];
+    }
     
     if (self.leftBorderLine)
     {
@@ -1380,5 +1491,22 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     
 }
 
+
+- (void)calcScrollViewContentSize:(CGRect)newRect
+{
+    if (self.adjustScrollViewContentSize && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
+    {
+        UIScrollView *scrolv = (UIScrollView*)self.superview;
+        CGSize contsize = scrolv.contentSize;
+        
+        if (contsize.height != newRect.size.height)
+            contsize.height = newRect.size.height;
+        if (contsize.width != newRect.size.width)
+            contsize.width = newRect.size.width;
+        
+        scrolv.contentSize = contsize;
+        
+    }
+}
 
 @end
