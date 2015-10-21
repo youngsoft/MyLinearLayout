@@ -10,56 +10,6 @@
 #import "MyLayoutInner.h"
 #import <objc/runtime.h>
 
-
-
-@implementation MyAbsolutePos
-
--(id)init
-{
-    self = [super init];
-    if (self != nil)
-    {
-        _leftPos = CGFLOAT_MAX;
-        _rightPos = CGFLOAT_MAX;
-        _topPos = CGFLOAT_MAX;
-        _bottomPos = CGFLOAT_MAX;
-        _width = CGFLOAT_MAX;
-        _height = CGFLOAT_MAX;
-    }
-    
-    return self;
-}
-
--(void)reset
-{
-    _leftPos = CGFLOAT_MAX;
-    _rightPos = CGFLOAT_MAX;
-    _topPos = CGFLOAT_MAX;
-    _bottomPos = CGFLOAT_MAX;
-    _width = CGFLOAT_MAX;
-    _height = CGFLOAT_MAX;
-}
-
-
--(CGRect)frame
-{
-    return CGRectMake(_leftPos, _topPos, _width, _height);
-}
-
--(void)setFrame:(CGRect)frame
-{
-    _leftPos = frame.origin.x;
-    _topPos = frame.origin.y;
-    _width  = frame.size.width;
-    _height = frame.size.height;
-    _rightPos = _leftPos + _width;
-    _bottomPos = _topPos + _height;
-}
-
-
-@end
-
-
 @implementation UIView(MyLayoutExt)
 
 const char * const ASSOCIATEDOBJECT_KEY_RELATIVE_LEFT = "associatedobject_key_relativeleft";
@@ -358,13 +308,20 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 }
 
 
--(CGRect)estimateRect
+-(CGRect)estimatedRect
 {
     CGRect rect = self.absPos.frame;
     if (rect.origin.x == CGFLOAT_MAX || rect.origin.y == CGFLOAT_MAX)
         return self.frame;
     return rect;
 }
+
+
+-(void)resetMyLayoutSetting
+{
+    objc_removeAssociatedObjects(self);
+}
+
 
 
 
@@ -376,18 +333,18 @@ const char * const ASSOCIATEDOBJECT_KEY_FLEXEDHEIGHT = "associatedobject_key_fle
 const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_absolutepos";
 
 
--(MyAbsolutePos*)absPos
+-(MyLayoutMeasurement*)absPos
 {
-    MyAbsolutePos *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS);
+    MyLayoutMeasurement *pos = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS);
     if (pos == nil)
     {
-        pos = [MyAbsolutePos new];
+        pos = [MyLayoutMeasurement new];
         objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, pos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return pos;
 }
 
--(void)setAbsPos:(MyAbsolutePos *)absPos
+-(void)setAbsPos:(MyLayoutMeasurement *)absPos
 {
     objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS, absPos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
@@ -395,310 +352,6 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
 
 @end
-
-
-
-@implementation MyLayoutPos
-
--(id)init
-{
-    self = [super init];
-    if (self != nil)
-    {
-        _view = nil;
-        _pos = MGRAVITY_NONE;
-        _posVal = nil;
-        _posValType = MyLayoutValueType_NULL;
-        _offsetVal = 0;
-    }
-    
-    return self;
-}
-
--(void)setNeedLayout
-{
-    if (_view.superview != nil && [_view.superview isKindOfClass:[MyLayoutBase class]])
-    {
-        MyLayoutBase* lb = (MyLayoutBase*)_view.superview;
-        if (!lb.isLayouting)
-            [_view.superview setNeedsLayout];
-    }
-    
-}
-
-
--(NSNumber*)posNumVal
-{
-    if (_posVal == nil)
-        return nil;
-    
-    if (_posValType == MyLayoutValueType_NSNumber)
-        return _posVal;
-    
-    return nil;
-    
-}
-
--(void)setPosNumVal:(NSNumber *)posNumVal
-{
-    NSAssert(0, @"oops");
-}
-
-
--(MyLayoutPos*)posRelaVal
-{
-    if (_posVal == nil)
-        return nil;
-    
-    if (_posValType == MyLayoutValueType_Layout)
-        return _posVal;
-    
-    return nil;
-    
-}
-
--(void)setPosRelaVal:(MyLayoutPos *)posRelaVal
-{
-    NSAssert(0, @"oops");
-
-}
-
-
-
--(MyLayoutPos*)posArrVal
-{
-    if (_posVal == nil)
-        return nil;
-    
-    if (_posValType == MyLayoutValueType_Array)
-        return _posVal;
-    
-    return nil;
-    
-}
-
--(void)setPosArrVal:(NSArray *)posArrVal
-{
-    NSAssert(0, @"oops");
-}
-
-
--(CGFloat)margin
-{
-    if (self.posNumVal == nil)
-        return _offsetVal;
-    else
-        return self.posNumVal.floatValue + _offsetVal;
-}
-
--(void)setMargin:(CGFloat)margin
-{
-    NSAssert(0, @"oops");
-
-}
-
-
--(MyLayoutPos* (^)(CGFloat val))offset
-{
-    return ^id(CGFloat val){
-        
-        _offsetVal = val;
-        
-        [self setNeedLayout];
-        
-        return self;
-    };
-}
-
--(MyLayoutPos* (^)(id val))equalTo
-{
-    return ^id(id val){
-        
-        _posVal = val;
-       if ([val isKindOfClass:[NSNumber class]])
-            _posValType = MyLayoutValueType_NSNumber;
-        else if ([val isKindOfClass:[MyLayoutPos class]])
-            _posValType = MyLayoutValueType_Layout;
-        else if ([val isKindOfClass:[NSArray class]])
-            _posValType = MyLayoutValueType_Array;
-        else
-            _posValType = MyLayoutValueType_NULL;
-        
-        [self setNeedLayout];
-        
-        return self;
-    };
-    
-}
-
--(void)dealloc
-{
-    
-}
-
-
-@end
-
-
-
-@implementation MyLayoutDime
-
--(id)init
-{
-    self= [super init];
-    if (self !=nil)
-    {
-        _view = nil;
-        _dime = MGRAVITY_NONE;
-        _addVal = 0;
-        _mutilVal = 1;
-        _dimeVal = nil;
-        _dimeValType = MyLayoutValueType_NULL;
-    }
-    
-    return self;
-}
-
--(void)setNeedLayout
-{
-    if (_view.superview != nil && [_view.superview isKindOfClass:[MyLayoutBase class]])
-    {
-        MyLayoutBase* lb = (MyLayoutBase*)_view.superview;
-        if (!lb.isLayouting)
-            [_view.superview setNeedsLayout];
-    }
-
-}
-
-//乘
--(MyLayoutDime* (^)(CGFloat val))multiply
-{
-    return ^id(CGFloat val){
-        
-        _mutilVal = val;
-        
-        [self setNeedLayout];
-        
-        return self;
-    };
-    
-}
-
-//加
--(MyLayoutDime* (^)(CGFloat val))add
-{
-    return ^id(CGFloat val){
-        
-        _addVal = val;
-        
-        [self setNeedLayout];
-        
-        return self;
-        
-    };
-    
-}
-
--(MyLayoutDime* (^)(id val))equalTo
-{
-    return ^id(id val){
-        
-        _dimeVal = val;
-        
-        if ([val isKindOfClass:[NSNumber class]])
-            _dimeValType = MyLayoutValueType_NSNumber;
-        else if ([val isKindOfClass:[MyLayoutDime class]])
-            _dimeValType = MyLayoutValueType_Layout;
-        else if ([val isKindOfClass:[NSArray class]])
-            _dimeValType = MyLayoutValueType_Array;
-        else
-            _dimeValType = MyLayoutValueType_NULL;
-
-        [self setNeedLayout];
-        
-        return self;
-    };
-    
-}
-
--(NSNumber*)dimeNumVal
-{
-    if (_dimeVal == nil)
-        return nil;
-    if (_dimeValType == MyLayoutValueType_NSNumber)
-        return _dimeVal;
-    return nil;
-}
-
--(void)setDimeNumVal:(NSNumber *)dimeNumVal
-{
-    NSAssert(0, @"oops");
-}
-
-
--(NSArray*)dimeArrVal
-{
-    if (_dimeVal == nil)
-        return nil;
-    if (_dimeValType == MyLayoutValueType_Array)
-        return _dimeVal;
-    return nil;
-    
-}
-
--(void)setDimeArrVal:(NSArray *)dimeArrVal
-{
-    NSAssert(0, @"oops");
-
-}
-
--(MyLayoutDime*)dimeRelaVal
-{
-    if (_dimeVal == nil)
-        return nil;
-    if (_dimeValType == MyLayoutValueType_Layout)
-        return _dimeVal;
-    return nil;
-    
-}
-
--(void)setDimeRelaVal:(MyLayoutDime *)dimeRelaVal
-{
-    NSAssert(0, @"oops");
-
-}
-
--(BOOL)isMatchParent
-{
-    return self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview;
-}
-
--(void)setIsMatchParent:(BOOL)isMatchParent
-{
-    NSAssert(0, @"oops");
-}
-
-
--(BOOL)isMatchView:(UIView*)v
-{
-    return self.dimeRelaVal != nil && self.dimeRelaVal.view == v;
-}
-
-
--(CGFloat) measure
-{
-    return self.dimeNumVal.floatValue * _mutilVal + _addVal;
-}
-
-
--(void)setMeasure:(CGFloat)measure
-{
-    NSAssert(0, @"oops");
-}
-
-
-@end
-
 
 
 @implementation MyBorderLineDraw
@@ -956,11 +609,13 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     if (_highlightedBackgroundColor != nil)
     {
         self.backgroundColor = _oldBackgroundColor;
+        _oldBackgroundColor = nil;
     }
     
     if (_highlightedBackgroundImage != nil)
     {
         self.backgroundImage = _oldBackgroundImage;
+        _oldBackgroundImage = nil;
     }
     
     //距离太远则不会处理
@@ -997,11 +652,13 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         if (_highlightedBackgroundColor != nil)
         {
             self.backgroundColor = _oldBackgroundColor;
+            _oldBackgroundColor = nil;
         }
         
         if (_highlightedBackgroundImage != nil)
         {
             self.backgroundImage = _oldBackgroundImage;
+            _oldBackgroundImage = nil;
         }
         
     }
@@ -1024,7 +681,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(UIView*)object change:(NSDictionary *)change context:(void *)context
 {
-    if (object == self.superview)
+    if (object == self.superview && [keyPath isEqualToString:@"frame"])
     {
         //
         
@@ -1133,7 +790,15 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     
     if (newSuperview == nil && self.superview != nil && ![self.superview isKindOfClass:[MyLayoutBase class]])
     {
-        [self.superview removeObserver:self forKeyPath:@"frame"];
+        @try {
+            [self.superview removeObserver:self forKeyPath:@"frame"];
+        }
+        @catch (NSException *exception) {
+            
+        }
+        @finally {
+            
+        }
         
     }
         
@@ -1156,7 +821,6 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     
     
         CGRect oldSelfRect = self.frame;
-        
         CGRect newSelfRect = [self doLayoutSubviews];
         
         
@@ -1169,7 +833,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
         if (!CGRectEqualToRect(oldSelfRect,newSelfRect))
             self.frame = newSelfRect;
         
-        [self calcScrollViewContentSize:newSelfRect];
+        [self alterScrollViewContentSize:newSelfRect];
     
     
         self.isLayouting = NO;
@@ -1325,6 +989,18 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
     
     
 }
+
+
+-(void)setWrapContentWidthNoLayout:(BOOL)wrapContentWidth
+{
+    _wrapContentWidth = wrapContentWidth;
+}
+
+-(void)setWrapContentHeightNoLayout:(BOOL)wrapContentHeight
+{
+    _wrapContentHeight = wrapContentHeight;
+}
+
 
 
 
@@ -1492,7 +1168,7 @@ const char * const ASSOCIATEDOBJECT_KEY_ABSOLUTE_POS = "associatedobject_key_abs
 }
 
 
-- (void)calcScrollViewContentSize:(CGRect)newRect
+- (void)alterScrollViewContentSize:(CGRect)newRect
 {
     if (self.adjustScrollViewContentSize && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
     {

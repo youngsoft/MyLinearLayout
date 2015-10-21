@@ -81,7 +81,7 @@
             cell.textLabel.text = @"线性布局-子视图的位置停靠";
             break;
         case 3:
-            cell.textLabel.text = @"线性布局-布局尺寸由子视图决定1";
+            cell.textLabel.text = @"线性布局-布局尺寸由子视图决定";
             break;
         case 4:
             cell.textLabel.text = @"线性布局-UITableViewCell动态高度";
@@ -90,10 +90,10 @@
             cell.textLabel.text = @"线性布局-子视图尺寸由布局决定";
             break;
         case 6:
-            cell.textLabel.text = @"相对视图尺寸";
+            cell.textLabel.text = @"完美屏幕适配1";
             break;
         case 7:
-            cell.textLabel.text = @"布局视图尺寸由子视图决定";
+            cell.textLabel.text = @"完美屏幕适配2";
             break;
         case 8:
             cell.textLabel.text = @"视图之间的浮动间距";
@@ -105,7 +105,7 @@
             cell.textLabel.text = @"框架布局";
             break;
         case 11:
-            cell.textLabel.text = @"边框的线以及布局动画,触摸事件";
+            cell.textLabel.text = @"UITableView静态界面的替换方案";
             break;
         case 12:
             cell.textLabel.text = @"相对布局1-视图之间的依赖";

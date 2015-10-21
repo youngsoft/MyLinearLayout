@@ -692,32 +692,48 @@
     
 }
 
--(CGRect)estimateLayoutRect:(CGSize)size
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate
 {
-    CGRect newRect = [super estimateLayoutRect:size];
+    CGRect newRect;
+    
+    
+    if (isEstimate)
+        newRect = self.absPos.frame;
+    else
+        newRect = [super estimateLayoutRect:size];
+    
     
     for (UIView *sbv in self.subviews)
     {
-        [sbv.absPos reset];
         
-    
+        if (!isEstimate)
+            [sbv.absPos reset];
+        
+        
         if ([sbv isKindOfClass:[MyLayoutBase class]])
         {
-            MyLayoutBase *vl = (MyLayoutBase*)sbv;
+             MyLayoutBase *vl = (MyLayoutBase*)sbv;
+            
             if (vl.wrapContentWidth)
             {
                 //只要同时设置了左右边距或者设置了宽度则应该把wrapContentWidth置为NO
                 if ((vl.leftPos.posVal != nil && vl.rightPos.posVal != nil) || vl.widthDime.dimeVal != nil)
-                    vl.wrapContentWidth = NO;
+                    [vl setWrapContentWidthNoLayout:NO];
             }
             
             if (vl.wrapContentHeight)
             {
                 if ((vl.topPos.posVal != nil && vl.bottomPos.posVal != nil) || vl.heightDime.dimeVal != nil)
-                    vl.wrapContentHeight = NO;
+                    [vl setWrapContentHeightNoLayout:NO];
+            }
+            
+            
+            if (isEstimate)
+            {
+                [vl estimateLayoutRect:vl.absPos.frame.size];
             }
         }
-
+        
         
         
     }
@@ -759,9 +775,15 @@
 
 }
 
+-(CGRect)estimateLayoutRect:(CGSize)size
+{
+    self.absPos.frame = [self calcLayoutRect:size isEstimate:NO];
+    return [self calcLayoutRect:CGSizeZero isEstimate:YES];
+}
+
 -(CGRect)doLayoutSubviews
 {
-    return [self estimateLayoutRect:CGSizeMake(0, 0)];
+    return  [self calcLayoutRect:CGSizeZero isEstimate:NO]; //[self estimateLayoutRect:CGSizeZero];
 }
 
 @end

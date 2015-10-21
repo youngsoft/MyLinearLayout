@@ -18,49 +18,72 @@
 
 -(void)loadView
 {
-        
-    MyLinearLayout *ll = [MyLinearLayout new];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.gravity = MGRAVITY_VERT_CENTER;
-    ll.backgroundColor = [UIColor grayColor];
-    self.view = ll;
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    rootLayout.backgroundColor = [UIColor grayColor];
+
+    rootLayout.wrapContentWidth = NO;
+    rootLayout.wrapContentHeight = NO;
+    self.view = rootLayout;
     
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
+    
+    UILabel *v1 = [UILabel new];
+    v1.text = @"宽度和父视图相等 高度为父视图剩余空间的20%";
+    v1.adjustsFontSizeToFitWidth = YES;
+    v1.textAlignment = NSTextAlignmentCenter;
     v1.backgroundColor = [UIColor redColor];
+    
     v1.topMargin = 10;
-    v1.leftMargin = v1.rightMargin = 0;
-    [ll addSubview:v1];
+    v1.leftMargin = v1.rightMargin = 0; //或者v1.widthDime.equalTo(rootLayout.widthDime);
+    v1.weight = 0.2;
+    [rootLayout addSubview:v1];
     
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
+    
+    UILabel *v2 = [UILabel new];
+    v2.text = @"宽度是父视图的80% 高度为父视图剩余空间的30%";
+    v2.adjustsFontSizeToFitWidth = YES;
+    v2.textAlignment = NSTextAlignmentCenter;
     v2.backgroundColor = [UIColor greenColor];
+    
     v2.topMargin = 10;
-    v2.widthDime.equalTo(ll.widthDime).multiply(0.8);  //父视图的宽度的0.8
-    [ll addSubview:v2];
+    v2.widthDime.equalTo(rootLayout.widthDime).multiply(0.8);  //父视图的宽度的0.8
+    v2.centerXOffset = 0;
+    v2.weight = 0.3;
+    [rootLayout addSubview:v2];
     
     
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
+    UILabel *v3 = [UILabel new];
+    v3.text = @"宽度是父视图的宽度-20 高度为父视图剩余空间的50%";
+    v3.adjustsFontSizeToFitWidth = YES;
+    v3.textAlignment = NSTextAlignmentCenter;
     v3.backgroundColor = [UIColor blueColor];
-    v3.topMargin = 10;
-    v3.widthDime.equalTo(ll.widthDime).add(-20);  //父视图的宽度-20
-    [ll addSubview:v3];
     
-    UIView *v4 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
+    v3.topMargin = 10;
+    v3.widthDime.equalTo(rootLayout.widthDime).add(-20);  //父视图的宽度-20 或者v3.leftMargin = 20; v3.rightMargin = 0;
+    v3.rightMargin = 0;
+    v3.weight = 0.5;
+    [rootLayout addSubview:v3];
+    
+    
+    UILabel *v4 = [UILabel new];
+    v4.text = @"宽度固定是200 高度固定是50";
+    v4.textAlignment = NSTextAlignmentCenter;
+    v4.adjustsFontSizeToFitWidth = YES;
     v4.backgroundColor = [UIColor yellowColor];
+    
     v4.topMargin = 10;
     v4.bottomMargin = 10;
-    v4.leftMargin = 10;
-    v4.rightMargin = 10;
-    [ll addSubview:v4];
+    v4.width = 200;
+    v4.height = 50;
+    [rootLayout addSubview:v4];
     
 
-    
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"子视图的尺寸由父视图决定";
+    self.title = @"线性布局-子视图尺寸由布局决定";
 }
 
 - (void)didReceiveMemoryWarning {

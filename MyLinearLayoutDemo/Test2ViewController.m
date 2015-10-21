@@ -61,7 +61,7 @@
     infoLayout.wrapContentHeight = YES;
     [contentLayout addSubview:infoLayout];
     
-    UIImageView *imageView = [[UIImageView  alloc] initWithImage:[UIImage imageNamed:@"user"]];
+    UIImageView *imageView = [[UIImageView  alloc] initWithImage:[UIImage imageNamed:@"head1"]];
     
     [imageView sizeToFit];
     imageView.centerYOffset = 0;

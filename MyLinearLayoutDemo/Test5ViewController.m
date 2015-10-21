@@ -88,7 +88,7 @@
         info.headImage = @"head1";
         info.nickName = @"醉里挑灯看键";
         info.textMessage = @"这是一段既有文本也有图片，文本在上面，图片在下面。文本会自动的进行换行，而图片则在文本下面居中显示";
-        info.imageMessage = @"image1";
+        info.imageMessage = @"image3";
         
         [arr addObject:info];
         
@@ -135,7 +135,51 @@
     if (cell == nil)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"dialog_cell"];
-    
+        
+        //您可以用相对布局来实现，也可以用线性布局来实现，下面用的是相对布局来实现。
+      /*  MyRelativeLayout *dialogLayout = [MyRelativeLayout new];
+        dialogLayout.tag = 50;
+        
+        dialogLayout.widthDime.equalTo(cell.contentView.widthDime);
+        dialogLayout.wrapContentHeight = YES;
+        [cell.contentView addSubview:dialogLayout];
+        
+        
+        UIImageView *headImageView = [UIImageView new];
+        headImageView.tag = 100;
+        [dialogLayout addSubview:headImageView];
+
+        
+        UILabel *nickNameLabel = [UILabel new];
+        nickNameLabel.tag = 200;
+        nickNameLabel.textColor = [UIColor blueColor];
+        nickNameLabel.font = [UIFont systemFontOfSize:15];
+        
+        nickNameLabel.leftPos.equalTo(headImageView.rightPos).offset(5);
+        [dialogLayout addSubview:nickNameLabel];
+
+        
+        UILabel *textMessageLabel = [UILabel new];
+        textMessageLabel.tag = 300;
+        textMessageLabel.font = [UIFont systemFontOfSize:13];
+        
+        textMessageLabel.flexedHeight = YES;
+        textMessageLabel.numberOfLines = 0;
+        textMessageLabel.leftPos.equalTo(headImageView.rightPos).offset(5);
+        textMessageLabel.rightPos.equalTo(dialogLayout.rightPos);
+        textMessageLabel.topPos.equalTo(nickNameLabel.bottomPos).offset(5);
+        [dialogLayout addSubview:textMessageLabel];
+        
+        
+        UIImageView *imageMessageView = [UIImageView new];
+        imageMessageView.tag = 400;
+        
+        imageMessageView.centerXPos.equalTo(@5);
+        imageMessageView.topPos.equalTo(textMessageLabel.bottomPos).offset(5);
+        [dialogLayout addSubview:imageMessageView];
+       */
+
+        //您可以用相对布局来实现，也可以用线性布局来实现，下面用的是线性布局来实现。线性布局需要比相对布局多增加一个布局层
         MyLinearLayout *dialogLayout= [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_HORZ];
         dialogLayout.tag = 50;
         
@@ -181,8 +225,8 @@
         imageMessageView.tag = 400;
         
         imageMessageView.centerXOffset = 0;
+        imageMessageView.topMargin = 5;
         [messageLayout addSubview:imageMessageView];
-        
         
     }
     
@@ -221,7 +265,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-    MyLinearLayout *dialogLayout = (MyLinearLayout*)[cell viewWithTag:50];
+    MyLayoutBase *dialogLayout = (MyLayoutBase*)[cell viewWithTag:50];
     
     //通过布局视图的estimateLayoutRect函数能够评估出UITableViewCell的动态高度。estimateLayoutRect并不会进行布局
     //而只是评估布局的尺寸，这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们

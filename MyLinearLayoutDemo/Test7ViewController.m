@@ -17,44 +17,44 @@
 
 -(void)loadView
 {
-    //线性布局实现相对子视图
-    MyLinearLayout *ll = [MyLinearLayout new];
-    //保证容器和视图控制的视图的大小进行伸缩调整。
-    ll.orientation = LVORIENTATION_VERT;
-    ll.padding = UIEdgeInsetsMake(20, 20, 20, 20);
-    ll.backgroundColor = [UIColor grayColor];
+    //上下均分和左右均分
     
-    MyLinearLayout *topll = MyLinearLayout.new;
-    topll.orientation = LVORIENTATION_HORZ;
-    topll.weight = 0.5;
-    topll.leftMargin = topll.rightMargin = 0;
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    rootLayout.backgroundColor = [UIColor grayColor];
+
+    rootLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
+    
+    MyLinearLayout *topLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_HORZ];
+    topLayout.weight = 0.5;
+    topLayout.leftMargin = topLayout.rightMargin = 0;
+    [rootLayout addSubview:topLayout];
     
     UIView *topLeft = UIView.new;
     topLeft.backgroundColor = [UIColor redColor];
+    
     topLeft.weight = 0.5;
     topLeft.topMargin = topLeft.bottomMargin = 0;
-    [topll addSubview:topLeft];
+    [topLayout addSubview:topLeft];
     
     UIView *topRight = UIView.new;
     topRight.backgroundColor = [UIColor greenColor];
     topRight.weight = 0.5;
     topRight.topMargin = topRight.bottomMargin = 0;
     topRight.leftMargin = 20;
-    [topll addSubview:topRight];
+    [topLayout addSubview:topRight];
     
-    [ll addSubview:topll];
     
     
     UIView *bottom = UIView.new;
     bottom.backgroundColor = [UIColor blueColor];
     bottom.weight = 0.5;
-    bottom.widthDime.equalTo(ll.widthDime);
+    bottom.widthDime.equalTo(rootLayout.widthDime);
     bottom.leftMargin = bottom.rightMargin = 0;
     bottom.topMargin = 20;
-    [ll addSubview:bottom];
+    [rootLayout addSubview:bottom];
     
     
-    self.view = ll;
+    self.view = rootLayout;
 
     //下面是采用相对布局的方式进行布局，可以看到相对布局的代码比较少一些，缺点是在进行布局时需要对视图之间的关系要非常清楚
     //采用线性布局的优点是不需要考虑视图之间的关系，但代码多了一些。

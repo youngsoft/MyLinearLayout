@@ -7,77 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MyLayoutDef.h"
+#import "MyLayoutPos.h"
+#import "MyLayoutDime.h"
 
-
-//视图的停靠属性
-typedef enum : unsigned char {
-    MGRAVITY_NONE = 0,
-    
-    //水平
-    MGRAVITY_HORZ_LEFT = 1,
-    MGRAVITY_HORZ_CENTER = 2,
-    MGRAVITY_HORZ_RIGHT = 4,
-    //水平填满
-    MGRAVITY_HORZ_FILL = MGRAVITY_HORZ_LEFT | MGRAVITY_HORZ_CENTER | MGRAVITY_HORZ_RIGHT,
-    
-    MGRAVITY_HORZ_MASK = 0xF0,     //设置水平前请跟这个值进行&操作再跟具体的水平|
-    
-    //垂直
-    MGRAVITY_VERT_TOP = 1 << 4,
-    MGRAVITY_VERT_CENTER = 2 << 4,
-    MGRAVITY_VERT_BOTTOM = 4 << 4,
-    //垂直填满
-    MGRAVITY_VERT_FILL = MGRAVITY_VERT_TOP | MGRAVITY_VERT_CENTER | MGRAVITY_VERT_BOTTOM,
-    
-    MGRAVITY_VERT_MASK = 0x0F,
-    
-    //居中
-    MGRAVITY_CENTER = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_CENTER,
-    
-    //全屏填满
-    MGRAVITY_FILL = MGRAVITY_HORZ_FILL | MGRAVITY_VERT_FILL
-    
-} MarignGravity;
-
-
-
-/*布局位置对象*/
-@interface MyLayoutPos : NSObject
-
-//偏移
--(MyLayoutPos* (^)(CGFloat val))offset;
-
-
-/*
- val的取值可以是NSNumber,MyLayoutPos,NSArray类型的对象。
- **如果是NSNumber类型的值表示在这个方向相对父视图或者兄弟视图(线性布局)的偏移值，比如：
-   v.leftPos.equalTo(@10) 表示视图v左边偏移父视图或者兄弟视图10个点的位置。
-   v.centerXPos.equalTo(@10) 表示视图v的水平中心点在父视图的水平中心点并偏移10个点的位置
-   v.leftPos.equalTo(@0.1) 如果值被设置为大于0小于1则只在框架布局和线性布局里面有效表示左边距的值占用父视图宽度的10%
- **如果是MyLayoutPos类型的值则表示这个方向的值是相对于另外一个视图的边界值，比如：
-   v1.leftPos.equal(v2.rightPos) 表示视图v1的左边边界值等于v2的右边边界值
- **如果是NSArray类型的值则只能用在相对布局的centerXPos,centerYPos中，数组里面里面也必须是centerXPos，表示指定的视图数组在父视图中居中，比如： A.centerXPos.equalTo(@[B.centerXPos.offset(20)].offset(20)  表示A和B在父视图中居中往下偏移20，B在A的右边，间隔20。
- */
--(MyLayoutPos* (^)(id val))equalTo;
-
-@end
-
-
-/*布局尺寸对象*/
-@interface MyLayoutDime : NSObject
-
-//乘
--(MyLayoutDime* (^)(CGFloat val))multiply;
-
-//加,用这个和equalTo的数组功能可以实现均分子视图宽度以及间隔的设定。
--(MyLayoutDime* (^)(CGFloat val))add;
-
-
-//NSNumber, MyLayoutDime以及MyLayoutDime数组，数组的概念就是所有数组里面的子视图的尺寸平分父视图的尺寸。
--(MyLayoutDime* (^)(id val))equalTo;
-
-
-@end
 
 
 @interface UIView(MyLayoutExt)
@@ -144,7 +77,10 @@ typedef enum : unsigned char {
 
 
 //得到视图的评估rect，在调用前请先调用父布局的-(CGRect)estimateLayoutRect;
--(CGRect)estimateRect;
+-(CGRect)estimatedRect;
+
+//清除所有布局设置
+-(void)resetMyLayoutSetting;
 
 
 @end
@@ -154,8 +90,8 @@ typedef enum : unsigned char {
 /**画线用于布局的四周的线的绘制**/
 @interface MyBorderLineDraw : NSObject
 
-@property(nonatomic) UIColor *color;             //颜色
-@property(nonatomic) UIColor *insetColor;        //嵌入颜色，用于实现立体效果
+@property(nonatomic,strong) UIColor *color;             //颜色
+@property(nonatomic,strong) UIColor *insetColor;        //嵌入颜色，用于实现立体效果
 @property(nonatomic,assign) CGFloat thick;       //厚度,默认为1
 @property(nonatomic,assign) CGFloat headIndent;  //头部缩进
 @property(nonatomic, assign) CGFloat tailIndent;  //尾部缩进

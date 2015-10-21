@@ -34,10 +34,14 @@
 		186A55FD1B8C099600C96A3D /* MyRelativeLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A55F81B8C099600C96A3D /* MyRelativeLayout.m */; };
 		186A56541B8D90D900C96A3D /* MyTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A56531B8D90D900C96A3D /* MyTableLayout.m */; };
 		186A56571B8DB25F00C96A3D /* Test18ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A56561B8DB25F00C96A3D /* Test18ViewController.m */; };
+		187576E41BD55B6B00D83A27 /* image3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187576E31BD55B6B00D83A27 /* image3@2x.png */; };
 		187C6A4F1B47C94700A6949A /* Test13ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C6A4D1B47C94700A6949A /* Test13ViewController.m */; };
 		187D8CD11B8E0E7E006EFF62 /* Test19ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D8CD01B8E0E7E006EFF62 /* Test19ViewController.m */; };
 		1889AEAE1B4A69130001F871 /* Test14ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1889AEAD1B4A69130001F871 /* Test14ViewController.m */; };
 		18A2C4FC1B3A8C1A00FDFF5D /* Test12ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A2C4FB1B3A8C1A00FDFF5D /* Test12ViewController.m */; };
+		18A823741BD5D96100E52942 /* MyLayoutPos.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A823731BD5D96100E52942 /* MyLayoutPos.m */; };
+		18A823771BD5D97E00E52942 /* MyLayoutDime.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A823761BD5D97E00E52942 /* MyLayoutDime.m */; };
+		18A8237A1BD5D99300E52942 /* MyLayoutMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A823791BD5D99300E52942 /* MyLayoutMeasurement.m */; };
 		18E8084D1B3A5D170059C410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8084C1B3A5D170059C410 /* QuartzCore.framework */; };
 		18EFB5341BD4C1180044E36B /* image2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EFB5331BD4C1180044E36B /* image2@2x.png */; };
 		18EFB5361BD4C11F0044E36B /* image1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EFB5351BD4C11F0044E36B /* image1@2x.png */; };
@@ -112,6 +116,7 @@
 		186A56531B8D90D900C96A3D /* MyTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableLayout.m; sourceTree = "<group>"; };
 		186A56551B8DB25F00C96A3D /* Test18ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test18ViewController.h; sourceTree = "<group>"; };
 		186A56561B8DB25F00C96A3D /* Test18ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test18ViewController.m; sourceTree = "<group>"; };
+		187576E31BD55B6B00D83A27 /* image3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image3@2x.png"; sourceTree = "<group>"; };
 		187C6A4C1B47C94700A6949A /* Test13ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test13ViewController.h; sourceTree = "<group>"; };
 		187C6A4D1B47C94700A6949A /* Test13ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test13ViewController.m; sourceTree = "<group>"; };
 		187D8CCF1B8E0E7E006EFF62 /* Test19ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test19ViewController.h; sourceTree = "<group>"; };
@@ -120,6 +125,15 @@
 		1889AEAD1B4A69130001F871 /* Test14ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test14ViewController.m; sourceTree = "<group>"; };
 		18A2C4FA1B3A8C1A00FDFF5D /* Test12ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test12ViewController.h; sourceTree = "<group>"; };
 		18A2C4FB1B3A8C1A00FDFF5D /* Test12ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test12ViewController.m; sourceTree = "<group>"; };
+		18A823721BD5D96100E52942 /* MyLayoutPos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutPos.h; sourceTree = "<group>"; };
+		18A823731BD5D96100E52942 /* MyLayoutPos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutPos.m; sourceTree = "<group>"; };
+		18A823751BD5D97E00E52942 /* MyLayoutDime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDime.h; sourceTree = "<group>"; };
+		18A823761BD5D97E00E52942 /* MyLayoutDime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDime.m; sourceTree = "<group>"; };
+		18A823781BD5D99300E52942 /* MyLayoutMeasurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutMeasurement.h; sourceTree = "<group>"; };
+		18A823791BD5D99300E52942 /* MyLayoutMeasurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutMeasurement.m; sourceTree = "<group>"; };
+		18A8237B1BD5DA1700E52942 /* MyLayoutDef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutDef.h; sourceTree = "<group>"; };
+		18A8237C1BD5E0D400E52942 /* MyLayoutPosInner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutPosInner.h; sourceTree = "<group>"; };
+		18A8237D1BD5E1DC00E52942 /* MyLayoutDimeInner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutDimeInner.h; sourceTree = "<group>"; };
 		18E8084C1B3A5D170059C410 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		18EFB5331BD4C1180044E36B /* image2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image2@2x.png"; sourceTree = "<group>"; };
 		18EFB5351BD4C11F0044E36B /* image1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image1@2x.png"; sourceTree = "<group>"; };
@@ -223,6 +237,7 @@
 		184082901B2C46E8003F378B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				187576E31BD55B6B00D83A27 /* image3@2x.png */,
 				18EFB5391BD4C57C0044E36B /* head2@2x.png */,
 				18EFB53A1BD4C57C0044E36B /* head1@2x.png */,
 				18EFB5351BD4C11F0044E36B /* image1@2x.png */,
@@ -268,6 +283,15 @@
 				186A55F61B8C099600C96A3D /* MyMaker.m */,
 				186A56521B8D90D900C96A3D /* MyTableLayout.h */,
 				186A56531B8D90D900C96A3D /* MyTableLayout.m */,
+				18A823721BD5D96100E52942 /* MyLayoutPos.h */,
+				18A8237C1BD5E0D400E52942 /* MyLayoutPosInner.h */,
+				18A823731BD5D96100E52942 /* MyLayoutPos.m */,
+				18A823751BD5D97E00E52942 /* MyLayoutDime.h */,
+				18A8237D1BD5E1DC00E52942 /* MyLayoutDimeInner.h */,
+				18A823761BD5D97E00E52942 /* MyLayoutDime.m */,
+				18A823781BD5D99300E52942 /* MyLayoutMeasurement.h */,
+				18A823791BD5D99300E52942 /* MyLayoutMeasurement.m */,
+				18A8237B1BD5DA1700E52942 /* MyLayoutDef.h */,
 			);
 			path = MyLayout;
 			sourceTree = "<group>";
@@ -353,6 +377,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				187576E41BD55B6B00D83A27 /* image3@2x.png in Resources */,
 				183AB2ED1B36DB7E003E999F /* user@2x.png in Resources */,
 				18EFB53C1BD4C57C0044E36B /* head1@2x.png in Resources */,
 				18EFB53B1BD4C57C0044E36B /* head2@2x.png in Resources */,
@@ -377,6 +402,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18A8237A1BD5D99300E52942 /* MyLayoutMeasurement.m in Sources */,
 				183AB2E21B36B99A003E999F /* Test7ViewController.m in Sources */,
 				18A2C4FC1B3A8C1A00FDFF5D /* Test12ViewController.m in Sources */,
 				183AB2EB1B36CB75003E999F /* Test10ViewController.m in Sources */,
@@ -399,11 +425,13 @@
 				186A56541B8D90D900C96A3D /* MyTableLayout.m in Sources */,
 				186A56571B8DB25F00C96A3D /* Test18ViewController.m in Sources */,
 				186A55FA1B8C099600C96A3D /* MyLayoutBase.m in Sources */,
+				18A823771BD5D97E00E52942 /* MyLayoutDime.m in Sources */,
 				186A55FC1B8C099600C96A3D /* MyMaker.m in Sources */,
 				183AB2D01B3664DB003E999F /* Test1ViewController.m in Sources */,
 				183AB2DF1B36B503003E999F /* Test6ViewController.m in Sources */,
 				186A55F91B8C099600C96A3D /* MyFrameLayout.m in Sources */,
 				183AB2E81B36CB69003E999F /* Test9ViewController.m in Sources */,
+				18A823741BD5D96100E52942 /* MyLayoutPos.m in Sources */,
 				184082931B2C46E8003F378B /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -34,6 +34,9 @@
 #ifndef MyLinearLayoutDemo_MyLayout_h
 #define MyLinearLayoutDemo_MyLayout_h
 
+#import "MyLayoutDef.h"
+#import "MyLayoutPos.h"
+#import "MyLayoutDime.h"
 #import "MyLinearLayout.h"
 #import "MyFrameLayout.h"
 #import "MyRelativeLayout.h"

@@ -87,7 +87,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"线性布局-布局尺寸由子视图决定1";
+    self.title = @"线性布局-布局尺寸由子视图决定";
 }
 
 - (void)didReceiveMemoryWarning {

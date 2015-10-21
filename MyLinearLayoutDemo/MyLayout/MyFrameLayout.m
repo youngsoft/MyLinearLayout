@@ -68,7 +68,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
     
     if (subView.isFlexedHeight)
     {
-        CGSize sz = [subView sizeThatFits:CGSizeMake(pRect->size.width, pRect->size.height)];
+        CGSize sz = [subView sizeThatFits:CGSizeMake(pRect->size.width, 0)];
         pRect->size.height = sz.height;
     }
     
@@ -76,35 +76,46 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
     
 }
 
--(CGRect)estimateLayoutRectHelper:(CGSize)size isLayout:(BOOL)isLayout
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate
 {
-    CGRect selfRect = [super estimateLayoutRect:size];
+    
+    CGRect selfRect;
+    
+    if (isEstimate)
+        selfRect = self.absPos.frame;
+    else
+        selfRect = [super estimateLayoutRect:size];
+    
+    
     CGSize selfSize = selfRect.size;
     
     NSArray *sbs = self.subviews;
     for (UIView *v in sbs)
     {
         CGRect rect;
-        
-        if (isLayout)
-             rect = v.frame;
-        else
+    
+        if (!isEstimate)
         {
-            if ([v isKindOfClass:[MyLayoutBase class]])
+            rect  = v.frame;
+        }
+        
+        if ([v isKindOfClass:[MyLayoutBase class]])
+        {
+            if (isEstimate)
             {
                 MyLayoutBase *vl = (MyLayoutBase*)v;
-                rect = [vl estimateLayoutRect:CGSizeZero];
+                rect = [vl estimateLayoutRect:vl.absPos.frame.size];
             }
-            else
-                rect = v.frame;
         }
+
+
         
         //宽度等于另外视图的高度
         if (v.widthDime.dimeRelaVal != nil && v.widthDime.dimeRelaVal.dime == MGRAVITY_VERT_FILL)
         {
             CGRect otherRect = v.widthDime.dimeRelaVal.view.frame;
             [self calcSubView:v.widthDime.dimeRelaVal.view pRect:&otherRect inSize:selfSize];
-            rect.size.width = otherRect.size.height;
+            rect.size.width = [v.widthDime validMeasure:otherRect.size.height];
         }
         
         //高度等于另外视图的宽度
@@ -112,7 +123,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
         {
             CGRect otherRect = v.heightDime.dimeRelaVal.view.frame;
             [self calcSubView:v.heightDime.dimeRelaVal.view pRect:&otherRect inSize:selfSize];
-            rect.size.height = otherRect.size.width;
+            rect.size.height = [v.heightDime validMeasure:otherRect.size.width];
         }
         
         //计算自己的位置和高宽
@@ -125,15 +136,17 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
 
 }
 
+
 -(CGRect)estimateLayoutRect:(CGSize)size
 {
-    return [self estimateLayoutRectHelper:size isLayout:NO];
+    self.absPos.frame = [self calcLayoutRect:size isEstimate:NO];
+    return [self calcLayoutRect:CGSizeZero isEstimate:YES];
 }
 
 
 -(CGRect)doLayoutSubviews
 {
-    return [self estimateLayoutRectHelper:CGSizeZero isLayout:YES];
+    return [self calcLayoutRect:CGSizeZero isEstimate:NO];
 }
 
 @end

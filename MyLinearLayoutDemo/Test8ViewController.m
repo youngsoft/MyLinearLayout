@@ -18,42 +18,139 @@
 
 -(void)loadView
 {
-    [super loadView];
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    rootLayout.backgroundColor = [UIColor grayColor];
+    self.view = rootLayout;
     
-    //布局视图中不需要指定宽度，而是由最大子视图决定宽度
-    MyLinearLayout *ll = [[MyLinearLayout alloc] initWithFrame:CGRectMake(100, 100, 0,0)];
-    ll.orientation = LVORIENTATION_VERT;
-    ll.wrapContentWidth = YES;  //这句话表示宽度的尺寸由最大的子视图的宽度决定。
-    ll.backgroundColor = [UIColor grayColor];
+    MyLinearLayout *topLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    topLayout.backgroundColor = [UIColor redColor];
+    topLayout.wrapContentHeight = NO;
+    topLayout.gravity = MGRAVITY_HORZ_CENTER;  //里面所有子视图水平居中
+    topLayout.weight = 0.3;
+    topLayout.leftMargin = 0;
+    topLayout.rightMargin = 0;
+    [rootLayout addSubview:topLayout];
     
-    UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 90, 40)]; //这个子视图最宽 10+90+20 父视图的宽度为110
-    v1.backgroundColor = [UIColor redColor];
-    v1.leftMargin = 10;
-    v1.rightMargin = 20;
-    v1.topMargin = 4;
-    [ll addSubview:v1];
-    
-    UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 60)];
-    v2.backgroundColor = [UIColor greenColor];
-    v2.topMargin = 6;
-    [ll addSubview:v2];
+     //头像
+    UIImageView *headImage = [UIImageView new];
+    headImage.image = [UIImage imageNamed:@"head1"];
+    [headImage sizeToFit];
+    headImage.topMargin = 0.45;
+    headImage.bottomMargin = 0.05;
+    [topLayout addSubview:headImage];
     
     
-    UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 30)];
-    v3.backgroundColor = [UIColor blueColor];
-    v3.topMargin = 3;
-    v3.bottomMargin = 4;
-    [ll addSubview:v3];
+    UILabel *nickName = [UILabel new];
+    nickName.text = @"欧阳大哥";
+    nickName.font = [UIFont systemFontOfSize:14];
+    nickName.textColor = [UIColor whiteColor];
+    [nickName sizeToFit];
+    nickName.topMargin = 0.05;
+    nickName.bottomMargin = 0.45;
+    [topLayout addSubview:nickName];
     
-    [self.view addSubview:ll];
+    
+    UILabel *lastLoginTime = [UILabel new];
+    lastLoginTime.text = @"上次登录时间：2015年10月20日 16:11:11";
+    lastLoginTime.font = [UIFont systemFontOfSize:13];
+    lastLoginTime.textColor = [UIColor whiteColor];
+    [lastLoginTime sizeToFit];
+    lastLoginTime.bottomMargin = 1;  //固定在底部
+    [topLayout addSubview:lastLoginTime];
+    
+    
+    MyLinearLayout *bottomLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
+    bottomLayout.wrapContentHeight = NO;
+    bottomLayout.weight = 0.7;
+    bottomLayout.leftMargin = 0;
+    bottomLayout.rightMargin = 0;
+    bottomLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    [rootLayout addSubview:bottomLayout];
+    
+    UILabel *tipLabel = [UILabel new];
+    tipLabel.text = @"    这个DEMO通过设置weight和margin的值来实现,请尝试旋转屏幕或者切换不同尺寸的屏幕测试结果。";
+    tipLabel.font = [UIFont systemFontOfSize:14];
+    tipLabel.leftMargin = 0;
+    tipLabel.rightMargin = 0;
+    tipLabel.numberOfLines = 0;
+    tipLabel.flexedHeight = YES;
+    [bottomLayout addSubview:tipLabel];
+    
+    
+    MyLinearLayout *imageViewLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_HORZ];
+    imageViewLayout.gravity = MGRAVITY_VERT_FILL; //里面所有子视图的高度都跟自己相等。
+    imageViewLayout.weight = 0.8;
+    imageViewLayout.leftMargin = 0;
+    imageViewLayout.rightMargin = 0;
+    imageViewLayout.topMargin = 5;
+    [bottomLayout addSubview:imageViewLayout];
+    
+    
+    UIImageView *imageView1 = [UIImageView new];
+    imageView1.image = [UIImage imageNamed:@"image1"];
+    
+    imageView1.weight = 1.0;
+    [imageViewLayout addSubview:imageView1];
+    
+    
+    UIImageView *imageView2 = [UIImageView new];
+    imageView2.image = [UIImage imageNamed:@"image2"];
+    imageView2.weight = 1.0;
+    [imageViewLayout addSubview:imageView2];
     
 
+    UIImageView *imageView3 = [UIImageView new];
+    imageView3.image = [UIImage imageNamed:@"image3"];
+    imageView3.weight = 1.0;
+    [imageViewLayout addSubview:imageView3];
+    
+    
+    MyLinearLayout *functionLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_HORZ];
+    functionLayout.gravity = MGRAVITY_VERT_CENTER; //里面所有子视图都垂直居中。
+    functionLayout.weight = 0.2;
+    functionLayout.leftMargin = 0;
+    functionLayout.rightMargin = 0;
+    functionLayout.topMargin = 5;
+    [bottomLayout addSubview:functionLayout];
+    
+    UILabel *leftFunctionLabel = [UILabel new];
+    leftFunctionLabel.backgroundColor = [UIColor blueColor];
+    leftFunctionLabel.textAlignment = NSTextAlignmentCenter;
+    leftFunctionLabel.text = @"添   加";
+    leftFunctionLabel.leftMargin = 0.1;
+    leftFunctionLabel.rightMargin = 0.1;
+    leftFunctionLabel.weight = 0.3;
+    leftFunctionLabel.heightDime.equalTo(functionLayout.heightDime).multiply(0.6);
+    [functionLayout addSubview:leftFunctionLabel];
+    
+    
+    UILabel *rightFunctionLabel = [UILabel new];
+    rightFunctionLabel.backgroundColor = [UIColor redColor];
+    rightFunctionLabel.textAlignment = NSTextAlignmentCenter;
+    rightFunctionLabel.text = @"删   除";
+    rightFunctionLabel.leftMargin = 0.1;
+    rightFunctionLabel.rightMargin = 0.1;
+    rightFunctionLabel.weight = 0.3;
+    rightFunctionLabel.heightDime.equalTo(functionLayout.heightDime).multiply(0.6);
+    [functionLayout addSubview:rightFunctionLabel];
+
+
+    //申明文字
+    UILabel *copyrightLabel = [UILabel new];
+    copyrightLabel.text = @"本界面库遵从MIT协议";
+    copyrightLabel.font = [UIFont systemFontOfSize:13];
+    [copyrightLabel sizeToFit];
+    copyrightLabel.bottomMargin = 5;
+    copyrightLabel.centerXOffset = 0;
+    [rootLayout addSubview:copyrightLabel];
+    
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"布局视图尺寸由子视图决定";
+    self.title = @"完美适配";
 }
 
 - (void)didReceiveMemoryWarning {

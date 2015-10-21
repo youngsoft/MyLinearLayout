@@ -25,6 +25,8 @@
 -(MyMaker*)centerX;
 -(MyMaker*)centerY;
 
+-(MyMaker*)sizeToFit;
+
 
 //布局独有
 -(MyMaker*)topPadding;

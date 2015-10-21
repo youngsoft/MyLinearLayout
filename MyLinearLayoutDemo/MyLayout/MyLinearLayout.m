@@ -94,13 +94,27 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 {
     if (_orientation == LVORIENTATION_VERT)
     {
-        [self averageSubviewsForVert:centered];
+        [self averageSubviewsForVert:centered withMargin:CGFLOAT_MAX];
     }
     else
     {
-        [self averageSubviewsForHorz:centered];
+        [self averageSubviewsForHorz:centered withMargin:CGFLOAT_MAX];
     }
 }
+
+-(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin
+{
+    if (_orientation == LVORIENTATION_VERT)
+    {
+        [self averageSubviewsForVert:centered withMargin:margin];
+    }
+    else
+    {
+        [self averageSubviewsForHorz:centered withMargin:margin];
+    }
+
+}
+
 
 -(void)averageMargin:(BOOL)centered
 {
@@ -177,7 +191,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     return newSelfRect;
 }
 
--(CGRect)layoutSubviewsForVert:(CGRect)newSelfRect isLayout:(BOOL)isLayout
+-(CGRect)layoutSubviewsForVert:(CGRect)newSelfRect
 {
     
 
@@ -339,7 +353,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     return newSelfRect;
 }
 
--(CGRect)layoutSubviewsForHorz:(CGRect)newSelfRect isLayout:(BOOL)isLayout
+-(CGRect)layoutSubviewsForHorz:(CGRect)newSelfRect
 {
     
     NSArray *sbs = self.subviews;
@@ -453,14 +467,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             CGSize sz = [v sizeThatFits:CGSizeMake(rect.size.width, rect.size.height)];
             rect.size.height = sz.height;
         }
-        
-        //如果是在评估状态则重新计算自己的位置。
-        if (!isLayout && [v isKindOfClass:[MyLayoutBase class]])
-        {
-            MyLayoutBase *vl = (MyLayoutBase*)v;
-            rect = [vl estimateLayoutRect:rect.size];
-        }
-        
+    
         //计算最高的高度。
         if (self.wrapContentHeight && !v.heightDime.isMatchParent)
         {
@@ -531,7 +538,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 }
 
 
--(CGRect)layoutSubviewsForVertGravity:(CGRect)newSelfRect isLayout:(BOOL)isLayout
+-(CGRect)layoutSubviewsForVertGravity:(CGRect)newSelfRect
 {
     //计算子视图。
     NSArray *sbs = self.subviews;
@@ -659,7 +666,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     
 }
 
--(CGRect)layoutSubviewsForHorzGravity:(CGRect)newSelfRect isLayout:(BOOL)isLayout
+-(CGRect)layoutSubviewsForHorzGravity:(CGRect)newSelfRect
 {
     //计算子视图。
     NSArray *sbs = self.subviews;
@@ -699,12 +706,6 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             rect.size.height = sz.height;
         }
         
-        //如果是在评估状态则重新计算自己的位置。
-        if (!isLayout && [v isKindOfClass:[MyLayoutBase class]])
-        {
-            MyLayoutBase *vl = (MyLayoutBase*)v;
-            rect = [vl estimateLayoutRect:rect.size];
-        }
 
         //计算以子视图为大小的情况
         if (self.wrapContentHeight && !v.heightDime.isMatchParent)
@@ -807,29 +808,40 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 }
 
 
--(CGRect)estimateLayoutRectHelper:(CGSize)size isLayout:(BOOL)isLayout
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate
 {
-    CGRect newSelfRect = [super estimateLayoutRect:size];
+    CGRect newSelfRect;
     
-    for (UIView *sbv in self.subviews)
-    {
-        sbv.absPos.frame = sbv.frame;
-    }
+    if (isEstimate)
+        newSelfRect = self.absPos.frame;
+    else
+        newSelfRect = [super estimateLayoutRect:size];
+    
     
     if (_orientation == LVORIENTATION_VERT)
     {
         
         //如果是垂直的布局，但是子视图设置了左右的边距或者设置了宽度则wrapContentWidth应该设置为NO
-        for (UIView *v in self.subviews)
+        for (UIView *sbv in self.subviews)
         {
-            if ([v isKindOfClass:[MyLayoutBase class]])
+            if (!isEstimate)
             {
-                MyLayoutBase *vl = (MyLayoutBase*)v;
-                if (vl.wrapContentWidth)
+                sbv.absPos.frame = sbv.frame;
+            }
+            
+            if ([sbv isKindOfClass:[MyLayoutBase class]])
+            {
+                MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
+                if (sbvl.wrapContentWidth)
                 {
                     //只要同时设置了左右边距或者设置了宽度则应该把wrapContentWidth置为NO
-                    if ((vl.leftPos.posVal != nil && vl.rightPos.posVal != nil) || vl.widthDime.dimeVal != nil)
-                        vl.wrapContentWidth = NO;
+                    if ((sbvl.leftPos.posVal != nil && sbvl.rightPos.posVal != nil) || sbvl.widthDime.dimeVal != nil)
+                        [sbvl setWrapContentWidthNoLayout:NO];
+                }
+                
+                if (isEstimate)
+                {
+                    [sbvl estimateLayoutRect:sbvl.absPos.frame.size];
                 }
             }
             
@@ -837,25 +849,33 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         
         
         if ((_gravity & MGRAVITY_HORZ_MASK) != MGRAVITY_NONE)
-        {
-            newSelfRect = [self layoutSubviewsForVertGravity:newSelfRect isLayout:isLayout];
-        }
+            newSelfRect = [self layoutSubviewsForVertGravity:newSelfRect];
         else
-            newSelfRect = [self layoutSubviewsForVert:newSelfRect isLayout:isLayout];
+            newSelfRect = [self layoutSubviewsForVert:newSelfRect];
     }
     else
     {
         //如果是水平的布局，但是子视图设置了上下的边距或者设置了高度则wrapContentWidth应该设置为NO
-        for (UIView *v in self.subviews)
+        for (UIView *sbv in self.subviews)
         {
-            if ([v isKindOfClass:[MyLayoutBase class]])
+            if (!isEstimate)
             {
-                MyLayoutBase *vl = (MyLayoutBase*)v;
-                if (vl.wrapContentHeight)
+                sbv.absPos.frame = sbv.frame;
+            }
+            
+            if ([sbv isKindOfClass:[MyLayoutBase class]])
+            {
+                MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
+                if (sbvl.wrapContentHeight)
                 {
                     //只要同时设置了左右边距或者设置了宽度则应该把wrapContentWidth置为NO
-                    if ((vl.topPos.posVal != nil && vl.bottomPos.posVal != nil) || vl.heightDime.dimeVal != nil)
-                        vl.wrapContentHeight = NO;
+                    if ((sbvl.topPos.posVal != nil && sbvl.bottomPos.posVal != nil) || sbvl.heightDime.dimeVal != nil)
+                        [sbvl setWrapContentHeightNoLayout:NO];
+                }
+                
+                if (isEstimate)
+                {
+                    [sbvl estimateLayoutRect:sbvl.absPos.frame.size];
                 }
             }
             
@@ -863,27 +883,27 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         
         
         if ((_gravity & MGRAVITY_VERT_MASK) != MGRAVITY_NONE)
-        {
-            newSelfRect = [self layoutSubviewsForHorzGravity:newSelfRect isLayout:isLayout];
-        }
+            newSelfRect = [self layoutSubviewsForHorzGravity:newSelfRect];
         else
-            newSelfRect = [self layoutSubviewsForHorz:newSelfRect isLayout:isLayout];
+            newSelfRect = [self layoutSubviewsForHorz:newSelfRect];
         
     }
     
     return newSelfRect;
-    
+   
 }
 
 
 -(CGRect)estimateLayoutRect:(CGSize)size
 {
-    return [self estimateLayoutRectHelper:size isLayout:NO];
+    self.absPos.frame = [self calcLayoutRect:size isEstimate:NO];
+    return [self calcLayoutRect:CGSizeZero isEstimate:YES];
 }
+
 
 -(CGRect)doLayoutSubviews
 {
-    return [self estimateLayoutRectHelper:CGSizeMake(0, 0) isLayout:YES];
+    return [self calcLayoutRect:CGSizeZero isEstimate:NO];
 }
 
 #pragma mark -- Private Method
@@ -923,7 +943,7 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 }
 
--(void)averageSubviewsForVert:(BOOL)centered
+-(void)averageSubviewsForVert:(BOOL)centered withMargin:(CGFloat)margin
 {
     NSArray *arr = self.subviews;
     
@@ -938,28 +958,43 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     }
     
     //如果居中和不居中则拆分出来的片段是不一样的。
-    CGFloat fragments = centered ? sbs.count * 2 + 1 : sbs.count * 2 - 1;
-    CGFloat scale = 1 / fragments;
+    
+    CGFloat scale;
+    CGFloat scale2;
+    
+    if (margin == CGFLOAT_MAX)
+    {
+       CGFloat fragments = centered ? sbs.count * 2 + 1 : sbs.count * 2 - 1;
+        scale = 1 / fragments;
+        scale2 = scale;
+
+    }
+    else
+    {
+        scale = 1.0;
+        scale2 = margin;
+    }
+    
     
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
         
         v.bottomPos.equalTo(@0);
-        v.topPos.equalTo(@(scale));
+        v.topPos.equalTo(@(scale2));
         v.weight = scale;
         
         if (i == 0 && !centered)
             v.topPos.equalTo(@0);
         
         if (i == sbs.count - 1 && centered)
-            v.bottomPos.equalTo(@(scale));
+            v.bottomPos.equalTo(@(scale2));
     }
     
     [self setNeedsLayout];
 }
 
--(void)averageSubviewsForHorz:(BOOL)centered
+-(void)averageSubviewsForHorz:(BOOL)centered withMargin:(CGFloat)margin
 {
     NSArray *arr = self.subviews;
     
@@ -974,21 +1009,35 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     }
 
     //如果居中和不居中则拆分出来的片段是不一样的。
-    CGFloat fragments = centered ? sbs.count * 2 + 1 : sbs.count * 2 - 1;
-    CGFloat scale = 1 / fragments;
+    CGFloat scale;
+    CGFloat scale2;
+    
+    if (margin == CGFLOAT_MAX)
+    {
+        CGFloat fragments = centered ? sbs.count * 2 + 1 : sbs.count * 2 - 1;
+        scale = 1 / fragments;
+        scale2 = scale;
+        
+    }
+    else
+    {
+        scale = 1.0;
+        scale2 = margin;
+    }
+
     
     for (int i = 0; i < sbs.count; i++)
     {
         UIView *v = [sbs objectAtIndex:i];
         
-        v.leftPos.equalTo(@(scale));
+        v.leftPos.equalTo(@(scale2));
         v.weight = scale;
         
         if (i == 0 && !centered)
             v.leftPos.equalTo(@0);
         
         if (i == sbs.count - 1 && centered)
-            v.rightPos.equalTo(@(scale));
+            v.rightPos.equalTo(@(scale2));
     }
     
     [self setNeedsLayout];

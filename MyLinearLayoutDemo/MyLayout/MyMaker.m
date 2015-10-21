@@ -157,6 +157,17 @@
     return [self addMethod:@"centerYPos"];
 }
 
+-(MyMaker*)sizeToFit
+{
+    for (UIView *myView in _myViews)
+    {
+        [myView sizeToFit];
+    }
+    
+    return self;
+}
+
+
 -(MyMaker*)marginGravity
 {
     return [self addMethod:@"marginGravity"];

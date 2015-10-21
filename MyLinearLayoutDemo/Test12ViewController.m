@@ -21,6 +21,47 @@
 {
     [super loadView];
     
+    /*
+     在一些应用的关于界面，以及用户个人信息的展示和修改界面我们通常都会用UITableView来实现，这些UITableView的特点是UITableViewCell的数量是固定的
+     而且每个UITableViewCell的布局样式可能有很大的不同，而且通常都会有分组的情况。如果我们采用传统的UITableView来实现这些功能，将会有很多的缺陷：
+      
+     1。你的DataSourceDelegate 的实现如果是数量，cell, 还是选择都会产生一个很大的switch的分支来处理不同的情况，如果有分组则更加复杂
+     2。不同的Cell难以实现不同样式的分割线，不同的背景设置。
+     3。如果Cell中需要有输入的UITextField时，当改变文本框的值时难以更新其绑定的属性。
+     4。因为Cell中有复用机制，所以Cell中的某些子视图的状态也需要单独的进行保存，比如高亮，enable等等。这样将增加程序的复杂性
+     5。每个Cell中的内容的高度可能不一样，难以动态计算Cell的高度。
+     
+     因此综上所述，我们一般不建议这些界面通过UITableView来实现，而是采用UIScrollView加MyLinearLayout来实现，因为MyLinearLayout本身就支持事件的单击触摸和
+     背景的设置以及分割线的设置等功能，下面的例子将采用线性布局实现一个关于的界面。
+     
+    */
+    
+    /*
+    //顶部个人信息的头像 头像 姓名
+    
+    //消息通知分组
+       声音     》
+       通知显示消息内容    开关
+         退出后仍接受消息通知     开关， 这个开关受那个开关控制
+       夜间防骚扰模式   开关
+    打开后你的系统将在23：00-6:00之间屏蔽接受任何消息
+    
+    
+    
+    //聊天记录分组
+       清空消息列表
+       清空所有聊天记录
+       清空缓存数据
+    
+    //隐私
+    联系人隐私  》
+    设备锁、账号安全   图片  未开启 》
+    设备密码：  右边文本框。
+    
+    
+    //底部退出登录按钮
+    */
+    
     self.view = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     self.view.backgroundColor = [UIColor redColor];
     
@@ -67,7 +108,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"边框的线以及布局动画,触摸事件";
+    self.title = @"UITableView静态界面的替换方案";
     
     
 }

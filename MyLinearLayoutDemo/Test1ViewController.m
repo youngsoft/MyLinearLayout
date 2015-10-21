@@ -30,7 +30,6 @@
     v1.width = 200;
     v1.height = 25;
     
-    
    /*
     您也可以采用如下的语法来专门设置布局属性，详情请参考MyMaker
     [v1 makeLayout:^(MyMaker *make) {
@@ -38,7 +37,7 @@
         make.top.equalTo(@10);
         make.left.equalTo(@10);
         make.width.equalTo(@200);
-        make.height.equalTo(@30);
+        make.height.equalTo(@25);
     }];
     */
     
@@ -55,7 +54,16 @@
     v2.centerXOffset = 0; //水平居中,如果不等于0则会产生偏移
     v2.width = 200;
     v2.height = 25;
-
+    
+  /*  [v2 makeLayout:^(MyMaker *make) {
+        
+        make.top.equalTo(@10);
+        make.centerX.equalTo(@0);
+        make.width.equalTo(@200);
+        make.height.equalTo(@25);
+        
+    }];
+  */
     
     UILabel *v3 = [UILabel new];
     v3.text = @"右边边距";
@@ -68,7 +76,16 @@
     v3.rightMargin = 10; //右边边距10
     v3.width = 200;
     v3.height = 25;
-
+    
+   /* [v3 makeLayout:^(MyMaker *make) {
+        
+        make.top.equalTo(@10);
+        make.right.equalTo(@10);
+        make.width.equalTo(@200);
+        make.width.equalTo(@25);
+        
+    }];
+  */
     
     
     UILabel *v4 = [UILabel new];
@@ -83,6 +100,11 @@
     v4.leftMargin = 10;
     v4.rightMargin = 10; //两边边距为10,如果设置了两边边距则不需要指定宽度了
     v4.height = 25;
+    
+   /* [v4 makeLayout:^(MyMaker *make) {
+        make.margin.equalTo(@10);
+        make.height.equalTo(@25);
+    }]; */
     
 }
 
@@ -101,6 +123,15 @@
     v1.width = 60;
     v1.height = 60;
     
+    /*
+    [v1 makeLayout:^(MyMaker *make) {
+        make.left.equalTo(@10);
+        make.top.equalTo(@10);
+        make.width.equalTo(@60);
+        make.height.equalTo(@60);
+    }];
+    */
+    
     
     UILabel *v2 = [UILabel new];
     v2.text = @"垂直居中";
@@ -113,6 +144,15 @@
     v2.centerYOffset = 0; //垂直居中，如果不等于0则会产生偏移
     v2.width = 60;
     v2.height = 60;
+    
+    
+    /*[v2 makeLayout:^(MyMaker *make) {
+        make.left.equalTo(@10);
+        make.centerY.equalTo(@0);
+        make.width.equalTo(@60);
+        make.height.equalTo(@60);
+    }];
+    */
     
     
     UILabel *v3 = [UILabel new];
@@ -128,6 +168,17 @@
     v3.width = 60;
     v3.height = 60;
     
+    /*
+    [v3 makeLayout:^(MyMaker *make) {
+       
+        make.left.equalTo(@10);
+        make.bottom.equalTo(@10);
+        make.right.equalTo(@5);
+        make.width.equalTo(@60);
+        make.height.equalTo(@60);
+    }];
+    */
+    
     
     UILabel *v4 = [UILabel new];
     v4.text = @"上下边距";
@@ -141,6 +192,12 @@
     v4.topMargin = 10;
     v4.bottomMargin = 10; //两边边距为10,如果设置了则不需要指定高度了。
     v4.width = 60;
+    
+    /*
+    [v4 makeLayout:^(MyMaker *make) {
+        make.margin.equalTo(@10);
+        make.width.equalTo(@60);
+    }];*/
 }
 
 
@@ -150,17 +207,42 @@
     //如果布局作为视图控制器的视图则请设置wrapContentWidth和wrapContentHeight都为NO,
     rootLayout.wrapContentHeight = NO;
     rootLayout.wrapContentWidth = NO;
+    
+   /* [rootLayout makeLayout:^(MyMaker *make) {
+        make.wrapContentHeight.equalTo(@NO);
+        make.wrapContentWidth.equalTo(@NO);
+    }];
+    */
+    
     self.view = rootLayout;
     
     UILabel *vertTitle = [UILabel new];
     vertTitle.text = @"垂直布局(从上到下)";
+    
     [vertTitle sizeToFit];
     vertTitle.centerXOffset = 0;  //水平居中
+    
+   /* [vertTitle makeLayout:^(MyMaker *make) {
+        [make sizeToFit];
+        make.centerX.equalTo(@0);
+    }];
+    */
+    
     [rootLayout addSubview:vertTitle];
     
     MyLinearLayout *vertLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_VERT];
     vertLayout.backgroundColor = [UIColor lightGrayColor];
+    
     vertLayout.leftMargin = vertLayout.rightMargin = 0;  //宽度和父视图等宽
+    
+  /*  [vertLayout makeLayout:^(MyMaker *make) {
+        
+        make.left.equalTo(@0);
+        make.right.equalTo(@0);
+        
+    }];
+    */
+    
     [rootLayout addSubview:vertLayout];
     [self addVertSubView:vertLayout];
     
@@ -168,13 +250,32 @@
     
     UILabel *horzTitle = [UILabel new];
     horzTitle.text = @"水平布局(从左到右)";
+   
+    
     [horzTitle sizeToFit];
     horzTitle.centerXOffset = 0;  //水平居中
+    
+   /* [horzTitle makeLayout:^(MyMaker *make) {
+        
+        [make sizeToFit];
+        make.centerX.equalTo(@0);
+        
+    }];*/
+    
     [rootLayout addSubview:horzTitle];
     
     MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:LVORIENTATION_HORZ];
     horzLayout.backgroundColor = [UIColor darkGrayColor];
+    
     horzLayout.weight = 1.0;                            //高度占用父视图的剩余高度
+   
+    /*
+    [horzLayout makeLayout:^(MyMaker *make) {
+        
+        make.weight.equalTo(@1.0);
+        
+    }];*/
+    
     [rootLayout addSubview:horzLayout];
     [self addHorzSubView:horzLayout];
     
