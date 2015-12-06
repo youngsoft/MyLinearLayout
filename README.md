@@ -1,48 +1,55 @@
-# MyLinearLayout
-     一套功能强大的iOS布局库，他不是在自动布局的基础上进行的封装，而是一套原生的基于对frame设置的封装，因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了android的布局原理，而比android的布局库以及iOS的自动布局库功能更加强大，其分别提供了：线性布局MyLinearLayout、相对布局MyRelativeLayout、框架布局MyFrameLayout、表格布局MyTableLayout、流式布局MyFlowLayout五个布局类，各种类应用的场景不大一样，具体的使用方法请看Demo中的演示代码以及到我的CSDN主页中了解：
+# MyLinearLayout1.1
+
+## 功能介绍
+
+   一套功能强大的iOS布局库，他不是在自动布局的基础上进行的封装，而是一套原生的基于对frame设置的封装，因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了android的布局和iOS自动布局以及SizeClass的功能，而比android的布局库以及iOS的自动布局库功能更加强大，其分别提供了：**线性布局MyLinearLayout**、**相对布局MyRelativeLayout**、**框架布局MyFrameLayout**、**表格布局MyTableLayout**、**流式布局MyFlowLayout**五个布局类，各种类应用的场景不大一样，具体的使用方法请看Demo中的演示代码以及到我的CSDN主页中了解：
 
 [http://blog.csdn.net/yangtiang/article/details/46483999](http://blog.csdn.net/yangtiang/article/details/46483999)   线性布局
 [http://blog.csdn.net/yangtiang/article/details/46795231](http://blog.csdn.net/yangtiang/article/details/46795231)   相对布局
 [http://blog.csdn.net/yangtiang/article/details/46492083](http://blog.csdn.net/yangtiang/article/details/46492083)   框架布局
 [http://blog.csdn.net/yangtiang/article/details/48011431](http://blog.csdn.net/yangtiang/article/details/48011431) 表格布局
 
+#### 线性布局MyLinearLayout
+    线性布局分为垂直线性布局和水平线性布局，其中垂直线性布局中的子视图总是按照添加的顺序依次从上到下依次排列，而水平线性布局中的子视图则按照添加的顺序依次从左到右进行排列。这种布局中的子视图之间不需要设置任何依赖关系，因此是最简单也是最常见的一种布局方式。
 
+#### 相对布局MyRelativeLayout
+    相对布局就是实现了iOS的自动布局功能的一种布局方式，但是比自动布局功能更加强大，更加容易使用。    相对布局中的子视图必须要设置视图与视图之间的依赖关系以及视图与布局视图的依赖关系，也就是需要设置自身上下左右的依赖关系以及高度和宽度的依赖关系。对于一些不规则的布局则最好使用相对布局。
+
+#### 框架布局MyFrameLayout
+    框架布局，故名思议要求布局必须设定明确的高度和宽度值，而且里面的子视图只能布局在框架布局的上中下以及左中右的某个具体的位置上，框架布局支持子视图之间的重叠排列。因此框架布局一般是用来做根布局使用。
+
+#### 表格布局MyTableLayout
+    表格布局，是一种增强的线性布局，也分为垂直表格和水平表格，表格布局必须要先添加一行，然后再在当前行上单元格的添加，表格布局的风格类似于HTML页面的表格实现机制，表格布局用于那些有规律的子视图的排列，以及可以用于实现瀑布流的效果。
+
+#### 流式布局MyFlowLayout
+	流式布局是一种限定了行数或者列数的布局，同样分为垂直流式布局和水平流式布局，对于垂直流式布局来说，需要设定每行的子视图数量，设定后子视图依次从左到右，从上到下依次排列，流式布局一般用于子视图有规律的排列。
+
+## 演示效果图
 
 ![演示图](http://cdn.cocimg.com/bbs/attachment/postcate/topic/16/319791_189_96f0143980087354c17bbc75c8a37.gif)
 
 
-版本V1.1更新功能如下：
+## V1.1版本新功能
 
-1.增加了流式布局
+1. 增加了新布局流式布局MyFlowLayout。     
+2. 线性布局添加了gravity停靠设置的屏幕水平居中和屏幕垂直居中的功能。  
+3. 添加了设置布局视图背景图片backgroundImage和高亮背景图片highlightedBackgroundImage的功能。
+4. 添加了视图偏移约束的最大max最小值min限制，以及尺寸约束时的最大max最小值min限制。
+5. 添加了布局尺寸评估方法estimateLayoutRect以及视图的评估rect值的功能。
+6. 添加了框架布局中的子视图的高度和宽度设置功能，可以让高度或者宽度设置为父视图的高度或者宽度的缩放比例，可以设置高度和宽度相等等功能。
+7. 添加了线性布局均分视图设置边距subviewMargin的功能。
+8. 添加了在布局中让某个子视图不参与布局的功能,只要将useFrame设置为NO即可。
+9. 添加了布局视图设置按下事件setTouchDownTarget，按下被取消setTouchCancelTarget的事件功能。
+10. 添加了线性布局均分时的间距值设置功能averageSubviews。
+11. 添加了清除视图布局设定的方法resetMyLayoutSetting。
 
-2.修改了布局内添加UIScrollView时没有橡皮筋效果
+## BUG修复
 
-3.添加了MGravity中的屏幕水平居中和屏幕垂直居中的功能。
+1. 修复了布局占用大量内存的问题。   
+2. 修改了布局内添加UIScrollView时橡皮筋效果无效的问题。  
+3. 优化了一些约束冲突的解决。
+4. 优化了布局视图添加到非布局视图时的位置和尺寸调整功能。
+5. 修正了子视图恢复隐藏时的界面不重绘的问题。
+6. 修正了布局边界线的缩进显示的问题。
+7. 修正UITableView，UICollectionView下添加布局可能会造成的问题。
 
-4.添加了布局视图背景图片的设置功能。
-
-5.添加了视图偏移约束的最大最小值限制，以及尺寸约束时的最大最小值限制
-
-6.添加了布局尺寸评估以及视图的评估rect值的功能。
-
-7.添加了框架布局中的子视图的高度和宽度设置功能。
-
-8.优化了一些约束冲突的解决。
-
-9.优化了布局视图添加到非布局视图时的位置和尺寸调整功能。
-
-10.添加了在布局中让某个子视图不参与布局的功能。
-
-11.添加了线性布局均分视图设置边距的功能。
-
-12.修正了子视图恢复隐藏时的界面不重绘的问题。
-
-13.修正了布局边界线的缩进显示的问题。
-
-14.修正UITableView，UICollectionView下添加布局可能会造成的问题。
-
-15.修正了布局占用大量内存的问题。
-
-16.添加了线性布局中设置视图之间间距的功能
-
-17.添加了布局视图设置按下事件，按下被取消的事件。
