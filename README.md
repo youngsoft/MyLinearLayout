@@ -26,7 +26,7 @@
 
 ## 演示效果图
 
-![演示图](http://cdn.cocimg.com/bbs/attachment/postcate/topic/16/319791_189_96f0143980087354c17bbc75c8a37.gif)
+![演示图](https://github.com/youngsoft/MyLinearLayout/blob/master/mylayout.gif)
 
 
 ## V1.1版本新功能
