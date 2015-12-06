@@ -12,30 +12,16 @@
 
 @implementation UIView(LinearLayoutExt)
 
-const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
-
-
 -(CGFloat)weight
 {
-    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_WEIGHT);
-    if (num == nil)
-        return 0;
-    return num.floatValue;
+    return self.myLayoutSizeClass.weight;
 }
 
 -(void)setWeight:(CGFloat)weight
-{
-    if (weight < 0)
-        return;
-    
-    CGFloat oldVal = [self weight];
-    if (oldVal != weight)
-    {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_WEIGHT, [NSNumber numberWithFloat:weight], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
-    }
+{    
+    self.myLayoutSizeClass.weight = weight;
+    if (self.superview != nil)
+        [self.superview setNeedsLayout];
 }
 
 
@@ -144,8 +130,12 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 {
     [super willMoveToSuperview:newSuperview];
     
-    if ([newSuperview isKindOfClass:[UIScrollView class]])
-        self.adjustScrollViewContentSize = YES;
+    if (newSuperview != nil)
+    {
+        //不支持放在UITableView和UICollectionView下,因为有肯能是tableheaderView或者section下。
+        if ([newSuperview isKindOfClass:[UIScrollView class]] && ![newSuperview isKindOfClass:[UITableView class]] && ![newSuperview isKindOfClass:[UICollectionView class]])
+            self.adjustScrollViewContentSize = YES;
+    }
 }
 
 
@@ -158,34 +148,27 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     //计算出最宽的子视图所占用的宽度
     if (self.wrapContentWidth)
     {
-        for (int i = 0; i < sbs.count; i++)
+        for (UIView *sbv in sbs)
         {
-            UIView *v = [sbs objectAtIndex:i];
-            if (v.isHidden && self.hideSubviewReLayout)
-                continue;
-            
-            if (!v.widthDime.isMatchParent)
+            if (!sbv.widthDime.isMatchParent)
             {
-                CGFloat leftMargin =  v.leftPos.margin;
-                CGFloat rightMargin = v.rightPos.margin;
-                CGFloat centerMargin = v.centerXPos.margin;
-                
-                CGFloat vWidth = v.absPos.width;
-                if (v.widthDime.dimeNumVal != nil)
-                    vWidth = v.widthDime.measure;
+               
+                CGFloat vWidth =  [sbv.widthDime validMeasure:sbv.absPos.width];
+                if (sbv.widthDime.dimeNumVal != nil)
+                    vWidth = sbv.widthDime.measure;
                 
                 //左边 + 中间偏移+ 宽度 + 右边
                 maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth
                                          subviewMeasure:vWidth
-                                             headMargin:leftMargin
-                                           centerMargin:centerMargin
-                                             tailMargin:rightMargin];
+                                             headPos:sbv.leftPos
+                                           centerPos:sbv.centerXPos
+                                             tailPos:sbv.rightPos];
                 
                 
             }
         }
         
-        newSelfRect.size.width = maxSubviewWidth + self.padding.left + self.padding.right;
+        newSelfRect.size.width = maxSubviewWidth + self.leftPadding + self.rightPadding;
     }
     
     return newSelfRect;
@@ -194,8 +177,16 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 -(CGRect)layoutSubviewsForVert:(CGRect)newSelfRect
 {
     
-
-    NSArray *sbs = self.subviews;
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
+    {
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+            continue;
+        
+        [sbs addObject:sbv];
+        
+    }
+    
     
     CGFloat fixedHeight = 0;   //计算固定部分的高度
     CGFloat floatingHeight = 0; //浮动的高度。
@@ -203,30 +194,53 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     newSelfRect = [self AdjustSelfWidth:sbs newSelfRect:newSelfRect];   //调整自身的宽度
    
     //调整子视图的宽度。并根据情况调整子视图的高度。并计算出固定高度和浮动高度。
-    for (int i = 0; i < sbs.count; i++)
+    for (UIView *sbv in sbs)
     {
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
+       
+        CGRect rect = sbv.absPos.frame;
         
-        CGRect rect = v.absPos.frame;
-        CGFloat leftMargin =  v.leftPos.margin;
-        CGFloat rightMargin = v.rightPos.margin;
-        CGFloat centerMargin = v.centerXPos.margin;
-        CGFloat topMargin = v.topPos.margin;
-        CGFloat bottomMargin = v.bottomPos.margin;
-        BOOL isFlexedHeight = v.isFlexedHeight && v.weight == 0;
+        CGFloat lm = sbv.leftPos.posNumVal.doubleValue;
+        CGFloat rm = sbv.rightPos.posNumVal.doubleValue;
+        CGFloat cxm = sbv.centerXPos.posNumVal.doubleValue;
+        CGFloat tm = sbv.topPos.posNumVal.doubleValue;
+        CGFloat bm = sbv.bottomPos.posNumVal.doubleValue;
         
         
-        if (v.widthDime.dimeNumVal != nil)
-            rect.size.width = v.widthDime.measure;
-        if (v.heightDime.dimeNumVal != nil)
-            rect.size.height = v.heightDime.measure;
+        BOOL isFlexedHeight = sbv.isFlexedHeight && sbv.weight == 0;
         
         
+        //控制最大最小尺寸限制
+        rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
+        rect.size.width = [sbv.widthDime validMeasure:rect.size.width];
+        
+        if (sbv.widthDime.dimeNumVal != nil)
+            rect.size.width = sbv.widthDime.measure;
+        if (sbv.heightDime.dimeNumVal != nil)
+            rect.size.height = sbv.heightDime.measure;
+        
+
+
         //调整子视图的宽度，如果子视图为matchParent的话
-        if (v.widthDime.isMatchParent || (v.leftPos.posVal != nil && v.rightPos.posVal != nil))
-            [self calcMatchParentWidth:v.widthDime selfWidth:newSelfRect.size.width leftMargin:leftMargin  centerMargin:centerMargin rightMargin:rightMargin leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect];
+        if (sbv.widthDime.isMatchParent || (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil))
+        {
+            
+            CGFloat vTotalWidth = (newSelfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            
+            if ([self isRelativeMargin:lm])
+                lm = vTotalWidth * lm;
+            lm = [sbv.leftPos validMargin:lm + sbv.leftPos.offsetVal];
+            
+            if ([self isRelativeMargin:cxm])
+                cxm = vTotalWidth * cxm;
+            cxm = [sbv.centerXPos validMargin:cxm + sbv.centerXPos.offsetVal];
+            
+            if ([self isRelativeMargin:rm])
+                rm = vTotalWidth *rm;
+            rm = [sbv.rightPos validMargin:rm + sbv.rightPos.offsetVal];
+            
+            
+            [self calcMatchParentWidth:sbv.widthDime selfWidth:newSelfRect.size.width leftMargin:lm  centerMargin:cxm rightMargin:rm leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect];
+        }
         
         
         MarignGravity mg = MGRAVITY_HORZ_LEFT;
@@ -234,88 +248,98 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             mg =_gravity & MGRAVITY_VERT_MASK;
         else
         {
-            if (v.centerXPos.posVal != nil)
+            if (sbv.centerXPos.posVal != nil)
                 mg = MGRAVITY_HORZ_CENTER;
-            else if (v.leftPos.posVal != nil && v.rightPos.posVal != nil)
+            else if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
                 mg = MGRAVITY_HORZ_FILL;
-            else if (v.leftPos.posVal != nil)
+            else if (sbv.leftPos.posVal != nil)
                 mg = MGRAVITY_HORZ_LEFT;
-            else if (v.rightPos.posVal != nil)
+            else if (sbv.rightPos.posVal != nil)
                 mg = MGRAVITY_HORZ_RIGHT;
         }
         
-        [self horzGravity:mg selfWidth:newSelfRect.size.width leftMargin:leftMargin centerMargin:centerMargin rightMargin:rightMargin rect:&rect];
+        [self horzGravity:mg selfWidth:newSelfRect.size.width sbv:sbv rect:&rect];
         
+               
         
         //如果子视图需要调整高度则调整高度
         if (isFlexedHeight)
         {
-            CGSize sz = [v sizeThatFits:CGSizeMake(rect.size.width, 0)];
-            rect.size.height = sz.height;
+            CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
+            rect.size.height = [sbv.heightDime validMeasure:sz.height];
         }
         
         
         //计算固定高度和浮动高度。
-        if ([self isRelativeMargin:topMargin])
-            totalWeight += topMargin;
-        else
-            fixedHeight += topMargin;
-        
-        if ([self isRelativeMargin:bottomMargin])
-            totalWeight += bottomMargin;
-        else
-            fixedHeight += bottomMargin;
-        
-        if (v.weight > 0.0)
+        if ([self isRelativeMargin:tm])
         {
-            totalWeight += v.weight;
+            totalWeight += tm;
+            fixedHeight += sbv.topPos.offsetVal;
+        }
+        else
+            fixedHeight += sbv.topPos.margin;
+        
+        
+        
+        if ([self isRelativeMargin:bm])
+        {
+            totalWeight += bm;
+            fixedHeight += sbv.bottomPos.offsetVal;
+        }
+        else
+            fixedHeight += sbv.bottomPos.margin;
+        
+        
+        if (sbv.weight > 0.0)
+        {
+            totalWeight += sbv.weight;
         }
         else
         {
             fixedHeight += rect.size.height;
         }
         
-        v.absPos.frame = rect;
+        if (sbv != sbs.lastObject)
+            fixedHeight += self.subviewMargin;
+        
+        sbv.absPos.frame = rect;
     }
 
     //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
-    floatingHeight = newSelfRect.size.height - fixedHeight - self.padding.top - self.padding.bottom;
+    floatingHeight = newSelfRect.size.height - fixedHeight - self.topPadding - self.bottomPadding;
     if (floatingHeight <= 0 || floatingHeight == -0.0)
         floatingHeight = 0;
     
-    CGFloat pos = self.padding.top;
-    for (int i = 0; i < sbs.count; i++) {
+    CGFloat pos = self.topPadding;
+    for (UIView *sbv in sbs) {
         
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
         
-        CGFloat topMargin = v.topPos.margin;
-        CGFloat bottomMargin = v.bottomPos.margin;
-        CGFloat weight = v.weight;
-        CGRect rect =  v.absPos.frame;
+        CGFloat topMargin = sbv.topPos.posNumVal.doubleValue;
+        CGFloat bottomMargin = sbv.bottomPos.posNumVal.doubleValue;
+        CGFloat weight = sbv.weight;
+        CGRect rect =  sbv.absPos.frame;
         
         //分别处理相对顶部边距和绝对顶部边距
         if ([self isRelativeMargin:topMargin])
         {
-            CGFloat hh = (topMargin / totalWeight) * floatingHeight;
-            if (hh <= 0 || hh == -0.0)
-                hh = 0;
+            CGFloat th = (topMargin / totalWeight) * floatingHeight;
+            if (th <= 0 || th == -0.0)
+                th = 0;
             
-            pos += hh;
+            pos += [sbv.topPos validMargin:th + sbv.topPos.offsetVal];
         }
         else
-            pos += topMargin;
+            pos += [sbv.topPos validMargin:topMargin + sbv.topPos.offsetVal];
         
         //分别处理相对高度和绝对高度
         if (weight > 0)
         {
-            CGFloat hh = (weight / totalWeight) * floatingHeight;
-            if (hh <= 0 || hh == -0.0)
-                hh = 0;
+            CGFloat h = (weight / totalWeight) * floatingHeight;
+            if (h <= 0 || h == -0.0)
+                h = 0;
             
             rect.origin.y = pos;
-            rect.size.height = hh;
+            rect.size.height = [sbv.heightDime validMeasure:h];
             
         }
         else
@@ -328,21 +352,23 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         //分别处理相对底部边距和绝对底部边距
         if ([self isRelativeMargin:bottomMargin])
         {
-            CGFloat th = (bottomMargin / totalWeight) * floatingHeight;
-            if (th <= 0 || th == -0.0)
-                th = 0;
+            CGFloat bh = (bottomMargin / totalWeight) * floatingHeight;
+            if (bh <= 0 || bh == -0.0)
+                bh = 0;
             
-            pos += th;
+            pos += [sbv.bottomPos validMargin:bh + sbv.bottomPos.offsetVal];
             
         }
         else
-            pos += bottomMargin;
+            pos += [sbv.bottomPos validMargin:bottomMargin + sbv.bottomPos.offsetVal];
         
+        if (sbv != sbs.lastObject)
+            pos += self.subviewMargin;
         
-        v.absPos.frame = rect;
+        sbv.absPos.frame = rect;
     }
     
-    pos += self.padding.bottom;
+    pos += self.bottomPadding;
     
 
     if (self.wrapContentHeight && totalWeight == 0)
@@ -356,7 +382,15 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 -(CGRect)layoutSubviewsForHorz:(CGRect)newSelfRect
 {
     
-    NSArray *sbs = self.subviews;
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
+    {
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+            continue;
+        
+        [sbs addObject:sbv];
+        
+    }
     
     CGFloat fixedWidth = 0;   //计算固定部分的高度
     CGFloat floatingWidth = 0; //浮动的高度。
@@ -365,80 +399,87 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     CGFloat maxSubviewHeight = 0;
     
     //计算出固定的子视图宽度的总和以及宽度比例总和
-    for (int i = 0; i < sbs.count; i++)
+    for (UIView *sbv in sbs)
     {
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
         
-        if ([self isRelativeMargin:v.leftPos.margin])
-            totalWeight += v.leftPos.margin;
-        else
-            fixedWidth += v.leftPos.margin;
-        
-        if ([self isRelativeMargin:v.rightPos.margin])
-            totalWeight += v.rightPos.margin;
-        else
-            fixedWidth += v.rightPos.margin;
-        
-        if (v.weight > 0.0)
+        if ([self isRelativeMargin:sbv.leftPos.posNumVal.doubleValue])
         {
-            totalWeight += v.weight;
+            totalWeight += sbv.leftPos.posNumVal.doubleValue;
+            fixedWidth += sbv.leftPos.offsetVal;
+        }
+        else
+            fixedWidth += sbv.leftPos.margin;
+        
+        if ([self isRelativeMargin:sbv.rightPos.posNumVal.doubleValue])
+        {
+            totalWeight += sbv.rightPos.posNumVal.doubleValue;
+            fixedWidth += sbv.rightPos.offsetVal;
+        }
+        else
+            fixedWidth += sbv.rightPos.margin;
+        
+        if (sbv.weight > 0.0)
+        {
+            totalWeight += sbv.weight;
         }
         else
         {
-            if (v.widthDime.dimeNumVal != nil)
-                fixedWidth += v.widthDime.measure;
+            if (sbv.widthDime.dimeNumVal != nil)
+                fixedWidth += sbv.widthDime.measure;
             else
-                fixedWidth += v.absPos.width;
+                fixedWidth += [sbv.widthDime validMeasure:sbv.absPos.width];
         }
+        
+        if (sbv != sbs.lastObject)
+            fixedWidth += self.subviewMargin;
     }
     
     //剩余的可浮动的宽度，那些weight不为0的从这个高度来进行分发
-    floatingWidth = newSelfRect.size.width - fixedWidth - self.padding.left - self.padding.right;
+    floatingWidth = newSelfRect.size.width - fixedWidth - self.leftPadding - self.rightPadding;
     if (floatingWidth <= 0 || floatingWidth == -0.0)
         floatingWidth = 0;
     
     //调整所有子视图的宽度
-    CGFloat pos = self.padding.left;
-    for (int i = 0; i < sbs.count; i++) {
+    CGFloat pos = self.leftPadding;
+    for (UIView *sbv in sbs) {
         
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
+        CGFloat leftMargin = sbv.leftPos.posNumVal.doubleValue;
+        CGFloat rightMargin = sbv.rightPos.posNumVal.doubleValue;
+        CGFloat weight = sbv.weight;
+        BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
+        CGRect rect =  sbv.absPos.frame;
         
-        CGFloat leftMargin = v.leftPos.margin;
-        CGFloat rightMargin = v.rightPos.margin;
-        CGFloat weight = v.weight;
-        BOOL isFlexedHeight = v.isFlexedHeight && !v.heightDime.isMatchParent;
-        CGRect rect =  v.absPos.frame;
+        //控制最大最小尺寸限制
+        rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
+        rect.size.width = [sbv.widthDime validMeasure:rect.size.width];
         
-        if (v.widthDime.dimeNumVal != nil)
-            rect.size.width = v.widthDime.measure;
-        if (v.heightDime.dimeNumVal != nil)
-            rect.size.height = v.heightDime.measure;
+        if (sbv.widthDime.dimeNumVal != nil)
+            rect.size.width = sbv.widthDime.measure;
+        if (sbv.heightDime.dimeNumVal != nil)
+            rect.size.height = sbv.heightDime.measure;
+        
         
         //计算出先对左边边距和绝对左边边距
         if ([self isRelativeMargin:leftMargin])
         {
-            CGFloat hh = (leftMargin / totalWeight) * floatingWidth;
-            if (hh <= 0 || hh == -0.0)
-                hh = 0;
+            CGFloat lw = (leftMargin / totalWeight) * floatingWidth;
+            if (lw <= 0 || lw == -0.0)
+                lw = 0;
             
-            pos += hh;
+            pos += [sbv.leftPos validMargin:lw + sbv.leftPos.offsetVal];
         }
         else
-            pos += leftMargin;
+            pos += [sbv.leftPos validMargin:leftMargin + sbv.leftPos.offsetVal];
         
         //计算出相对宽度和绝对宽度
         if (weight > 0)
         {
-            CGFloat h = (weight / totalWeight) * floatingWidth;
-            if (h <= 0 || h == -0.0)
-                h = 0;
+            CGFloat w = (weight / totalWeight) * floatingWidth;
+            if (w <= 0 || w == -0.0)
+                w = 0;
             
             rect.origin.x = pos;
-            rect.size.width = h;
+            rect.size.width = [sbv.widthDime validMeasure:w];
             
         }
         else
@@ -451,60 +492,76 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         //计算相对的右边边距和绝对的右边边距
         if ([self isRelativeMargin:rightMargin])
         {
-            CGFloat th = (rightMargin / totalWeight) * floatingWidth;
-            if (th <= 0 || th == -0.0)
-                th = 0;
+            CGFloat rw = (rightMargin / totalWeight) * floatingWidth;
+            if (rw <= 0 || rw == -0.0)
+                rw = 0;
             
-            pos += th;
+            pos += [sbv.rightPos validMargin:rw + sbv.rightPos.offsetVal];
             
         }
         else
-            pos += rightMargin;
+            pos += [sbv.rightPos validMargin:rightMargin + sbv.rightPos.offsetVal];
+        
+        
+        if (sbv != sbs.lastObject)
+            pos += self.subviewMargin;
         
         //如果高度是浮动的则需要调整高度。
         if (isFlexedHeight)
         {
-            CGSize sz = [v sizeThatFits:CGSizeMake(rect.size.width, rect.size.height)];
-            rect.size.height = sz.height;
+            CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
+            rect.size.height = [sbv.heightDime validMeasure:sz.height];
         }
     
         //计算最高的高度。
-        if (self.wrapContentHeight && !v.heightDime.isMatchParent)
+        if (self.wrapContentHeight && !sbv.heightDime.isMatchParent)
         {
-            CGFloat topMargin = v.topPos.margin;
-            CGFloat centerMargin = v.centerYPos.margin;
-            CGFloat bottomMargin = v.bottomPos.margin;
-            
-            
-            maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:topMargin centerMargin:centerMargin tailMargin:bottomMargin];
+            maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headPos:sbv.topPos centerPos:sbv.centerYPos tailPos:sbv.bottomPos];
             
         }
         
-        v.absPos.frame = rect;
+        sbv.absPos.frame = rect;
     }
     
     if (self.wrapContentHeight)
     {
-        newSelfRect.size.height = maxSubviewHeight + self.padding.top + self.padding.bottom;
+        newSelfRect.size.height = maxSubviewHeight + self.topPadding + self.bottomPadding;
     }
     
     
-    //调整高度
-    for (int i = 0; i < sbs.count; i++) {
-        
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
-        
-        CGFloat topMargin =   v.topPos.margin;
-        CGFloat centerMargin = v.centerYPos.margin;
-        CGFloat bottomMargin = v.bottomPos.margin;
-        
-        CGRect rect = v.absPos.frame;
+    //调整所有子视图的高度
+    for (UIView *sbv in sbs)
+    {
+    
+        CGRect rect = sbv.absPos.frame;
         
         //布局高度
-        if (v.heightDime.isMatchParent || (v.topPos.posVal != nil && v.bottomPos.posVal != nil))
-            [self calcMatchParentHeight:v.heightDime selfHeight:newSelfRect.size.height topMargin:topMargin centerMargin:centerMargin bottomMargin:bottomMargin topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect];
+        if (sbv.heightDime.isMatchParent || (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil))
+        {
+            
+            CGFloat tm = sbv.topPos.posNumVal.doubleValue;
+            CGFloat cym = sbv.centerYPos.posNumVal.doubleValue;
+            CGFloat bm = sbv.bottomPos.posNumVal.doubleValue;
+            
+            
+            CGFloat vTotalHeight = (newSelfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+
+            
+            if ([self isRelativeMargin:tm])
+                tm = vTotalHeight * tm;
+            tm = [sbv.topPos validMargin:tm + sbv.topPos.offsetVal];
+            
+            if ([self isRelativeMargin:cym])
+                cym = vTotalHeight * cym;
+            cym = [sbv.centerYPos validMargin:cym + sbv.centerYPos.offsetVal];
+            
+            if ([self isRelativeMargin:bm])
+                bm = vTotalHeight *bm;
+            bm = [sbv.bottomPos validMargin:bm + sbv.bottomPos.offsetVal];
+            
+
+            [self calcMatchParentHeight:sbv.heightDime selfHeight:newSelfRect.size.height topMargin:tm centerMargin:cym bottomMargin:bm topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect];
+        }
         
         //优先以容器中的指定为标准
         MarignGravity mg = MGRAVITY_VERT_TOP;
@@ -512,22 +569,22 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             mg =_gravity & MGRAVITY_HORZ_MASK;
         else
         {
-            if (v.centerYPos.posVal != nil)
+            if (sbv.centerYPos.posVal != nil)
                 mg = MGRAVITY_VERT_CENTER;
-            else if (v.topPos.posVal != nil && v.bottomPos.posVal != nil)
+            else if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
                 mg = MGRAVITY_VERT_FILL;
-            else if (v.topPos.posVal != nil)
+            else if (sbv.topPos.posVal != nil)
                 mg = MGRAVITY_VERT_TOP;
-            else if (v.bottomPos.posVal != nil)
+            else if (sbv.bottomPos.posVal != nil)
                 mg = MGRAVITY_VERT_BOTTOM;
         }
         
-        [self vertGravity:mg selfHeight:newSelfRect.size.height topMargin:topMargin centerMargin:centerMargin bottomMargin:bottomMargin rect:&rect];
+        [self vertGravity:mg selfHeight:newSelfRect.size.height sbv:sbv rect:&rect];
         
-        v.absPos.frame = rect;
+        sbv.absPos.frame = rect;
     }
     
-    pos += self.padding.right;
+    pos += self.rightPadding;
     
     if (self.wrapContentWidth && totalWeight == 0)
     {
@@ -541,40 +598,73 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 -(CGRect)layoutSubviewsForVertGravity:(CGRect)newSelfRect
 {
     //计算子视图。
-    NSArray *sbs = self.subviews;
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
+    {
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+            continue;
+        
+        [sbs addObject:sbv];
+        
+    }
+
     
     CGFloat totalHeight = 0;
+    if (sbs.count > 1)
+        totalHeight += (sbs.count - 1) * self.subviewMargin;
     
     newSelfRect = [self AdjustSelfWidth:sbs newSelfRect:newSelfRect];
    
-    CGFloat floatingHeight = newSelfRect.size.height - self.padding.top - self.padding.bottom;
+    CGFloat floatingHeight = newSelfRect.size.height - self.topPadding - self.bottomPadding - totalHeight;
     if (floatingHeight <=0)
         floatingHeight = 0;
     
     //调整子视图的宽度。并根据情况调整子视图的高度。并计算出固定高度和浮动高度。
-    for (int i = 0; i < sbs.count; i++)
+    for (UIView *sbv in sbs)
     {
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
         
-        CGRect rect =  v.absPos.frame;
-        CGFloat leftMargin =   v.leftPos.margin;
-        CGFloat centerMaring = v.centerXPos.margin;
-        CGFloat rightMargin =  v.rightPos.margin;
-        CGFloat topMargin = v.topPos.margin;
-        CGFloat bottomMargin = v.bottomPos.margin;
-        BOOL isFlexedHeight = v.isFlexedHeight && v.weight == 0;
+        CGRect rect =  sbv.absPos.frame;
+        BOOL isFlexedHeight = sbv.isFlexedHeight && sbv.weight == 0;
         
-        if (v.widthDime.dimeNumVal != nil)
-            rect.size.width = v.widthDime.measure;
-        if (v.heightDime.dimeNumVal != nil)
-            rect.size.height = v.heightDime.measure;
+        CGFloat lm = sbv.leftPos.posNumVal.doubleValue;
+        CGFloat rm = sbv.rightPos.posNumVal.doubleValue;
+        CGFloat cxm = sbv.centerXPos.posNumVal.doubleValue;
+        CGFloat tm = sbv.topPos.posNumVal.doubleValue;
+        CGFloat bm = sbv.bottomPos.posNumVal.doubleValue;
+        
+        
+        
+        //控制最大最小尺寸限制
+        rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
+        rect.size.width = [sbv.widthDime validMeasure:rect.size.width];
+        
+        if (sbv.widthDime.dimeNumVal != nil)
+            rect.size.width = sbv.widthDime.measure;
+        if (sbv.heightDime.dimeNumVal != nil)
+            rect.size.height = sbv.heightDime.measure;
         
         
         //调整子视图的宽度，如果子视图为matchParent的话
-        if (v.widthDime.isMatchParent || (v.leftPos.posVal != nil && v.rightPos.posVal != nil))
-            [self calcMatchParentWidth:v.widthDime selfWidth:newSelfRect.size.width leftMargin:leftMargin centerMargin:centerMaring rightMargin:rightMargin leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect];
+        if (sbv.widthDime.isMatchParent || (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil))
+        {
+            
+            CGFloat vTotalWidth = (newSelfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            
+            if ([self isRelativeMargin:lm])
+                lm = vTotalWidth * lm;
+            lm = [sbv.leftPos validMargin:lm + sbv.leftPos.offsetVal];
+            
+            if ([self isRelativeMargin:cxm])
+                cxm = vTotalWidth * cxm;
+            cxm = [sbv.centerXPos validMargin:cxm + sbv.centerXPos.offsetVal];
+            
+            if ([self isRelativeMargin:rm])
+                rm = vTotalWidth *rm;
+            rm = [sbv.rightPos validMargin:rm + sbv.rightPos.offsetVal];
+            
+            
+            [self calcMatchParentWidth:sbv.widthDime selfWidth:newSelfRect.size.width leftMargin:lm centerMargin:cxm rightMargin:rm leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect];
+        }
         
         //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
         MarignGravity mg = MGRAVITY_HORZ_LEFT;
@@ -582,42 +672,40 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             mg =_gravity & MGRAVITY_VERT_MASK;
         else
         {
-            if (v.centerXPos.posVal != nil)
+            if (sbv.centerXPos.posVal != nil)
                 mg = MGRAVITY_HORZ_CENTER;
-            else if (v.leftPos.posVal != nil && v.rightPos.posVal != nil)
+            else if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
                 mg = MGRAVITY_HORZ_FILL;
-            else if (v.leftPos.posVal != nil)
+            else if (sbv.leftPos.posVal != nil)
                 mg = MGRAVITY_HORZ_LEFT;
-            else if (v.rightPos.posVal != nil)
+            else if (sbv.rightPos.posVal != nil)
                 mg = MGRAVITY_HORZ_RIGHT;
         }
         
-        [self horzGravity:mg selfWidth:newSelfRect.size.width leftMargin:leftMargin centerMargin:centerMaring rightMargin:rightMargin rect:&rect];
+        [self horzGravity:mg selfWidth:newSelfRect.size.width sbv:sbv rect:&rect];
         
         
         //如果子视图需要调整高度则调整高度
         if (isFlexedHeight)
         {
-            CGSize sz = [v sizeThatFits:CGSizeMake(rect.size.width, 0)];
-            rect.size.height = sz.height;
+            CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
+            rect.size.height = [sbv.heightDime validMeasure:sz.height];
         }
         
         
-        if ([self isRelativeMargin:topMargin])
-            totalHeight += floatingHeight * topMargin;
-        else
-            totalHeight += topMargin;
+        if ([self isRelativeMargin:tm])
+            tm = floatingHeight * tm;
+        
+        totalHeight += [sbv.topPos validMargin:tm + sbv.topPos.offsetVal];
         
         totalHeight += rect.size.height;
         
-        if ([self isRelativeMargin:bottomMargin])
-            totalHeight += floatingHeight * bottomMargin;
-        else
-            totalHeight += bottomMargin;
-
+        if ([self isRelativeMargin:bm])
+             bm = floatingHeight * bm;
         
+        totalHeight += [sbv.bottomPos validMargin:bm + sbv.bottomPos.offsetVal];
         
-        v.absPos.frame = rect;
+        sbv.absPos.frame = rect;
     }
 
     
@@ -625,41 +713,54 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     CGFloat pos = 0;
     if ((_gravity & MGRAVITY_HORZ_MASK) == MGRAVITY_VERT_TOP)
     {
-        pos = self.padding.top;
+        pos = self.topPadding;
     }
     else if ((_gravity & MGRAVITY_HORZ_MASK) == MGRAVITY_VERT_CENTER)
     {
-        pos = (newSelfRect.size.height - totalHeight - self.padding.bottom - self.padding.top)/2.0;
-        pos += self.padding.top;
+        pos = (newSelfRect.size.height - totalHeight - self.bottomPadding - self.topPadding)/2.0;
+        pos += self.topPadding;
+    }
+    else if ((_gravity & MGRAVITY_HORZ_MASK) == MGRAVITY_VERT_WINDOW_CENTER)
+    {
+        if (self.window != nil)
+        {
+            pos = (self.window.frame.size.height - totalHeight)/2.0;
+            
+            CGPoint pt = CGPointMake(0, pos);
+            pos = [self.window convertPoint:pt toView:self].y;
+            
+            
+        }
     }
     else
     {
-        pos = newSelfRect.size.height - totalHeight - self.padding.bottom;
+        pos = newSelfRect.size.height - totalHeight - self.bottomPadding;
     }
     
     
-    for (int i = 0; i < sbs.count; i++)
+    for (UIView *sbv in sbs)
     {
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
         
-       CGFloat topMargin = v.topPos.margin;
-       CGFloat bottomMargin = v.bottomPos.margin;
+       CGFloat tm = sbv.topPos.posNumVal.doubleValue;
+       CGFloat bm = sbv.bottomPos.posNumVal.doubleValue;
         
-       if ([self isRelativeMargin:topMargin])
-            pos += floatingHeight * topMargin;
+       if ([self isRelativeMargin:tm])
+            pos += [sbv.topPos validMargin:floatingHeight * tm + sbv.topPos.offsetVal];
         else
-            pos += topMargin;
+            pos += [sbv.topPos validMargin:tm + sbv.topPos.offsetVal];
         
-        v.absPos.topPos = pos;
+        sbv.absPos.topPos = pos;
         
-        pos +=  v.absPos.height; //rect.size.height;
+        pos +=  sbv.absPos.height;
         
-        if ([self isRelativeMargin:bottomMargin])
-            pos += floatingHeight * bottomMargin;
+        if ([self isRelativeMargin:bm])
+            pos += [sbv.bottomPos validMargin:floatingHeight * bm  + sbv.bottomPos.offsetVal];
         else
-            pos += bottomMargin;
+            pos += [sbv.bottomPos validMargin:bm + sbv.bottomPos.offsetVal];
+        
+        
+        if (sbv != sbs.lastObject)
+            pos += self.subviewMargin;
     }
     
     return newSelfRect;
@@ -669,112 +770,156 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 -(CGRect)layoutSubviewsForHorzGravity:(CGRect)newSelfRect
 {
     //计算子视图。
-    NSArray *sbs = self.subviews;
+    //计算子视图。
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
+    {
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+            continue;
+        
+        [sbs addObject:sbv];
+        
+    }
+
     
     CGFloat totalWidth = 0;
+    if (sbs.count > 1)
+        totalWidth += (sbs.count - 1) * self.subviewMargin;
+    
+    
     CGFloat floatingWidth = 0;
     
     CGFloat maxSubviewHeight = 0;
     
-    floatingWidth = newSelfRect.size.width - self.padding.left - self.padding.right;
+    floatingWidth = newSelfRect.size.width - self.leftPadding - self.rightPadding - totalWidth;
     if (floatingWidth <= 0)
         floatingWidth = 0;
     
     //计算出固定的高度
-    for (int i = 0; i < sbs.count; i++)
+    for (UIView *sbv in sbs)
     {
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
         
-        CGFloat topMargin =  v.topPos.margin;
-        CGFloat centerMarin = v.centerYPos.margin;
-        CGFloat bottomMargin = v.bottomPos.margin;
-        CGRect rect = v.absPos.frame;
-        BOOL isFlexedHeight = v.isFlexedHeight && !v.heightDime.isMatchParent;
+        CGRect rect = sbv.absPos.frame;
+        BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
         
-        if (v.widthDime.dimeNumVal != nil)
-            rect.size.width = v.widthDime.measure;
+        //控制最大最小尺寸限制
+        rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
+        rect.size.width = [sbv.widthDime validMeasure:rect.size.width];
         
-        if (v.heightDime.dimeNumVal != nil)
-            rect.size.height = v.heightDime.measure;
+        if (sbv.widthDime.dimeNumVal != nil)
+            rect.size.width = sbv.widthDime.measure;
+        
+        if (sbv.heightDime.dimeNumVal != nil)
+            rect.size.height = sbv.heightDime.measure;
+        
         
         //如果高度是浮动的则需要调整高度。
         if (isFlexedHeight)
         {
-            CGSize sz = [v sizeThatFits:CGSizeMake(rect.size.width, 0)];
-            rect.size.height = sz.height;
+            CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
+            rect.size.height = [sbv.heightDime validMeasure:sz.height];
         }
         
 
         //计算以子视图为大小的情况
-        if (self.wrapContentHeight && !v.heightDime.isMatchParent)
+        if (self.wrapContentHeight && !sbv.heightDime.isMatchParent)
         {
-                maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headMargin:topMargin centerMargin:centerMarin tailMargin:bottomMargin];
+                maxSubviewHeight = [self calcSelfMeasure:maxSubviewHeight subviewMeasure:rect.size.height headPos:sbv.topPos centerPos:sbv.centerYPos tailPos:sbv.bottomPos];
         }
         
-        if ([self isRelativeMargin:v.leftPos.margin])
-            totalWidth += floatingWidth * v.leftPos.margin;
-        else
-            totalWidth += v.leftPos.margin;
+        
+        CGFloat lm = sbv.leftPos.posNumVal.doubleValue;
+        CGFloat rm = sbv.rightPos.posNumVal.doubleValue;
+        
+        if ([self isRelativeMargin:lm])
+            lm *= floatingWidth;
+        totalWidth += [sbv.leftPos validMargin:lm + sbv.leftPos.offsetVal];
         
         totalWidth += rect.size.width;
         
-        if ([self isRelativeMargin:v.rightPos.margin])
-            totalWidth += floatingWidth * v.rightPos.margin;
-        else
-            totalWidth += v.rightPos.margin;
         
-        v.absPos.frame = rect;
+        if ([self isRelativeMargin:rm])
+            rm *= floatingWidth;
+        totalWidth += [sbv.rightPos validMargin:rm + sbv.rightPos.offsetVal];
+        
+        sbv.absPos.frame = rect;
     }
     
     
     //调整自己的高度。
     if (self.wrapContentHeight)
     {
-        newSelfRect.size.height = maxSubviewHeight + self.padding.top + self.padding.bottom;
+        newSelfRect.size.height = maxSubviewHeight + self.topPadding + self.bottomPadding;
     }
     
     //根据对齐的方位来定位子视图的布局对齐
     CGFloat pos = 0;
     if ((_gravity & MGRAVITY_VERT_MASK) == MGRAVITY_HORZ_LEFT)
     {
-        pos = self.padding.left;
+        pos = self.leftPadding;
     }
     else if ((_gravity & MGRAVITY_VERT_MASK) == MGRAVITY_HORZ_CENTER)
     {
-        pos = (newSelfRect.size.width - totalWidth - self.padding.left - self.padding.right)/2.0;
-        pos += self.padding.left;
+        pos = (newSelfRect.size.width - totalWidth - self.leftPadding - self.rightPadding)/2.0;
+        pos += self.leftPadding;
+    }
+    else if ((_gravity & MGRAVITY_VERT_MASK) == MGRAVITY_HORZ_WINDOW_CENTER)
+    {
+        if (self.window != nil)
+        {
+            pos = (self.window.frame.size.width - totalWidth)/2.0;
+            
+            CGPoint pt = CGPointMake(pos, 0);
+            pos = [self.window convertPoint:pt toView:self].x;
+        }
     }
     else
     {
-        pos = newSelfRect.size.width - totalWidth - self.padding.right;
+        pos = newSelfRect.size.width - totalWidth - self.rightPadding;
     }
     
     
-    for (int i = 0; i < sbs.count; i++)
+    for (UIView *sbv in sbs)
     {
-        UIView *v = [sbs objectAtIndex:i];
-        if (v.isHidden && self.hideSubviewReLayout)
-            continue;
         
-        CGFloat leftMargin = v.leftPos.margin;
-        CGFloat rightMargin = v.rightPos.margin;
-        CGFloat topMargin =  v.topPos.margin;
-        CGFloat centerMargin = v.centerYPos.margin;
-        CGFloat bottomMargin = v.bottomPos.margin;
+        CGFloat lm = sbv.leftPos.posNumVal.doubleValue;
+        CGFloat rm = sbv.rightPos.posNumVal.doubleValue;
         
-        if ([self isRelativeMargin:leftMargin])
-            pos += floatingWidth * v.leftPos.margin;
+        if ([self isRelativeMargin:lm])
+            pos += [sbv.leftPos validMargin:floatingWidth * lm + sbv.leftPos.offsetVal];
         else
-            pos += v.leftPos.margin;
+            pos += [sbv.leftPos validMargin:lm + sbv.leftPos.offsetVal];
         
-        CGRect rect = v.absPos.frame;
+        
+        CGRect rect = sbv.absPos.frame;
         rect.origin.x = pos;
         
         //计算高度
-        if (v.heightDime.isMatchParent || (v.topPos.posVal != nil && v.bottomPos.posVal != nil))
-            [self calcMatchParentHeight:v.heightDime selfHeight:newSelfRect.size.height topMargin:topMargin centerMargin:centerMargin bottomMargin:bottomMargin topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect];
+        if (sbv.heightDime.isMatchParent || (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil))
+        {
+            CGFloat tm = sbv.topPos.posNumVal.doubleValue;
+            CGFloat cym = sbv.centerYPos.posNumVal.doubleValue;
+            CGFloat bm = sbv.bottomPos.posNumVal.doubleValue;
+            
+            
+            CGFloat vTotalHeight = (newSelfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            
+            
+            if ([self isRelativeMargin:tm])
+                tm = vTotalHeight * tm;
+            tm = [sbv.topPos validMargin:tm + sbv.topPos.offsetVal];
+            
+            if ([self isRelativeMargin:cym])
+                cym = vTotalHeight * cym;
+            cym = [sbv.centerYPos validMargin:cym + sbv.centerYPos.offsetVal];
+            
+            if ([self isRelativeMargin:bm])
+                bm = vTotalHeight *bm;
+            bm = [sbv.bottomPos validMargin:bm + sbv.bottomPos.offsetVal];
+
+            
+            [self calcMatchParentHeight:sbv.heightDime selfHeight:newSelfRect.size.height topMargin:tm centerMargin:cym bottomMargin:bm topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect];
+        }
         
       
         MarignGravity mg = MGRAVITY_VERT_TOP;
@@ -782,41 +927,39 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             mg =_gravity & MGRAVITY_HORZ_MASK;
         else
         {
-            if (v.centerYPos.posVal != nil)
+            if (sbv.centerYPos.posVal != nil)
                 mg = MGRAVITY_VERT_CENTER;
-            else if (v.topPos.posVal != nil && v.bottomPos.posVal != nil)
+            else if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
                 mg = MGRAVITY_VERT_FILL;
-            else if (v.topPos.posVal != nil)
+            else if (sbv.topPos.posVal != nil)
                 mg = MGRAVITY_VERT_TOP;
-            else if (v.bottomPos.posVal != nil)
+            else if (sbv.bottomPos.posVal != nil)
                 mg = MGRAVITY_VERT_BOTTOM;
         }
         
-        [self vertGravity:mg selfHeight:newSelfRect.size.height topMargin:topMargin centerMargin:centerMargin bottomMargin:bottomMargin rect:&rect];
+        [self vertGravity:mg selfHeight:newSelfRect.size.height sbv:sbv rect:&rect];
         
-        v.absPos.frame = rect;
+        sbv.absPos.frame = rect;
         
         pos += rect.size.width;
         
-        if ([self isRelativeMargin:rightMargin])
-            pos += floatingWidth * rightMargin;
+        if ([self isRelativeMargin:rm])
+            pos += [sbv.rightPos validMargin:floatingWidth * rm + sbv.rightPos.offsetVal];
         else
-            pos += rightMargin;
+            pos += [sbv.rightPos validMargin:rm + sbv.rightPos.offsetVal];
+        
+        
+        if (sbv != sbs.lastObject)
+            pos += self.subviewMargin;
     }
 
     return newSelfRect;
 }
 
 
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout
 {
-    CGRect newSelfRect;
-    
-    if (isEstimate)
-        newSelfRect = self.absPos.frame;
-    else
-        newSelfRect = [super estimateLayoutRect:size];
-    
+    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout];
     
     if (_orientation == LVORIENTATION_VERT)
     {
@@ -824,6 +967,9 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         //如果是垂直的布局，但是子视图设置了左右的边距或者设置了宽度则wrapContentWidth应该设置为NO
         for (UIView *sbv in self.subviews)
         {
+            if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+                continue;
+            
             if (!isEstimate)
             {
                 sbv.absPos.frame = sbv.frame;
@@ -831,6 +977,9 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
             
             if ([sbv isKindOfClass:[MyLayoutBase class]])
             {
+                if (pHasSubLayout != nil)
+                    *pHasSubLayout = YES;
+                
                 MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
                 if (sbvl.wrapContentWidth)
                 {
@@ -839,37 +988,9 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
                         [sbvl setWrapContentWidthNoLayout:NO];
                 }
                 
-                if (isEstimate)
-                {
-                    [sbvl estimateLayoutRect:sbvl.absPos.frame.size];
-                }
-            }
-            
-        }
-        
-        
-        if ((_gravity & MGRAVITY_HORZ_MASK) != MGRAVITY_NONE)
-            newSelfRect = [self layoutSubviewsForVertGravity:newSelfRect];
-        else
-            newSelfRect = [self layoutSubviewsForVert:newSelfRect];
-    }
-    else
-    {
-        //如果是水平的布局，但是子视图设置了上下的边距或者设置了高度则wrapContentWidth应该设置为NO
-        for (UIView *sbv in self.subviews)
-        {
-            if (!isEstimate)
-            {
-                sbv.absPos.frame = sbv.frame;
-            }
-            
-            if ([sbv isKindOfClass:[MyLayoutBase class]])
-            {
-                MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
                 if (sbvl.wrapContentHeight)
                 {
-                    //只要同时设置了左右边距或者设置了宽度则应该把wrapContentWidth置为NO
-                    if ((sbvl.topPos.posVal != nil && sbvl.bottomPos.posVal != nil) || sbvl.heightDime.dimeVal != nil)
+                    if (sbvl.heightDime.dimeVal != nil)
                         [sbvl setWrapContentHeightNoLayout:NO];
                 }
                 
@@ -882,58 +1003,134 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
         }
         
         
-        if ((_gravity & MGRAVITY_VERT_MASK) != MGRAVITY_NONE)
-            newSelfRect = [self layoutSubviewsForHorzGravity:newSelfRect];
+        if ((_gravity & MGRAVITY_HORZ_MASK) != MGRAVITY_NONE)
+            selfRect = [self layoutSubviewsForVertGravity:selfRect];
         else
-            newSelfRect = [self layoutSubviewsForHorz:newSelfRect];
+            selfRect = [self layoutSubviewsForVert:selfRect];
+    }
+    else
+    {
+        //如果是水平的布局，但是子视图设置了上下的边距或者设置了高度则wrapContentWidth应该设置为NO
+        for (UIView *sbv in self.subviews)
+        {
+            if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+                continue;
+            
+            if (!isEstimate)
+            {
+                sbv.absPos.frame = sbv.frame;
+            }
+            
+            if ([sbv isKindOfClass:[MyLayoutBase class]])
+            {
+                if (pHasSubLayout != nil)
+                    *pHasSubLayout = YES;
+                
+                MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
+                if (sbvl.wrapContentHeight)
+                {
+                    //只要同时设置了左右边距或者设置了宽度则应该把wrapContentWidth置为NO
+                    if ((sbvl.topPos.posVal != nil && sbvl.bottomPos.posVal != nil) || sbvl.heightDime.dimeVal != nil)
+                        [sbvl setWrapContentHeightNoLayout:NO];
+                }
+                
+                if (sbvl.wrapContentWidth)
+                {
+                    if (sbvl.widthDime.dimeVal != nil)
+                        [sbvl setWrapContentWidthNoLayout:NO];
+                }
+                
+                if (isEstimate)
+                {
+                    [sbvl estimateLayoutRect:sbvl.absPos.frame.size];
+                }
+            }
+            
+        }
+        
+        
+        if ((_gravity & MGRAVITY_VERT_MASK) != MGRAVITY_NONE)
+            selfRect = [self layoutSubviewsForHorzGravity:selfRect];
+        else
+            selfRect = [self layoutSubviewsForHorz:selfRect];
         
     }
     
-    return newSelfRect;
+    selfRect.size.height = [self.heightDime validMeasure:selfRect.size.height];
+    selfRect.size.width = [self.widthDime validMeasure:selfRect.size.width];
+    
+    
+    return selfRect;
    
-}
-
-
--(CGRect)estimateLayoutRect:(CGSize)size
-{
-    self.absPos.frame = [self calcLayoutRect:size isEstimate:NO];
-    return [self calcLayoutRect:CGSizeZero isEstimate:YES];
-}
-
-
--(CGRect)doLayoutSubviews
-{
-    return [self calcLayoutRect:CGSizeZero isEstimate:NO];
 }
 
 #pragma mark -- Private Method
 
--(CGFloat)calcSelfMeasure:(CGFloat)selfMeasure subviewMeasure:(CGFloat)subviewMeasure headMargin:(CGFloat)headMargin centerMargin:(CGFloat)centerMargin tailMargin:(CGFloat)tailMargin
+-(CGFloat)calcSelfMeasure:(CGFloat)selfMeasure subviewMeasure:(CGFloat)subviewMeasure headPos:(MyLayoutPos*)headPos centerPos:(MyLayoutPos*)centerPos tailPos:(MyLayoutPos*)tailPos
 {
     CGFloat temp = subviewMeasure;
     CGFloat tempWeight = 0;
     
-    if (![self isRelativeMargin:headMargin])
-        temp += headMargin;
-    else
-        tempWeight += headMargin;
+    CGFloat hm = headPos.posNumVal.doubleValue;
+    CGFloat cm = centerPos.posNumVal.doubleValue;
+    CGFloat tm = tailPos.posNumVal.doubleValue;
     
-    if (![self isRelativeMargin:centerMargin])
-        temp += centerMargin;
-    else
-        tempWeight += centerMargin;
+    //这里是求父视图的最大尺寸,因此如果使用了相对边距的话，最大最小要参与计算。
     
-    if (![self isRelativeMargin:tailMargin])
-        temp += tailMargin;
+    if (![self isRelativeMargin:hm])
+        temp += hm;
     else
-        tempWeight += tailMargin;
+        tempWeight += hm;
+    
+    temp += headPos.offsetVal;
+    
+    if (![self isRelativeMargin:cm])
+        temp += cm;
+    else
+        tempWeight += cm;
+    
+    temp += centerPos.offsetVal;
+    
+    if (![self isRelativeMargin:tm])
+        temp += tm;
+    else
+        tempWeight += tm;
+    
+    temp += tailPos.offsetVal;
     
     
     if (1  <= tempWeight)
         temp = 0;
     else
-        temp /=(1 - tempWeight);
+        temp /=(1 - tempWeight);  //在有相对
     
+    //得到最真实的
+    CGFloat headMargin;
+    CGFloat centerMargin;
+    CGFloat tailMargin;
+    
+    if (![self isRelativeMargin:hm])
+        headMargin = hm;
+    else
+        headMargin = temp * hm;
+    
+    headMargin = [headPos validMargin:headMargin + headPos.offsetVal];
+    
+    if (![self isRelativeMargin:cm])
+        centerMargin = cm;
+    else
+        centerMargin = temp *cm;
+    
+    centerMargin = [centerPos validMargin:centerMargin + centerPos.offsetVal];
+    
+    if (![self isRelativeMargin:tm])
+        tailMargin = tm;
+    else
+        tailMargin = temp * tm;
+    
+    tailMargin = [tailPos validMargin:tailMargin + tailPos.offsetVal];
+    
+    temp = subviewMeasure + headMargin + centerMargin + tailMargin;
     if (temp > selfMeasure)
     {
         selfMeasure = temp;
@@ -945,15 +1142,14 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)averageSubviewsForVert:(BOOL)centered withMargin:(CGFloat)margin
 {
-    NSArray *arr = self.subviews;
     
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:arr.count];
-    for (UIView *v in arr)
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
     {
-        if (v.isHidden && self.hideSubviewReLayout)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
             continue;
         
-        [sbs addObject:v];
+        [sbs addObject:sbv];
         
     }
     
@@ -978,17 +1174,17 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     
     for (int i = 0; i < sbs.count; i++)
     {
-        UIView *v = [sbs objectAtIndex:i];
+        UIView *sbv = [sbs objectAtIndex:i];
         
-        v.bottomPos.equalTo(@0);
-        v.topPos.equalTo(@(scale2));
-        v.weight = scale;
+        sbv.bottomPos.equalTo(@0);
+        sbv.topPos.equalTo(@(scale2));
+        sbv.weight = scale;
         
         if (i == 0 && !centered)
-            v.topPos.equalTo(@0);
+            sbv.topPos.equalTo(@0);
         
         if (i == sbs.count - 1 && centered)
-            v.bottomPos.equalTo(@(scale2));
+            sbv.bottomPos.equalTo(@(scale2));
     }
     
     [self setNeedsLayout];
@@ -996,15 +1192,14 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)averageSubviewsForHorz:(BOOL)centered withMargin:(CGFloat)margin
 {
-    NSArray *arr = self.subviews;
     
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:arr.count];
-    for (UIView *v in arr)
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
     {
-        if (v.isHidden && self.hideSubviewReLayout)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
             continue;
         
-        [sbs addObject:v];
+        [sbs addObject:sbv];
         
     }
 
@@ -1028,16 +1223,16 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     
     for (int i = 0; i < sbs.count; i++)
     {
-        UIView *v = [sbs objectAtIndex:i];
+        UIView *sbv = [sbs objectAtIndex:i];
         
-        v.leftPos.equalTo(@(scale2));
-        v.weight = scale;
+        sbv.leftPos.equalTo(@(scale2));
+        sbv.weight = scale;
         
         if (i == 0 && !centered)
-            v.leftPos.equalTo(@0);
+            sbv.leftPos.equalTo(@0);
         
         if (i == sbs.count - 1 && centered)
-            v.rightPos.equalTo(@(scale2));
+            sbv.rightPos.equalTo(@(scale2));
     }
     
     [self setNeedsLayout];
@@ -1047,15 +1242,14 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)averageMarginForVert:(BOOL)centered
 {
-    NSArray *arr = self.subviews;
     
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:arr.count];
-    for (UIView *v in arr)
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
     {
-        if (v.isHidden && self.hideSubviewReLayout)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
             continue;
         
-        [sbs addObject:v];
+        [sbs addObject:sbv];
         
     }
 
@@ -1065,15 +1259,15 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     
     for (int i = 0; i < sbs.count; i++)
     {
-        UIView *v = [sbs objectAtIndex:i];
+        UIView *sbv = [sbs objectAtIndex:i];
         
-        v.topPos.equalTo(@(scale));
+        sbv.topPos.equalTo(@(scale));
         
         if (i == 0 && !centered)
-            v.topPos.equalTo(@0);
+            sbv.topPos.equalTo(@0);
         
         if (i == sbs.count - 1 && centered)
-            v.bottomPos.equalTo(@(scale));
+            sbv.bottomPos.equalTo(@(scale));
     }
     
     [self setNeedsLayout];
@@ -1083,15 +1277,14 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
 
 -(void)averageMarginForHorz:(BOOL)centered
 {
-    NSArray *arr = self.subviews;
     
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:arr.count];
-    for (UIView *v in arr)
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
     {
-        if (v.isHidden && self.hideSubviewReLayout)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
             continue;
         
-        [sbs addObject:v];
+        [sbs addObject:sbv];
         
     }
 
@@ -1101,15 +1294,15 @@ const char * const ASSOCIATEDOBJECT_KEY_WEIGHT = "associatedobject_key_weight";
     
     for (int i = 0; i < sbs.count; i++)
     {
-        UIView *v = [sbs objectAtIndex:i];
+        UIView *sbv = [sbs objectAtIndex:i];
         
-        v.leftPos.equalTo(@(scale));
+        sbv.leftPos.equalTo(@(scale));
         
         if (i == 0 && !centered)
-            v.leftPos.equalTo(@0);
+            sbv.leftPos.equalTo(@0);
         
         if (i == sbs.count - 1 && centered)
-            v.rightPos.equalTo(@(scale));
+            sbv.rightPos.equalTo(@(scale));
     }
     
     [self setNeedsLayout];

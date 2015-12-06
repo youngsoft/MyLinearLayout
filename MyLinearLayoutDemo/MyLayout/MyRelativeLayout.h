@@ -10,7 +10,10 @@
 
 
 
-/*相对布局视图，里面的所有子视图都需要指定位置和尺寸的依赖关系*/
+/*
+ 相对布局视图，里面的所有子视图都需要指定位置和尺寸的依赖关系
+ 相对布局支持wrapContentHeight,wrapContentWidth特性
+ */
 @interface MyRelativeLayout : MyLayoutBase
 
 

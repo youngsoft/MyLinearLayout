@@ -111,6 +111,11 @@
 
 @implementation MyTableLayout
 
++(id)tableLayoutWithOrientation:(LineViewOrientation)orientation
+{
+    return [self linearLayoutWithOrientation:orientation];
+}
+
 
 -(void)addRow:(CGFloat)rowHeight colWidth:(CGFloat)colWidth
 {
@@ -200,6 +205,10 @@
     UIView * colView1 = [self viewAtIndexPath:indexPath1];
     UIView * colView2 = [self viewAtIndexPath:indexPath2];
     
+    if (colView1 == colView2)
+        return;
+    
+    
     [self removeColAt:indexPath1];
     [self removeColAt:indexPath2];
     
@@ -231,7 +240,7 @@
 
 - (void)addSubview:(UIView *)view
 {
-    NSAssert(0, @"Can't call addSubview");
+    [self addCol:view atRow:[self countOfRow] - 1];
 }
 
 - (void)insertSubview:(UIView *)view belowSubview:(UIView *)siblingSubview

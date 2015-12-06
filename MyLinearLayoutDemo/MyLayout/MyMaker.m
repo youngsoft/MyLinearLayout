@@ -296,6 +296,45 @@
     
 }
 
+-(MyMaker* (^)(CGFloat val))min
+{
+    _clear = YES;
+    return ^id(CGFloat val) {
+        
+        for (NSString *key in _keys)
+        {
+            
+            for (UIView *myView in _myViews)
+            {
+                
+                ((MyLayoutDime*)[myView valueForKey:key]).min(val);
+            }
+        }
+        return self;
+    };
+
+}
+
+-(MyMaker* (^)(CGFloat val))max
+{
+    _clear = YES;
+    return ^id(CGFloat val) {
+        
+        for (NSString *key in _keys)
+        {
+            
+            for (UIView *myView in _myViews)
+            {
+                
+                ((MyLayoutDime*)[myView valueForKey:key]).max(val);
+            }
+        }
+        return self;
+    };
+
+}
+
+
 
 
 

@@ -7,47 +7,55 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		181385BF1B5A617500DEA407 /* Test17ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181385BE1B5A617500DEA407 /* Test17ViewController.m */; };
-		183AB2D01B3664DB003E999F /* Test1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2CF1B3664DB003E999F /* Test1ViewController.m */; };
-		183AB2D31B36714F003E999F /* Test2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2D21B36714F003E999F /* Test2ViewController.m */; };
-		183AB2D61B36A9FA003E999F /* Test3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2D51B36A9FA003E999F /* Test3ViewController.m */; };
-		183AB2D91B36ACC1003E999F /* Test4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2D81B36ACC1003E999F /* Test4ViewController.m */; };
-		183AB2DC1B36B183003E999F /* Test5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2DB1B36B183003E999F /* Test5ViewController.m */; };
-		183AB2DF1B36B503003E999F /* Test6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2DE1B36B503003E999F /* Test6ViewController.m */; };
-		183AB2E21B36B99A003E999F /* Test7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2E11B36B99A003E999F /* Test7ViewController.m */; };
-		183AB2E51B36CB41003E999F /* Test8ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2E41B36CB41003E999F /* Test8ViewController.m */; };
-		183AB2E81B36CB69003E999F /* Test9ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2E71B36CB69003E999F /* Test9ViewController.m */; };
-		183AB2EB1B36CB75003E999F /* Test10ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2EA1B36CB75003E999F /* Test10ViewController.m */; };
+		181385BF1B5A617500DEA407 /* TLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181385BE1B5A617500DEA407 /* TLTest1ViewController.m */; };
+		183AB2D01B3664DB003E999F /* LLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2CF1B3664DB003E999F /* LLTest1ViewController.m */; };
+		183AB2D31B36714F003E999F /* LLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2D21B36714F003E999F /* LLTest2ViewController.m */; };
+		183AB2D61B36A9FA003E999F /* LLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2D51B36A9FA003E999F /* LLTest3ViewController.m */; };
+		183AB2D91B36ACC1003E999F /* LLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2D81B36ACC1003E999F /* LLTest4ViewController.m */; };
+		183AB2DC1B36B183003E999F /* LLTest6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2DB1B36B183003E999F /* LLTest6ViewController.m */; };
+		183AB2DF1B36B503003E999F /* LLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2DE1B36B503003E999F /* LLTest5ViewController.m */; };
+		183AB2E21B36B99A003E999F /* FLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2E11B36B99A003E999F /* FLTest1ViewController.m */; };
+		183AB2E51B36CB41003E999F /* FLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2E41B36CB41003E999F /* FLTest2ViewController.m */; };
+		183AB2E81B36CB69003E999F /* AllTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2E71B36CB69003E999F /* AllTest1ViewController.m */; };
+		183AB2EB1B36CB75003E999F /* LLTest7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2EA1B36CB75003E999F /* LLTest7ViewController.m */; };
 		183AB2ED1B36DB7E003E999F /* user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 183AB2EC1B36DB7E003E999F /* user@2x.png */; };
-		183AB2F01B36F8F8003E999F /* Test11ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2EF1B36F8F8003E999F /* Test11ViewController.m */; };
+		183AB2F01B36F8F8003E999F /* AllTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183AB2EF1B36F8F8003E999F /* AllTest2ViewController.m */; };
 		184082931B2C46E8003F378B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 184082921B2C46E8003F378B /* main.m */; };
 		184082961B2C46E8003F378B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 184082951B2C46E8003F378B /* AppDelegate.m */; };
 		184082991B2C46E8003F378B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184082981B2C46E8003F378B /* ViewController.m */; };
 		1840829E1B2C46E8003F378B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1840829D1B2C46E8003F378B /* Images.xcassets */; };
 		184082A11B2C46E8003F378B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1840829F1B2C46E8003F378B /* LaunchScreen.xib */; };
 		184082AD1B2C46E8003F378B /* MyLinearLayoutDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 184082AC1B2C46E8003F378B /* MyLinearLayoutDemoTests.m */; };
-		184CEC221B4E8B2900E97C7E /* Test16ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184CEC211B4E8B2900E97C7E /* Test16ViewController.m */; };
+		184CEC221B4E8B2900E97C7E /* RLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184CEC211B4E8B2900E97C7E /* RLTest3ViewController.m */; };
 		186A55F91B8C099600C96A3D /* MyFrameLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A55EE1B8C099600C96A3D /* MyFrameLayout.m */; };
 		186A55FA1B8C099600C96A3D /* MyLayoutBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A55F11B8C099600C96A3D /* MyLayoutBase.m */; };
 		186A55FB1B8C099600C96A3D /* MyLinearLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A55F41B8C099600C96A3D /* MyLinearLayout.m */; };
 		186A55FC1B8C099600C96A3D /* MyMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A55F61B8C099600C96A3D /* MyMaker.m */; };
 		186A55FD1B8C099600C96A3D /* MyRelativeLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A55F81B8C099600C96A3D /* MyRelativeLayout.m */; };
 		186A56541B8D90D900C96A3D /* MyTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A56531B8D90D900C96A3D /* MyTableLayout.m */; };
-		186A56571B8DB25F00C96A3D /* Test18ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A56561B8DB25F00C96A3D /* Test18ViewController.m */; };
+		186A56571B8DB25F00C96A3D /* TLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186A56561B8DB25F00C96A3D /* TLTest2ViewController.m */; };
 		187576E41BD55B6B00D83A27 /* image3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187576E31BD55B6B00D83A27 /* image3@2x.png */; };
-		187C6A4F1B47C94700A6949A /* Test13ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C6A4D1B47C94700A6949A /* Test13ViewController.m */; };
-		187D8CD11B8E0E7E006EFF62 /* Test19ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D8CD01B8E0E7E006EFF62 /* Test19ViewController.m */; };
-		1889AEAE1B4A69130001F871 /* Test14ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1889AEAD1B4A69130001F871 /* Test14ViewController.m */; };
-		18A2C4FC1B3A8C1A00FDFF5D /* Test12ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A2C4FB1B3A8C1A00FDFF5D /* Test12ViewController.m */; };
+		187C08661BE4D7B2006636EA /* MyFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C08651BE4D7B2006636EA /* MyFlowLayout.m */; };
+		187C08691BE50C77006636EA /* FLLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C08681BE50C77006636EA /* FLLTest1ViewController.m */; };
+		187C6A4F1B47C94700A6949A /* RLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187C6A4D1B47C94700A6949A /* RLTest1ViewController.m */; };
+		1889AEAE1B4A69130001F871 /* RLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1889AEAD1B4A69130001F871 /* RLTest2ViewController.m */; };
+		189445A51C12A4E6004C2316 /* minions4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 189445A41C12A4E6004C2316 /* minions4@2x.png */; };
+		189445A91C12A4FF004C2316 /* minions1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 189445A61C12A4FF004C2316 /* minions1@2x.png */; };
+		189445AA1C12A4FF004C2316 /* minions3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 189445A71C12A4FF004C2316 /* minions3@2x.png */; };
+		189445AB1C12A4FF004C2316 /* minions2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 189445A81C12A4FF004C2316 /* minions2@2x.png */; };
+		189445AF1C12A780004C2316 /* bk1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 189445AD1C12A780004C2316 /* bk1@2x.png */; };
+		189445B11C12A908004C2316 /* bk2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 189445B01C12A908004C2316 /* bk2@2x.png */; };
+		18A2C4FC1B3A8C1A00FDFF5D /* AllTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A2C4FB1B3A8C1A00FDFF5D /* AllTest3ViewController.m */; };
 		18A823741BD5D96100E52942 /* MyLayoutPos.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A823731BD5D96100E52942 /* MyLayoutPos.m */; };
 		18A823771BD5D97E00E52942 /* MyLayoutDime.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A823761BD5D97E00E52942 /* MyLayoutDime.m */; };
-		18A8237A1BD5D99300E52942 /* MyLayoutMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A823791BD5D99300E52942 /* MyLayoutMeasurement.m */; };
+		18A8237A1BD5D99300E52942 /* MyLayoutMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A823791BD5D99300E52942 /* MyLayoutMeasure.m */; };
 		18E8084D1B3A5D170059C410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8084C1B3A5D170059C410 /* QuartzCore.framework */; };
 		18EFB5341BD4C1180044E36B /* image2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EFB5331BD4C1180044E36B /* image2@2x.png */; };
 		18EFB5361BD4C11F0044E36B /* image1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EFB5351BD4C11F0044E36B /* image1@2x.png */; };
 		18EFB53B1BD4C57C0044E36B /* head2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EFB5391BD4C57C0044E36B /* head2@2x.png */; };
 		18EFB53C1BD4C57C0044E36B /* head1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18EFB53A1BD4C57C0044E36B /* head1@2x.png */; };
-		18FAC18A1B4ABD10005FD4E0 /* Test15ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FAC1891B4ABD10005FD4E0 /* Test15ViewController.m */; };
+		18FAC18A1B4ABD10005FD4E0 /* AllTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FAC1891B4ABD10005FD4E0 /* AllTest4ViewController.m */; };
+		18FDA8141C08387A007D9363 /* next@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FDA8131C08387A007D9363 /* next@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,31 +69,31 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		181385BD1B5A617500DEA407 /* Test17ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test17ViewController.h; sourceTree = "<group>"; };
-		181385BE1B5A617500DEA407 /* Test17ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test17ViewController.m; sourceTree = "<group>"; };
-		183AB2CE1B3664DB003E999F /* Test1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test1ViewController.h; sourceTree = "<group>"; };
-		183AB2CF1B3664DB003E999F /* Test1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test1ViewController.m; sourceTree = "<group>"; };
-		183AB2D11B36714F003E999F /* Test2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test2ViewController.h; sourceTree = "<group>"; };
-		183AB2D21B36714F003E999F /* Test2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test2ViewController.m; sourceTree = "<group>"; };
-		183AB2D41B36A9FA003E999F /* Test3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test3ViewController.h; sourceTree = "<group>"; };
-		183AB2D51B36A9FA003E999F /* Test3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test3ViewController.m; sourceTree = "<group>"; };
-		183AB2D71B36ACC1003E999F /* Test4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test4ViewController.h; sourceTree = "<group>"; };
-		183AB2D81B36ACC1003E999F /* Test4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test4ViewController.m; sourceTree = "<group>"; };
-		183AB2DA1B36B183003E999F /* Test5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test5ViewController.h; sourceTree = "<group>"; };
-		183AB2DB1B36B183003E999F /* Test5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test5ViewController.m; sourceTree = "<group>"; };
-		183AB2DD1B36B503003E999F /* Test6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test6ViewController.h; sourceTree = "<group>"; };
-		183AB2DE1B36B503003E999F /* Test6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test6ViewController.m; sourceTree = "<group>"; };
-		183AB2E01B36B99A003E999F /* Test7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test7ViewController.h; sourceTree = "<group>"; };
-		183AB2E11B36B99A003E999F /* Test7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test7ViewController.m; sourceTree = "<group>"; };
-		183AB2E31B36CB41003E999F /* Test8ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test8ViewController.h; sourceTree = "<group>"; };
-		183AB2E41B36CB41003E999F /* Test8ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test8ViewController.m; sourceTree = "<group>"; };
-		183AB2E61B36CB69003E999F /* Test9ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test9ViewController.h; sourceTree = "<group>"; };
-		183AB2E71B36CB69003E999F /* Test9ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test9ViewController.m; sourceTree = "<group>"; };
-		183AB2E91B36CB75003E999F /* Test10ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test10ViewController.h; sourceTree = "<group>"; };
-		183AB2EA1B36CB75003E999F /* Test10ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test10ViewController.m; sourceTree = "<group>"; };
+		181385BD1B5A617500DEA407 /* TLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLTest1ViewController.h; sourceTree = "<group>"; };
+		181385BE1B5A617500DEA407 /* TLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLTest1ViewController.m; sourceTree = "<group>"; };
+		183AB2CE1B3664DB003E999F /* LLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest1ViewController.h; sourceTree = "<group>"; };
+		183AB2CF1B3664DB003E999F /* LLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest1ViewController.m; sourceTree = "<group>"; };
+		183AB2D11B36714F003E999F /* LLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest2ViewController.h; sourceTree = "<group>"; };
+		183AB2D21B36714F003E999F /* LLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest2ViewController.m; sourceTree = "<group>"; };
+		183AB2D41B36A9FA003E999F /* LLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest3ViewController.h; sourceTree = "<group>"; };
+		183AB2D51B36A9FA003E999F /* LLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest3ViewController.m; sourceTree = "<group>"; };
+		183AB2D71B36ACC1003E999F /* LLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest4ViewController.h; sourceTree = "<group>"; };
+		183AB2D81B36ACC1003E999F /* LLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest4ViewController.m; sourceTree = "<group>"; };
+		183AB2DA1B36B183003E999F /* LLTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest6ViewController.h; sourceTree = "<group>"; };
+		183AB2DB1B36B183003E999F /* LLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest6ViewController.m; sourceTree = "<group>"; };
+		183AB2DD1B36B503003E999F /* LLTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest5ViewController.h; sourceTree = "<group>"; };
+		183AB2DE1B36B503003E999F /* LLTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest5ViewController.m; sourceTree = "<group>"; };
+		183AB2E01B36B99A003E999F /* FLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLTest1ViewController.h; sourceTree = "<group>"; };
+		183AB2E11B36B99A003E999F /* FLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLTest1ViewController.m; sourceTree = "<group>"; };
+		183AB2E31B36CB41003E999F /* FLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLTest2ViewController.h; sourceTree = "<group>"; };
+		183AB2E41B36CB41003E999F /* FLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLTest2ViewController.m; sourceTree = "<group>"; };
+		183AB2E61B36CB69003E999F /* AllTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1ViewController.h; sourceTree = "<group>"; };
+		183AB2E71B36CB69003E999F /* AllTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1ViewController.m; sourceTree = "<group>"; };
+		183AB2E91B36CB75003E999F /* LLTest7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest7ViewController.h; sourceTree = "<group>"; };
+		183AB2EA1B36CB75003E999F /* LLTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest7ViewController.m; sourceTree = "<group>"; };
 		183AB2EC1B36DB7E003E999F /* user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user@2x.png"; sourceTree = "<group>"; };
-		183AB2EE1B36F8F8003E999F /* Test11ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test11ViewController.h; sourceTree = "<group>"; };
-		183AB2EF1B36F8F8003E999F /* Test11ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test11ViewController.m; sourceTree = "<group>"; };
+		183AB2EE1B36F8F8003E999F /* AllTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest2ViewController.h; sourceTree = "<group>"; };
+		183AB2EF1B36F8F8003E999F /* AllTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest2ViewController.m; sourceTree = "<group>"; };
 		1840828D1B2C46E8003F378B /* MyLinearLayoutDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLinearLayoutDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		184082911B2C46E8003F378B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		184082921B2C46E8003F378B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -98,8 +106,8 @@
 		184082A61B2C46E8003F378B /* MyLinearLayoutDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyLinearLayoutDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		184082AB1B2C46E8003F378B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		184082AC1B2C46E8003F378B /* MyLinearLayoutDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyLinearLayoutDemoTests.m; sourceTree = "<group>"; };
-		184CEC201B4E8B2900E97C7E /* Test16ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test16ViewController.h; sourceTree = "<group>"; };
-		184CEC211B4E8B2900E97C7E /* Test16ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test16ViewController.m; sourceTree = "<group>"; };
+		184CEC201B4E8B2900E97C7E /* RLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLTest3ViewController.h; sourceTree = "<group>"; };
+		184CEC211B4E8B2900E97C7E /* RLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLTest3ViewController.m; sourceTree = "<group>"; };
 		186A55ED1B8C099600C96A3D /* MyFrameLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFrameLayout.h; sourceTree = "<group>"; };
 		186A55EE1B8C099600C96A3D /* MyFrameLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFrameLayout.m; sourceTree = "<group>"; };
 		186A55EF1B8C099600C96A3D /* MyLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayout.h; sourceTree = "<group>"; };
@@ -114,23 +122,31 @@
 		186A55F81B8C099600C96A3D /* MyRelativeLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRelativeLayout.m; sourceTree = "<group>"; };
 		186A56521B8D90D900C96A3D /* MyTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableLayout.h; sourceTree = "<group>"; };
 		186A56531B8D90D900C96A3D /* MyTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableLayout.m; sourceTree = "<group>"; };
-		186A56551B8DB25F00C96A3D /* Test18ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test18ViewController.h; sourceTree = "<group>"; };
-		186A56561B8DB25F00C96A3D /* Test18ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test18ViewController.m; sourceTree = "<group>"; };
+		186A56551B8DB25F00C96A3D /* TLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLTest2ViewController.h; sourceTree = "<group>"; };
+		186A56561B8DB25F00C96A3D /* TLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLTest2ViewController.m; sourceTree = "<group>"; };
 		187576E31BD55B6B00D83A27 /* image3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image3@2x.png"; sourceTree = "<group>"; };
-		187C6A4C1B47C94700A6949A /* Test13ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test13ViewController.h; sourceTree = "<group>"; };
-		187C6A4D1B47C94700A6949A /* Test13ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test13ViewController.m; sourceTree = "<group>"; };
-		187D8CCF1B8E0E7E006EFF62 /* Test19ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test19ViewController.h; sourceTree = "<group>"; };
-		187D8CD01B8E0E7E006EFF62 /* Test19ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test19ViewController.m; sourceTree = "<group>"; };
-		1889AEAC1B4A69130001F871 /* Test14ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test14ViewController.h; sourceTree = "<group>"; };
-		1889AEAD1B4A69130001F871 /* Test14ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test14ViewController.m; sourceTree = "<group>"; };
-		18A2C4FA1B3A8C1A00FDFF5D /* Test12ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test12ViewController.h; sourceTree = "<group>"; };
-		18A2C4FB1B3A8C1A00FDFF5D /* Test12ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test12ViewController.m; sourceTree = "<group>"; };
+		187C08641BE4D7B2006636EA /* MyFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFlowLayout.h; sourceTree = "<group>"; };
+		187C08651BE4D7B2006636EA /* MyFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFlowLayout.m; sourceTree = "<group>"; };
+		187C08671BE50C77006636EA /* FLLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest1ViewController.h; sourceTree = "<group>"; };
+		187C08681BE50C77006636EA /* FLLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest1ViewController.m; sourceTree = "<group>"; };
+		187C6A4C1B47C94700A6949A /* RLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLTest1ViewController.h; sourceTree = "<group>"; };
+		187C6A4D1B47C94700A6949A /* RLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLTest1ViewController.m; sourceTree = "<group>"; };
+		1889AEAC1B4A69130001F871 /* RLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLTest2ViewController.h; sourceTree = "<group>"; };
+		1889AEAD1B4A69130001F871 /* RLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLTest2ViewController.m; sourceTree = "<group>"; };
+		189445A41C12A4E6004C2316 /* minions4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minions4@2x.png"; sourceTree = "<group>"; };
+		189445A61C12A4FF004C2316 /* minions1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minions1@2x.png"; sourceTree = "<group>"; };
+		189445A71C12A4FF004C2316 /* minions3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minions3@2x.png"; sourceTree = "<group>"; };
+		189445A81C12A4FF004C2316 /* minions2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minions2@2x.png"; sourceTree = "<group>"; };
+		189445AD1C12A780004C2316 /* bk1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bk1@2x.png"; sourceTree = "<group>"; };
+		189445B01C12A908004C2316 /* bk2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bk2@2x.png"; sourceTree = "<group>"; };
+		18A2C4FA1B3A8C1A00FDFF5D /* AllTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest3ViewController.h; sourceTree = "<group>"; };
+		18A2C4FB1B3A8C1A00FDFF5D /* AllTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest3ViewController.m; sourceTree = "<group>"; };
 		18A823721BD5D96100E52942 /* MyLayoutPos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutPos.h; sourceTree = "<group>"; };
 		18A823731BD5D96100E52942 /* MyLayoutPos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutPos.m; sourceTree = "<group>"; };
 		18A823751BD5D97E00E52942 /* MyLayoutDime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDime.h; sourceTree = "<group>"; };
 		18A823761BD5D97E00E52942 /* MyLayoutDime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDime.m; sourceTree = "<group>"; };
-		18A823781BD5D99300E52942 /* MyLayoutMeasurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutMeasurement.h; sourceTree = "<group>"; };
-		18A823791BD5D99300E52942 /* MyLayoutMeasurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutMeasurement.m; sourceTree = "<group>"; };
+		18A823781BD5D99300E52942 /* MyLayoutMeasure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutMeasure.h; sourceTree = "<group>"; };
+		18A823791BD5D99300E52942 /* MyLayoutMeasure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutMeasure.m; sourceTree = "<group>"; };
 		18A8237B1BD5DA1700E52942 /* MyLayoutDef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutDef.h; sourceTree = "<group>"; };
 		18A8237C1BD5E0D400E52942 /* MyLayoutPosInner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutPosInner.h; sourceTree = "<group>"; };
 		18A8237D1BD5E1DC00E52942 /* MyLayoutDimeInner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutDimeInner.h; sourceTree = "<group>"; };
@@ -139,8 +155,9 @@
 		18EFB5351BD4C11F0044E36B /* image1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image1@2x.png"; sourceTree = "<group>"; };
 		18EFB5391BD4C57C0044E36B /* head2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "head2@2x.png"; sourceTree = "<group>"; };
 		18EFB53A1BD4C57C0044E36B /* head1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "head1@2x.png"; sourceTree = "<group>"; };
-		18FAC1881B4ABD10005FD4E0 /* Test15ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test15ViewController.h; sourceTree = "<group>"; };
-		18FAC1891B4ABD10005FD4E0 /* Test15ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test15ViewController.m; sourceTree = "<group>"; };
+		18FAC1881B4ABD10005FD4E0 /* AllTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest4ViewController.h; sourceTree = "<group>"; };
+		18FAC1891B4ABD10005FD4E0 /* AllTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest4ViewController.m; sourceTree = "<group>"; };
+		18FDA8131C08387A007D9363 /* next@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "next@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,44 +209,44 @@
 				1840829D1B2C46E8003F378B /* Images.xcassets */,
 				1840829F1B2C46E8003F378B /* LaunchScreen.xib */,
 				184082901B2C46E8003F378B /* Supporting Files */,
-				183AB2CE1B3664DB003E999F /* Test1ViewController.h */,
-				183AB2CF1B3664DB003E999F /* Test1ViewController.m */,
-				183AB2D11B36714F003E999F /* Test2ViewController.h */,
-				183AB2D21B36714F003E999F /* Test2ViewController.m */,
-				183AB2D41B36A9FA003E999F /* Test3ViewController.h */,
-				183AB2D51B36A9FA003E999F /* Test3ViewController.m */,
-				183AB2D71B36ACC1003E999F /* Test4ViewController.h */,
-				183AB2D81B36ACC1003E999F /* Test4ViewController.m */,
-				183AB2DA1B36B183003E999F /* Test5ViewController.h */,
-				183AB2DB1B36B183003E999F /* Test5ViewController.m */,
-				183AB2DD1B36B503003E999F /* Test6ViewController.h */,
-				183AB2DE1B36B503003E999F /* Test6ViewController.m */,
-				183AB2E01B36B99A003E999F /* Test7ViewController.h */,
-				183AB2E11B36B99A003E999F /* Test7ViewController.m */,
-				183AB2E31B36CB41003E999F /* Test8ViewController.h */,
-				183AB2E41B36CB41003E999F /* Test8ViewController.m */,
-				183AB2E61B36CB69003E999F /* Test9ViewController.h */,
-				183AB2E71B36CB69003E999F /* Test9ViewController.m */,
-				183AB2E91B36CB75003E999F /* Test10ViewController.h */,
-				183AB2EA1B36CB75003E999F /* Test10ViewController.m */,
-				183AB2EE1B36F8F8003E999F /* Test11ViewController.h */,
-				183AB2EF1B36F8F8003E999F /* Test11ViewController.m */,
-				18A2C4FA1B3A8C1A00FDFF5D /* Test12ViewController.h */,
-				18A2C4FB1B3A8C1A00FDFF5D /* Test12ViewController.m */,
-				187C6A4C1B47C94700A6949A /* Test13ViewController.h */,
-				187C6A4D1B47C94700A6949A /* Test13ViewController.m */,
-				1889AEAC1B4A69130001F871 /* Test14ViewController.h */,
-				1889AEAD1B4A69130001F871 /* Test14ViewController.m */,
-				18FAC1881B4ABD10005FD4E0 /* Test15ViewController.h */,
-				18FAC1891B4ABD10005FD4E0 /* Test15ViewController.m */,
-				184CEC201B4E8B2900E97C7E /* Test16ViewController.h */,
-				184CEC211B4E8B2900E97C7E /* Test16ViewController.m */,
-				181385BD1B5A617500DEA407 /* Test17ViewController.h */,
-				181385BE1B5A617500DEA407 /* Test17ViewController.m */,
-				186A56551B8DB25F00C96A3D /* Test18ViewController.h */,
-				186A56561B8DB25F00C96A3D /* Test18ViewController.m */,
-				187D8CCF1B8E0E7E006EFF62 /* Test19ViewController.h */,
-				187D8CD01B8E0E7E006EFF62 /* Test19ViewController.m */,
+				183AB2CE1B3664DB003E999F /* LLTest1ViewController.h */,
+				183AB2CF1B3664DB003E999F /* LLTest1ViewController.m */,
+				183AB2D11B36714F003E999F /* LLTest2ViewController.h */,
+				183AB2D21B36714F003E999F /* LLTest2ViewController.m */,
+				183AB2D41B36A9FA003E999F /* LLTest3ViewController.h */,
+				183AB2D51B36A9FA003E999F /* LLTest3ViewController.m */,
+				183AB2D71B36ACC1003E999F /* LLTest4ViewController.h */,
+				183AB2D81B36ACC1003E999F /* LLTest4ViewController.m */,
+				183AB2DD1B36B503003E999F /* LLTest5ViewController.h */,
+				183AB2DE1B36B503003E999F /* LLTest5ViewController.m */,
+				183AB2DA1B36B183003E999F /* LLTest6ViewController.h */,
+				183AB2DB1B36B183003E999F /* LLTest6ViewController.m */,
+				183AB2E91B36CB75003E999F /* LLTest7ViewController.h */,
+				183AB2EA1B36CB75003E999F /* LLTest7ViewController.m */,
+				183AB2E01B36B99A003E999F /* FLTest1ViewController.h */,
+				183AB2E11B36B99A003E999F /* FLTest1ViewController.m */,
+				183AB2E31B36CB41003E999F /* FLTest2ViewController.h */,
+				183AB2E41B36CB41003E999F /* FLTest2ViewController.m */,
+				187C6A4C1B47C94700A6949A /* RLTest1ViewController.h */,
+				187C6A4D1B47C94700A6949A /* RLTest1ViewController.m */,
+				1889AEAC1B4A69130001F871 /* RLTest2ViewController.h */,
+				1889AEAD1B4A69130001F871 /* RLTest2ViewController.m */,
+				184CEC201B4E8B2900E97C7E /* RLTest3ViewController.h */,
+				184CEC211B4E8B2900E97C7E /* RLTest3ViewController.m */,
+				181385BD1B5A617500DEA407 /* TLTest1ViewController.h */,
+				181385BE1B5A617500DEA407 /* TLTest1ViewController.m */,
+				186A56551B8DB25F00C96A3D /* TLTest2ViewController.h */,
+				186A56561B8DB25F00C96A3D /* TLTest2ViewController.m */,
+				187C08671BE50C77006636EA /* FLLTest1ViewController.h */,
+				187C08681BE50C77006636EA /* FLLTest1ViewController.m */,
+				183AB2E61B36CB69003E999F /* AllTest1ViewController.h */,
+				183AB2E71B36CB69003E999F /* AllTest1ViewController.m */,
+				183AB2EE1B36F8F8003E999F /* AllTest2ViewController.h */,
+				183AB2EF1B36F8F8003E999F /* AllTest2ViewController.m */,
+				18A2C4FA1B3A8C1A00FDFF5D /* AllTest3ViewController.h */,
+				18A2C4FB1B3A8C1A00FDFF5D /* AllTest3ViewController.m */,
+				18FAC1881B4ABD10005FD4E0 /* AllTest4ViewController.h */,
+				18FAC1891B4ABD10005FD4E0 /* AllTest4ViewController.m */,
 			);
 			path = MyLinearLayoutDemo;
 			sourceTree = "<group>";
@@ -237,6 +254,13 @@
 		184082901B2C46E8003F378B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				189445AD1C12A780004C2316 /* bk1@2x.png */,
+				189445B01C12A908004C2316 /* bk2@2x.png */,
+				189445A61C12A4FF004C2316 /* minions1@2x.png */,
+				189445A71C12A4FF004C2316 /* minions3@2x.png */,
+				189445A81C12A4FF004C2316 /* minions2@2x.png */,
+				189445A41C12A4E6004C2316 /* minions4@2x.png */,
+				18FDA8131C08387A007D9363 /* next@2x.png */,
 				187576E31BD55B6B00D83A27 /* image3@2x.png */,
 				18EFB5391BD4C57C0044E36B /* head2@2x.png */,
 				18EFB53A1BD4C57C0044E36B /* head1@2x.png */,
@@ -278,19 +302,21 @@
 				186A55F41B8C099600C96A3D /* MyLinearLayout.m */,
 				186A55F71B8C099600C96A3D /* MyRelativeLayout.h */,
 				186A55F81B8C099600C96A3D /* MyRelativeLayout.m */,
+				187C08641BE4D7B2006636EA /* MyFlowLayout.h */,
+				187C08651BE4D7B2006636EA /* MyFlowLayout.m */,
+				186A56521B8D90D900C96A3D /* MyTableLayout.h */,
+				186A56531B8D90D900C96A3D /* MyTableLayout.m */,
 				186A55F21B8C099600C96A3D /* MyLayoutInner.h */,
 				186A55F51B8C099600C96A3D /* MyMaker.h */,
 				186A55F61B8C099600C96A3D /* MyMaker.m */,
-				186A56521B8D90D900C96A3D /* MyTableLayout.h */,
-				186A56531B8D90D900C96A3D /* MyTableLayout.m */,
 				18A823721BD5D96100E52942 /* MyLayoutPos.h */,
 				18A8237C1BD5E0D400E52942 /* MyLayoutPosInner.h */,
 				18A823731BD5D96100E52942 /* MyLayoutPos.m */,
 				18A823751BD5D97E00E52942 /* MyLayoutDime.h */,
 				18A8237D1BD5E1DC00E52942 /* MyLayoutDimeInner.h */,
 				18A823761BD5D97E00E52942 /* MyLayoutDime.m */,
-				18A823781BD5D99300E52942 /* MyLayoutMeasurement.h */,
-				18A823791BD5D99300E52942 /* MyLayoutMeasurement.m */,
+				18A823781BD5D99300E52942 /* MyLayoutMeasure.h */,
+				18A823791BD5D99300E52942 /* MyLayoutMeasure.m */,
 				18A8237B1BD5DA1700E52942 /* MyLayoutDef.h */,
 			);
 			path = MyLayout;
@@ -377,14 +403,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				189445AA1C12A4FF004C2316 /* minions3@2x.png in Resources */,
+				189445A91C12A4FF004C2316 /* minions1@2x.png in Resources */,
 				187576E41BD55B6B00D83A27 /* image3@2x.png in Resources */,
+				18FDA8141C08387A007D9363 /* next@2x.png in Resources */,
 				183AB2ED1B36DB7E003E999F /* user@2x.png in Resources */,
+				189445AB1C12A4FF004C2316 /* minions2@2x.png in Resources */,
 				18EFB53C1BD4C57C0044E36B /* head1@2x.png in Resources */,
 				18EFB53B1BD4C57C0044E36B /* head2@2x.png in Resources */,
 				184082A11B2C46E8003F378B /* LaunchScreen.xib in Resources */,
 				1840829E1B2C46E8003F378B /* Images.xcassets in Resources */,
+				189445A51C12A4E6004C2316 /* minions4@2x.png in Resources */,
 				18EFB5361BD4C11F0044E36B /* image1@2x.png in Resources */,
 				18EFB5341BD4C1180044E36B /* image2@2x.png in Resources */,
+				189445AF1C12A780004C2316 /* bk1@2x.png in Resources */,
+				189445B11C12A908004C2316 /* bk2@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,35 +435,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18A8237A1BD5D99300E52942 /* MyLayoutMeasurement.m in Sources */,
-				183AB2E21B36B99A003E999F /* Test7ViewController.m in Sources */,
-				18A2C4FC1B3A8C1A00FDFF5D /* Test12ViewController.m in Sources */,
-				183AB2EB1B36CB75003E999F /* Test10ViewController.m in Sources */,
-				183AB2D91B36ACC1003E999F /* Test4ViewController.m in Sources */,
-				184CEC221B4E8B2900E97C7E /* Test16ViewController.m in Sources */,
-				183AB2E51B36CB41003E999F /* Test8ViewController.m in Sources */,
-				183AB2D31B36714F003E999F /* Test2ViewController.m in Sources */,
-				18FAC18A1B4ABD10005FD4E0 /* Test15ViewController.m in Sources */,
+				18A8237A1BD5D99300E52942 /* MyLayoutMeasure.m in Sources */,
+				183AB2E21B36B99A003E999F /* FLTest1ViewController.m in Sources */,
+				18A2C4FC1B3A8C1A00FDFF5D /* AllTest3ViewController.m in Sources */,
+				183AB2EB1B36CB75003E999F /* LLTest7ViewController.m in Sources */,
+				183AB2D91B36ACC1003E999F /* LLTest4ViewController.m in Sources */,
+				187C08661BE4D7B2006636EA /* MyFlowLayout.m in Sources */,
+				187C08691BE50C77006636EA /* FLLTest1ViewController.m in Sources */,
+				184CEC221B4E8B2900E97C7E /* RLTest3ViewController.m in Sources */,
+				183AB2E51B36CB41003E999F /* FLTest2ViewController.m in Sources */,
+				183AB2D31B36714F003E999F /* LLTest2ViewController.m in Sources */,
+				18FAC18A1B4ABD10005FD4E0 /* AllTest4ViewController.m in Sources */,
 				186A55FD1B8C099600C96A3D /* MyRelativeLayout.m in Sources */,
-				183AB2F01B36F8F8003E999F /* Test11ViewController.m in Sources */,
-				183AB2DC1B36B183003E999F /* Test5ViewController.m in Sources */,
-				1889AEAE1B4A69130001F871 /* Test14ViewController.m in Sources */,
-				181385BF1B5A617500DEA407 /* Test17ViewController.m in Sources */,
-				183AB2D61B36A9FA003E999F /* Test3ViewController.m in Sources */,
-				187D8CD11B8E0E7E006EFF62 /* Test19ViewController.m in Sources */,
-				187C6A4F1B47C94700A6949A /* Test13ViewController.m in Sources */,
+				183AB2F01B36F8F8003E999F /* AllTest2ViewController.m in Sources */,
+				183AB2DC1B36B183003E999F /* LLTest6ViewController.m in Sources */,
+				1889AEAE1B4A69130001F871 /* RLTest2ViewController.m in Sources */,
+				181385BF1B5A617500DEA407 /* TLTest1ViewController.m in Sources */,
+				183AB2D61B36A9FA003E999F /* LLTest3ViewController.m in Sources */,
+				187C6A4F1B47C94700A6949A /* RLTest1ViewController.m in Sources */,
 				184082991B2C46E8003F378B /* ViewController.m in Sources */,
 				186A55FB1B8C099600C96A3D /* MyLinearLayout.m in Sources */,
 				184082961B2C46E8003F378B /* AppDelegate.m in Sources */,
 				186A56541B8D90D900C96A3D /* MyTableLayout.m in Sources */,
-				186A56571B8DB25F00C96A3D /* Test18ViewController.m in Sources */,
+				186A56571B8DB25F00C96A3D /* TLTest2ViewController.m in Sources */,
 				186A55FA1B8C099600C96A3D /* MyLayoutBase.m in Sources */,
 				18A823771BD5D97E00E52942 /* MyLayoutDime.m in Sources */,
 				186A55FC1B8C099600C96A3D /* MyMaker.m in Sources */,
-				183AB2D01B3664DB003E999F /* Test1ViewController.m in Sources */,
-				183AB2DF1B36B503003E999F /* Test6ViewController.m in Sources */,
+				183AB2D01B3664DB003E999F /* LLTest1ViewController.m in Sources */,
+				183AB2DF1B36B503003E999F /* LLTest5ViewController.m in Sources */,
 				186A55F91B8C099600C96A3D /* MyFrameLayout.m in Sources */,
-				183AB2E81B36CB69003E999F /* Test9ViewController.m in Sources */,
+				183AB2E81B36CB69003E999F /* AllTest1ViewController.m in Sources */,
 				18A823741BD5D96100E52942 /* MyLayoutPos.m in Sources */,
 				184082931B2C46E8003F378B /* main.m in Sources */,
 			);

@@ -83,6 +83,10 @@
 -(void)resetMyLayoutSetting;
 
 
+//如果设置为YES则表示这个视图不会受任何布局视图的布局控制，而是用自身的frame的值进行布局，默认设置为NO
+@property(nonatomic, assign) BOOL useFrame;
+
+
 @end
 
 
@@ -91,7 +95,7 @@
 @interface MyBorderLineDraw : NSObject
 
 @property(nonatomic,strong) UIColor *color;             //颜色
-@property(nonatomic,strong) UIColor *insetColor;        //嵌入颜色，用于实现立体效果
+@property(nonatomic,strong) UIColor *insetColor __attribute__((deprecated));       //嵌入颜色，用于实现立体效果,这个属性无效。
 @property(nonatomic,assign) CGFloat thick;       //厚度,默认为1
 @property(nonatomic,assign) CGFloat headIndent;  //头部缩进
 @property(nonatomic, assign) CGFloat tailIndent;  //尾部缩进
@@ -160,8 +164,12 @@
 @property(nonatomic,strong) UIImage *backgroundImage;
 @property(nonatomic,strong) UIImage *highlightedBackgroundImage;
 
-//设置单击触摸的事件，如果target为nil则取消事件。
+
+//设置单击触摸的事件，这个是触摸成功后的事件。如果target为nil则取消事件。
 -(void)setTarget:(id)target action:(SEL)action;
+//设置按下，按下取消(被取消，以及移动超过范围的取消)两个事件。如果设置为nil则取消事件，请不要在这两个事件中修改高亮颜色，背景图，以及高亮背景图。
+-(void)setTouchDownTarget:(id)target action:(SEL)action;
+-(void)setTouchCancelTarget:(id)target action:(SEL)action;
 
 
 /*

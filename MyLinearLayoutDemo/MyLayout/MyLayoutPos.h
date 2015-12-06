@@ -36,4 +36,12 @@
  */
 -(MyLayoutPos* (^)(id val))equalTo;
 
+
+//上面设置的属性
+@property(nonatomic, assign, readonly) CGFloat offsetVal;
+@property(nonatomic, assign, readonly) CGFloat minVal;
+@property(nonatomic, assign, readonly) CGFloat maxVal;
+@property(nonatomic, strong, readonly) id posVal;
+
+
 @end

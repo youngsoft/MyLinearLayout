@@ -14,11 +14,6 @@
 
 @property(nonatomic, weak) UIView *view;
 @property(nonatomic, assign) MarignGravity dime;
-@property(nonatomic, assign) CGFloat addVal;
-@property(nonatomic, assign) CGFloat minVal;
-@property(nonatomic, assign) CGFloat maxVal;
-@property(nonatomic, assign) CGFloat mutilVal;
-@property(nonatomic, strong) id dimeVal;
 
 @property(nonatomic, assign) MyLayoutValueType dimeValType;
 

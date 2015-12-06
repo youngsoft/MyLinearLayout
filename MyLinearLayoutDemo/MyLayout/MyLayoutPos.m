@@ -13,6 +13,13 @@
 
 
 @implementation MyLayoutPos
+{
+    CGFloat _offsetVal;
+    CGFloat _minVal;
+    CGFloat _maxVal;
+    id _posVal;
+
+}
 
 -(id)init
 {
@@ -55,11 +62,6 @@
     
 }
 
--(void)setPosNumVal:(NSNumber *)posNumVal
-{
-    NSAssert(0, @"oops");
-}
-
 
 -(MyLayoutPos*)posRelaVal
 {
@@ -70,12 +72,6 @@
         return _posVal;
     
     return nil;
-    
-}
-
--(void)setPosRelaVal:(MyLayoutPos *)posRelaVal
-{
-    NSAssert(0, @"oops");
     
 }
 
@@ -93,27 +89,17 @@
     
 }
 
--(void)setPosArrVal:(NSArray *)posArrVal
-{
-    NSAssert(0, @"oops");
-}
-
 
 -(CGFloat)margin
 {
     CGFloat retVal = _offsetVal;
     
     if (self.posNumVal != nil)
-        retVal +=self.posNumVal.floatValue;
+        retVal +=self.posNumVal.doubleValue;
     
     return [self validMargin:retVal];
 }
 
--(void)setMargin:(CGFloat)margin
-{
-    NSAssert(0, @"oops");
-    
-}
 
 -(CGFloat)validMargin:(CGFloat)margin
 {
@@ -181,10 +167,90 @@
     
 }
 
--(void)dealloc
+
++(NSString*)posstrFromPos:(MyLayoutPos*)posobj showView:(BOOL)showView
 {
     
+    NSString *viewstr = @"";
+    if (showView)
+    {
+        viewstr = [NSString stringWithFormat:@"View:%p.", posobj.view];
+    }
+    
+    NSString *posStr = @"";
+    
+    switch (posobj.pos) {
+        case MGRAVITY_HORZ_LEFT:
+            posStr = @"LeftPos";
+            break;
+        case MGRAVITY_HORZ_CENTER:
+            posStr = @"CenterXPos";
+            break;
+        case MGRAVITY_HORZ_RIGHT:
+            posStr = @"RightPos";
+            break;
+        case MGRAVITY_VERT_TOP:
+            posStr = @"TopPos";
+            break;
+        case MGRAVITY_VERT_CENTER:
+            posStr = @"CenterYPos";
+            break;
+        case MGRAVITY_VERT_BOTTOM:
+            posStr = @"BottomPos";
+            break;
+        default:
+            break;
+    }
+    
+    return [NSString stringWithFormat:@"%@%@",viewstr,posStr];
+
+    
 }
+
+-(NSString*)description
+{
+    NSString *posValStr = @"";
+    switch (_posValType) {
+        case MyLayoutValueType_NULL:
+            posValStr = @"nil";
+            break;
+        case MyLayoutValueType_NSNumber:
+            posValStr = [_posVal description];
+            break;
+        case MyLayoutValueType_Layout:
+            posValStr = [MyLayoutPos posstrFromPos:_posVal showView:YES];
+            break;
+        case MyLayoutValueType_Array:
+        {
+            posValStr = @"[";
+            for (NSObject *obj in _posVal)
+            {
+                if ([obj isKindOfClass:[MyLayoutPos class]])
+                {
+                    posValStr = [posValStr stringByAppendingString:[MyLayoutPos posstrFromPos:(MyLayoutPos*)obj showView:YES]];
+                }
+                else
+                {
+                    posValStr = [posValStr stringByAppendingString:[obj description]];
+
+                }
+                
+                if (obj != [_posVal lastObject])
+                    posValStr = [posValStr stringByAppendingString:@", "];
+                
+            }
+            
+            posValStr = [posValStr stringByAppendingString:@"]"];
+            
+        }
+        default:
+            break;
+    }
+
+    return [NSString stringWithFormat:@"%@=%@, Offset=%g, Max=%g, Min=%g",[MyLayoutPos posstrFromPos:self showView:NO], posValStr, _offsetVal, _maxVal == CGFLOAT_MAX ? NAN : _maxVal , _minVal == -CGFLOAT_MAX ? NAN : _minVal];
+   
+}
+
 
 
 @end

@@ -33,4 +33,13 @@
 -(MyLayoutDime* (^)(id val))equalTo;
 
 
+//上面方法设置的属性的获取。
+@property(nonatomic, assign, readonly) CGFloat addVal;
+@property(nonatomic, assign, readonly) CGFloat minVal;
+@property(nonatomic, assign, readonly) CGFloat maxVal;
+@property(nonatomic, assign, readonly) CGFloat mutilVal;
+@property(nonatomic, strong, readonly) id dimeVal;
+
+
+
 @end

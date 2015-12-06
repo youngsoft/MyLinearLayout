@@ -7,25 +7,32 @@
 //
 
 #import "ViewController.h"
-#import "Test1ViewController.h"
-#import "Test2ViewController.h"
-#import "Test3ViewController.h"
-#import "Test4ViewController.h"
-#import "Test5ViewController.h"
-#import "Test6ViewController.h"
-#import "Test7ViewController.h"
-#import "Test8ViewController.h"
-#import "Test9ViewController.h"
-#import "Test10ViewController.h"
-#import "Test11ViewController.h"
-#import "Test12ViewController.h"
-#import "Test13ViewController.h"
-#import "Test14ViewController.h"
-#import "Test15ViewController.h"
-#import "Test16ViewController.h"
-#import "Test17ViewController.h"
-#import "Test18ViewController.h"
-#import "Test19ViewController.h"
+#import "LLTest1ViewController.h"
+#import "LLTest2ViewController.h"
+#import "LLTest3ViewController.h"
+#import "LLTest4ViewController.h"
+#import "LLTest5ViewController.h"
+#import "LLTest6ViewController.h"
+#import "LLTest7ViewController.h"
+
+#import "FLTest1ViewController.h"
+#import "FLTest2ViewController.h"
+
+#import "RLTest1ViewController.h"
+#import "RLTest2ViewController.h"
+#import "RLTest3ViewController.h"
+
+
+#import "TLTest1ViewController.h"
+#import "TLTest2ViewController.h"
+
+#import "FLLTest1ViewController.h"
+
+
+#import "AllTest1ViewController.h"
+#import "AllTest2ViewController.h"
+#import "AllTest3ViewController.h"
+#import "AllTest4ViewController.h"
 
 
 @interface ViewController ()
@@ -61,7 +68,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 19;
+    return 20;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -78,55 +85,55 @@
             cell.textLabel.text = @"线性布局-和UIScrollView的结合";
             break;
         case 2:
-            cell.textLabel.text = @"线性布局-子视图的位置停靠";
+            cell.textLabel.text = @"线性布局-子视图停靠";
             break;
         case 3:
             cell.textLabel.text = @"线性布局-布局尺寸由子视图决定";
             break;
         case 4:
-            cell.textLabel.text = @"线性布局-UITableViewCell动态高度";
-            break;
-        case 5:
             cell.textLabel.text = @"线性布局-子视图尺寸由布局决定";
             break;
+        case 5:
+            cell.textLabel.text = @"线性布局-视图之间的浮动间距";
+            break;
         case 6:
-            cell.textLabel.text = @"完美屏幕适配1";
+            cell.textLabel.text = @"线性布局-均分视图和间距";
             break;
         case 7:
-            cell.textLabel.text = @"完美屏幕适配2";
+            cell.textLabel.text = @"框架布局1";
             break;
         case 8:
-            cell.textLabel.text = @"视图之间的浮动间距";
+            cell.textLabel.text = @"框架布局2";
             break;
         case 9:
-            cell.textLabel.text = @"均分视图和间距";
-            break;
-        case 10:
-            cell.textLabel.text = @"框架布局";
-            break;
-        case 11:
-            cell.textLabel.text = @"UITableView静态界面的替换方案";
-            break;
-        case 12:
             cell.textLabel.text = @"相对布局1-视图之间的依赖";
             break;
-        case 13:
+        case 10:
             cell.textLabel.text = @"相对布局2-子视图之间尺寸分配";
             break;
-        case 14:
-            cell.textLabel.text = @"相对布局3-父视图高宽由子视图决定";
+        case 11:
+            cell.textLabel.text = @"相对布局3-一组视图整体居中";
             break;
-        case 15:
-            cell.textLabel.text = @"相对布局4-一组视图居中";
-            break;
-        case 16:
+        case 12:
             cell.textLabel.text = @"表格布局-垂直表格";
             break;
-        case 17:
+        case 13:
             cell.textLabel.text = @"表格布局-水平表格(瀑布流)";
             break;
+        case 14:
+            cell.textLabel.text = @"流式布局";
+            break;
+        case 15:
+            cell.textLabel.text = @"UITableViewCell动态高度";
+            break;
+        case 16:
+            cell.textLabel.text = @"完美屏幕适配";
+            break;
+        case 17:
+            cell.textLabel.text = @"UITableView的替换方案";
+            break;
         case 18:
-            cell.textLabel.text = @"其他";
+            cell.textLabel.text = @"五种布局实现同一功能";
             break;
         default:
             break;
@@ -143,61 +150,61 @@
     UIViewController *vc = nil;
     switch (indexPath.row) {
         case 0:
-            vc = [Test1ViewController new];
+            vc = [LLTest1ViewController new];
             break;
         case 1:
-            vc = [Test2ViewController new];
+            vc = [LLTest2ViewController new];
             break;
         case 2:
-            vc = [Test3ViewController new];
+            vc = [LLTest3ViewController new];
             break;
         case 3:
-            vc = [Test4ViewController new];
+            vc = [LLTest4ViewController new];
             break;
         case 4:
-            vc = [Test5ViewController new];
+            vc = [LLTest5ViewController new];
             break;
         case 5:
-            vc = [Test6ViewController new];
+            vc = [LLTest6ViewController new];
             break;
         case 6:
-            vc = [Test7ViewController new];
+            vc = [LLTest7ViewController new];
             break;
         case 7:
-            vc = [Test8ViewController new];
+            vc = [FLTest1ViewController new];
             break;
         case 8:
-            vc = [Test9ViewController new];
+            vc = [FLTest2ViewController new];
             break;
         case 9:
-            vc = [Test10ViewController new];
+            vc = [RLTest1ViewController new];
             break;
         case 10:
-            vc = [Test11ViewController new];
+            vc = [RLTest2ViewController new];
             break;
         case 11:
-            vc = [Test12ViewController new];
+            vc = [RLTest3ViewController new];
             break;
         case 12:
-            vc = [Test13ViewController new];
+            vc = [TLTest1ViewController new];
             break;
         case 13:
-            vc = [Test14ViewController new];
+            vc = [TLTest2ViewController new];
             break;
         case 14:
-            vc = [Test15ViewController new];
+            vc = [FLLTest1ViewController new];
             break;
         case 15:
-            vc = [Test16ViewController new];
+            vc = [AllTest1ViewController new];
             break;
         case 16:
-            vc = [Test17ViewController new];
+            vc = [AllTest2ViewController new];
             break;
         case 17:
-            vc = [Test18ViewController new];
+            vc = [AllTest3ViewController new];
             break;
         case 18:
-            vc = [Test19ViewController new];
+            vc = [AllTest4ViewController new];
             break;
         default:
             break;

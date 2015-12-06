@@ -54,10 +54,12 @@
 //赋值操支持NSNumber,UIView,MyRelativePos,MyRelativeDime, NSArray[MyRelativeDime]
 -(MyMaker* (^)(id val))equalTo;
 
-//相对布局下子视图独有
 -(MyMaker* (^)(CGFloat val))offset;
 -(MyMaker* (^)(CGFloat val))multiply;
 -(MyMaker* (^)(CGFloat val))add;
+-(MyMaker* (^)(CGFloat val))min;
+-(MyMaker* (^)(CGFloat val))max;
+
 
 
 @end

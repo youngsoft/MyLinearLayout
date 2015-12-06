@@ -17,16 +17,10 @@
 @end
 
 
-//布局排列的方向
-typedef enum : NSUInteger {
-    LVORIENTATION_VERT,
-    LVORIENTATION_HORZ,
-} LineViewOrientation;
-
-
 
 /*
- 线性布局，分为水平和垂直方向，根据添加进入的子视图的顺序依次从上到下或者从左到右分别排列布局
+ 线性布局，分为水平和垂直方向，根据添加进入的子视图的顺序依次从上到下或者从左到右分别排列布局，
+ 线性布局支持wrapContentHeight,wrapContentWidth特性
  */
 @interface MyLinearLayout : MyLayoutBase
 
@@ -56,6 +50,12 @@ typedef enum : NSUInteger {
 //均分子视图的间距，上面函数会使子视图和间距的尺寸保持一致，而这个函数则是子视图的尺寸保持不变而间距自动平均分配。
 //centered的意义同上。
 -(void)averageMargin:(BOOL)centered;
+
+
+//指定子视图之间的间距,布局总是会为两个子视图之间添加这个间距值，默认为0
+//这个属性的意义是当子视图之间的间距是固定时，不需要分别为每个子视图都设置相等的间距，而是设置一个值即可。
+//这个属性通常和padding结合用来设置一些统一的边距值
+@property(nonatomic, assign) CGFloat subviewMargin;
 
 
 

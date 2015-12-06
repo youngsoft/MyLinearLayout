@@ -13,11 +13,8 @@
 @interface MyLayoutPos()
 
 @property(nonatomic, weak) UIView *view;
+
 @property(nonatomic, assign) MarignGravity pos;
-@property(nonatomic, assign) CGFloat offsetVal;
-@property(nonatomic, assign) CGFloat minVal;
-@property(nonatomic, assign) CGFloat maxVal;
-@property(nonatomic, strong) id posVal;
 
 @property(nonatomic, assign) MyLayoutValueType posValType;
 
@@ -25,10 +22,12 @@
 @property(nonatomic, readonly) MyLayoutPos *posRelaVal;
 @property(nonatomic, readonly) NSArray *posArrVal;
 
-//posNumVal + offsetVal
+// minVal <= posNumVal + offsetVal <=maxVal . 注意这个只试用于相对布局。对于线性布局和框架布局来说，因为可以支持相对边距。
+// 所以线性布局和框架布局不能使用这个属性。
 @property(nonatomic,readonly) CGFloat margin;
 
 //计算有效的margin值，有效的margin  minVal <= margin <=maxVal
 -(CGFloat)validMargin:(CGFloat)margin;
+
 
 @end

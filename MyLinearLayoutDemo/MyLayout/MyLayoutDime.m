@@ -11,6 +11,13 @@
 #import "MyLayoutBase.h"
 
 @implementation MyLayoutDime
+{
+    CGFloat _addVal;
+    CGFloat _minVal;
+    CGFloat _maxVal;
+    CGFloat _mutilVal;
+    id _dimeVal;
+}
 
 -(id)init
 {
@@ -183,7 +190,7 @@
 
 -(CGFloat) measure
 {
-    CGFloat retVal = self.dimeNumVal.floatValue * _mutilVal + _addVal;
+    CGFloat retVal = self.dimeNumVal.doubleValue * _mutilVal + _addVal;
     return [self validMeasure:retVal];
 }
 
@@ -198,6 +205,77 @@
 -(void)setMeasure:(CGFloat)measure
 {
     NSAssert(0, @"oops");
+}
+
+
++(NSString*)dimestrFromDime:(MyLayoutDime*)dimeobj showView:(BOOL)showView
+{
+    
+    NSString *viewstr = @"";
+    if (showView)
+    {
+        viewstr = [NSString stringWithFormat:@"View:%p.", dimeobj.view];
+    }
+    
+    NSString *dimeStr = @"";
+    
+    switch (dimeobj.dime) {
+        case MGRAVITY_HORZ_FILL:
+            dimeStr = @"WidthDime";
+            break;
+        case MGRAVITY_VERT_FILL:
+            dimeStr = @"HeightDime";
+            break;
+        default:
+            break;
+    }
+    
+    return [NSString stringWithFormat:@"%@%@",viewstr,dimeStr];
+    
+}
+
+-(NSString*)description
+{
+    NSString *dimeValStr = @"";
+    switch (_dimeValType) {
+        case MyLayoutValueType_NULL:
+            dimeValStr = @"nil";
+            break;
+        case MyLayoutValueType_NSNumber:
+            dimeValStr = [_dimeVal description];
+            break;
+        case MyLayoutValueType_Layout:
+            dimeValStr = [MyLayoutDime dimestrFromDime:_dimeVal showView:YES];
+            break;
+        case MyLayoutValueType_Array:
+        {
+            dimeValStr = @"[";
+            for (NSObject *obj in _dimeVal)
+            {
+                if ([obj isKindOfClass:[MyLayoutDime class]])
+                {
+                    dimeValStr = [dimeValStr stringByAppendingString:[MyLayoutDime dimestrFromDime:(MyLayoutDime*)obj showView:YES]];
+                }
+                else
+                {
+                    dimeValStr = [dimeValStr stringByAppendingString:[obj description]];
+                    
+                }
+                
+                if (obj != [_dimeVal lastObject])
+                    dimeValStr = [dimeValStr stringByAppendingString:@", "];
+                
+            }
+            
+            dimeValStr = [dimeValStr stringByAppendingString:@"]"];
+            
+        }
+        default:
+            break;
+    }
+    
+    return [NSString stringWithFormat:@"%@=%@, Multiply=%g, Add=%g, Max=%g, Min=%g",[MyLayoutDime dimestrFromDime:self showView:NO], dimeValStr, _mutilVal, _addVal, _maxVal == CGFLOAT_MAX ? NAN : _maxVal , _minVal == -CGFLOAT_MAX ? NAN : _minVal];
+    
 }
 
 

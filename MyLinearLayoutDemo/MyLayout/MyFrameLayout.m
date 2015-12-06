@@ -13,27 +13,19 @@
 
 @implementation UIView(MyFrameLayoutExt)
 
-const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_margingravity";
 
 -(MarignGravity)marginGravity
 {
-    NSNumber *num = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MARGINGRAVITY);
-    if (num == nil)
-        return MGRAVITY_VERT_TOP | MGRAVITY_HORZ_LEFT;
-    return num.unsignedCharValue;
+    return self.myLayoutSizeClass.marginGravity;
 }
 
 
 -(void)setMarginGravity:(MarignGravity)marginGravity
 {
-    MarignGravity oldVal = [self marginGravity];
-    if (oldVal != marginGravity)
-    {
-        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MARGINGRAVITY, [NSNumber numberWithUnsignedChar:marginGravity], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
-    }
+
+    self.myLayoutSizeClass.marginGravity = marginGravity;
+    if (self.superview != nil)
+        [self.superview setNeedsLayout];    
 }
 
 @end
@@ -49,104 +41,122 @@ const char * const ASSOCIATEDOBJECT_KEY_MARGINGRAVITY = "associatedobject_key_ma
 */
 
 
--(void)calcSubView:(UIView*)subView pRect:(CGRect*)pRect inSize:(CGSize)selfSize
+-(void)calcSubView:(UIView*)sbv pRect:(CGRect*)pRect inSize:(CGSize)selfSize
 {
     
-    MarignGravity gravity = subView.marginGravity;
+    MarignGravity gravity = sbv.marginGravity;
     MarignGravity vert = gravity & MGRAVITY_HORZ_MASK;
     MarignGravity horz = gravity & MGRAVITY_VERT_MASK;
     
+     
     //优先用设定的宽度尺寸。
-    if (subView.widthDime.dimeNumVal != nil)
-        pRect->size.width = subView.widthDime.measure;
+    if (sbv.widthDime.dimeNumVal != nil)
+        pRect->size.width = sbv.widthDime.measure;
     
-    if (subView.heightDime.dimeNumVal != nil)
-        pRect->size.height = subView.heightDime.measure;
+    if (sbv.heightDime.dimeNumVal != nil)
+        pRect->size.height = sbv.heightDime.measure;
     
-    
-    [self horzGravity:horz selfWidth:selfSize.width leftMargin:subView.leftPos.margin centerMargin:subView.centerXPos.margin rightMargin:subView.rightPos.margin rect:pRect];
-    
-    if (subView.isFlexedHeight)
+    if (sbv.widthDime.dimeRelaVal != nil && sbv.widthDime.dimeRelaVal.view != sbv)
     {
-        CGSize sz = [subView sizeThatFits:CGSizeMake(pRect->size.width, 0)];
-        pRect->size.height = sz.height;
+        if (sbv.widthDime.dimeRelaVal.view == self)
+            pRect->size.width = (selfSize.width - self.leftPadding - self.rightPadding) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+        else
+            pRect->size.width = sbv.widthDime.dimeRelaVal.view.estimatedRect.size.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+        pRect->size.width = [sbv.widthDime validMeasure:pRect->size.width];
     }
     
-    [self vertGravity:vert selfHeight:selfSize.height topMargin:subView.topPos.margin centerMargin:subView.centerYPos.margin bottomMargin:subView.bottomPos.margin rect:pRect];
+    if (sbv.heightDime.dimeRelaVal != nil && sbv.heightDime.dimeRelaVal.view != sbv)
+    {
+        if (sbv.heightDime.dimeRelaVal.view == self)
+            pRect->size.height = (selfSize.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        else
+            pRect->size.height = sbv.heightDime.dimeRelaVal.view.estimatedRect.size.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        
+        pRect->size.height = [sbv.heightDime validMeasure:pRect->size.height];
+    }
+    
+   
+    [self horzGravity:horz selfWidth:selfSize.width sbv:sbv rect:pRect];
+   
+    
+    
+    if (sbv.isFlexedHeight)
+    {
+        CGSize sz = [sbv sizeThatFits:CGSizeMake(pRect->size.width, 0)];
+        pRect->size.height = [sbv.heightDime validMeasure:sz.height];
+    }
+    
+    [self vertGravity:vert selfHeight:selfSize.height sbv:sbv rect:pRect];
+    
+    
+    if (sbv.widthDime.dimeRelaVal != nil && sbv.widthDime.dimeRelaVal.view == sbv)
+    {
+        pRect->size.width =  pRect->size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+        pRect->size.width = [sbv.widthDime validMeasure:pRect->size.width];
+    }
+    
+    if (sbv.heightDime.dimeRelaVal != nil && sbv.heightDime.dimeRelaVal.view == sbv)
+    {
+        pRect->size.height = pRect->size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        pRect->size.height = [sbv.heightDime validMeasure:pRect->size.height];
+        
+        if (sbv.isFlexedHeight)
+        {
+            CGSize sz = [sbv sizeThatFits:CGSizeMake(pRect->size.width, 0)];
+            pRect->size.height = [sbv.heightDime validMeasure:sz.height];
+        }
+    }
+
+    
+ 
     
 }
 
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout
 {
     
-    CGRect selfRect;
-    
-    if (isEstimate)
-        selfRect = self.absPos.frame;
-    else
-        selfRect = [super estimateLayoutRect:size];
-    
-    
+    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout];
     CGSize selfSize = selfRect.size;
-    
     NSArray *sbs = self.subviews;
-    for (UIView *v in sbs)
+    for (UIView *sbv in sbs)
     {
+        
+        if (sbv.useFrame)
+            continue;
+        
         CGRect rect;
     
         if (!isEstimate)
+            rect  = sbv.frame;
+        else
         {
-            rect  = v.frame;
-        }
-        
-        if ([v isKindOfClass:[MyLayoutBase class]])
-        {
-            if (isEstimate)
+            if ([sbv isKindOfClass:[MyLayoutBase class]])
             {
-                MyLayoutBase *vl = (MyLayoutBase*)v;
-                rect = [vl estimateLayoutRect:vl.absPos.frame.size];
+                if (pHasSubLayout != nil)
+                    *pHasSubLayout = YES;
+                
+                MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
+                rect = [sbvl estimateLayoutRect:sbvl.absPos.frame.size];
             }
-        }
-
-
-        
-        //宽度等于另外视图的高度
-        if (v.widthDime.dimeRelaVal != nil && v.widthDime.dimeRelaVal.dime == MGRAVITY_VERT_FILL)
-        {
-            CGRect otherRect = v.widthDime.dimeRelaVal.view.frame;
-            [self calcSubView:v.widthDime.dimeRelaVal.view pRect:&otherRect inSize:selfSize];
-            rect.size.width = [v.widthDime validMeasure:otherRect.size.height];
+            else
+                rect = sbv.absPos.frame;
         }
         
-        //高度等于另外视图的宽度
-        if (v.heightDime.dimeRelaVal != nil && v.heightDime.dimeRelaVal.dime == MGRAVITY_HORZ_FILL)
-        {
-            CGRect otherRect = v.heightDime.dimeRelaVal.view.frame;
-            [self calcSubView:v.heightDime.dimeRelaVal.view pRect:&otherRect inSize:selfSize];
-            rect.size.height = [v.heightDime validMeasure:otherRect.size.width];
-        }
+        rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
+        rect.size.width  = [sbv.widthDime validMeasure:rect.size.width];
         
         //计算自己的位置和高宽
-        [self calcSubView:v pRect:&rect inSize:selfSize];
-        v.absPos.frame = rect;
+        [self calcSubView:sbv pRect:&rect inSize:selfSize];
+        sbv.absPos.frame = rect;
         
     }
     
+    selfRect.size.height = [self.heightDime validMeasure:selfRect.size.height];
+    selfRect.size.width = [self.widthDime validMeasure:selfRect.size.width];
+    
+    
     return selfRect;
 
-}
-
-
--(CGRect)estimateLayoutRect:(CGSize)size
-{
-    self.absPos.frame = [self calcLayoutRect:size isEstimate:NO];
-    return [self calcLayoutRect:CGSizeZero isEstimate:YES];
-}
-
-
--(CGRect)doLayoutSubviews
-{
-    return [self calcLayoutRect:CGSizeZero isEstimate:NO];
 }
 
 @end
