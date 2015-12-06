@@ -1,4 +1,4 @@
-# MyLinearLayout1.1
+# MyLinearLayout1.1.0
 
 ## 功能介绍
 
@@ -29,7 +29,7 @@
 ![演示图](https://github.com/youngsoft/MyLinearLayout/blob/master/mylayout.gif)
 
 
-## V1.1版本新功能
+## V1.1.0版本新功能
 
 1. 增加了新布局流式布局MyFlowLayout。     
 2. 线性布局添加了gravity停靠设置的屏幕水平居中和屏幕垂直居中的功能。  
