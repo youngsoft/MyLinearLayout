@@ -26,7 +26,7 @@
 
 ## 演示效果图
 
-![演示图](https://github.com/youngsoft/MyLinearLayout/blob/master/mylayout.gif)
+![演示图](http://7xoymz.com1.z0.glb.clouddn.com/mylayout.gif)
 
 
 ## V1.1.0版本新功能
