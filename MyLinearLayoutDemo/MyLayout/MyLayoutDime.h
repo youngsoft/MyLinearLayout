@@ -29,7 +29,11 @@
 
 
 
-//NSNumber, MyLayoutDime以及MyLayoutDime数组，数组的概念就是所有数组里面的子视图的尺寸平分父视图的尺寸。
+/*NSNumber, MyLayoutDime以及MyLayoutDime数组，
+ ***NSNumber值表示指定具体的宽度或者高度
+ ***MyLayoutDime值表示宽度和高度与设置的对象有依赖关系
+ ***MyLayoutDime数组的概念就是所有数组里面的子视图的尺寸平分父视图的尺寸。只有相对布局里面的子视图才支持这种设置。
+ */
 -(MyLayoutDime* (^)(id val))equalTo;
 
 

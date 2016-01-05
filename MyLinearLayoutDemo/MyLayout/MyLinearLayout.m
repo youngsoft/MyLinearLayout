@@ -74,6 +74,14 @@
     }
 }
 
+-(void)setSubviewMargin:(CGFloat)subviewMargin
+{
+    if (_subviewMargin != subviewMargin)
+    {
+        _subviewMargin = subviewMargin;
+        [self setNeedsLayout];
+    }
+}
 
 
 -(void)averageSubviews:(BOOL)centered

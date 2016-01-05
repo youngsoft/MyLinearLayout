@@ -929,7 +929,11 @@ BOOL _hasBegin;
         _hasDoCancel = NO;
         if (_touchDownTarget != nil && _touchDownAction != nil)
         {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
             [_touchDownTarget performSelector:_touchDownAction withObject:self];
+#pragma clang diagnostic pop
+
         }
         
     }
@@ -953,7 +957,11 @@ BOOL _hasBegin;
                     
                     if (_touchCancelTarget != nil && _touchCancelAction != nil)
                     {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                         [_touchCancelTarget performSelector:_touchCancelAction withObject:self];
+#pragma clang diagnostic pop
+
                     }
                     
                     _hasDoCancel = YES;
@@ -987,7 +995,11 @@ BOOL _hasBegin;
     CGPoint pt = [touch locationInView:self];
     if (CGRectContainsPoint(self.bounds, pt) && _action != nil && _canCallAction)
     {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [_target performSelector:_action withObject:self];
+#pragma clang diagnostic pop
+
     }
     else
     {
@@ -995,7 +1007,11 @@ BOOL _hasBegin;
         {
             if (_touchCancelTarget != nil && _touchCancelAction != nil)
             {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                 [_touchCancelTarget performSelector:_touchCancelAction withObject:self];
+#pragma clang diagnostic pop
+
             }
             
             _hasDoCancel = YES;
@@ -1015,7 +1031,11 @@ BOOL _hasBegin;
     {
         //设置一个延时.
         _forbidTouch = YES;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [self performSelector:@selector(doTargetAction:) withObject:[touches anyObject] afterDelay:0.12];
+#pragma clang diagnostic pop
+
         _hasBegin = NO;
     }
     
@@ -1047,7 +1067,11 @@ BOOL _hasBegin;
         {
             if (_touchCancelTarget != nil && _touchCancelAction != nil)
             {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                 [_touchCancelTarget performSelector:_touchCancelAction withObject:self];
+#pragma clang diagnostic pop
+
             }
             
             _hasDoCancel = YES;
@@ -1256,49 +1280,10 @@ BOOL _hasBegin;
     
     if (!self.isLayouting)
     {
-        self.isLayouting = YES;
+        _isLayouting = YES;
     
         if (self.priorAutoresizingMask)
             [super layoutSubviews];
-        
-      /*
-        UIView *newSuperview = self.superview;
-        if (newSuperview != nil && ![newSuperview isKindOfClass:[MyLayoutBase class]])
-        {
-            
-            //如果同时设置了左边和右边值则
-            if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) ||
-                [self.widthDime isMatchView:newSuperview] ||
-                (self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) ||
-                [self.heightDime isMatchView:newSuperview])
-            {
-                CGRect rectSuper = newSuperview.bounds;
-                CGRect rectSelf = self.frame;
-                
-                if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) || [self.widthDime isMatchView:newSuperview])
-                {
-                    self.wrapContentWidth = NO;
-                    [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin centerMargin:0  rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf];
-                }
-                
-                
-                if ((self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) || [self.heightDime isMatchView:newSuperview])
-                {
-                    self.wrapContentHeight = NO;
-                    [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin centerMargin:0 bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf];
-                }
-                
-                rectSelf.size.height = [self.heightDime validMeasure:rectSelf.size.height];
-                rectSelf.size.width = [self.widthDime validMeasure:rectSelf.size.width];
-                
-                self.frame = rectSelf;
-                
-               // [newSuperview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-                
-            }
-        }
-
-        */
         
         CGRect oldSelfRect = self.frame;
         CGRect newSelfRect = [self calcLayoutRect:CGSizeZero isEstimate:NO pHasSubLayout:nil];
@@ -1335,7 +1320,7 @@ BOOL _hasBegin;
        
         
         
-        self.isLayouting = NO;
+        _isLayouting = NO;
     }
     
     if (self.endLayoutBlock != nil)

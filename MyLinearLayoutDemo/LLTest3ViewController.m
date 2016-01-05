@@ -126,6 +126,9 @@
     [flowLayout1 addSubview:windowCenterHorzButton];
 
     
+    UIButton *subviewMarginButton = [self createActionButton:@"子视图间距设置" tag:1000];
+    [flowLayout1 addSubview:subviewMarginButton];
+    
     
     return flowLayout1;
 }
@@ -276,8 +279,6 @@
 
 -(void)handleGravity:(UIButton*)button
 {
-    //垂直布局，
-  
     switch (button.tag) {
         case 100:  //上
             self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MGRAVITY_VERT_MASK) | MGRAVITY_VERT_TOP;
@@ -305,6 +306,27 @@
             break;
         case 900:   //窗口水平居中
             self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MGRAVITY_HORZ_MASK) | MGRAVITY_HORZ_WINDOW_CENTER;
+            break;
+        case 1000:
+        {
+            self.vertGravityLayout.subviewMargin = self.vertGravityLayout.subviewMargin == 10 ? -10 : 10;
+            
+            self.vertGravityLayout.beginLayoutBlock=^{
+                
+                [UIView beginAnimations:nil context:nil];
+                [UIView setAnimationDuration:0.5];
+                
+            };
+            
+            self.vertGravityLayout.endLayoutBlock=^{
+                
+                [UIView commitAnimations];
+                
+            };
+            
+
+            
+        }
             break;
             
         case 101:  //左

@@ -11,7 +11,8 @@
 
 @interface UIView(LinearLayoutExt)
 
-//比重，指定高度或者宽度在父视图的剩余空间中的比重，取值1>=weight>0。默认值是0表示不按比重来决定自身的高度或者宽度。当父视图是垂直布局时指定的是高度在父视图中的比重，而当父视图是水平布局时则指定的是宽度在父视图中的比重。
+//设置视图的高度或者宽度占用线性布局剩余空间比重，取值1>= weight >0。默认值是0表示不按比重来决定自身的高度或者宽度。当父视图是垂直线性布局时指定的是高度在父视图剩余高度中的比重，而当父视图是水平线性布局时则指定的是宽度在父视图剩余宽度中的比重。
+//设置比重的目的是为了解决设置子视图的相对尺寸的问题，通过比重的设置可以不需要让子视图明确的指定具体的高度或者宽度。
 @property(nonatomic, assign) CGFloat weight;
 
 @end
@@ -19,7 +20,7 @@
 
 
 /*
- 线性布局，分为水平和垂直方向，根据添加进入的子视图的顺序依次从上到下或者从左到右分别排列布局，
+ 线性布局，分为水平和垂直方向，根据添加进入的子视图的顺序依次从上到下或者从左到右依次的线条形式的排列。
  线性布局支持wrapContentHeight,wrapContentWidth特性
  */
 @interface MyLinearLayout : MyLayoutBase
@@ -27,7 +28,6 @@
 
 //用方向初始化一个线性布局
 -(id)initWithOrientation:(LineViewOrientation)orientation;
-
 +(id)linearLayoutWithOrientation:(LineViewOrientation)orientation;
 
 
@@ -36,6 +36,7 @@
 
 
 //里面的所有子视图的停靠位置，默认是MGRAVITY_NONE，表示不控制子视图的停靠，可以分别控制水平和垂直的停靠位置
+//具体参考MarignGravity中的值，通过设置子视图的停靠位置，则里面的所有子视图都将按统一的停靠方式进行布局和排列
 @property(nonatomic, assign) MarignGravity gravity;
 
 

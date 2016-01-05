@@ -16,7 +16,7 @@
  **/
 @interface MyFlowLayout : MyLayoutBase
 
-
+//初始化一个流式布局并指定布局的方向和布局的数量
 -(id)initWithOrientation:(LineViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
 
 +(id)flowLayoutWithOrientation:(LineViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
