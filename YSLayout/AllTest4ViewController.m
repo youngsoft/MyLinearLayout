@@ -59,7 +59,7 @@ typedef enum : NSUInteger {
 {
     YSLinearLayout *linearLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     linearLayout.subviewMargin = 5;
-    linearLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    linearLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     
     //第一行
     NSArray *titleArray = @[@"左1",@"右1",@"左2",@"右2",@"左3",@"右3",@"左4",@"右4",@"左5",@"右5"];
@@ -124,7 +124,7 @@ typedef enum : NSUInteger {
 {
     YSRelativeLayout *relativeLayout = [YSRelativeLayout new];
     relativeLayout.wrapContentHeight = YES;
-    relativeLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    relativeLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     
     
     NSArray *titleArray = @[@"左1",@"右1",@"左2",@"右2",@"左3",@"右3",@"左4",@"右4",@"左5",@"右5"];
@@ -196,7 +196,7 @@ typedef enum : NSUInteger {
 -(YSFrameLayout*)createFrameLayout
 {
     YSFrameLayout *frameLayout = [YSFrameLayout new];
-    frameLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    frameLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     
     frameLayout.ysHeight = 4 *5 + 30 *3; //框架布局不支持由子视图决定高度和宽度
     
@@ -213,7 +213,7 @@ typedef enum : NSUInteger {
     UIView *item5 = [self createItemLayout:titleArray[8] rightTitle:titleArray[9]];
     [frameLayout addSubview:item5];
     
-    //注意这里减去2.5的原因是因为框架布局计算宽度时不会扣除掉ysPadding的值。
+    //注意这里减去2.5的原因是因为框架布局计算宽度时不会扣除掉padding的值。
     item1.marginGravity = YSMarignGravity_Horz_Left | YSMarignGravity_Vert_Top;
     item1.widthDime.equalTo(frameLayout.widthDime).multiply(0.5).add(-2.5);
     
@@ -262,7 +262,7 @@ typedef enum : NSUInteger {
 -(YSTableLayout*)createTableLayout
 {
     YSTableLayout *tableLayout = [YSTableLayout tableLayoutWithOrientation:YSLayoutViewOrientation_Vert];
-    tableLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    tableLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     tableLayout.subviewMargin = 5;
     
     
@@ -312,7 +312,7 @@ typedef enum : NSUInteger {
 -(YSFlowLayout*)createFlowLayout
 {
     YSFlowLayout *flowLayout = [YSFlowLayout flowLayoutWithOrientation:YSLayoutViewOrientation_Vert arrangedCount:2];
-    flowLayout.ysPadding = UIEdgeInsetsMake(5,5,5,5);
+    flowLayout.padding = UIEdgeInsetsMake(5,5,5,5);
     flowLayout.subviewHorzMargin = 5;
     flowLayout.subviewVertMargin = 5;
     flowLayout.averageArrange = YES;
@@ -455,7 +455,7 @@ typedef enum : NSUInteger {
     actionLayout.backgroundColor = [UIColor redColor];
     actionLayout.averageArrange = YES;
     actionLayout.wrapContentHeight = YES;
-    actionLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewHorzMargin = 5;
     actionLayout.subviewVertMargin = 5;
     [self.rootLayout addSubview:actionLayout];

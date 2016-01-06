@@ -23,7 +23,7 @@
     
     YSLinearLayout *contentLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     
-    contentLayout.ysPadding = UIEdgeInsetsMake(10, 10, 10, 10); //设置布局内的子视图离自己的边距.
+    contentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10); //设置布局内的子视图离自己的边距.
     contentLayout.ysLeftMargin = 0;
     contentLayout.ysRightMargin = 0;  //同时指定左右边距为0表示宽度和父视图一样宽
     [self.view addSubview:contentLayout];
@@ -52,7 +52,7 @@
     infoLayout.layer.borderWidth = 0.5;
     infoLayout.layer.cornerRadius = 4;
     
-    infoLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    infoLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     infoLayout.ysTopMargin = 20;
     infoLayout.ysLeftMargin = infoLayout.ysRightMargin = 0;
     infoLayout.wrapContentHeight = YES;
@@ -87,7 +87,7 @@
     ageLayout.layer.cornerRadius = 4;
     
     ageLayout.gravity = YSMarignGravity_Horz_Fill;
-    ageLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    ageLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     ageLayout.ysTopMargin = 20;
     ageLayout.ysLeftMargin = ageLayout.ysRightMargin = 0;
     [contentLayout addSubview:ageLayout];
@@ -144,7 +144,7 @@
     addressLayout.layer.borderWidth = 0.5;
     addressLayout.layer.cornerRadius = 4;
     
-    addressLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    addressLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     addressLayout.ysTopMargin = 20;
     addressLayout.ysLeftMargin = addressLayout.ysRightMargin = 0;
     addressLayout.wrapContentHeight = YES;
@@ -174,7 +174,7 @@
     sexLayout.layer.borderWidth = 0.5;
     sexLayout.layer.cornerRadius = 4;
     
-    sexLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    sexLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     sexLayout.ysTopMargin = 20;
     sexLayout.ysLeftMargin = sexLayout.ysRightMargin = 0;
     sexLayout.wrapContentHeight = YES;

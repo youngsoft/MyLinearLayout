@@ -98,7 +98,7 @@
     }
     else if (sbv.centerXPos.posNumVal != nil)
     {
-        sbv.absPos.leftPos = (selfRect.size.width - self.ysRightPadding - self.ysLeftPadding - sbv.absPos.width) / 2 + self.ysLeftPadding + sbv.centerXPos.margin;
+        sbv.absPos.leftPos = (selfRect.size.width - self.rightPadding - self.leftPadding - sbv.absPos.width) / 2 + self.leftPadding + sbv.centerXPos.margin;
         sbv.absPos.rightPos = sbv.absPos.leftPos + sbv.absPos.width;
         return;
     }
@@ -112,7 +112,7 @@
         }
         else if (sbv.leftPos.posNumVal != nil)
         {
-            sbv.absPos.leftPos = sbv.leftPos.margin + self.ysLeftPadding;
+            sbv.absPos.leftPos = sbv.leftPos.margin + self.leftPadding;
             sbv.absPos.rightPos = sbv.absPos.leftPos + sbv.absPos.width;
             return;
         }
@@ -127,12 +127,12 @@
         }
         else if (sbv.rightPos.posNumVal != nil)
         {
-            sbv.absPos.rightPos = selfRect.size.width -  self.ysRightPadding -  sbv.rightPos.margin + sbv.leftPos.margin;
+            sbv.absPos.rightPos = selfRect.size.width -  self.rightPadding -  sbv.rightPos.margin + sbv.leftPos.margin;
             sbv.absPos.leftPos = sbv.absPos.rightPos - sbv.absPos.width;
             return;
         }
         
-        sbv.absPos.leftPos = sbv.leftPos.margin + self.ysLeftPadding;
+        sbv.absPos.leftPos = sbv.leftPos.margin + self.leftPadding;
         sbv.absPos.rightPos = sbv.absPos.leftPos + sbv.absPos.width;
         
     }
@@ -157,7 +157,7 @@
     }
     else if (sbv.centerYPos.posNumVal != nil)
     {
-        sbv.absPos.topPos = (selfRect.size.height - self.ysTopPadding - self.ysBottomPadding -  sbv.absPos.height) / 2 + self.ysTopPadding + sbv.centerYPos.margin;
+        sbv.absPos.topPos = (selfRect.size.height - self.topPadding - self.bottomPadding -  sbv.absPos.height) / 2 + self.topPadding + sbv.centerYPos.margin;
         sbv.absPos.bottomPos = sbv.absPos.topPos + sbv.absPos.height;
         return;
     }
@@ -186,12 +186,12 @@
         }
         else if (sbv.bottomPos.posNumVal != nil)
         {
-            sbv.absPos.bottomPos = selfRect.size.height -  sbv.bottomPos.margin - self.ysBottomPadding + sbv.topPos.margin;
+            sbv.absPos.bottomPos = selfRect.size.height -  sbv.bottomPos.margin - self.bottomPadding + sbv.topPos.margin;
             sbv.absPos.topPos = sbv.absPos.bottomPos - sbv.absPos.height;
             return;
         }
         
-        sbv.absPos.topPos = sbv.topPos.margin + self.ysTopPadding;
+        sbv.absPos.topPos = sbv.topPos.margin + self.topPadding;
         sbv.absPos.bottomPos = sbv.absPos.topPos + sbv.absPos.height;
         
     }
@@ -206,7 +206,7 @@
         case YSMarignGravity_Horz_Left:
         {
             if (sbv == self || sbv == nil)
-                return self.ysLeftPadding;
+                return self.leftPadding;
             
             
             if (sbv.absPos.leftPos != CGFLOAT_MAX)
@@ -222,7 +222,7 @@
         case YSMarignGravity_Horz_Right:
         {
             if (sbv == self || sbv == nil)
-                return selfRect.size.width - self.ysRightPadding;
+                return selfRect.size.width - self.rightPadding;
             
             if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
             {
@@ -247,7 +247,7 @@
         case YSMarignGravity_Vert_Top:
         {
             if (sbv == self || sbv == nil)
-                return self.ysTopPadding;
+                return self.topPadding;
             
             
             if (sbv.absPos.topPos != CGFLOAT_MAX)
@@ -262,7 +262,7 @@
         case YSMarignGravity_Vert_Bottom:
         {
             if (sbv == self || sbv == nil)
-                return selfRect.size.height - self.ysBottomPadding;
+                return selfRect.size.height - self.bottomPadding;
             
             if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
             {
@@ -287,7 +287,7 @@
         case YSMarignGravity_Horz_Fill:
         {
             if (sbv == self || sbv == nil)
-                return selfRect.size.width - self.ysLeftPadding - self.ysRightPadding;
+                return selfRect.size.width - self.leftPadding - self.rightPadding;
             
     
             if (sbv.absPos.width != CGFLOAT_MAX)
@@ -302,7 +302,7 @@
         case YSMarignGravity_Vert_Fill:
         {
             if (sbv == self || sbv == nil)
-                return selfRect.size.height - self.ysTopPadding - self.ysBottomPadding;
+                return selfRect.size.height - self.topPadding - self.bottomPadding;
             
             
             if (sbv.absPos.height != CGFLOAT_MAX)
@@ -316,7 +316,7 @@
         case YSMarignGravity_Horz_Center:
         {
             if (sbv == self || sbv == nil)
-                return (selfRect.size.width - self.ysLeftPadding - self.ysRightPadding) / 2 + self.ysLeftPadding;
+                return (selfRect.size.width - self.leftPadding - self.rightPadding) / 2 + self.leftPadding;
             
             if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
             {
@@ -342,7 +342,7 @@
         case YSMarignGravity_Vert_Center:
         {
             if (sbv == self || sbv == nil)
-                return (selfRect.size.height - self.ysTopPadding - self.ysBottomPadding) / 2 + self.ysTopPadding;
+                return (selfRect.size.height - self.topPadding - self.bottomPadding) / 2 + self.topPadding;
             
             if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
             {
@@ -396,12 +396,12 @@
             if (sbv.leftPos.posRelaVal != nil)
                  sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos selfRect:selfRect] + sbv.leftPos.margin;
             else
-                sbv.absPos.leftPos = sbv.leftPos.margin + self.ysLeftPadding;
+                sbv.absPos.leftPos = sbv.leftPos.margin + self.leftPadding;
             
             if (sbv.rightPos.posRelaVal != nil)
                 sbv.absPos.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos selfRect:selfRect] - sbv.rightPos.margin;
             else
-                sbv.absPos.rightPos = selfRect.size.width - sbv.rightPos.margin - self.ysRightPadding;
+                sbv.absPos.rightPos = selfRect.size.width - sbv.rightPos.margin - self.rightPadding;
             
             sbv.absPos.width = sbv.absPos.rightPos - sbv.absPos.leftPos;
             sbv.absPos.width = [sbv.widthDime validMeasure:sbv.absPos.width];
@@ -446,12 +446,12 @@
             if (sbv.topPos.posRelaVal != nil)
                 sbv.absPos.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos selfRect:selfRect] + sbv.topPos.margin;
             else
-                sbv.absPos.topPos = sbv.topPos.margin + self.ysTopPadding;
+                sbv.absPos.topPos = sbv.topPos.margin + self.topPadding;
             
             if (sbv.bottomPos.posRelaVal != nil)
                 sbv.absPos.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos selfRect:selfRect] - sbv.bottomPos.margin;
             else
-                sbv.absPos.bottomPos = selfRect.size.height - sbv.bottomPos.margin - self.ysBottomPadding;
+                sbv.absPos.bottomPos = selfRect.size.height - sbv.bottomPos.margin - self.bottomPadding;
             
             sbv.absPos.height = sbv.absPos.bottomPos - sbv.absPos.topPos;
             sbv.absPos.height = [sbv.heightDime validMeasure:sbv.absPos.height];
@@ -511,7 +511,7 @@
                 
             }
             
-            CGFloat floatWidth = selfRect.size.width - self.ysLeftPadding - self.ysRightPadding + totalAdd;
+            CGFloat floatWidth = selfRect.size.width - self.leftPadding - self.rightPadding + totalAdd;
             if (floatWidth <= 0)
                 floatWidth = 0;
             
@@ -554,7 +554,7 @@
                 
             }
             
-            CGFloat floatHeight = selfRect.size.height - self.ysTopPadding - self.ysBottomPadding + totalAdd;
+            CGFloat floatHeight = selfRect.size.height - self.topPadding - self.bottomPadding + totalAdd;
             if (floatHeight <= 0)
                 floatHeight = 0;
             
@@ -597,8 +597,8 @@
             }
             
             //所有宽度算出后，再分别设置
-            CGFloat leftOffset = (selfRect.size.width - self.ysLeftPadding - self.ysRightPadding - totalWidth) / 2;
-            leftOffset += self.ysLeftPadding;
+            CGFloat leftOffset = (selfRect.size.width - self.leftPadding - self.rightPadding - totalWidth) / 2;
+            leftOffset += self.leftPadding;
             
             id prev = @(leftOffset);
             if (!(sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout)))
@@ -642,8 +642,8 @@
             }
             
             //所有宽度算出后，再分别设置
-            CGFloat topOffset = (selfRect.size.height - self.ysTopPadding - self.ysBottomPadding - totalHeight) / 2;
-            topOffset += self.ysTopPadding;
+            CGFloat topOffset = (selfRect.size.height - self.topPadding - self.bottomPadding - totalHeight) / 2;
+            topOffset += self.topPadding;
             
             id prev = @(topOffset);
             if (!(sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout)))
@@ -666,8 +666,8 @@
     }
     
     //计算最大的宽度和高度
-    CGFloat maxWidth = self.ysLeftPadding;
-    CGFloat maxHeight = self.ysTopPadding;
+    CGFloat maxWidth = self.leftPadding;
+    CGFloat maxHeight = self.topPadding;
     
     for (UIView *sbv in self.subviews)
     {
@@ -700,8 +700,8 @@
             maxHeight = sbv.absPos.bottomPos + sbv.bottomPos.margin;
     }
     
-    maxWidth += self.ysRightPadding;
-    maxHeight += self.ysBottomPadding;
+    maxWidth += self.rightPadding;
+    maxHeight += self.bottomPadding;
     
     return CGSizeMake(maxWidth, maxHeight);
     

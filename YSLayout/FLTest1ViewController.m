@@ -26,7 +26,7 @@
     YSFrameLayout *fl = [YSFrameLayout new];
     fl.ysLeftMargin = fl.ysRightMargin = 0;
     fl.ysTopMargin = fl.ysBottomMargin = 0;
-    fl.ysPadding = UIEdgeInsetsMake(20, 20, 20, 20);
+    fl.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     fl.backgroundColor = [UIColor grayColor];
     
     //显示全屏

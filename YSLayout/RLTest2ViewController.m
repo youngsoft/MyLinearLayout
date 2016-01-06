@@ -23,7 +23,7 @@
 {
     
     YSRelativeLayout *rootLayout = [YSRelativeLayout new];
-    rootLayout.ysPadding = UIEdgeInsetsMake(0, 0, 0, 10);
+    rootLayout.padding = UIEdgeInsetsMake(0, 0, 0, 10);
     rootLayout.backgroundColor = [UIColor grayColor];
     self.view = rootLayout;
     

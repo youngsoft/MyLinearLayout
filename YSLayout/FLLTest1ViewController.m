@@ -46,7 +46,7 @@
 
     actionLayout.wrapContentHeight = YES;
     actionLayout.averageArrange = YES;
-    actionLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewHorzMargin = 5;
     actionLayout.subviewVertMargin = 5;
     [rootLayout addSubview:actionLayout];
@@ -71,7 +71,7 @@
     self.flowLayout.backgroundColor = [UIColor lightGrayColor];
     
     self.flowLayout.frame = CGRectMake(0, 0, 800, 800);
-    self.flowLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    self.flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.flowLayout.subviewVertMargin = 5;
     self.flowLayout.subviewHorzMargin = 5;
     [scrollView addSubview:self.flowLayout];

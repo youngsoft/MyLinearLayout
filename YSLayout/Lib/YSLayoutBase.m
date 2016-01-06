@@ -694,107 +694,53 @@ BOOL _hasBegin;
 
 #pragma  mark -- Public Method
 
-#ifdef YS_USEOLDENUMDEF
-
--(UIEdgeInsets)padding
-{
-    return self.ysPadding;
-}
-
 -(void)setPadding:(UIEdgeInsets)padding
 {
-    self.ysPadding = padding;
-}
-
--(void)setLeftPadding:(CGFloat)leftPadding
-{
-    self.ysLeftPadding = leftPadding;
-}
-
--(CGFloat)leftPadding
-{
-    return self.ysLeftPadding;
-}
-
--(void)setTopPadding:(CGFloat)topPadding
-{
-    self.ysTopPadding = topPadding;
-}
-
--(CGFloat)topPadding
-{
-    return self.ysTopPadding;
-}
-
--(void)setRightPadding:(CGFloat)rightPadding
-{
-    self.ysRightPadding = rightPadding;
-}
-
--(CGFloat)rightPadding
-{
-    return self.ysRightPadding;
-}
-
--(void)setBottomPadding:(CGFloat)bottomPadding
-{
-    self.ysBottomPadding = bottomPadding;
-}
-
--(CGFloat)bottomPadding
-{
-    return self.ysBottomPadding;
-}
-
-#endif
-
--(void)setYsPadding:(UIEdgeInsets)padding
-{
-    if (!UIEdgeInsetsEqualToEdgeInsets(_ysPadding, padding))
+    if (!UIEdgeInsetsEqualToEdgeInsets(_padding, padding))
     {
-        _ysPadding = padding;
+        _padding = padding;
         [self setNeedsLayout];
     }
 }
 
--(void)setYsLeftPadding:(CGFloat)leftPadding
+-(void)setLeftPadding:(CGFloat)leftPadding
 {
-    [self setYsPadding:UIEdgeInsetsMake(_ysPadding.top, leftPadding, _ysPadding.bottom,_ysPadding.right)];
+    [self setPadding:UIEdgeInsetsMake(_padding.top, leftPadding, _padding.bottom,_padding.right)];
 }
 
--(CGFloat)ysLeftPadding
+-(CGFloat)leftPadding
 {
-    return _ysPadding.left;
+    return _padding.left;
 }
 
--(void)setYsTopPadding:(CGFloat)topPadding
+-(void)setTopPadding:(CGFloat)topPadding
 {
-    [self setYsPadding:UIEdgeInsetsMake(topPadding, _ysPadding.left, _ysPadding.bottom,_ysPadding.right)];
+    [self setPadding:UIEdgeInsetsMake(topPadding, _padding.left, _padding.bottom,_padding.right)];
 }
 
--(CGFloat)ysTopPadding
+-(CGFloat)topPadding
 {
-    return _ysPadding.top;
+    return _padding.top;
 }
 
--(void)setYsRightPadding:(CGFloat)rightPadding
+-(void)setRightPadding:(CGFloat)rightPadding
 {
-    [self setYsPadding:UIEdgeInsetsMake(_ysPadding.top, _ysPadding.left, _ysPadding.bottom,rightPadding)];
+    [self setPadding:UIEdgeInsetsMake(_padding.top, _padding.left, _padding.bottom,rightPadding)];
 }
 
--(CGFloat)ysRightPadding
+-(CGFloat)rightPadding
 {
-    return _ysPadding.right;
+    return _padding.right;
 }
 
--(void)setYsBottomPadding:(CGFloat)bottomPadding
+-(void)setBottomPadding:(CGFloat)bottomPadding
 {
-    [self setYsPadding:UIEdgeInsetsMake(_ysPadding.top, _ysPadding.left, bottomPadding,_ysPadding.right)];
+    [self setPadding:UIEdgeInsetsMake(_padding.top, _padding.left, bottomPadding,_padding.right)];
 }
 
--(CGFloat)ysBottomPadding
+-(CGFloat)bottomPadding
 {
-    return _ysPadding.bottom;
+    return _padding.bottom;
 }
 
 
@@ -1223,7 +1169,7 @@ BOOL _hasBegin;
     
     
     //监控子视图的frame的变化以便重新进行布局
-    if (!_isLayouting && [self.subviews containsObject:object])
+    if (!_isYSLayouting && [self.subviews containsObject:object])
     {
         if (![object useFrame])
         {
@@ -1385,9 +1331,9 @@ BOOL _hasBegin;
     if (self.beginLayoutBlock != nil)
         self.beginLayoutBlock();
     
-    if (!self.isLayouting)
+    if (!self.isYSLayouting)
     {
-        _isLayouting = YES;
+        _isYSLayouting = YES;
     
         if (self.priorAutoresizingMask)
             [super layoutSubviews];
@@ -1427,7 +1373,7 @@ BOOL _hasBegin;
        
         
         
-        _isLayouting = NO;
+        _isYSLayouting = NO;
     }
     
     if (self.endLayoutBlock != nil)
@@ -1492,7 +1438,7 @@ BOOL _hasBegin;
     CGFloat bottomMargin;
     
     
-    CGFloat fixedHeight = self.ysPadding.top + self.ysPadding.bottom;
+    CGFloat fixedHeight = self.padding.top + self.padding.bottom;
     
     if ([self isRelativeMargin:tm])
         topMargin = (selfHeight - fixedHeight) * tm;
@@ -1519,13 +1465,13 @@ BOOL _hasBegin;
     if (vert == YSMarignGravity_Vert_Fill)
     {
         
-        pRect->origin.y = self.ysPadding.top + topMargin;
-        pRect->size.height = [sbv.heightDime validMeasure:selfHeight - self.ysPadding.bottom - bottomMargin - pRect->origin.y];
+        pRect->origin.y = self.padding.top + topMargin;
+        pRect->size.height = [sbv.heightDime validMeasure:selfHeight - self.padding.bottom - bottomMargin - pRect->origin.y];
     }
     else if (vert == YSMarignGravity_Vert_Center)
     {
         
-        pRect->origin.y = (selfHeight - self.ysPadding.top - self.ysPadding.bottom - topMargin - bottomMargin - pRect->size.height)/2 + self.ysPadding.top + topMargin + centerMargin;
+        pRect->origin.y = (selfHeight - self.padding.top - self.padding.bottom - topMargin - bottomMargin - pRect->size.height)/2 + self.padding.top + topMargin + centerMargin;
     }
     else if (vert == YSMarignGravity_Vert_Window_Center)
     {
@@ -1541,15 +1487,15 @@ BOOL _hasBegin;
     else if (vert == YSMarignGravity_Vert_Bottom)
     {
         
-        pRect->origin.y = selfHeight - self.ysPadding.bottom - bottomMargin - pRect->size.height;
+        pRect->origin.y = selfHeight - self.padding.bottom - bottomMargin - pRect->size.height;
     }
     else if (vert == YSMarignGravity_Vert_Top)
     {
-        pRect->origin.y = self.ysPadding.top + topMargin;
+        pRect->origin.y = self.padding.top + topMargin;
     }
     else
     {
-        pRect->origin.y = self.ysPadding.top + topMargin;
+        pRect->origin.y = self.padding.top + topMargin;
     }
     
     
@@ -1570,7 +1516,7 @@ BOOL _hasBegin;
     CGFloat rightMargin;
     
     
-    CGFloat fixedWidth = self.ysPadding.left + self.ysPadding.right;
+    CGFloat fixedWidth = self.padding.left + self.padding.right;
     if ([self isRelativeMargin:lm])
         leftMargin = (selfWidth - fixedWidth) * lm;
     else
@@ -1596,12 +1542,12 @@ BOOL _hasBegin;
     if (horz == YSMarignGravity_Horz_Fill)
     {
         
-        pRect->origin.x = self.ysPadding.left + leftMargin;
-        pRect->size.width = [sbv.widthDime validMeasure:selfWidth - self.ysPadding.right - rightMargin - pRect->origin.x];
+        pRect->origin.x = self.padding.left + leftMargin;
+        pRect->size.width = [sbv.widthDime validMeasure:selfWidth - self.padding.right - rightMargin - pRect->origin.x];
     }
     else if (horz == YSMarignGravity_Horz_Center)
     {
-        pRect->origin.x = (selfWidth - self.ysPadding.left - self.ysPadding.right - leftMargin - rightMargin - pRect->size.width)/2 + self.ysPadding.left + leftMargin + centerMargin;
+        pRect->origin.x = (selfWidth - self.padding.left - self.padding.right - leftMargin - rightMargin - pRect->size.width)/2 + self.padding.left + leftMargin + centerMargin;
     }
     else if (horz == YSMarignGravity_Horz_Window_Center)
     {
@@ -1618,15 +1564,15 @@ BOOL _hasBegin;
     else if (horz == YSMarignGravity_Horz_Right)
     {
         
-        pRect->origin.x = selfWidth - self.ysPadding.right - rightMargin - pRect->size.width;
+        pRect->origin.x = selfWidth - self.padding.right - rightMargin - pRect->size.width;
     }
     else if (horz == YSMarignGravity_Horz_Left)
     {
-        pRect->origin.x = self.ysPadding.left + leftMargin;
+        pRect->origin.x = self.padding.left + leftMargin;
     }
     else
     {
-        pRect->origin.x = self.ysPadding.left + leftMargin;
+        pRect->origin.x = self.padding.left + leftMargin;
     }
 }
 

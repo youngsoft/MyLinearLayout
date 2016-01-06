@@ -320,7 +320,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0640;
-				ORGANIZATIONNAME = SunnadaSoft;
+				ORGANIZATIONNAME = YoungSoft;
 				TargetAttributes = {
 					1840828C1B2C46E8003F378B = {
 						CreatedOnToolsVersion = 6.3.2;

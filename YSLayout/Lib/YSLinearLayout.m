@@ -176,7 +176,7 @@
             }
         }
         
-        newSelfRect.size.width = maxSubviewWidth + self.ysLeftPadding + self.ysRightPadding;
+        newSelfRect.size.width = maxSubviewWidth + self.leftPadding + self.rightPadding;
     }
     
     return newSelfRect;
@@ -232,7 +232,7 @@
         if (sbv.widthDime.isMatchParent || (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil))
         {
             
-            CGFloat vTotalWidth = (newSelfRect.size.width - self.ysLeftPadding - self.ysRightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            CGFloat vTotalWidth = (newSelfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
             
             if ([self isRelativeMargin:lm])
                 lm = vTotalWidth * lm;
@@ -247,7 +247,7 @@
             rm = [sbv.rightPos validMargin:rm + sbv.rightPos.offsetVal];
             
             
-            [self calcMatchParentWidth:sbv.widthDime selfWidth:newSelfRect.size.width leftMargin:lm  centerMargin:cxm rightMargin:rm leftPadding:self.ysLeftPadding rightPadding:self.ysRightPadding rect:&rect];
+            [self calcMatchParentWidth:sbv.widthDime selfWidth:newSelfRect.size.width leftMargin:lm  centerMargin:cxm rightMargin:rm leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect];
         }
         
         
@@ -314,11 +314,11 @@
     }
 
     //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
-    floatingHeight = newSelfRect.size.height - fixedHeight - self.ysTopPadding - self.ysBottomPadding;
+    floatingHeight = newSelfRect.size.height - fixedHeight - self.topPadding - self.bottomPadding;
     if (floatingHeight <= 0 || floatingHeight == -0.0)
         floatingHeight = 0;
     
-    CGFloat pos = self.ysTopPadding;
+    CGFloat pos = self.topPadding;
     for (UIView *sbv in sbs) {
         
         
@@ -376,7 +376,7 @@
         sbv.absPos.frame = rect;
     }
     
-    pos += self.ysBottomPadding;
+    pos += self.bottomPadding;
     
 
     if (self.wrapContentHeight && totalWeight == 0)
@@ -443,12 +443,12 @@
     }
     
     //剩余的可浮动的宽度，那些weight不为0的从这个高度来进行分发
-    floatingWidth = newSelfRect.size.width - fixedWidth - self.ysLeftPadding - self.ysRightPadding;
+    floatingWidth = newSelfRect.size.width - fixedWidth - self.leftPadding - self.rightPadding;
     if (floatingWidth <= 0 || floatingWidth == -0.0)
         floatingWidth = 0;
     
     //调整所有子视图的宽度
-    CGFloat pos = self.ysLeftPadding;
+    CGFloat pos = self.leftPadding;
     for (UIView *sbv in sbs) {
         
         CGFloat leftMargin = sbv.leftPos.posNumVal.doubleValue;
@@ -533,7 +533,7 @@
     
     if (self.wrapContentHeight)
     {
-        newSelfRect.size.height = maxSubviewHeight + self.ysTopPadding + self.ysBottomPadding;
+        newSelfRect.size.height = maxSubviewHeight + self.topPadding + self.bottomPadding;
     }
     
     
@@ -552,7 +552,7 @@
             CGFloat bm = sbv.bottomPos.posNumVal.doubleValue;
             
             
-            CGFloat vTotalHeight = (newSelfRect.size.height - self.ysTopPadding - self.ysBottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            CGFloat vTotalHeight = (newSelfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
 
             
             if ([self isRelativeMargin:tm])
@@ -568,7 +568,7 @@
             bm = [sbv.bottomPos validMargin:bm + sbv.bottomPos.offsetVal];
             
 
-            [self calcMatchParentHeight:sbv.heightDime selfHeight:newSelfRect.size.height topMargin:tm centerMargin:cym bottomMargin:bm topPadding:self.ysTopPadding bottomPadding:self.ysBottomPadding rect:&rect];
+            [self calcMatchParentHeight:sbv.heightDime selfHeight:newSelfRect.size.height topMargin:tm centerMargin:cym bottomMargin:bm topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect];
         }
         
         //优先以容器中的指定为标准
@@ -592,7 +592,7 @@
         sbv.absPos.frame = rect;
     }
     
-    pos += self.ysRightPadding;
+    pos += self.rightPadding;
     
     if (self.wrapContentWidth && totalWeight == 0)
     {
@@ -623,7 +623,7 @@
     
     newSelfRect = [self AdjustSelfWidth:sbs newSelfRect:newSelfRect];
    
-    CGFloat floatingHeight = newSelfRect.size.height - self.ysTopPadding - self.ysBottomPadding - totalHeight;
+    CGFloat floatingHeight = newSelfRect.size.height - self.topPadding - self.bottomPadding - totalHeight;
     if (floatingHeight <=0)
         floatingHeight = 0;
     
@@ -656,7 +656,7 @@
         if (sbv.widthDime.isMatchParent || (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil))
         {
             
-            CGFloat vTotalWidth = (newSelfRect.size.width - self.ysLeftPadding - self.ysRightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            CGFloat vTotalWidth = (newSelfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
             
             if ([self isRelativeMargin:lm])
                 lm = vTotalWidth * lm;
@@ -671,7 +671,7 @@
             rm = [sbv.rightPos validMargin:rm + sbv.rightPos.offsetVal];
             
             
-            [self calcMatchParentWidth:sbv.widthDime selfWidth:newSelfRect.size.width leftMargin:lm centerMargin:cxm rightMargin:rm leftPadding:self.ysLeftPadding rightPadding:self.ysRightPadding rect:&rect];
+            [self calcMatchParentWidth:sbv.widthDime selfWidth:newSelfRect.size.width leftMargin:lm centerMargin:cxm rightMargin:rm leftPadding:self.leftPadding rightPadding:self.rightPadding rect:&rect];
         }
         
         //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
@@ -721,12 +721,12 @@
     CGFloat pos = 0;
     if ((_gravity & YSMarignGravity_Horz_Mask) == YSMarignGravity_Vert_Top)
     {
-        pos = self.ysTopPadding;
+        pos = self.topPadding;
     }
     else if ((_gravity & YSMarignGravity_Horz_Mask) == YSMarignGravity_Vert_Center)
     {
-        pos = (newSelfRect.size.height - totalHeight - self.ysBottomPadding - self.ysTopPadding)/2.0;
-        pos += self.ysTopPadding;
+        pos = (newSelfRect.size.height - totalHeight - self.bottomPadding - self.topPadding)/2.0;
+        pos += self.topPadding;
     }
     else if ((_gravity & YSMarignGravity_Horz_Mask) == YSMarignGravity_Vert_Window_Center)
     {
@@ -742,7 +742,7 @@
     }
     else
     {
-        pos = newSelfRect.size.height - totalHeight - self.ysBottomPadding;
+        pos = newSelfRect.size.height - totalHeight - self.bottomPadding;
     }
     
     
@@ -799,7 +799,7 @@
     
     CGFloat maxSubviewHeight = 0;
     
-    floatingWidth = newSelfRect.size.width - self.ysLeftPadding - self.ysRightPadding - totalWidth;
+    floatingWidth = newSelfRect.size.width - self.leftPadding - self.rightPadding - totalWidth;
     if (floatingWidth <= 0)
         floatingWidth = 0;
     
@@ -857,19 +857,19 @@
     //调整自己的高度。
     if (self.wrapContentHeight)
     {
-        newSelfRect.size.height = maxSubviewHeight + self.ysTopPadding + self.ysBottomPadding;
+        newSelfRect.size.height = maxSubviewHeight + self.topPadding + self.bottomPadding;
     }
     
     //根据对齐的方位来定位子视图的布局对齐
     CGFloat pos = 0;
     if ((_gravity & YSMarignGravity_Vert_Mask) == YSMarignGravity_Horz_Left)
     {
-        pos = self.ysLeftPadding;
+        pos = self.leftPadding;
     }
     else if ((_gravity & YSMarignGravity_Vert_Mask) == YSMarignGravity_Horz_Center)
     {
-        pos = (newSelfRect.size.width - totalWidth - self.ysLeftPadding - self.ysRightPadding)/2.0;
-        pos += self.ysLeftPadding;
+        pos = (newSelfRect.size.width - totalWidth - self.leftPadding - self.rightPadding)/2.0;
+        pos += self.leftPadding;
     }
     else if ((_gravity & YSMarignGravity_Vert_Mask) == YSMarignGravity_Horz_Window_Center)
     {
@@ -883,7 +883,7 @@
     }
     else
     {
-        pos = newSelfRect.size.width - totalWidth - self.ysRightPadding;
+        pos = newSelfRect.size.width - totalWidth - self.rightPadding;
     }
     
     
@@ -910,7 +910,7 @@
             CGFloat bm = sbv.bottomPos.posNumVal.doubleValue;
             
             
-            CGFloat vTotalHeight = (newSelfRect.size.height - self.ysTopPadding - self.ysBottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            CGFloat vTotalHeight = (newSelfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
             
             
             if ([self isRelativeMargin:tm])
@@ -926,7 +926,7 @@
             bm = [sbv.bottomPos validMargin:bm + sbv.bottomPos.offsetVal];
 
             
-            [self calcMatchParentHeight:sbv.heightDime selfHeight:newSelfRect.size.height topMargin:tm centerMargin:cym bottomMargin:bm topPadding:self.ysTopPadding bottomPadding:self.ysBottomPadding rect:&rect];
+            [self calcMatchParentHeight:sbv.heightDime selfHeight:newSelfRect.size.height topMargin:tm centerMargin:cym bottomMargin:bm topPadding:self.topPadding bottomPadding:self.bottomPadding rect:&rect];
         }
         
       

@@ -9,24 +9,44 @@
 
 //如果想使用老的库的所有的定义则请定义YS_USEOLDLIBDEF这个宏，这个的目的是为了兼容老的版本
 #ifdef YS_USEOLDLIBDEF
+
+    #ifndef YS_USEOLDENUMDEF
+        #define YS_USEOLDENUMDEF 1
+    #endif
+
+    #ifndef YS_USEOLDMETHODDEF
+        #define YS_USEOLDMETHODDEF 1
+    #endif
+
     #define YSDEPRECATED(desc)
+
 #else
+
     #define YSDEPRECATED(desc)  __attribute__((deprecated(desc)))
+
 #endif
 
 
 //如果想使用老的枚举类型的定义则请定义YS_USEOLDENUMDEF这个宏，这个目的是为了兼容老的版本
 #ifdef YS_USEOLDENUMDEF
+
     #define YSENUMDEPRECATED(desc)
+
 #else
+
     #define YSENUMDEPRECATED(desc) YSDEPRECATED(desc)
+
 #endif
 
 //如果想使用老的方法的定义则请定义YS_USEOLDMETHODDEF这个宏，这个的目的是为了兼容老的版本
 #ifdef YS_USEOLDMETHODDEF
+
     #define YSMETHODDEPRECATED(desc)
+
 #else
+
     #define YSMETHODDEPRECATED(desc) YSDEPRECATED(desc)
+
 #endif
 
 

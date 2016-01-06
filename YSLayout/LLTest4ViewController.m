@@ -41,7 +41,7 @@
     
     actionLayout.wrapContentHeight = YES;
     actionLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
-    actionLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewMargin = 5;
 
     //四周的边线
@@ -59,7 +59,7 @@
     YSLinearLayout *addLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     addLayout.backgroundColor = [UIColor blueColor];
     
-    addLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    addLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     addLayout.subviewMargin = 5;
     addLayout.wrapContentWidth = YES;
     addLayout.wrapContentHeight = YES;  //布局的高度和宽度由子视图决定
@@ -87,7 +87,7 @@
     self.rootLayout.backgroundColor = [UIColor grayColor];
     self.rootLayout.wrapContentHeight = YES;
     self.rootLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
-    self.rootLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    self.rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.rootLayout.subviewMargin = 5;
     [self.view addSubview:self.rootLayout];
     

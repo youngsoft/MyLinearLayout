@@ -42,7 +42,7 @@
     if (_view.superview != nil && [_view.superview isKindOfClass:[YSLayoutBase class]])
     {
         YSLayoutBase* lb = (YSLayoutBase*)_view.superview;
-        if (!lb.isLayouting)
+        if (!lb.isYSLayouting)
             [_view.superview setNeedsLayout];
     }
     

@@ -25,8 +25,8 @@
     [actionLayout setTarget:self action:action];    //这里设置布局的触摸事件处理。
     
     //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
-    actionLayout.ysLeftPadding = 10;
-    actionLayout.ysRightPadding = 10;
+    actionLayout.leftPadding = 10;
+    actionLayout.rightPadding = 10;
     actionLayout.wrapContentWidth = NO;
     actionLayout.heightDime.equalTo(@50);
     actionLayout.gravity = YSMarignGravity_Vert_Center;
@@ -55,8 +55,8 @@
     switchLayout.backgroundColor = [UIColor whiteColor];
     
     //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
-    switchLayout.ysLeftPadding = 10;
-    switchLayout.ysRightPadding = 10;
+    switchLayout.leftPadding = 10;
+    switchLayout.rightPadding = 10;
     switchLayout.wrapContentWidth = NO;
     switchLayout.heightDime.equalTo(@50);
     switchLayout.gravity = YSMarignGravity_Vert_Center;
@@ -127,7 +127,7 @@
     contentLayout.leftPos.equalTo(@0);
     contentLayout.rightPos.equalTo(@0);
     contentLayout.gravity = YSMarignGravity_Horz_Fill;  //让子视图全部水平填充
-    contentLayout.ysPadding = UIEdgeInsetsMake(10, 10, 10, 10);
+    contentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [scrollView addSubview:contentLayout];
     
     
@@ -227,7 +227,7 @@
     YSFlowLayout *layout10 = [YSFlowLayout flowLayoutWithOrientation:YSLayoutViewOrientation_Vert arrangedCount:3];
     layout10.backgroundColor = [UIColor whiteColor];
     layout10.averageArrange = YES;
-    layout10.ysPadding = UIEdgeInsetsMake(10, 10, 10, 10);
+    layout10.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     layout10.subviewHorzMargin = 10;
     layout10.subviewVertMargin = 10;
     

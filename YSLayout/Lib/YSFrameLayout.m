@@ -59,7 +59,7 @@
     if (sbv.widthDime.dimeRelaVal != nil && sbv.widthDime.dimeRelaVal.view != sbv)
     {
         if (sbv.widthDime.dimeRelaVal.view == self)
-            pRect->size.width = (selfSize.width - self.ysLeftPadding - self.ysRightPadding) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            pRect->size.width = (selfSize.width - self.leftPadding - self.rightPadding) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         else
             pRect->size.width = sbv.widthDime.dimeRelaVal.view.estimatedRect.size.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         pRect->size.width = [sbv.widthDime validMeasure:pRect->size.width];
@@ -68,7 +68,7 @@
     if (sbv.heightDime.dimeRelaVal != nil && sbv.heightDime.dimeRelaVal.view != sbv)
     {
         if (sbv.heightDime.dimeRelaVal.view == self)
-            pRect->size.height = (selfSize.height - self.ysTopPadding - self.ysBottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            pRect->size.height = (selfSize.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         else
             pRect->size.height = sbv.heightDime.dimeRelaVal.view.estimatedRect.size.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         

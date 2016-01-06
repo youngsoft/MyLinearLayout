@@ -23,6 +23,7 @@
 -(YSMaker*)height;
 -(YSMaker*)width;
 -(YSMaker*)flexedHeight;
+-(YSMaker*)useFrame;
 
 -(YSMaker*)centerX;
 -(YSMaker*)centerY;

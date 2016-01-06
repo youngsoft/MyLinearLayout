@@ -139,8 +139,8 @@
     //第五行高度均分.这里设置为0表示剩余高度再均分。宽度均分,
     [tbll addRow:MTLROWHEIGHT_AVERAGE colWidth:MTLCOLWIDTH_AVERAGE];
     YSLinearLayout *row4 = [tbll viewAtRowIndex:4];
-    //可以设置行的属性.比如ysPadding, 线条颜色，
-    row4.ysPadding = UIEdgeInsetsMake(3, 3, 3, 3);
+    //可以设置行的属性.比如padding, 线条颜色，
+    row4.padding = UIEdgeInsetsMake(3, 3, 3, 3);
     row4.leftBorderLine = [[YSBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
     row4.leftBorderLine.thick = 2;
     row4.backgroundColor = [UIColor colorWithWhite:0.5 alpha:1];

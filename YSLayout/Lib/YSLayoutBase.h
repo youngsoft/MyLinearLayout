@@ -158,18 +158,6 @@ typedef YSBorderLineDraw MyBorderLineDraw YSDEPRECATED("use YSBorderLineDraw");
 
 
 //用来设置所有子视图的离自己四周的距离，也就是内容的四周的缩进值， 默认上下左右都是0
-@property(nonatomic,assign) UIEdgeInsets ysPadding;
-
-//这四个是上面属性的简化设置版本。
-@property(nonatomic, assign) CGFloat ysTopPadding;
-@property(nonatomic, assign) CGFloat ysLeftPadding;
-@property(nonatomic, assign) CGFloat ysBottomPadding;
-@property(nonatomic, assign) CGFloat ysRightPadding;
-
-
-
-#ifdef YS_USEOLDENUMDEF
-
 @property(nonatomic,assign) UIEdgeInsets padding;
 
 //这四个是上面属性的简化设置版本。
@@ -177,9 +165,6 @@ typedef YSBorderLineDraw MyBorderLineDraw YSDEPRECATED("use YSBorderLineDraw");
 @property(nonatomic, assign) CGFloat leftPadding;
 @property(nonatomic, assign) CGFloat bottomPadding;
 @property(nonatomic, assign) CGFloat rightPadding;
-
-
-#endif
 
 
 //指定布局的高度和宽度是否由所有子视图共同决定，这两个属性对于框架布局无效，
@@ -224,7 +209,7 @@ typedef YSBorderLineDraw MyBorderLineDraw YSDEPRECATED("use YSBorderLineDraw");
 @property(nonatomic,copy) void (^endLayoutBlock)();
 
 //当前是否正在布局中,如果正在布局中则返回YES,否则返回NO
-@property(nonatomic,assign,readonly) BOOL isLayouting;
+@property(nonatomic,assign,readonly) BOOL isYSLayouting;
 
 
 //指定布局四个要绘制的边界线。

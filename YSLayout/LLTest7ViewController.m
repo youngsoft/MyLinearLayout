@@ -40,7 +40,7 @@
     rootLayout.wrapContentHeight = NO;
     rootLayout.wrapContentWidth = NO;
     rootLayout.gravity = YSMarignGravity_Horz_Fill;
-    rootLayout.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.view = rootLayout;
     
     
@@ -88,8 +88,8 @@
     self.testLayout.backgroundColor = [UIColor grayColor];
     self.testLayout.wrapContentHeight = NO;
     self.testLayout.weight = 1.0;
-    self.testLayout.ysLeftPadding = 10;
-    self.testLayout.ysRightPadding = 10;
+    self.testLayout.leftPadding = 10;
+    self.testLayout.rightPadding = 10;
     self.testLayout.ysTopMargin = 5;
     [rootLayout addSubview:self.testLayout];
     

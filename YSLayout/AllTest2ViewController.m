@@ -24,7 +24,7 @@
    /* YSLinearLayout *rootLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [UIColor grayColor];
     
-    rootLayout.ysPadding = UIEdgeInsetsMake(20, 20, 20, 20);
+    rootLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     rootLayout.subviewMargin = 20;
     
     YSLinearLayout *topLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Horz];
@@ -60,7 +60,7 @@
     //相对布局实现
    /*  YSRelativeLayout *rootLayout = [YSRelativeLayout new];
     rootLayout.backgroundColor = [UIColor grayColor];
-    rootLayout.ysPadding = UIEdgeInsetsMake(20, 20, 20, 20);
+    rootLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     
     UIView *topLeft = [UIView new];
     topLeft.backgroundColor = [UIColor redColor];
@@ -90,7 +90,7 @@
     //表格布局实现
     YSTableLayout *rootLayout = [YSTableLayout tableLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [UIColor grayColor];
-    rootLayout.ysPadding = UIEdgeInsetsMake(20, 20, 20, 20);
+    rootLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     rootLayout.subviewMargin = 20;
 
     [rootLayout addRow:MTLROWHEIGHT_AVERAGE colWidth:MTLCOLWIDTH_AVERAGE];
@@ -116,7 +116,7 @@
     //框架布局实现
    /* YSFrameLayout *rootLayout = [YSFrameLayout new];
     rootLayout.backgroundColor = [UIColor grayColor];
-    rootLayout.ysPadding = UIEdgeInsetsMake(20, 20, 20, 20);
+    rootLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
 
     UIView *topLeft = UIView.new;
     topLeft.backgroundColor = [UIColor redColor];

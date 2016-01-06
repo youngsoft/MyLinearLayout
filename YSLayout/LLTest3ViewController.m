@@ -94,7 +94,7 @@
     flowLayout1.averageArrange = YES;
     flowLayout1.subviewHorzMargin = 5;
     flowLayout1.subviewVertMargin = 5;
-    flowLayout1.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    flowLayout1.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     
     UIButton *topButton = [self createActionButton:@"上停靠" tag:100];
     [flowLayout1 addSubview:topButton];
@@ -141,7 +141,7 @@
     flowLayout1.averageArrange = YES;
     flowLayout1.subviewHorzMargin = 5;
     flowLayout1.subviewVertMargin = 5;
-    flowLayout1.ysPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+    flowLayout1.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     
     
     UIButton *leftButton = [self createActionButton:@"左停靠" tag:101];

@@ -86,8 +86,13 @@
 -(YSMaker*)flexedHeight
 {
     return [self addMethod:@"flexedHeight"];
-    
 }
+
+-(YSMaker*)useFrame
+{
+    return [self addMethod:@"useFrame"];
+}
+
 
 -(YSMaker*)wrapContentHeight
 {
@@ -110,26 +115,26 @@
 -(YSMaker*)topPadding
 {
     
-    return [self addMethod:@"ysTopPadding"];
+    return [self addMethod:@"topPadding"];
     
 }
 
 -(YSMaker*)leftPadding
 {
-    return [self addMethod:@"ysLeftPadding"];
+    return [self addMethod:@"leftPadding"];
     
 }
 
 -(YSMaker*)bottomPadding
 {
     
-    return [self addMethod:@"ysBottomPadding"];
+    return [self addMethod:@"bottomPadding"];
     
 }
 
 -(YSMaker*)rightPadding
 {
-    return [self addMethod:@"ysRightPadding"];
+    return [self addMethod:@"rightPadding"];
     
 }
 
