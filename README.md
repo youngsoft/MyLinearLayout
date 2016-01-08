@@ -73,7 +73,7 @@
 | 流式布局 | MyFlowLayout      |    YSFlowLayout |
 | 边框线 | MyBorderLineDraw      |    YSBorderLineDraw |
 | 布局构建器 | MyMaker      |    YSMaker |
-| 位置停靠枚举定义 | MarignGravity      |    YSMarignGravity |
+| 位置停靠枚举定义 | MarignGravity      |    YSMarginGravity |
 | 位置停靠枚举值 | 大写格式      |    大小写格式 |
 | 布局方向枚举定义 | LineViewOrientation      |    YSLayoutViewOrientation |
 | 布局方向枚举值 | 大写格式      |    大小写格式 |
