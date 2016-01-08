@@ -86,7 +86,7 @@
     ageLayout.layer.borderWidth = 0.5;
     ageLayout.layer.cornerRadius = 4;
     
-    ageLayout.gravity = YSMarignGravity_Horz_Fill;
+    ageLayout.gravity = YSMarginGravity_Horz_Fill;
     ageLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     ageLayout.ysTopMargin = 20;
     ageLayout.ysLeftMargin = ageLayout.ysRightMargin = 0;

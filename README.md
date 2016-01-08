@@ -82,7 +82,7 @@
 | 视图的中心偏移 |    centerXXOffset   |    ysCenterXXOffset |
 
 
-如果您在代码中还使用老的命名系统也会让您编译通过，但是会提示过期的警告，因此建议您将名称迁移到新的命名中来，对于类名以及枚举的迁移相对简单，只要利用工程中的查找替换功能就能完成。最麻烦的就是原先的leftMargin,rightMargin,topMargin,bottomMargin,centerXoffset,centerYOffset,centerOffset,width,height这9个属性方法的迁移会比较麻烦，您不能用全局查找替换的方法，最好是通过编译出现的错误进行一一替换（这里深表对不起）。  
+如果您在代码中还使用老的命名系统也会让您编译通过，但是会提示过期的警告，因此建议您将名称迁移到新的命名中来，对于类名以及枚举的迁移相对简单，只要利用工程中的查找替换功能就能完成。最麻烦的就是原先的leftMargin,rightMargin,topMargin,bottomMargin,centerXoffset,centerYOffset,centerOffset,width,height这9个属性方法的迁移会比较麻烦，您不能用全局查找替换的方法，最好是通过编译出现的错误进行一一替换,或者通过全局查找替换功能并使用Preview进行有选择的替换（这里深表对不起）。  
 
 如果您不想进行迁移，但是又不出现告警提示的话，则可以在***pch文件中***，***工程的宏定义中***，以及在***YSLayoutDef.h的最开头***这三种方法的任意一种方法中定义三个宏：
 

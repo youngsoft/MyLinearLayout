@@ -180,22 +180,22 @@
     NSString *posStr = @"";
     
     switch (posobj.pos) {
-        case YSMarignGravity_Horz_Left:
+        case YSMarginGravity_Horz_Left:
             posStr = @"LeftPos";
             break;
-        case YSMarignGravity_Horz_Center:
+        case YSMarginGravity_Horz_Center:
             posStr = @"CenterXPos";
             break;
-        case YSMarignGravity_Horz_Right:
+        case YSMarginGravity_Horz_Right:
             posStr = @"RightPos";
             break;
-        case YSMarignGravity_Vert_Top:
+        case YSMarginGravity_Vert_Top:
             posStr = @"TopPos";
             break;
-        case YSMarignGravity_Vert_Center:
+        case YSMarginGravity_Vert_Center:
             posStr = @"CenterYPos";
             break;
-        case YSMarignGravity_Vert_Bottom:
+        case YSMarginGravity_Vert_Bottom:
             posStr = @"BottomPos";
             break;
         default:

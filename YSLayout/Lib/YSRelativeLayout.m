@@ -200,10 +200,10 @@
 
 
 
--(CGFloat)calcSubView:(UIView*)sbv gravity:(YSMarignGravity)gravity selfRect:(CGRect)selfRect
+-(CGFloat)calcSubView:(UIView*)sbv gravity:(YSMarginGravity)gravity selfRect:(CGRect)selfRect
 {
     switch (gravity) {
-        case YSMarignGravity_Horz_Left:
+        case YSMarginGravity_Horz_Left:
         {
             if (sbv == self || sbv == nil)
                 return self.leftPadding;
@@ -219,7 +219,7 @@
             
         }
             break;
-        case YSMarignGravity_Horz_Right:
+        case YSMarginGravity_Horz_Right:
         {
             if (sbv == self || sbv == nil)
                 return selfRect.size.width - self.rightPadding;
@@ -244,7 +244,7 @@
             
         }
             break;
-        case YSMarignGravity_Vert_Top:
+        case YSMarginGravity_Vert_Top:
         {
             if (sbv == self || sbv == nil)
                 return self.topPadding;
@@ -259,7 +259,7 @@
             
         }
             break;
-        case YSMarignGravity_Vert_Bottom:
+        case YSMarginGravity_Vert_Bottom:
         {
             if (sbv == self || sbv == nil)
                 return selfRect.size.height - self.bottomPadding;
@@ -284,7 +284,7 @@
             return sbv.absPos.bottomPos;
         }
             break;
-        case YSMarignGravity_Horz_Fill:
+        case YSMarginGravity_Horz_Fill:
         {
             if (sbv == self || sbv == nil)
                 return selfRect.size.width - self.leftPadding - self.rightPadding;
@@ -299,7 +299,7 @@
             
         }
             break;
-        case YSMarignGravity_Vert_Fill:
+        case YSMarginGravity_Vert_Fill:
         {
             if (sbv == self || sbv == nil)
                 return selfRect.size.height - self.topPadding - self.bottomPadding;
@@ -313,7 +313,7 @@
             return sbv.absPos.height;
         }
             break;
-        case YSMarignGravity_Horz_Center:
+        case YSMarginGravity_Horz_Center:
         {
             if (sbv == self || sbv == nil)
                 return (selfRect.size.width - self.leftPadding - self.rightPadding) / 2 + self.leftPadding;
@@ -339,7 +339,7 @@
         }
             break;
             
-        case YSMarignGravity_Vert_Center:
+        case YSMarginGravity_Vert_Center:
         {
             if (sbv == self || sbv == nil)
                 return (selfRect.size.height - self.topPadding - self.bottomPadding) / 2 + self.topPadding;

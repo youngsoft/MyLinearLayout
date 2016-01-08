@@ -64,7 +64,7 @@
 
 
 
--(void)setGravity:(YSMarignGravity)gravity
+-(void)setGravity:(YSMarginGravity)gravity
 {
  
     if (_gravity != gravity)
@@ -251,19 +251,19 @@
         }
         
         
-        YSMarignGravity mg = YSMarignGravity_Horz_Left;
-        if ((_gravity & YSMarignGravity_Vert_Mask)!= YSMarginGravity_None)
-            mg =_gravity & YSMarignGravity_Vert_Mask;
+        YSMarginGravity mg = YSMarginGravity_Horz_Left;
+        if ((_gravity & YSMarginGravity_Vert_Mask)!= YSMarginGravity_None)
+            mg =_gravity & YSMarginGravity_Vert_Mask;
         else
         {
             if (sbv.centerXPos.posVal != nil)
-                mg = YSMarignGravity_Horz_Center;
+                mg = YSMarginGravity_Horz_Center;
             else if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
-                mg = YSMarignGravity_Horz_Fill;
+                mg = YSMarginGravity_Horz_Fill;
             else if (sbv.leftPos.posVal != nil)
-                mg = YSMarignGravity_Horz_Left;
+                mg = YSMarginGravity_Horz_Left;
             else if (sbv.rightPos.posVal != nil)
-                mg = YSMarignGravity_Horz_Right;
+                mg = YSMarginGravity_Horz_Right;
         }
         
         [self horzGravity:mg selfWidth:newSelfRect.size.width sbv:sbv rect:&rect];
@@ -572,19 +572,19 @@
         }
         
         //优先以容器中的指定为标准
-        YSMarignGravity mg = YSMarignGravity_Vert_Top;
-        if ((_gravity & YSMarignGravity_Horz_Mask)!= YSMarginGravity_None)
-            mg =_gravity & YSMarignGravity_Horz_Mask;
+        YSMarginGravity mg = YSMarginGravity_Vert_Top;
+        if ((_gravity & YSMarginGravity_Horz_Mask)!= YSMarginGravity_None)
+            mg =_gravity & YSMarginGravity_Horz_Mask;
         else
         {
             if (sbv.centerYPos.posVal != nil)
-                mg = YSMarignGravity_Vert_Center;
+                mg = YSMarginGravity_Vert_Center;
             else if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
-                mg = YSMarignGravity_Vert_Fill;
+                mg = YSMarginGravity_Vert_Fill;
             else if (sbv.topPos.posVal != nil)
-                mg = YSMarignGravity_Vert_Top;
+                mg = YSMarginGravity_Vert_Top;
             else if (sbv.bottomPos.posVal != nil)
-                mg = YSMarignGravity_Vert_Bottom;
+                mg = YSMarginGravity_Vert_Bottom;
         }
         
         [self vertGravity:mg selfHeight:newSelfRect.size.height sbv:sbv rect:&rect];
@@ -675,19 +675,19 @@
         }
         
         //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
-        YSMarignGravity mg = YSMarignGravity_Horz_Left;
-        if ((_gravity & YSMarignGravity_Vert_Mask)!= YSMarginGravity_None)
-            mg =_gravity & YSMarignGravity_Vert_Mask;
+        YSMarginGravity mg = YSMarginGravity_Horz_Left;
+        if ((_gravity & YSMarginGravity_Vert_Mask)!= YSMarginGravity_None)
+            mg =_gravity & YSMarginGravity_Vert_Mask;
         else
         {
             if (sbv.centerXPos.posVal != nil)
-                mg = YSMarignGravity_Horz_Center;
+                mg = YSMarginGravity_Horz_Center;
             else if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
-                mg = YSMarignGravity_Horz_Fill;
+                mg = YSMarginGravity_Horz_Fill;
             else if (sbv.leftPos.posVal != nil)
-                mg = YSMarignGravity_Horz_Left;
+                mg = YSMarginGravity_Horz_Left;
             else if (sbv.rightPos.posVal != nil)
-                mg = YSMarignGravity_Horz_Right;
+                mg = YSMarginGravity_Horz_Right;
         }
         
         [self horzGravity:mg selfWidth:newSelfRect.size.width sbv:sbv rect:&rect];
@@ -719,16 +719,16 @@
     
     //根据对齐的方位来定位子视图的布局对齐
     CGFloat pos = 0;
-    if ((_gravity & YSMarignGravity_Horz_Mask) == YSMarignGravity_Vert_Top)
+    if ((_gravity & YSMarginGravity_Horz_Mask) == YSMarginGravity_Vert_Top)
     {
         pos = self.topPadding;
     }
-    else if ((_gravity & YSMarignGravity_Horz_Mask) == YSMarignGravity_Vert_Center)
+    else if ((_gravity & YSMarginGravity_Horz_Mask) == YSMarginGravity_Vert_Center)
     {
         pos = (newSelfRect.size.height - totalHeight - self.bottomPadding - self.topPadding)/2.0;
         pos += self.topPadding;
     }
-    else if ((_gravity & YSMarignGravity_Horz_Mask) == YSMarignGravity_Vert_Window_Center)
+    else if ((_gravity & YSMarginGravity_Horz_Mask) == YSMarginGravity_Vert_Window_Center)
     {
         if (self.window != nil)
         {
@@ -862,16 +862,16 @@
     
     //根据对齐的方位来定位子视图的布局对齐
     CGFloat pos = 0;
-    if ((_gravity & YSMarignGravity_Vert_Mask) == YSMarignGravity_Horz_Left)
+    if ((_gravity & YSMarginGravity_Vert_Mask) == YSMarginGravity_Horz_Left)
     {
         pos = self.leftPadding;
     }
-    else if ((_gravity & YSMarignGravity_Vert_Mask) == YSMarignGravity_Horz_Center)
+    else if ((_gravity & YSMarginGravity_Vert_Mask) == YSMarginGravity_Horz_Center)
     {
         pos = (newSelfRect.size.width - totalWidth - self.leftPadding - self.rightPadding)/2.0;
         pos += self.leftPadding;
     }
-    else if ((_gravity & YSMarignGravity_Vert_Mask) == YSMarignGravity_Horz_Window_Center)
+    else if ((_gravity & YSMarginGravity_Vert_Mask) == YSMarginGravity_Horz_Window_Center)
     {
         if (self.window != nil)
         {
@@ -930,19 +930,19 @@
         }
         
       
-        YSMarignGravity mg = YSMarignGravity_Vert_Top;
-        if ((_gravity & YSMarignGravity_Horz_Mask)!= YSMarginGravity_None)
-            mg =_gravity & YSMarignGravity_Horz_Mask;
+        YSMarginGravity mg = YSMarginGravity_Vert_Top;
+        if ((_gravity & YSMarginGravity_Horz_Mask)!= YSMarginGravity_None)
+            mg =_gravity & YSMarginGravity_Horz_Mask;
         else
         {
             if (sbv.centerYPos.posVal != nil)
-                mg = YSMarignGravity_Vert_Center;
+                mg = YSMarginGravity_Vert_Center;
             else if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
-                mg = YSMarignGravity_Vert_Fill;
+                mg = YSMarginGravity_Vert_Fill;
             else if (sbv.topPos.posVal != nil)
-                mg = YSMarignGravity_Vert_Top;
+                mg = YSMarginGravity_Vert_Top;
             else if (sbv.bottomPos.posVal != nil)
-                mg = YSMarignGravity_Vert_Bottom;
+                mg = YSMarginGravity_Vert_Bottom;
         }
         
         [self vertGravity:mg selfHeight:newSelfRect.size.height sbv:sbv rect:&rect];
@@ -1011,7 +1011,7 @@
         }
         
         
-        if ((_gravity & YSMarignGravity_Horz_Mask) != YSMarginGravity_None)
+        if ((_gravity & YSMarginGravity_Horz_Mask) != YSMarginGravity_None)
             selfRect = [self layoutSubviewsForVertGravity:selfRect];
         else
             selfRect = [self layoutSubviewsForVert:selfRect];
@@ -1057,7 +1057,7 @@
         }
         
         
-        if ((_gravity & YSMarignGravity_Vert_Mask) != YSMarginGravity_None)
+        if ((_gravity & YSMarginGravity_Vert_Mask) != YSMarginGravity_None)
             selfRect = [self layoutSubviewsForHorzGravity:selfRect];
         else
             selfRect = [self layoutSubviewsForHorz:selfRect];

@@ -30,7 +30,7 @@
 //流式布局内所有子视图的整体停靠对齐位置设定。
 //如果视图方向为YSLayoutViewOrientation_Vert时且averageArrange为YES时则水平方向的对齐失效。
 //如果视图方向为YSLayoutViewOrientation_Horz时且averageArrange为YES时则垂直方向的对齐失效。
-@property(nonatomic,assign) YSMarignGravity gravity;
+@property(nonatomic,assign) YSMarginGravity gravity;
 
 
 //指定方向上的子视图的数量默认是1。
@@ -45,9 +45,9 @@
 
 
 //流式布局中每排子视图的停靠对齐位置设定。
-//如果是YSLayoutViewOrientation_Vert则只用于表示每行子视图的上中下停靠对齐位置，这个属性只支持YSMarignGravity_Vert_Top，YSMarignGravity_Vert_Center,YSMarignGravity_Vert_Bottom，YSMarignGravity_Vert_Fill 这里的对齐基础是以每行中的最高的子视图为基准。
-//如果是YSLayoutViewOrientation_Horz则只用于表示每列子视图的左中右停靠对齐位置，这个属性只支持YSMarignGravity_Horz_Left，YSMarignGravity_Horz_Center,YSMarignGravity_Horz_Right，YSMarignGravity_Horz_Fill 这里的对齐基础是以每列中的最宽的子视图为基准。
-@property(nonatomic,assign) YSMarignGravity arrangedGravity;
+//如果是YSLayoutViewOrientation_Vert则只用于表示每行子视图的上中下停靠对齐位置，这个属性只支持YSMarginGravity_Vert_Top，YSMarginGravity_Vert_Center,YSMarginGravity_Vert_Bottom，YSMarginGravity_Vert_Fill 这里的对齐基础是以每行中的最高的子视图为基准。
+//如果是YSLayoutViewOrientation_Horz则只用于表示每列子视图的左中右停靠对齐位置，这个属性只支持YSMarginGravity_Horz_Left，YSMarginGravity_Horz_Center,YSMarginGravity_Horz_Right，YSMarginGravity_Horz_Fill 这里的对齐基础是以每列中的最宽的子视图为基准。
+@property(nonatomic,assign) YSMarginGravity arrangedGravity;
 
 
 //子视图之间的垂直和水平的间距，默认为0。当子视图之间的间距是固定时可以通过直接设置这两个属性值来指定间距

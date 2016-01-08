@@ -220,10 +220,10 @@
     NSString *dimeStr = @"";
     
     switch (dimeobj.dime) {
-        case YSMarignGravity_Horz_Fill:
+        case YSMarginGravity_Horz_Fill:
             dimeStr = @"WidthDime";
             break;
-        case YSMarignGravity_Vert_Fill:
+        case YSMarginGravity_Vert_Fill:
             dimeStr = @"HeightDime";
             break;
         default:

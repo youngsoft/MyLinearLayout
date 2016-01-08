@@ -36,8 +36,8 @@
 
 
 //里面的所有子视图的停靠位置，默认是YSMarginGravity_None，表示不控制子视图的停靠，可以分别控制水平和垂直的停靠位置
-//具体参考YSMarignGravity中的值，通过设置子视图的停靠位置，则里面的所有子视图都将按统一的停靠方式进行布局和排列
-@property(nonatomic, assign) YSMarignGravity gravity;
+//具体参考YSMarginGravity中的值，通过设置子视图的停靠位置，则里面的所有子视图都将按统一的停靠方式进行布局和排列
+@property(nonatomic, assign) YSMarginGravity gravity;
 
 
 //均分子视图和间距,布局会根据里面的子视图的数量来平均分配子视图的高度或者宽度以及间距。

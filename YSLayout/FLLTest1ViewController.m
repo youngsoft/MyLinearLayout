@@ -37,7 +37,7 @@
     YSLinearLayout *rootLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     rootLayout.wrapContentWidth = NO;
     rootLayout.wrapContentHeight = NO;
-    rootLayout.gravity = YSMarignGravity_Horz_Fill;
+    rootLayout.gravity = YSMarginGravity_Horz_Fill;
     self.view = rootLayout;
     
     //添加操作按钮。
@@ -188,16 +188,16 @@
     };
     
     if (self.flowLayout.gravity == YSMarginGravity_None)
-        self.flowLayout.gravity = YSMarignGravity_Vert_Center;
-    else if (self.flowLayout.gravity == YSMarignGravity_Vert_Center)
-        self.flowLayout.gravity = YSMarignGravity_Vert_Bottom;
-    else if (self.flowLayout.gravity == YSMarignGravity_Vert_Bottom)
-        self.flowLayout.gravity = YSMarignGravity_Horz_Center;
-    else if (self.flowLayout.gravity == YSMarignGravity_Horz_Center)
-        self.flowLayout.gravity = YSMarignGravity_Horz_Right;
-    else if (self.flowLayout.gravity == YSMarignGravity_Horz_Right)
-        self.flowLayout.gravity = YSMarignGravity_Center;
-    else if (self.flowLayout.gravity == YSMarignGravity_Center)
+        self.flowLayout.gravity = YSMarginGravity_Vert_Center;
+    else if (self.flowLayout.gravity == YSMarginGravity_Vert_Center)
+        self.flowLayout.gravity = YSMarginGravity_Vert_Bottom;
+    else if (self.flowLayout.gravity == YSMarginGravity_Vert_Bottom)
+        self.flowLayout.gravity = YSMarginGravity_Horz_Center;
+    else if (self.flowLayout.gravity == YSMarginGravity_Horz_Center)
+        self.flowLayout.gravity = YSMarginGravity_Horz_Right;
+    else if (self.flowLayout.gravity == YSMarginGravity_Horz_Right)
+        self.flowLayout.gravity = YSMarginGravity_Center;
+    else if (self.flowLayout.gravity == YSMarginGravity_Center)
         self.flowLayout.gravity = YSMarginGravity_None;
     
     
@@ -222,17 +222,17 @@
     
     if (self.flowLayout.orientation == YSLayoutViewOrientation_Vert)
     {
-        YSMarignGravity mg = self.flowLayout.arrangedGravity & YSMarignGravity_Horz_Mask;
+        YSMarginGravity mg = self.flowLayout.arrangedGravity & YSMarginGravity_Horz_Mask;
         
-        if (mg == YSMarginGravity_None || mg == YSMarignGravity_Vert_Top)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Center;
-        else if (mg == YSMarignGravity_Vert_Center)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Bottom;
-        else if (mg  == YSMarignGravity_Vert_Bottom)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Fill;
-        else if (mg == YSMarignGravity_Vert_Fill)
+        if (mg == YSMarginGravity_None || mg == YSMarginGravity_Vert_Top)
+            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Center;
+        else if (mg == YSMarginGravity_Vert_Center)
+            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Bottom;
+        else if (mg  == YSMarginGravity_Vert_Bottom)
+            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Fill;
+        else if (mg == YSMarginGravity_Vert_Fill)
         {
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Top;
+            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Top;
             
             for (UIView *vv in self.flowLayout.subviews)
             {
@@ -243,17 +243,17 @@
     }
     else
     {
-        YSMarignGravity mg = self.flowLayout.arrangedGravity & YSMarignGravity_Vert_Mask;
+        YSMarginGravity mg = self.flowLayout.arrangedGravity & YSMarginGravity_Vert_Mask;
         
-        if (mg == YSMarginGravity_None || mg == YSMarignGravity_Horz_Left)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Center;
-        else if (mg == YSMarignGravity_Horz_Center)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Right;
-        else if (mg  == YSMarignGravity_Horz_Right)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Fill;
-        else if (mg == YSMarignGravity_Horz_Fill)
+        if (mg == YSMarginGravity_None || mg == YSMarginGravity_Horz_Left)
+            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Center;
+        else if (mg == YSMarginGravity_Horz_Center)
+            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Right;
+        else if (mg  == YSMarginGravity_Horz_Right)
+            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Fill;
+        else if (mg == YSMarginGravity_Horz_Fill)
         {
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Left;
+            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Left;
             
             for (UIView *vv in self.flowLayout.subviews)
             {

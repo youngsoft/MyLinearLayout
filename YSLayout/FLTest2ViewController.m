@@ -36,7 +36,7 @@
     rightImageView.layer.cornerRadius = 16;
 
     [rightImageView sizeToFit];
-    rightImageView.marginGravity = YSMarignGravity_Horz_Right | YSMarignGravity_Vert_Top;
+    rightImageView.marginGravity = YSMarginGravity_Horz_Right | YSMarginGravity_Vert_Top;
     rightImageView.ysTopMargin = 10;
     rightImageView.ysRightMargin = 10;
     [rootLayout addSubview:rightImageView];
@@ -52,7 +52,7 @@
     
     headImage.heightDime.equalTo(rootLayout.heightDime).multiply(0.3);
     headImage.widthDime.equalTo(headImage.heightDime);
-    headImage.marginGravity = YSMarignGravity_Center;
+    headImage.marginGravity = YSMarginGravity_Center;
     [rootLayout addSubview:headImage];
     
     
@@ -64,7 +64,7 @@
     //这里昵称在头像的下面。而头像是居中，昵称也是居中的,但是因为头像的高度是1/3。而高度的一半就是1/6，因此
     //昵称的偏移可以设置为居中的相对偏移量， 再加上文本本身的高度的一半就是昵称在头像的下面。
     [nickName sizeToFit];
-    nickName.marginGravity = YSMarignGravity_Center;
+    nickName.marginGravity = YSMarginGravity_Center;
     nickName.centerYPos.equalTo(@(1/6.0)).offset(nickName.frame.size.height / 2);
     [rootLayout addSubview:nickName];
     
@@ -73,20 +73,20 @@
     UIImageView *leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image1"]];
     leftView.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
     leftView.heightDime.equalTo(leftView.widthDime).max(80);
-    leftView.marginGravity = YSMarignGravity_Vert_Bottom | YSMarignGravity_Horz_Left;
+    leftView.marginGravity = YSMarginGravity_Vert_Bottom | YSMarginGravity_Horz_Left;
     [rootLayout addSubview:leftView];
     
     UIImageView *centerView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image2"]];
     centerView.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
     centerView.heightDime.equalTo(centerView.widthDime).max(80);
-    centerView.marginGravity = YSMarignGravity_Vert_Bottom | YSMarignGravity_Horz_Center;
+    centerView.marginGravity = YSMarginGravity_Vert_Bottom | YSMarginGravity_Horz_Center;
     [rootLayout addSubview:centerView];
 
     
     UIImageView *rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image3"]];
     rightView.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
     rightView.heightDime.equalTo(rightView.widthDime).max(80);
-    rightView.marginGravity = YSMarignGravity_Vert_Bottom | YSMarignGravity_Horz_Right;
+    rightView.marginGravity = YSMarginGravity_Vert_Bottom | YSMarginGravity_Horz_Right;
     [rootLayout addSubview:rightView];
 
     

@@ -120,21 +120,21 @@
 
     UIView *topLeft = UIView.new;
     topLeft.backgroundColor = [UIColor redColor];
-    topLeft.marginGravity = YSMarignGravity_Horz_Left | YSMarignGravity_Vert_Top;
+    topLeft.marginGravity = YSMarginGravity_Horz_Left | YSMarginGravity_Vert_Top;
     topLeft.widthDime.equalTo(rootLayout.widthDime).multiply(0.5).add(-10);
     topLeft.heightDime.equalTo(rootLayout.heightDime).multiply(0.5).add(-10);
     [rootLayout addSubview:topLeft];
     
     UIView *topRight = UIView.new;
     topRight.backgroundColor = [UIColor greenColor];
-    topRight.marginGravity = YSMarignGravity_Horz_Right | YSMarignGravity_Vert_Top;
+    topRight.marginGravity = YSMarginGravity_Horz_Right | YSMarginGravity_Vert_Top;
     topRight.widthDime.equalTo(rootLayout.widthDime).multiply(0.5).add(-10);
     topRight.heightDime.equalTo(rootLayout.heightDime).multiply(0.5).add(-10);
     [rootLayout addSubview:topRight];
     
     UIView *bottom = UIView.new;
     bottom.backgroundColor = [UIColor blueColor];
-    bottom.marginGravity = YSMarignGravity_Horz_Fill | YSMarignGravity_Vert_Bottom;
+    bottom.marginGravity = YSMarginGravity_Horz_Fill | YSMarginGravity_Vert_Bottom;
     bottom.heightDime.equalTo(rootLayout.heightDime).multiply(0.5).add(-10);
     [rootLayout addSubview:bottom];
     

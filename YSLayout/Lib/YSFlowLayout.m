@@ -74,7 +74,7 @@
     }
 }
 
--(void)setGravity:(YSMarignGravity)gravity
+-(void)setGravity:(YSMarginGravity)gravity
 {
     if (_gravity != gravity)
     {
@@ -83,7 +83,7 @@
     }
 }
 
--(void)setArrangedGravity:(YSMarignGravity)arrangedGravity
+-(void)setArrangedGravity:(YSMarginGravity)arrangedGravity
 {
     if (_arrangedGravity != arrangedGravity)
     {
@@ -126,19 +126,19 @@
 }
 
 
-- (void)calcVertLayoutGravity:(CGFloat)selfWidth rowMaxHeight:(CGFloat)rowMaxHeight rowMaxWidth:(CGFloat)rowMaxWidth mg:(YSMarignGravity)mg amg:(YSMarignGravity)amg sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
+- (void)calcVertLayoutGravity:(CGFloat)selfWidth rowMaxHeight:(CGFloat)rowMaxHeight rowMaxWidth:(CGFloat)rowMaxWidth mg:(YSMarginGravity)mg amg:(YSMarginGravity)amg sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
 {
     
     CGFloat addXPos = 0;
     if (!self.averageArrange)
     {
         switch (mg) {
-            case YSMarignGravity_Horz_Center:
+            case YSMarginGravity_Horz_Center:
             {
                 addXPos = (selfWidth - self.leftPadding - self.rightPadding - rowMaxWidth) / 2;
             }
                 break;
-            case YSMarignGravity_Horz_Right:
+            case YSMarginGravity_Horz_Right:
             {
                 addXPos = selfWidth - self.leftPadding - self.rightPadding - rowMaxWidth; //因为具有不考虑左边距，而原来的位置增加了左边距，因此
             }
@@ -150,7 +150,7 @@
     
     
     //最后一排。
-    if ((amg != YSMarginGravity_None && amg != YSMarignGravity_Vert_Top) || addXPos != 0)
+    if ((amg != YSMarginGravity_None && amg != YSMarginGravity_Vert_Top) || addXPos != 0)
     {
         //将整行的位置进行调整。
         for (NSInteger j = startIndex - count; j < startIndex; j++)
@@ -160,18 +160,18 @@
             sbv.absPos.leftPos += addXPos;
             
             switch (amg) {
-                case YSMarignGravity_Vert_Center:
+                case YSMarginGravity_Vert_Center:
                 {
                     sbv.absPos.topPos += (rowMaxHeight - sbv.topPos.margin - sbv.bottomPos.margin - sbv.absPos.height) / 2;
                     
                 }
                     break;
-                case YSMarignGravity_Vert_Bottom:
+                case YSMarginGravity_Vert_Bottom:
                 {
                     sbv.absPos.topPos += rowMaxHeight - sbv.topPos.margin - sbv.bottomPos.margin - sbv.absPos.height;
                 }
                     break;
-                case YSMarignGravity_Vert_Fill:
+                case YSMarginGravity_Vert_Fill:
                 {
                     sbv.absPos.height = [sbv.heightDime validMeasure:rowMaxHeight - sbv.topPos.margin - sbv.bottomPos.margin] ;
                 }
@@ -202,9 +202,9 @@
     CGFloat rowMaxHeight = 0;  //某一行的最高值。
     CGFloat rowMaxWidth = 0;   //某一行的最宽值
     CGFloat maxWidth = self.leftPadding;  //全部行的最宽值
-    YSMarignGravity mgvert = self.gravity & YSMarignGravity_Horz_Mask;
-    YSMarignGravity mghorz = self.gravity & YSMarignGravity_Vert_Mask;
-    YSMarignGravity amgvert = self.arrangedGravity & YSMarignGravity_Horz_Mask;
+    YSMarginGravity mgvert = self.gravity & YSMarginGravity_Horz_Mask;
+    YSMarginGravity mghorz = self.gravity & YSMarginGravity_Vert_Mask;
+    YSMarginGravity amgvert = self.arrangedGravity & YSMarginGravity_Horz_Mask;
     
     CGFloat averageWidth = (selfRect.size.width - self.leftPadding - self.rightPadding - (arrangedCount - 1) * self.subviewHorzMargin) / arrangedCount;
     
@@ -295,11 +295,11 @@
     else
     {
         CGFloat addYPos = 0;
-        if (mgvert == YSMarignGravity_Vert_Center)
+        if (mgvert == YSMarginGravity_Vert_Center)
         {
             addYPos = (selfRect.size.height - self.bottomPadding - rowMaxHeight - yPos) / 2;
         }
-        else if (mgvert == YSMarignGravity_Vert_Bottom)
+        else if (mgvert == YSMarginGravity_Vert_Bottom)
         {
             addYPos = selfRect.size.height - self.bottomPadding - rowMaxHeight - yPos;
         }
@@ -325,19 +325,19 @@
 
 
 
-- (void)calcHorzLayoutGravity:(CGFloat)selfHeight colMaxWidth:(CGFloat)colMaxWidth colMaxHeight:(CGFloat)colMaxHeight mg:(YSMarignGravity)mg  amg:(YSMarignGravity)amg sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
+- (void)calcHorzLayoutGravity:(CGFloat)selfHeight colMaxWidth:(CGFloat)colMaxWidth colMaxHeight:(CGFloat)colMaxHeight mg:(YSMarginGravity)mg  amg:(YSMarginGravity)amg sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
 {
     
     CGFloat addYPos = 0;
     if (!self.averageArrange)
     {
         switch (mg) {
-            case YSMarignGravity_Vert_Center:
+            case YSMarginGravity_Vert_Center:
             {
                 addYPos = (selfHeight - self.topPadding - self.bottomPadding - colMaxHeight) / 2;
             }
                 break;
-            case YSMarignGravity_Vert_Bottom:
+            case YSMarginGravity_Vert_Bottom:
             {
                 addYPos = selfHeight - self.topPadding - self.bottomPadding - colMaxHeight;
             }
@@ -349,7 +349,7 @@
     
 
     
-    if ((amg != YSMarginGravity_None && amg != YSMarignGravity_Horz_Left) || addYPos != 0)
+    if ((amg != YSMarginGravity_None && amg != YSMarginGravity_Horz_Left) || addYPos != 0)
     {
         //将整行的位置进行调整。
         for (NSInteger j = startIndex - count; j < startIndex; j++)
@@ -359,18 +359,18 @@
             sbv.absPos.topPos += addYPos;
             
             switch (amg) {
-                case YSMarignGravity_Horz_Center:
+                case YSMarginGravity_Horz_Center:
                 {
                     sbv.absPos.leftPos += (colMaxWidth - sbv.leftPos.margin - sbv.rightPos.margin - sbv.absPos.width) / 2;
                     
                 }
                     break;
-                case YSMarignGravity_Horz_Right:
+                case YSMarginGravity_Horz_Right:
                 {
                     sbv.absPos.leftPos += colMaxWidth - sbv.leftPos.margin - sbv.rightPos.margin - sbv.absPos.width;
                 }
                     break;
-                case YSMarignGravity_Horz_Fill:
+                case YSMarginGravity_Horz_Fill:
                 {
                     sbv.absPos.width = [sbv.widthDime validMeasure:colMaxWidth - sbv.leftPos.margin - sbv.rightPos.margin];
                 }
@@ -407,9 +407,9 @@
     CGFloat colMaxHeight = 0; //每列的最大高度
     CGFloat maxHeight = self.topPadding;
     
-    YSMarignGravity mgvert = self.gravity & YSMarignGravity_Horz_Mask;
-    YSMarignGravity mghorz = self.gravity & YSMarignGravity_Vert_Mask;
-    YSMarignGravity amghorz = self.arrangedGravity & YSMarignGravity_Vert_Mask;
+    YSMarginGravity mgvert = self.gravity & YSMarginGravity_Horz_Mask;
+    YSMarginGravity mghorz = self.gravity & YSMarginGravity_Vert_Mask;
+    YSMarginGravity amghorz = self.arrangedGravity & YSMarginGravity_Vert_Mask;
 
     
     CGFloat averageHeight = (selfRect.size.height - self.topPadding - self.bottomPadding - (arrangedCount - 1) * self.subviewVertMargin) / arrangedCount;
@@ -503,11 +503,11 @@
     {
      
         CGFloat addXPos = 0;
-        if (mghorz == YSMarignGravity_Horz_Center)
+        if (mghorz == YSMarginGravity_Horz_Center)
         {
             addXPos = (selfRect.size.width - self.rightPadding - colMaxWidth - xPos) / 2;
         }
-        else if (mghorz == YSMarignGravity_Horz_Right)
+        else if (mghorz == YSMarginGravity_Horz_Right)
         {
             addXPos = selfRect.size.width - self.rightPadding - colMaxWidth - xPos;
         }

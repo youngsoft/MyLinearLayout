@@ -208,7 +208,7 @@
     rootLayout.ysLeftMargin = rootLayout.ysRightMargin = 0;
     [scrollView addSubview:rootLayout];
     
-    rootLayout.gravity = YSMarignGravity_Horz_Fill;  //设置这个属性后rootLayout的所有子视图都不需要指定宽度了，这个值的意义是所有子视图的宽度都填充满布局。也就是说设置了这个值后不需要为每个子视图设置ysLeftMargin, ysRightMargin来指定宽度了。
+    rootLayout.gravity = YSMarginGravity_Horz_Fill;  //设置这个属性后rootLayout的所有子视图都不需要指定宽度了，这个值的意义是所有子视图的宽度都填充满布局。也就是说设置了这个值后不需要为每个子视图设置ysLeftMargin, ysRightMargin来指定宽度了。
     
     
     UILabel *label1 = [UILabel new];
@@ -281,31 +281,31 @@
 {
     switch (button.tag) {
         case 100:  //上
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Top;
+            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Top;
             break;
         case 200:  //垂直
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Center;
+            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Center;
             break;
         case 300:   //下
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Bottom;
+            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Bottom;
             break;
         case 400:  //左
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Left;
+            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Left;
             break;
         case 500:  //水平
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Center;
+            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Center;
             break;
         case 600:   //右
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Right;
+            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Right;
             break;
         case 700:   //填充
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Fill;
+            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Fill;
             break;
         case 800:   //窗口垂直居中
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Window_Center;
+            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Window_Center;
             break;
         case 900:   //窗口水平居中
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Window_Center;
+            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Window_Center;
             break;
         case 1000:
         {
@@ -330,31 +330,31 @@
             break;
             
         case 101:  //左
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Left;
+            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Left;
             break;
         case 201:  //水平
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Center;
+            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Center;
             break;
         case 301:   //右
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Right;
+            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Right;
             break;
         case 401:  //上
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Top;
+            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Top;
             break;
         case 501:  //垂直
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Center;
+            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Center;
             break;
         case 601:   //下
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Bottom;
+            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Bottom;
             break;
         case 701:   //填充
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Fill;
+            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Fill;
             break;
         case 801:   //窗口垂直居中
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarignGravity_Vert_Mask) | YSMarignGravity_Vert_Window_Center;
+            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarginGravity_Vert_Mask) | YSMarginGravity_Vert_Window_Center;
             break;
         case 901:   //窗口水平居中
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarignGravity_Horz_Mask) | YSMarignGravity_Horz_Window_Center;
+            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & YSMarginGravity_Horz_Mask) | YSMarginGravity_Horz_Window_Center;
             break;
  
         default:
@@ -368,8 +368,8 @@
     YSLinearLayout *navigationItemLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     navigationItemLayout.wrapContentHeight = navigationItemLayout.wrapContentWidth = NO;
     
-    //通过YSMarignGravity_Horz_Window_Center的设置总是保证在窗口的中间而不是布局视图的中间。
-    navigationItemLayout.gravity = YSMarignGravity_Horz_Window_Center | YSMarignGravity_Vert_Center;
+    //通过YSMarginGravity_Horz_Window_Center的设置总是保证在窗口的中间而不是布局视图的中间。
+    navigationItemLayout.gravity = YSMarginGravity_Horz_Window_Center | YSMarginGravity_Vert_Center;
     navigationItemLayout.frame = self.navigationController.navigationBar.bounds;
     
     UILabel *topLabel = [UILabel new];

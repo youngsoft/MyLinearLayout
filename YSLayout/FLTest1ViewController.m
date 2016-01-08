@@ -33,7 +33,7 @@
     UILabel *fill = UILabel.new;
     fill.text = @"                fill";
     fill.backgroundColor = [UIColor blueColor];
-    fill.marginGravity = YSMarignGravity_Fill;
+    fill.marginGravity = YSMarginGravity_Fill;
     [fl addSubview:fill];
     
     
@@ -44,7 +44,7 @@
     [horzFill sizeToFit];
     horzFill.textAlignment = NSTextAlignmentCenter;
     horzFill.backgroundColor = [UIColor greenColor];
-    horzFill.marginGravity = YSMarignGravity_Horz_Fill | YSMarignGravity_Vert_Top;
+    horzFill.marginGravity = YSMarginGravity_Horz_Fill | YSMarginGravity_Vert_Top;
     horzFill.ysTopMargin = 40;
     [fl addSubview:horzFill];
     
@@ -54,7 +54,7 @@
     horzCenter.text = @"Horz Center";
     [horzCenter sizeToFit];
     horzCenter.backgroundColor = [UIColor whiteColor];
-    horzCenter.marginGravity = YSMarignGravity_Horz_Center | YSMarignGravity_Vert_Top;
+    horzCenter.marginGravity = YSMarginGravity_Horz_Center | YSMarginGravity_Vert_Top;
     [fl addSubview:horzCenter];
     
     
@@ -63,7 +63,7 @@
     topLeft.text = @"topLeft";
     [topLeft sizeToFit];
     topLeft.backgroundColor = [UIColor whiteColor];
-    topLeft.marginGravity = YSMarignGravity_Horz_Left | YSMarignGravity_Vert_Top;
+    topLeft.marginGravity = YSMarginGravity_Horz_Left | YSMarginGravity_Vert_Top;
     [fl addSubview:topLeft];
     
     //左中
@@ -71,7 +71,7 @@
     centerLeft.text = @"centerLeft";
     [centerLeft sizeToFit];
     centerLeft.backgroundColor = [UIColor whiteColor];
-    centerLeft.marginGravity = YSMarignGravity_Horz_Left | YSMarignGravity_Vert_Center;
+    centerLeft.marginGravity = YSMarginGravity_Horz_Left | YSMarginGravity_Vert_Center;
     [fl addSubview:centerLeft];
     
     
@@ -80,7 +80,7 @@
     bottomLeft.text = @"bottomLeft";
     [bottomLeft sizeToFit];
     bottomLeft.backgroundColor = [UIColor whiteColor];
-    bottomLeft.marginGravity = YSMarignGravity_Horz_Left | YSMarignGravity_Vert_Bottom;
+    bottomLeft.marginGravity = YSMarginGravity_Horz_Left | YSMarginGravity_Vert_Bottom;
     [fl addSubview:bottomLeft];
     
     
@@ -89,7 +89,7 @@
     topCenter.text = @"topCenter";
     [topCenter sizeToFit];
     topCenter.backgroundColor = [UIColor greenColor];
-    topCenter.marginGravity = YSMarignGravity_Horz_Center | YSMarignGravity_Vert_Top;
+    topCenter.marginGravity = YSMarginGravity_Horz_Center | YSMarginGravity_Vert_Top;
     [fl addSubview:topCenter];
     
     
@@ -98,7 +98,7 @@
     centerCenter.text = @"centerCenter";
     [centerCenter sizeToFit];
     centerCenter.backgroundColor = [UIColor greenColor];
-    centerCenter.marginGravity = YSMarignGravity_Horz_Center | YSMarignGravity_Vert_Center;
+    centerCenter.marginGravity = YSMarginGravity_Horz_Center | YSMarginGravity_Vert_Center;
     [fl addSubview:centerCenter];
     
     
@@ -107,7 +107,7 @@
     bottomCenter.text = @"bottomCenter";
     [bottomCenter sizeToFit];
     bottomCenter.backgroundColor = [UIColor greenColor];
-    bottomCenter.marginGravity = YSMarignGravity_Horz_Center | YSMarignGravity_Vert_Bottom;
+    bottomCenter.marginGravity = YSMarginGravity_Horz_Center | YSMarginGravity_Vert_Bottom;
     [fl addSubview:bottomCenter];
     
     
@@ -116,7 +116,7 @@
     topRight.text = @"topRight";
     [topRight sizeToFit];
     topRight.backgroundColor = [UIColor greenColor];
-    topRight.marginGravity = YSMarignGravity_Horz_Right | YSMarignGravity_Vert_Top;
+    topRight.marginGravity = YSMarginGravity_Horz_Right | YSMarginGravity_Vert_Top;
     [fl addSubview:topRight];
     
     
@@ -125,7 +125,7 @@
     centerRight.text = @"centerRight";
     [centerRight sizeToFit];
     centerRight.backgroundColor = [UIColor greenColor];
-    centerRight.marginGravity = YSMarignGravity_Horz_Right | YSMarignGravity_Vert_Center;
+    centerRight.marginGravity = YSMarginGravity_Horz_Right | YSMarginGravity_Vert_Center;
     [fl addSubview:centerRight];
     
     
@@ -133,7 +133,7 @@
     bottomRight.text = @"bottomRight";
     [bottomRight sizeToFit];
     bottomRight.backgroundColor = [UIColor greenColor];
-    bottomRight.marginGravity = YSMarignGravity_Horz_Right | YSMarignGravity_Vert_Bottom;
+    bottomRight.marginGravity = YSMarginGravity_Horz_Right | YSMarginGravity_Vert_Bottom;
     [fl addSubview:bottomRight];
     
     
@@ -142,7 +142,7 @@
     center.text = @"center";
     [center sizeToFit];
     center.backgroundColor = [UIColor orangeColor];
-    center.marginGravity = YSMarignGravity_Center;
+    center.marginGravity = YSMarginGravity_Center;
     [fl addSubview:center];
     
     

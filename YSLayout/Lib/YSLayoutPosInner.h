@@ -14,7 +14,7 @@
 
 @property(nonatomic, weak) UIView *view;
 
-@property(nonatomic, assign) YSMarignGravity pos;
+@property(nonatomic, assign) YSMarginGravity pos;
 
 @property(nonatomic, assign) YSLayoutValueType posValType;
 

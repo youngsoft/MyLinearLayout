@@ -12,7 +12,7 @@
 @interface UIView(YSFrameLayoutExt)
 
 //用于指定视图在框架布局中的停靠位置，也就是在父视图中的停靠策略,这个属性只有放在框架布局才有意义，默认值是YSMarginGravity_None表示停靠在左上角
-@property(nonatomic, assign) YSMarignGravity marginGravity;
+@property(nonatomic, assign) YSMarginGravity marginGravity;
 
 @end
 

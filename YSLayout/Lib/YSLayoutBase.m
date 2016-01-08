@@ -22,7 +22,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     if (_leftPos == nil)
     {
         _leftPos = [YSLayoutPos new];
-        _leftPos.pos = YSMarignGravity_Horz_Left;
+        _leftPos.pos = YSMarginGravity_Horz_Left;
         
     }
     
@@ -35,7 +35,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     if (_topPos == nil)
     {
         _topPos = [YSLayoutPos new];
-        _topPos.pos = YSMarignGravity_Vert_Top;
+        _topPos.pos = YSMarginGravity_Vert_Top;
         
     }
     
@@ -47,7 +47,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     if (_rightPos == nil)
     {
         _rightPos = [YSLayoutPos new];
-        _rightPos.pos = YSMarignGravity_Horz_Right;
+        _rightPos.pos = YSMarginGravity_Horz_Right;
         
     }
     
@@ -59,7 +59,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     if (_bottomPos == nil)
     {
         _bottomPos = [YSLayoutPos new];
-        _bottomPos.pos = YSMarignGravity_Vert_Bottom;
+        _bottomPos.pos = YSMarginGravity_Vert_Bottom;
         
     }
     
@@ -72,7 +72,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     if (_centerXPos == nil)
     {
         _centerXPos = [YSLayoutPos new];
-        _centerXPos.pos = YSMarignGravity_Horz_Center;
+        _centerXPos.pos = YSMarginGravity_Horz_Center;
         
     }
     
@@ -84,7 +84,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     if (_centerYPos == nil)
     {
         _centerYPos = [YSLayoutPos new];
-        _centerYPos.pos = YSMarignGravity_Vert_Center;
+        _centerYPos.pos = YSMarginGravity_Vert_Center;
         
     }
     
@@ -97,7 +97,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     if (_widthDime == nil)
     {
         _widthDime = [YSLayoutDime new];
-        _widthDime.dime = YSMarignGravity_Horz_Fill;
+        _widthDime.dime = YSMarginGravity_Horz_Fill;
         
     }
     
@@ -110,7 +110,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     if (_heightDime == nil)
     {
         _heightDime = [YSLayoutDime new];
-        _heightDime.dime = YSMarignGravity_Vert_Fill;
+        _heightDime.dime = YSMarginGravity_Vert_Fill;
         
     }
     
@@ -181,7 +181,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     
 }
 
-#ifdef YS_USEOLDENUMDEF
+#ifdef YS_USEOLDMETHODDEF
 
 
 -(CGFloat)leftMargin
@@ -290,7 +290,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
 }
 
 
-#ifdef YS_USEOLDENUMDEF
+#ifdef YS_USEOLDMETHODDEF
 
 -(CGFloat)width
 {
@@ -353,7 +353,7 @@ const char * const ASSOCIATEDOBJECT_KEY_YSLAYOUT_SIZECLASS = "ASSOCIATEDOBJECT_K
     return pos;
 }
 
-#ifdef YS_USEOLDENUMDEF
+#ifdef YS_USEOLDMETHODDEF
 
 -(CGFloat)centerXOffset
 {
@@ -1423,7 +1423,7 @@ BOOL _hasBegin;
 
 
 
--(void)vertGravity:(YSMarignGravity)vert
+-(void)vertGravity:(YSMarginGravity)vert
         selfHeight:(CGFloat)selfHeight
                sbv:(UIView *)sbv
               rect:(CGRect*)pRect
@@ -1462,18 +1462,18 @@ BOOL _hasBegin;
     bottomMargin = [sbv.bottomPos validMargin:bottomMargin + sbv.bottomPos.offsetVal];
 
     
-    if (vert == YSMarignGravity_Vert_Fill)
+    if (vert == YSMarginGravity_Vert_Fill)
     {
         
         pRect->origin.y = self.padding.top + topMargin;
         pRect->size.height = [sbv.heightDime validMeasure:selfHeight - self.padding.bottom - bottomMargin - pRect->origin.y];
     }
-    else if (vert == YSMarignGravity_Vert_Center)
+    else if (vert == YSMarginGravity_Vert_Center)
     {
         
         pRect->origin.y = (selfHeight - self.padding.top - self.padding.bottom - topMargin - bottomMargin - pRect->size.height)/2 + self.padding.top + topMargin + centerMargin;
     }
-    else if (vert == YSMarignGravity_Vert_Window_Center)
+    else if (vert == YSMarginGravity_Vert_Window_Center)
     {
         if (self.window != nil)
         {
@@ -1484,12 +1484,12 @@ BOOL _hasBegin;
         }
 
     }
-    else if (vert == YSMarignGravity_Vert_Bottom)
+    else if (vert == YSMarginGravity_Vert_Bottom)
     {
         
         pRect->origin.y = selfHeight - self.padding.bottom - bottomMargin - pRect->size.height;
     }
-    else if (vert == YSMarignGravity_Vert_Top)
+    else if (vert == YSMarginGravity_Vert_Top)
     {
         pRect->origin.y = self.padding.top + topMargin;
     }
@@ -1501,7 +1501,7 @@ BOOL _hasBegin;
     
 }
 
--(void)horzGravity:(YSMarignGravity)horz
+-(void)horzGravity:(YSMarginGravity)horz
          selfWidth:(CGFloat)selfWidth
                sbv:(UIView *)sbv
               rect:(CGRect*)pRect
@@ -1539,17 +1539,17 @@ BOOL _hasBegin;
 
     
     
-    if (horz == YSMarignGravity_Horz_Fill)
+    if (horz == YSMarginGravity_Horz_Fill)
     {
         
         pRect->origin.x = self.padding.left + leftMargin;
         pRect->size.width = [sbv.widthDime validMeasure:selfWidth - self.padding.right - rightMargin - pRect->origin.x];
     }
-    else if (horz == YSMarignGravity_Horz_Center)
+    else if (horz == YSMarginGravity_Horz_Center)
     {
         pRect->origin.x = (selfWidth - self.padding.left - self.padding.right - leftMargin - rightMargin - pRect->size.width)/2 + self.padding.left + leftMargin + centerMargin;
     }
-    else if (horz == YSMarignGravity_Horz_Window_Center)
+    else if (horz == YSMarginGravity_Horz_Window_Center)
     {
         if (self.window != nil)
         {
@@ -1561,12 +1561,12 @@ BOOL _hasBegin;
 
 
     }
-    else if (horz == YSMarignGravity_Horz_Right)
+    else if (horz == YSMarginGravity_Horz_Right)
     {
         
         pRect->origin.x = selfWidth - self.padding.right - rightMargin - pRect->size.width;
     }
-    else if (horz == YSMarignGravity_Horz_Left)
+    else if (horz == YSMarginGravity_Horz_Left)
     {
         pRect->origin.x = self.padding.left + leftMargin;
     }

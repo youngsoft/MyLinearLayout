@@ -49,7 +49,7 @@
 */
 
 
-#ifdef YS_USEOLDENUMDEF
+#ifdef YS_USEOLDMETHODDEF
 
 @property(nonatomic, assign) CGFloat leftMargin   YSMETHODDEPRECATED("use ysLeftMargin");
 @property(nonatomic, assign) CGFloat topMargin    YSMETHODDEPRECATED("use ysTopMargin");
@@ -80,7 +80,7 @@
 @property(nonatomic, assign) CGPoint ysCenterOffset;
 
 
-#ifdef YS_USEOLDENUMDEF
+#ifdef YS_USEOLDMETHODDEF
 
 @property(nonatomic, assign) CGFloat centerXOffset YSMETHODDEPRECATED("use ysCenterXOffset");
 @property(nonatomic, assign) CGFloat centerYOffset YSMETHODDEPRECATED("use ysCenterYOffset");
@@ -102,7 +102,7 @@
 @property(nonatomic,assign) CGFloat ysHeight;
 
 
-#ifdef YS_USEOLDENUMDEF
+#ifdef YS_USEOLDMETHODDEF
 
 @property(nonatomic,assign) CGFloat width  YSMETHODDEPRECATED("use ysWidth");
 @property(nonatomic,assign) CGFloat height YSMETHODDEPRECATED("use ysHeight");

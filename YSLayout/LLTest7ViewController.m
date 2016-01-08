@@ -39,7 +39,7 @@
     YSLinearLayout *rootLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     rootLayout.wrapContentHeight = NO;
     rootLayout.wrapContentWidth = NO;
-    rootLayout.gravity = YSMarignGravity_Horz_Fill;
+    rootLayout.gravity = YSMarginGravity_Horz_Fill;
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.view = rootLayout;
     
@@ -84,7 +84,7 @@
     */
     
     self.testLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
-    self.testLayout.gravity = YSMarignGravity_Horz_Fill;  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
+    self.testLayout.gravity = YSMarginGravity_Horz_Fill;  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
     self.testLayout.backgroundColor = [UIColor grayColor];
     self.testLayout.wrapContentHeight = NO;
     self.testLayout.weight = 1.0;

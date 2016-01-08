@@ -63,26 +63,26 @@ typedef enum : unsigned short {
     MGRAVITY_NONE YSENUMDEPRECATED("use YSMarginGravity_None") = 0,
     
     //水平
-    MGRAVITY_HORZ_LEFT YSENUMDEPRECATED("use YSMarignGravity_Horz_Left") = 1,
-    MGRAVITY_HORZ_CENTER YSENUMDEPRECATED("use YSMarignGravity_Horz_Center") = 2,
-    MGRAVITY_HORZ_RIGHT YSENUMDEPRECATED("use YSMarignGravity_Horz_Right")= 4,
-    MGRAVITY_HORZ_WINDOW_CENTER YSENUMDEPRECATED("use YSMarignGravity_Horz_Window_Center") = 8,  //在窗口中水平居中。
-    MGRAVITY_HORZ_FILL YSENUMDEPRECATED("use YSMarignGravity_Horz_Fill") = MGRAVITY_HORZ_LEFT | MGRAVITY_HORZ_CENTER | MGRAVITY_HORZ_RIGHT,
-    MGRAVITY_HORZ_MASK YSENUMDEPRECATED("use YSMarignGravity_Horz_Mask") = 0xFF00,     //设置水平前请跟这个值进行&操作再跟具体的水平|
+    MGRAVITY_HORZ_LEFT YSENUMDEPRECATED("use YSMarginGravity_Horz_Left") = 1,
+    MGRAVITY_HORZ_CENTER YSENUMDEPRECATED("use YSMarginGravity_Horz_Center") = 2,
+    MGRAVITY_HORZ_RIGHT YSENUMDEPRECATED("use YSMarginGravity_Horz_Right")= 4,
+    MGRAVITY_HORZ_WINDOW_CENTER YSENUMDEPRECATED("use YSMarginGravity_Horz_Window_Center") = 8,  //在窗口中水平居中。
+    MGRAVITY_HORZ_FILL YSENUMDEPRECATED("use YSMarginGravity_Horz_Fill") = MGRAVITY_HORZ_LEFT | MGRAVITY_HORZ_CENTER | MGRAVITY_HORZ_RIGHT,
+    MGRAVITY_HORZ_MASK YSENUMDEPRECATED("use YSMarginGravity_Horz_Mask") = 0xFF00,     //设置水平前请跟这个值进行&操作再跟具体的水平|
     
     //垂直
-    MGRAVITY_VERT_TOP YSENUMDEPRECATED("use YSMarignGravity_Vert_Top") = 1 << 8,
-    MGRAVITY_VERT_CENTER YSENUMDEPRECATED("use YSMarignGravity_Vert_Center") = 2 << 8,
-    MGRAVITY_VERT_BOTTOM YSENUMDEPRECATED("use YSMarignGravity_Vert_Bottom") = 4 << 8,
-    MGRAVITY_VERT_WINDOW_CENTER YSENUMDEPRECATED("use YSMarignGravity_Vert_Window_Center") = 8 << 8, //窗口中垂直居中
-    MGRAVITY_VERT_FILL YSENUMDEPRECATED("use YSMarignGravity_Vert_Fill") = MGRAVITY_VERT_TOP | MGRAVITY_VERT_CENTER | MGRAVITY_VERT_BOTTOM,
-    MGRAVITY_VERT_MASK YSENUMDEPRECATED("use YSMarignGravity_Vert_Mask") = 0x00FF,   //设置垂直前请跟这个值进行&操作再跟具体的垂直|
+    MGRAVITY_VERT_TOP YSENUMDEPRECATED("use YSMarginGravity_Vert_Top") = 1 << 8,
+    MGRAVITY_VERT_CENTER YSENUMDEPRECATED("use YSMarginGravity_Vert_Center") = 2 << 8,
+    MGRAVITY_VERT_BOTTOM YSENUMDEPRECATED("use YSMarginGravity_Vert_Bottom") = 4 << 8,
+    MGRAVITY_VERT_WINDOW_CENTER YSENUMDEPRECATED("use YSMarginGravity_Vert_Window_Center") = 8 << 8, //窗口中垂直居中
+    MGRAVITY_VERT_FILL YSENUMDEPRECATED("use YSMarginGravity_Vert_Fill") = MGRAVITY_VERT_TOP | MGRAVITY_VERT_CENTER | MGRAVITY_VERT_BOTTOM,
+    MGRAVITY_VERT_MASK YSENUMDEPRECATED("use YSMarginGravity_Vert_Mask") = 0x00FF,   //设置垂直前请跟这个值进行&操作再跟具体的垂直|
     
     //居中
-    MGRAVITY_CENTER YSENUMDEPRECATED("use YSMarignGravity_Center") = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_CENTER,
+    MGRAVITY_CENTER YSENUMDEPRECATED("use YSMarginGravity_Center") = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_CENTER,
     
     //填充
-    MGRAVITY_FILL YSENUMDEPRECATED("use YSMarignGravity_Fill") = MGRAVITY_HORZ_FILL | MGRAVITY_VERT_FILL,
+    MGRAVITY_FILL YSENUMDEPRECATED("use YSMarginGravity_Fill") = MGRAVITY_HORZ_FILL | MGRAVITY_VERT_FILL,
     
     
     
@@ -90,33 +90,33 @@ typedef enum : unsigned short {
     YSMarginGravity_None = 0,
 
     //水平
-    YSMarignGravity_Horz_Left = 1,
-    YSMarignGravity_Horz_Center = 2,
-    YSMarignGravity_Horz_Right = 4,
-    YSMarignGravity_Horz_Window_Center = 8,
-    YSMarignGravity_Horz_Fill = YSMarignGravity_Horz_Left | YSMarignGravity_Horz_Center | YSMarignGravity_Horz_Right,
-    YSMarignGravity_Horz_Mask = 0xFF00,
+    YSMarginGravity_Horz_Left = 1,
+    YSMarginGravity_Horz_Center = 2,
+    YSMarginGravity_Horz_Right = 4,
+    YSMarginGravity_Horz_Window_Center = 8,
+    YSMarginGravity_Horz_Fill = YSMarginGravity_Horz_Left | YSMarginGravity_Horz_Center | YSMarginGravity_Horz_Right,
+    YSMarginGravity_Horz_Mask = 0xFF00,
 
     //垂直
-    YSMarignGravity_Vert_Top = 1 << 8,
-    YSMarignGravity_Vert_Center = 2 << 8,
-    YSMarignGravity_Vert_Bottom = 4 << 8,
-    YSMarignGravity_Vert_Window_Center = 8 << 8,
-    YSMarignGravity_Vert_Fill = YSMarignGravity_Vert_Top | YSMarignGravity_Vert_Center | YSMarignGravity_Vert_Bottom,
-    YSMarignGravity_Vert_Mask = 0x00FF,
+    YSMarginGravity_Vert_Top = 1 << 8,
+    YSMarginGravity_Vert_Center = 2 << 8,
+    YSMarginGravity_Vert_Bottom = 4 << 8,
+    YSMarginGravity_Vert_Window_Center = 8 << 8,
+    YSMarginGravity_Vert_Fill = YSMarginGravity_Vert_Top | YSMarginGravity_Vert_Center | YSMarginGravity_Vert_Bottom,
+    YSMarginGravity_Vert_Mask = 0x00FF,
 
     //居中
-    YSMarignGravity_Center = YSMarignGravity_Horz_Center | YSMarignGravity_Vert_Center,
+    YSMarginGravity_Center = YSMarginGravity_Horz_Center | YSMarginGravity_Vert_Center,
 
     //填充
-    YSMarignGravity_Fill = YSMarignGravity_Horz_Fill | YSMarignGravity_Vert_Fill,
+    YSMarginGravity_Fill = YSMarginGravity_Horz_Fill | YSMarginGravity_Vert_Fill,
     
     
     
-} YSMarignGravity;
+} YSMarginGravity;
 
 //兼容老版本定义
-typedef YSMarignGravity MarginGravity YSDEPRECATED("use YSMarginGravity");
+typedef YSMarginGravity MarginGravity YSDEPRECATED("use YSMarginGravity");
 
  
 

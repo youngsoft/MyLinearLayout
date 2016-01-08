@@ -36,7 +36,7 @@ typedef enum : NSUInteger {
 {
     YSLinearLayout *itemLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Horz];
     itemLayout.wrapContentWidth = NO;
-    itemLayout.gravity = YSMarignGravity_Vert_Center;
+    itemLayout.gravity = YSMarginGravity_Vert_Center;
     
     UILabel *leftLabel = [UILabel new];
     leftLabel.text = leftTitle;
@@ -177,14 +177,14 @@ typedef enum : NSUInteger {
     UILabel *leftLabel = [UILabel new];
     leftLabel.text = leftTitle;
     leftLabel.textAlignment = NSTextAlignmentLeft;
-    leftLabel.marginGravity = YSMarignGravity_Vert_Center | YSMarignGravity_Horz_Left;
+    leftLabel.marginGravity = YSMarginGravity_Vert_Center | YSMarginGravity_Horz_Left;
     [leftLabel sizeToFit];
     [itemLayout addSubview:leftLabel];
     
     UILabel *rightLabel = [UILabel new];
     rightLabel.text = rightTitle;
     rightLabel.textAlignment = NSTextAlignmentRight;
-    rightLabel.marginGravity = YSMarignGravity_Vert_Center | YSMarignGravity_Horz_Right;
+    rightLabel.marginGravity = YSMarginGravity_Vert_Center | YSMarginGravity_Horz_Right;
     [rightLabel sizeToFit];
     [itemLayout addSubview:rightLabel];
 
@@ -214,19 +214,19 @@ typedef enum : NSUInteger {
     [frameLayout addSubview:item5];
     
     //注意这里减去2.5的原因是因为框架布局计算宽度时不会扣除掉padding的值。
-    item1.marginGravity = YSMarignGravity_Horz_Left | YSMarignGravity_Vert_Top;
+    item1.marginGravity = YSMarginGravity_Horz_Left | YSMarginGravity_Vert_Top;
     item1.widthDime.equalTo(frameLayout.widthDime).multiply(0.5).add(-2.5);
     
-    item2.marginGravity = YSMarignGravity_Horz_Right |YSMarignGravity_Vert_Top;
+    item2.marginGravity = YSMarginGravity_Horz_Right |YSMarginGravity_Vert_Top;
     item2.widthDime.equalTo(frameLayout.widthDime).multiply(0.5).add(-2.5);
     
-    item3.marginGravity = YSMarignGravity_Horz_Left |YSMarignGravity_Vert_Center;
+    item3.marginGravity = YSMarginGravity_Horz_Left |YSMarginGravity_Vert_Center;
     item3.widthDime.equalTo(frameLayout.widthDime).multiply(0.5).add(-2.5);
     
-    item4.marginGravity = YSMarignGravity_Horz_Right |YSMarignGravity_Vert_Center;
+    item4.marginGravity = YSMarginGravity_Horz_Right |YSMarginGravity_Vert_Center;
     item4.widthDime.equalTo(frameLayout.widthDime).multiply(0.5).add(-2.5);
     
-    item5.marginGravity = YSMarignGravity_Horz_Left |YSMarignGravity_Vert_Bottom;
+    item5.marginGravity = YSMarginGravity_Horz_Left |YSMarginGravity_Vert_Bottom;
     item5.widthDime.equalTo(frameLayout.widthDime).multiply(0.5).add(-2.5);
     
     
@@ -239,7 +239,7 @@ typedef enum : NSUInteger {
 -(YSTableLayout*)createTableItemLayout:(NSString*)leftTitle rightTitle:(NSString*)rightTitle
 {
     YSTableLayout *itemLayout = [YSTableLayout tableLayoutWithOrientation:YSLayoutViewOrientation_Vert];
-    itemLayout.gravity = YSMarignGravity_Vert_Center;
+    itemLayout.gravity = YSMarginGravity_Vert_Center;
     
     [itemLayout addRow:MTLROWHEIGHT_WRAPCONTENT colWidth:MTLCOLWIDTH_AVERAGE];
     
@@ -292,7 +292,7 @@ typedef enum : NSUInteger {
 {
     YSFlowLayout *itemLayout = [YSFlowLayout flowLayoutWithOrientation:YSLayoutViewOrientation_Vert arrangedCount:2];
     itemLayout.averageArrange = YES;
-    itemLayout.gravity = YSMarignGravity_Vert_Center;
+    itemLayout.gravity = YSMarginGravity_Vert_Center;
     
     UILabel *leftLabel = [UILabel new];
     leftLabel.text = leftTitle;
@@ -374,7 +374,7 @@ typedef enum : NSUInteger {
 {
     YSLinearLayout *contentLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     contentLayout.ysLeftMargin = self.contentLayout.ysRightMargin = 0;
-    contentLayout.gravity = YSMarignGravity_Horz_Fill;
+    contentLayout.gravity = YSMarginGravity_Horz_Fill;
     
     //线性布局实现功能。
     UILabel *linearLayoutLabel = [UILabel new];
@@ -442,7 +442,7 @@ typedef enum : NSUInteger {
     
     self.rootLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     self.rootLayout.ysLeftMargin = self.rootLayout.ysRightMargin = 0;
-    self.rootLayout.gravity = YSMarignGravity_Horz_Fill;
+    self.rootLayout.gravity = YSMarginGravity_Horz_Fill;
     [scrollView addSubview:self.rootLayout];
     
     

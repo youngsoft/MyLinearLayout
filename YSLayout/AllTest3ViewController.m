@@ -29,7 +29,7 @@
     actionLayout.rightPadding = 10;
     actionLayout.wrapContentWidth = NO;
     actionLayout.heightDime.equalTo(@50);
-    actionLayout.gravity = YSMarignGravity_Vert_Center;
+    actionLayout.gravity = YSMarginGravity_Vert_Center;
     
     
     UILabel *label = [UILabel new];
@@ -59,7 +59,7 @@
     switchLayout.rightPadding = 10;
     switchLayout.wrapContentWidth = NO;
     switchLayout.heightDime.equalTo(@50);
-    switchLayout.gravity = YSMarignGravity_Vert_Center;
+    switchLayout.gravity = YSMarginGravity_Vert_Center;
     
     
     UILabel *label = [UILabel new];
@@ -119,14 +119,14 @@
     self.view = frameLayout;
     
     UIScrollView *scrollView = [UIScrollView new];
-    scrollView.marginGravity = YSMarignGravity_Fill;
+    scrollView.marginGravity = YSMarginGravity_Fill;
     scrollView.alwaysBounceVertical = YES;
     [self.view addSubview:scrollView];
     
     YSLinearLayout *contentLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     contentLayout.leftPos.equalTo(@0);
     contentLayout.rightPos.equalTo(@0);
-    contentLayout.gravity = YSMarignGravity_Horz_Fill;  //让子视图全部水平填充
+    contentLayout.gravity = YSMarginGravity_Horz_Fill;  //让子视图全部水平填充
     contentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [scrollView addSubview:contentLayout];
     
@@ -203,7 +203,7 @@
     
     YSLinearLayout *layout8 = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     layout8.backgroundColor = [UIColor whiteColor];
-    layout8.gravity = YSMarignGravity_Horz_Fill;
+    layout8.gravity = YSMarginGravity_Horz_Fill;
     layout8.topPos.equalTo(@10);
     [contentLayout addSubview:layout8];
     self.pushLayout = layout8;
@@ -262,7 +262,7 @@
     [button setTitle:@"退出登录" forState:UIControlStateNormal];
     
     button.ysHeight = 50;
-    button.marginGravity = YSMarignGravity_Vert_Bottom | YSMarignGravity_Horz_Fill;
+    button.marginGravity = YSMarginGravity_Vert_Bottom | YSMarginGravity_Horz_Fill;
     [self.view addSubview:button];
     
 }

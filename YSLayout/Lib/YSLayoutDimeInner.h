@@ -13,7 +13,7 @@
 @interface YSLayoutDime()
 
 @property(nonatomic, weak) UIView *view;
-@property(nonatomic, assign) YSMarignGravity dime;
+@property(nonatomic, assign) YSMarginGravity dime;
 
 @property(nonatomic, assign) YSLayoutValueType dimeValType;
 

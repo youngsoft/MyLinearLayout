@@ -48,13 +48,13 @@
 
 
 
--(void)vertGravity:(YSMarignGravity)vert
+-(void)vertGravity:(YSMarginGravity)vert
         selfHeight:(CGFloat)selfHeight
                sbv:(UIView*)sbv
               rect:(CGRect*)pRect;
 
 
--(void)horzGravity:(YSMarignGravity)horz
+-(void)horzGravity:(YSMarginGravity)horz
          selfWidth:(CGFloat)selfWidth
                sbv:(UIView*)sbv
               rect:(CGRect*)pRect;
@@ -90,7 +90,7 @@
 @property(nonatomic, assign) CGFloat weight;
 
 
-@property(nonatomic, assign) YSMarignGravity marginGravity;
+@property(nonatomic, assign) YSMarginGravity marginGravity;
 
 @property(nonatomic, strong) YSLayoutMeasure *absPos;
 

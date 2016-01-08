@@ -14,13 +14,13 @@
 @implementation UIView(YSFrameLayoutExt)
 
 
--(YSMarignGravity)marginGravity
+-(YSMarginGravity)marginGravity
 {
     return self.ysLayoutSizeClass.marginGravity;
 }
 
 
--(void)setMarginGravity:(YSMarignGravity)marginGravity
+-(void)setMarginGravity:(YSMarginGravity)marginGravity
 {
 
     self.ysLayoutSizeClass.marginGravity = marginGravity;
@@ -44,9 +44,9 @@
 -(void)calcSubView:(UIView*)sbv pRect:(CGRect*)pRect inSize:(CGSize)selfSize
 {
     
-    YSMarignGravity gravity = sbv.marginGravity;
-    YSMarignGravity vert = gravity & YSMarignGravity_Horz_Mask;
-    YSMarignGravity horz = gravity & YSMarignGravity_Vert_Mask;
+    YSMarginGravity gravity = sbv.marginGravity;
+    YSMarginGravity vert = gravity & YSMarginGravity_Horz_Mask;
+    YSMarginGravity horz = gravity & YSMarginGravity_Vert_Mask;
     
      
     //优先用设定的宽度尺寸。

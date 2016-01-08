@@ -123,7 +123,7 @@
     YSLinearLayout *headerViewLayout = [YSLinearLayout linearLayoutWithOrientation:YSLayoutViewOrientation_Vert];
     headerViewLayout.backgroundColor = [UIColor grayColor];
     headerViewLayout.frame = CGRectMake(0, 0, 0, 100);
-    headerViewLayout.gravity = YSMarignGravity_Center;
+    headerViewLayout.gravity = YSMarginGravity_Center;
     
     UILabel *label1 = [UILabel new];
     label1.text = @"设置tableHeaderView";
