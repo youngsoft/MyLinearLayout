@@ -10,6 +10,7 @@
 #import "MyLayoutDef.h"
 #import "MyLayoutPos.h"
 #import "MyLayoutDime.h"
+#import "MyLayoutSizeClass.h"
 
 
 /*
@@ -136,6 +137,12 @@
 -(void)resetMyLayoutSetting;
 
 
+//注意这里
+-(MyLayoutSizeClass*)mySizeClass:(MySizeClass)sizeClass;
+
+
+
+
 @end
 
 
@@ -250,6 +257,9 @@
  
  */
 -(CGRect)estimateLayoutRect:(CGSize)size;
+
+
+-(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass;
 
 
 @end

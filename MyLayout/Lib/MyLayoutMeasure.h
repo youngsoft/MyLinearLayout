@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "MyLayoutSizeClass.h"
 
 
 //视图在布局中的评估测量值
@@ -19,6 +20,9 @@
 @property(nonatomic, assign) CGFloat bottomPos;
 @property(nonatomic, assign) CGFloat width;
 @property(nonatomic, assign) CGFloat height;
+
+@property(nonatomic, weak) MyLayoutSizeClass *sizeClass;
+
 
 -(void)reset;
 

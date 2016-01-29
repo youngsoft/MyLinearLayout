@@ -43,6 +43,8 @@
 		18D684521C4F421400A48BB4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D6842F1C4F421400A48BB4 /* ViewController.m */; };
 		18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684551C4F423400A48BB4 /* MyLayoutTests.m */; };
 		18E8084D1B3A5D170059C410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8084C1B3A5D170059C410 /* QuartzCore.framework */; };
+		46D45B161C525FC400A8362C /* MyLayoutSizeClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */; settings = {ASSET_TAGS = (); }; };
+		46DB7E6B1C54B4BC001B409D /* AllTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +134,10 @@
 		18D684541C4F423400A48BB4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D684551C4F423400A48BB4 /* MyLayoutTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutTests.m; sourceTree = "<group>"; };
 		18E8084C1B3A5D170059C410 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		46D45B141C525FC400A8362C /* MyLayoutSizeClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutSizeClass.h; sourceTree = "<group>"; };
+		46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutSizeClass.m; sourceTree = "<group>"; };
+		46DB7E691C54B4BC001B409D /* AllTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest5ViewController.h; sourceTree = "<group>"; };
+		46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest5ViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +226,8 @@
 				18D6842D1C4F421400A48BB4 /* TLTest2ViewController.m */,
 				18D6842E1C4F421400A48BB4 /* ViewController.h */,
 				18D6842F1C4F421400A48BB4 /* ViewController.m */,
+				46DB7E691C54B4BC001B409D /* AllTest5ViewController.h */,
+				46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */,
 			);
 			path = MyLayout;
 			sourceTree = "<group>";
@@ -252,6 +260,8 @@
 				18D684121C4F421400A48BB4 /* MyRelativeLayout.m */,
 				18D684131C4F421400A48BB4 /* MyTableLayout.h */,
 				18D684141C4F421400A48BB4 /* MyTableLayout.m */,
+				46D45B141C525FC400A8362C /* MyLayoutSizeClass.h */,
+				46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -392,6 +402,7 @@
 				18D684491C4F421400A48BB4 /* LLTest5ViewController.m in Sources */,
 				18D684331C4F421400A48BB4 /* AllTest4ViewController.m in Sources */,
 				18D6844E1C4F421400A48BB4 /* RLTest2ViewController.m in Sources */,
+				46D45B161C525FC400A8362C /* MyLayoutSizeClass.m in Sources */,
 				18D6843B1C4F421400A48BB4 /* MyFlowLayout.m in Sources */,
 				18D684461C4F421400A48BB4 /* LLTest2ViewController.m in Sources */,
 				18D684411C4F421400A48BB4 /* MyLinearLayout.m in Sources */,
@@ -404,6 +415,7 @@
 				18D684481C4F421400A48BB4 /* LLTest4ViewController.m in Sources */,
 				18D684431C4F421400A48BB4 /* MyRelativeLayout.m in Sources */,
 				18D684451C4F421400A48BB4 /* LLTest1ViewController.m in Sources */,
+				46DB7E6B1C54B4BC001B409D /* AllTest5ViewController.m in Sources */,
 				18D6844B1C4F421400A48BB4 /* LLTest7ViewController.m in Sources */,
 				18D6843F1C4F421400A48BB4 /* MyLayoutMeasure.m in Sources */,
 				18D684371C4F421400A48BB4 /* FLTest1ViewController.m in Sources */,

@@ -10,19 +10,16 @@
 #import "MyLayoutInner.h"
 
 @implementation MyFlowLayout
-{
-    NSInteger _arrangedCount;
-}
 
 -(id)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
 {
-    self = [self init];
+    self = [super init];
     if (self != nil)
     {
-        _orientation = orientation;
-        _arrangedCount = arrangedCount;
-        if (_arrangedCount < 1)
-            _arrangedCount = 1;
+        self.orientation = orientation;
+        self.arrangedCount = arrangedCount;
+        if (self.arrangedCount < 1)
+            self.arrangedCount = 1;
     }
     
     return self;
@@ -37,20 +34,28 @@
 
 -(void)setOrientation:(MyLayoutViewOrientation)orientation
 {
-    if (_orientation != orientation)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    if (lsc.orientation != orientation)
     {
-        _orientation = orientation;
+        lsc.orientation = orientation;
         [self setNeedsLayout];
     }
 }
 
+-(MyLayoutViewOrientation)orientation
+{
+    return self.myCurrentSizeClass.orientation;
+}
+
 -(void)setArrangedCount:(NSInteger)arrangedCount
 {
-    if (_arrangedCount != arrangedCount)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+
+    if (lsc.arrangedCount != arrangedCount)
     {
-        _arrangedCount = arrangedCount;
-        if (_arrangedCount < 1)
-            _arrangedCount = 1;
+        lsc.arrangedCount = arrangedCount;
+        if (lsc.arrangedCount < 1)
+            lsc.arrangedCount = 1;
         
         [self setNeedsLayout];
     }
@@ -58,56 +63,89 @@
 
 -(NSInteger)arrangedCount
 {
-    if (_arrangedCount < 1)
-        _arrangedCount = 1;
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    if (lsc.arrangedCount < 1)
+        lsc.arrangedCount = 1;
     
-    return _arrangedCount;
+    return lsc.arrangedCount;
 }
 
 
 -(void)setAverageArrange:(BOOL)averageArrange
 {
-    if (_averageArrange != averageArrange)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+
+    if (lsc.averageArrange != averageArrange)
     {
-        _averageArrange = averageArrange;
+        lsc.averageArrange = averageArrange;
         [self setNeedsLayout];
     }
+}
+
+-(BOOL)averageArrange
+{
+    return self.myCurrentSizeClass.averageArrange;
 }
 
 -(void)setGravity:(MyMarginGravity)gravity
 {
-    if (_gravity != gravity)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    if (lsc.gravity != gravity)
     {
-        _gravity = gravity;
+        lsc.gravity = gravity;
         [self setNeedsLayout];
     }
+}
+
+-(MyMarginGravity)gravity
+{
+    return self.myCurrentSizeClass.gravity;
 }
 
 -(void)setArrangedGravity:(MyMarginGravity)arrangedGravity
 {
-    if (_arrangedGravity != arrangedGravity)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    if (lsc.arrangedGravity != arrangedGravity)
     {
-        _arrangedGravity = arrangedGravity;
+        lsc.arrangedGravity = arrangedGravity;
         [self setNeedsLayout];
     }
+}
+
+-(MyMarginGravity)arrangedGravity
+{
+    return self.myCurrentSizeClass.arrangedGravity;
 }
 
 -(void)setSubviewHorzMargin:(CGFloat)subviewHorzMargin
 {
-    if (_subviewHorzMargin != subviewHorzMargin)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+
+    if (lsc.subviewHorzMargin != subviewHorzMargin)
     {
-        _subviewHorzMargin = subviewHorzMargin;
+        lsc.subviewHorzMargin = subviewHorzMargin;
         [self setNeedsLayout];
     }
 }
 
+-(CGFloat)subviewHorzMargin
+{
+    return self.myCurrentSizeClass.subviewHorzMargin;
+}
+
 -(void)setSubviewVertMargin:(CGFloat)subviewVertMargin
 {
-    if (_subviewVertMargin != subviewVertMargin)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    if (lsc.subviewVertMargin != subviewVertMargin)
     {
-        _subviewVertMargin = subviewVertMargin;
+        lsc.subviewVertMargin = subviewVertMargin;
         [self setNeedsLayout];
     }
+}
+
+-(CGFloat)subviewVertMargin
+{
+    return self.myCurrentSizeClass.subviewVertMargin;
 }
 
 
@@ -560,7 +598,7 @@
 
     
     
-    if (_orientation == MyLayoutViewOrientation_Vert)
+    if (self.orientation == MyLayoutViewOrientation_Vert)
     {
         selfRect = [self layoutSubviewsForVert:selfRect];
     }

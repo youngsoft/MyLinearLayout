@@ -29,7 +29,7 @@
 
 -(id)initWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth orientation:(MyLayoutViewOrientation)orientation
 {
-    self = [self init];
+    self = [super init];
     if (self != nil)
     {
         _rowHeight = rowHeight;

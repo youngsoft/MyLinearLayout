@@ -10,6 +10,7 @@
 #import "MyLayoutPosInner.h"
 #import "MyLayoutDimeInner.h"
 #import "MyLayoutMeasure.h"
+#import "MyLayoutSizeClass.h"
 
 
 
@@ -70,34 +71,6 @@
 @end
 
 
-/**内部的布局子视图的扩展**/
-@interface MyLayoutSizeClass : NSObject
-
-@property(nonatomic, strong)  MyLayoutPos *leftPos;
-@property(nonatomic, strong)  MyLayoutPos *topPos;
-@property(nonatomic, strong)  MyLayoutPos *rightPos;
-@property(nonatomic, strong)  MyLayoutPos *bottomPos;
-@property(nonatomic, strong)  MyLayoutPos *centerXPos;
-@property(nonatomic, strong)  MyLayoutPos *centerYPos;
-
-@property(nonatomic, strong)  MyLayoutDime *widthDime;
-@property(nonatomic, strong)  MyLayoutDime *heightDime;
-
-@property(nonatomic, assign)  BOOL flexedHeight;
-
-
-@property(nonatomic, assign) BOOL useFrame;
-
-@property(nonatomic, assign) CGFloat weight;
-
-
-@property(nonatomic, assign) MyMarginGravity marginGravity;
-
-@property(nonatomic, strong) MyLayoutMeasure *absPos;
-
-
-@end
-
 
 
 
@@ -108,7 +81,12 @@
 @property(nonatomic, strong, readonly) MyLayoutMeasure *absPos;
 
 
-@property(nonatomic, strong, readonly) MyLayoutSizeClass *myLayoutSizeClass;
+@property(nonatomic, strong, readonly) MyLayoutSizeClass *myDefaultSizeClass;
+
+@property(nonatomic, strong, readonly) MyLayoutSizeClass *myBestSizeClass;
+
+@property(nonatomic, strong, readonly) MyLayoutSizeClass *myCurrentSizeClass;
+
 
 @end
 

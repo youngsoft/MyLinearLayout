@@ -14,12 +14,12 @@
 
 -(CGFloat)weight
 {
-    return self.myLayoutSizeClass.weight;
+    return self.myCurrentSizeClass.weight;
 }
 
 -(void)setWeight:(CGFloat)weight
-{    
-    self.myLayoutSizeClass.weight = weight;
+{
+    self.myCurrentSizeClass.weight = weight;
     if (self.superview != nil)
         [self.superview setNeedsLayout];
 }
@@ -37,7 +37,7 @@
 
 -(id)initWithOrientation:(MyLayoutViewOrientation)orientation
 {
-    self = [self init];
+    self = [super init];
     if (self)
     {
         self.orientation = orientation;
@@ -58,8 +58,13 @@
         self.wrapContentHeight = YES;
     else
         self.wrapContentWidth = YES;
-    _orientation = orientation;
+    self.myCurrentSizeClass.orientation = orientation;
     [self setNeedsLayout];
+}
+
+-(MyLayoutViewOrientation)orientation
+{
+    return self.myCurrentSizeClass.orientation;
 }
 
 
@@ -67,26 +72,39 @@
 -(void)setGravity:(MyMarginGravity)gravity
 {
  
-    if (_gravity != gravity)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    if (lsc.gravity != gravity)
     {
-        _gravity = gravity;
+        lsc.gravity = gravity;
         [self setNeedsLayout];
     }
 }
 
+-(MyMarginGravity)gravity
+{
+    return self.myCurrentSizeClass.gravity;
+}
+
 -(void)setSubviewMargin:(CGFloat)subviewMargin
 {
-    if (_subviewMargin != subviewMargin)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+
+    if (lsc.subviewMargin != subviewMargin)
     {
-        _subviewMargin = subviewMargin;
+        lsc.subviewMargin = subviewMargin;
         [self setNeedsLayout];
     }
+}
+
+-(CGFloat)subviewMargin
+{
+    return self.myCurrentSizeClass.subviewMargin;
 }
 
 
 -(void)averageSubviews:(BOOL)centered
 {
-    if (_orientation == MyLayoutViewOrientation_Vert)
+    if (self.orientation == MyLayoutViewOrientation_Vert)
     {
         [self averageSubviewsForVert:centered withMargin:CGFLOAT_MAX];
     }
@@ -98,7 +116,7 @@
 
 -(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin
 {
-    if (_orientation == MyLayoutViewOrientation_Vert)
+    if (self.orientation == MyLayoutViewOrientation_Vert)
     {
         [self averageSubviewsForVert:centered withMargin:margin];
     }
@@ -112,7 +130,7 @@
 
 -(void)averageMargin:(BOOL)centered
 {
-    if (_orientation == MyLayoutViewOrientation_Vert)
+    if (self.orientation == MyLayoutViewOrientation_Vert)
     {
         [self averageMarginForVert:centered];
     }
@@ -146,6 +164,7 @@
     }
 }
 
+#pragma mark -- Private Method
 
 
 - (CGRect)AdjustSelfWidth:(NSArray *)sbs newSelfRect:(CGRect)newSelfRect
@@ -252,8 +271,8 @@
         
         
         MyMarginGravity mg = MyMarginGravity_Horz_Left;
-        if ((_gravity & MyMarginGravity_Vert_Mask)!= MyMarginGravity_None)
-            mg =_gravity & MyMarginGravity_Vert_Mask;
+        if ((self.gravity & MyMarginGravity_Vert_Mask)!= MyMarginGravity_None)
+            mg =self.gravity & MyMarginGravity_Vert_Mask;
         else
         {
             if (sbv.centerXPos.posVal != nil)
@@ -573,8 +592,8 @@
         
         //优先以容器中的指定为标准
         MyMarginGravity mg = MyMarginGravity_Vert_Top;
-        if ((_gravity & MyMarginGravity_Horz_Mask)!= MyMarginGravity_None)
-            mg =_gravity & MyMarginGravity_Horz_Mask;
+        if ((self.gravity & MyMarginGravity_Horz_Mask)!= MyMarginGravity_None)
+            mg =self.gravity & MyMarginGravity_Horz_Mask;
         else
         {
             if (sbv.centerYPos.posVal != nil)
@@ -676,8 +695,8 @@
         
         //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
         MyMarginGravity mg = MyMarginGravity_Horz_Left;
-        if ((_gravity & MyMarginGravity_Vert_Mask)!= MyMarginGravity_None)
-            mg =_gravity & MyMarginGravity_Vert_Mask;
+        if ((self.gravity & MyMarginGravity_Vert_Mask)!= MyMarginGravity_None)
+            mg =self.gravity & MyMarginGravity_Vert_Mask;
         else
         {
             if (sbv.centerXPos.posVal != nil)
@@ -719,16 +738,16 @@
     
     //根据对齐的方位来定位子视图的布局对齐
     CGFloat pos = 0;
-    if ((_gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Top)
+    if ((self.gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Top)
     {
         pos = self.topPadding;
     }
-    else if ((_gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Center)
+    else if ((self.gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Center)
     {
         pos = (newSelfRect.size.height - totalHeight - self.bottomPadding - self.topPadding)/2.0;
         pos += self.topPadding;
     }
-    else if ((_gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Window_Center)
+    else if ((self.gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Window_Center)
     {
         if (self.window != nil)
         {
@@ -862,16 +881,16 @@
     
     //根据对齐的方位来定位子视图的布局对齐
     CGFloat pos = 0;
-    if ((_gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Left)
+    if ((self.gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Left)
     {
         pos = self.leftPadding;
     }
-    else if ((_gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Center)
+    else if ((self.gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Center)
     {
         pos = (newSelfRect.size.width - totalWidth - self.leftPadding - self.rightPadding)/2.0;
         pos += self.leftPadding;
     }
-    else if ((_gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Window_Center)
+    else if ((self.gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Window_Center)
     {
         if (self.window != nil)
         {
@@ -931,8 +950,8 @@
         
       
         MyMarginGravity mg = MyMarginGravity_Vert_Top;
-        if ((_gravity & MyMarginGravity_Horz_Mask)!= MyMarginGravity_None)
-            mg =_gravity & MyMarginGravity_Horz_Mask;
+        if ((self.gravity & MyMarginGravity_Horz_Mask)!= MyMarginGravity_None)
+            mg =self.gravity & MyMarginGravity_Horz_Mask;
         else
         {
             if (sbv.centerYPos.posVal != nil)
@@ -969,7 +988,7 @@
 {
     CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout];
     
-    if (_orientation == MyLayoutViewOrientation_Vert)
+    if (self.orientation == MyLayoutViewOrientation_Vert)
     {
         
         //如果是垂直的布局，但是子视图设置了左右的边距或者设置了宽度则wrapContentWidth应该设置为NO
@@ -1011,7 +1030,7 @@
         }
         
         
-        if ((_gravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_None)
+        if ((self.gravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_None)
             selfRect = [self layoutSubviewsForVertGravity:selfRect];
         else
             selfRect = [self layoutSubviewsForVert:selfRect];
@@ -1057,7 +1076,7 @@
         }
         
         
-        if ((_gravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_None)
+        if ((self.gravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_None)
             selfRect = [self layoutSubviewsForHorzGravity:selfRect];
         else
             selfRect = [self layoutSubviewsForHorz:selfRect];
@@ -1072,7 +1091,6 @@
    
 }
 
-#pragma mark -- Private Method
 
 -(CGFloat)calcSelfMeasure:(CGFloat)selfMeasure subviewMeasure:(CGFloat)subviewMeasure headPos:(MyLayoutPos*)headPos centerPos:(MyLayoutPos*)centerPos tailPos:(MyLayoutPos*)tailPos
 {

@@ -16,14 +16,14 @@
 
 -(MyMarginGravity)marginGravity
 {
-    return self.myLayoutSizeClass.marginGravity;
+    return self.myCurrentSizeClass.marginGravity;
 }
 
 
 -(void)setMarginGravity:(MyMarginGravity)marginGravity
 {
 
-    self.myLayoutSizeClass.marginGravity = marginGravity;
+    self.myCurrentSizeClass.marginGravity = marginGravity;
     if (self.superview != nil)
         [self.superview setNeedsLayout];    
 }

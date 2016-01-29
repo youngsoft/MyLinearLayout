@@ -23,20 +23,34 @@
 
 -(void)setFlexOtherViewWidthWhenSubviewHidden:(BOOL)flexOtherViewWidthWhenSubviewHidden
 {
-    if (_flexOtherViewWidthWhenSubviewHidden != flexOtherViewWidthWhenSubviewHidden)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    
+    if (lsc.flexOtherViewWidthWhenSubviewHidden != flexOtherViewWidthWhenSubviewHidden)
     {
-        _flexOtherViewWidthWhenSubviewHidden = flexOtherViewWidthWhenSubviewHidden;
+        lsc.flexOtherViewWidthWhenSubviewHidden = flexOtherViewWidthWhenSubviewHidden;
         [self setNeedsLayout];
     }
 }
 
+-(BOOL)flexOtherViewWidthWhenSubviewHidden
+{
+    return self.myCurrentSizeClass.flexOtherViewWidthWhenSubviewHidden;
+}
+
 -(void)setFlexOtherViewHeightWhenSubviewHidden:(BOOL)flexOtherViewHeightWhenSubviewHidden
 {
-    if (_flexOtherViewHeightWhenSubviewHidden != flexOtherViewHeightWhenSubviewHidden)
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+
+    if (lsc.flexOtherViewHeightWhenSubviewHidden != flexOtherViewHeightWhenSubviewHidden)
     {
-        _flexOtherViewHeightWhenSubviewHidden = flexOtherViewHeightWhenSubviewHidden;
+        lsc.flexOtherViewHeightWhenSubviewHidden = flexOtherViewHeightWhenSubviewHidden;
         [self setNeedsLayout];
     }
+}
+
+-(BOOL)flexOtherViewHeightWhenSubviewHidden
+{
+    return self.myCurrentSizeClass.flexOtherViewHeightWhenSubviewHidden;
 }
 
 -(void)willMoveToSuperview:(UIView *)newSuperview

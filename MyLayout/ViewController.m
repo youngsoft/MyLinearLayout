@@ -33,6 +33,7 @@
 #import "AllTest2ViewController.h"
 #import "AllTest3ViewController.h"
 #import "AllTest4ViewController.h"
+#import "AllTest5ViewController.h"
 
 
 @interface ViewController ()
@@ -135,6 +136,9 @@
         case 18:
             cell.textLabel.text = @"五种布局实现同一功能";
             break;
+        case 19:
+            cell.textLabel.text = @"SizeClass 测试1";
+            break;
         default:
             break;
     }
@@ -205,6 +209,9 @@
             break;
         case 18:
             vc = [AllTest4ViewController new];
+            break;
+        case 19:
+            vc = [AllTest5ViewController new];
             break;
         default:
             break;
