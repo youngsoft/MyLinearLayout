@@ -984,9 +984,9 @@
 }
 
 
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
-    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout];
+    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
@@ -1023,7 +1023,7 @@
                 
                 if (isEstimate)
                 {
-                    [sbvl estimateLayoutRect:sbvl.absPos.frame.size];
+                    [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
                 }
             }
             
@@ -1069,7 +1069,7 @@
                 
                 if (isEstimate)
                 {
-                    [sbvl estimateLayoutRect:sbvl.absPos.frame.size];
+                    [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
                 }
             }
             

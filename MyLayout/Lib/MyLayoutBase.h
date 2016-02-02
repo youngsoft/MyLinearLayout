@@ -258,7 +258,7 @@
  */
 -(CGRect)estimateLayoutRect:(CGSize)size;
 
-
+//评估某个sizeClass下的尺寸值，如果没有找到指定的sizeClass则会根据继承规则得到最合适的sizeClass
 -(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass;
 
 

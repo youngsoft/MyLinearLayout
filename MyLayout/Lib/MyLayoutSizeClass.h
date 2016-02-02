@@ -13,7 +13,7 @@
 #import "MyLayoutDime.h"
 
 
-@interface MyLayoutSizeClass : NSObject<NSCopying>
+@interface MyLayoutSizeClass : NSObject
 
 //所有视图通用
 @property(nonatomic, strong)  MyLayoutPos *leftPos;

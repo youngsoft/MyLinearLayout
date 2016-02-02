@@ -24,7 +24,7 @@
 
 
 //派生类重载这个函数进行布局
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout;
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass;
 
 //判断margin是否是相对margin
 -(BOOL)isRelativeMargin:(CGFloat)margin;
@@ -83,7 +83,8 @@
 
 @property(nonatomic, strong, readonly) MyLayoutSizeClass *myDefaultSizeClass;
 
-@property(nonatomic, strong, readonly) MyLayoutSizeClass *myBestSizeClass;
+//@property(nonatomic, strong, readonly) MyLayoutSizeClass *myBestSizeClass:(MySizeClass)sizeClass;
+-(MyLayoutSizeClass*)myBestSizeClass:(MySizeClass)sizeClass;
 
 @property(nonatomic, strong, readonly) MyLayoutSizeClass *myCurrentSizeClass;
 

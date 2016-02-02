@@ -112,10 +112,10 @@
     
 }
 
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
     
-    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout];
+    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     CGSize selfSize = selfRect.size;
     NSArray *sbs = self.subviews;
     for (UIView *sbv in sbs)
@@ -136,7 +136,7 @@
                     *pHasSubLayout = YES;
                 
                 MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
-                rect = [sbvl estimateLayoutRect:sbvl.absPos.frame.size];
+                rect = [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
             }
             else
                 rect = sbv.absPos.frame;

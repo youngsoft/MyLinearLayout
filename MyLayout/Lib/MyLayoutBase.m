@@ -399,7 +399,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 }
 
 
--(MyLayoutSizeClass*)myBestSizeClass
+-(MyLayoutSizeClass*)myBestSizeClass:(MySizeClass)sizeClass
 {
     
     if ([UIDevice currentDevice].systemVersion.floatValue < 8.0)
@@ -408,11 +408,14 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     }
     else
     {
-        UITraitCollection *tc = self.traitCollection;
+       // UITraitCollection *tc = self.traitCollection;
         
         //取垂直和水平
-        UIUserInterfaceSizeClass vsc = tc.verticalSizeClass;
-        UIUserInterfaceSizeClass hsc = tc.horizontalSizeClass;
+      //  UIUserInterfaceSizeClass vsc =  sizeClass & 0x0F; //tc.verticalSizeClass;
+      //  UIUserInterfaceSizeClass hsc =    //tc.horizontalSizeClass;
+        
+        MySizeClass vsc = (sizeClass & 0xF0) >> 4;
+        MySizeClass hsc = sizeClass & 0x0F;
         
         
         //先找到最合适的。
@@ -908,11 +911,11 @@ BOOL _hasBegin;
 -(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass
 {
     BOOL hasSubLayout = NO;
-    self.absPos.frame = [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout];
+    self.absPos.frame = [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
     if (!hasSubLayout)
         return self.absPos.frame;
     else
-        return [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout];
+        return [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
 
 }
 
@@ -1371,8 +1374,13 @@ BOOL _hasBegin;
             [super layoutSubviews];
         
         
+        MySizeClass vsc  =  self.traitCollection.verticalSizeClass;
+        MySizeClass hsc = self.traitCollection.horizontalSizeClass;
+        
+
+        
         CGRect oldSelfRect = self.frame;
-        CGRect newSelfRect = [self calcLayoutRect:CGSizeZero isEstimate:NO pHasSubLayout:nil];
+        CGRect newSelfRect = [self calcLayoutRect:CGSizeZero isEstimate:NO pHasSubLayout:nil sizeClass:(hsc | (vsc << 4))];
         
         for (UIView *sbv in self.subviews)
         {
@@ -1432,13 +1440,13 @@ BOOL _hasBegin;
     self.hideSubviewReLayout = YES;
 }
 
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
     
-    self.absPos.sizeClass = [self myBestSizeClass];
+    self.absPos.sizeClass = [self myBestSizeClass:sizeClass];
     for (UIView *sbv in self.subviews)
     {
-        sbv.absPos.sizeClass = [sbv myBestSizeClass];
+        sbv.absPos.sizeClass = [sbv myBestSizeClass:sizeClass];
     }
     
     CGRect selfRect;

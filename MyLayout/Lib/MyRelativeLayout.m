@@ -721,9 +721,9 @@
     
 }
 
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout
+-(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
-    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout];
+    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
 
     for (UIView *sbv in self.subviews)
     {
@@ -757,7 +757,7 @@
             
             if (isEstimate)
             {
-                [sbvl estimateLayoutRect:sbvl.absPos.frame.size];
+                [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
             }
         }
         
