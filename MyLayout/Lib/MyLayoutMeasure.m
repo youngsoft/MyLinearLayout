@@ -40,7 +40,7 @@
 
 -(CGRect)frame
 {
-    return CGRectMake(_leftPos, _topPos, _width, _height);
+    return CGRectMake(_leftPos, _topPos,_width, _height);
 }
 
 -(void)setFrame:(CGRect)frame

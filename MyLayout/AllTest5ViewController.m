@@ -17,13 +17,14 @@
 
 -(void)loadView
 {
-    //[super loadView];
-    
+    //默认设置为垂直布局
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyMarginGravity_Horz_Fill;
     rootLayout.subviewMargin = 10;
+    self.view = rootLayout;
+
     
     UIView *v1 = [UIView new];
     v1.backgroundColor = [UIColor redColor];
@@ -42,9 +43,15 @@
     v3.weight = 1;
     [rootLayout addSubview:v3];
     
-    self.view = rootLayout;
     
-    MyLayoutSizeClass *lsc = [rootLayout mySizeClass:MySizeClass_wRegular | MySizeClass_hCompact];
+    //其他任何横屏都不参与布局
+    [v3 mySizeClass:MySizeClass_wAny | MySizeClass_hCompact].hidden = YES;
+    //只有iphone6Plus的横屏才参与布局
+    [v3 mySizeClass:MySizeClass_wRegular | MySizeClass_hCompact].hidden = NO;
+    [v3 mySizeClass:MySizeClass_wRegular | MySizeClass_hCompact].weight = 1;
+    
+    //针对iPhone设备的所有横屏的高度都是Compact的，而宽度则是任意，因此下面的设置横屏情况下布局变为水平布局。
+    MyLayoutSizeClass *lsc = [rootLayout mySizeClass:MySizeClass_wAny | MySizeClass_hCompact];
     lsc.orientation = MyLayoutViewOrientation_Horz;
     lsc.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     lsc.wrapContentWidth = NO;

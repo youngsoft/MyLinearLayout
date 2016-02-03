@@ -408,11 +408,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     }
     else
     {
-       // UITraitCollection *tc = self.traitCollection;
-        
-        //取垂直和水平
-      //  UIUserInterfaceSizeClass vsc =  sizeClass & 0x0F; //tc.verticalSizeClass;
-      //  UIUserInterfaceSizeClass hsc =    //tc.horizontalSizeClass;
         
         MySizeClass vsc = (sizeClass & 0xF0) >> 4;
         MySizeClass hsc = sizeClass & 0x0F;
@@ -910,13 +905,32 @@ BOOL _hasBegin;
 
 -(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass
 {
+    
+    self.absPos.sizeClass = [self myBestSizeClass:sizeClass];
+    for (UIView *sbv in self.subviews)
+    {
+        sbv.absPos.sizeClass = [sbv myBestSizeClass:sizeClass];
+    }
+    
     BOOL hasSubLayout = NO;
+    CGRect rect;
     self.absPos.frame = [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
     if (!hasSubLayout)
-        return self.absPos.frame;
+        rect = self.absPos.frame;
     else
-        return [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
+        rect = [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
 
+    
+    //计算后还原为默认sizeClass
+    for (UIView *sbv in self.subviews)
+    {
+        sbv.absPos.sizeClass = self.myDefaultSizeClass;
+    }
+    self.absPos.sizeClass = self.myDefaultSizeClass;
+    
+    
+    return rect;
+    
 }
 
 
@@ -1136,7 +1150,7 @@ BOOL _hasBegin;
 {
     
     //监控非布局父视图的frame的变化，而改变自身的位置和尺寸
-    if (object == self.superview && ![object isKindOfClass:[MyLayoutBase class]] /*[keyPath isEqualToString:@"frame"]*/)
+    if (object == self.superview && ![object isKindOfClass:[MyLayoutBase class]])
     {
         
         if ([keyPath isEqualToString:@"frame"] ||
@@ -1373,26 +1387,38 @@ BOOL _hasBegin;
         if (self.priorAutoresizingMask)
             [super layoutSubviews];
         
+        //得到最佳的sizeClass
+        MySizeClass sizeClass;
+        if ([UIDevice currentDevice].systemVersion.floatValue < 8)
+            sizeClass = MySizeClass_hAny | MySizeClass_wAny;
+        else
+            sizeClass = (MySizeClass)((self.traitCollection.verticalSizeClass << 4) | self.traitCollection.horizontalSizeClass);
         
-        MySizeClass vsc  =  self.traitCollection.verticalSizeClass;
-        MySizeClass hsc = self.traitCollection.horizontalSizeClass;
-        
+        self.absPos.sizeClass = [self myBestSizeClass:sizeClass];
+        for (UIView *sbv in self.subviews)
+        {
+            sbv.absPos.sizeClass = [sbv myBestSizeClass:sizeClass];
+        }
 
-        
+        //计算布局
         CGRect oldSelfRect = self.frame;
-        CGRect newSelfRect = [self calcLayoutRect:CGSizeZero isEstimate:NO pHasSubLayout:nil sizeClass:(hsc | (vsc << 4))];
+        CGRect newSelfRect = [self calcLayoutRect:CGSizeZero isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass];
         
+        //设置子视图的frame并还原
         for (UIView *sbv in self.subviews)
         {
             if (sbv.absPos.leftPos != CGFLOAT_MAX && sbv.absPos.topPos != CGFLOAT_MAX)
                 sbv.frame = sbv.absPos.frame;
             
+            if (sbv.absPos.sizeClass.isHidden)
+                sbv.frame = CGRectZero;
+            
             sbv.absPos.sizeClass = [sbv myDefaultSizeClass];
             [sbv.absPos reset];
         }
-        
         self.absPos.sizeClass = [self myDefaultSizeClass];
         
+        //调整自身
         if (!CGRectEqualToRect(oldSelfRect,newSelfRect) && newSelfRect.origin.x != CGFLOAT_MAX)
         {
             self.frame = newSelfRect;
@@ -1412,6 +1438,7 @@ BOOL _hasBegin;
             [_rightBorderLineLayer setNeedsLayout];
 
         
+        //这里只用origin.x判断的原因是如果newSelfRect被计算成功则rect中的所有值都不是CGFLOAT_MAX，所以这里选origin.x只是其中一个代表。
         if (newSelfRect.origin.x != CGFLOAT_MAX)
             [self alterScrollViewContentSize:newSelfRect];
        
@@ -1442,13 +1469,6 @@ BOOL _hasBegin;
 
 -(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
-    
-    self.absPos.sizeClass = [self myBestSizeClass:sizeClass];
-    for (UIView *sbv in self.subviews)
-    {
-        sbv.absPos.sizeClass = [sbv myBestSizeClass:sizeClass];
-    }
-    
     CGRect selfRect;
     if (isEstimate)
         selfRect = self.absPos.frame;

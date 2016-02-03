@@ -43,8 +43,8 @@
 		18D684521C4F421400A48BB4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D6842F1C4F421400A48BB4 /* ViewController.m */; };
 		18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684551C4F423400A48BB4 /* MyLayoutTests.m */; };
 		18E8084D1B3A5D170059C410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8084C1B3A5D170059C410 /* QuartzCore.framework */; };
-		46D45B161C525FC400A8362C /* MyLayoutSizeClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */; settings = {ASSET_TAGS = (); }; };
-		46DB7E6B1C54B4BC001B409D /* AllTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */; settings = {ASSET_TAGS = (); }; };
+		46D45B161C525FC400A8362C /* MyLayoutSizeClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */; };
+		46DB7E6B1C54B4BC001B409D /* AllTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -235,33 +235,33 @@
 		18D683FB1C4F421400A48BB4 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				18D684001C4F421400A48BB4 /* MyLayout.h */,
+				18D684031C4F421400A48BB4 /* MyLayoutDef.h */,
+				18D684071C4F421400A48BB4 /* MyLayoutInner.h */,
+				18D684011C4F421400A48BB4 /* MyLayoutBase.h */,
+				18D684021C4F421400A48BB4 /* MyLayoutBase.m */,
 				18D683FC1C4F421400A48BB4 /* MyFlowLayout.h */,
 				18D683FD1C4F421400A48BB4 /* MyFlowLayout.m */,
 				18D683FE1C4F421400A48BB4 /* MyFrameLayout.h */,
 				18D683FF1C4F421400A48BB4 /* MyFrameLayout.m */,
-				18D684001C4F421400A48BB4 /* MyLayout.h */,
-				18D684011C4F421400A48BB4 /* MyLayoutBase.h */,
-				18D684021C4F421400A48BB4 /* MyLayoutBase.m */,
-				18D684031C4F421400A48BB4 /* MyLayoutDef.h */,
 				18D684041C4F421400A48BB4 /* MyLayoutDime.h */,
-				18D684051C4F421400A48BB4 /* MyLayoutDime.m */,
 				18D684061C4F421400A48BB4 /* MyLayoutDimeInner.h */,
-				18D684071C4F421400A48BB4 /* MyLayoutInner.h */,
+				18D684051C4F421400A48BB4 /* MyLayoutDime.m */,
 				18D684081C4F421400A48BB4 /* MyLayoutMeasure.h */,
 				18D684091C4F421400A48BB4 /* MyLayoutMeasure.m */,
 				18D6840A1C4F421400A48BB4 /* MyLayoutPos.h */,
-				18D6840B1C4F421400A48BB4 /* MyLayoutPos.m */,
 				18D6840C1C4F421400A48BB4 /* MyLayoutPosInner.h */,
+				18D6840B1C4F421400A48BB4 /* MyLayoutPos.m */,
 				18D6840D1C4F421400A48BB4 /* MyLinearLayout.h */,
 				18D6840E1C4F421400A48BB4 /* MyLinearLayout.m */,
-				18D6840F1C4F421400A48BB4 /* MyMaker.h */,
-				18D684101C4F421400A48BB4 /* MyMaker.m */,
 				18D684111C4F421400A48BB4 /* MyRelativeLayout.h */,
 				18D684121C4F421400A48BB4 /* MyRelativeLayout.m */,
 				18D684131C4F421400A48BB4 /* MyTableLayout.h */,
 				18D684141C4F421400A48BB4 /* MyTableLayout.m */,
 				46D45B141C525FC400A8362C /* MyLayoutSizeClass.h */,
 				46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */,
+				18D6840F1C4F421400A48BB4 /* MyMaker.h */,
+				18D684101C4F421400A48BB4 /* MyMaker.m */,
 			);
 			path = Lib;
 			sourceTree = "<group>";

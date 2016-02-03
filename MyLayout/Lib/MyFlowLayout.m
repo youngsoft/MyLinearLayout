@@ -227,7 +227,7 @@
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if (sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout))
+        if (sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -429,7 +429,7 @@
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
+        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -574,7 +574,7 @@
     
     for (UIView *sbv in self.subviews)
     {
-        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
+        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             continue;
         
         if (!isEstimate)
@@ -592,6 +592,7 @@
             if (isEstimate)
             {
                 [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
+                sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
             }
         }
     }

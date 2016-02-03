@@ -157,6 +157,20 @@ typedef MyLayoutViewOrientation LineViewOrientation MYENUMDEPRECATED("use MyLayo
  w:Regular h:Compact 继承 (w:Any h:Compact , w:Regular h:Any , w:Any h:Any)
  w:Compact h:Regular 继承 (w:Any h:Regular , w:Compact h:Any , w:Any h:Any)
  w:Regular h:Regular 继承 (w:Any h:Regular , w:Regular h:Any , w:Any h:Any)
+ 
+ 下面列出各种设备的sizeClass值
+ iPhone4S,iPhone5/5s,iPhone6
+    竖屏：(w:Compact h:Regular)
+    横屏：(w:Compact h:Compact)
+ iPhone6 Plus
+    竖屏：(w:Compact h:Regular)
+    横屏：(w:Regular h:Compact)
+ iPad
+    竖屏：(w:Regular h:Regular)
+    横屏：(w:Regular h:Regular)
+ Apple Watch
+    竖屏：(w:Compact h:Compact)
+    横屏：(w:Compact h:Compact)
  */
 typedef enum : NSInteger{
     MySizeClass_wAny = 0,       //任意尺寸

@@ -137,6 +137,7 @@
                 
                 MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
                 rect = [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
+                sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
             }
             else
                 rect = sbv.absPos.frame;

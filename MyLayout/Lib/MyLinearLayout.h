@@ -41,24 +41,38 @@
 @property(nonatomic, assign) MyMarginGravity gravity;
 
 
-//均分子视图和间距,布局会根据里面的子视图的数量来平均分配子视图的高度或者宽度以及间距。
-//这个函数只对已经加入布局的视图有效，函数调用后加入的子视图无效。
-//centered属性描述是否所有子视图居中，当居中时顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
--(void)averageSubviews:(BOOL)centered;
-
-//均分子视图，并指定固定的边距
--(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin;
-
-//均分子视图的间距，上面函数会使子视图和间距的尺寸保持一致，而这个函数则是子视图的尺寸保持不变而间距自动平均分配。
-//centered的意义同上。
--(void)averageMargin:(BOOL)centered;
-
-
 //指定子视图之间的间距,布局总是会为两个子视图之间添加这个间距值，默认为0
 //这个属性的意义是当子视图之间的间距是固定时，不需要分别为每个子视图都设置相等的间距，而是设置一个值即可。
 //这个属性通常和padding结合用来设置一些统一的边距值
 @property(nonatomic, assign) CGFloat subviewMargin;
 
+
+
+/*
+ 均分子视图和间距,布局会根据里面的子视图的数量来平均分配子视图的高度或者宽度以及间距。
+ 这个函数只对已经加入布局的视图有效，函数调用后加入的子视图无效。
+ centered参数描述是否所有子视图居中，当居中时顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
+ sizeClass参数表示设置在指定sizeClass下进行子视图和间距的均分
+ */
+-(void)averageSubviews:(BOOL)centered;
+-(void)averageSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+
+/*
+  均分子视图，并指定固定的边距.上面的函数会导致子视图的高度或者宽度和他们之间的间距相等，而这个函数则表示间距是一个指定的值而子视图的高度或者宽度则会被均分
+  这个函数只对已经加入布局的视图有效，函数调用后加入的子视图无效。
+  centered参数描述是否所有子视图居中，当居中时顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
+  sizeClass参数表示设置在指定sizeClass下进行子视图高度或者宽度的均分以及间距的指定
+ */
+-(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin;
+-(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin inSizeClass:(MySizeClass)sizeClass;
+
+/*
+ 均分子视图的间距，上面函数会调整子视图的尺寸以及间距，而这个函数则是子视图的尺寸保持不变而间距自动平均分配，也就是用布局视图的剩余空间来均分间距
+ centered参数意义同上。
+ sizeClass参数的意义同上。
+ */
+-(void)averageMargin:(BOOL)centered;
+-(void)averageMargin:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 
 @end

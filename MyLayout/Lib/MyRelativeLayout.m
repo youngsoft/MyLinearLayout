@@ -224,12 +224,12 @@
             
             
             if (sbv.absPos.leftPos != CGFLOAT_MAX)
-                return sbv.absPos.leftPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout)) ? sbv.leftPos.margin : 0);
+                return sbv.absPos.leftPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden) ? sbv.leftPos.margin : 0);
             
            
             [self calcSubViewLeftRight:sbv selfRect:selfRect];
             
-            return sbv.absPos.leftPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout)) ? sbv.leftPos.margin : 0);
+            return sbv.absPos.leftPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden) ? sbv.leftPos.margin : 0);
             
         }
             break;
@@ -238,7 +238,7 @@
             if (sbv == self || sbv == nil)
                 return selfRect.size.width - self.rightPadding;
             
-            if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
+            if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             {
                 if (sbv.absPos.leftPos != CGFLOAT_MAX)
                     return sbv.absPos.leftPos - sbv.leftPos.margin;
@@ -265,11 +265,11 @@
             
             
             if (sbv.absPos.topPos != CGFLOAT_MAX)
-                return sbv.absPos.topPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout)) ? sbv.topPos.margin : 0);
+                return sbv.absPos.topPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden) ? sbv.topPos.margin : 0);
             
             [self calcSubViewTopBottom:sbv selfRect:selfRect];
             
-            return sbv.absPos.topPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout)) ? sbv.topPos.margin : 0);
+            return sbv.absPos.topPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden) ? sbv.topPos.margin : 0);
             
         }
             break;
@@ -278,7 +278,7 @@
             if (sbv == self || sbv == nil)
                 return selfRect.size.height - self.bottomPadding;
             
-            if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
+            if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             {
                 if (sbv.absPos.topPos != CGFLOAT_MAX)
                     return sbv.absPos.topPos - sbv.topPos.margin;
@@ -332,7 +332,7 @@
             if (sbv == self || sbv == nil)
                 return (selfRect.size.width - self.leftPadding - self.rightPadding) / 2 + self.leftPadding;
             
-            if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
+            if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             {
                 if (sbv.absPos.leftPos != CGFLOAT_MAX)
                     return sbv.absPos.leftPos - sbv.leftPos.margin;
@@ -358,7 +358,7 @@
             if (sbv == self || sbv == nil)
                 return (selfRect.size.height - self.topPadding - self.bottomPadding) / 2 + self.topPadding;
             
-            if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
+            if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             {
                 if (sbv.absPos.topPos != CGFLOAT_MAX)
                     return sbv.absPos.topPos - sbv.topPos.margin;
@@ -502,14 +502,14 @@
             
             NSArray *arr = sbv.widthDime.dimeArrVal;
             
-            BOOL ok1 = sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout && self.flexOtherViewWidthWhenSubviewHidden);
+            BOOL ok1 = sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout && self.flexOtherViewWidthWhenSubviewHidden) || sbv.absPos.sizeClass.isHidden;
             
             
             CGFloat totalMutil = ok1 ? 0 : sbv.widthDime.mutilVal;
             CGFloat totalAdd =  ok1 ? 0 : sbv.widthDime.addVal;
             for (MyLayoutDime *d in arr)
             {
-                BOOL ok = d.view.useFrame || (d.view.isHidden && self.hideSubviewReLayout && self.flexOtherViewWidthWhenSubviewHidden);
+                BOOL ok = d.view.useFrame || (d.view.isHidden && self.hideSubviewReLayout && self.flexOtherViewWidthWhenSubviewHidden) || d.view.absPos.sizeClass.isHidden;
                 
                 if (!ok)
                 {
@@ -548,13 +548,13 @@
             
             NSArray *arr = sbv.heightDime.dimeArrVal;
             
-            BOOL ok1 = sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout && self.flexOtherViewHeightWhenSubviewHidden);
+            BOOL ok1 = sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout && self.flexOtherViewHeightWhenSubviewHidden) || sbv.absPos.sizeClass.isHidden;
             
             CGFloat totalMutil = ok1 ? 0 : sbv.heightDime.mutilVal;
             CGFloat totalAdd = ok1 ? 0 : sbv.heightDime.addVal;
             for (MyLayoutDime *d in arr)
             {
-                BOOL ok = d.view.useFrame || (d.view.isHidden && self.hideSubviewReLayout && self.flexOtherViewHeightWhenSubviewHidden);
+                BOOL ok = d.view.useFrame || (d.view.isHidden && self.hideSubviewReLayout && self.flexOtherViewHeightWhenSubviewHidden) || d.view.absPos.sizeClass.isHidden;
                 
                 if (!ok)
                 {
@@ -594,7 +594,7 @@
             
             CGFloat totalWidth = 0;
             
-            if (!(sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout)))
+            if (!(sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden))
             {
                 [self calcWidth:sbv selfRect:selfRect];
                 totalWidth += sbv.absPos.width + sbv.centerXPos.margin;
@@ -603,7 +603,7 @@
             
             for (MyLayoutPos *p in arr)
             {
-                if (!(p.view.useFrame || (p.view.isHidden && self.hideSubviewReLayout)))
+                if (!(p.view.useFrame || (p.view.isHidden && self.hideSubviewReLayout) || p.view.absPos.sizeClass.isHidden))
                 {
                     [self calcWidth:p.view selfRect:selfRect];
                     totalWidth += p.view.absPos.width + p.view.centerXPos.margin;
@@ -615,7 +615,7 @@
             leftOffset += self.leftPadding;
             
             id prev = @(leftOffset);
-            if (!(sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout)))
+            if (!(sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden))
             {
                 sbv.leftPos.equalTo(prev);
                 prev = sbv.rightPos;
@@ -623,7 +623,7 @@
             
             for (MyLayoutPos *p in arr)
             {
-                if (!(p.view.useFrame || (p.view.isHidden && self.hideSubviewReLayout)))
+                if (!(p.view.useFrame || (p.view.isHidden && self.hideSubviewReLayout) || p.view.absPos.sizeClass.isHidden))
                 {
                     p.view.leftPos.equalTo(prev).offset(p.view.centerXPos.margin);
                     prev = p.view.rightPos;
@@ -639,7 +639,7 @@
             
             CGFloat totalHeight = 0;
             
-            if (!(sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout)))
+            if (!(sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden))
             {
                 [self calcHeight:sbv selfRect:selfRect];
                 totalHeight += sbv.absPos.height + sbv.centerYPos.margin;
@@ -648,7 +648,7 @@
             
             for (MyLayoutPos *p in arr)
             {
-                if (!( p.view.useFrame || (p.view.isHidden && self.hideSubviewReLayout)))
+                if (!( p.view.useFrame || (p.view.isHidden && self.hideSubviewReLayout) || p.view.absPos.sizeClass.isHidden))
                 {
                     [self calcHeight:p.view selfRect:selfRect];
                     totalHeight += p.view.absPos.height + p.view.centerYPos.margin;
@@ -660,7 +660,7 @@
             topOffset += self.topPadding;
             
             id prev = @(topOffset);
-            if (!(sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout)))
+            if (!(sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden))
             {
                 sbv.topPos.equalTo(prev);
                 prev = sbv.bottomPos;
@@ -668,7 +668,7 @@
             
             for (MyLayoutPos *p in arr)
             {
-                if (!( p.view.useFrame || (p.view.isHidden && self.hideSubviewReLayout)))
+                if (!( p.view.useFrame || (p.view.isHidden && self.hideSubviewReLayout) || p.view.absPos.sizeClass.isHidden ))
                 {
                     p.view.topPos.equalTo(prev).offset(p.view.centerYPos.margin);
                     prev = p.view.bottomPos;
@@ -704,7 +704,7 @@
         if (sbv.bottomPos.posRelaVal != nil && sbv.bottomPos.posRelaVal.view == self)
             *pRecalc = YES;
         
-        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
+        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             continue;
         
         if (maxWidth < sbv.absPos.rightPos + sbv.rightPos.margin)
@@ -727,7 +727,7 @@
 
     for (UIView *sbv in self.subviews)
     {
-        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout))
+        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             continue;
         
         if (!isEstimate)
@@ -758,6 +758,7 @@
             if (isEstimate)
             {
                 [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
+                sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
             }
         }
         

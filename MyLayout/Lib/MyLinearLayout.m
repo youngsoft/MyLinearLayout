@@ -104,18 +104,27 @@
 
 -(void)averageSubviews:(BOOL)centered
 {
-    if (self.orientation == MyLayoutViewOrientation_Vert)
-    {
-        [self averageSubviewsForVert:centered withMargin:CGFLOAT_MAX];
-    }
-    else
-    {
-        [self averageSubviewsForHorz:centered withMargin:CGFLOAT_MAX];
-    }
+    [self averageSubviews:centered withMargin:CGFLOAT_MAX];
 }
+
+-(void)averageSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass
+{
+    [self averageSubviews:centered withMargin:CGFLOAT_MAX inSizeClass:sizeClass];
+}
+
 
 -(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin
 {
+    [self averageSubviews:centered withMargin:margin inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+    [self setNeedsLayout];
+}
+
+-(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin inSizeClass:(MySizeClass)sizeClass
+{
+    self.absPos.sizeClass = [self mySizeClass:sizeClass];
+    for (UIView *sbv in self.subviews)
+        sbv.absPos.sizeClass = [sbv mySizeClass:sizeClass];
+    
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
         [self averageSubviewsForVert:centered withMargin:margin];
@@ -124,12 +133,27 @@
     {
         [self averageSubviewsForHorz:centered withMargin:margin];
     }
-
+    
+    self.absPos.sizeClass = self.myDefaultSizeClass;
+    for (UIView *sbv in self.subviews)
+        sbv.absPos.sizeClass = sbv.myDefaultSizeClass;
 }
+
 
 
 -(void)averageMargin:(BOOL)centered
 {
+    [self averageMargin:centered inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+    [self setNeedsLayout];
+
+}
+
+-(void)averageMargin:(BOOL)centered inSizeClass:(MySizeClass)sizeClass
+{
+    self.absPos.sizeClass = [self mySizeClass:sizeClass];
+    for (UIView *sbv in self.subviews)
+        sbv.absPos.sizeClass = [sbv mySizeClass:sizeClass];
+    
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
         [self averageMarginForVert:centered];
@@ -138,9 +162,12 @@
     {
         [self averageMarginForHorz:centered];
     }
+    
+    self.absPos.sizeClass = self.myDefaultSizeClass;
+    for (UIView *sbv in self.subviews)
+        sbv.absPos.sizeClass = sbv.myDefaultSizeClass;
+
 }
-
-
 
 
 /*
@@ -207,7 +234,7 @@
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -412,7 +439,7 @@
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -628,7 +655,7 @@
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -801,7 +828,7 @@
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -994,7 +1021,7 @@
         //如果是垂直的布局，但是子视图设置了左右的边距或者设置了宽度则wrapContentWidth应该设置为NO
         for (UIView *sbv in self.subviews)
         {
-            if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+            if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
                 continue;
             
             if (!isEstimate)
@@ -1024,6 +1051,7 @@
                 if (isEstimate)
                 {
                     [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
+                    sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
                 }
             }
             
@@ -1040,7 +1068,7 @@
         //如果是水平的布局，但是子视图设置了上下的边距或者设置了高度则wrapContentWidth应该设置为NO
         for (UIView *sbv in self.subviews)
         {
-            if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+            if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
                 continue;
             
             if (!isEstimate)
@@ -1070,6 +1098,8 @@
                 if (isEstimate)
                 {
                     [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
+                    sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+
                 }
             }
             
@@ -1172,7 +1202,7 @@
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -1213,7 +1243,6 @@
             sbv.bottomPos.equalTo(@(scale2));
     }
     
-    [self setNeedsLayout];
 }
 
 -(void)averageSubviewsForHorz:(BOOL)centered withMargin:(CGFloat)margin
@@ -1222,7 +1251,7 @@
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -1261,8 +1290,6 @@
             sbv.rightPos.equalTo(@(scale2));
     }
     
-    [self setNeedsLayout];
-
 }
 
 
@@ -1272,7 +1299,7 @@
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -1296,18 +1323,16 @@
             sbv.bottomPos.equalTo(@(scale));
     }
     
-    [self setNeedsLayout];
-    
     
 }
 
 -(void)averageMarginForHorz:(BOOL)centered
 {
-    
+
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
             continue;
         
         [sbs addObject:sbv];
@@ -1330,9 +1355,6 @@
         if (i == sbs.count - 1 && centered)
             sbv.rightPos.equalTo(@(scale));
     }
-    
-    [self setNeedsLayout];
-
 }
 
 

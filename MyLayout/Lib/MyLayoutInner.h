@@ -26,6 +26,7 @@
 //派生类重载这个函数进行布局
 -(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass;
 
+
 //判断margin是否是相对margin
 -(BOOL)isRelativeMargin:(CGFloat)margin;
 
