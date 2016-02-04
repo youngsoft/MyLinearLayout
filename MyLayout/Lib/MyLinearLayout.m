@@ -121,9 +121,9 @@
 
 -(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin inSizeClass:(MySizeClass)sizeClass
 {
-    self.absPos.sizeClass = [self mySizeClass:sizeClass];
+    self.absPos.sizeClass = [self myLayoutSizeClass:sizeClass];
     for (UIView *sbv in self.subviews)
-        sbv.absPos.sizeClass = [sbv mySizeClass:sizeClass];
+        sbv.absPos.sizeClass = [sbv myLayoutSizeClass:sizeClass];
     
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
@@ -150,9 +150,9 @@
 
 -(void)averageMargin:(BOOL)centered inSizeClass:(MySizeClass)sizeClass
 {
-    self.absPos.sizeClass = [self mySizeClass:sizeClass];
+    self.absPos.sizeClass = [self myLayoutSizeClass:sizeClass];
     for (UIView *sbv in self.subviews)
-        sbv.absPos.sizeClass = [sbv mySizeClass:sizeClass];
+        sbv.absPos.sizeClass = [sbv myLayoutSizeClass:sizeClass];
     
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
@@ -1029,12 +1029,12 @@
                 sbv.absPos.frame = sbv.frame;
             }
             
-            if ([sbv isKindOfClass:[MyLayoutBase class]])
+            if ([sbv isKindOfClass:[MyBaseLayout class]])
             {
                 if (pHasSubLayout != nil)
                     *pHasSubLayout = YES;
                 
-                MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
+                MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
                 if (sbvl.wrapContentWidth)
                 {
                     //只要同时设置了左右边距或者设置了宽度则应该把wrapContentWidth置为NO
@@ -1076,12 +1076,12 @@
                 sbv.absPos.frame = sbv.frame;
             }
             
-            if ([sbv isKindOfClass:[MyLayoutBase class]])
+            if ([sbv isKindOfClass:[MyBaseLayout class]])
             {
                 if (pHasSubLayout != nil)
                     *pHasSubLayout = YES;
                 
-                MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
+                MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
                 if (sbvl.wrapContentHeight)
                 {
                     //只要同时设置了左右边距或者设置了宽度则应该把wrapContentWidth置为NO

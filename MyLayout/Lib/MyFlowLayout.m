@@ -148,6 +148,21 @@
     return self.myCurrentSizeClass.subviewVertMargin;
 }
 
+-(CGFloat)subviewMargin
+{
+    return self.myCurrentSizeClass.subviewMargin;
+}
+
+-(void)setSubviewMargin:(CGFloat)subviewMargin
+{
+    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    if (lsc.subviewMargin != subviewMargin)
+    {
+        lsc.subviewMargin = subviewMargin;
+        [self setNeedsLayout];
+    }
+}
+
 
 -(void)willMoveToSuperview:(UIView *)newSuperview
 {
@@ -582,13 +597,13 @@
             sbv.absPos.frame = sbv.frame;
         }
         
-        if ([sbv isKindOfClass:[MyLayoutBase class]])
+        if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
             if (pHasSubLayout != NULL)
                 *pHasSubLayout = YES;
             
             //流式布局因为左右边距和自身的宽高没有限制所以这里不需要进行wrapContent的约束控制。
-            MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
+            MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
             if (isEstimate)
             {
                 [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];

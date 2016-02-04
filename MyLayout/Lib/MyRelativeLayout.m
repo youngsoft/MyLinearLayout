@@ -734,12 +734,12 @@
             [sbv.absPos reset];
         
         
-        if ([sbv isKindOfClass:[MyLayoutBase class]])
+        if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
             if (pHasSubLayout != NULL)
                 *pHasSubLayout = YES;
             
-             MyLayoutBase *sbvl = (MyLayoutBase*)sbv;
+             MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
             
             if (sbvl.wrapContentWidth)
             {

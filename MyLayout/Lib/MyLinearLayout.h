@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年. All rights reserved.
 //
 
-#import "MyLayoutBase.h"
+#import "MyBaseLayout.h"
 
 
 @interface UIView(MyLinearLayoutExt)
@@ -24,7 +24,7 @@
  线性布局，分为水平和垂直方向，根据添加进入的子视图的顺序依次从上到下或者从左到右依次的线条形式的排列。
  线性布局支持wrapContentHeight,wrapContentWidth特性
  */
-@interface MyLinearLayout : MyLayoutBase
+@interface MyLinearLayout : MyBaseLayout
 
 
 //用方向初始化一个线性布局

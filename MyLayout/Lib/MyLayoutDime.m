@@ -8,7 +8,7 @@
 
 #import "MyLayoutDime.h"
 #import "MyLayoutDimeInner.h"
-#import "MyLayoutBase.h"
+#import "MyBaseLayout.h"
 
 @implementation MyLayoutDime
 {
@@ -39,9 +39,9 @@
 
 -(void)setNeedLayout
 {
-    if (_view.superview != nil && [_view.superview isKindOfClass:[MyLayoutBase class]])
+    if (_view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
     {
-        MyLayoutBase* lb = (MyLayoutBase*)_view.superview;
+        MyBaseLayout* lb = (MyBaseLayout*)_view.superview;
         if (!lb.isMyLayouting)
             [_view.superview setNeedsLayout];
     }

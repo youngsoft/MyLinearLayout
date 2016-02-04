@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 欧阳大哥. All rights reserved.
 //
 
-#import "MyLayoutBase.h"
+#import "MyBaseLayout.h"
 
 /**
  流式布局，支持从左到右以及从上到下的垂直布局方式，和从上到下以及从左到右的水平布局方式
@@ -14,7 +14,7 @@
  是不固定的。
  流式布局支持wrapContentHeight,wrapContentWidth,而且流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度。
  **/
-@interface MyFlowLayout : MyLayoutBase
+@interface MyFlowLayout : MyBaseLayout
 
 //初始化一个流式布局并指定布局的方向和布局的数量
 -(id)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
@@ -52,8 +52,10 @@
 
 //子视图之间的垂直和水平的间距，默认为0。当子视图之间的间距是固定时可以通过直接设置这两个属性值来指定间距
 //而不需要为每个子视图来设置margin值。
+//subviewMargin表示同时设置水平和垂直间距一致。
 @property(nonatomic ,assign) CGFloat subviewVertMargin;
 @property(nonatomic, assign) CGFloat subviewHorzMargin;
+@property(nonatomic, assign) CGFloat subviewMargin;
 
 
 

@@ -44,13 +44,23 @@
 //框架布局子视图独有
 -(MyMaker*)marginGravity;
 
-//线性布局独有
+//线性布局和流式布局独有
 -(MyMaker*)orientation;
 -(MyMaker*)gravity;
+-(MyMaker*)subviewMargin;
+
+
+//流式布局独有
+-(MyMaker*)arrangedCount;
+-(MyMaker*)averageArrange;
+-(MyMaker*)arrangedGravity;
+-(MyMaker*)subviewVertMargin;
+-(MyMaker*)subviewHorzMargin;
+
+
 
 //线性布局子视图独有
 -(MyMaker*)weight;
-
 
 
 

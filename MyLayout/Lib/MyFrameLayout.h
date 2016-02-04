@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 欧阳大哥. All rights reserved.
 //
 
-#import "MyLayoutBase.h"
+#import "MyBaseLayout.h"
 
 
 @interface UIView(MyFrameLayoutExt)
@@ -27,7 +27,7 @@
  5.框架布局中的子视图支持通过设置frame来决定高度和宽度，但是frame不能决定位置。
  6.框架布局不支持wrapContentHeight和wrapContentWidth属性。
  */
-@interface MyFrameLayout : MyLayoutBase
+@interface MyFrameLayout : MyBaseLayout
 
 @end
 

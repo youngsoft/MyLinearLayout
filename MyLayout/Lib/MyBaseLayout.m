@@ -1,12 +1,12 @@
 //
-//  MyLayoutBase.m
+//  MyBaseLayout.m
 //  MyLayout
 //
 //  Created by apple on 15/6/14.
 //  Copyright (c) 2015年 欧阳大哥. All rights reserved.
 //
 
-#import "MyLayoutBase.h"
+#import "MyBaseLayout.h"
 #import "MyLayoutInner.h"
 #import <objc/runtime.h>
 
@@ -219,6 +219,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 
 
+
 -(MyLayoutPos*)centerXPos
 {
     MyLayoutPos *pos = self.myCurrentSizeClass.centerXPos;
@@ -331,10 +332,19 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)resetMyLayoutSetting
 {
-    objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self resetMyLayoutSettingInSizeClass:MySizeClass_wAny | MySizeClass_hAny];
+}
+
+-(void)resetMyLayoutSettingInSizeClass:(MySizeClass)sizeClass
+{
+    NSMutableDictionary *dict = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES);
+    if (dict != nil)
+    {
+        [dict removeObjectForKey:@(sizeClass)];
+    }
 
 }
+
 
 
 -(BOOL)useFrame
@@ -353,7 +363,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 
 
--(MyLayoutSizeClass*)mySizeClass:(MySizeClass)sizeClass
+-(MyLayoutSizeClass*)myLayoutSizeClass:(MySizeClass)sizeClass
 {
     NSMutableDictionary *dict = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES);
     if (dict == nil)
@@ -386,7 +396,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(MyLayoutSizeClass*)myDefaultSizeClass
 {
-    return [self mySizeClass:MySizeClass_wAny | MySizeClass_hAny];
+    return [self myLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny];
 }
 
 
@@ -504,9 +514,9 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 /**绘制线条层委托实现类**/
 @interface MyBorderLineLayerDelegate : NSObject
 
-@property(nonatomic ,weak) MyLayoutBase *layout;
+@property(nonatomic ,weak) MyBaseLayout *layout;
 
--(id)initWithLayout:(MyLayoutBase*)layout;
+-(id)initWithLayout:(MyBaseLayout*)layout;
 
 
 @end
@@ -514,7 +524,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 @implementation MyBorderLineLayerDelegate
 
 
--(id)initWithLayout:(MyLayoutBase*)layout
+-(id)initWithLayout:(MyBaseLayout*)layout
 {
     self = [self init];
     if (self != nil)
@@ -602,13 +612,13 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 @end
 
 
-@interface MyLayoutBase()
+@interface MyBaseLayout()
 
 @end
 
 
 
-@implementation MyLayoutBase
+@implementation MyBaseLayout
 {
     __weak id _target;
     SEL   _action;
@@ -631,27 +641,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 }
 
 BOOL _hasBegin;
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    if (self)
-    {
-        [self layoutConstruct];
-    }
-    return self;
-}
-
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-        [self layoutConstruct];
-    }
-    return self;
-}
 
 -(void)dealloc
 {
@@ -1150,7 +1139,7 @@ BOOL _hasBegin;
 {
     
     //监控非布局父视图的frame的变化，而改变自身的位置和尺寸
-    if (object == self.superview && ![object isKindOfClass:[MyLayoutBase class]])
+    if (object == self.superview && ![object isKindOfClass:[MyBaseLayout class]])
     {
         
         if ([keyPath isEqualToString:@"frame"] ||
@@ -1260,7 +1249,7 @@ BOOL _hasBegin;
 
     
     //将要添加到父视图时，如果不是MyLayout派生则则跟需要根据父视图的frame的变化而调整自身的位置和尺寸
-    if (newSuperview != nil && ![newSuperview isKindOfClass:[MyLayoutBase class]])
+    if (newSuperview != nil && ![newSuperview isKindOfClass:[MyBaseLayout class]])
     {
 
         //如果同时设置了左边和右边值则
@@ -1293,7 +1282,7 @@ BOOL _hasBegin;
             //有可能父视图不为空，所以这里先把以前父视图的KVO删除。否则会导致程序崩溃
             
             
-            if (self.superview != nil && ![self.superview isKindOfClass:[MyLayoutBase class]])
+            if (self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
             {
                 @try {
                     [self.superview removeObserver:self forKeyPath:@"frame"];
@@ -1342,7 +1331,7 @@ BOOL _hasBegin;
         }
     }
     
-    if (newSuperview == nil && self.superview != nil && ![self.superview isKindOfClass:[MyLayoutBase class]])
+    if (newSuperview == nil && self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
     {
         
         @try {
@@ -1460,12 +1449,6 @@ BOOL _hasBegin;
 
 
 #pragma mark -- Private Method
-
-
--(void)layoutConstruct
-{
-    self.hideSubviewReLayout = YES;
-}
 
 -(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {

@@ -14,7 +14,7 @@
 
 
 
-@interface MyLayoutBase()
+@interface MyBaseLayout()
 
 
 @property(nonatomic ,strong) CAShapeLayer *leftBorderLineLayer;
@@ -84,7 +84,6 @@
 
 @property(nonatomic, strong, readonly) MyLayoutSizeClass *myDefaultSizeClass;
 
-//@property(nonatomic, strong, readonly) MyLayoutSizeClass *myBestSizeClass:(MySizeClass)sizeClass;
 -(MyLayoutSizeClass*)myBestSizeClass:(MySizeClass)sizeClass;
 
 @property(nonatomic, strong, readonly) MyLayoutSizeClass *myCurrentSizeClass;

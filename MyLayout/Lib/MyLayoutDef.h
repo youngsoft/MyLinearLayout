@@ -148,43 +148,6 @@ typedef MyLayoutViewOrientation LineViewOrientation MYENUMDEPRECATED("use MyLayo
 #endif
 
 
-//SizeClass的尺寸定义,下面是sizeClass的继承关系。
-//也就是说设备当前是：w:Compact h:Compact 则会找出某个视图是否定义了这个尺寸，如果没有则找w:Any h:Compact。如果找到了
-//则使用，否则继续往上找，指导w:Any h:Any这种尺寸，因为默认所有视图定义的属性都是w:Any h:Any的。所以总是会找到对应的视图定义的
-//尺寸的。
-/*
- w:Compact h:Compact 继承 (w:Any h:Compact , w:Compact h:Any , w:Any h:Any)
- w:Regular h:Compact 继承 (w:Any h:Compact , w:Regular h:Any , w:Any h:Any)
- w:Compact h:Regular 继承 (w:Any h:Regular , w:Compact h:Any , w:Any h:Any)
- w:Regular h:Regular 继承 (w:Any h:Regular , w:Regular h:Any , w:Any h:Any)
- 
- 下面列出各种设备的sizeClass值
- iPhone4S,iPhone5/5s,iPhone6
-    竖屏：(w:Compact h:Regular)
-    横屏：(w:Compact h:Compact)
- iPhone6 Plus
-    竖屏：(w:Compact h:Regular)
-    横屏：(w:Regular h:Compact)
- iPad
-    竖屏：(w:Regular h:Regular)
-    横屏：(w:Regular h:Regular)
- Apple Watch
-    竖屏：(w:Compact h:Compact)
-    横屏：(w:Compact h:Compact)
- */
-typedef enum : NSInteger{
-    MySizeClass_wAny = 0,       //任意尺寸
-    MySizeClass_wCompact = 1,   //压缩尺寸
-    MySizeClass_wRegular = 2,   //常规尺寸
-    
-    MySizeClass_hAny = 0,       //任意尺寸
-    MySizeClass_hCompact = 1 << 4,   //压缩尺寸
-    MySizeClass_hRegular = 2 << 4,   //常规尺寸
-}MySizeClass;
-
-
-
-
 
 //内部使用
 typedef enum : unsigned char

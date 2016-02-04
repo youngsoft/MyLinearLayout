@@ -101,6 +101,81 @@
 }
 
 
+-(CGFloat)myLeftMargin
+{
+    return self.leftPos.margin;
+}
+
+-(void)setMyLeftMargin:(CGFloat)leftMargin
+{
+    self.leftPos.equalTo(@(leftMargin));
+    
+}
+
+-(CGFloat)myTopMargin
+{
+    return self.topPos.margin;
+}
+
+-(void)setMyTopMargin:(CGFloat)topMargin
+{
+    self.topPos.equalTo(@(topMargin));
+}
+
+-(CGFloat)myRightMargin
+{
+    return self.rightPos.margin;
+}
+
+-(void)setMyRightMargin:(CGFloat)rightMargin
+{
+    self.rightPos.equalTo(@(rightMargin));
+}
+
+-(CGFloat)myBottomMargin
+{
+    return self.bottomPos.margin;
+}
+
+-(void)setMyBottomMargin:(CGFloat)bottomMargin
+{
+    self.bottomPos.equalTo(@(bottomMargin));
+}
+
+
+-(CGFloat)myCenterXOffset
+{
+    return self.centerXPos.margin;
+}
+
+-(void)setMyCenterXOffset:(CGFloat)centerXOffset
+{
+    self.centerXPos.equalTo(@(centerXOffset));
+}
+
+-(CGFloat)myCenterYOffset
+{
+    return self.centerYPos.margin;
+}
+
+-(void)setMyCenterYOffset:(CGFloat)centerYOffset
+{
+    self.centerYPos.equalTo(@(centerYOffset));
+}
+
+
+-(CGPoint)myCenterOffset
+{
+    return CGPointMake(self.myCenterXOffset, self.myCenterYOffset);
+}
+
+-(void)setMyCenterOffset:(CGPoint)centerOffset
+{
+    self.myCenterXOffset = centerOffset.x;
+    self.myCenterYOffset = centerOffset.y;
+}
+
+
 -(MyLayoutDime*)widthDime
 {
     if (_widthDime == nil)
@@ -126,6 +201,40 @@
     return _heightDime;
 }
 
+
+-(CGFloat)myWidth
+{
+    return self.widthDime.measure;
+}
+
+-(void)setMyWidth:(CGFloat)width
+{
+    self.widthDime.equalTo(@(width));
+}
+
+-(CGFloat)myHeight
+{
+    return self.heightDime.measure;
+}
+
+-(void)setMyHeight:(CGFloat)height
+{
+    self.heightDime.equalTo(@(height));
+}
+
+-(CGSize)mySize
+{
+    return CGSizeMake(self.myWidth, self.myHeight);
+}
+
+-(void)setMySize:(CGSize)mySize
+{
+    self.myWidth = mySize.width;
+    self.myHeight = mySize.height;
+}
+
+
+
 -(void)setWeight:(CGFloat)weight
 {
     if (weight < 0)
@@ -135,6 +244,16 @@
         _weight = weight;
 }
 
+-(CGFloat)subviewMargin
+{
+    return self.subviewVertMargin;
+}
+
+-(void)setSubviewMargin:(CGFloat)subviewMargin
+{
+    self.subviewVertMargin = subviewMargin;
+    self.subviewHorzMargin = subviewMargin;
+}
 
 
 @end

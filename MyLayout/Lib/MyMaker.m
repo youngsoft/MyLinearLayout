@@ -139,7 +139,6 @@
 }
 
 
-//布局独有
 -(MyMaker*)orientation
 {
     return [self addMethod:@"orientation"];
@@ -180,6 +179,40 @@
 
 }
 
+-(MyMaker*)subviewMargin
+{
+    return [self addMethod:@"subviewMargin"];
+    
+}
+
+-(MyMaker*)arrangedCount
+{
+    return [self addMethod:@"arrangedCount"];
+}
+
+-(MyMaker*)averageArrange
+{
+    return [self addMethod:@"averageArrange"];
+}
+
+-(MyMaker*)arrangedGravity
+{
+    return [self addMethod:@"arrangedGravity"];
+
+}
+
+-(MyMaker*)subviewVertMargin
+{
+    return [self addMethod:@"subviewVertMargin"];
+
+}
+
+-(MyMaker*)subviewHorzMargin
+{
+    return [self addMethod:@"subviewHorzMargin"];
+
+}
+
 
 
 
@@ -193,8 +226,6 @@
             
             for (UIView * myView in _myViews)
             {
-                
-                //如果是整形
                 if ([val isKindOfClass:[NSNumber class]])
                 {
                     id oldVal = [myView valueForKey:key];

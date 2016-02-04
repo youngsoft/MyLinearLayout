@@ -330,11 +330,11 @@ typedef enum : NSUInteger {
 
 
 
--(MyLayoutBase*)createItemLayout:(NSString*)leftTitle rightTitle:(NSString*)rightTitle
+-(MyBaseLayout*)createItemLayout:(NSString*)leftTitle rightTitle:(NSString*)rightTitle
 {
     //创建一个左右条目的布局，高度固定为50，而宽度则随父视图决定，里面的子视图垂直居中
     //下面用各种布局实现同一个功能。
-    MyLayoutBase *itemLayout = nil;
+    MyBaseLayout *itemLayout = nil;
     
     if (self.currentItemType == ItemType_LinearLayout)
     {
@@ -382,7 +382,7 @@ typedef enum : NSUInteger {
     [linearLayoutLabel sizeToFit];
     linearLayoutLabel.myTopMargin = 5;
     [contentLayout addSubview:linearLayoutLabel];
-    MyLayoutBase *linearLayout = [self createLinearLayout];
+    MyBaseLayout *linearLayout = [self createLinearLayout];
     linearLayout.wrapContentHeight = YES;
     linearLayout.backgroundColor = [UIColor grayColor];
     [contentLayout addSubview:linearLayout];
@@ -393,7 +393,7 @@ typedef enum : NSUInteger {
     [relativeLayoutLabel sizeToFit];
     relativeLayoutLabel.myTopMargin = 5;
     [contentLayout addSubview:relativeLayoutLabel];
-    MyLayoutBase *relativeLayout = [self createRelativeLayout];
+    MyBaseLayout *relativeLayout = [self createRelativeLayout];
     relativeLayout.wrapContentHeight = YES;
     relativeLayout.backgroundColor = [UIColor grayColor];
     [contentLayout addSubview:relativeLayout];
@@ -404,7 +404,7 @@ typedef enum : NSUInteger {
     [tableLayoutLabel sizeToFit];
     tableLayoutLabel.myTopMargin = 5;
     [contentLayout addSubview:tableLayoutLabel];
-    MyLayoutBase *tableLayout = [self createTableLayout];
+    MyBaseLayout *tableLayout = [self createTableLayout];
     tableLayout.wrapContentHeight = YES;
     tableLayout.backgroundColor = [UIColor grayColor];
     [contentLayout addSubview:tableLayout];
@@ -415,7 +415,7 @@ typedef enum : NSUInteger {
     [flowLayoutLabel sizeToFit];
     flowLayoutLabel.myTopMargin = 5;
     [contentLayout addSubview:flowLayoutLabel];
-    MyLayoutBase *flowLayout = [self createFlowLayout];
+    MyBaseLayout *flowLayout = [self createFlowLayout];
     flowLayout.wrapContentHeight = YES;
     flowLayout.backgroundColor = [UIColor grayColor];
     [contentLayout addSubview:flowLayout];

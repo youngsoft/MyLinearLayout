@@ -1,5 +1,5 @@
 //
-//  MyLayoutBase.h
+//  MyBaseLayout.h
 //  MyLayout
 //
 //  Created by apple on 15/6/14.
@@ -135,10 +135,12 @@
 
 //清除所有视图的扩展属性的设置。
 -(void)resetMyLayoutSetting;
+-(void)resetMyLayoutSettingInSizeClass:(MySizeClass)sizeClass;
 
 
-//注意这里
--(MyLayoutSizeClass*)mySizeClass:(MySizeClass)sizeClass;
+//获取某个SizeClass下的MyLayoutSizeClass对象，然后用户可以通过MyLayoutSizeClass来设置这种SizeClass下的各种约束属性
+//具体参考MyLayoutSizeClass和MySizeClass的定义和说明。
+-(MyLayoutSizeClass*)myLayoutSizeClass:(MySizeClass)sizeClass;
 
 
 
@@ -163,7 +165,7 @@
 
 
 /*布局视图基类，基类不支持实例化对象*/
-@interface MyLayoutBase : UIView
+@interface MyBaseLayout : UIView
 
 
 //用来设置所有子视图的离自己四周的距离，也就是内容的四周的缩进值， 默认上下左右都是0

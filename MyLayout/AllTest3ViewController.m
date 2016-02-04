@@ -79,7 +79,7 @@
     return switchLayout;
 }
 
--(void)handleTap:(MyLayoutBase*)sender
+-(void)handleTap:(MyBaseLayout*)sender
 {
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"test" message:@"执行单击测试" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
     

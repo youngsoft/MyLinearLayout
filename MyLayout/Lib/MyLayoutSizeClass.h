@@ -13,7 +13,83 @@
 #import "MyLayoutDime.h"
 
 
+/*
+ SizeClass的尺寸定义,用于定义苹果设备的各种屏幕的尺寸，对于任意一种设备来说某个纬度的尺寸都可以描述为：Any任意，Compact压缩，Regular常规
+ 三种形式，比如下面就列出了苹果各种设备的SizeClass定义：
+ 
+ iPhone4S,iPhone5/5s,iPhone6
+ 竖屏：(w:Compact h:Regular)
+ 横屏：(w:Compact h:Compact)
+ iPhone6 Plus
+ 竖屏：(w:Compact h:Regular)
+ 横屏：(w:Regular h:Compact)
+ iPad
+ 竖屏：(w:Regular h:Regular)
+ 横屏：(w:Regular h:Regular)
+ Apple Watch
+ 竖屏：(w:Compact h:Compact)
+ 横屏：(w:Compact h:Compact)
+
+ 我们可以专门为某种设备的SizeClass来设置具体的各种子视图和布局的约束，但是为了兼容多种设备，我们提出了Size Class的继承关系,其中的继承关系如下：
+ 
+ w:Compact h:Compact 继承 (w:Any h:Compact , w:Compact h:Any , w:Any h:Any)
+ w:Regular h:Compact 继承 (w:Any h:Compact , w:Regular h:Any , w:Any h:Any)
+ w:Compact h:Regular 继承 (w:Any h:Regular , w:Compact h:Any , w:Any h:Any)
+ w:Regular h:Regular 继承 (w:Any h:Regular , w:Regular h:Any , w:Any h:Any)
+ 
+ 
+  也就是说设备当前是：w:Compact h:Compact 则会找出某个视图是否定义了这个尺寸的界面约束布局，如果没有则找w:Any h:Compact。如果找到了
+ 则使用，否则继续往上找，直到w:Any h:Any这种尺寸，因为默认所有视图的约束设置都是基于w:Any h:Any的。所以总是会找到对应的视图定义的约束的。
+ 
+ 
+ 在默认情况下现有的布局以及子视图的约束设置都是基于w:Any h:Any的,如果我们要为某种Size Class设置约束则可以调用视图的扩展方法：
+ 
+ -(MyLayoutSizeClass*)myLayoutSizeClass:(MySizeClass)sizeClass;
+
+ 这个方法需要传递一个宽度的MySizeClass定义和高度的MySizeClass定义，并通过 | 运算符来组合。 比如：
+ 
+ 1.想设置所有iPhone设备的横屏的约束
+     MyLayoutSizeClass *lsc = [某视图 myLayoutSizeClass:MySizeClass_wAny|MySizeClass_hCompact];
+ 
+ 2.想设置iphone6plus下的横屏的约束
+     MyLayoutSizeClass *lsc = [某视图 myLayoutSizeClass:MySizeClass_wRegular|MySizeClass_hCompact];
+ 
+ 3.想设置ipad下的约束
+    MyLayoutSizeClass *lsc = [某视图 myLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular];
+
+ 4.想设置所有设备下的约束，也是默认的视图的约束
+    MyLayoutSizeClass *lsc = [某视图 myLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny];
+
+ 
+ 得到了一个MyLayoutSizeClass对象后，就可以使用其中的属性来设置具体的约束了。
+ 
+ */
+typedef enum : NSInteger{
+    MySizeClass_wAny = 0,       //任意尺寸
+    MySizeClass_wCompact = 1,   //压缩尺寸
+    MySizeClass_wRegular = 2,   //常规尺寸
+    
+    MySizeClass_hAny = 0,       //任意尺寸
+    MySizeClass_hCompact = 1 << 4,   //压缩尺寸
+    MySizeClass_hRegular = 2 << 4,   //常规尺寸
+}MySizeClass;
+
+
+
+/*
+ 布局的尺寸类型类，这个类的功能用来支持类似于iOS的Size Class机制用来实现各种屏幕下的视图的约束。
+ MyLayoutSizeClass类中定义的各种属性跟视图和布局的各种扩展属性是一致的。
+ 
+ 我们所有的视图的默认的约束设置都是基于MySizeClass_wAny|MySizeClass_hAny这种SizeClass的。
+ 
+ 需要注意的是因为MyLayoutSizeClass是基于苹果SizeClass实现的，因此如果是iOS7的系统则只能支持MySizeClass_wAny|MySizeClass_hAny这种
+ SizeClass，也就是设置布局默认的约束。而iOS8以上的系统则能支持所有的SizeClass.
+ */
 @interface MyLayoutSizeClass : NSObject
+
+//得到sizeclass定义。
+@property(nonatomic,assign,readonly) MySizeClass sizeClass;
+
 
 //所有视图通用
 @property(nonatomic, strong)  MyLayoutPos *leftPos;
@@ -23,8 +99,24 @@
 @property(nonatomic, strong)  MyLayoutPos *centerXPos;
 @property(nonatomic, strong)  MyLayoutPos *centerYPos;
 
+
+@property(nonatomic, assign) CGFloat myLeftMargin;
+@property(nonatomic, assign) CGFloat myTopMargin;
+@property(nonatomic, assign) CGFloat myRightMargin;
+@property(nonatomic, assign) CGFloat myBottomMargin;
+@property(nonatomic, assign) CGFloat myCenterXOffset;
+@property(nonatomic, assign) CGFloat myCenterYOffset;
+@property(nonatomic, assign) CGPoint myCenterOffset;
+
+
+
 @property(nonatomic, strong)  MyLayoutDime *widthDime;
 @property(nonatomic, strong)  MyLayoutDime *heightDime;
+
+@property(nonatomic,assign) CGFloat myWidth;
+@property(nonatomic,assign) CGFloat myHeight;
+@property(nonatomic,assign) CGSize  mySize;
+
 
 @property(nonatomic, assign,getter=isFlexedHeight)  BOOL flexedHeight;
 
@@ -52,6 +144,7 @@
 
 
 @interface MyLayoutSizeClass()
+
 
 //布局专用
 @property(nonatomic,assign) UIEdgeInsets padding;
@@ -81,12 +174,13 @@
 @property(nonatomic,assign) BOOL averageArrange;
 @property(nonatomic,assign) MyMarginGravity arrangedGravity;
 
-//线性布局专用
+//线性布局和流式布局专用
 @property(nonatomic, assign) CGFloat subviewMargin;
 
 //流式布局专用
 @property(nonatomic ,assign) CGFloat subviewVertMargin;
 @property(nonatomic, assign) CGFloat subviewHorzMargin;
+
 
 
 

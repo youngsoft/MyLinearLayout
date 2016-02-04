@@ -281,7 +281,7 @@
     }
     
     //这里最后一行没有下划线
-    MyLayoutBase *dialogLayout = (MyLayoutBase*)[cell viewWithTag:50];
+    MyBaseLayout *dialogLayout = (MyBaseLayout*)[cell viewWithTag:50];
     if (indexPath.row  == self.dialogs.count - 1)
         dialogLayout.bottomBorderLine = nil;
     else
@@ -331,7 +331,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-    MyLayoutBase *dialogLayout = (MyLayoutBase*)[cell viewWithTag:50];
+    MyBaseLayout *dialogLayout = (MyBaseLayout*)[cell viewWithTag:50];
     
     //通过布局视图的estimateLayoutRect函数能够评估出UITableViewCell的动态高度。estimateLayoutRect并不会进行布局
     //而只是评估布局的尺寸，这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们
@@ -344,7 +344,7 @@
     return rect.size.height;  //如果使用系统自带的分割线，请返回rect.size.height+1
 }
 
--(void)handleTest:(MyLayoutBase*)sender
+-(void)handleTest:(MyBaseLayout*)sender
 {
     
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[self.tableView convertPoint:sender.center fromView:sender]];
