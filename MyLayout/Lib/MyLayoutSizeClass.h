@@ -2,7 +2,7 @@
 //  MyLayoutSizeClass.h
 //  MyLayout
 //
-//  Created by fzy on 16/1/22.
+//  Created by apple on 16/1/22.
 //  Copyright © 2016年 YoungSoft. All rights reserved.
 //
 
@@ -30,7 +30,7 @@
  竖屏：(w:Compact h:Compact)
  横屏：(w:Compact h:Compact)
 
- 我们可以专门为某种设备的SizeClass来设置具体的各种子视图和布局的约束，但是为了兼容多种设备，我们提出了Size Class的继承关系,其中的继承关系如下：
+ 我们可以专门为某种设备的SizeClass来设置具体的各种子视图和布局的约束，但是为了兼容多种设备，我们提出了SizeClass的继承关系,其中的继承关系如下：
  
  w:Compact h:Compact 继承 (w:Any h:Compact , w:Compact h:Any , w:Any h:Any)
  w:Regular h:Compact 继承 (w:Any h:Compact , w:Regular h:Any , w:Any h:Any)
@@ -38,15 +38,17 @@
  w:Regular h:Regular 继承 (w:Any h:Regular , w:Regular h:Any , w:Any h:Any)
  
  
-  也就是说设备当前是：w:Compact h:Compact 则会找出某个视图是否定义了这个尺寸的界面约束布局，如果没有则找w:Any h:Compact。如果找到了
- 则使用，否则继续往上找，直到w:Any h:Any这种尺寸，因为默认所有视图的约束设置都是基于w:Any h:Any的。所以总是会找到对应的视图定义的约束的。
+  也就是说设备当前是：w:Compact h:Compact 则会找出某个视图是否定义了这个SizeClass的界面约束布局，如果没有则找w:Any h:Compact。如果找到了
+ 则使用，否则继续往上找，直到w:Any h:Any这种尺寸，因为默认所有视图和布局视图的约束设置都是基于w:Any h:Any的。所以总是会找到对应的视图定义的约束的。
  
  
- 在默认情况下现有的布局以及子视图的约束设置都是基于w:Any h:Any的,如果我们要为某种Size Class设置约束则可以调用视图的扩展方法：
+ 在默认情况下现有的布局以及子视图的约束设置都是基于w:Any h:Any的,如果我们要为某种SizeClass设置约束则可以调用视图的扩展方法：
  
  -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass;
+ -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
 
- 这个方法需要传递一个宽度的MySizeClass定义和高度的MySizeClass定义，并通过 | 运算符来组合。 比如：
+
+ 这两个方法需要传递一个宽度的MySizeClass定义和高度的MySizeClass定义，并通过 | 运算符来组合。 比如：
  
  1.想设置所有iPhone设备的横屏的约束
      UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wAny|MySizeClass_hCompact];
@@ -84,9 +86,7 @@ typedef enum : unsigned char{
  
  需要注意的是因为MyLayoutSizeClass是基于苹果SizeClass实现的，因此如果是iOS7的系统则只能支持MySizeClass_wAny|MySizeClass_hAny这种
  SizeClass，也就是设置布局默认的约束。而iOS8以上的系统则能支持所有的SizeClass.
- 
- 需要注意的是除MySizeClass_wAny|MySizeClass_hAny外的任何一种SizeClass在建立时会copy默认SizeClass(MySizeClass_wAny|MySizeClass_hAny)中的MyLayoutSizeClass部分的值。这样可以避免重复的设置。
- 
+  
  */
 @interface MyLayoutSizeClass:NSObject<NSCopying>
 
