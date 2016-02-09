@@ -1,11 +1,11 @@
-# MyLayout1.1.1
+# MyLayout1.1.2
 
 ##  新版本注意
-   为了防止命名冲突，以及命名的规范，这个版本对一些方法进行了重命名，以及枚举值重新命名，请浏览最下面的如何解决命名冲突和报警的问题。
+   为了防止命名冲突，以及命名的规范，1.1.1版本对一些方法进行了重命名，以及枚举值重新命名，请浏览最下面的如何解决命名冲突和报警的问题。
 
 ## 功能介绍
 
-   一套功能强大的iOS布局库，他不是在自动布局的基础上进行的封装，而是一套原生的基于对frame设置的封装，通过重载layoutSubview函数来实现子视图的布局，因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了android的布局和iOS自动布局以及SizeClass的功能，而比android的布局库以及iOS的自动布局库功能更加强大，使用则方便简单，其分别提供了：**线性布局MyLinearLayout**、**相对布局MyRelativeLayout**、**框架布局MyFrameLayout**、**表格布局MyTableLayout**、**流式布局MyFlowLayout**五个布局类，各种类应用的场景不大一样，具体的使用方法请看Demo中的演示代码以及到我的CSDN主页中了解：
+   一套功能强大的iOS布局库，他不是在自动布局的基础上进行的封装，而是一套原生的基于对frame设置的封装，通过重载layoutSubview函数来实现子视图的布局，因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了android的布局和iOS自动布局以及SizeClass的功能，而比android的布局库以及iOS的自动布局库功能更加强大，使用则方便简单，其分别提供了：**线性布局MyLinearLayout**、**相对布局MyRelativeLayout**、**框架布局MyFrameLayout**、**表格布局MyTableLayout**、**流式布局MyFlowLayout**五个布局类，以及针对苹果的各种屏幕尺寸的设备添加了对**SizeClass**的支持，以便同时适配各种屏幕设备。各种类应用的场景不大一样，具体的使用方法请看Demo中的演示代码以及到我的CSDN主页中了解：
 
 [http://blog.csdn.net/yangtiang/article/details/46483999](http://blog.csdn.net/yangtiang/article/details/46483999)   线性布局  
 [http://blog.csdn.net/yangtiang/article/details/46795231](http://blog.csdn.net/yangtiang/article/details/46795231)   相对布局  
@@ -27,10 +27,20 @@
 #### 流式布局MyFlowLayout
 	流式布局是一种限定了行数或者列数的布局，同样分为垂直流式布局和水平流式布局，对于垂直流式布局来说，需要设定每行的子视图数量，设定后子视图依次从左到右，从上到下依次排列，流式布局一般用于子视图有规律的排列。
 
+####  SizeClass的支持
+    为了有效的同时适配苹果的各种屏幕尺寸的设备，在1.1.2版本中新增加了对SizeClass的支持，通过SizeClass可以完成对某个视图在各种屏幕尺寸下的布局约束设置。
+    
 ## 演示效果图
 
 ![演示图](http://7xoymz.com1.z0.glb.clouddn.com/mylayout.gif)
+![演示图](http://7xoymz.com1.z0.glb.clouddn.com/sizeClassLayout.gif)
 
+## V1.1.2版本新功能
+1.  全面升级，新增加了对SizeClass的支持，通过SizeClass的功能可以为苹果的不同尺寸的设备提供完美的适配功能，对SizeClass的支持，是在苹果的SizeClass能力上支持的，因此只有iOS8以上的版本才支持SizeClass.
+2.  添加了一个新的视图扩展属性mySize，以便为了简化同时设置myWidth,myHeight的能力。
+3.  将原先的布局基类名字MyLayoutBase更名为MyBaseLayout.
+4.  修正了直接从MyLinearLayout或者MyFlowLayout派生时初始化可能会出现的死循环的问题。
+5.  修正了其他的BUG。
 
 ## V1.1.1版本新功能
 1.	新增加了一个mySize属性可以设置布局的宽度和高度，相当于同时设置myWidth,myHeight
