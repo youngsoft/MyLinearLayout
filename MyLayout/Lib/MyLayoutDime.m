@@ -278,6 +278,22 @@
     
 }
 
+#pragma mark -- NSCopying
+
+-(id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutDime *ld = [[[self class] allocWithZone:zone] init];
+    ld.view = self.view;
+    ld.dime = self.dime;
+    ld->_addVal = self.addVal;
+    ld->_minVal = self.minVal;
+    ld->_maxVal = self.maxVal;
+    ld->_mutilVal = self.mutilVal;
+    ld->_dimeVal = self->_dimeVal;
+    ld.dimeValType = self.dimeValType;
+    
+    return self;
+}
 
 @end
 

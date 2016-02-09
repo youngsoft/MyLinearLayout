@@ -12,7 +12,7 @@
 /**
  *  视图在布局中的偏移位置对象
  */
-@interface MyLayoutPos : NSObject
+@interface MyLayoutPos : NSObject<NSCopying>
 
 //设置偏移量
 -(MyLayoutPos* (^)(CGFloat val))offset;

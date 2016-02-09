@@ -140,7 +140,14 @@
 
 //获取某个SizeClass下的MyLayoutSizeClass对象，然后用户可以通过MyLayoutSizeClass来设置这种SizeClass下的各种约束属性
 //具体参考MyLayoutSizeClass和MySizeClass的定义和说明。
--(MyLayoutSizeClass*)myLayoutSizeClass:(MySizeClass)sizeClass;
+//这里虽然返回的是instancetype但实际返回的是MyLayoutSizeClass或者其派生类，默认函数不拷贝其他sizeClass。
+-(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass;
+
+/*
+ 获取某个sizeClass的MyLayoutSizeClass或者其派生类，如果sizeClass不存在则会建立一个新的sizeClass，并且其布局内容都拷贝自srcSizeClass
+的属性，如果sizeClass已经存在则srcSizeClass不起作用，如果srcSizeClass本来就不存在则也不会起作用.
+ */
+-(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
 
 
 

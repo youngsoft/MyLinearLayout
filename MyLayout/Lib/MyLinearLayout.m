@@ -19,9 +19,12 @@
 
 -(void)setWeight:(CGFloat)weight
 {
-    self.myCurrentSizeClass.weight = weight;
-    if (self.superview != nil)
-        [self.superview setNeedsLayout];
+    if (self.myCurrentSizeClass.weight != weight)
+    {
+        self.myCurrentSizeClass.weight = weight;
+        if (self.superview != nil)
+            [self.superview setNeedsLayout];
+    }
 }
 
 
@@ -40,7 +43,12 @@
     self = [super init];
     if (self)
     {
-        self.orientation = orientation;
+        if (orientation == MyLayoutViewOrientation_Vert)
+            self.myCurrentSizeClass.wrapContentHeight = YES;
+        else
+            self.myCurrentSizeClass.wrapContentWidth = YES;
+        self.myCurrentSizeClass.orientation = orientation;
+        
     }
     
     return self;
@@ -54,12 +62,11 @@
 
 -(void)setOrientation:(MyLayoutViewOrientation)orientation
 {
-    if (orientation == MyLayoutViewOrientation_Vert)
-        self.wrapContentHeight = YES;
-    else
-        self.wrapContentWidth = YES;
-    self.myCurrentSizeClass.orientation = orientation;
-    [self setNeedsLayout];
+    if (self.myCurrentSizeClass.orientation != orientation)
+    {
+        self.myCurrentSizeClass.orientation = orientation;
+        [self setNeedsLayout];
+    }
 }
 
 -(MyLayoutViewOrientation)orientation
@@ -72,7 +79,7 @@
 -(void)setGravity:(MyMarginGravity)gravity
 {
  
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyLinearLayout *lsc = self.myCurrentSizeClass;
     if (lsc.gravity != gravity)
     {
         lsc.gravity = gravity;
@@ -87,7 +94,7 @@
 
 -(void)setSubviewMargin:(CGFloat)subviewMargin
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyLinearLayout *lsc = self.myCurrentSizeClass;
 
     if (lsc.subviewMargin != subviewMargin)
     {
@@ -121,9 +128,9 @@
 
 -(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin inSizeClass:(MySizeClass)sizeClass
 {
-    self.absPos.sizeClass = [self myLayoutSizeClass:sizeClass];
+    self.absPos.sizeClass = [self fetchLayoutSizeClass:sizeClass];
     for (UIView *sbv in self.subviews)
-        sbv.absPos.sizeClass = [sbv myLayoutSizeClass:sizeClass];
+        sbv.absPos.sizeClass = [sbv fetchLayoutSizeClass:sizeClass];
     
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
@@ -150,9 +157,9 @@
 
 -(void)averageMargin:(BOOL)centered inSizeClass:(MySizeClass)sizeClass
 {
-    self.absPos.sizeClass = [self myLayoutSizeClass:sizeClass];
+    self.absPos.sizeClass = [self fetchLayoutSizeClass:sizeClass];
     for (UIView *sbv in self.subviews)
-        sbv.absPos.sizeClass = [sbv myLayoutSizeClass:sizeClass];
+        sbv.absPos.sizeClass = [sbv fetchLayoutSizeClass:sizeClass];
     
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
@@ -1355,6 +1362,11 @@
         if (i == sbs.count - 1 && centered)
             sbv.rightPos.equalTo(@(scale));
     }
+}
+
+-(id)createSizeClassInstance
+{
+    return [MyLayoutSizeClassLinearLayout new];
 }
 
 

@@ -12,7 +12,7 @@
 /**
  *  视图在布局中的尺寸对象
  */
-@interface MyLayoutDime : NSObject
+@interface MyLayoutDime : NSObject<NSCopying>
 
 //乘
 -(MyLayoutDime* (^)(CGFloat val))multiply;

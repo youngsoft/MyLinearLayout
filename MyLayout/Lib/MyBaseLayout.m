@@ -20,6 +20,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(MyLayoutPos*)leftPos
 {
+        
     MyLayoutPos *pos = self.myCurrentSizeClass.leftPos;
     pos.view = self;
     return pos;
@@ -363,7 +364,12 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 
 
--(MyLayoutSizeClass*)myLayoutSizeClass:(MySizeClass)sizeClass
+-(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass
+{
+    return [self fetchLayoutSizeClass:sizeClass copyFrom:0xFF];
+}
+
+-(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass
 {
     NSMutableDictionary *dict = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES);
     if (dict == nil)
@@ -373,16 +379,23 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
         
     }
     
-    MyLayoutSizeClass *myClass = (MyLayoutSizeClass*)[dict objectForKey:@(sizeClass)];
-    if (myClass == nil)
+    MyLayoutSizeClass *myLayoutSizeClass = (MyLayoutSizeClass*)[dict objectForKey:@(sizeClass)];
+    if (myLayoutSizeClass == nil)
     {
-        myClass = [MyLayoutSizeClass new];
-        [dict setObject:myClass forKey:@(sizeClass)];
+        MyLayoutSizeClass *srcLayoutSizeClass = (MyLayoutSizeClass*)[dict objectForKey:@(srcSizeClass)];
+        if (srcLayoutSizeClass == nil)
+            myLayoutSizeClass = [self createSizeClassInstance];
+        else
+            myLayoutSizeClass = [srcLayoutSizeClass copy];
+        
+        [dict setObject:myLayoutSizeClass forKey:@(sizeClass)];
     }
     
     
-    return myClass;
+    return (UIView*)myLayoutSizeClass;
+
 }
+
 
 
 
@@ -394,13 +407,13 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 @implementation UIView(MyLayoutExtInner)
 
 
--(MyLayoutSizeClass*)myDefaultSizeClass
+-(instancetype)myDefaultSizeClass
 {
-    return [self myLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny];
+    return [self fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny];
 }
 
 
--(MyLayoutSizeClass*)myCurrentSizeClass
+-(instancetype)myCurrentSizeClass
 {
     if (self.absPos.sizeClass == nil)
         self.absPos.sizeClass = [self myDefaultSizeClass];
@@ -409,7 +422,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 }
 
 
--(MyLayoutSizeClass*)myBestSizeClass:(MySizeClass)sizeClass
+-(instancetype)myBestSizeClass:(MySizeClass)sizeClass
 {
     
     if ([UIDevice currentDevice].systemVersion.floatValue < 8.0)
@@ -434,25 +447,25 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
         
         MyLayoutSizeClass *myClass = (MyLayoutSizeClass*)[dict objectForKey:@(hsc | (vsc << 4))];
         if (myClass != nil)
-            return myClass;
+            return (UIView*)myClass;
         
         myClass = (MyLayoutSizeClass*)[dict objectForKey:@(MySizeClass_wAny | (vsc << 4))];
         if (myClass != nil)
-            return myClass;
+            return (UIView*)myClass;
         
-        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(hsc | (MySizeClass_hAny << 4))];
+        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(hsc | MySizeClass_hAny)];
         if (myClass != nil)
-            return myClass;
+            return (UIView*)myClass;
         
         
-        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(MySizeClass_wAny | MySizeClass_hAny << 4)];
+        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(MySizeClass_wAny | MySizeClass_hAny)];
         if (myClass == nil)
         {
-            myClass = [MyLayoutSizeClass new];
-            [dict setObject:myClass forKey:@(MySizeClass_wAny | MySizeClass_hAny << 4)];
+            myClass = [self createSizeClassInstance];
+            [dict setObject:myClass forKey:@(MySizeClass_wAny | MySizeClass_hAny)];
         }
         
-        return myClass;
+        return (UIView*)myClass;
     }
     
     
@@ -472,6 +485,12 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     
     return obj;
 }
+
+-(id)createSizeClassInstance
+{
+    return [MyLayoutSizeClass new];
+}
+
 
 
 @end
@@ -650,7 +669,7 @@ BOOL _hasBegin;
 
 -(void)setPadding:(UIEdgeInsets)padding
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
     if (!UIEdgeInsetsEqualToEdgeInsets(lsc.padding, padding))
     {
         lsc.padding = padding;
@@ -665,7 +684,7 @@ BOOL _hasBegin;
 
 -(void)setLeftPadding:(CGFloat)leftPadding
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
     [self setPadding:UIEdgeInsetsMake(lsc.padding.top, leftPadding, lsc.padding.bottom,lsc.padding.right)];
 }
 
@@ -676,7 +695,7 @@ BOOL _hasBegin;
 
 -(void)setTopPadding:(CGFloat)topPadding
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
     [self setPadding:UIEdgeInsetsMake(topPadding, lsc.padding.left, lsc.padding.bottom,lsc.padding.right)];
 }
 
@@ -687,7 +706,7 @@ BOOL _hasBegin;
 
 -(void)setRightPadding:(CGFloat)rightPadding
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
     [self setPadding:UIEdgeInsetsMake(lsc.padding.top, lsc.padding.left, lsc.padding.bottom, rightPadding)];
 }
 
@@ -698,7 +717,7 @@ BOOL _hasBegin;
 
 -(void)setBottomPadding:(CGFloat)bottomPadding
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
     [self setPadding:UIEdgeInsetsMake(lsc.padding.top, lsc.padding.left, bottomPadding, lsc.padding.right)];
 }
 
@@ -711,7 +730,7 @@ BOOL _hasBegin;
 
 -(void)setWrapContentHeight:(BOOL)wrapContentHeight
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
 
     if (lsc.wrapContentHeight != wrapContentHeight)
     {
@@ -727,7 +746,7 @@ BOOL _hasBegin;
 
 -(void)setWrapContentWidth:(BOOL)wrapContentWidth
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
 
     if (lsc.wrapContentWidth != wrapContentWidth)
     {
@@ -744,7 +763,7 @@ BOOL _hasBegin;
 
 -(void)setHideSubviewReLayout:(BOOL)hideSubviewReLayout
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
 
     if (lsc.hideSubviewReLayout != hideSubviewReLayout)
     {
@@ -1196,6 +1215,12 @@ BOOL _hasBegin;
 
 
 #pragma mark -- Override Method
+
+-(id)createSizeClassInstance
+{
+    return [MyLayoutSizeClassLayout new];
+}
+
 
 -(CGSize)sizeThatFits:(CGSize)size
 {
@@ -1662,13 +1687,13 @@ BOOL _hasBegin;
 
 -(void)setWrapContentWidthNoLayout:(BOOL)wrapContentWidth
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
     lsc.wrapContentWidth = wrapContentWidth;
 }
 
 -(void)setWrapContentHeightNoLayout:(BOOL)wrapContentHeight
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
     lsc.wrapContentHeight = wrapContentHeight;
 }
 

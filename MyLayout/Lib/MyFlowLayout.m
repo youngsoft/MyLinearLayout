@@ -16,10 +16,8 @@
     self = [super init];
     if (self != nil)
     {
-        self.orientation = orientation;
-        self.arrangedCount = arrangedCount;
-        if (self.arrangedCount < 1)
-            self.arrangedCount = 1;
+        self.myCurrentSizeClass.orientation = orientation;
+        self.myCurrentSizeClass.arrangedCount = arrangedCount;
     }
     
     return self;
@@ -34,7 +32,7 @@
 
 -(void)setOrientation:(MyLayoutViewOrientation)orientation
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+     MyFlowLayout *lsc = self.myCurrentSizeClass;
     if (lsc.orientation != orientation)
     {
         lsc.orientation = orientation;
@@ -49,31 +47,24 @@
 
 -(void)setArrangedCount:(NSInteger)arrangedCount
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
-
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
     if (lsc.arrangedCount != arrangedCount)
     {
         lsc.arrangedCount = arrangedCount;
-        if (lsc.arrangedCount < 1)
-            lsc.arrangedCount = 1;
-        
         [self setNeedsLayout];
     }
 }
 
 -(NSInteger)arrangedCount
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
-    if (lsc.arrangedCount < 1)
-        lsc.arrangedCount = 1;
-    
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
     return lsc.arrangedCount;
 }
 
 
 -(void)setAverageArrange:(BOOL)averageArrange
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
 
     if (lsc.averageArrange != averageArrange)
     {
@@ -89,7 +80,7 @@
 
 -(void)setGravity:(MyMarginGravity)gravity
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
     if (lsc.gravity != gravity)
     {
         lsc.gravity = gravity;
@@ -104,7 +95,7 @@
 
 -(void)setArrangedGravity:(MyMarginGravity)arrangedGravity
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
     if (lsc.arrangedGravity != arrangedGravity)
     {
         lsc.arrangedGravity = arrangedGravity;
@@ -119,7 +110,7 @@
 
 -(void)setSubviewHorzMargin:(CGFloat)subviewHorzMargin
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
 
     if (lsc.subviewHorzMargin != subviewHorzMargin)
     {
@@ -135,7 +126,7 @@
 
 -(void)setSubviewVertMargin:(CGFloat)subviewVertMargin
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
     if (lsc.subviewVertMargin != subviewVertMargin)
     {
         lsc.subviewVertMargin = subviewVertMargin;
@@ -155,7 +146,7 @@
 
 -(void)setSubviewMargin:(CGFloat)subviewMargin
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
     if (lsc.subviewMargin != subviewMargin)
     {
         lsc.subviewMargin = subviewMargin;
@@ -629,6 +620,12 @@
     
     return selfRect;
 }
+
+-(id)createSizeClassInstance
+{
+    return [MyLayoutSizeClassFlowLayout new];
+}
+
 
 
 @end

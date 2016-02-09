@@ -23,7 +23,7 @@
 
 -(void)setFlexOtherViewWidthWhenSubviewHidden:(BOOL)flexOtherViewWidthWhenSubviewHidden
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyRelativeLayout *lsc = self.myCurrentSizeClass;
     
     if (lsc.flexOtherViewWidthWhenSubviewHidden != flexOtherViewWidthWhenSubviewHidden)
     {
@@ -39,7 +39,7 @@
 
 -(void)setFlexOtherViewHeightWhenSubviewHidden:(BOOL)flexOtherViewHeightWhenSubviewHidden
 {
-    MyLayoutSizeClass *lsc = self.myCurrentSizeClass;
+    MyRelativeLayout *lsc = self.myCurrentSizeClass;
 
     if (lsc.flexOtherViewHeightWhenSubviewHidden != flexOtherViewHeightWhenSubviewHidden)
     {
@@ -806,5 +806,11 @@
     return selfRect;
 
 }
+
+-(id)createSizeClassInstance
+{
+    return [MyLayoutSizeClassRelativeLayout new];
+}
+
 
 @end

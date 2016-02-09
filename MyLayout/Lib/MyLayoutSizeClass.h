@@ -44,27 +44,27 @@
  
  在默认情况下现有的布局以及子视图的约束设置都是基于w:Any h:Any的,如果我们要为某种Size Class设置约束则可以调用视图的扩展方法：
  
- -(MyLayoutSizeClass*)myLayoutSizeClass:(MySizeClass)sizeClass;
+ -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass;
 
  这个方法需要传递一个宽度的MySizeClass定义和高度的MySizeClass定义，并通过 | 运算符来组合。 比如：
  
  1.想设置所有iPhone设备的横屏的约束
-     MyLayoutSizeClass *lsc = [某视图 myLayoutSizeClass:MySizeClass_wAny|MySizeClass_hCompact];
+     UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wAny|MySizeClass_hCompact];
  
  2.想设置iphone6plus下的横屏的约束
-     MyLayoutSizeClass *lsc = [某视图 myLayoutSizeClass:MySizeClass_wRegular|MySizeClass_hCompact];
+     UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wRegular|MySizeClass_hCompact];
  
  3.想设置ipad下的约束
-    MyLayoutSizeClass *lsc = [某视图 myLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular];
+    UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular];
 
  4.想设置所有设备下的约束，也是默认的视图的约束
-    MyLayoutSizeClass *lsc = [某视图 myLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny];
+    UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny];
 
  
- 得到了一个MyLayoutSizeClass对象后，就可以使用其中的属性来设置具体的约束了。
+ fetchLayoutSizeClass虽然返回的是一个instancetype,但实际得到了一个MyLayoutSizeClass对象或者其派生类，而MyLayoutSizeClass类中又定义了跟UIView一样相同的布局方法，因此虽然是返回视图对象，并设置各种约束，但实际上是设置MyLayoutSizeClass对象的各种约束。
  
  */
-typedef enum : NSInteger{
+typedef enum : unsigned char{
     MySizeClass_wAny = 0,       //任意尺寸
     MySizeClass_wCompact = 1,   //压缩尺寸
     MySizeClass_wRegular = 2,   //常规尺寸
@@ -84,11 +84,11 @@ typedef enum : NSInteger{
  
  需要注意的是因为MyLayoutSizeClass是基于苹果SizeClass实现的，因此如果是iOS7的系统则只能支持MySizeClass_wAny|MySizeClass_hAny这种
  SizeClass，也就是设置布局默认的约束。而iOS8以上的系统则能支持所有的SizeClass.
+ 
+ 需要注意的是除MySizeClass_wAny|MySizeClass_hAny外的任何一种SizeClass在建立时会copy默认SizeClass(MySizeClass_wAny|MySizeClass_hAny)中的MyLayoutSizeClass部分的值。这样可以避免重复的设置。
+ 
  */
-@interface MyLayoutSizeClass : NSObject
-
-//得到sizeclass定义。
-@property(nonatomic,assign,readonly) MySizeClass sizeClass;
+@interface MyLayoutSizeClass:NSObject<NSCopying>
 
 
 //所有视图通用
@@ -141,12 +141,8 @@ typedef enum : NSInteger{
 @end
 
 
+@interface MyLayoutSizeClassLayout : MyLayoutSizeClass
 
-
-@interface MyLayoutSizeClass()
-
-
-//布局专用
 @property(nonatomic,assign) UIEdgeInsets padding;
 @property(nonatomic, assign) CGFloat topPadding;
 @property(nonatomic, assign) CGFloat leftPadding;
@@ -159,30 +155,39 @@ typedef enum : NSInteger{
 @property(nonatomic, assign) BOOL hideSubviewReLayout;
 
 
-//线性布局和流式布局专用
+@end
+
+
+@interface MyLayoutSizeClassLinearLayout : MyLayoutSizeClassLayout
+
 @property(nonatomic,assign) MyLayoutViewOrientation orientation;
 @property(nonatomic, assign) MyMarginGravity gravity;
 
+@property(nonatomic ,assign) CGFloat subviewVertMargin;
+@property(nonatomic, assign) CGFloat subviewHorzMargin;
+@property(nonatomic, assign) CGFloat subviewMargin;
 
-//相对布局专用
+
+@end
+
+
+@interface MyLayoutSizeClassFlowLayout : MyLayoutSizeClassLinearLayout
+
+@property(nonatomic,assign) NSInteger arrangedCount;
+@property(nonatomic,assign) BOOL averageArrange;
+@property(nonatomic,assign) MyMarginGravity arrangedGravity;
+
+
+@end
+
+@interface MyLayoutSizeClassRelativeLayout : MyLayoutSizeClassLayout
+
 @property(nonatomic, assign) BOOL flexOtherViewWidthWhenSubviewHidden;
 @property(nonatomic, assign) BOOL flexOtherViewHeightWhenSubviewHidden;
 
 
-//流式布局专用
-@property(nonatomic, assign) NSInteger arrangedCount;
-@property(nonatomic,assign) BOOL averageArrange;
-@property(nonatomic,assign) MyMarginGravity arrangedGravity;
-
-//线性布局和流式布局专用
-@property(nonatomic, assign) CGFloat subviewMargin;
-
-//流式布局专用
-@property(nonatomic ,assign) CGFloat subviewVertMargin;
-@property(nonatomic, assign) CGFloat subviewHorzMargin;
-
-
-
-
 @end
+
+
+
 

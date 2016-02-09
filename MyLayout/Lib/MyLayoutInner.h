@@ -13,7 +13,6 @@
 #import "MyLayoutSizeClass.h"
 
 
-
 @interface MyBaseLayout()
 
 
@@ -82,12 +81,13 @@
 @property(nonatomic, strong, readonly) MyLayoutMeasure *absPos;
 
 
-@property(nonatomic, strong, readonly) MyLayoutSizeClass *myDefaultSizeClass;
+-(instancetype)myDefaultSizeClass;
 
--(MyLayoutSizeClass*)myBestSizeClass:(MySizeClass)sizeClass;
+-(instancetype)myBestSizeClass:(MySizeClass)sizeClass;
 
-@property(nonatomic, strong, readonly) MyLayoutSizeClass *myCurrentSizeClass;
+-(instancetype)myCurrentSizeClass;
 
+-(id)createSizeClassInstance;
 
 @end
 

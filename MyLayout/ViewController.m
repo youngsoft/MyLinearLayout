@@ -34,6 +34,7 @@
 #import "AllTest3ViewController.h"
 #import "AllTest4ViewController.h"
 #import "AllTest5ViewController.h"
+#import "AllTest6ViewController.h"
 
 
 @interface ViewController ()
@@ -69,7 +70,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 20;
+    return 21;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -137,7 +138,10 @@
             cell.textLabel.text = @"五种布局实现同一功能";
             break;
         case 19:
-            cell.textLabel.text = @"SizeClass 测试1";
+            cell.textLabel.text = @"SizeClass--Demo1";
+            break;
+        case 20:
+            cell.textLabel.text = @"SizeClass--Demo2";
             break;
         default:
             break;
@@ -212,6 +216,9 @@
             break;
         case 19:
             vc = [AllTest5ViewController new];
+            break;
+        case 20:
+            vc = [AllTest6ViewController new];
             break;
         default:
             break;

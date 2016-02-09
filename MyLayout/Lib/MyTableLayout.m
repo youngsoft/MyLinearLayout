@@ -29,12 +29,11 @@
 
 -(id)initWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth orientation:(MyLayoutViewOrientation)orientation
 {
-    self = [super init];
+    self = [super initWithOrientation:orientation];
     if (self != nil)
     {
         _rowHeight = rowHeight;
         _colWidth = colWidth;
-        self.orientation = orientation;
         
         if (rowHeight == 0)
             self.weight = 1;

@@ -251,6 +251,23 @@
    
 }
 
+#pragma mark -- NSCopying  
+
+-(id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutPos *lp = [[[self class] allocWithZone:zone] init];
+    lp.view = self.view;
+    lp.pos = self.pos;
+    lp.posValType = self.posValType;
+    lp->_offsetVal = self.offsetVal;
+    lp->_minVal = self.minVal;
+    lp->_maxVal = self.maxVal;
+    lp->_posVal = self->_posVal;
+    
+    return lp;
+
+}
+
 
 
 @end

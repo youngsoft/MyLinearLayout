@@ -13,19 +13,6 @@
 @implementation MyLayoutSizeClass
 
 
--(id)init
-{
-    self = [super init];
-    if (self != nil)
-    {
-        self.hideSubviewReLayout = YES;
-    }
-    
-    return self;
-}
-
-
-
 -(MyLayoutPos*)leftPos
 {
     if (_leftPos == nil)
@@ -244,6 +231,105 @@
         _weight = weight;
 }
 
+#pragma mark -- NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutSizeClass *lsc = [[[self class] allocWithZone:zone] init];
+    
+  
+    //这里不会复制hidden属性
+    lsc->_leftPos = [self.leftPos copy];
+    lsc->_topPos = [self.topPos copy];
+    lsc->_rightPos = [self.rightPos copy];
+    lsc->_bottomPos = [self.bottomPos copy];
+    lsc->_centerXPos = [self.centerXPos copy];
+    lsc->_centerYPos = [self.centerYPos copy];
+    lsc->_widthDime = [self.widthDime copy];
+    lsc->_heightDime = [self.heightDime copy];
+    lsc.flexedHeight = self.isFlexedHeight;
+    lsc.useFrame = self.useFrame;
+    lsc.hidden = self.hidden;
+    lsc.weight = self.weight;
+    lsc.marginGravity = self.marginGravity;
+
+    
+    return lsc;
+}
+
+
+@end
+
+@implementation MyLayoutSizeClassLayout
+
+-(id)init
+{
+    self = [super init];
+    if (self != nil)
+    {
+        self.hideSubviewReLayout = YES;
+    }
+    
+    return self;
+}
+
+-(CGFloat)topPadding
+{
+    return self.padding.top;
+}
+
+-(void)setTopPadding:(CGFloat)topPadding
+{
+    self->_padding.top = topPadding;
+}
+
+-(CGFloat)leftPadding
+{
+    return self.padding.left;
+}
+
+-(void)setLeftPadding:(CGFloat)leftPadding
+{
+    self->_padding.left = leftPadding;
+}
+
+-(CGFloat)bottomPadding
+{
+    return self.padding.bottom;
+}
+
+-(void)setBottomPadding:(CGFloat)bottomPadding
+{
+    self->_padding.bottom = bottomPadding;
+}
+
+-(CGFloat)rightPadding
+{
+    return self.padding.right;
+}
+
+-(void)setRightPadding:(CGFloat)rightPadding
+{
+    self->_padding.right = rightPadding;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutSizeClassLayout *lsc = [super copyWithZone:zone];
+    lsc.padding = self.padding;
+    lsc.wrapContentWidth = self.wrapContentWidth;
+    lsc.wrapContentHeight = self.wrapContentHeight;
+    lsc.hideSubviewReLayout = self.hideSubviewReLayout;
+    
+    return lsc;
+}
+
+
+@end
+
+
+@implementation MyLayoutSizeClassLinearLayout
+
 -(CGFloat)subviewMargin
 {
     return self.subviewVertMargin;
@@ -253,6 +339,71 @@
 {
     self.subviewVertMargin = subviewMargin;
     self.subviewHorzMargin = subviewMargin;
+}
+
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutSizeClassLinearLayout *lsc = [super copyWithZone:zone];
+    
+    lsc.orientation = self.orientation;
+    lsc.gravity = self.gravity;
+    lsc.subviewVertMargin = self.subviewVertMargin;
+    lsc.subviewHorzMargin = self.subviewHorzMargin;
+    
+     return lsc;
+}
+
+
+
+@end
+
+
+@implementation MyLayoutSizeClassFlowLayout
+{
+    NSInteger _arrangedCount;
+}
+
+-(void)setArrangedCount:(NSInteger)arrangedCount
+{
+    _arrangedCount = arrangedCount;
+    if (_arrangedCount == 0)
+        _arrangedCount = 1;
+}
+
+-(NSInteger)arrangedCount
+{
+   if (_arrangedCount == 0)
+       _arrangedCount = 1;
+    
+    return _arrangedCount;
+}
+
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutSizeClassFlowLayout *lsc = [super copyWithZone:zone];
+    
+    lsc.arrangedCount = self.arrangedCount;
+    lsc.averageArrange = self.averageArrange;
+    lsc.arrangedGravity = self.arrangedGravity;
+    
+    return lsc;
+}
+
+
+@end
+
+
+@implementation MyLayoutSizeClassRelativeLayout
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutSizeClassRelativeLayout *lsc = [super copyWithZone:zone];
+    lsc.flexOtherViewWidthWhenSubviewHidden = self.flexOtherViewWidthWhenSubviewHidden;
+    lsc.flexOtherViewHeightWhenSubviewHidden = self.flexOtherViewHeightWhenSubviewHidden;
+    
+    return lsc;
 }
 
 

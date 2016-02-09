@@ -21,7 +21,7 @@
 @property(nonatomic, assign) CGFloat width;
 @property(nonatomic, assign) CGFloat height;
 
-@property(nonatomic, weak) MyLayoutSizeClass *sizeClass;
+@property(nonatomic, weak) UIView *sizeClass;
 
 
 -(void)reset;

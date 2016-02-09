@@ -22,10 +22,12 @@
 
 -(void)setMarginGravity:(MyMarginGravity)marginGravity
 {
-
-    self.myCurrentSizeClass.marginGravity = marginGravity;
-    if (self.superview != nil)
-        [self.superview setNeedsLayout];    
+    if (self.myCurrentSizeClass.marginGravity != marginGravity)
+    {
+        self.myCurrentSizeClass.marginGravity = marginGravity;
+        if (self.superview != nil)
+            [self.superview setNeedsLayout];
+    }
 }
 
 @end

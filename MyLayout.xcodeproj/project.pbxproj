@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		188261CF1C647CB300996C2C /* AllTest6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188261CE1C647CB300996C2C /* AllTest6ViewController.m */; };
 		18D684301C4F421400A48BB4 /* AllTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683E81C4F421400A48BB4 /* AllTest1ViewController.m */; };
 		18D684311C4F421400A48BB4 /* AllTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683EA1C4F421400A48BB4 /* AllTest2ViewController.m */; };
 		18D684321C4F421400A48BB4 /* AllTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683EC1C4F421400A48BB4 /* AllTest3ViewController.m */; };
@@ -60,6 +61,8 @@
 /* Begin PBXFileReference section */
 		1840828D1B2C46E8003F378B /* MyLayout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLayout.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		184082A61B2C46E8003F378B /* MyLayout.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyLayout.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		188261CD1C647CB300996C2C /* AllTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest6ViewController.h; sourceTree = "<group>"; };
+		188261CE1C647CB300996C2C /* AllTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest6ViewController.m; sourceTree = "<group>"; };
 		18D683E71C4F421400A48BB4 /* AllTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1ViewController.h; sourceTree = "<group>"; };
 		18D683E81C4F421400A48BB4 /* AllTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D683E91C4F421400A48BB4 /* AllTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest2ViewController.h; sourceTree = "<group>"; };
@@ -198,6 +201,8 @@
 				18D683EE1C4F421400A48BB4 /* AllTest4ViewController.m */,
 				46DB7E691C54B4BC001B409D /* AllTest5ViewController.h */,
 				46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */,
+				188261CD1C647CB300996C2C /* AllTest6ViewController.h */,
+				188261CE1C647CB300996C2C /* AllTest6ViewController.m */,
 				18D683F31C4F421400A48BB4 /* FLLTest1ViewController.h */,
 				18D683F41C4F421400A48BB4 /* FLLTest1ViewController.m */,
 				18D683F51C4F421400A48BB4 /* FLTest1ViewController.h */,
@@ -388,6 +393,7 @@
 				18D6844C1C4F421400A48BB4 /* main.m in Sources */,
 				18D684441C4F421400A48BB4 /* MyTableLayout.m in Sources */,
 				18D684421C4F421400A48BB4 /* MyMaker.m in Sources */,
+				188261CF1C647CB300996C2C /* AllTest6ViewController.m in Sources */,
 				18D684401C4F421400A48BB4 /* MyLayoutPos.m in Sources */,
 				18D684321C4F421400A48BB4 /* AllTest3ViewController.m in Sources */,
 				18D6844F1C4F421400A48BB4 /* RLTest3ViewController.m in Sources */,
