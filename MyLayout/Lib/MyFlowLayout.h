@@ -25,7 +25,7 @@
  4.水平数量约束流式布局。
     orientation为MyLayoutViewOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange。
  
- 流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度。
+ 流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度,以及高度或者宽度依赖于流式布局本身的高度或者宽度
  **/
 @interface MyFlowLayout : MyBaseLayout
 

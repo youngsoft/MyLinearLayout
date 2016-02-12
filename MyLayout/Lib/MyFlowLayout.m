@@ -269,6 +269,9 @@
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
+        if (sbv.widthDime.dimeRelaVal == self.widthDime)
+            rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - self.leftPadding - self.rightPadding) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+        
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
             rect.size.height = [sbv.heightDime validMeasure:rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
         
@@ -615,6 +618,9 @@
         
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
+        
+        if (sbv.heightDime.dimeRelaVal == self.heightDime)
+            rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
         
         if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
             rect.size.width = [sbv.widthDime validMeasure:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
