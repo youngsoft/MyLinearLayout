@@ -41,8 +41,8 @@
 
 
 //流式布局内所有子视图的整体停靠对齐位置设定。
-//如果视图方向为MyLayoutViewOrientation_Vert时且averageArrange为YES时则水平方向的对齐失效。
-//如果视图方向为MyLayoutViewOrientation_Horz时且averageArrange为YES时则垂直方向的对齐失效。
+//如果视图方向为MyLayoutViewOrientation_Vert时且averageArrange为YES时则水平方向的停靠失效。
+//如果视图方向为MyLayoutViewOrientation_Horz时且averageArrange为YES时则垂直方向的停靠失效。
 @property(nonatomic,assign) MyMarginGravity gravity;
 
 
