@@ -10,13 +10,26 @@
 
 /**
  流式布局，支持从左到右以及从上到下的垂直布局方式，和从上到下以及从左到右的水平布局方式
- 流式布局和表格布局的区别是流式布局限定了布局方向的子视图排列的数量，一旦数量达到则会自动换行排列；而表格布局需要明确指定建立一个新的行，但是列的数量
- 是不固定的。
- 流式布局支持wrapContentHeight,wrapContentWidth,而且流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度。
+ 流式布局除了支持两种方向的布局外，还分别支持按子视图内容填充约束和子视图数量约束两种，所谓按子视图内容填充约束是指子视图依次先按一个方向排列，当某个子视图的
+ 空间不能容纳在流式布局视图下时则会另起一行或者一列重新排列；而按子视图数量约束则是指子视图依次先按一个方向排列，当一行或者一列的子视图的数量到达指定的数量后
+ 则会另起一行或者一列重新排列。因此流式布局可以实现四种不同的流：
+ 1.垂直内容填充约束流式布局.
+    orientation为MyLayoutViewOrientation_Vert,arrangedCount为0,支持wrapContentHeight,不支持wrapContentWidth,不支持averageArrange。
+ 
+ 2.垂直数量约束流式布局
+    orientation为MyLayoutViewOrientation_Vert,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange。
+
+ 3.水平内容填充约束流式布局
+    orientation为MyLayoutViewOrientation_Horz,arrangedCount为0,不支持wrapContentHeight,支持wrapContentWidth,不支持averageArrange。
+
+ 4.水平数量约束流式布局。
+    orientation为MyLayoutViewOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange。
+ 
+ 流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度。
  **/
 @interface MyFlowLayout : MyBaseLayout
 
-//初始化一个流式布局并指定布局的方向和布局的数量
+//初始化一个流式布局并指定布局的方向和布局的数量,如果数量为0则表示内容填充约束流式布局
 -(id)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
 
 +(id)flowLayoutWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
@@ -33,7 +46,8 @@
 @property(nonatomic,assign) MyMarginGravity gravity;
 
 
-//指定方向上的子视图的数量默认是1。
+//指定方向上的子视图的数量，默认是0表示为内容填充约束流式布局，当数量不为0时则是数量约束流式布局。当值为0时则表示当子视图在
+//方向上的尺寸超过布局视图时则会新起一行或者一列。而如果数量不为0时则：
 //如果方向为MyLayoutViewOrientation_Vert，则表示从左到右的数量，当子视图从左往右满足这个数量后新的子视图将会换行再排列
 //如果方向为MyLayoutViewOrientation_Horz，则表示从上到下的数量，当子视图从上往下满足这个数量后新的子视图将会换列再排列
 @property(nonatomic, assign) NSInteger arrangedCount;
@@ -41,6 +55,7 @@
 //指定是否均分布局方向上的子视图的宽度或者高度，默认是NO。
 //如果是MyLayoutViewOrientation_Vert则表示每行的子视图的宽度会被均分，这样子视图不需要指定宽度，但是布局视图必须要指定一个明确的宽度值，如果设置为YES则wrapContentWidth会失效。
 //如果是MyLayoutViewOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
+//内容填充约束流式布局不支持averageArrange这个属性。
 @property(nonatomic,assign) BOOL averageArrange;
 
 

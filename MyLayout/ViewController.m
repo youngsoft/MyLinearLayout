@@ -27,6 +27,7 @@
 #import "TLTest2ViewController.h"
 
 #import "FLLTest1ViewController.h"
+#import "FLLTest2ViewController.h"
 
 
 #import "AllTest1ViewController.h"
@@ -70,7 +71,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 21;
+    return 22;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -126,21 +127,24 @@
             cell.textLabel.text = @"流式布局";
             break;
         case 15:
-            cell.textLabel.text = @"UITableViewCell动态高度";
+            cell.textLabel.text = @"流式布局 - 标签流";
             break;
         case 16:
-            cell.textLabel.text = @"完美屏幕适配";
+            cell.textLabel.text = @"UITableViewCell动态高度";
             break;
         case 17:
-            cell.textLabel.text = @"UITableView的替换方案";
+            cell.textLabel.text = @"完美屏幕适配";
             break;
         case 18:
-            cell.textLabel.text = @"五种布局实现同一功能";
+            cell.textLabel.text = @"UITableView的替换方案";
             break;
         case 19:
-            cell.textLabel.text = @"SizeClass--Demo1";
+            cell.textLabel.text = @"五种布局实现同一功能";
             break;
         case 20:
+            cell.textLabel.text = @"SizeClass--Demo1";
+            break;
+        case 21:
             cell.textLabel.text = @"SizeClass--Demo2";
             break;
         default:
@@ -203,21 +207,24 @@
             vc = [FLLTest1ViewController new];
             break;
         case 15:
-            vc = [AllTest1ViewController new];
+            vc = [FLLTest2ViewController new];
             break;
         case 16:
-            vc = [AllTest2ViewController new];
+            vc = [AllTest1ViewController new];
             break;
         case 17:
-            vc = [AllTest3ViewController new];
+            vc = [AllTest2ViewController new];
             break;
         case 18:
-            vc = [AllTest4ViewController new];
+            vc = [AllTest3ViewController new];
             break;
         case 19:
-            vc = [AllTest5ViewController new];
+            vc = [AllTest4ViewController new];
             break;
         case 20:
+            vc = [AllTest5ViewController new];
+            break;
+        case 21:
             vc = [AllTest6ViewController new];
             break;
         default:

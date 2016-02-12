@@ -1,5 +1,5 @@
 //
-//  Test20ViewController.m
+//  FLLTest1ViewController.m
 //  MyLayout
 //
 //  Created by apple on 15/10/31.
@@ -78,7 +78,7 @@
     
     NSArray *imageArray = @[@"minions1",@"minions2",@"minions3",@"minions4",@"head1"];
     
-    for (int i = 0; i < 14; i++)
+    for (int i = 0; i < 60; i++)
     {
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageArray[random()%5]]];
         [imageView sizeToFit];

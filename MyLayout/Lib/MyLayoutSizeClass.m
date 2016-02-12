@@ -360,25 +360,6 @@
 
 
 @implementation MyLayoutSizeClassFlowLayout
-{
-    NSInteger _arrangedCount;
-}
-
--(void)setArrangedCount:(NSInteger)arrangedCount
-{
-    _arrangedCount = arrangedCount;
-    if (_arrangedCount == 0)
-        _arrangedCount = 1;
-}
-
--(NSInteger)arrangedCount
-{
-   if (_arrangedCount == 0)
-       _arrangedCount = 1;
-    
-    return _arrangedCount;
-}
-
 
 - (id)copyWithZone:(NSZone *)zone
 {

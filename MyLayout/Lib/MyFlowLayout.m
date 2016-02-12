@@ -174,7 +174,7 @@
 {
     
     CGFloat addXPos = 0;
-    if (!self.averageArrange)
+    if (!self.averageArrange || self.arrangedCount == 0)
     {
         switch (mg) {
             case MyMarginGravity_Horz_Center:
@@ -226,6 +226,153 @@
         }
     }
 }
+
+-(CGRect)layoutSubviewsForVertFloat:(CGRect)selfRect
+{
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
+    {
+        if (sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
+            continue;
+        
+        [sbs addObject:sbv];
+    }
+    
+    CGFloat xPos = self.leftPadding;
+    CGFloat yPos = self.topPadding;
+    CGFloat rowMaxHeight = 0;  //某一行的最高值。
+    CGFloat rowMaxWidth = 0;   //某一行的最宽值
+    
+    MyMarginGravity mgvert = self.gravity & MyMarginGravity_Horz_Mask;
+    MyMarginGravity mghorz = self.gravity & MyMarginGravity_Vert_Mask;
+    MyMarginGravity amgvert = self.arrangedGravity & MyMarginGravity_Horz_Mask;
+    
+    NSInteger arrangedIndex = 0;
+    NSInteger i = 0;
+    for (; i < sbs.count; i++)
+    {
+        UIView *sbv = sbs[i];
+        
+        CGFloat topMargin = sbv.topPos.margin;
+        CGFloat leftMargin = sbv.leftPos.margin;
+        CGFloat bottomMargin = sbv.bottomPos.margin;
+        CGFloat rightMargin = sbv.rightPos.margin;
+        CGRect rect = sbv.absPos.frame;
+        
+        //控制最大最小尺寸
+        rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
+        rect.size.width  = [sbv.widthDime validMeasure:rect.size.width];
+        
+        if (sbv.widthDime.dimeNumVal != nil)
+            rect.size.width = sbv.widthDime.measure;
+        
+        if (sbv.heightDime.dimeNumVal != nil)
+            rect.size.height = sbv.heightDime.measure;
+        
+        if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
+            rect.size.height = [sbv.heightDime validMeasure:rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+        
+        //如果高度是浮动的则需要调整高度。
+        if (sbv.isFlexedHeight)
+        {
+            CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
+            rect.size.height = [sbv.heightDime validMeasure:sz.height];
+        }
+        
+        //计算xPos的值加上leftMargin + rect.size.width + rightMargin + self.subviewHorzMargin 的值要小于整体的宽度。
+        CGFloat place = xPos + leftMargin + rect.size.width + rightMargin;
+        if (arrangedIndex != 0)
+            place += self.subviewHorzMargin;
+        place += self.rightPadding;
+        
+        //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
+        if (place > selfRect.size.width)
+        {
+            xPos = self.leftPadding;
+            yPos += self.subviewVertMargin;
+            yPos += rowMaxHeight;
+
+
+            //计算每行的gravity情况。
+            [self calcVertLayoutGravity:selfRect.size.width rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex];
+
+            //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
+            if (leftMargin + rightMargin + rect.size.width > selfRect.size.width - self.leftPadding - self.rightPadding)
+            {
+                rect.size.width = [sbv.widthDime validMeasure:selfRect.size.width - self.leftPadding - self.rightPadding - leftMargin - rightMargin ];
+                
+                if (sbv.isFlexedHeight)
+                {
+                    CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
+                    rect.size.height = [sbv.heightDime validMeasure:sz.height];
+                }
+            }
+            
+            rowMaxHeight = 0;
+            rowMaxWidth = 0;
+            arrangedIndex = 0;
+            
+        }
+        
+        if (arrangedIndex != 0)
+            xPos += self.subviewHorzMargin;
+        
+        
+        rect.origin.x = xPos + leftMargin;
+        rect.origin.y = yPos + topMargin;
+        xPos += leftMargin + rect.size.width + rightMargin;
+        
+        if (rowMaxHeight < topMargin + bottomMargin + rect.size.height)
+            rowMaxHeight = topMargin + bottomMargin + rect.size.height;
+        
+        if (rowMaxWidth < (xPos - self.leftPadding))
+            rowMaxWidth = (xPos - self.leftPadding);
+
+      
+
+        sbv.absPos.frame = rect;
+        
+        arrangedIndex++;
+
+        
+
+    }
+    
+    //最后一行
+    [self calcVertLayoutGravity:selfRect.size.width rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex];
+
+    
+    if (self.wrapContentHeight)
+        selfRect.size.height = yPos + self.bottomPadding + rowMaxHeight;
+    else
+    {
+        CGFloat addYPos = 0;
+        if (mgvert == MyMarginGravity_Vert_Center)
+        {
+            addYPos = (selfRect.size.height - self.bottomPadding - rowMaxHeight - yPos) / 2;
+        }
+        else if (mgvert == MyMarginGravity_Vert_Bottom)
+        {
+            addYPos = selfRect.size.height - self.bottomPadding - rowMaxHeight - yPos;
+        }
+        
+        if (addYPos != 0)
+        {
+            for (int i = 0; i < sbs.count; i++)
+            {
+                UIView *sbv = sbs[i];
+                
+                sbv.absPos.topPos += addYPos;
+            }
+        }
+        
+    }
+    
+    
+    return selfRect;
+    
+}
+
 
 -(CGRect)layoutSubviewsForVert:(CGRect)selfRect
 {
@@ -427,6 +574,145 @@
 }
 
 
+-(CGRect)layoutSubviewsForHorzFloat:(CGRect)selfRect
+{
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
+    {
+        if (sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
+            continue;
+        
+        [sbs addObject:sbv];
+    }
+    
+    CGFloat xPos = self.leftPadding;
+    CGFloat yPos = self.topPadding;
+    CGFloat colMaxWidth = 0;  //某一列的最宽值。
+    CGFloat colMaxHeight = 0;   //某一列的最高值
+    
+    MyMarginGravity mgvert = self.gravity & MyMarginGravity_Horz_Mask;
+    MyMarginGravity mghorz = self.gravity & MyMarginGravity_Vert_Mask;
+    MyMarginGravity amghorz = self.arrangedGravity & MyMarginGravity_Vert_Mask;
+    
+    NSInteger arrangedIndex = 0;
+    NSInteger i = 0;
+    for (; i < sbs.count; i++)
+    {
+        UIView *sbv = sbs[i];
+        
+        CGFloat topMargin = sbv.topPos.margin;
+        CGFloat leftMargin = sbv.leftPos.margin;
+        CGFloat bottomMargin = sbv.bottomPos.margin;
+        CGFloat rightMargin = sbv.rightPos.margin;
+        CGRect rect = sbv.absPos.frame;
+        
+        //控制最大最小尺寸
+        rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
+        rect.size.width  = [sbv.widthDime validMeasure:rect.size.width];
+        
+        if (sbv.widthDime.dimeNumVal != nil)
+            rect.size.width = sbv.widthDime.measure;
+        
+        if (sbv.heightDime.dimeNumVal != nil)
+            rect.size.height = sbv.heightDime.measure;
+        
+        if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
+            rect.size.width = [sbv.widthDime validMeasure:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+        
+        //如果高度是浮动的则需要调整高度。
+        if (sbv.isFlexedHeight)
+        {
+            CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
+            rect.size.height = [sbv.heightDime validMeasure:sz.height];
+        }
+        
+        //计算yPos的值加上topMargin + rect.size.height + bottomMargin + self.subviewVertMargin 的值要小于整体的宽度。
+        CGFloat place = yPos + topMargin + rect.size.height + bottomMargin;
+        if (arrangedIndex != 0)
+            place += self.subviewVertMargin;
+        place += self.bottomPadding;
+        
+        //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
+        if (place > selfRect.size.height)
+        {
+            yPos = self.topPadding;
+            xPos += self.subviewHorzMargin;
+            xPos += colMaxWidth;
+            
+            
+            //计算每行的gravity情况。
+            [self calcHorzLayoutGravity:selfRect.size.height colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex];
+            
+            //计算单独的sbv的高度是否大于整体的高度。如果大于则缩小高度。
+            if (topMargin + bottomMargin + rect.size.height > selfRect.size.height - self.topPadding - self.bottomPadding)
+            {
+                rect.size.height = [sbv.heightDime validMeasure:selfRect.size.height - self.topPadding - self.bottomPadding - topMargin - bottomMargin ];
+            }
+            
+            colMaxWidth = 0;
+            colMaxHeight = 0;
+            arrangedIndex = 0;
+            
+        }
+        
+        if (arrangedIndex != 0)
+            yPos += self.subviewVertMargin;
+        
+        
+        rect.origin.x = xPos + leftMargin;
+        rect.origin.y = yPos + topMargin;
+        yPos += topMargin + rect.size.height + bottomMargin;
+        
+        if (colMaxWidth < leftMargin + rightMargin + rect.size.width)
+            colMaxWidth = leftMargin + rightMargin + rect.size.width;
+        
+        if (colMaxHeight < (yPos - self.topPadding))
+            colMaxHeight = (yPos - self.topPadding);
+        
+        
+        
+        sbv.absPos.frame = rect;
+        
+        arrangedIndex++;
+        
+        
+        
+    }
+    
+    //最后一行
+    [self calcHorzLayoutGravity:selfRect.size.height colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex];
+    
+    
+    if (self.wrapContentWidth)
+        selfRect.size.width = xPos + self.rightPadding + colMaxWidth;
+    else
+    {
+        CGFloat addXPos = 0;
+        if (mghorz == MyMarginGravity_Horz_Center)
+        {
+            addXPos = (selfRect.size.width - self.rightPadding - colMaxWidth - xPos) / 2;
+        }
+        else if (mghorz == MyMarginGravity_Horz_Right)
+        {
+            addXPos = selfRect.size.width - self.rightPadding - colMaxWidth - xPos;
+        }
+        
+        if (addXPos != 0)
+        {
+            for (int i = 0; i < sbs.count; i++)
+            {
+                UIView *sbv = sbs[i];
+                
+                sbv.absPos.leftPos += addXPos;
+            }
+        }
+        
+    }
+    
+    
+    return selfRect;
+}
+
 
 
 -(CGRect)layoutSubviewsForHorz:(CGRect)selfRect
@@ -607,11 +893,17 @@
     
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
-        selfRect = [self layoutSubviewsForVert:selfRect];
+        if (self.arrangedCount == 0)
+            selfRect = [self layoutSubviewsForVertFloat:selfRect];
+        else
+            selfRect = [self layoutSubviewsForVert:selfRect];
     }
     else
     {
-        selfRect = [self layoutSubviewsForHorz:selfRect];
+        if (self.arrangedCount == 0)
+            selfRect = [self layoutSubviewsForHorzFloat:selfRect];
+        else
+            selfRect = [self layoutSubviewsForHorz:selfRect];
     }
     
     selfRect.size.height = [self.heightDime validMeasure:selfRect.size.height];
