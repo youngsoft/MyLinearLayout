@@ -1391,6 +1391,9 @@ BOOL _hasBegin;
 
 -(void)layoutSubviews
 {
+    if (!self.autoresizesSubviews)
+        return;
+    
     if (self.beginLayoutBlock != nil)
         self.beginLayoutBlock();
     

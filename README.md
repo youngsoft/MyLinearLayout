@@ -42,7 +42,8 @@
 2.  添加了一个新的视图扩展属性mySize，以便为了简化同时设置myWidth,myHeight的能力。
 3.  将原先的布局基类名字MyLayoutBase更名为MyBaseLayout.
 4.  修正了直接从MyLinearLayout或者MyFlowLayout建立派生类并初始化可能会出现的死循环的问题。
-5.  修正了其他的BUG。
+5.  增加了对布局视图的autoresizesSubviews属性的支持，这个属性默认是设置为YES，如果设置为NO则布局视图不会产生任何的布局动作，也就是所有的子视图的frame的设置是最终的布局的结果，设置这个属性的作用主要用来实现一些子视图的动画。
+6.  修正了其他的BUG。
 
 ## V1.1.1版本新功能
 1.	新增加了一个mySize属性可以设置布局的宽度和高度，相当于同时设置myWidth,myHeight
