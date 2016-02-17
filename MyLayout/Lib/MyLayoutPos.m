@@ -113,9 +113,11 @@
 {
     return ^id(CGFloat val){
         
-        _offsetVal = val;
-        
-        [self setNeedLayout];
+        if (_offsetVal != val)
+        {
+            _offsetVal = val;
+            [self setNeedLayout];
+        }
         
         return self;
     };
@@ -125,9 +127,12 @@
 {
     return ^id(CGFloat val){
         
-        _minVal = val;
-        
-        [self setNeedLayout];
+        if (_minVal != val)
+        {
+            _minVal = val;
+            
+            [self setNeedLayout];
+        }
         
         return self;
     };
@@ -137,9 +142,11 @@
 {
     return ^id(CGFloat val){
         
-        _maxVal = val;
-        
-        [self setNeedLayout];
+        if (_maxVal != val)
+        {
+            _maxVal = val;
+            [self setNeedLayout];
+        }
         
         return self;
     };
@@ -150,17 +157,20 @@
 {
     return ^id(id val){
         
-        _posVal = val;
-        if ([val isKindOfClass:[NSNumber class]])
-            _posValType = MyLayoutValueType_NSNumber;
-        else if ([val isKindOfClass:[MyLayoutPos class]])
-            _posValType = MyLayoutValueType_Layout;
-        else if ([val isKindOfClass:[NSArray class]])
-            _posValType = MyLayoutValueType_Array;
-        else
-            _posValType = MyLayoutValueType_Nil;
-        
-        [self setNeedLayout];
+        if (![_posVal isEqual:val])
+        {
+            _posVal = val;
+            if ([val isKindOfClass:[NSNumber class]])
+                _posValType = MyLayoutValueType_NSNumber;
+            else if ([val isKindOfClass:[MyLayoutPos class]])
+                _posValType = MyLayoutValueType_Layout;
+            else if ([val isKindOfClass:[NSArray class]])
+                _posValType = MyLayoutValueType_Array;
+            else
+                _posValType = MyLayoutValueType_Nil;
+            
+            [self setNeedLayout];
+        }
         
         return self;
     };

@@ -53,9 +53,11 @@
 {
     return ^id(CGFloat val){
         
-        _mutilVal = val;
-        
-        [self setNeedLayout];
+        if (_mutilVal != val)
+        {
+            _mutilVal = val;
+            [self setNeedLayout];
+        }
         
         return self;
     };
@@ -67,9 +69,11 @@
 {
     return ^id(CGFloat val){
         
-        _addVal = val;
-        
-        [self setNeedLayout];
+        if (_addVal != val)
+        {
+            _addVal = val;
+            [self setNeedLayout];
+        }
         
         return self;
         
@@ -81,9 +85,11 @@
 {
     return ^id(CGFloat val){
         
-        _minVal = val;
-        
-        [self setNeedLayout];
+        if (_minVal != val)
+        {
+            _minVal = val;
+            [self setNeedLayout];
+        }
         
         return self;
     };
@@ -93,9 +99,11 @@
 {
     return ^id(CGFloat val){
         
-        _maxVal = val;
-        
-        [self setNeedLayout];
+        if (_maxVal != val)
+        {
+            _maxVal = val;
+            [self setNeedLayout];
+        }
         
         return self;
     };
@@ -106,18 +114,21 @@
 {
     return ^id(id val){
         
-        _dimeVal = val;
-        
-        if ([val isKindOfClass:[NSNumber class]])
-            _dimeValType = MyLayoutValueType_NSNumber;
-        else if ([val isKindOfClass:[MyLayoutDime class]])
-            _dimeValType = MyLayoutValueType_Layout;
-        else if ([val isKindOfClass:[NSArray class]])
-            _dimeValType = MyLayoutValueType_Array;
-        else
-            _dimeValType = MyLayoutValueType_Nil;
-        
-        [self setNeedLayout];
+        if (![_dimeVal isEqual:val])
+        {
+            _dimeVal = val;
+            
+            if ([val isKindOfClass:[NSNumber class]])
+                _dimeValType = MyLayoutValueType_NSNumber;
+            else if ([val isKindOfClass:[MyLayoutDime class]])
+                _dimeValType = MyLayoutValueType_Layout;
+            else if ([val isKindOfClass:[NSArray class]])
+                _dimeValType = MyLayoutValueType_Array;
+            else
+                _dimeValType = MyLayoutValueType_Nil;
+            
+            [self setNeedLayout];
+        }
         
         return self;
     };

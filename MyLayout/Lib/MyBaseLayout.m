@@ -309,14 +309,36 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setFlexedHeight:(BOOL)flexedHeight
 {
-    self.myCurrentSizeClass.flexedHeight = flexedHeight;
-    if (self.superview != nil)
-        [self.superview setNeedsLayout];
+    UIView *lsc = self.myCurrentSizeClass;
+    if (lsc.flexedHeight != flexedHeight)
+    {
+        lsc.flexedHeight = flexedHeight;
+        if (self.superview != nil)
+            [self.superview setNeedsLayout];
+    }
 }
 
 -(BOOL)isFlexedHeight
 {
     return self.myCurrentSizeClass.isFlexedHeight;
+}
+
+
+-(BOOL)useFrame
+{
+    return self.myCurrentSizeClass.useFrame;
+}
+
+-(void)setUseFrame:(BOOL)useFrame
+{
+    UIView *lsc = self.myCurrentSizeClass;
+    if (lsc.useFrame != useFrame)
+    {
+        lsc.useFrame = useFrame;
+        if (self.superview != nil)
+            [ self.superview setNeedsLayout];
+    }
+    
 }
 
 
@@ -348,19 +370,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 
 
--(BOOL)useFrame
-{
-    return self.myCurrentSizeClass.useFrame;
-}
-
--(void)setUseFrame:(BOOL)useFrame
-{
-    
-    self.myCurrentSizeClass.useFrame = useFrame;
-    if (self.superview != nil)
-        [ self.superview setNeedsLayout];
-    
-}
 
 
 
