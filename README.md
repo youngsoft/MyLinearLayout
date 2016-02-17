@@ -36,6 +36,10 @@
 ![演示图](http://7xoymz.com1.z0.glb.clouddn.com/mylayout.gif)
 ![演示图](http://7xoymz.com1.z0.glb.clouddn.com/sizeClassLayout.gif)
 
+## 使用方式
+1.  将github工程中的Lib文件夹下的所有文件复制到您的工程中。
+2.  将`#import "MyLayout.h"` 头文件放入到您的pch文件中，或者在需要使用界面布局的源代码位置。
+
 ## V1.1.2版本新功能
 1.  全面升级，新增加了对SizeClass的支持，通过SizeClass的功能可以为苹果的不同尺寸的设备提供完美的适配功能，对SizeClass的支持，是在苹果的SizeClass能力上支持的，因此只有iOS8以上的版本才支持SizeClass.
 2.  流式布局MyFlowLayout增加了按内容填充约束的方式的布局，当arrangedCount设置为0时则表示按内容约束方式进行布局。

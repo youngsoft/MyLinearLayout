@@ -6,6 +6,8 @@
 //  Copyright (c) 2015年 欧阳大哥. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 //您可以解开下面的注释，兼容一些老的方法和老的枚举值告警
 /*
 #define MY_USEOLDMETHODDEF 1
