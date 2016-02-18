@@ -37,8 +37,28 @@
 ![演示图](http://7xoymz.com1.z0.glb.clouddn.com/sizeClassLayout.gif)
 
 ## 使用方式
+### 直接拷贝
 1.  将github工程中的Lib文件夹下的所有文件复制到您的工程中。
 2.  将`#import "MyLayout.h"` 头文件放入到您的pch文件中，或者在需要使用界面布局的源代码位置。
+
+### Installation with CocoaPods
+
+CocoaPods is a dependency manager for Objective-C, which automates and simplifies the process of using 3rd-party libraries like AFNetworking in your projects. See the "Getting Started" guide for more information. You can install it with the following command:
+
+**$ gem install cocoapods**
+
+To integrate MyLayout into your Xcode project using CocoaPods, specify it in your Podfile:
+
+*source 'https://github.com/CocoaPods/Specs.git'*
+*platform :ios, '7.0'*
+
+*pod 'MyLayout', '~> 1.1.2'*
+
+   
+Then, run the following command:
+
+**$ pod install**
+
 
 ## V1.1.2版本新功能
 1.  全面升级，新增加了对SizeClass的支持，通过SizeClass的功能可以为苹果的不同尺寸的设备提供完美的适配功能，对SizeClass的支持，是在苹果的SizeClass能力上支持的，因此只有iOS8以上的版本才支持SizeClass.

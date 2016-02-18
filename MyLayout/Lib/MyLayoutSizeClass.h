@@ -6,7 +6,6 @@
 //  Copyright © 2016年 YoungSoft. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 
 #import "MyLayoutDef.h"
 #import "MyLayoutPos.h"

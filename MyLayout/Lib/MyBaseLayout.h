@@ -6,7 +6,6 @@
 //  Copyright (c) 2015年 欧阳大哥. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "MyLayoutDef.h"
 #import "MyLayoutPos.h"
 #import "MyLayoutDime.h"

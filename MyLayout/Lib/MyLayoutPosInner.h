@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 欧阳大哥. All rights reserved.
 //
 
-#import "MyLayoutDef.h"
+#import "MyLayoutPos.h"
 
 
 //布局位置内部定义
@@ -18,13 +18,13 @@
 
 @property(nonatomic, assign) MyLayoutValueType posValType;
 
-@property(nonatomic, readonly) NSNumber *posNumVal;
-@property(nonatomic, readonly) MyLayoutPos *posRelaVal;
-@property(nonatomic, readonly) NSArray *posArrVal;
+@property(nonatomic, readonly, strong) NSNumber *posNumVal;
+@property(nonatomic, readonly, strong) MyLayoutPos *posRelaVal;
+@property(nonatomic, readonly, strong) NSArray *posArrVal;
 
 // minVal <= posNumVal + offsetVal <=maxVal . 注意这个只试用于相对布局。对于线性布局和框架布局来说，因为可以支持相对边距。
 // 所以线性布局和框架布局不能使用这个属性。
-@property(nonatomic,readonly) CGFloat margin;
+@property(nonatomic,readonly, assign) CGFloat margin;
 
 //计算有效的margin值，有效的margin  minVal <= margin <=maxVal
 -(CGFloat)validMargin:(CGFloat)margin;
