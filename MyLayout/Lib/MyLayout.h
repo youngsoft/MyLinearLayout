@@ -43,6 +43,7 @@
 #import "MyRelativeLayout.h"
 #import "MyTableLayout.h"
 #import "MyFlowLayout.h"
+#import "MyFloatLayout.h"
 #import "MyMaker.h"
 
 #endif

@@ -150,6 +150,19 @@ typedef MyLayoutViewOrientation LineViewOrientation MYENUMDEPRECATED("use MyLayo
 #endif
 
 
+//定义浮动布局浮动和清除的方向
+typedef enum : unsigned char{
+    MyLayoutDirection_None = 0,       //默认是
+    MyLayoutDirection_Left = 1,       //左边方向
+    MyLayoutDirection_Top = 1,        //顶部方向
+    MyLayoutDirection_Right = 2,       //右边方向
+    MyLayoutDirection_Bottom = 2,      //底部方向
+    MyLayoutDirection_Both = 3,       //两边方向
+}MyLayoutDirection;
+
+
+
+
 
 //内部使用
 typedef enum : unsigned char

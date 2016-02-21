@@ -231,6 +231,13 @@
         _weight = weight;
 }
 
+-(void)setFloatDirection:(MyLayoutDirection)floatDirection
+{
+    NSAssert(floatDirection =! MyLayoutDirection_Both, @"floatDirection set invalid value");
+    _floatDirection = floatDirection;
+    
+}
+
 #pragma mark -- NSCopying
 
 - (id)copyWithZone:(NSZone *)zone
@@ -252,6 +259,8 @@
     lsc.hidden = self.hidden;
     lsc.weight = self.weight;
     lsc.marginGravity = self.marginGravity;
+    lsc.floatDirection = self.floatDirection;
+    lsc.clearDirection = self.clearDirection;
 
     
     return lsc;

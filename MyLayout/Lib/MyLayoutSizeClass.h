@@ -136,6 +136,9 @@ typedef enum : unsigned char{
 //框架布局子视图专用
 @property(nonatomic, assign) MyMarginGravity marginGravity;
 
+//浮动布局子视图专用
+@property(nonatomic,assign) MyLayoutDirection floatDirection;
+@property(nonatomic,assign) MyLayoutDirection clearDirection;
 
 @end
 

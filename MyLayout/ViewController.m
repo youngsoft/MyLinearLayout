@@ -38,6 +38,11 @@
 #import "AllTest6ViewController.h"
 
 
+#import "FOLTest1ViewController.h"
+#import "FOLTest2ViewController.h"
+#import "FOLTest3ViewController.h"
+
+
 @interface ViewController ()
 
 @end
@@ -71,7 +76,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 22;
+    return 25;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -146,6 +151,15 @@
             break;
         case 21:
             cell.textLabel.text = @"SizeClass--Demo2";
+            break;
+        case 22:
+            cell.textLabel.text = @"浮动布局1--Demo1";
+            break;
+        case 23:
+            cell.textLabel.text = @"浮动布局2--仿淘宝首页的商品列表布局";
+            break;
+        case 24:
+            cell.textLabel.text = @"浮动布局3--仿今日头条的新闻卡片";
             break;
         default:
             break;
@@ -226,6 +240,15 @@
             break;
         case 21:
             vc = [AllTest6ViewController new];
+            break;
+        case 22:
+            vc = [FOLTest1ViewController new];
+            break;
+        case 23:
+            vc = [FOLTest2ViewController new];
+            break;
+        case 24:
+            vc = [FOLTest2ViewController new];
             break;
         default:
             break;

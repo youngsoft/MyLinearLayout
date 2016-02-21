@@ -56,7 +56,7 @@
 
 +(id)linearLayoutWithOrientation:(MyLayoutViewOrientation)orientation
 {
-    return [[self alloc] initWithOrientation:orientation];
+    return [[[self class] alloc] initWithOrientation:orientation];
 }
 
 

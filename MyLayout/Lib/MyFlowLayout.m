@@ -26,7 +26,7 @@
 
 +(id)flowLayoutWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
 {
-    MyFlowLayout *layout = [[MyFlowLayout alloc] initWithOrientation:orientation arrangedCount:arrangedCount];
+    MyFlowLayout *layout = [[[self class] alloc] initWithOrientation:orientation arrangedCount:arrangedCount];
     return layout;
 }
 
