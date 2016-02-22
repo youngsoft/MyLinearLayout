@@ -89,7 +89,7 @@
     [contentLayout addSubview:func3Label];
     
     
-    //下面定义横屏时的界面布局。
+    //下面定义iPhone设备横屏时的界面布局。
     MyLinearLayout *rootLayoutSC = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
     rootLayoutSC.orientation = MyLayoutViewOrientation_Horz;
     rootLayoutSC.gravity = MyMarginGravity_Vert_Fill;
@@ -111,12 +111,12 @@
     func2LabelSC.heightDime.equalTo(contentLayout.heightDime);
     func3LabelSC.heightDime.equalTo(contentLayout.heightDime);
     
-    //下面是定义在iPad上时的界面布局，iPad的布局只是菜单的高度有最大的限制。
-    UILabel *menu1LabelSC = [menu1Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    //下面是定义在iPad上设备的横屏的界面布局，因为iPad上的SizeClass都是regular，所以这里要区分横竖屏的方法是使用MySizeClass_Portrait和MySizeClass_Landscape
+    UILabel *menu1LabelSC = [menu1Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     menu1LabelSC.heightDime.max(200);
-    UILabel *menu2LabelSC = [menu2Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    UILabel *menu2LabelSC = [menu2Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     menu2LabelSC.heightDime.max(200);
-    UILabel *menu3LabelSC = [menu3Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    UILabel *menu3LabelSC = [menu3Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     menu3LabelSC.heightDime.max(200);
 
     

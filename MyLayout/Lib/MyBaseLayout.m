@@ -434,48 +434,82 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 -(instancetype)myBestSizeClass:(MySizeClass)sizeClass
 {
     
+    MySizeClass wsc = sizeClass & 0x03;
+    MySizeClass hsc = sizeClass & 0x0C;
+    MySizeClass ori = sizeClass & 0xC0;
+    
+    
+    NSMutableDictionary *dict = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES);
+    if (dict == nil)
+    {
+        dict = [NSMutableDictionary new];
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES, dict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
+    }
+    
     if ([UIDevice currentDevice].systemVersion.floatValue < 8.0)
     {
-        return self.myDefaultSizeClass;
+        wsc = MySizeClass_wAny;
+        hsc = MySizeClass_hAny;
     }
-    else
-    {
-        
-        MySizeClass vsc = (sizeClass & 0xF0) >> 4;
-        MySizeClass hsc = sizeClass & 0x0F;
-        
-        
-        //先找到最合适的。
-        NSMutableDictionary *dict = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES);
-        if (dict == nil)
-        {
-            dict = [NSMutableDictionary new];
-            objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_SIZECLASSES, dict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-            
-        }
-        
-        MyLayoutSizeClass *myClass = (MyLayoutSizeClass*)[dict objectForKey:@(hsc | (vsc << 4))];
-        if (myClass != nil)
-            return (UIView*)myClass;
-        
-        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(MySizeClass_wAny | (vsc << 4))];
-        if (myClass != nil)
-            return (UIView*)myClass;
-        
-        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(hsc | MySizeClass_hAny)];
-        if (myClass != nil)
-            return (UIView*)myClass;
-        
-        
-        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(MySizeClass_wAny | MySizeClass_hAny)];
-        if (myClass == nil)
-        {
-            myClass = [self createSizeClassInstance];
-            [dict setObject:myClass forKey:@(MySizeClass_wAny | MySizeClass_hAny)];
-        }
-        
+    
+    
+    //first search the most exact SizeClass
+    MySizeClass searchSizeClass = wsc | hsc | ori;
+    MyLayoutSizeClass *myClass = (MyLayoutSizeClass*)[dict objectForKey:@(searchSizeClass)];
+    if (myClass != nil)
         return (UIView*)myClass;
+    
+    searchSizeClass = MySizeClass_wAny | hsc | ori;
+    if (ori != 0 && searchSizeClass != sizeClass)
+    {
+        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(searchSizeClass)];
+        if (myClass != nil)
+            return (UIView*)myClass;
+        
     }
+    
+    searchSizeClass = MySizeClass_wAny | hsc;
+    if (searchSizeClass != sizeClass)
+    {
+        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(searchSizeClass)];
+        if (myClass != nil)
+            return (UIView*)myClass;
+    }
+    
+    searchSizeClass = wsc | MySizeClass_hAny | ori;
+    if (ori != 0 && searchSizeClass != sizeClass)
+    {
+        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(searchSizeClass)];
+        if (myClass != nil)
+            return (UIView*)myClass;
+    }
+    
+    searchSizeClass = wsc | MySizeClass_hAny;
+    if (searchSizeClass != sizeClass)
+    {
+        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(searchSizeClass)];
+        if (myClass != nil)
+            return (UIView*)myClass;
+    }
+    
+    searchSizeClass = MySizeClass_wAny | MySizeClass_hAny | ori;
+    if (ori != 0 && searchSizeClass != sizeClass)
+    {
+        myClass = (MyLayoutSizeClass*)[dict objectForKey:@(searchSizeClass)];
+        if (myClass != nil)
+            return (UIView*)myClass;
+    }
+    
+    searchSizeClass = MySizeClass_wAny | MySizeClass_hAny;
+    myClass = (MyLayoutSizeClass*)[dict objectForKey:@(searchSizeClass)];
+    if (myClass == nil)
+    {
+        myClass = [self createSizeClassInstance];
+        [dict setObject:myClass forKey:@(searchSizeClass)];
+    }
+    
+    return (UIView*)myClass;
     
     
 }
@@ -1418,7 +1452,15 @@ BOOL _hasBegin;
         if ([UIDevice currentDevice].systemVersion.floatValue < 8)
             sizeClass = MySizeClass_hAny | MySizeClass_wAny;
         else
-            sizeClass = (MySizeClass)((self.traitCollection.verticalSizeClass << 4) | self.traitCollection.horizontalSizeClass);
+            sizeClass = (MySizeClass)((self.traitCollection.verticalSizeClass << 2) | self.traitCollection.horizontalSizeClass);
+        
+        UIDeviceOrientation ori =   [UIDevice currentDevice].orientation;
+        if (UIDeviceOrientationIsPortrait(ori))
+            sizeClass |= MySizeClass_Portrait;
+        else if (UIDeviceOrientationIsLandscape(ori))
+            sizeClass |= MySizeClass_Landscape;
+        else;
+
         
         self.absPos.sizeClass = [self myBestSizeClass:sizeClass];
         for (UIView *sbv in self.subviews)

@@ -1,4 +1,4 @@
-# MyLayout1.1.2
+# MyLayout1.1.3
 
 ##  新版本注意
    为了防止命名冲突，以及命名的规范，1.1.1版本对一些方法进行了重命名，以及枚举值重新命名，请浏览最下面的如何解决命名冲突和报警的问题。
@@ -14,23 +14,23 @@
 [http://blog.csdn.net/yangtiang/article/details/50652946](http://blog.csdn.net/yangtiang/article/details/50652946) 流式布局
 
 #### 线性布局MyLinearLayout
-    线性布局分为垂直线性布局和水平线性布局，其中垂直线性布局中的子视图总是按照添加的顺序依次从上到下排列，而水平线性布局中的子视图则按照添加的顺序依次从左到右进行排列。这种布局中的子视图之间不需要设置任何依赖关系，因此是最简单也是最常见的一种布局方式。
+	线性布局分为垂直线性布局和水平线性布局，其中垂直线性布局中的子视图总是按照添加的顺序依次从上到下排列，而水平线性布局中的子视图则按照添加的顺序依次从左到右进行排列。这种布局中的子视图之间不需要设置任何依赖关系，因此是最简单也是最常见的一种布局方式。
 
 #### 相对布局MyRelativeLayout
-    相对布局就是实现了iOS的自动布局功能的一种布局方式，但是比自动布局功能更加强大，更加容易使用。相对布局中的子视图必须要设置视图与视图之间的依赖关系以及视图与布局视图的依赖关系，也就是需要设置视图自身上下左右的依赖关系以及高度和宽度的依赖关系。对于一些不规则的布局则最好使用相对布局。
+	相对布局就是实现了iOS的自动布局功能的一种布局方式，但是比自动布局功能更加强大，更加容易使用。相对布局中的子视图必须要设置视图与视图之间的依赖关系以及视图与布局视图的依赖关系，也就是需要设置视图自身上下左右的依赖关系以及高度和宽度的依赖关系。对于一些不规则的布局则最好使用相对布局。
 
 #### 框架布局MyFrameLayout
-    框架布局，故名思议要求布局必须设定明确的高度和宽度值，而且里面的子视图只能布局在框架布局的上中下以及左中右的某个具体的位置上，框架布局支持子视图之间的重叠排列。因此框架布局一般是用来做根布局使用。
+	框架布局，故名思议要求布局必须设定明确的高度和宽度值，而且里面的子视图只能布局在框架布局的上中下以及左中右的某个具体的位置上，框架布局支持子视图之间的重叠排列。因此框架布局一般是用来做根布局使用。
 
 #### 表格布局MyTableLayout
-    表格布局，是一种增强的线性布局，也分为垂直表格和水平表格，表格布局必须要先添加一行，然后再在当前行上进行单元格视图的添加，表格布局的风格类似于HTML页面的表格实现机制，表格布局用于那些有规律的子视图的排列，以及可以用于实现瀑布流的效果。
+	表格布局，是一种增强的线性布局，也分为垂直表格和水平表格，表格布局必须要先添加一行，然后再在当前行上进行单元格视图的添加，表格布局的风格类似于HTML页面的表格实现机制，表格布局用于那些有规律的子视图的排列，以及可以用于实现瀑布流的效果。
 
 #### 流式布局MyFlowLayout
 	流式布局是一种子视图优先按特定方向排列布局，而当子视图填充尺寸或者数量满足一定条件后则后续的子视图会换行或者换列并回到起点重新进行排列布局。流式布局分为垂直内容填充约束流式布局、垂直数量约束流式布局、水平内容填充约束流式布局、水平数量约束流式布局四种布局。流式布局一般用于子视图有规律的排列。
 
 ####  SizeClass的支持
-    为了有效的同时适配苹果的各种屏幕尺寸的设备，在1.1.2版本中新增加了对SizeClass的支持，通过SizeClass可以完成对某个视图在各种屏幕尺寸下的布局约束设置。
-    
+	为了有效的同时适配苹果的各种屏幕尺寸的设备，在1.1.2版本中新增加了对SizeClass的支持，通过SizeClass可以完成对某个视图在各种屏幕尺寸下的布局约束设置。
+	
 ## 演示效果图
 
 ![演示图](http://7xoymz.com1.z0.glb.clouddn.com/mylayout.gif)
@@ -44,21 +44,27 @@
 ### Installation with CocoaPods
 
 CocoaPods is a dependency manager for Objective-C, which automates and simplifies the process of using 3rd-party libraries like AFNetworking in your projects. See the "Getting Started" guide for more information. You can install it with the following command:
-
-**$ gem install cocoapods**
+```
+$ gem install cocoapods
+```
 
 To integrate MyLayout into your Xcode project using CocoaPods, specify it in your Podfile:
 
-*source 'https://github.com/CocoaPods/Specs.git'*
-*platform :ios, '7.0'*
+```
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '7.0'
 
-*pod 'MyLayout', '~> 1.1.2'*
-
+pod 'MyLayout', '~> 1.1.3'
+```
    
 Then, run the following command:
 
-**$ pod install**
+```
+$ pod install
+```
 
+## V1.1.3版本新功能
+1.  对SizeClass支持和竖屏MySizeClass_Portrait和横屏MySizeClass_Landscape。以便支持单独的横屏和竖屏的界面适配，尤其是对iPad设备的横竖屏进行区分适配。
 
 ## V1.1.2版本新功能
 1.  全面升级，新增加了对SizeClass的支持，通过SizeClass的功能可以为苹果的不同尺寸的设备提供完美的适配功能，对SizeClass的支持，是在苹果的SizeClass能力上支持的，因此只有iOS8以上的版本才支持SizeClass.
@@ -79,7 +85,7 @@ Then, run the following command:
 
 ## V1.1.0版本新功能
 
-1. 增加了新布局流式布局MyFlowLayout。     
+1. 增加了新布局流式布局MyFlowLayout。	 
 2. 线性布局添加了gravity停靠设置的屏幕水平居中和屏幕垂直居中的功能。  
 3. 添加了设置布局视图背景图片backgroundImage和高亮背景图片highlightedBackgroundImage的功能。
 4. 添加了视图偏移约束的最大max最小值min限制，以及尺寸约束时的最大max最小值min限制。
@@ -102,7 +108,7 @@ Then, run the following command:
 7. 修正UITableView，UICollectionView下添加布局可能会造成的问题。
 
 ## FAQ
-1. 如果使用布局运行时造成CPU的100%占用则表示出现约束冲突了，请检查子视图约束的设置。    
+1. 如果使用布局运行时造成CPU的100%占用则表示出现约束冲突了，请检查子视图约束的设置。	
 2. 为支持布局而扩展的视图属性只对放在布局内才完全有效，如果在布局视图之外设置则无效。
 3. 如果将布局视图放在非布局视图之中则只有部分属性有效，如果同时设置了leftMargin和rightMargin则表示设置自身的宽度，如果同时设置了topMargin,bottomMargin则表示设置自身的高度。
 4. 如果设置wrapContentWidth,和wrapContentHeight的话，而又设置高度和宽度话可能会引起布局冲突。
@@ -111,16 +117,15 @@ Then, run the following command:
 ## 版本迁移（老版本迁移需要注意）
   因为历史的原因，原先的枚举类型的值都是大写,以及原来的一些UIView的一些扩展方法可能会和其他的库的扩展方法产生冲突。下面列出新老名称的映射表：
 
-  | 名称        | 老命名           | 新命名  |
-| ------------- |:-------------:| -----:|
-| 位置停靠枚举定义 | MarignGravity      |    MyMarginGravity |
-| 位置停靠枚举值 | 大写格式      |    大小写格式 |
-| 布局方向枚举定义 | LineViewOrientation      |    MyLayoutViewOrientation |
-| 布局方向枚举值 | 大写格式      |    大小写格式 |
-| 视图的xxMargin扩展方法 |    xxMargin   |    myXXMargin |
-| 视图的高宽扩展方法 |    width,height   |    myWidth,myHeight |
-| 视图的中心偏移 |    centerXXOffset   |    myCenterXXOffset |
-
+  名称：老命名 --> 新命名
+ 
+1. 位置停靠枚举定义:MarignGravity --> MyMarginGravity 
+2.  位置停靠枚举值:大写格式 --> 大小写格式 
+3. 布局方向枚举定义:LineViewOrientation --> MyLayoutViewOrientation
+4. 布局方向枚举值:大写格式 --> 大小写格式
+5. 视图的xxMargin扩展方法:xxMargin --> myXXMargin
+6. 视图的高宽扩展方法:width,height --> myWidth,myHeight
+7. 视图的中心偏移:centerXXOffset --> myCenterXXOffset
 
 如果您在代码中还使用老的命名系统也会让您编译通过，但是会提示过期的警告，因此建议您将名称迁移到新的命名中来，对于类名以及枚举的迁移相对简单，只要利用工程中的查找替换功能就能完成。最麻烦的就是原先的leftMargin,rightMargin,topMargin,bottomMargin,centerXoffset,centerYOffset,centerOffset,width,height这9个属性方法的迁移会比较麻烦，您不能用全局查找替换的方法，最好是通过编译出现的错误进行一一替换,或者通过全局查找替换功能并使用Preview进行有选择的替换（这里深表对不起）。  
 
