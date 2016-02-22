@@ -460,6 +460,16 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     if (myClass != nil)
         return (UIView*)myClass;
     
+    
+    searchSizeClass = wsc | hsc;
+    if (searchSizeClass != sizeClass)
+    {
+        MyLayoutSizeClass *myClass = (MyLayoutSizeClass*)[dict objectForKey:@(searchSizeClass)];
+        if (myClass != nil)
+            return (UIView*)myClass;
+    }
+    
+    
     searchSizeClass = MySizeClass_wAny | hsc | ori;
     if (ori != 0 && searchSizeClass != sizeClass)
     {
@@ -1460,7 +1470,6 @@ BOOL _hasBegin;
         else if (UIDeviceOrientationIsLandscape(ori))
             sizeClass |= MySizeClass_Landscape;
         else;
-
         
         self.absPos.sizeClass = [self myBestSizeClass:sizeClass];
         for (UIView *sbv in self.subviews)
