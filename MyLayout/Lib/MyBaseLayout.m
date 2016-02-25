@@ -689,7 +689,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 @end
 
 
-
+IB_DESIGNABLE
 @implementation MyBaseLayout
 {
     __weak id _target;

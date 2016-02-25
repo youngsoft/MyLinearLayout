@@ -9,6 +9,7 @@
 #import "MyFlowLayout.h"
 #import "MyLayoutInner.h"
 
+IB_DESIGNABLE
 @implementation MyFlowLayout
 
 -(id)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount

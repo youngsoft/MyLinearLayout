@@ -13,7 +13,7 @@
 
 //设置视图的高度或者宽度占用线性布局剩余空间比重，取值1>= weight >0。默认值是0表示不按比重来决定自身的高度或者宽度。当父视图是垂直线性布局时指定的是高度在父视图剩余高度中的比重，而当父视图是水平线性布局时则指定的是宽度在父视图剩余宽度中的比重。
 //设置比重的目的是为了解决设置子视图的相对尺寸的问题，通过比重的设置可以不需要让子视图明确的指定具体的高度或者宽度。
-@property(nonatomic, assign) CGFloat weight;
+@property(nonatomic, assign) IBInspectable CGFloat weight;
 
 @end
 
@@ -33,18 +33,18 @@
 
 
 //方向，默认是纵向的,请在布局视图建立后立即调用这个属性设置方向,对于垂直布局系统默认设置wrapContentHeight为YES，而对于水平布局则设置wrapContentWidth为YES
-@property(nonatomic,assign) MyLayoutViewOrientation orientation;
+@property(nonatomic,assign) IBInspectable MyLayoutViewOrientation orientation;
 
 
 //里面的所有子视图的停靠位置，默认是MyMarginGravity_None，表示不控制子视图的停靠，可以分别控制水平和垂直的停靠位置
 //具体参考MyMarginGravity中的值，通过设置子视图的停靠位置，则里面的所有子视图都将按统一的停靠方式进行布局和排列
-@property(nonatomic, assign) MyMarginGravity gravity;
+@property(nonatomic, assign) IBInspectable MyMarginGravity gravity;
 
 
 //指定子视图之间的间距,布局总是会为两个子视图之间添加这个间距值，默认为0
 //这个属性的意义是当子视图之间的间距是固定时，不需要分别为每个子视图都设置相等的间距，而是设置一个值即可。
 //这个属性通常和padding结合用来设置一些统一的边距值
-@property(nonatomic, assign) CGFloat subviewMargin;
+@property(nonatomic, assign) IBInspectable CGFloat subviewMargin;
 
 
 

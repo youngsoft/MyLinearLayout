@@ -21,6 +21,7 @@
 
 @end
 
+IB_DESIGNABLE
 @implementation MyTableRowLayout
 {
    CGFloat _rowHeight;

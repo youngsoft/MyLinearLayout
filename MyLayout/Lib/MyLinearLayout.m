@@ -32,10 +32,8 @@
 
 @end
 
-
-
+IB_DESIGNABLE
 @implementation MyLinearLayout
-
 
 
 -(id)initWithOrientation:(MyLayoutViewOrientation)orientation
@@ -58,7 +56,6 @@
 {
     return [[self alloc] initWithOrientation:orientation];
 }
-
 
 -(void)setOrientation:(MyLayoutViewOrientation)orientation
 {
