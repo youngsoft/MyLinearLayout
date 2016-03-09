@@ -53,6 +53,7 @@
 @property(nonatomic, assign) IBInspectable CGFloat myTopMargin;
 @property(nonatomic, assign) IBInspectable CGFloat myRightMargin;
 @property(nonatomic, assign) IBInspectable CGFloat myBottomMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myMargin;      //前面四个简易设置。
 
 //如果您要使用下面的方法请定义MY_USEOLDMETHODDEF这个宏，如果想用老的方法不告警则定义MY_USEOLDMETHODNOWARNING这个宏
 #ifdef MY_USEOLDMETHODDEF

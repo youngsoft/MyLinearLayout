@@ -36,6 +36,7 @@
 #define MyLayout_MyLayout_h
 
 #import "MyLayoutDef.h"
+#import "MyDimeScale.h"
 #import "MyLayoutPos.h"
 #import "MyLayoutDime.h"
 #import "MyLinearLayout.h"

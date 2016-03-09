@@ -141,7 +141,18 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     self.bottomPos.equalTo(@(bottomMargin));
 }
 
+-(CGFloat)myMargin
+{
+    return self.leftPos.margin;
+}
 
+-(void)setMyMargin:(CGFloat)myMargin
+{
+    self.topPos.equalTo(@(myMargin));
+    self.leftPos.equalTo(@(myMargin));
+    self.rightPos.equalTo(@(myMargin));
+    self.bottomPos.equalTo(@(myMargin));
+}
 
 -(MyLayoutDime*)widthDime
 {
@@ -979,13 +990,17 @@ BOOL _hasBegin;
     if (!hasSubLayout)
         rect = self.absPos.frame;
     else
+    {
         rect = [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
+        self.absPos.frame = rect;
+    }
 
     
     //计算后还原为默认sizeClass
     for (UIView *sbv in self.subviews)
     {
         sbv.absPos.sizeClass = self.myDefaultSizeClass;
+        
     }
     self.absPos.sizeClass = self.myDefaultSizeClass;
     

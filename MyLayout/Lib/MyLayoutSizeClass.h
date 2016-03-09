@@ -118,6 +118,7 @@ typedef enum : unsigned char{
 @property(nonatomic, assign) CGFloat myTopMargin;
 @property(nonatomic, assign) CGFloat myRightMargin;
 @property(nonatomic, assign) CGFloat myBottomMargin;
+@property(nonatomic, assign) CGFloat myMargin;
 @property(nonatomic, assign) CGFloat myCenterXOffset;
 @property(nonatomic, assign) CGFloat myCenterYOffset;
 @property(nonatomic, assign) CGPoint myCenterOffset;

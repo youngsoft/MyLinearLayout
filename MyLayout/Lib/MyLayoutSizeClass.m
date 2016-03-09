@@ -129,6 +129,19 @@
     self.bottomPos.equalTo(@(bottomMargin));
 }
 
+-(CGFloat)myMargin
+{
+    return self.leftPos.margin;
+}
+
+-(void)setMyMargin:(CGFloat)myMargin
+{
+    self.topPos.equalTo(@(myMargin));
+    self.leftPos.equalTo(@(myMargin));
+    self.rightPos.equalTo(@(myMargin));
+    self.bottomPos.equalTo(@(myMargin));
+}
+
 
 -(CGFloat)myCenterXOffset
 {

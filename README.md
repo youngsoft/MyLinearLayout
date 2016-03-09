@@ -1,4 +1,4 @@
-# MyLayout1.1.3
+# MyLayout1.1.4
 
 ##  新版本注意
    为了防止命名冲突，以及命名的规范，1.1.1版本对一些方法进行了重命名，以及枚举值重新命名，请浏览最下面的如何解决命名冲突和报警的问题。
@@ -62,6 +62,12 @@ Then, run the following command:
 ```
 $ pod install
 ```
+
+## V1.1.4版本新功能
+1.	 修正了尺寸评估函数`estimateLayoutRect`的一个多层嵌套是无法正确评估尺寸的BUG。
+2.	 添加了属性`myMargin`用来简单快速的设置myLeftMarign,myTopMargin,myRightMargin,myBottomMargin都是相等的值。
+3.	 增加了`MyDimeScale`这个工具类，用来实现不同屏幕的尺寸和位置的缩放的功能，加入我们的UI给我们的是iPhone6的设计图，并指定了某个视图的高度为100但又同时希望在iPhone5上高度缩小，而在iPhone6Plus上高度增加，则可以通过`[MyDimeScale scale:100]`得到各种屏幕的缩放后的值了。
+
 
 ## V1.1.3版本新功能
 1.  对SizeClass支持和竖屏MySizeClass_Portrait和横屏MySizeClass_Landscape。以便支持单独的横屏和竖屏的界面适配，尤其是对iPad设备的横竖屏进行区分适配。
