@@ -137,8 +137,8 @@ typedef enum : unsigned char{
 @property(nonatomic, assign) MyMarginGravity marginGravity;
 
 //浮动布局子视图专用
-@property(nonatomic,assign) MyLayoutDirection floatDirection;
-@property(nonatomic,assign) MyLayoutDirection clearDirection;
+@property(nonatomic,assign,getter=isReverseFloat) BOOL reverseFloat;
+@property(nonatomic,assign) BOOL clearFloat;
 
 @end
 

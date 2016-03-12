@@ -12,36 +12,35 @@
 @implementation  UIView(MyFloatLayoutExt)
 
 
--(void)setFloatDirection:(MyLayoutDirection)floatDirection
+-(void)setReverseFloat:(BOOL)reverseFloat
 {
-    if (self.myCurrentSizeClass.floatDirection != floatDirection)
+    if (self.myCurrentSizeClass.isReverseFloat != reverseFloat)
     {
-        self.myCurrentSizeClass.floatDirection = floatDirection;
+        self.myCurrentSizeClass.reverseFloat = reverseFloat;
         if (self.superview != nil)
             [self.superview setNeedsLayout];
     }
 }
 
--(MyLayoutDirection)floatDirection
+-(BOOL)isReverseFloat
 {
-    return self.myCurrentSizeClass.floatDirection;
+    return self.myCurrentSizeClass.isReverseFloat;
 
 }
 
--(void)setClearDirection:(MyLayoutDirection)clearDirection
+-(void)setClearFloat:(BOOL)clearFloat
 {
-    if (self.myCurrentSizeClass.clearDirection != clearDirection)
+    if (self.myCurrentSizeClass.clearFloat != clearFloat)
     {
-        self.myCurrentSizeClass.clearDirection = clearDirection;
+        self.myCurrentSizeClass.clearFloat = clearFloat;
         if (self.superview != nil)
             [self.superview setNeedsLayout];
     }
 }
 
--(MyLayoutDirection)clearDirection
+-(BOOL)clearFloat
 {
-    return self.myCurrentSizeClass.clearDirection;
-
+    return self.myCurrentSizeClass.clearFloat;
 }
 
 @end
@@ -177,8 +176,12 @@
     
     //候选的换行点
     NSMutableArray *candidatePoints = [NSMutableArray new];
-    CGPoint nextPoint = {self.leftPadding,self.topPadding};
+    CGPoint nextFloatPoint = {self.leftPadding,self.topPadding};
     CGFloat maxHeight = self.topPadding;
+    CGFloat floatBoundary = self.leftPadding;  //左边的边界
+    CGFloat reverseFloatBoundary = selfRect.size.width - self.rightPadding;  //右边的边界
+    
+    
     for (UIView *sbv in sbs)
     {
         CGFloat topMargin = sbv.topPos.margin;
@@ -226,7 +229,7 @@
         
         
         //计算nextPoint 加上自身的宽度是否超过总的宽度，如果超过则换行。
-        if (nextPoint.x + leftMargin + rect.size.width + rightMargin > selfRect.size.width - self.rightPadding)
+        if (nextFloatPoint.x + leftMargin + rect.size.width + rightMargin > selfRect.size.width - self.rightPadding)
         {
             
             //从候选的位置中选择一个位置。
@@ -246,18 +249,18 @@
             rect.origin.y = candidatePoint.y + topMargin;
             
             //y值最后一个加入的顶部，而x则是按浮动的顺序调整。
-            nextPoint.x = rect.origin.x + rect.size.width + rightMargin;
-            nextPoint.y = rect.origin.y - topMargin;
+            nextFloatPoint.x = rect.origin.x + rect.size.width + rightMargin;
+            nextFloatPoint.y = rect.origin.y - topMargin;
             
             
         }
         else
         {
             
-            rect.origin.x = nextPoint.x + leftMargin;
-            rect.origin.y = nextPoint.y + topMargin;
+            rect.origin.x = nextFloatPoint.x + leftMargin;
+            rect.origin.y = nextFloatPoint.y + topMargin;
             
-            nextPoint.x += rect.size.width + rightMargin + leftMargin;
+            nextFloatPoint.x += rect.size.width + rightMargin + leftMargin;
         }
         
         

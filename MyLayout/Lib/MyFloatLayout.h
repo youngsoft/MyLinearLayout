@@ -11,8 +11,8 @@
 
 @interface UIView(MyFloatLayoutExt)
 
-@property(nonatomic,assign) MyLayoutDirection floatDirection;   //定义浮动的方向,默认是None
-@property(nonatomic,assign) MyLayoutDirection clearDirection;   //定义清除的方向,默认是None
+@property(nonatomic,assign,getter=isReverseFloat) BOOL reverseFloat; //是否反方向浮动，默认是NO表示正向浮动，具体方向则根据浮动布局视图的方向
+@property(nonatomic,assign) BOOL clearFloat;   //清除浮动，默认是NO。
 
 @end
 
