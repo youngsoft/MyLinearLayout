@@ -20,7 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.floatLayout.orientation = MyLayoutViewOrientation_Horz;
+   // self.floatLayout.orientation = MyLayoutViewOrientation_Horz;
+    self.floatLayout.padding = UIEdgeInsetsZero;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,7 +44,7 @@
 -(void)createTagButton:(NSString*)text
 {
     NSArray *arr = [text componentsSeparatedByString:@","];
-    if (arr.count != 2 && arr.count != 6)
+    if (arr.count != 2 && arr.count != 8 && arr.count != 3 && arr.count !=4)
         return;
     
     UIButton *tagButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, [arr[0] floatValue], [arr[1] floatValue])];
@@ -53,12 +54,23 @@
     [tagButton addTarget:self action:@selector(handleDelTag:) forControlEvents:UIControlEventTouchUpInside];
     [self.floatLayout addSubview:tagButton];
     
-    if (arr.count == 6)
+    if (arr.count == 8)
     {
-        tagButton.myLeftMargin = [arr[2] floatValue];
-        tagButton.myTopMargin = [arr[3] floatValue];
-        tagButton.myRightMargin = [arr[4] floatValue];
-        tagButton.myBottomMargin = [arr[5] floatValue];
+        tagButton.reverseFloat = [arr[2] boolValue];
+        tagButton.clearFloat = [arr[3] boolValue];
+        tagButton.myLeftMargin = [arr[4] floatValue];
+        tagButton.myTopMargin = [arr[5] floatValue];
+        tagButton.myRightMargin = [arr[6] floatValue];
+        tagButton.myBottomMargin = [arr[7] floatValue];
+    }
+    else if (arr.count == 3)
+    {
+        tagButton.reverseFloat = [arr[2] boolValue];
+    }
+    else if (arr.count == 4)
+    {
+        tagButton.reverseFloat = [arr[2] boolValue];
+        tagButton.clearFloat = [arr[3] boolValue];
     }
     
     self.floatLayout.beginLayoutBlock =^{
