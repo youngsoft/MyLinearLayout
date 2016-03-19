@@ -9,7 +9,7 @@
 #import "MyRelativeLayout.h"
 #import "MyLayoutInner.h"
 
-
+IB_DESIGNABLE
 @implementation MyRelativeLayout
 
 /*

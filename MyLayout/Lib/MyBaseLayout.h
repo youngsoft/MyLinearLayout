@@ -49,10 +49,11 @@
 */
 
 //因为上面四个属性值可能会和其他库的名字有冲突，所以这里增加前缀
-@property(nonatomic, assign) CGFloat myLeftMargin;
-@property(nonatomic, assign) CGFloat myTopMargin;
-@property(nonatomic, assign) CGFloat myRightMargin;
-@property(nonatomic, assign) CGFloat myBottomMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myLeftMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myTopMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myRightMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myBottomMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myMargin;      //前面四个简易设置。
 
 //如果您要使用下面的方法请定义MY_USEOLDMETHODDEF这个宏，如果想用老的方法不告警则定义MY_USEOLDMETHODNOWARNING这个宏
 #ifdef MY_USEOLDMETHODDEF
@@ -76,9 +77,9 @@
  
  这三个属性的值最好别用于读取，而只是单纯用于设置
  */
-@property(nonatomic, assign) CGFloat myCenterXOffset;
-@property(nonatomic, assign) CGFloat myCenterYOffset;
-@property(nonatomic, assign) CGPoint myCenterOffset;
+@property(nonatomic, assign) IBInspectable CGFloat myCenterXOffset;
+@property(nonatomic, assign) IBInspectable CGFloat myCenterYOffset;
+@property(nonatomic, assign) IBInspectable CGPoint myCenterOffset;
 
 
 //如果您要使用下面的方法请定义MY_USEOLDMETHODDEF这个宏，如果想用老的方法不告警则定义MY_USEOLDMETHODNOWARNING这个宏
@@ -100,9 +101,9 @@
  
  这两个属性的值最好别用于读取，而只是单纯用于设置
  */
-@property(nonatomic,assign) CGFloat myWidth;
-@property(nonatomic,assign) CGFloat myHeight;
-@property(nonatomic,assign) CGSize  mySize;       //myWith,myHeight的结合
+@property(nonatomic,assign) IBInspectable CGFloat myWidth;
+@property(nonatomic,assign) IBInspectable CGFloat myHeight;
+@property(nonatomic,assign) IBInspectable CGSize  mySize;       //myWith,myHeight的结合
 
 
 //如果您要使用下面的方法请定义MY_USEOLDMETHODDEF这个宏，如果想用老的方法不告警则定义MY_USEOLDMETHODNOWARNING这个宏
@@ -119,12 +120,12 @@
 
 //设定视图的高度在宽度固定情况下是否根据内容的大小而自动调整,如果内容无法容纳的话则自动拉升视图的高度,如果原始高度高于内容的高度则会缩小视图的高度。默认为NO。
 //这个属性主要用UILabel,UITextView的需要显示多行的情况，如果是UILabel则请numberOfLines的值。其他控件有可能设置这个属性无效，只有支持sizeThatFits这个方法的控件设置才有效
-@property(nonatomic, assign, getter=isFlexedHeight) BOOL flexedHeight;
+@property(nonatomic, assign, getter=isFlexedHeight) IBInspectable BOOL flexedHeight;
 
 
 //如果设置为YES则表示这个视图不会受任何布局视图的布局控制，而是用自身的frame的值进行布局，默认设置为NO
 //当这个属性设置为YES后，所有视图设置的扩展属性都不会生效，而是使用最原始的frame的设置来决定在布局中的大小和位置。
-@property(nonatomic, assign) BOOL useFrame;
+@property(nonatomic, assign) IBInspectable BOOL useFrame;
 
 
 //得到视图的评估rect，在调用前请先调用父布局的-(CGRect)estimateLayoutRect，否则得到的结果未可知。
@@ -178,10 +179,10 @@
 @property(nonatomic,assign) UIEdgeInsets padding;
 
 //这四个是上面属性的简化设置版本。
-@property(nonatomic, assign) CGFloat topPadding;
-@property(nonatomic, assign) CGFloat leftPadding;
-@property(nonatomic, assign) CGFloat bottomPadding;
-@property(nonatomic, assign) CGFloat rightPadding;
+@property(nonatomic, assign) IBInspectable CGFloat topPadding;
+@property(nonatomic, assign) IBInspectable CGFloat leftPadding;
+@property(nonatomic, assign) IBInspectable CGFloat bottomPadding;
+@property(nonatomic, assign) IBInspectable CGFloat rightPadding;
 
 
 //指定布局的高度和宽度是否由所有子视图共同决定，这两个属性对于框架布局无效，
@@ -189,8 +190,8 @@
 //如果设置为NO的话则表示布局视图需要指定自身的高度和宽度。
 //这两个属性默认是设置为NO，但是派生类则不一定，比如线性布局就会根据子视图的排列方向而默认设置为YES。
 //如果对某个布局设置了包裹子视图为YES而又同时设置了具体的高度或者宽度时则有可能会导致布局设置约束的冲突，因此在设置时需要注意可能会造成的约束冲突。
-@property(nonatomic,assign) BOOL wrapContentWidth;
-@property(nonatomic,assign) BOOL wrapContentHeight;
+@property(nonatomic,assign) IBInspectable BOOL wrapContentWidth;
+@property(nonatomic,assign) IBInspectable BOOL wrapContentHeight;
 
 
 //如果布局的父视图是UIScrollView或者其子类的话则在布局的位置调整后是否调整滚动视图的contentsize,默认是NO
@@ -239,11 +240,11 @@
 
 
 //布局高亮的背景色,我们支持在布局中执行触摸的事件，用户触摸手势按下时背景会高亮.只有设置了手势触摸事件才会高亮
-@property(nonatomic,strong) UIColor *highlightedBackgroundColor;
+@property(nonatomic,strong) IBInspectable UIColor *highlightedBackgroundColor;
 
 //设置布局背景图片和高亮的背景图片，只有设置手势触摸事件高亮背景图片才会生效。
-@property(nonatomic,strong) UIImage *backgroundImage;
-@property(nonatomic,strong) UIImage *highlightedBackgroundImage;
+@property(nonatomic,strong) IBInspectable UIImage *backgroundImage;
+@property(nonatomic,strong) IBInspectable UIImage *highlightedBackgroundImage;
 
 
 //设置手势触摸的事件，这个是触摸成功后的事件。如果target为nil则取消事件，请不要在这个事件中调整高亮颜色，背景图，以及高亮背景图。

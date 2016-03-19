@@ -18,10 +18,10 @@
 
 
 //均分宽度时当有隐藏子视图，是否参与宽度计算,这个属性只有在参与均分视图的子视图隐藏时才有效,默认是NO
-@property(nonatomic, assign) BOOL flexOtherViewWidthWhenSubviewHidden;
+@property(nonatomic, assign) IBInspectable BOOL flexOtherViewWidthWhenSubviewHidden;
 
 //均分高度时当有隐藏子视图，是否参与高度计算,这个属性只有在参与均分视图的子视图隐藏时才有效，默认是NO
-@property(nonatomic, assign) BOOL flexOtherViewHeightWhenSubviewHidden;
+@property(nonatomic, assign) IBInspectable BOOL flexOtherViewHeightWhenSubviewHidden;
 
 
 @end

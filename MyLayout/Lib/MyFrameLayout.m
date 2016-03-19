@@ -32,6 +32,7 @@
 
 @end
 
+IB_DESIGNABLE
 @implementation MyFrameLayout
 
 /*

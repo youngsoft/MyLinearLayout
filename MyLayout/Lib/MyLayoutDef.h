@@ -136,8 +136,8 @@ typedef enum : NSUInteger {
 #endif
     
     /**新的枚举值的定义**/
-    MyLayoutViewOrientation_Vert = 0,
-    MyLayoutViewOrientation_Horz = 1,
+     MyLayoutViewOrientation_Vert = 0,
+     MyLayoutViewOrientation_Horz = 1,
 } MyLayoutViewOrientation;
 
 

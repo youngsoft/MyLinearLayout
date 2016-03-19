@@ -296,6 +296,8 @@
 				46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */,
 				18D684081C4F421400A48BB4 /* MyLayoutMeasure.h */,
 				18D684091C4F421400A48BB4 /* MyLayoutMeasure.m */,
+				18014BA31C9079DA0088133B /* MyDimeScale.h */,
+				18014BA41C9079DA0088133B /* MyDimeScale.m */,
 				18D6840F1C4F421400A48BB4 /* MyMaker.h */,
 				18D684101C4F421400A48BB4 /* MyMaker.m */,
 			);
@@ -450,6 +452,7 @@
 				18D684411C4F421400A48BB4 /* MyLinearLayout.m in Sources */,
 				18D6844A1C4F421400A48BB4 /* LLTest6ViewController.m in Sources */,
 				18D684341C4F421400A48BB4 /* AppDelegate.m in Sources */,
+				18014BA51C9079DA0088133B /* MyDimeScale.m in Sources */,
 				18D684381C4F421400A48BB4 /* FLTest2ViewController.m in Sources */,
 				18D6844D1C4F421400A48BB4 /* RLTest1ViewController.m in Sources */,
 				18D684501C4F421400A48BB4 /* TLTest1ViewController.m in Sources */,
