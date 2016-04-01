@@ -21,7 +21,7 @@
     
     
     //线性布局实现
-   /* MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+  /*  MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [UIColor grayColor];
     
     rootLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
@@ -54,8 +54,8 @@
     // bottom.myLeftMargin = bottom.myRightMargin = 0; 这句和上面一句是等价的。
     [rootLayout addSubview:bottom];
     
-    self.view = rootLayout; */
-    
+    self.view = rootLayout;
+    */
     
     //相对布局实现
    /*  MyRelativeLayout *rootLayout = [MyRelativeLayout new];
@@ -88,7 +88,7 @@
     */
     
     //表格布局实现
-    MyTableLayout *rootLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+   /* MyTableLayout *rootLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [UIColor grayColor];
     rootLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     rootLayout.subviewMargin = 20;
@@ -111,7 +111,7 @@
     [rootLayout addSubview:bottom];
     
     self.view = rootLayout;
-    
+    */
     
     //框架布局实现
    /* MyFrameLayout *rootLayout = [MyFrameLayout new];
@@ -141,6 +141,60 @@
     self.view = rootLayout;
     */
     
+    //浮动布局实现
+  /*  MyFloatLayout *rootLayout = [MyFloatLayout new];
+    rootLayout.backgroundColor = [UIColor grayColor];
+    rootLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
+    
+    UIView *topLeft = UIView.new;
+    topLeft.backgroundColor = [UIColor redColor];
+    topLeft.widthDime.equalTo(rootLayout.widthDime).multiply(0.5).add(-10);
+    topLeft.heightDime.equalTo(rootLayout.heightDime).multiply(0.5).add(-10);
+    [rootLayout addSubview:topLeft];
+    
+    UIView *topRight = UIView.new;
+    topRight.backgroundColor = [UIColor greenColor];
+    topRight.widthDime.equalTo(rootLayout.widthDime).multiply(0.5).add(-10);
+    topRight.heightDime.equalTo(rootLayout.heightDime).multiply(0.5).add(-10);
+    topRight.leftPos.equalTo(@20);
+    [rootLayout addSubview:topRight];
+    
+    UIView *bottom = UIView.new;
+    bottom.backgroundColor = [UIColor blueColor];
+    bottom.widthDime.equalTo(rootLayout.widthDime);
+    bottom.heightDime.equalTo(rootLayout.heightDime).multiply(0.5).add(-10);
+    bottom.topPos.equalTo(@20);
+    [rootLayout addSubview:bottom];
+    
+    self.view = rootLayout;
+   */
+
+
+    //流式布局实现。
+    MyFlowLayout *rootLayout = [MyFlowLayout new];
+    rootLayout.backgroundColor = [UIColor grayColor];
+    rootLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
+    rootLayout.subviewMargin = 20;
+    
+    UIView *topLeft = UIView.new;
+    topLeft.backgroundColor = [UIColor redColor];
+    topLeft.widthDime.equalTo(rootLayout.widthDime).multiply(0.5).add(-10);
+    topLeft.heightDime.equalTo(rootLayout.heightDime).multiply(0.5).add(-10);
+    [rootLayout addSubview:topLeft];
+    
+    UIView *topRight = UIView.new;
+    topRight.backgroundColor = [UIColor greenColor];
+    topRight.widthDime.equalTo(rootLayout.widthDime).multiply(0.5).add(-10);
+    topRight.heightDime.equalTo(rootLayout.heightDime).multiply(0.5).add(-10);
+    [rootLayout addSubview:topRight];
+    
+    UIView *bottom = UIView.new;
+    bottom.backgroundColor = [UIColor blueColor];
+    bottom.widthDime.equalTo(rootLayout.widthDime);
+    bottom.heightDime.equalTo(rootLayout.heightDime).multiply(0.5).add(-10);
+    [rootLayout addSubview:bottom];
+    
+    self.view = rootLayout;
     
     
 }

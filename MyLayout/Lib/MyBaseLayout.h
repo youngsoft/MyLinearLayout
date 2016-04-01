@@ -239,6 +239,20 @@
 @property(nonatomic, strong) MyBorderLineDraw *boundBorderLine;
 
 
+//智能分割线，智能分割线会对布局里面所有的布局子视图添加边界线.
+//只有当某两个布局子视图有交界边界的时候才会生成分割线，布局子视图和浮动布局交界的边以及布局子视图和非布局子
+//视图之间的交界的边不产生分割线。
+//智能边界线只对布局视图里面的子布局视图产生效果
+//v1.1.5版本暂时只支持线性布局和浮动布局这两种布局的
+@property(nonatomic, strong) MyBorderLineDraw *IntelligentBorderLine;
+
+//当布局视图的父布局视图定义了IntelligentBorderLine时，默认情况下父布局视图里面的所有子布局视图都会根据规则自动生成边界线
+//而如果我们们将这个属性设置为YES时，则即使父布局视图设定了智能边界线，布局视图也不会自动生成边界线，而是根据上面定义的边界线来展示自己的边界线
+//这个属性默认为NO。
+@property(nonatomic, assign) BOOL notUseIntelligentBorderLine;
+
+
+
 //布局高亮的背景色,我们支持在布局中执行触摸的事件，用户触摸手势按下时背景会高亮.只有设置了手势触摸事件才会高亮
 @property(nonatomic,strong) IBInspectable UIColor *highlightedBackgroundColor;
 

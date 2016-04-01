@@ -146,7 +146,7 @@ typedef enum : unsigned char{
 @property(nonatomic, assign, getter=isHidden) BOOL hidden;
 
 
-//线性布局子视图专用
+//线性布局和浮动布局子视图专用
 @property(nonatomic, assign) CGFloat weight;
 
 //框架布局子视图专用

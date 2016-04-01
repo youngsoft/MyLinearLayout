@@ -135,31 +135,31 @@
             cell.textLabel.text = @"流式布局 - 标签流";
             break;
         case 16:
-            cell.textLabel.text = @"UITableViewCell动态高度";
-            break;
-        case 17:
-            cell.textLabel.text = @"完美屏幕适配";
-            break;
-        case 18:
-            cell.textLabel.text = @"UITableView的替换方案";
-            break;
-        case 19:
-            cell.textLabel.text = @"五种布局实现同一功能";
-            break;
-        case 20:
-            cell.textLabel.text = @"SizeClass--Demo1";
-            break;
-        case 21:
-            cell.textLabel.text = @"SizeClass--Demo2";
-            break;
-        case 22:
             cell.textLabel.text = @"浮动布局1--Demo1";
             break;
+        case 17:
+            cell.textLabel.text = @"浮动布局2--仿天猫淘宝首页";
+            break;
+        case 18:
+            cell.textLabel.text = @"浮动布局3--仿ZAKER新闻卡片布局";
+            break;
+        case 19:
+            cell.textLabel.text = @"UITableViewCell动态高度";
+            break;
+        case 20:
+            cell.textLabel.text = @"完美屏幕适配";
+            break;
+        case 21:
+            cell.textLabel.text = @"UITableView的替换方案";
+            break;
+        case 22:
+            cell.textLabel.text = @"六种布局实现同一功能";
+            break;
         case 23:
-            cell.textLabel.text = @"浮动布局2--仿淘宝首页的商品列表布局";
+            cell.textLabel.text = @"SizeClass--Demo1";
             break;
         case 24:
-            cell.textLabel.text = @"浮动布局3--仿今日头条的新闻卡片";
+            cell.textLabel.text = @"SizeClass--Demo2";
             break;
         default:
             break;
@@ -224,31 +224,31 @@
             vc = [FLLTest2ViewController new];
             break;
         case 16:
-            vc = [AllTest1ViewController new];
-            break;
-        case 17:
-            vc = [AllTest2ViewController new];
-            break;
-        case 18:
-            vc = [AllTest3ViewController new];
-            break;
-        case 19:
-            vc = [AllTest4ViewController new];
-            break;
-        case 20:
-            vc = [AllTest5ViewController new];
-            break;
-        case 21:
-            vc = [AllTest6ViewController new];
-            break;
-        case 22:
             vc = [FOLTest1ViewController new];
             break;
-        case 23:
+        case 17:
             vc = [FOLTest2ViewController new];
             break;
+        case 18:
+            vc = [FOLTest3ViewController new];
+            break;
+        case 19:
+            vc = [AllTest1ViewController new];
+            break;
+        case 20:
+            vc = [AllTest2ViewController new];
+            break;
+        case 21:
+            vc = [AllTest3ViewController new];
+            break;
+        case 22:
+            vc = [AllTest4ViewController new];
+            break;
+        case 23:
+            vc = [AllTest5ViewController new];
+            break;
         case 24:
-            vc = [FOLTest2ViewController new];
+            vc = [AllTest6ViewController new];
             break;
         default:
             break;

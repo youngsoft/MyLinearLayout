@@ -1,11 +1,11 @@
-# MyLayout1.1.4
+# MyLayout1.1.5
 
 ##  新版本注意
    为了防止命名冲突，以及命名的规范，1.1.1版本对一些方法进行了重命名，以及枚举值重新命名，请浏览最下面的如何解决命名冲突和报警的问题。
 
 ## 功能介绍
 
-   一套功能强大的iOS布局库，他不是在自动布局的基础上进行的封装，而是一套原生的基于对frame设置的封装，通过重载layoutSubview函数来实现子视图的布局，因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了android的布局和iOS自动布局以及SizeClass的功能，而比android的布局库以及iOS的自动布局库功能更加强大，使用则方便简单，其分别提供了：**线性布局MyLinearLayout**、**相对布局MyRelativeLayout**、**框架布局MyFrameLayout**、**表格布局MyTableLayout**、**流式布局MyFlowLayout**五个布局类，以及针对苹果的各种屏幕尺寸的设备添加了对**SizeClass**的支持，以便同时适配各种屏幕设备。各种类应用的场景不大一样，具体的使用方法请看Demo中的演示代码以及到我的CSDN主页中了解：
+   一套功能强大的iOS布局库，他不是在自动布局的基础上进行的封装，而是一套原生的基于对frame设置的封装，通过重载layoutSubview函数来实现子视图的布局，因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了android的布局和iOS自动布局以及SizeClass的功能，而比android的布局库以及iOS的自动布局库功能更加强大，使用则方便简单，其分别提供了：**线性布局MyLinearLayout**、**相对布局MyRelativeLayout**、**框架布局MyFrameLayout**、**表格布局MyTableLayout**、**流式布局MyFlowLayout**、**浮动布局MyFloatLayout**六个布局类，以及针对苹果的各种屏幕尺寸的设备添加了对**SizeClass**的支持，以便同时适配各种屏幕设备。各种类应用的场景不大一样，具体的使用方法请看Demo中的演示代码以及到我的CSDN主页中了解：
 
 [http://blog.csdn.net/yangtiang/article/details/46483999](http://blog.csdn.net/yangtiang/article/details/46483999)   线性布局  
 [http://blog.csdn.net/yangtiang/article/details/46795231](http://blog.csdn.net/yangtiang/article/details/46795231)   相对布局  
@@ -27,6 +27,9 @@
 
 #### 流式布局MyFlowLayout
 	流式布局是一种子视图优先按特定方向排列布局，而当子视图填充尺寸或者数量满足一定条件后则后续的子视图会换行或者换列并回到起点重新进行排列布局。流式布局分为垂直内容填充约束流式布局、垂直数量约束流式布局、水平内容填充约束流式布局、水平数量约束流式布局四种布局。流式布局一般用于子视图有规律的排列。
+	
+#### 浮动布局MyFloatLayout
+	浮动布局是一种子视图总是按特定的方向浮动进行排列的布局，一旦某个子视图的宽度或者高度按某个方向浮动而不能被容纳时，则将会自动的切换位置，以便找到一个最合适的位置进行容纳。浮动布局是从HTML的CSS的浮动布局功能实现的。浮动布局可以支持垂直浮动布局和水平浮动布局两种浮动方式，浮动布局主要用于一些不规则排列的布局，以及新闻类的卡片布局。
 
 ####  SizeClass的支持
 	为了有效的同时适配苹果的各种屏幕尺寸的设备，在1.1.2版本中新增加了对SizeClass的支持，通过SizeClass可以完成对某个视图在各种屏幕尺寸下的布局约束设置。
@@ -62,6 +65,16 @@ Then, run the following command:
 ```
 $ pod install
 ```
+
+## V1.1.5版本新功能
+1. 添加了新的布局 **浮动布局**，浮动布局实现不规则的子视图的排列，卡片布局。设计思想是从HTML中的CSS样式的float属性得到了。
+2. 新增智能边界线的功能，通过智能边界线的设定，可以让布局中的子布局根据排版而自动生成边界线，而不需要手动去设置。
+3. 修正了各布局的wrapContentHeight和 wrapContentWidth 可能计算不正确的问题。
+4. 修正了布局视图的leftBorderLineLayer的宽度不正确的问题。
+5. 增加了MyLayoutDime和MyLayoutPos这两个类中的方法clear，以便能快速的清除掉所有的设置。
+6. 优化了速度和性能的问题。
+
+
 
 ## V1.1.4版本新功能
 1.	 修正了尺寸评估函数`estimateLayoutRect`的一个多层嵌套是无法正确评估尺寸的BUG。

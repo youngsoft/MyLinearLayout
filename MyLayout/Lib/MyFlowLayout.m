@@ -174,18 +174,19 @@ IB_DESIGNABLE
 - (void)calcVertLayoutGravity:(CGFloat)selfWidth rowMaxHeight:(CGFloat)rowMaxHeight rowMaxWidth:(CGFloat)rowMaxWidth mg:(MyMarginGravity)mg amg:(MyMarginGravity)amg sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
 {
     
+    UIEdgeInsets padding = self.padding;
     CGFloat addXPos = 0;
     if (!self.averageArrange || self.arrangedCount == 0)
     {
         switch (mg) {
             case MyMarginGravity_Horz_Center:
             {
-                addXPos = (selfWidth - self.leftPadding - self.rightPadding - rowMaxWidth) / 2;
+                addXPos = (selfWidth - padding.left - padding.right - rowMaxWidth) / 2;
             }
                 break;
             case MyMarginGravity_Horz_Right:
             {
-                addXPos = selfWidth - self.leftPadding - self.rightPadding - rowMaxWidth; //因为具有不考虑左边距，而原来的位置增加了左边距，因此
+                addXPos = selfWidth - padding.left - padding.right - rowMaxWidth; //因为具有不考虑左边距，而原来的位置增加了左边距，因此
             }
                 break;
             default:
@@ -239,8 +240,10 @@ IB_DESIGNABLE
         [sbs addObject:sbv];
     }
     
-    CGFloat xPos = self.leftPadding;
-    CGFloat yPos = self.topPadding;
+    
+    UIEdgeInsets padding = self.padding;
+    CGFloat xPos = padding.left;
+    CGFloat yPos = padding.top;
     CGFloat rowMaxHeight = 0;  //某一行的最高值。
     CGFloat rowMaxWidth = 0;   //某一行的最宽值
     
@@ -270,11 +273,16 @@ IB_DESIGNABLE
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
-        if (sbv.widthDime.dimeRelaVal == self.widthDime)
-            rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - self.leftPadding - self.rightPadding) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+        if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
+            rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+        
+        if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
+            rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
             rect.size.height = [sbv.heightDime validMeasure:rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+        
         
         //如果高度是浮动的则需要调整高度。
         if (sbv.isFlexedHeight)
@@ -287,12 +295,12 @@ IB_DESIGNABLE
         CGFloat place = xPos + leftMargin + rect.size.width + rightMargin;
         if (arrangedIndex != 0)
             place += self.subviewHorzMargin;
-        place += self.rightPadding;
+        place += padding.right;
         
         //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
         if (place > selfRect.size.width)
         {
-            xPos = self.leftPadding;
+            xPos = padding.left;
             yPos += self.subviewVertMargin;
             yPos += rowMaxHeight;
 
@@ -301,9 +309,9 @@ IB_DESIGNABLE
             [self calcVertLayoutGravity:selfRect.size.width rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex];
 
             //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
-            if (leftMargin + rightMargin + rect.size.width > selfRect.size.width - self.leftPadding - self.rightPadding)
+            if (leftMargin + rightMargin + rect.size.width > selfRect.size.width - padding.left - padding.right)
             {
-                rect.size.width = [sbv.widthDime validMeasure:selfRect.size.width - self.leftPadding - self.rightPadding - leftMargin - rightMargin ];
+                rect.size.width = [sbv.widthDime validMeasure:selfRect.size.width - padding.left - padding.right - leftMargin - rightMargin ];
                 
                 if (sbv.isFlexedHeight)
                 {
@@ -329,8 +337,8 @@ IB_DESIGNABLE
         if (rowMaxHeight < topMargin + bottomMargin + rect.size.height)
             rowMaxHeight = topMargin + bottomMargin + rect.size.height;
         
-        if (rowMaxWidth < (xPos - self.leftPadding))
-            rowMaxWidth = (xPos - self.leftPadding);
+        if (rowMaxWidth < (xPos - padding.left))
+            rowMaxWidth = (xPos - padding.left);
 
       
 
@@ -347,17 +355,17 @@ IB_DESIGNABLE
 
     
     if (self.wrapContentHeight)
-        selfRect.size.height = yPos + self.bottomPadding + rowMaxHeight;
+        selfRect.size.height = yPos + padding.bottom + rowMaxHeight;
     else
     {
         CGFloat addYPos = 0;
         if (mgvert == MyMarginGravity_Vert_Center)
         {
-            addYPos = (selfRect.size.height - self.bottomPadding - rowMaxHeight - yPos) / 2;
+            addYPos = (selfRect.size.height - padding.bottom - rowMaxHeight - yPos) / 2;
         }
         else if (mgvert == MyMarginGravity_Vert_Bottom)
         {
-            addYPos = selfRect.size.height - self.bottomPadding - rowMaxHeight - yPos;
+            addYPos = selfRect.size.height - padding.bottom - rowMaxHeight - yPos;
         }
         
         if (addYPos != 0)
@@ -390,18 +398,18 @@ IB_DESIGNABLE
         [sbs addObject:sbv];
     }
     
-    
+    UIEdgeInsets padding = self.padding;
     NSInteger arrangedCount = self.arrangedCount;
-    CGFloat xPos = self.leftPadding;
-    CGFloat yPos = self.topPadding;
+    CGFloat xPos = padding.left;
+    CGFloat yPos = padding.top;
     CGFloat rowMaxHeight = 0;  //某一行的最高值。
     CGFloat rowMaxWidth = 0;   //某一行的最宽值
-    CGFloat maxWidth = self.leftPadding;  //全部行的最宽值
+    CGFloat maxWidth = padding.left;  //全部行的最宽值
     MyMarginGravity mgvert = self.gravity & MyMarginGravity_Horz_Mask;
     MyMarginGravity mghorz = self.gravity & MyMarginGravity_Vert_Mask;
     MyMarginGravity amgvert = self.arrangedGravity & MyMarginGravity_Horz_Mask;
     
-    CGFloat averageWidth = (selfRect.size.width - self.leftPadding - self.rightPadding - (arrangedCount - 1) * self.subviewHorzMargin) / arrangedCount;
+    CGFloat averageWidth = (selfRect.size.width - padding.left - padding.right - (arrangedCount - 1) * self.subviewHorzMargin) / arrangedCount;
     
     NSInteger arrangedIndex = 0;
     NSInteger i = 0;
@@ -413,7 +421,7 @@ IB_DESIGNABLE
         if (arrangedIndex >=  arrangedCount)
         {
             arrangedIndex = 0;
-            xPos = self.leftPadding;
+            xPos = padding.left;
             yPos += rowMaxHeight;
             yPos += self.subviewVertMargin;
             
@@ -445,6 +453,13 @@ IB_DESIGNABLE
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
+        if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
+            rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+        
+        if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
+            rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+
+        
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
             rect.size.height = [sbv.heightDime validMeasure:rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
         
@@ -467,8 +482,8 @@ IB_DESIGNABLE
         if (rowMaxHeight < topMargin + bottomMargin + rect.size.height)
             rowMaxHeight = topMargin + bottomMargin + rect.size.height;
         
-        if (rowMaxWidth < (xPos - self.leftPadding))
-            rowMaxWidth = (xPos - self.leftPadding);
+        if (rowMaxWidth < (xPos - padding.left))
+            rowMaxWidth = (xPos - padding.left);
         
         if (maxWidth < xPos)
             maxWidth = xPos;
@@ -476,7 +491,6 @@ IB_DESIGNABLE
         
         
         sbv.absPos.frame = rect;
-        
         
         arrangedIndex++;
         
@@ -486,17 +500,17 @@ IB_DESIGNABLE
     [self calcVertLayoutGravity:selfRect.size.width rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex];
 
     if (self.wrapContentHeight)
-        selfRect.size.height = yPos + self.bottomPadding + rowMaxHeight;
+        selfRect.size.height = yPos + padding.bottom + rowMaxHeight;
     else
     {
         CGFloat addYPos = 0;
         if (mgvert == MyMarginGravity_Vert_Center)
         {
-            addYPos = (selfRect.size.height - self.bottomPadding - rowMaxHeight - yPos) / 2;
+            addYPos = (selfRect.size.height - padding.bottom - rowMaxHeight - yPos) / 2;
         }
         else if (mgvert == MyMarginGravity_Vert_Bottom)
         {
-            addYPos = selfRect.size.height - self.bottomPadding - rowMaxHeight - yPos;
+            addYPos = selfRect.size.height - padding.bottom - rowMaxHeight - yPos;
         }
         
         if (addYPos != 0)
@@ -512,7 +526,7 @@ IB_DESIGNABLE
     }
     
     if (self.wrapContentWidth && !self.averageArrange)
-        selfRect.size.width = maxWidth + self.rightPadding;
+        selfRect.size.width = maxWidth + padding.right;
     
     
     return selfRect;
@@ -524,17 +538,18 @@ IB_DESIGNABLE
 {
     
     CGFloat addYPos = 0;
+    UIEdgeInsets padding = self.padding;
     if (!self.averageArrange)
     {
         switch (mg) {
             case MyMarginGravity_Vert_Center:
             {
-                addYPos = (selfHeight - self.topPadding - self.bottomPadding - colMaxHeight) / 2;
+                addYPos = (selfHeight - padding.top - padding.bottom - colMaxHeight) / 2;
             }
                 break;
             case MyMarginGravity_Vert_Bottom:
             {
-                addYPos = selfHeight - self.topPadding - self.bottomPadding - colMaxHeight;
+                addYPos = selfHeight - padding.top - padding.bottom - colMaxHeight;
             }
                 break;
             default:
@@ -589,8 +604,9 @@ IB_DESIGNABLE
         [sbs addObject:sbv];
     }
     
-    CGFloat xPos = self.leftPadding;
-    CGFloat yPos = self.topPadding;
+    UIEdgeInsets padding = self.padding;
+    CGFloat xPos = padding.left;
+    CGFloat yPos = padding.top;
     CGFloat colMaxWidth = 0;  //某一列的最宽值。
     CGFloat colMaxHeight = 0;   //某一列的最高值
     
@@ -620,9 +636,12 @@ IB_DESIGNABLE
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
-        if (sbv.heightDime.dimeRelaVal == self.heightDime)
-            rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+        if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
+            rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
         
+        if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
+            rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+       
         if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
             rect.size.width = [sbv.widthDime validMeasure:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
         
@@ -637,12 +656,12 @@ IB_DESIGNABLE
         CGFloat place = yPos + topMargin + rect.size.height + bottomMargin;
         if (arrangedIndex != 0)
             place += self.subviewVertMargin;
-        place += self.bottomPadding;
+        place += padding.bottom;
         
         //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
         if (place > selfRect.size.height)
         {
-            yPos = self.topPadding;
+            yPos = padding.top;
             xPos += self.subviewHorzMargin;
             xPos += colMaxWidth;
             
@@ -651,9 +670,9 @@ IB_DESIGNABLE
             [self calcHorzLayoutGravity:selfRect.size.height colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex];
             
             //计算单独的sbv的高度是否大于整体的高度。如果大于则缩小高度。
-            if (topMargin + bottomMargin + rect.size.height > selfRect.size.height - self.topPadding - self.bottomPadding)
+            if (topMargin + bottomMargin + rect.size.height > selfRect.size.height - padding.top - padding.bottom)
             {
-                rect.size.height = [sbv.heightDime validMeasure:selfRect.size.height - self.topPadding - self.bottomPadding - topMargin - bottomMargin ];
+                rect.size.height = [sbv.heightDime validMeasure:selfRect.size.height - padding.top - padding.bottom - topMargin - bottomMargin ];
             }
             
             colMaxWidth = 0;
@@ -673,8 +692,8 @@ IB_DESIGNABLE
         if (colMaxWidth < leftMargin + rightMargin + rect.size.width)
             colMaxWidth = leftMargin + rightMargin + rect.size.width;
         
-        if (colMaxHeight < (yPos - self.topPadding))
-            colMaxHeight = (yPos - self.topPadding);
+        if (colMaxHeight < (yPos - padding.top))
+            colMaxHeight = (yPos - padding.top);
         
         
         
@@ -691,17 +710,17 @@ IB_DESIGNABLE
     
     
     if (self.wrapContentWidth)
-        selfRect.size.width = xPos + self.rightPadding + colMaxWidth;
+        selfRect.size.width = xPos + padding.right + colMaxWidth;
     else
     {
         CGFloat addXPos = 0;
         if (mghorz == MyMarginGravity_Horz_Center)
         {
-            addXPos = (selfRect.size.width - self.rightPadding - colMaxWidth - xPos) / 2;
+            addXPos = (selfRect.size.width - padding.right - colMaxWidth - xPos) / 2;
         }
         else if (mghorz == MyMarginGravity_Horz_Right)
         {
-            addXPos = selfRect.size.width - self.rightPadding - colMaxWidth - xPos;
+            addXPos = selfRect.size.width - padding.right - colMaxWidth - xPos;
         }
         
         if (addXPos != 0)
@@ -734,22 +753,22 @@ IB_DESIGNABLE
         [sbs addObject:sbv];
     }
     
-    
+    UIEdgeInsets padding = self.padding;
     
     NSInteger arrangedIndex = 0;
     NSInteger arrangedCount = self.arrangedCount;
-    CGFloat xPos = self.leftPadding;
-    CGFloat yPos = self.topPadding;
+    CGFloat xPos = padding.left;
+    CGFloat yPos = padding.top;
     CGFloat colMaxWidth = 0;  //每列的最大宽度
     CGFloat colMaxHeight = 0; //每列的最大高度
-    CGFloat maxHeight = self.topPadding;
+    CGFloat maxHeight = padding.top;
     
     MyMarginGravity mgvert = self.gravity & MyMarginGravity_Horz_Mask;
     MyMarginGravity mghorz = self.gravity & MyMarginGravity_Vert_Mask;
     MyMarginGravity amghorz = self.arrangedGravity & MyMarginGravity_Vert_Mask;
 
     
-    CGFloat averageHeight = (selfRect.size.height - self.topPadding - self.bottomPadding - (arrangedCount - 1) * self.subviewVertMargin) / arrangedCount;
+    CGFloat averageHeight = (selfRect.size.height - padding.top - padding.bottom - (arrangedCount - 1) * self.subviewVertMargin) / arrangedCount;
     
     int i = 0;
     for (; i < sbs.count; i++)
@@ -761,7 +780,7 @@ IB_DESIGNABLE
             arrangedIndex = 0;
             xPos += colMaxWidth;
             xPos += self.subviewHorzMargin;
-            yPos = self.topPadding;
+            yPos = padding.top;
             
             //计算每行的gravity情况。
             [self calcHorzLayoutGravity:selfRect.size.height colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedCount];
@@ -789,6 +808,12 @@ IB_DESIGNABLE
         if (sbv.heightDime.dimeNumVal != nil && !self.averageArrange)
             rect.size.height = sbv.heightDime.measure;
         
+        if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
+            rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+        
+        if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
+            rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+        
         //如果高度是浮动的则需要调整高度。
         if (isFlexedHeight)
         {
@@ -814,8 +839,8 @@ IB_DESIGNABLE
         if (colMaxWidth < leftMargin + rightMargin + rect.size.width)
             colMaxWidth = leftMargin + rightMargin + rect.size.width;
         
-        if (colMaxHeight < (yPos - self.topPadding))
-            colMaxHeight = yPos - self.topPadding;
+        if (colMaxHeight < (yPos - padding.top))
+            colMaxHeight = yPos - padding.top;
         
         if (maxHeight < yPos)
             maxHeight = yPos;
@@ -832,21 +857,21 @@ IB_DESIGNABLE
     [self calcHorzLayoutGravity:selfRect.size.height colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex];
 
     if (self.wrapContentHeight && !self.averageArrange)
-        selfRect.size.height = maxHeight + self.bottomPadding;
+        selfRect.size.height = maxHeight + padding.bottom;
     
     if (self.wrapContentWidth)
-        selfRect.size.width = xPos + self.rightPadding + colMaxWidth;
+        selfRect.size.width = xPos + padding.right + colMaxWidth;
     else
     {
      
         CGFloat addXPos = 0;
         if (mghorz == MyMarginGravity_Horz_Center)
         {
-            addXPos = (selfRect.size.width - self.rightPadding - colMaxWidth - xPos) / 2;
+            addXPos = (selfRect.size.width - padding.right - colMaxWidth - xPos) / 2;
         }
         else if (mghorz == MyMarginGravity_Horz_Right)
         {
-            addXPos = selfRect.size.width - self.rightPadding - colMaxWidth - xPos;
+            addXPos = selfRect.size.width - padding.right - colMaxWidth - xPos;
         }
         
         if (addXPos != 0)

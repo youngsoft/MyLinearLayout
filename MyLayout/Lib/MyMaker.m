@@ -111,6 +111,16 @@
     
 }
 
+-(MyMaker*)reverseFloat
+{
+    return [self addMethod:@"reverseFloat"];
+}
+
+-(MyMaker*)clearFloat
+{
+    return [self addMethod:@"clearFloat"];
+}
+
 
 -(MyMaker*)topPadding
 {

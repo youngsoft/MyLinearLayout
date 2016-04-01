@@ -218,6 +218,17 @@
     NSAssert(0, @"oops");
 }
 
+-(void)clear
+{
+    _addVal = 0;
+    _mutilVal = 1;
+    _minVal = -CGFLOAT_MAX;
+    _maxVal = CGFLOAT_MAX;
+    _dimeVal = nil;
+    _dimeValType = MyLayoutValueType_Nil;
+}
+
+
 
 +(NSString*)dimestrFromDime:(MyLayoutDime*)dimeobj showView:(BOOL)showView
 {

@@ -57,8 +57,12 @@
 
 
 
-//线性布局子视图独有
+//线性布局和浮动布局子视图独有
 -(MyMaker*)weight;
+
+//浮动布局子视图独有
+-(MyMaker*)reverseFloat;
+-(MyMaker*)clearFloat;
 
 
 

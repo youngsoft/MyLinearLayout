@@ -35,6 +35,9 @@
  */
 -(MyLayoutDime* (^)(id val))equalTo;
 
+//清除设置的尺寸信息
+-(void)clear;
+
 
 //上面方法设置的属性的获取。
 @property(nonatomic, assign, readonly) CGFloat addVal;

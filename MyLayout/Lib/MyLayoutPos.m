@@ -177,6 +177,15 @@
     
 }
 
+-(void)clear
+{
+    _posVal = nil;
+    _posValType = MyLayoutValueType_Nil;
+    _offsetVal = 0;
+    _minVal = -CGFLOAT_MAX;
+    _maxVal = CGFLOAT_MAX;
+}
+
 
 +(NSString*)posstrFromPos:(MyLayoutPos*)posobj showView:(BOOL)showView
 {

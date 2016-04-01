@@ -97,7 +97,7 @@
         info = [DialogInfo new];
         info.headImage = @"head2";
         info.nickName = @"欧阳大哥";
-        info.textMessage = @"通过布局视图的estimateLayoutRect函数能够评估出UITableViewCell的动态高度。estimateLayoutRect并不会进行布局而只是评估布局的尺寸，这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们传递了宽度为0的话则会按320的宽度来评估UITableViewCell的动态高度，这样当在375和414的宽度时评估出来的高度将不会正确，因此这里需要指定出真实的宽度尺寸；而高度设置为0的意思是表示高度不是固定值需要评估出来。UITableViewCell的动态高度评估不局限于线性布局，相对布局也是同样适用的。";
+        info.textMessage = @"这个布局的DEMO可以分别用线性布局、相对布局、浮动布局来实现。其中的线性布局需要进行布局的嵌套，而相对布局则需要通过设置视图之间的依赖来实现，而浮动布局则会自动根据内容进行对应的浮动来进行自适应的布局，因此浮动布局这里的实现比较强大。";
         info.imageMessage = @"image2";
         
         [arr addObject:info];
@@ -173,13 +173,15 @@
 
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+{    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"dialog_cell"];
     
     if (cell == nil)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"dialog_cell"];
-        //您可以用相对布局来实现，也可以用线性布局来实现，下面用的是相对布局来实现。
+    
+        
+        //您可以用相对布局来实现，下面用的是相对布局来实现。
         MyRelativeLayout *dialogLayout = [MyRelativeLayout new];
         dialogLayout.tag = 50;
         [dialogLayout setTarget:self action:@selector(handleTest:)];
@@ -222,10 +224,9 @@
         imageMessageView.centerXPos.equalTo(@5);
         imageMessageView.topPos.equalTo(textMessageLabel.bottomPos).offset(5);
         [dialogLayout addSubview:imageMessageView];
-        
         /*
          
-         //您可以用相对布局来实现，也可以用线性布局来实现，下面用的是线性布局来实现。线性布局需要比相对布局多增加一个布局层
+         //您也可以用线性布局来实现，下面用的是线性布局来实现。线性布局需要比相对布局多增加一个布局层
          MyLinearLayout *dialogLayout= [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
          dialogLayout.tag = 50;
          [dialogLayout setTarget:self action:@selector(handleTest:)];
@@ -278,6 +279,53 @@
          [messageLayout addSubview:imageMessageView];
          */
         
+        
+        // 您也可以用浮动布局,浮动布局的代码最少。因为会自动根据内容和浮动设置进行排版布局，也不需要去设置视图之间的约束，也不需要进行布局视图的嵌套。
+      /*  MyFloatLayout *dialogLayout= [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+        dialogLayout.tag = 50;
+        [dialogLayout setTarget:self action:@selector(handleTest:)];
+        
+        dialogLayout.myLeftMargin = 0;
+        dialogLayout.myRightMargin = 0;
+        dialogLayout.wrapContentHeight = YES;
+        [cell.contentView addSubview:dialogLayout];
+        
+        //第一个子视图浮动到最左边。
+        UIImageView *headImageView = [UIImageView new];
+        headImageView.tag = 100;
+        headImageView.myRightMargin = 5;
+        [dialogLayout addSubview:headImageView];
+        
+        //第二个子视图紧跟在第一个子视图后面，并且通过设置weight来占据剩余的宽度
+        UILabel *nickNameLabel = [UILabel new];
+        nickNameLabel.tag = 200;
+        nickNameLabel.textColor = [UIColor blueColor];
+        nickNameLabel.font = [UIFont systemFontOfSize:15];
+        
+        nickNameLabel.myBottomMargin = 5;
+        nickNameLabel.weight = 1;
+        [dialogLayout addSubview:nickNameLabel];
+        
+        //第三个子视图也是紧跟在第一个子视图后面，并且通过设置weight来占据剩余的宽度
+        UILabel *textMessageLabel = [UILabel new];
+        textMessageLabel.tag = 300;
+        textMessageLabel.font = [UIFont systemFontOfSize:13];
+        textMessageLabel.weight = 1;
+        textMessageLabel.flexedHeight = YES;
+        textMessageLabel.numberOfLines = 0;
+        [dialogLayout addSubview:textMessageLabel];
+        
+        //第四个子视图占据整个宽度
+        UIImageView *imageMessageView = [UIImageView new];
+        imageMessageView.tag = 400;
+        
+        imageMessageView.myTopMargin = 5;
+        imageMessageView.reverseFloat = YES;
+        imageMessageView.weight = 1;
+        imageMessageView.contentMode = UIViewContentModeCenter;
+        [dialogLayout addSubview:imageMessageView];
+      */
+    
     }
     
     //这里最后一行没有下划线
@@ -330,6 +378,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     MyBaseLayout *dialogLayout = (MyBaseLayout*)[cell viewWithTag:50];
     

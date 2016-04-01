@@ -13,12 +13,12 @@ IB_DESIGNABLE
 @implementation MyRelativeLayout
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 
 
 -(void)setFlexOtherViewWidthWhenSubviewHidden:(BOOL)flexOtherViewWidthWhenSubviewHidden
@@ -40,7 +40,7 @@ IB_DESIGNABLE
 -(void)setFlexOtherViewHeightWhenSubviewHidden:(BOOL)flexOtherViewHeightWhenSubviewHidden
 {
     MyRelativeLayout *lsc = self.myCurrentSizeClass;
-
+    
     if (lsc.flexOtherViewHeightWhenSubviewHidden != flexOtherViewHeightWhenSubviewHidden)
     {
         lsc.flexOtherViewHeightWhenSubviewHidden = flexOtherViewHeightWhenSubviewHidden;
@@ -63,7 +63,7 @@ IB_DESIGNABLE
         if ([newSuperview isKindOfClass:[UIScrollView class]] && ![newSuperview isKindOfClass:[UITableView class]] && ![newSuperview isKindOfClass:[UICollectionView class]])
             self.adjustScrollViewContentSize = YES;
     }
-
+    
     
 }
 
@@ -97,7 +97,7 @@ IB_DESIGNABLE
     
     if ((sbv.absPos.leftPos != CGFLOAT_MAX && sbv.absPos.rightPos != CGFLOAT_MAX && sbv.absPos.width != CGFLOAT_MAX) || sbv.useFrame)
         return;
-
+    
     
     //先检测宽度,如果宽度是父亲的宽度则宽度和左右都确定
     if ([self calcWidth:sbv selfRect:selfRect])
@@ -209,7 +209,7 @@ IB_DESIGNABLE
         sbv.absPos.bottomPos = sbv.absPos.topPos + sbv.absPos.height;
         
     }
-
+    
 }
 
 
@@ -226,7 +226,7 @@ IB_DESIGNABLE
             if (sbv.absPos.leftPos != CGFLOAT_MAX)
                 return sbv.absPos.leftPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden) ? sbv.leftPos.margin : 0);
             
-           
+            
             [self calcSubViewLeftRight:sbv selfRect:selfRect];
             
             return sbv.absPos.leftPos - ((sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden) ? sbv.leftPos.margin : 0);
@@ -287,7 +287,7 @@ IB_DESIGNABLE
                 
                 return sbv.absPos.topPos - sbv.topPos.margin;
             }
-
+            
             
             
             if (sbv.absPos.bottomPos != CGFLOAT_MAX)
@@ -303,7 +303,7 @@ IB_DESIGNABLE
             if (sbv == self || sbv == nil)
                 return selfRect.size.width - self.leftPadding - self.rightPadding;
             
-    
+            
             if (sbv.absPos.width != CGFLOAT_MAX)
                 return sbv.absPos.width;
             
@@ -341,7 +341,7 @@ IB_DESIGNABLE
                 
                 return sbv.absPos.leftPos - sbv.leftPos.margin;
             }
-
+            
             
             if (sbv.absPos.leftPos != CGFLOAT_MAX && sbv.absPos.rightPos != CGFLOAT_MAX &&  sbv.absPos.width != CGFLOAT_MAX)
                 return sbv.absPos.leftPos + sbv.absPos.width / 2;
@@ -367,7 +367,7 @@ IB_DESIGNABLE
                 
                 return sbv.absPos.topPos - sbv.topPos.margin;
             }
-
+            
             
             if (sbv.absPos.topPos != CGFLOAT_MAX && sbv.absPos.bottomPos != CGFLOAT_MAX &&  sbv.absPos.height != CGFLOAT_MAX)
                 return sbv.absPos.topPos + sbv.absPos.height / 2;
@@ -394,13 +394,13 @@ IB_DESIGNABLE
             
             sbv.absPos.width = [self calcSubView:sbv.widthDime.dimeRelaVal.view gravity:sbv.widthDime.dimeRelaVal.dime selfRect:selfRect] * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
             sbv.absPos.width = [sbv.widthDime validMeasure:sbv.absPos.width];
-
+            
         }
         else if (sbv.widthDime.dimeNumVal != nil)
         {
             sbv.absPos.width = sbv.widthDime.dimeNumVal.doubleValue * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
             sbv.absPos.width = [sbv.widthDime validMeasure:sbv.absPos.width];
-
+            
         }
         else;
         
@@ -408,7 +408,7 @@ IB_DESIGNABLE
         if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
         {
             if (sbv.leftPos.posRelaVal != nil)
-                 sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos selfRect:selfRect] + sbv.leftPos.margin;
+                sbv.absPos.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos selfRect:selfRect] + sbv.leftPos.margin;
             else
                 sbv.absPos.leftPos = sbv.leftPos.margin + self.leftPadding;
             
@@ -419,9 +419,9 @@ IB_DESIGNABLE
             
             sbv.absPos.width = sbv.absPos.rightPos - sbv.absPos.leftPos;
             sbv.absPos.width = [sbv.widthDime validMeasure:sbv.absPos.width];
-
+            
             return YES;
-
+            
         }
         
         
@@ -445,13 +445,13 @@ IB_DESIGNABLE
             
             sbv.absPos.height = [self calcSubView:sbv.heightDime.dimeRelaVal.view gravity:sbv.heightDime.dimeRelaVal.dime selfRect:selfRect] * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
             sbv.absPos.height = [sbv.heightDime validMeasure:sbv.absPos.height];
-
+            
         }
         else if (sbv.heightDime.dimeNumVal != nil)
         {
             sbv.absPos.height = sbv.heightDime.dimeNumVal.doubleValue * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
             sbv.absPos.height = [sbv.heightDime validMeasure:sbv.absPos.height];
-
+            
         }
         else;
         
@@ -469,7 +469,7 @@ IB_DESIGNABLE
             
             sbv.absPos.height = sbv.absPos.bottomPos - sbv.absPos.topPos;
             sbv.absPos.height = [sbv.heightDime validMeasure:sbv.absPos.height];
-
+            
             
             return YES;
             
@@ -484,7 +484,7 @@ IB_DESIGNABLE
     }
     
     return NO;
-
+    
 }
 
 
@@ -675,7 +675,7 @@ IB_DESIGNABLE
                 }
             }
         }
-
+        
         
     }
     
@@ -685,12 +685,28 @@ IB_DESIGNABLE
     
     for (UIView *sbv in self.subviews)
     {
-        //左边检测。
+        
+        BOOL canCalcMaxWidth = YES;
+        BOOL canCalcMaxHeight = YES;
         
         [self calcSubViewLeftRight:sbv selfRect:selfRect];
         
         if (sbv.rightPos.posRelaVal != nil && sbv.rightPos.posRelaVal.view == self)
+        {
             *pRecalc = YES;
+        }
+        
+        if (sbv.widthDime.dimeRelaVal != nil && sbv.widthDime.dimeRelaVal.view == self)
+        {
+            canCalcMaxWidth = NO;
+            *pRecalc = YES;
+        }
+        
+        if (sbv.leftPos.posRelaVal != nil && sbv.leftPos.posRelaVal.view == self &&
+            sbv.rightPos.posRelaVal != nil && sbv.rightPos.posRelaVal.view == self)
+        {
+            canCalcMaxWidth = NO;
+        }
         
         
         if (sbv.isFlexedHeight)
@@ -704,13 +720,26 @@ IB_DESIGNABLE
         if (sbv.bottomPos.posRelaVal != nil && sbv.bottomPos.posRelaVal.view == self)
             *pRecalc = YES;
         
+        if (sbv.heightDime.dimeRelaVal != nil && sbv.heightDime.dimeRelaVal.view == self)
+        {
+            *pRecalc = YES;
+            canCalcMaxHeight = NO;
+        }
+        
+        if (sbv.topPos.posRelaVal != nil && sbv.topPos.posRelaVal.view == self &&
+            sbv.bottomPos.posRelaVal != nil && sbv.bottomPos.posRelaVal.view == self)
+        {
+            canCalcMaxHeight = NO;
+        }
+        
+        
         if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             continue;
         
-        if (maxWidth < sbv.absPos.rightPos + sbv.rightPos.margin)
+        if (canCalcMaxWidth &&  maxWidth < sbv.absPos.rightPos + sbv.rightPos.margin)
             maxWidth = sbv.absPos.rightPos + sbv.rightPos.margin;
         
-        if (maxHeight < sbv.absPos.bottomPos + sbv.bottomPos.margin)
+        if (canCalcMaxHeight && maxHeight < sbv.absPos.bottomPos + sbv.bottomPos.margin)
             maxHeight = sbv.absPos.bottomPos + sbv.bottomPos.margin;
     }
     
@@ -724,7 +753,7 @@ IB_DESIGNABLE
 -(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
     CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
-
+    
     for (UIView *sbv in self.subviews)
     {
         if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
@@ -739,7 +768,7 @@ IB_DESIGNABLE
             if (pHasSubLayout != NULL)
                 *pHasSubLayout = YES;
             
-             MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
+            MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
             
             if (sbvl.wrapContentWidth)
             {
@@ -804,7 +833,7 @@ IB_DESIGNABLE
     
     
     return selfRect;
-
+    
 }
 
 -(id)createSizeClassInstance

@@ -12,6 +12,10 @@
 @interface FOLTest1ViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *whTextField;
 @property (weak, nonatomic) IBOutlet MyFloatLayout *floatLayout;
+@property (weak, nonatomic) IBOutlet UISwitch *reverseFloatSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *clearFloatSwitch;
+@property (weak, nonatomic) IBOutlet UIStepper *weightStepper;
+@property (weak, nonatomic) IBOutlet UILabel *weightLabel;
 
 @end
 
@@ -21,7 +25,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
    // self.floatLayout.orientation = MyLayoutViewOrientation_Horz;
-    self.floatLayout.padding = UIEdgeInsetsZero;
+   self.title = @"浮动布局1--Demo1";
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,34 +50,34 @@
 -(void)createTagButton:(NSString*)text
 {
     NSArray *arr = [text componentsSeparatedByString:@","];
-    if (arr.count != 2 && arr.count != 8 && arr.count != 3 && arr.count !=4)
+    if (arr.count != 2 && arr.count != 6)
         return;
     
-    UIButton *tagButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, [arr[0] floatValue], [arr[1] floatValue])];
+    UIButton *tagButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [arr[0] floatValue], [arr[1] floatValue])];
     [tagButton setTitle:text forState:UIControlStateNormal];
     tagButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     tagButton.backgroundColor = [UIColor colorWithRed:random()%256 / 255.0 green:random()%256 / 255.0 blue:random()%256 / 255.0 alpha:1];
     [tagButton addTarget:self action:@selector(handleDelTag:) forControlEvents:UIControlEventTouchUpInside];
     [self.floatLayout addSubview:tagButton];
     
-    if (arr.count == 8)
+    if (arr.count == 6)
     {
-        tagButton.reverseFloat = [arr[2] boolValue];
-        tagButton.clearFloat = [arr[3] boolValue];
-        tagButton.myLeftMargin = [arr[4] floatValue];
-        tagButton.myTopMargin = [arr[5] floatValue];
-        tagButton.myRightMargin = [arr[6] floatValue];
-        tagButton.myBottomMargin = [arr[7] floatValue];
+        tagButton.myLeftMargin = [arr[2] floatValue];
+        tagButton.myTopMargin = [arr[3] floatValue];
+        tagButton.myRightMargin = [arr[4] floatValue];
+        tagButton.myBottomMargin = [arr[5] floatValue];
     }
-    else if (arr.count == 3)
-    {
-        tagButton.reverseFloat = [arr[2] boolValue];
-    }
-    else if (arr.count == 4)
-    {
-        tagButton.reverseFloat = [arr[2] boolValue];
-        tagButton.clearFloat = [arr[3] boolValue];
-    }
+    
+    tagButton.reverseFloat = self.reverseFloatSwitch.isOn;
+    tagButton.clearFloat = self.clearFloatSwitch.isOn;
+    tagButton.weight = self.weightStepper.value;
+    
+    self.weightStepper.value = 0;
+    self.weightLabel.text = @"0";
+    
+    self.reverseFloatSwitch.on = NO;
+    self.clearFloatSwitch.on = NO;
+    
     
     self.floatLayout.beginLayoutBlock =^{
         
@@ -118,6 +124,11 @@
         [UIView commitAnimations];
     };
 
+    
+}
+- (IBAction)handleWeightStepper:(id)sender {
+    
+    self.weightLabel.text = [NSString stringWithFormat:@"%.1f", self.weightStepper.value];
     
 }
 
