@@ -195,13 +195,40 @@ IB_DESIGNABLE
     }
     
     
-    //最后一排。
-    if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Vert_Top) || addXPos != 0)
+    //将整行的位置进行调整。
+    for (NSInteger j = startIndex - count; j < startIndex; j++)
     {
-        //将整行的位置进行调整。
-        for (NSInteger j = startIndex - count; j < startIndex; j++)
+        UIView *sbv = sbs[j];
+        
+        if (self.IntelligentBorderLine != nil)
         {
-            UIView *sbv = sbs[j];
+            if ([sbv isKindOfClass:[MyBaseLayout class]])
+            {
+                MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
+                if (!sbvl.notUseIntelligentBorderLine)
+                {
+                    sbvl.leftBorderLine = nil;
+                    sbvl.topBorderLine = nil;
+                    sbvl.rightBorderLine = nil;
+                    sbvl.bottomBorderLine = nil;
+                    
+                    if (j != startIndex - count)
+                    {
+                        sbvl.leftBorderLine = self.IntelligentBorderLine;
+                    }
+                    
+                    if (startIndex - count != 0)
+                    {
+                        sbvl.topBorderLine = self.IntelligentBorderLine;
+                    }
+                    
+                    
+                }
+            }
+        }
+        
+        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Vert_Top) || addXPos != 0)
+        {
             
             sbv.absPos.leftPos += addXPos;
             
@@ -227,6 +254,7 @@ IB_DESIGNABLE
             }
         }
     }
+
 }
 
 -(CGRect)layoutSubviewsForVertFloat:(CGRect)selfRect
@@ -559,13 +587,42 @@ IB_DESIGNABLE
     
 
     
-    if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Horz_Left) || addYPos != 0)
+    
+    //将整行的位置进行调整。
+    for (NSInteger j = startIndex - count; j < startIndex; j++)
     {
-        //将整行的位置进行调整。
-        for (NSInteger j = startIndex - count; j < startIndex; j++)
+        UIView *sbv = sbs[j];
+        
+        if (self.IntelligentBorderLine != nil)
         {
-            UIView *sbv = sbs[j];
-            
+            if ([sbv isKindOfClass:[MyBaseLayout class]])
+            {
+                MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
+                if (!sbvl.notUseIntelligentBorderLine)
+                {
+                    sbvl.leftBorderLine = nil;
+                    sbvl.topBorderLine = nil;
+                    sbvl.rightBorderLine = nil;
+                    sbvl.bottomBorderLine = nil;
+                    
+                    if (j != startIndex - count)
+                    {
+                        sbvl.topBorderLine = self.IntelligentBorderLine;
+                    }
+                    
+                    if (startIndex - count != 0)
+                    {
+                        sbvl.leftBorderLine = self.IntelligentBorderLine;
+                    }
+                    
+                    
+                }
+            }
+        }
+        
+        
+        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Horz_Left) || addYPos != 0)
+        {
             sbv.absPos.topPos += addYPos;
             
             switch (amg) {
