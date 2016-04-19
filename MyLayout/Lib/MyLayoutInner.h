@@ -2,8 +2,8 @@
 //  MyLayoutInner.h
 //  MyLayout
 //
-//  Created by apple on 15/7/10.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/7/10.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyLayoutDef.h"

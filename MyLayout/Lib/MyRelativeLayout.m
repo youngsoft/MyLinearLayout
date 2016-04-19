@@ -2,8 +2,8 @@
 //  MyRelativeLayout.m
 //  MyLayout
 //
-//  Created by apple on 15/7/1.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/7/1.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyRelativeLayout.h"
@@ -585,6 +585,20 @@ IB_DESIGNABLE
             }
         }
         
+        //处理尺寸等于内容时并且需要添加额外尺寸的情况。
+        if (sbv.widthDime.dimeSelf != nil || sbv.heightDime.dimeSelf != nil)
+        {
+            CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
+            if (sbv.widthDime.dimeSelf != nil)
+            {
+                sbv.absPos.width = [sbv.widthDime validMeasure:fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            }
+            
+            if (sbv.heightDime.dimeSelf != nil)
+            {
+                sbv.absPos.height = [sbv.heightDime validMeasure:fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+            }
+        }
         
         //表示视图数组水平居中
         if (sbv.centerXPos.posArrVal != nil)

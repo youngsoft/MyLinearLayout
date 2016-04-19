@@ -2,7 +2,7 @@
 //  FLLTest2ViewController.m
 //  MyLayout
 //
-//  Created by apple on 16/2/12.
+//  Created by oybq on 16/2/12.
 //  Copyright © 2016年 YoungSoft. All rights reserved.
 //
 
@@ -53,7 +53,10 @@
     tagButton.layer.cornerRadius = 20;
     tagButton.backgroundColor = [UIColor colorWithRed:random()%256 / 255.0 green:random()%256 / 255.0 blue:random()%256 / 255.0 alpha:1];
     tagButton.heightDime.equalTo(@((random() % 40) + 40));
-    tagButton.widthDime.min(40);
+    
+    //这里可以看到尺寸宽度等于自己的尺寸宽度并且再增加10，且最小是40，意思是按钮的宽度是等于自身内容的宽度再加10，但最小的宽度是40
+    //如果没有这个设置，而是直接调用了sizeToFit则按钮的宽度就是内容的宽度。
+    tagButton.widthDime.equalTo(tagButton.widthDime).add(10).min(40);
     [tagButton sizeToFit];
     [tagButton addTarget:self action:@selector(handleDelTag:) forControlEvents:UIControlEventTouchUpInside];
     [self.flowLayout addSubview:tagButton];

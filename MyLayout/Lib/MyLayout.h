@@ -2,16 +2,18 @@
 //  MyLayout.h
 //  MyLayout
 //
-//  Created by apple on 15/7/5.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
-//  Email:obq0387_cn@sina.com
-//  qq:156355113
-//  qq群:178573773
+//  Created by oybq on 15/7/5.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
+//  Email:    obq0387_cn@sina.com
+//  QQ:       156355113
+//  QQ群:     178573773
+//  Github:   https://github.com/youngsoft/MyLinearLayout
+//  个人主页:  http://www.jianshu.com/users/3c9287519f58/latest_articles  http://blog.csdn.net/yangtiang
 //
 /*
  The MIT License (MIT)
  
- Copyright (c) 2015 欧阳大哥
+ Copyright (c) 2015 YoungSoft
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

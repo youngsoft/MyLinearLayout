@@ -2,8 +2,8 @@
 //  Test1ViewController.m
 //  MyLayout
 //
-//  Created by apple on 15/6/21.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/6/21.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "LLTest1ViewController.h"
@@ -205,6 +205,12 @@
 
 -(void)loadView
 {
+    
+   // [MyDimeScale sc]
+    
+    
+
+
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [UIColor whiteColor];

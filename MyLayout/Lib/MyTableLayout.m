@@ -2,8 +2,8 @@
 //  MyTableLayout.m
 //  MyLayout
 //
-//  Created by apple on 15/8/26.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/8/26.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyTableLayout.h"
@@ -179,14 +179,27 @@ IB_DESIGNABLE
     {
         if (colView.frame.size.height == 0 && colView.heightDime.dimeVal == nil)
         {
-            colView.heightDime.equalTo(rowView.heightDime);
+            if ([colView isKindOfClass:[MyBaseLayout class]])
+            {
+                if (!((MyBaseLayout*)colView).wrapContentHeight)
+                    colView.heightDime.equalTo(rowView.heightDime);
+            }
+            else
+                colView.heightDime.equalTo(rowView.heightDime);
         }
     }
     else
     {
         if (colView.frame.size.width == 0 && colView.widthDime.dimeVal == nil)
         {
-            colView.widthDime.equalTo(rowView.widthDime);
+            
+            if ([colView isKindOfClass:[MyBaseLayout class]])
+            {
+                if (!((MyBaseLayout*)colView).wrapContentWidth)
+                     colView.widthDime.equalTo(rowView.widthDime);
+            }
+            else
+                colView.widthDime.equalTo(rowView.widthDime);
         }
         
     }

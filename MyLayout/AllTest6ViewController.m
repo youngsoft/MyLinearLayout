@@ -2,7 +2,7 @@
 //  AllTest6ViewController.m
 //  MyLayout
 //
-//  Created by apple on 16/2/5.
+//  Created by oybq on 16/2/5.
 //  Copyright (c) 2016年 YoungSoft. All rights reserved.
 //
 

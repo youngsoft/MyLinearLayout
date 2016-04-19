@@ -2,7 +2,7 @@
 //  MyFloatLayout.m
 //  MyLayout
 //
-//  Created by apple on 16/2/18.
+//  Created by oybq on 16/2/18.
 //  Copyright © 2016年 YoungSoft. All rights reserved.
 //
 
@@ -1044,6 +1044,23 @@
         if (!isEstimate)
         {
             sbv.absPos.frame = sbv.frame;
+            
+            //处理尺寸等于内容时并且需要添加额外尺寸的情况。
+            if (sbv.widthDime.dimeSelf != nil || sbv.heightDime.dimeSelf != nil)
+            {
+                CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
+                if (sbv.widthDime.dimeSelf != nil)
+                {
+                    sbv.absPos.width = [sbv.widthDime validMeasure:fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+                }
+                
+                if (sbv.heightDime.dimeSelf != nil)
+                {
+                    sbv.absPos.height = [sbv.heightDime validMeasure:fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+                }
+            }
+
+            
         }
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])

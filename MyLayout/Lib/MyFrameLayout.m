@@ -2,8 +2,8 @@
 //  MyFrameLayout.m
 //  MyLayout
 //
-//  Created by apple on 15/6/14.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/6/14.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyFrameLayout.h"
@@ -130,7 +130,26 @@ IB_DESIGNABLE
         CGRect rect;
     
         if (!isEstimate)
+        {
             rect  = sbv.frame;
+            
+            //处理尺寸等于内容时并且需要添加额外尺寸的情况。
+            if (sbv.widthDime.dimeSelf != nil || sbv.heightDime.dimeSelf != nil)
+            {
+                CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
+                if (sbv.widthDime.dimeSelf != nil)
+                {
+                    rect.size.width = [sbv.widthDime validMeasure:fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+                }
+                
+                if (sbv.heightDime.dimeSelf != nil)
+                {
+                    rect.size.height = [sbv.heightDime validMeasure:fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+                }
+            }
+
+            
+        }
         else
         {
             if ([sbv isKindOfClass:[MyBaseLayout class]])

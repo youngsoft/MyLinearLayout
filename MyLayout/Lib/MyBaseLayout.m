@@ -2,8 +2,8 @@
 //  MyBaseLayout.m
 //  MyLayout
 //
-//  Created by apple on 15/6/14.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/6/14.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyBaseLayout.h"
@@ -570,7 +570,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     if (self != nil)
     {
         _color = [UIColor blackColor];
-        _insetColor = nil;
         _thick = 1;
         _headIndent = 0;
         _tailIndent = 0;
@@ -716,6 +715,10 @@ IB_DESIGNABLE
     
     UIColor *_oldBackgroundColor;
     UIImage *_oldBackgroundImage;
+    
+    CGFloat _oldAlpha;
+    CGFloat _highlightedOpacity;
+    
     BOOL _forbidTouch;
     BOOL _canCallAction;
     CGPoint _beginPoint;
@@ -840,58 +843,6 @@ BOOL _hasBegin;
 -(BOOL)hideSubviewReLayout
 {
     return self.myCurrentSizeClass.hideSubviewReLayout;
-}
-
-
--(void)updateBorderLayer:(CAShapeLayer**)ppLayer withBorderLineDraw:(MyBorderLineDraw*)borderLineDraw
-{
-    if (borderLineDraw == nil)
-    {
-        if (*ppLayer != nil)
-        {
-            (*ppLayer).delegate = nil;
-            [(*ppLayer) removeFromSuperlayer];
-            *ppLayer = nil;
-        }
-    }
-    else
-    {
-        if (_layerDelegate == nil)
-            _layerDelegate = [[MyBorderLineLayerDelegate alloc] initWithLayout:self];
-        
-        if ( *ppLayer == nil)
-        {
-            *ppLayer = [[CAShapeLayer alloc] init];
-            (*ppLayer).delegate = _layerDelegate;
-            [self.layer addSublayer:*ppLayer];
-        }
-        
-        //如果是点线则是用path，否则就用背景色
-        if (borderLineDraw.dash != 0)
-        {
-            (*ppLayer).lineDashPhase = borderLineDraw.dash / 2;
-            NSNumber *num = @(borderLineDraw.dash);
-            (*ppLayer).lineDashPattern = @[num,num];
-            
-            (*ppLayer).strokeColor = borderLineDraw.color.CGColor;
-            (*ppLayer).lineWidth = borderLineDraw.thick;
-            (*ppLayer).backgroundColor = nil;
-
-        }
-        else
-        {
-            (*ppLayer).lineDashPhase = 0;
-            (*ppLayer).lineDashPattern = nil;
-            
-            (*ppLayer).strokeColor = nil;
-            (*ppLayer).lineWidth = 0;
-            (*ppLayer).backgroundColor = borderLineDraw.color.CGColor;
-
-        }
-        
-        [(*ppLayer) setNeedsLayout];
-        
-    }
 }
 
 
@@ -1035,7 +986,7 @@ BOOL _hasBegin;
 
 
 
-#pragma mark -- touches event
+#pragma mark -- Touches Event
 
 
 
@@ -1047,6 +998,13 @@ BOOL _hasBegin;
         _hasBegin = YES;
         _canCallAction = YES;
         _beginPoint = [((UITouch*)[touches anyObject]) locationInView:self];
+        
+        if (_highlightedOpacity != 0)
+        {
+            _oldAlpha = self.alpha;
+            self.alpha = 1 - _highlightedOpacity;
+        }
+        
         if (_highlightedBackgroundColor != nil)
         {
             _oldBackgroundColor = self.backgroundColor;
@@ -1110,6 +1068,13 @@ BOOL _hasBegin;
 
 -(void)doTargetAction:(UITouch*)touch
 {
+    
+    if (_highlightedOpacity != 0)
+    {
+        self.alpha = _oldAlpha;
+        _oldAlpha = 1;
+    }
+    
     if (_highlightedBackgroundColor != nil)
     {
         self.backgroundColor = _oldBackgroundColor;
@@ -1181,6 +1146,12 @@ BOOL _hasBegin;
     
     if (_target != nil && _hasBegin)
     {
+        if (_highlightedOpacity != 0)
+        {
+            self.alpha = _oldAlpha;
+            _oldAlpha = 1;
+        }
+        
         if (_highlightedBackgroundColor != nil)
         {
             self.backgroundColor = _oldBackgroundColor;
@@ -1792,5 +1763,57 @@ BOOL _hasBegin;
         
     }
 }
+
+-(void)updateBorderLayer:(CAShapeLayer**)ppLayer withBorderLineDraw:(MyBorderLineDraw*)borderLineDraw
+{
+    if (borderLineDraw == nil)
+    {
+        if (*ppLayer != nil)
+        {
+            (*ppLayer).delegate = nil;
+            [(*ppLayer) removeFromSuperlayer];
+            *ppLayer = nil;
+        }
+    }
+    else
+    {
+        if (_layerDelegate == nil)
+            _layerDelegate = [[MyBorderLineLayerDelegate alloc] initWithLayout:self];
+        
+        if ( *ppLayer == nil)
+        {
+            *ppLayer = [[CAShapeLayer alloc] init];
+            (*ppLayer).delegate = _layerDelegate;
+            [self.layer addSublayer:*ppLayer];
+        }
+        
+        //如果是点线则是用path，否则就用背景色
+        if (borderLineDraw.dash != 0)
+        {
+            (*ppLayer).lineDashPhase = borderLineDraw.dash / 2;
+            NSNumber *num = @(borderLineDraw.dash);
+            (*ppLayer).lineDashPattern = @[num,num];
+            
+            (*ppLayer).strokeColor = borderLineDraw.color.CGColor;
+            (*ppLayer).lineWidth = borderLineDraw.thick;
+            (*ppLayer).backgroundColor = nil;
+            
+        }
+        else
+        {
+            (*ppLayer).lineDashPhase = 0;
+            (*ppLayer).lineDashPattern = nil;
+            
+            (*ppLayer).strokeColor = nil;
+            (*ppLayer).lineWidth = 0;
+            (*ppLayer).backgroundColor = borderLineDraw.color.CGColor;
+            
+        }
+        
+        [(*ppLayer) setNeedsLayout];
+        
+    }
+}
+
 
 @end

@@ -2,8 +2,8 @@
 //  MyFlowLayout.m
 //  MyLayout
 //
-//  Created by apple on 15/10/31.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/10/31.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyFlowLayout.h"
@@ -257,7 +257,7 @@ IB_DESIGNABLE
 
 }
 
--(CGRect)layoutSubviewsForVertFloat:(CGRect)selfRect
+-(CGRect)layoutSubviewsForVertAuto:(CGRect)selfRect
 {
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
@@ -650,7 +650,7 @@ IB_DESIGNABLE
 }
 
 
--(CGRect)layoutSubviewsForHorzFloat:(CGRect)selfRect
+-(CGRect)layoutSubviewsForHorzAuto:(CGRect)selfRect
 {
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
@@ -961,6 +961,23 @@ IB_DESIGNABLE
         if (!isEstimate)
         {
             sbv.absPos.frame = sbv.frame;
+            
+            //处理尺寸等于内容时并且需要添加额外尺寸的情况。
+            if (sbv.widthDime.dimeSelf != nil || sbv.heightDime.dimeSelf != nil)
+            {
+                CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
+                if (sbv.widthDime.dimeSelf != nil)
+                {
+                    sbv.absPos.width = [sbv.widthDime validMeasure:fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+                }
+                
+                if (sbv.heightDime.dimeSelf != nil)
+                {
+                    sbv.absPos.height = [sbv.heightDime validMeasure:fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+                }
+            }
+
+            
         }
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
@@ -983,14 +1000,14 @@ IB_DESIGNABLE
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
         if (self.arrangedCount == 0)
-            selfRect = [self layoutSubviewsForVertFloat:selfRect];
+            selfRect = [self layoutSubviewsForVertAuto:selfRect];
         else
             selfRect = [self layoutSubviewsForVert:selfRect];
     }
     else
     {
         if (self.arrangedCount == 0)
-            selfRect = [self layoutSubviewsForHorzFloat:selfRect];
+            selfRect = [self layoutSubviewsForHorzAuto:selfRect];
         else
             selfRect = [self layoutSubviewsForHorz:selfRect];
     }

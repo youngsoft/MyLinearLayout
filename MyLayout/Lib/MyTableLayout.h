@@ -2,8 +2,8 @@
 //  MyTableLayout.h
 //  MyLayout
 //
-//  Created by apple on 15/8/26.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/8/26.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyLinearLayout.h"
@@ -12,7 +12,6 @@
 /**
  *  行列描述扩展对象。
  */
-
 @interface NSIndexPath(MyTableLayoutEx)
 
 +(instancetype)indexPathForCol:(NSInteger)col inRow:(NSInteger)row;
@@ -32,11 +31,7 @@
 
 
 /**
- *  表格布局.用于方便的进行表格布局视图的操作。可以添加任意行，每行可以添加任意的列
- *  表格布局也可以用数据量不大的瀑布流式布局。
- *  因为是从线性布局派生，因此表格也分为垂直表格和水平表格
- *  所谓垂直表格就是行是从上往下排列，而水平表格则行是从左往右排列
- *  表格布局支持wrapContentHeight,wrapContentWidth属性
+ * 表格布局，用来实现多行多列表格样式的布局，可以用表格布局来实现瀑布流的功能。一个垂直表格外部是一个垂直线性布局而里面的行则是水平线性布局，而一个水平表格外部是一个水平线性布局而
  */
 @interface MyTableLayout : MyLinearLayout
 

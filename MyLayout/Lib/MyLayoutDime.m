@@ -2,8 +2,8 @@
 //  MyLayoutDime.m
 //  MyLayout
 //
-//  Created by apple on 15/6/14.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/6/14.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyLayoutDime.h"
@@ -119,20 +119,50 @@
             _dimeVal = val;
             
             if ([val isKindOfClass:[NSNumber class]])
+            {
                 _dimeValType = MyLayoutValueType_NSNumber;
+            }
             else if ([val isKindOfClass:[MyLayoutDime class]])
+            {
                 _dimeValType = MyLayoutValueType_Layout;
+                
+                //我们支持尺寸等于自己的情况，用来支持那些尺寸包裹内容但又想扩展尺寸的场景，为了不造成循环引用这里做特殊处理
+                //当尺寸等于自己时，我们只记录_dimeValType，而把值设置为nil
+                if (val == self)
+                    _dimeVal = nil;
+            }
             else if ([val isKindOfClass:[NSArray class]])
+            {
                 _dimeValType = MyLayoutValueType_Array;
+            }
             else
+            {
                 _dimeValType = MyLayoutValueType_Nil;
+            }
             
             [self setNeedLayout];
+        }
+        else
+        {
+            //参考上面自己等于自己的特殊情况需要特殊处理。
+            if (val == nil && _dimeVal == nil && _dimeValType == MyLayoutValueType_Layout)
+            {
+                _dimeValType = MyLayoutValueType_Nil;
+                [self setNeedLayout];
+            }
         }
         
         return self;
     };
     
+}
+
+-(id)dimeVal
+{
+    if (_dimeValType == MyLayoutValueType_Layout && _dimeVal == nil)
+        return self;
+    
+    return _dimeVal;
 }
 
 -(NSNumber*)dimeNumVal
@@ -174,6 +204,19 @@
         return _dimeVal;
     return nil;
     
+}
+
+-(MyLayoutDime*)dimeSelf
+{
+    if (_dimeValType == MyLayoutValueType_Layout && _dimeVal == nil)
+        return self;
+    
+    return nil;
+}
+
+-(void)setDimeSelf:(MyLayoutDime *)dimeSelf
+{
+    NSAssert(0, @"oops");
 }
 
 -(void)setDimeRelaVal:(MyLayoutDime *)dimeRelaVal

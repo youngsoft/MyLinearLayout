@@ -2,7 +2,7 @@
 //  MyFloatLayout.h
 //  MyLayout
 //
-//  Created by apple on 16/2/18.
+//  Created by oybq on 16/2/18.
 //  Copyright © 2016年 YoungSoft. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  MyLayoutSizeClass.h
 //  MyLayout
 //
-//  Created by apple on 16/1/22.
+//  Created by oybq on 16/1/22.
 //  Copyright © 2016年 YoungSoft. All rights reserved.
 //
 

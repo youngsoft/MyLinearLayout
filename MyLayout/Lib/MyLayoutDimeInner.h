@@ -2,8 +2,8 @@
 //  MyLayoutDimeInner.h
 //  MyLayout
 //
-//  Created by apple on 15/6/14.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/6/14.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyLayoutDime.h"
@@ -20,6 +20,7 @@
 @property(nonatomic, readonly, strong) NSNumber *dimeNumVal;
 @property(nonatomic, readonly, strong) NSArray *dimeArrVal;
 @property(nonatomic, readonly, strong) MyLayoutDime *dimeRelaVal;
+@property(nonatomic, readonly, strong) MyLayoutDime *dimeSelf;
 
 
 //是否跟父视图相关

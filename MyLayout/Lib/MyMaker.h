@@ -2,14 +2,16 @@
 //  MyMaker.h
 //  MyLayout
 //
-//  Created by apple on 15/7/5.
-//  Copyright (c) 2015年 欧阳大哥. All rights reserved.
+//  Created by oybq on 15/7/5.
+//  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
 #import "MyLayoutDef.h"
 
 
-/*专门为布局设置的简化操作类，以便在统一的地方进行布局设置*/
+/**
+ *专门为布局设置的简化操作类，以便在统一的地方进行布局设置
+ */
 @interface MyMaker : NSObject
 
 -(MyMaker*)top;
@@ -82,7 +84,7 @@
 
 @interface UIView(MyMakerExt)
 
-//对视图进行统一的布局，方便操作，跟masonry库的设置一致，请参考DEMO1中的设置。
+//对视图进行统一的布局，方便操作，请参考DEMO1中的使用方法。
 -(void)makeLayout:(void(^)(MyMaker *make))layoutMaker;
 
 //布局内所有子视图的布局构造，会影响到有所的子视图。
