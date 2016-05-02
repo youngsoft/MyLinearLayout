@@ -14,10 +14,10 @@
 
 @implementation MyLayoutPos
 {
+    id _posVal;
     CGFloat _offsetVal;
     CGFloat _minVal;
     CGFloat _maxVal;
-    id _posVal;
 
 }
 
@@ -38,76 +38,29 @@
     return self;
 }
 
--(void)setNeedLayout
+-(MyLayoutPos* (^)(id val))equalTo
 {
-    if (_view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
-    {
-        MyBaseLayout* lb = (MyBaseLayout*)_view.superview;
-        if (!lb.isMyLayouting)
-            [_view.superview setNeedsLayout];
-    }
-    
-}
-
-
--(NSNumber*)posNumVal
-{
-    if (_posVal == nil)
-        return nil;
-    
-    if (_posValType == MyLayoutValueType_NSNumber)
-        return _posVal;
+    return ^id(id val){
         
-    return nil;
+        if (![_posVal isEqual:val])
+        {
+            _posVal = val;
+            if ([val isKindOfClass:[NSNumber class]])
+                _posValType = MyLayoutValueType_NSNumber;
+            else if ([val isKindOfClass:[MyLayoutPos class]])
+                _posValType = MyLayoutValueType_Layout;
+            else if ([val isKindOfClass:[NSArray class]])
+                _posValType = MyLayoutValueType_Array;
+            else
+                _posValType = MyLayoutValueType_Nil;
+            
+            [self setNeedLayout];
+        }
+        
+        return self;
+    };
     
 }
-
-
--(MyLayoutPos*)posRelaVal
-{
-    if (_posVal == nil)
-        return nil;
-    
-    if (_posValType == MyLayoutValueType_Layout)
-        return _posVal;
-    
-    return nil;
-    
-}
-
-
-
--(MyLayoutPos*)posArrVal
-{
-    if (_posVal == nil)
-        return nil;
-    
-    if (_posValType == MyLayoutValueType_Array)
-        return _posVal;
-    
-    return nil;
-    
-}
-
-
--(CGFloat)margin
-{
-    CGFloat retVal = _offsetVal;
-    
-    if (self.posNumVal != nil)
-        retVal +=self.posNumVal.doubleValue;
-    
-    return [self validMargin:retVal];
-}
-
-
--(CGFloat)validMargin:(CGFloat)margin
-{
-    margin = MAX(_minVal, margin);
-    return MIN(_maxVal, margin);
-}
-
-
 
 -(MyLayoutPos* (^)(CGFloat val))offset
 {
@@ -153,29 +106,6 @@
 }
 
 
--(MyLayoutPos* (^)(id val))equalTo
-{
-    return ^id(id val){
-        
-        if (![_posVal isEqual:val])
-        {
-            _posVal = val;
-            if ([val isKindOfClass:[NSNumber class]])
-                _posValType = MyLayoutValueType_NSNumber;
-            else if ([val isKindOfClass:[MyLayoutPos class]])
-                _posValType = MyLayoutValueType_Layout;
-            else if ([val isKindOfClass:[NSArray class]])
-                _posValType = MyLayoutValueType_Array;
-            else
-                _posValType = MyLayoutValueType_Nil;
-            
-            [self setNeedLayout];
-        }
-        
-        return self;
-    };
-    
-}
 
 -(void)clear
 {
@@ -184,7 +114,113 @@
     _offsetVal = 0;
     _minVal = -CGFLOAT_MAX;
     _maxVal = CGFLOAT_MAX;
+    [self setNeedLayout];
 }
+
+
+
+-(NSNumber*)posNumVal
+{
+    if (_posVal == nil)
+        return nil;
+    
+    if (_posValType == MyLayoutValueType_NSNumber)
+        return _posVal;
+        
+    return nil;
+    
+}
+
+
+
+-(MyLayoutPos*)posRelaVal
+{
+    if (_posVal == nil)
+        return nil;
+    
+    if (_posValType == MyLayoutValueType_Layout)
+        return _posVal;
+    
+    return nil;
+    
+}
+
+
+-(NSArray*)posArrVal
+{
+    if (_posVal == nil)
+        return nil;
+    
+    if (_posValType == MyLayoutValueType_Array)
+        return _posVal;
+    
+    return nil;
+    
+}
+
+
+-(CGFloat)margin
+{
+    CGFloat retVal = _offsetVal;
+    
+    if (self.posNumVal != nil)
+        retVal +=self.posNumVal.doubleValue;
+    
+    return [self validMargin:retVal];
+}
+
+-(BOOL)isRelativeMargin:(CGFloat)margin
+{
+    return margin > 0 && margin < 1;
+}
+
+-(CGFloat)realMarginInSize:(CGFloat)size
+{
+    CGFloat realMargin = self.posNumVal.doubleValue;
+    if ([self isRelativeMargin:realMargin])
+        realMargin *= size;
+    
+    return [self validMargin:realMargin + _offsetVal];
+}
+
+
+
+-(CGFloat)validMargin:(CGFloat)margin
+{
+    margin = MAX(_minVal, margin);
+    return MIN(_maxVal, margin);
+}
+
+#pragma mark -- NSCopying  
+
+-(id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutPos *lp = [[[self class] allocWithZone:zone] init];
+    lp.view = self.view;
+    lp.pos = self.pos;
+    lp.posValType = self.posValType;
+    lp->_offsetVal = self.offsetVal;
+    lp->_minVal = self.minVal;
+    lp->_maxVal = self.maxVal;
+    lp->_posVal = self->_posVal;
+    
+    return lp;
+
+}
+
+
+#pragma mark -- Private Method
+-(void)setNeedLayout
+{
+    if (_view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
+    {
+        MyBaseLayout* lb = (MyBaseLayout*)_view.superview;
+        if (!lb.isMyLayouting)
+            [_view.superview setNeedsLayout];
+    }
+    
+}
+
 
 
 +(NSString*)posstrFromPos:(MyLayoutPos*)posobj showView:(BOOL)showView
@@ -222,7 +258,7 @@
     }
     
     return [NSString stringWithFormat:@"%@%@",viewstr,posStr];
-
+    
     
 }
 
@@ -251,7 +287,7 @@
                 else
                 {
                     posValStr = [posValStr stringByAppendingString:[obj description]];
-
+                    
                 }
                 
                 if (obj != [_posVal lastObject])
@@ -265,26 +301,9 @@
         default:
             break;
     }
-
-    return [NSString stringWithFormat:@"%@=%@, Offset=%g, Max=%g, Min=%g",[MyLayoutPos posstrFromPos:self showView:NO], posValStr, _offsetVal, _maxVal == CGFLOAT_MAX ? NAN : _maxVal , _minVal == -CGFLOAT_MAX ? NAN : _minVal];
-   
-}
-
-#pragma mark -- NSCopying  
-
--(id)copyWithZone:(NSZone *)zone
-{
-    MyLayoutPos *lp = [[[self class] allocWithZone:zone] init];
-    lp.view = self.view;
-    lp.pos = self.pos;
-    lp.posValType = self.posValType;
-    lp->_offsetVal = self.offsetVal;
-    lp->_minVal = self.minVal;
-    lp->_maxVal = self.maxVal;
-    lp->_posVal = self->_posVal;
     
-    return lp;
-
+    return [NSString stringWithFormat:@"%@=%@, Offset=%g, Max=%g, Min=%g",[MyLayoutPos posstrFromPos:self showView:NO], posValStr, _offsetVal, _maxVal == CGFLOAT_MAX ? NAN : _maxVal , _minVal == -CGFLOAT_MAX ? NAN : _minVal];
+    
 }
 
 

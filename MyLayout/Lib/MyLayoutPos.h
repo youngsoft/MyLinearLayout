@@ -9,7 +9,50 @@
 #import "MyLayoutDef.h"
 
 /**
- *  视图在布局中的布局位置类，用来设置视图在布局视图的位置和偏移。
+ *视图的布局位置类，用于定位视图在布局视图中的位置。位置可分为水平方向的位置和垂直方向的位置，在视图定位时必要同时指定水平方向的位置和垂直方向的位置。水平方向的位置可以分为左，水平居中，右三种位置，垂直方向的位置可以分为上，垂直居中，下三种位置。
+ 其中的offset方法可以用来设置布局位置的偏移值,一般只在equalTo设置为MyLayoutPos或者NSArray时配合使用。比如A.leftPos.equalTo(B.rightPos).offset(5)表示A在B的右边再偏移5个点
+ 
+ 其中的min,max表示用来设置布局位置的最大最小值。比如A.leftPos.min(10).max(40)表示左边边界值最小是10最大是40。最大最小值一般和线性布局和框架布局中的子视图的位置设置为相对间距的情况下搭配着用。
+ 
+ 下面的表格描述了各种布局下的子视图的布局位置对象的equalTo方法可以设置的值。
+ 为了表示方便我们把：线性布局简写为L、相对布局简写为R、表格布局简写为T、框架布局简写为FR、流式布局简写为FL、浮动布局简写为FO、全部简写为ALL，不支持为-
+ +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
+ |method\val|NSNumber|NSArray<MyLayoutPos*>|leftPos|topPos|rightPos|bottomPos|centerXPos|centerYPos|
+ +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
+ | leftPos	| ALL    | -                   | R     | -    |  R     | -       | R        | -        |
+ +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
+ | topPos   | ALL    | -                   | -     | R    |  -     | R       | -        | R        |
+ +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
+ |rightPos	| ALL    | -                   | R     | -    |  R     | -       | R        | -        |
+ +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
+ |bottomPos	| ALL    | -                   | -     | R    |  -     | R       | -        | R        |
+ +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
+ |centerXPos| ALL    | R                   | R     | -    |  R     | -       | R        | -        |
+ +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
+ |centerYPos| ALL    | R                   | -     | R    |  -     | R       | -        | R        |
+ +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
+ 
+ 上表中所有布局下的子视图的布局位置都支持设置为数值，而数值对于线性布局，表格布局，框架布局这三种布局来说当设置的结果>0且<1时表示的是相对的边界值
+ 比如一个框架布局的宽度是100，而其中的一个子视图的leftPos.equalTo(@0.1)则表示这个子视图左边距离框架布局的左边的宽度是100*0.1
+ 
+ */
+/*
+ The MyLayoutPos is the layout position object of the UIView. It is used to set the position relationship at the six directions of left, top, right, bottom, horizontal center, vertical center between the view and sibling views or Layoutview.
+ 
+ you can use the equalTo() method of MyLayoutPos to set as below:
+ 1.NSNumber: the layout position is equal to a number. e.g. leftPos.equalTo (@100) indicates that the value of the left boundary is 100.
+ 2.MyLayoutPos: the layout position depends on aother layout position. e.g. A.leftPos.equalTo(B.rightPos) indicates that A is on the right side of B.
+ 3.NSArray<MyLayoutPos*>: all views in the array and View are centered. e.g. A.centerXPos.equalTo(@[B.centerXPos, C.centerXPos]) indicates that A,B,C are overall horizontal centered.
+ 4.nil: the layout position value is clear.
+ 
+ you can use offset() method of MyLayoutPos to set offset of the layout position,but it is generally used together when equalTo() is set at MyLayoutPos or NSArray. e.g. A.leftPos.equalTo(B.rightPos).offset(5) indicates that A is on the right side of B and increase 5 point offset.
+ 
+ you can use max and min method of MyLayoutPos to limit the maximum and minimum postion value. e.g. A.leftPos.min (10).Max (40) indicates that the minimum value of the left boundary is 10 and the maximum is 40. The min and max method always be used together when the subview' position of MyLinearLayout or MyFrameLayout is set at the relative position(0,1].
+ 
+ The above table describes the value the equalTo method can be set by the of the layout location object of the subview in MyLayout.
+ 
+ For convenience we set MyLinearLayout abbreviated as L, MyRelativeLayout abbreviated as R, MyTableLayout abbreviated as T, MyFrameLayout abbreviated as FR, MyFlowLayout abbreviated as FL, MyFloatLayout abbreviated as FO, not support set to - support all set to ALL.
+ 
  */
 @interface MyLayoutPos : NSObject<NSCopying>
 
@@ -24,16 +67,24 @@
  v1.leftPos.equal(v2.rightPos) 表示视图v1的左边边界值等于v2的右边边界值
  设置为NSArray<MyLayoutPos*>类型的值则只能用在相对布局的centerXPos,centerYPos中，数组里面里面也必须是centerXPos，表示指定的视图数组在父视图中居中，比如： A.centerXPos.equalTo(@[B.centerXPos.offset(20)].offset(20)  表示A和B在父视图中居中往下偏移20，B在A的右边，间隔20。
  */
+
+/**
+ *设置布局位置值的方法。val可以设置的类型如下：
+  1.NSNumber：表示位置等于一个具体的数值。比如A.leftPos.equalTo(@100)表示A视图的左边位置等于100。
+  2.MyLayoutPos：表示位置依赖于其他的位置。比如A.leftPos.equalTo(B.rightPos)表示A视图的左边位置等于B视图的右边位置。
+  3.NSArray<MyLayoutPos*>：则表示位置和数组里面的其他位置整体居中。比如A.centerXPos.equalTo(@[B.centerXPos, C.centerXPos])表示A,B,C三个视图整体水平居中。
+  4.nil: 表示清除位置的值
+*/
 -(MyLayoutPos* (^)(id val))equalTo;
 
 
 /**
- *设置偏移量
+ *设置布局位置的偏移量, 所谓偏移量是指布局位置在设置了某种值后再增加或者减少的偏移值。比如A.leftPos.equalTo(@10).offset(5)表示A视图的左边位置等于10再偏移5,也就是最终的左边位置是15；再比如A.leftPos.equalTo(B.rightPos).offset(5)表示A视图的左边位置等于B视图的右边位置再偏移5.
  */
 -(MyLayoutPos* (^)(CGFloat val))offset;
 
 /**
- *最小的偏移量。如果设置了则最小不能低于这个值。
+ *设置布局位置的最小值。如果设置了则最小不能低于这个值。
  */
 -(MyLayoutPos* (^)(CGFloat val))min;
 
@@ -49,10 +100,10 @@
 -(void)clear;
 
 //通过如下属性获取上面的设置结果。
+@property(nonatomic, strong, readonly) id posVal;
 @property(nonatomic, assign, readonly) CGFloat offsetVal;
 @property(nonatomic, assign, readonly) CGFloat minVal;
 @property(nonatomic, assign, readonly) CGFloat maxVal;
-@property(nonatomic, strong, readonly) id posVal;
 
 
 @end

@@ -136,6 +136,7 @@ typedef enum : unsigned char{
 @property(nonatomic, assign,getter=isFlexedHeight)  BOOL flexedHeight;
 
 @property(nonatomic, assign) BOOL useFrame;
+@property(nonatomic, assign) BOOL noLayout;
 
 /*
  隐藏不参与布局，这个属性是默认sizeClass外可以用来设置某个视图是否参与布局的标志，如果设置为YES则表示不参与布局。默认是NO。
@@ -193,6 +194,7 @@ typedef enum : unsigned char{
 
 @property(nonatomic,assign) NSInteger arrangedCount;
 @property(nonatomic,assign) BOOL averageArrange;
+@property(nonatomic,assign) BOOL autoArrange;
 @property(nonatomic,assign) MyMarginGravity arrangedGravity;
 
 

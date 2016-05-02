@@ -13,9 +13,7 @@
 @interface MyLayoutPos()
 
 @property(nonatomic, weak) UIView *view;
-
 @property(nonatomic, assign) MyMarginGravity pos;
-
 @property(nonatomic, assign) MyLayoutValueType posValType;
 
 @property(nonatomic, readonly, strong) NSNumber *posNumVal;
@@ -28,6 +26,9 @@
 
 //计算有效的margin值，有效的margin  minVal <= margin <=maxVal
 -(CGFloat)validMargin:(CGFloat)margin;
+
+//获取真实的位置值
+-(CGFloat)realMarginInSize:(CGFloat)size;
 
 
 @end

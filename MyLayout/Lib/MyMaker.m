@@ -93,6 +93,12 @@
     return [self addMethod:@"useFrame"];
 }
 
+-(MyMaker*)noLayout
+{
+    return [self addMethod:@"noLayout"];
+
+}
+
 
 -(MyMaker*)wrapContentHeight
 {
@@ -203,6 +209,11 @@
 -(MyMaker*)averageArrange
 {
     return [self addMethod:@"averageArrange"];
+}
+
+-(MyMaker*)autoArrange
+{
+    return [self addMethod:@"autoArrange"];
 }
 
 -(MyMaker*)arrangedGravity

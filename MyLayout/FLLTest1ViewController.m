@@ -94,7 +94,6 @@
     self.title = @"流式布局";
     // Do any additional setup after loading the view.
     
-  //  [self performSelector:@selector(handleTest) withObject:nil afterDelay:4];
 }
 
 

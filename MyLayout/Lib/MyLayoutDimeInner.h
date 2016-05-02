@@ -14,13 +14,12 @@
 
 @property(nonatomic, weak) UIView *view;
 @property(nonatomic, assign) MyMarginGravity dime;
-
 @property(nonatomic, assign) MyLayoutValueType dimeValType;
 
 @property(nonatomic, readonly, strong) NSNumber *dimeNumVal;
-@property(nonatomic, readonly, strong) NSArray *dimeArrVal;
 @property(nonatomic, readonly, strong) MyLayoutDime *dimeRelaVal;
-@property(nonatomic, readonly, strong) MyLayoutDime *dimeSelf;
+@property(nonatomic, readonly, strong) NSArray *dimeArrVal;
+@property(nonatomic, readonly, strong) MyLayoutDime *dimeSelfVal;
 
 
 //是否跟父视图相关

@@ -8,13 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-//您可以解开下面的注释，兼容一些老的方法和老的枚举值告警
-/*
-#define MY_USEOLDMETHODDEF 1
-#define MY_USEOLDMETHODNOWARNING 1
-#define MY_USEOLDENUMDEF 1
-#define MY_USEOLDENUMNOWARNING 1
-*/
 
 #ifndef MYDEPRECATED
     #define MYDEPRECATED(desc)  __attribute__((deprecated(desc)))
@@ -55,38 +48,7 @@
  */
 typedef enum : unsigned short {
     
-
-//如果想使用老的枚举值定义则请定义这个宏MY_USEOLDENUMDEF, 如果使用老的宏定义而不出现警告则请定义MY_USEOLDENUMNOWARNING
-#ifdef MY_USEOLDENUMDEF
-    
-    /**过期的枚举定义**/
-    MGRAVITY_NONE MYENUMDEPRECATED("use MyMarginGravity_None") = 0,
-    
-    //水平
-    MGRAVITY_HORZ_LEFT MYENUMDEPRECATED("use MyMarginGravity_Horz_Left") = 1,
-    MGRAVITY_HORZ_CENTER MYENUMDEPRECATED("use MyMarginGravity_Horz_Center") = 2,
-    MGRAVITY_HORZ_RIGHT MYENUMDEPRECATED("use MyMarginGravity_Horz_Right")= 4,
-    MGRAVITY_HORZ_WINDOW_CENTER MYENUMDEPRECATED("use MyMarginGravity_Horz_Window_Center") = 8,  //在窗口中水平居中。
-    MGRAVITY_HORZ_FILL MYENUMDEPRECATED("use MyMarginGravity_Horz_Fill") = MGRAVITY_HORZ_LEFT | MGRAVITY_HORZ_CENTER | MGRAVITY_HORZ_RIGHT,
-    MGRAVITY_HORZ_MASK MYENUMDEPRECATED("use MyMarginGravity_Horz_Mask") = 0xFF00,     //设置水平前请跟这个值进行&操作再跟具体的水平|
-    
-    //垂直
-    MGRAVITY_VERT_TOP MYENUMDEPRECATED("use MyMarginGravity_Vert_Top") = 1 << 8,
-    MGRAVITY_VERT_CENTER MYENUMDEPRECATED("use MyMarginGravity_Vert_Center") = 2 << 8,
-    MGRAVITY_VERT_BOTTOM MYENUMDEPRECATED("use MyMarginGravity_Vert_Bottom") = 4 << 8,
-    MGRAVITY_VERT_WINDOW_CENTER MYENUMDEPRECATED("use MyMarginGravity_Vert_Window_Center") = 8 << 8, //窗口中垂直居中
-    MGRAVITY_VERT_FILL MYENUMDEPRECATED("use MyMarginGravity_Vert_Fill") = MGRAVITY_VERT_TOP | MGRAVITY_VERT_CENTER | MGRAVITY_VERT_BOTTOM,
-    MGRAVITY_VERT_MASK MYENUMDEPRECATED("use MyMarginGravity_Vert_Mask") = 0x00FF,   //设置垂直前请跟这个值进行&操作再跟具体的垂直|
-    
-    //居中
-    MGRAVITY_CENTER MYENUMDEPRECATED("use MyMarginGravity_Center") = MGRAVITY_HORZ_CENTER | MGRAVITY_VERT_CENTER,
-    
-    //填充
-    MGRAVITY_FILL MYENUMDEPRECATED("use MyMarginGravity_Fill") = MGRAVITY_HORZ_FILL | MGRAVITY_VERT_FILL,
-    
-#endif
-    
-    /**新的枚举值的定义**/
+    //不停靠
     MyMarginGravity_None = 0,
 
     //水平
@@ -116,39 +78,12 @@ typedef enum : unsigned short {
 } MyMarginGravity;
 
 
-//如果想使用老的枚举值定义则请定义这个宏MY_USEOLDENUMDEF, 如果使用老的宏定义而不出现警告则请定义MY_USEOLDENUMNOWARNING
-#ifdef MY_USEOLDENUMDEF
-
-//兼容老版本定义
-typedef MyMarginGravity MarginGravity MYENUMDEPRECATED("use MyMarginGravity");
-
-#endif
-
-
 //布局视图排列的方向定义
 typedef enum : NSUInteger {
-
-//如果想使用老的枚举值定义则请定义这个宏MY_USEOLDENUMDEF, 如果使用老的宏定义而不出现警告则请定义MY_USEOLDENUMNOWARNING
-#ifdef MY_USEOLDENUMDEF
-    /**过期的枚举值定义**/
-    LVORIENTATION_VERT MYENUMDEPRECATED("use MyLayoutViewOrientation_Vert!") = 0,
-    LVORIENTATION_HORZ MYENUMDEPRECATED("use MyLayoutViewOrientation_Horz!") = 1,
-#endif
     
-    /**新的枚举值的定义**/
      MyLayoutViewOrientation_Vert = 0,
      MyLayoutViewOrientation_Horz = 1,
 } MyLayoutViewOrientation;
-
-
-//如果想使用老的枚举值定义则请定义这个宏MY_USEOLDENUMDEF, 如果使用老的宏定义而不出现警告则请定义MY_USEOLDENUMNOWARNING
-#ifdef MY_USEOLDENUMDEF
-
-//兼容老版本定义
-typedef MyLayoutViewOrientation LineViewOrientation MYENUMDEPRECATED("use MyLayoutViewOrientation!");
-
-#endif
-
 
 
 

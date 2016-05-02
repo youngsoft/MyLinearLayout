@@ -122,7 +122,7 @@
     //添加tableHeaderView
     MyLinearLayout *headerViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     headerViewLayout.backgroundColor = [UIColor grayColor];
-    headerViewLayout.frame = CGRectMake(0, 0, 0, 100);
+    headerViewLayout.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 100);
     headerViewLayout.gravity = MyMarginGravity_Center;
     
     UILabel *label1 = [UILabel new];
@@ -132,7 +132,7 @@
     [headerViewLayout addSubview:label1];
     
     UILabel *label2 = [UILabel new];
-    label2.text = @"可以直接设置frame值来指定高度";
+    label2.text = @"可以直接设置frame值来指定高度和宽度";
     label2.myCenterXOffset = 0;
     label2.myTopMargin = 10;
     [label2 sizeToFit];
@@ -169,6 +169,113 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(MyFrameLayout*)createFrame:(NSString*)str
+{
+    MyFrameLayout *ll = [MyFrameLayout new];
+    
+    UILabel *lb = [UILabel new];
+    lb.text = str;
+    [lb sizeToFit];
+
+    lb.marginGravity = MyMarginGravity_Center;
+
+    [ll addSubview:lb];
+    
+    return ll;
+}
+
+-(void)handleTap:(UIView*)sender
+{
+    //得到下划线视图。
+    UIView *redView = [sender.superview viewWithTag:500];
+    
+    if (sender.tag == 100)
+    {
+        redView.marginGravity = MyMarginGravity_Vert_Bottom | MyMarginGravity_Horz_Left;
+        
+    }
+    else if (sender.tag == 200)
+    {
+        redView.marginGravity = MyMarginGravity_Vert_Bottom | MyMarginGravity_Horz_Center;
+
+    }
+    else
+    {
+        redView.marginGravity = MyMarginGravity_Vert_Bottom | MyMarginGravity_Horz_Right;
+    }
+    
+    
+    MyBaseLayout *ll = (MyBaseLayout*)sender.superview;
+    ll.beginLayoutBlock = ^{
+    
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.1];
+    };
+    
+    ll.endLayoutBlock = ^{
+    
+        [UIView commitAnimations];
+    };
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    MyFrameLayout *headerLayout = [MyFrameLayout new];
+    headerLayout.backgroundColor = [UIColor whiteColor];
+    
+    MyFrameLayout *left = [self createFrame:@"晒单"];
+    left.widthDime.equalTo(headerLayout.widthDime).multiply(1/3.0);
+    left.marginGravity = MyMarginGravity_Vert_Fill | MyMarginGravity_Horz_Left;
+    left.highlightedOpacity = 0.5;
+    [headerLayout addSubview:left];
+    left.tag = 100;
+    [left setTarget:self action:@selector(handleTap:)];
+    
+    MyBorderLineDraw *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];
+    bld.tailIndent = bld.headIndent = 5;
+    
+    MyFrameLayout *center = [self createFrame:@"话题"];
+    center.widthDime.equalTo(headerLayout.widthDime).multiply(1/3.0);
+    center.marginGravity = MyMarginGravity_Vert_Fill | MyMarginGravity_Horz_Center;
+    center.leftBorderLine = bld;
+    center.highlightedOpacity = 0.5;
+    [headerLayout addSubview:center];
+    center.tag = 200;
+    [center setTarget:self action:@selector(handleTap:)];
+
+    
+    MyFrameLayout *right = [self createFrame:@"关注"];
+    right.widthDime.equalTo(headerLayout.widthDime).multiply(1/3.0);
+    right.marginGravity = MyMarginGravity_Vert_Fill | MyMarginGravity_Horz_Right;
+    right.leftBorderLine = bld;
+    right.highlightedOpacity = 0.5;
+    [headerLayout addSubview:right];
+    right.tag = 300;
+    [right setTarget:self action:@selector(handleTap:)];
+
+    
+    //底部的横线
+    UIView *redView = [UIView new];
+    redView.myHeight = 2;
+    redView.backgroundColor = [UIColor redColor];
+    redView.widthDime.equalTo(headerLayout.widthDime).multiply(1/3.0);
+    redView.marginGravity = MyMarginGravity_Vert_Bottom | MyMarginGravity_Horz_Left;
+    [headerLayout addSubview:redView];
+    redView.tag = 500; //设置记录一下。
+    
+    MyBorderLineDraw *headerLayoutBld = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];
+    headerLayout.bottomBorderLine = headerLayoutBld;
+    headerLayout.topBorderLine = headerLayoutBld;
+
+    
+    return headerLayout;
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return  44;
 }
 
 

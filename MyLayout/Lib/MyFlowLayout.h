@@ -14,16 +14,16 @@
  空间不能容纳在流式布局视图下时则会另起一行或者一列重新排列；而按子视图数量约束则是指子视图依次先按一个方向排列，当一行或者一列的子视图的数量到达指定的数量后
  则会另起一行或者一列重新排列。因此流式布局可以实现四种不同的流：
  1.垂直内容填充约束流式布局.
-    orientation为MyLayoutViewOrientation_Vert,arrangedCount为0,支持wrapContentHeight,不支持wrapContentWidth,不支持averageArrange。
+    orientation为MyLayoutViewOrientation_Vert,arrangedCount为0,支持wrapContentHeight,不支持wrapContentWidth,支持averageArrange,支持autoArrange。
  
  2.垂直数量约束流式布局
-    orientation为MyLayoutViewOrientation_Vert,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange。
+    orientation为MyLayoutViewOrientation_Vert,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange,不支持autoArrange。
 
  3.水平内容填充约束流式布局
-    orientation为MyLayoutViewOrientation_Horz,arrangedCount为0,不支持wrapContentHeight,支持wrapContentWidth,不支持averageArrange。
+    orientation为MyLayoutViewOrientation_Horz,arrangedCount为0,不支持wrapContentHeight,支持wrapContentWidth,支持averageArrange,支持autoArrange。
 
  4.水平数量约束流式布局。
-    orientation为MyLayoutViewOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange。
+    orientation为MyLayoutViewOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange,不支持autoArrange。
  
  流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度,以及高度或者宽度依赖于流式布局本身的高度或者宽度
  */
@@ -59,12 +59,17 @@
 @property(nonatomic, assign) IBInspectable NSInteger arrangedCount;
 
 /**
- *指定是否均分布局方向上的子视图的宽度或者高度，默认是NO。
+ *指定是否均分布局方向上的子视图的宽度或者高度，或者拉伸子视图的尺寸，默认是NO。
  如果是MyLayoutViewOrientation_Vert则表示每行的子视图的宽度会被均分，这样子视图不需要指定宽度，但是布局视图必须要指定一个明确的宽度值，如果设置为YES则wrapContentWidth会失效。
  如果是MyLayoutViewOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
-内容填充约束流式布局不支持averageArrange这个属性。
+内容填充约束流式布局下averageArrange设置为YES时表示拉伸子视图的宽度或者高度以便填充满整个布局视图。
  */
 @property(nonatomic,assign) IBInspectable BOOL averageArrange;
+
+/**
+ *子视图自动排列,这个属性只有在内容填充约束流式布局下才有用,默认为NO.当设置为YES时则根据子视图的内容自动填充，而不是根据加入的顺序来填充，以便保证不会出现多余空隙的情况。
+ */
+@property(nonatomic,assign) IBInspectable BOOL autoArrange;
 
 
 /**

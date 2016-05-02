@@ -20,7 +20,7 @@
 
 
 /**
- *框架布局是一种自身具有宽度和高度的布局视图, 其中的子视图将根据设定的停靠值marginGravity来决定视图的位置和尺寸。因为框架布局必须要具有明确的宽度和高度，因此框架布局是不支持wrapContentHeight和wrapContentWidth的。
+ *框架布局是一种自身具有宽度和高度的布局视图, 其中的子视图将根据设定的停靠值marginGravity来决定视图的位置和尺寸。框架布局支持wrapContentHeight和wrapContentWidth
  */
 @interface MyFrameLayout : MyBaseLayout
 

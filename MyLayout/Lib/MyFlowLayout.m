@@ -79,6 +79,22 @@ IB_DESIGNABLE
     return self.myCurrentSizeClass.averageArrange;
 }
 
+-(void)setAutoArrange:(BOOL)autoArrange
+{
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
+    
+    if (lsc.autoArrange != autoArrange)
+    {
+        lsc.autoArrange = autoArrange;
+        [self setNeedsLayout];
+    }
+}
+
+-(BOOL)autoArrange
+{
+    return self.myCurrentSizeClass.autoArrange;
+}
+
 -(void)setGravity:(MyMarginGravity)gravity
 {
     MyFlowLayout *lsc = self.myCurrentSizeClass;
@@ -176,6 +192,7 @@ IB_DESIGNABLE
     
     UIEdgeInsets padding = self.padding;
     CGFloat addXPos = 0;
+    CGFloat addXFill = 0;
     if (!self.averageArrange || self.arrangedCount == 0)
     {
         switch (mg) {
@@ -189,8 +206,27 @@ IB_DESIGNABLE
                 addXPos = selfWidth - padding.left - padding.right - rowMaxWidth; //因为具有不考虑左边距，而原来的位置增加了左边距，因此
             }
                 break;
+            case MyMarginGravity_Horz_Fill:
+            {
+                //总宽度减去最大的宽度。再除以数量表示每个应该扩展的空间。最后一行无效。
+                if (startIndex != sbs.count && count > 1)
+                {
+                  addXFill = (selfWidth - padding.left - padding.right - rowMaxWidth) / (count - 1);
+                }
+            }
+                break;
             default:
                 break;
+        }
+        
+        //处理内容拉伸的情况。
+        if (self.arrangedCount == 0 && self.averageArrange)
+        {
+            if (startIndex != sbs.count)
+            {
+                addXFill = (selfWidth - padding.left - padding.right - rowMaxWidth) / count;
+            }
+
         }
     }
     
@@ -227,10 +263,28 @@ IB_DESIGNABLE
             }
         }
         
-        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Vert_Top) || addXPos != 0)
+        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Vert_Top) || addXPos != 0 || addXFill != 0)
         {
             
             sbv.absPos.leftPos += addXPos;
+            
+            if (self.arrangedCount == 0 && self.averageArrange)
+            {
+                //只拉伸宽度不拉伸间距
+                sbv.absPos.width += addXFill;
+                
+                if (j != startIndex - count)
+                {
+                    sbv.absPos.leftPos += addXFill * (j - (startIndex - count));
+                    
+                }
+            }
+            else
+            {
+                //只拉伸间距
+                sbv.absPos.leftPos += addXFill * (j - (startIndex - count));
+            }
+            
             
             switch (amg) {
                 case MyMarginGravity_Vert_Center:
@@ -257,17 +311,104 @@ IB_DESIGNABLE
 
 }
 
--(CGRect)layoutSubviewsForVertAuto:(CGRect)selfRect
+
+-(CGFloat)calcSingleLineSize:(NSArray*)sbs margin:(CGFloat)margin
 {
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
-    for (UIView *sbv in self.subviews)
+    CGFloat size = 0;
+    for (UIView *sbv in sbs)
     {
-        if (sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
-            continue;
-        
-        [sbs addObject:sbv];
+        size += sbv.absPos.rightPos;
+        if (sbv != sbs.lastObject)
+            size += margin;
     }
     
+    return size;
+}
+
+-(NSArray*)getAutoArrangeSubviews:(NSMutableArray*)sbs selfSize:(CGFloat)selfSize margin:(CGFloat)margin
+{
+    
+    NSMutableArray *retArray = [NSMutableArray arrayWithCapacity:sbs.count];
+    
+    NSMutableArray *bestSingleLineArray = [NSMutableArray arrayWithCapacity:sbs.count /2];
+    
+    while (sbs.count) {
+        
+        [self calcAutoArrangeSingleLineSubviews:sbs
+                                          index:0
+                                      calcArray:@[]
+                                       selfSize:selfSize
+                                         margin:margin
+                            bestSingleLineArray:bestSingleLineArray];
+        
+        [retArray addObjectsFromArray:bestSingleLineArray];
+        
+        [bestSingleLineArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL * stop) {
+            [sbs removeObject:obj];
+        }];
+        
+        [bestSingleLineArray removeAllObjects];
+    }
+    
+    return retArray;
+}
+
+-(void)calcAutoArrangeSingleLineSubviews:(NSMutableArray*)sbs
+     index:(NSInteger)index
+ calcArray:(NSArray*)calcArray
+selfSize:(CGFloat)selfSize
+    margin:(CGFloat)margin
+bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
+{
+    if (index >= sbs.count)
+    {
+        CGFloat s1 = [self calcSingleLineSize:calcArray margin:margin];
+        CGFloat s2 = [self calcSingleLineSize:bestSingleLineArray margin:margin];
+        if (fabs(selfSize - s1) < fabs(selfSize - s2) && s1 <= selfSize)
+        {
+            [bestSingleLineArray setArray:calcArray];
+        }
+        
+        return;
+    }
+    
+    
+    for (int i = index; i < sbs.count; i++) {
+        
+        
+        NSMutableArray *calcArray2 = [NSMutableArray arrayWithArray:calcArray];
+        [calcArray2 addObject:sbs[i]];
+        
+        CGFloat s1 = [self calcSingleLineSize:calcArray2 margin:margin];
+        if (s1 <= selfSize)
+        {
+            CGFloat s2 = [self calcSingleLineSize:bestSingleLineArray margin:margin];
+            if (fabs(selfSize - s1) < fabs(selfSize - s2))
+            {
+                [bestSingleLineArray setArray:calcArray2];
+            }
+            
+            if (s1 == selfSize)
+                break;
+            
+            [self calcAutoArrangeSingleLineSubviews:sbs
+                                              index:i + 1
+                                          calcArray:calcArray2
+                                           selfSize:selfSize
+                                             margin:margin
+                                bestSingleLineArray:bestSingleLineArray];
+            
+        }
+        else
+            break;
+        
+    }
+
+}
+
+
+-(CGRect)layoutSubviewsForVertContent:(CGRect)selfRect sbs:(NSMutableArray*)sbs
+{
     
     UIEdgeInsets padding = self.padding;
     CGFloat xPos = padding.left;
@@ -278,6 +419,38 @@ IB_DESIGNABLE
     MyMarginGravity mgvert = self.gravity & MyMarginGravity_Horz_Mask;
     MyMarginGravity mghorz = self.gravity & MyMarginGravity_Vert_Mask;
     MyMarginGravity amgvert = self.arrangedGravity & MyMarginGravity_Horz_Mask;
+    
+    if (self.autoArrange)
+    {
+        //计算出每个子视图的宽度。
+        for (UIView* sbv in sbs)
+        {
+            CGFloat leftMargin = sbv.leftPos.margin;
+            CGFloat rightMargin = sbv.rightPos.margin;
+            CGRect rect = sbv.absPos.frame;
+            
+            //控制最大最小尺寸
+            rect.size.width  = [sbv.widthDime validMeasure:rect.size.width];
+            
+            if (sbv.widthDime.dimeNumVal != nil)
+                rect.size.width = sbv.widthDime.measure;
+            
+            
+            if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
+                rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            
+            
+            
+            //暂时把宽度存放sbv.absPos.rightPos上。因为浮动布局来说这个属性无用。
+            sbv.absPos.rightPos = leftMargin + rect.size.width + rightMargin;
+            if (sbv.absPos.rightPos > selfRect.size.width - self.leftPadding - self.rightPadding)
+                sbv.absPos.rightPos = selfRect.size.width - self.leftPadding - self.rightPadding;
+        }
+        
+        [sbs setArray:[self getAutoArrangeSubviews:sbs selfSize:selfRect.size.width - self.leftPadding - self.rightPadding margin:self.subviewHorzMargin]];
+        
+    }
+    
     
     NSInteger arrangedIndex = 0;
     NSInteger i = 0;
@@ -414,18 +587,8 @@ IB_DESIGNABLE
 }
 
 
--(CGRect)layoutSubviewsForVert:(CGRect)selfRect
+-(CGRect)layoutSubviewsForVert:(CGRect)selfRect sbs:(NSMutableArray*)sbs
 {
-    
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
-    for (UIView *sbv in self.subviews)
-    {
-        if (sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
-            continue;
-        
-        [sbs addObject:sbv];
-    }
-    
     UIEdgeInsets padding = self.padding;
     NSInteger arrangedCount = self.arrangedCount;
     CGFloat xPos = padding.left;
@@ -566,8 +729,9 @@ IB_DESIGNABLE
 {
     
     CGFloat addYPos = 0;
+    CGFloat addYFill = 0;
     UIEdgeInsets padding = self.padding;
-    if (!self.averageArrange)
+    if (!self.averageArrange || self.arrangedCount == 0)
     {
         switch (mg) {
             case MyMarginGravity_Vert_Center:
@@ -580,9 +744,29 @@ IB_DESIGNABLE
                 addYPos = selfHeight - padding.top - padding.bottom - colMaxHeight;
             }
                 break;
+            case MyMarginGravity_Vert_Fill:
+            {
+                //总宽度减去最大的宽度。再除以数量表示每个应该扩展的空间。最后一行无效。
+                if (startIndex != sbs.count && count > 1)
+                {
+                    addYFill = (selfHeight - padding.top - padding.bottom - colMaxHeight) / (count - 1);
+                }
+
+            }
             default:
                 break;
         }
+        
+        //处理内容拉伸的情况。
+        if (self.arrangedCount == 0 && self.averageArrange)
+        {
+            if (startIndex != sbs.count)
+            {
+                addYFill = (selfHeight - padding.top - padding.bottom - colMaxHeight) / count;
+            }
+            
+        }
+
     }
     
 
@@ -621,9 +805,27 @@ IB_DESIGNABLE
         }
         
         
-        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Horz_Left) || addYPos != 0)
+        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Horz_Left) || addYPos != 0 || addYFill != 0)
         {
             sbv.absPos.topPos += addYPos;
+        
+            if (self.arrangedCount == 0 && self.averageArrange)
+            {
+                //只拉伸宽度不拉伸间距
+                sbv.absPos.height += addYFill;
+                
+                if (j != startIndex - count)
+                {
+                    sbv.absPos.topPos += addYFill * (j - (startIndex - count));
+                    
+                }
+            }
+            else
+            {
+                //只拉伸间距
+                sbv.absPos.topPos += addYFill * (j - (startIndex - count));
+            }
+
             
             switch (amg) {
                 case MyMarginGravity_Horz_Center:
@@ -650,16 +852,8 @@ IB_DESIGNABLE
 }
 
 
--(CGRect)layoutSubviewsForHorzAuto:(CGRect)selfRect
+-(CGRect)layoutSubviewsForHorzContent:(CGRect)selfRect sbs:(NSMutableArray*)sbs
 {
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
-    for (UIView *sbv in self.subviews)
-    {
-        if (sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
-            continue;
-        
-        [sbs addObject:sbv];
-    }
     
     UIEdgeInsets padding = self.padding;
     CGFloat xPos = padding.left;
@@ -670,6 +864,56 @@ IB_DESIGNABLE
     MyMarginGravity mgvert = self.gravity & MyMarginGravity_Horz_Mask;
     MyMarginGravity mghorz = self.gravity & MyMarginGravity_Vert_Mask;
     MyMarginGravity amghorz = self.arrangedGravity & MyMarginGravity_Vert_Mask;
+    
+    
+    if (self.autoArrange)
+    {
+        //计算出每个子视图的宽度。
+        for (UIView* sbv in sbs)
+        {
+           
+            CGFloat topMargin = sbv.topPos.margin;
+            CGFloat bottomMargin = sbv.bottomPos.margin;
+            CGRect rect = sbv.absPos.frame;
+            
+            //控制最大最小尺寸
+            rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
+            rect.size.width  = [sbv.widthDime validMeasure:rect.size.width];
+            
+            if (sbv.widthDime.dimeNumVal != nil)
+                rect.size.width = sbv.widthDime.measure;
+            
+            if (sbv.heightDime.dimeNumVal != nil)
+                rect.size.height = sbv.heightDime.measure;
+            
+            if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
+                rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            
+            if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
+                rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+            
+            if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
+                rect.size.width = [sbv.widthDime validMeasure:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            
+            //如果高度是浮动的则需要调整高度。
+            if (sbv.isFlexedHeight)
+            {
+                CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
+                rect.size.height = [sbv.heightDime validMeasure:sz.height];
+            }
+
+            
+            //暂时把宽度存放sbv.absPos.rightPos上。因为浮动布局来说这个属性无用。
+            sbv.absPos.rightPos = topMargin + rect.size.height + bottomMargin;
+            if (sbv.absPos.rightPos > selfRect.size.height - self.topPadding - self.bottomPadding)
+                sbv.absPos.rightPos = selfRect.size.height - self.topPadding - self.bottomPadding;
+        }
+        
+        [sbs setArray:[self getAutoArrangeSubviews:sbs selfSize:selfRect.size.height - self.topPadding - self.bottomPadding margin:self.subviewVertMargin]];
+        
+    }
+
+    
     
     NSInteger arrangedIndex = 0;
     NSInteger i = 0;
@@ -798,18 +1042,8 @@ IB_DESIGNABLE
 
 
 
--(CGRect)layoutSubviewsForHorz:(CGRect)selfRect
+-(CGRect)layoutSubviewsForHorz:(CGRect)selfRect sbs:(NSMutableArray*)sbs
 {
-    
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
-    for (UIView *sbv in self.subviews)
-    {
-        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
-            continue;
-        
-        [sbs addObject:sbv];
-    }
-    
     UIEdgeInsets padding = self.padding;
     
     NSInteger arrangedIndex = 0;
@@ -953,7 +1187,19 @@ IB_DESIGNABLE
 {
     CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     
+    
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
+    {
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
+            continue;
+        
+        [sbs addObject:sbv];
+    }
+
+    
+    
+    for (UIView *sbv in sbs)
     {
         if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
             continue;
@@ -963,15 +1209,15 @@ IB_DESIGNABLE
             sbv.absPos.frame = sbv.frame;
             
             //处理尺寸等于内容时并且需要添加额外尺寸的情况。
-            if (sbv.widthDime.dimeSelf != nil || sbv.heightDime.dimeSelf != nil)
+            if (sbv.widthDime.dimeSelfVal != nil || sbv.heightDime.dimeSelfVal != nil)
             {
                 CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
-                if (sbv.widthDime.dimeSelf != nil)
+                if (sbv.widthDime.dimeSelfVal != nil)
                 {
                     sbv.absPos.width = [sbv.widthDime validMeasure:fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
                 }
                 
-                if (sbv.heightDime.dimeSelf != nil)
+                if (sbv.heightDime.dimeSelfVal != nil)
                 {
                     sbv.absPos.height = [sbv.heightDime validMeasure:fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
                 }
@@ -1000,16 +1246,16 @@ IB_DESIGNABLE
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {
         if (self.arrangedCount == 0)
-            selfRect = [self layoutSubviewsForVertAuto:selfRect];
+            selfRect = [self layoutSubviewsForVertContent:selfRect sbs:sbs];
         else
-            selfRect = [self layoutSubviewsForVert:selfRect];
+            selfRect = [self layoutSubviewsForVert:selfRect sbs:sbs];
     }
     else
     {
         if (self.arrangedCount == 0)
-            selfRect = [self layoutSubviewsForHorzAuto:selfRect];
+            selfRect = [self layoutSubviewsForHorzContent:selfRect sbs:sbs];
         else
-            selfRect = [self layoutSubviewsForHorz:selfRect];
+            selfRect = [self layoutSubviewsForHorz:selfRect sbs:sbs];
     }
     
     selfRect.size.height = [self.heightDime validMeasure:selfRect.size.height];

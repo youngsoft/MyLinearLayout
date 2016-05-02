@@ -23,16 +23,16 @@
  */
 -(MyLayoutDime* (^)(id val))equalTo;
 
+/**
+ *设置尺寸增加值。
+ */
+-(MyLayoutDime* (^)(CGFloat val))add;
+
 
 /**
  * 设置尺寸的倍数
  */
 -(MyLayoutDime* (^)(CGFloat val))multiply;
-
-/**
- *设置尺寸增加值。
- */
--(MyLayoutDime* (^)(CGFloat val))add;
 
 
 /**
@@ -53,11 +53,11 @@
 
 
 //上面方法设置的属性的获取。
+@property(nonatomic, strong, readonly) id dimeVal;
 @property(nonatomic, assign, readonly) CGFloat addVal;
+@property(nonatomic, assign, readonly) CGFloat mutilVal;
 @property(nonatomic, assign, readonly) CGFloat minVal;
 @property(nonatomic, assign, readonly) CGFloat maxVal;
-@property(nonatomic, assign, readonly) CGFloat mutilVal;
-@property(nonatomic, strong, readonly) id dimeVal;
 
 
 

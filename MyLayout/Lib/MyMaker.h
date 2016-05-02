@@ -24,6 +24,7 @@
 -(MyMaker*)width;
 -(MyMaker*)flexedHeight;
 -(MyMaker*)useFrame;
+-(MyMaker*)noLayout;
 
 -(MyMaker*)centerX;
 -(MyMaker*)centerY;
@@ -53,6 +54,7 @@
 //流式布局独有
 -(MyMaker*)arrangedCount;
 -(MyMaker*)averageArrange;
+-(MyMaker*)autoArrange;
 -(MyMaker*)arrangedGravity;
 -(MyMaker*)subviewVertMargin;
 -(MyMaker*)subviewHorzMargin;

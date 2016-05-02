@@ -12,11 +12,11 @@
 
 @implementation MyLayoutDime
 {
+    id _dimeVal;
     CGFloat _addVal;
+    CGFloat _mutilVal;
     CGFloat _minVal;
     CGFloat _maxVal;
-    CGFloat _mutilVal;
-    id _dimeVal;
 }
 
 -(id)init
@@ -26,87 +26,15 @@
     {
         _view = nil;
         _dime = MyMarginGravity_None;
+        _dimeVal = nil;
+        _dimeValType = MyLayoutValueType_Nil;
         _addVal = 0;
         _mutilVal = 1;
         _minVal = -CGFLOAT_MAX;
         _maxVal = CGFLOAT_MAX;
-        _dimeVal = nil;
-        _dimeValType = MyLayoutValueType_Nil;
     }
     
     return self;
-}
-
--(void)setNeedLayout
-{
-    if (_view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
-    {
-        MyBaseLayout* lb = (MyBaseLayout*)_view.superview;
-        if (!lb.isMyLayouting)
-            [_view.superview setNeedsLayout];
-    }
-    
-}
-
-//乘
--(MyLayoutDime* (^)(CGFloat val))multiply
-{
-    return ^id(CGFloat val){
-        
-        if (_mutilVal != val)
-        {
-            _mutilVal = val;
-            [self setNeedLayout];
-        }
-        
-        return self;
-    };
-    
-}
-
-//加
--(MyLayoutDime* (^)(CGFloat val))add
-{
-    return ^id(CGFloat val){
-        
-        if (_addVal != val)
-        {
-            _addVal = val;
-            [self setNeedLayout];
-        }
-        
-        return self;
-        
-    };
-    
-}
-
--(MyLayoutDime* (^)(CGFloat val))min
-{
-    return ^id(CGFloat val){
-        
-        if (_minVal != val)
-        {
-            _minVal = val;
-            [self setNeedLayout];
-        }
-        
-        return self;
-    };
-}
-
--(MyLayoutDime* (^)(CGFloat val))max
-{
-    return ^id(CGFloat val){
-        
-        if (_maxVal != val)
-        {
-            _maxVal = val;
-            [self setNeedLayout];
-        }
-        
-        return self;
-    };
 }
 
 
@@ -157,6 +85,84 @@
     
 }
 
+//加
+-(MyLayoutDime* (^)(CGFloat val))add
+{
+    return ^id(CGFloat val){
+        
+        if (_addVal != val)
+        {
+            _addVal = val;
+            [self setNeedLayout];
+        }
+        
+        return self;
+        
+    };
+    
+}
+
+
+//乘
+-(MyLayoutDime* (^)(CGFloat val))multiply
+{
+    return ^id(CGFloat val){
+        
+        if (_mutilVal != val)
+        {
+            _mutilVal = val;
+            [self setNeedLayout];
+        }
+        
+        return self;
+    };
+    
+}
+
+
+-(MyLayoutDime* (^)(CGFloat val))min
+{
+    return ^id(CGFloat val){
+        
+        if (_minVal != val)
+        {
+            _minVal = val;
+            [self setNeedLayout];
+        }
+        
+        return self;
+    };
+}
+
+-(MyLayoutDime* (^)(CGFloat val))max
+{
+    return ^id(CGFloat val){
+        
+        if (_maxVal != val)
+        {
+            _maxVal = val;
+            [self setNeedLayout];
+        }
+        
+        return self;
+    };
+}
+
+
+-(void)clear
+{
+    _addVal = 0;
+    _mutilVal = 1;
+    _minVal = -CGFLOAT_MAX;
+    _maxVal = CGFLOAT_MAX;
+    _dimeVal = nil;
+    _dimeValType = MyLayoutValueType_Nil;
+    
+    [self setNeedLayout];
+}
+
+
+
 -(id)dimeVal
 {
     if (_dimeValType == MyLayoutValueType_Layout && _dimeVal == nil)
@@ -174,9 +180,14 @@
     return nil;
 }
 
--(void)setDimeNumVal:(NSNumber *)dimeNumVal
+-(MyLayoutDime*)dimeRelaVal
 {
-    NSAssert(0, @"oops");
+    if (_dimeVal == nil)
+        return nil;
+    if (_dimeValType == MyLayoutValueType_Layout)
+        return _dimeVal;
+    return nil;
+    
 }
 
 
@@ -190,23 +201,8 @@
     
 }
 
--(void)setDimeArrVal:(NSArray *)dimeArrVal
-{
-    NSAssert(0, @"oops");
-    
-}
 
--(MyLayoutDime*)dimeRelaVal
-{
-    if (_dimeVal == nil)
-        return nil;
-    if (_dimeValType == MyLayoutValueType_Layout)
-        return _dimeVal;
-    return nil;
-    
-}
-
--(MyLayoutDime*)dimeSelf
+-(MyLayoutDime*)dimeSelfVal
 {
     if (_dimeValType == MyLayoutValueType_Layout && _dimeVal == nil)
         return self;
@@ -214,25 +210,10 @@
     return nil;
 }
 
--(void)setDimeSelf:(MyLayoutDime *)dimeSelf
-{
-    NSAssert(0, @"oops");
-}
-
--(void)setDimeRelaVal:(MyLayoutDime *)dimeRelaVal
-{
-    NSAssert(0, @"oops");
-    
-}
 
 -(BOOL)isMatchParent
 {
     return self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview;
-}
-
--(void)setIsMatchParent:(BOOL)isMatchParent
-{
-    NSAssert(0, @"oops");
 }
 
 
@@ -254,23 +235,35 @@
     return MIN(_maxVal, measure);
 }
 
+#pragma mark -- NSCopying
 
-
--(void)setMeasure:(CGFloat)measure
+-(id)copyWithZone:(NSZone *)zone
 {
-    NSAssert(0, @"oops");
+    MyLayoutDime *ld = [[[self class] allocWithZone:zone] init];
+    ld.view = self.view;
+    ld.dime = self.dime;
+    ld->_addVal = self.addVal;
+    ld->_minVal = self.minVal;
+    ld->_maxVal = self.maxVal;
+    ld->_mutilVal = self.mutilVal;
+    ld->_dimeVal = self->_dimeVal;
+    ld.dimeValType = self.dimeValType;
+    
+    return self;
 }
 
--(void)clear
-{
-    _addVal = 0;
-    _mutilVal = 1;
-    _minVal = -CGFLOAT_MAX;
-    _maxVal = CGFLOAT_MAX;
-    _dimeVal = nil;
-    _dimeValType = MyLayoutValueType_Nil;
-}
+#pragma mark -- Private Method
 
+-(void)setNeedLayout
+{
+    if (_view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
+    {
+        MyBaseLayout* lb = (MyBaseLayout*)_view.superview;
+        if (!lb.isMyLayouting)
+            [_view.superview setNeedsLayout];
+    }
+    
+}
 
 
 +(NSString*)dimestrFromDime:(MyLayoutDime*)dimeobj showView:(BOOL)showView
@@ -343,22 +336,7 @@
     
 }
 
-#pragma mark -- NSCopying
 
--(id)copyWithZone:(NSZone *)zone
-{
-    MyLayoutDime *ld = [[[self class] allocWithZone:zone] init];
-    ld.view = self.view;
-    ld.dime = self.dime;
-    ld->_addVal = self.addVal;
-    ld->_minVal = self.minVal;
-    ld->_maxVal = self.maxVal;
-    ld->_mutilVal = self.mutilVal;
-    ld->_dimeVal = self->_dimeVal;
-    ld.dimeValType = self.dimeValType;
-    
-    return self;
-}
 
 @end
 

@@ -1046,15 +1046,15 @@
             sbv.absPos.frame = sbv.frame;
             
             //处理尺寸等于内容时并且需要添加额外尺寸的情况。
-            if (sbv.widthDime.dimeSelf != nil || sbv.heightDime.dimeSelf != nil)
+            if (sbv.widthDime.dimeSelfVal != nil || sbv.heightDime.dimeSelfVal != nil)
             {
                 CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
-                if (sbv.widthDime.dimeSelf != nil)
+                if (sbv.widthDime.dimeSelfVal != nil)
                 {
                     sbv.absPos.width = [sbv.widthDime validMeasure:fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
                 }
                 
-                if (sbv.heightDime.dimeSelf != nil)
+                if (sbv.heightDime.dimeSelfVal != nil)
                 {
                     sbv.absPos.height = [sbv.heightDime validMeasure:fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
                 }

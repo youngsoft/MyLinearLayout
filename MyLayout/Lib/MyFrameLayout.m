@@ -121,6 +121,8 @@ IB_DESIGNABLE
     CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     CGSize selfSize = selfRect.size;
     NSArray *sbs = self.subviews;
+    CGFloat maxWidth = self.leftPadding;
+    CGFloat maxHeight = self.topPadding;
     for (UIView *sbv in sbs)
     {
         
@@ -134,15 +136,15 @@ IB_DESIGNABLE
             rect  = sbv.frame;
             
             //处理尺寸等于内容时并且需要添加额外尺寸的情况。
-            if (sbv.widthDime.dimeSelf != nil || sbv.heightDime.dimeSelf != nil)
+            if (sbv.widthDime.dimeSelfVal != nil || sbv.heightDime.dimeSelfVal != nil)
             {
                 CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
-                if (sbv.widthDime.dimeSelf != nil)
+                if (sbv.widthDime.dimeSelfVal != nil)
                 {
                     rect.size.width = [sbv.widthDime validMeasure:fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
                 }
                 
-                if (sbv.heightDime.dimeSelf != nil)
+                if (sbv.heightDime.dimeSelfVal != nil)
                 {
                     rect.size.height = [sbv.heightDime validMeasure:fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
                 }
@@ -172,6 +174,28 @@ IB_DESIGNABLE
         [self calcSubView:sbv pRect:&rect inSize:selfSize];
         sbv.absPos.frame = rect;
         
+        if ((sbv.marginGravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_Horz_Fill && sbv.widthDime.dimeRelaVal != self.widthDime)
+        {
+            if (maxWidth < CGRectGetMaxX(rect))
+                maxWidth = CGRectGetMaxX(rect);
+        }
+        
+        if ((sbv.marginGravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_Vert_Fill && sbv.heightDime.dimeRelaVal != self.heightDime)
+        {
+            if (maxHeight < CGRectGetMaxY(rect))
+                maxHeight = CGRectGetMaxY(rect);
+        }
+
+    }
+    
+    if (self.wrapContentWidth)
+    {
+        selfRect.size.width = maxWidth + self.rightPadding;
+    }
+    
+    if (self.wrapContentHeight)
+    {
+        selfRect.size.height = maxHeight + self.bottomPadding;
     }
     
     selfRect.size.height = [self.heightDime validMeasure:selfRect.size.height];

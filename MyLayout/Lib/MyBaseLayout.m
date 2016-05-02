@@ -54,52 +54,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     
 }
 
-#ifdef MY_USEOLDMETHODDEF
-
-
--(CGFloat)leftMargin
-{
-    return self.myLeftMargin;
-}
-
--(void)setLeftMargin:(CGFloat)leftMargin
-{
-    self.myLeftMargin = leftMargin;
-
-}
-
--(CGFloat)topMargin
-{
-    return self.myTopMargin;
-}
-
--(void)setTopMargin:(CGFloat)topMargin
-{
-    self.myTopMargin = topMargin;
- }
-
--(CGFloat)rightMargin
-{
-    return self.myRightMargin;
-}
-
--(void)setRightMargin:(CGFloat)rightMargin
-{
-    self.myRightMargin = rightMargin;
-}
-
--(CGFloat)bottomMargin
-{
-    return self.myBottomMargin;
-}
-
--(void)setBottomMargin:(CGFloat)bottomMargin
-{
-    self.myBottomMargin = bottomMargin;
-}
-
-#endif
-
 -(CGFloat)myLeftMargin
 {
     return self.leftPos.margin;
@@ -174,30 +128,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 }
 
 
-#ifdef MY_USEOLDMETHODDEF
-
--(CGFloat)width
-{
-    return self.myWidth;
-}
-
--(void)setWidth:(CGFloat)width
-{
-    self.myWidth = width;
-}
-
--(CGFloat)height
-{
-    return self.myHeight;
-}
-
--(void)setHeight:(CGFloat)height
-{
-    self.myHeight = height;
-}
-
-#endif
-
 -(CGFloat)myWidth
 {
     return self.widthDime.measure;
@@ -248,41 +178,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     pos.view = self;
     return pos;
 }
-
-#ifdef MY_USEOLDMETHODDEF
-
--(CGFloat)centerXOffset
-{
-    return self.myCenterXOffset;
-}
-
--(void)setCenterXOffset:(CGFloat)centerXOffset
-{
-    self.myCenterXOffset = centerXOffset;
-}
-
--(CGFloat)centerYOffset
-{
-    return self.myCenterYOffset;
-}
-
--(void)setCenterYOffset:(CGFloat)centerYOffset
-{
-    self.myCenterYOffset = centerYOffset;
-}
-
-
--(CGPoint)centerOffset
-{
-    return self.myCenterOffset;
-}
-
--(void)setCenterOffset:(CGPoint)centerOffset
-{
-    self.myCenterOffset = centerOffset;
-}
-
-#endif
 
 
 -(CGFloat)myCenterXOffset
@@ -351,6 +246,25 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     }
     
 }
+
+-(BOOL)noLayout
+{
+    return self.myCurrentSizeClass.noLayout;
+}
+
+-(void)setNoLayout:(BOOL)noLayout
+{
+    UIView *lsc = self.myCurrentSizeClass;
+    if (lsc.noLayout != noLayout)
+    {
+        lsc.noLayout = noLayout;
+        if (self.superview != nil)
+            [ self.superview setNeedsLayout];
+    }
+    
+}
+
+
 
 
 
@@ -666,8 +580,11 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     {
         
         [CATransaction begin];
+        
         [CATransaction setValue:(id)kCFBooleanTrue
                          forKey:kCATransactionDisableActions];
+        
+        
         
         if (layer.lineDashPhase == 0)
         {
@@ -685,6 +602,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
         
         
         layer.frame = layerRect;
+        
         
         [CATransaction commit];
     }
@@ -1470,7 +1388,7 @@ BOOL _hasBegin;
         //设置子视图的frame并还原
         for (UIView *sbv in self.subviews)
         {
-            if (sbv.absPos.leftPos != CGFLOAT_MAX && sbv.absPos.topPos != CGFLOAT_MAX)
+            if (sbv.absPos.leftPos != CGFLOAT_MAX && sbv.absPos.topPos != CGFLOAT_MAX && !sbv.noLayout)
                 sbv.frame = sbv.absPos.frame;
             
             if (sbv.absPos.sizeClass.isHidden)
@@ -1723,8 +1641,6 @@ BOOL _hasBegin;
 
 -(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin centerMargin:(CGFloat)centerMargin  bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect
 {
-    
-    
     CGFloat vTotalHeight = (selfHeight - topPadding - bottomPadding)*match.mutilVal + match.addVal;
     
     pRect->size.height = [match validMeasure:vTotalHeight - topMargin - centerMargin - bottomMargin];
@@ -1768,10 +1684,11 @@ BOOL _hasBegin;
 {
     if (borderLineDraw == nil)
     {
+        
         if (*ppLayer != nil)
         {
-            (*ppLayer).delegate = nil;
-            [(*ppLayer) removeFromSuperlayer];
+          (*ppLayer).delegate = nil;
+           [(*ppLayer) removeFromSuperlayer];
             *ppLayer = nil;
         }
     }

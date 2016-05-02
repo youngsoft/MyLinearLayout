@@ -264,6 +264,7 @@
     lsc->_heightDime = [self.heightDime copy];
     lsc.flexedHeight = self.isFlexedHeight;
     lsc.useFrame = self.useFrame;
+    lsc.noLayout = self.noLayout;
     lsc.hidden = self.hidden;
     lsc.weight = self.weight;
     lsc.marginGravity = self.marginGravity;
@@ -384,6 +385,7 @@
     
     lsc.arrangedCount = self.arrangedCount;
     lsc.averageArrange = self.averageArrange;
+    lsc.autoArrange = self.autoArrange;
     lsc.arrangedGravity = self.arrangedGravity;
     
     return lsc;
