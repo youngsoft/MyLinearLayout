@@ -373,7 +373,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     }
     
     
-    for (int i = index; i < sbs.count; i++) {
+    for (NSInteger i = index; i < sbs.count; i++) {
         
         
         NSMutableArray *calcArray2 = [NSMutableArray arrayWithArray:calcArray];
