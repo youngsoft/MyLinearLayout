@@ -12,8 +12,8 @@
 @interface FLLTest3ViewController ()
 
 @property(nonatomic, strong) MyFlowLayout *flowLayout;
-@property(nonatomic, assign) BOOL oldIndex;
-@property(nonatomic, assign) BOOL currentIndex;
+@property(nonatomic, assign) NSInteger oldIndex;
+@property(nonatomic, assign) NSInteger currentIndex;
 
 @end
 
@@ -109,7 +109,6 @@
     CGPoint pt = [[event touchesForView:sender].anyObject locationInView:self.flowLayout];
     
     UIView *sbv2 = nil;
-    
     //判断当前手指在具体视图的位置。
     for (UIView *sbv in self.flowLayout.subviews)
     {
@@ -126,6 +125,7 @@
     
     if (sbv2 != nil)
     {
+        
         //把所有子视图
            self.flowLayout.beginLayoutBlock = ^{
          
@@ -140,7 +140,7 @@
          };
         
         //得到要移动的视图的位置索引。
-        self.currentIndex = [self.flowLayout.subviews indexOfObject:sbv2];
+        self.currentIndex = [self.flowLayout.subviews indexOfObjectIdenticalTo:sbv2];
         
         if (self.oldIndex != self.currentIndex)
         {
@@ -150,6 +150,8 @@
         {
             self.currentIndex = self.oldIndex + 1;
         }
+        
+
         
         //因为sender在bringSubviewToFront后变为了最后一个子视图，因此要调整正确的位置。
         for (NSInteger i = self.flowLayout.subviews.count - 1; i > self.currentIndex; i--)
