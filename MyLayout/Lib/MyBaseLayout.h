@@ -20,48 +20,30 @@
 /**
  *视图的左边布局位置对象，可以通过其中的euqalTo方法来设置NSNumber、MyLayoutPos、nil这三种值。
  */
-/**
- * left Layout Position of the View, you can set NSNumber、MyLayoutPos、nil to euqalTo() of the MyLayoutPos.
- */
 @property(nonatomic, readonly)  MyLayoutPos *leftPos;
 
 /**
  *视图的上边布局位置对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutPos,nil这三种值。
- */
-/**
- *top Layout Position of the View, you can set NSNumber、MyLayoutPos、nil to euqalTo() of the MyLayoutPos.
  */
 @property(nonatomic, readonly)  MyLayoutPos *topPos;
 
 /**
  *视图的右边布局位置对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutPos,nil这三种值。
  */
-/**
- *right Layout Position of the View, you can set NSNumber、MyLayoutPos、nil to euqalTo() of the MyLayoutPos.
- */
 @property(nonatomic, readonly)  MyLayoutPos *rightPos;
 
 /**
  *视图的下边布局位置对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutPos,nil这三种值。
- */
-/**
- *bottom Layout Position of the View, you can set NSNumber、MyLayoutPos、nil to euqalTo() of the MyLayoutPos.
  */
 @property(nonatomic, readonly)  MyLayoutPos *bottomPos;
 
 /**
  *视图的水平中心布局位置对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutPos,NSArray<MyLayoutPos*>,nil这四种值。
  */
-/**
- *horizontal center Layout Position of the View, you can set NSNumber、MyLayoutPos、NSArray<MyLayoutPos*>、nil to euqalTo() of the MyLayoutPos.
- */
 @property(nonatomic, readonly)  MyLayoutPos *centerXPos;
 
 /**
  *视图的垂直中心布局位置对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutPos,NSArray<MyLayoutPos*>,nil这四种值。
- */
-/**
- *vertical center Layout Position of the View, you can set NSNumber、MyLayoutPos、NSArray<MyLayoutPos*>、nil to euqalTo() of the MyLayoutPos.
  */
 @property(nonatomic, readonly)  MyLayoutPos *centerYPos;
 
@@ -77,79 +59,44 @@
 
  这八个属性的值最好别用于读取，而只是单纯用于设置
 */
-/**
- *there are eight propertys below which used to instead equalTo method of MyLayoutPos set to NSNumber value.
- e.g.
- 
- v.myLeftMargin = 10    <==>   v.leftPos.equalTo(@10)  
- v.myRightMargin = 20   <==>   v.rightPos.equalTo(@20)
- v.myCenterXOffset = 0  <==>   v.centerXPos.equalTo(@0)
- 
- you'd better just use set operation.
- 
- */
 
 /**
  *视图左边的布局位置, 是leftPos.equalTo方法的简化版本
- */
-/**
- *left Layout Position of the View, Equivalent to leftPos.equalTo(NSNumber).
  */
 @property(nonatomic, assign) IBInspectable CGFloat myLeftMargin;
 
 /**
  *视图上边的布局位置, 是topPos.equalTo方法的简化版本
  */
-/**
- *top Layout Position of the View, Equivalent to topPos.equalTo(NSNumber).
- */
 @property(nonatomic, assign) IBInspectable CGFloat myTopMargin;
 
 /**
  *视图右边的布局位置, 是rightPos.equalTo方法的简化版本
- */
-/**
- *right Layout Position of the View, Equivalent to rightPos.equalTo(NSNumber).
  */
 @property(nonatomic, assign) IBInspectable CGFloat myRightMargin;
 
 /**
  *视图下边的布局位置, 是bottomPos.equalTo方法的简化版本
  */
-/**
- *bottom Layout Position of the View, Equivalent to bottomPos.equalTo(NSNumber).
- */
 @property(nonatomic, assign) IBInspectable CGFloat myBottomMargin;
 
 /**
  *视图四边的布局位置, 是myLeftMargin,myTopMargin,myRightMargin,myBottomMargin的简化版本
- */
-/**
- *boundary Layout Position of the View. Equivalent to myLeftMargin,myTopMargin,myRightMargin,myBottomMargin set to the same number.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myMargin;
 
 /**
  *视图水平中心布局位置, 是centerXPos.equalTo方法的简化版本
  */
-/**
- *horizontal center Layout Position of the View, Equivalent to centerXPos.equalTo(NSNumber).
- */
 @property(nonatomic, assign) IBInspectable CGFloat myCenterXOffset;
 
 /**
  *视图垂直中心布局位置, 是centerYPos.equalTo方法的简化版本
  */
-/**
- *vertical center Layout Position of the View, Equivalent to centerYPos.equalTo(NSNumber).
- */
 @property(nonatomic, assign) IBInspectable CGFloat myCenterYOffset;
 
 /**
  *视图中心布局位置, 是myCenterXOffset,myCenterYOffset方法的简化版本
- */
-/**
- *center Layout Position of the View, Equivalent to set myCenterXOffset and myCenterYOffset .
  */
 @property(nonatomic, assign) IBInspectable CGPoint myCenterOffset;
 
@@ -191,9 +138,7 @@
     表示视图A的宽度总是视图内容的宽度+30，这样即使视图调用了sizeToFit方法来计算出包裹内容的宽度，但是最终的布局宽度还是会再增加30个点。
  
  */
-/**
- the MyLayoutDime is layout dimension object object of the UIView. used to set the width and height of the View which is in Layout View
- */
+
 
 /**
  *视图的宽度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutDime,NSArray<MyLayoutDime*>,nil这四种值
