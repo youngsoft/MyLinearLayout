@@ -47,6 +47,7 @@
  *流式布局内所有子视图的整体停靠对齐位置设定。
  *如果视图方向为MyLayoutViewOrientation_Vert时且averageArrange为YES时则水平方向的停靠失效。
  *如果视图方向为MyLayoutViewOrientation_Horz时且averageArrange为YES时则垂直方向的停靠失效。
+ *对于内容填充布局来说如果设置为MyMarginGravity_Horz_Fill或者MyMarginGravity_Vert_Fill则表示间距的拉伸
  */
 @property(nonatomic,assign) IBInspectable MyMarginGravity gravity;
 
@@ -74,8 +75,8 @@
 
 /**
  *流式布局中每排子视图的停靠对齐位置设定。
- 如果是MyLayoutViewOrientation_Vert则只用于表示每行子视图的上中下停靠对齐位置，这个属性只支持MyMarginGravity_Vert_Top，MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom，MyMarginGravity_Vert_Fill 这里的对齐基础是以每行中的最高的子视图为基准。
- 如果是MyLayoutViewOrientation_Horz则只用于表示每列子视图的左中右停靠对齐位置，这个属性只支持MyMarginGravity_Horz_Left，MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right，MyMarginGravity_Horz_Fill 这里的对齐基础是以每列中的最宽的子视图为基准。
+ 如果是MyLayoutViewOrientation_Vert则只用于表示每行子视图的上中下停靠对齐位置，这个属性只支持MyMarginGravity_Vert_Top，MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom 这里的对齐基础是以每行中的最高的子视图为基准。
+ 如果是MyLayoutViewOrientation_Horz则只用于表示每列子视图的左中右停靠对齐位置，这个属性只支持MyMarginGravity_Horz_Left，MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right 这里的对齐基础是以每列中的最宽的子视图为基准。
  */
 @property(nonatomic,assign) IBInspectable MyMarginGravity arrangedGravity;
 

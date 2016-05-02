@@ -1,7 +1,5 @@
-# MyLayout1.1.5
+# MyLayout1.1.6
 
-##  新版本注意
-   为了防止命名冲突，以及命名的规范，1.1.1版本对一些方法进行了重命名，以及枚举值重新命名，请浏览最下面的如何解决命名冲突和报警的问题。
 
 ## 功能介绍
 
@@ -59,7 +57,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.1.5'
+pod 'MyLayout', '~> 1.1.6'
 ```
    
 Then, run the following command:
@@ -67,6 +65,17 @@ Then, run the following command:
 ```
 $ pod install
 ```
+
+## V1.1.6版本新功能
+1.  MyLayoutDime类的equalTo方法添加可以等于自身的功能。比如`a.widthDime.equalTo(a.widthDime).add(10);` 表示视图a的最终宽度等于其本身内容的宽度再加上10. 这种设置方法不会造成循环引用，主要用于那些需要在自身内容尺寸基础上再扩展尺寸的场景，具体例子见： *FLLTest2ViewController*。
+2.  流式布局MyFlowLayout中的内容填充布局为了解决每行内容的填充空隙问题，增加了拉伸间距，拉伸尺寸，以及自动排列三种功能。拉伸间距需要设置属性*gravity*的值为*MyMarginGravity_Horz_Fill*或者*MyMarginGravity_Vert_Fill*；拉伸尺寸需要设置属性*averageArrange*的值为YES；自动排列则需要设置属性autoArrange的值为YES。具体例子见*FLLTest2ViewController*。
+3.  添加了新的视图扩展属性*noLayout*。这个属性设置为YES时表示子视图会参与布局，但是并不会真实的调整其在布局视图中的位置和尺寸，而布局视图则会保留出这个子视图的布局位置和尺寸的空间。这个属性和*useFrame*混合使用用来实现一些动画效果。具体例子见：*FLLTest3ViewController*。
+4.  框架布局MyFrameLayout支持了wrapContentHeight和wrapContentWidth设置为YES的功能。
+5.  布局视图添加新的属性*highlightedOpacity*，用来指定当布局Touch事件的高亮不透明度值。具体例子见：AllTest1ViewController。
+6.  修正了MyTableLayout中的一个BUG。
+7.  将布局库中的所有注释部分重新进行了格式化和调整。
+8.  优化了布局中的一些性能问题。
+9.  去掉了对过期代码的兼容性。
 
 ## V1.1.5版本新功能
 1. 添加了新的布局 **浮动布局**，浮动布局实现不规则的子视图的排列，卡片布局。设计思想是从HTML中的CSS样式的float属性得到了。
@@ -117,16 +126,13 @@ $ pod install
 9. 添加了布局视图设置按下事件setTouchDownTarget，按下被取消setTouchCancelTarget的事件功能。
 10. 添加了线性布局均分时的间距值设置功能averageSubviews。
 11. 添加了清除视图布局设定的方法resetMyLayoutSetting。
-
-## BUG修复
-
-1. 修复了布局占用大量内存的问题。   
-2. 修改了布局内添加UIScrollView时橡皮筋效果无效的问题。  
-3. 优化了一些约束冲突的解决。
-4. 优化了布局视图添加到非布局视图时的位置和尺寸调整功能。
-5. 修正了子视图恢复隐藏时的界面不重绘的问题。
-6. 修正了布局边界线的缩进显示的问题。
-7. 修正UITableView，UICollectionView下添加布局可能会造成的问题。
+12. 修复了布局占用大量内存的问题。   
+13. 修改了布局内添加UIScrollView时橡皮筋效果无效的问题。  
+14. 优化了一些约束冲突的解决。
+15. 优化了布局视图添加到非布局视图时的位置和尺寸调整功能。
+16. 修正了子视图恢复隐藏时的界面不重绘的问题。
+17. 修正了布局边界线的缩进显示的问题。
+18. 修正UITableView，UICollectionView下添加布局可能会造成的问题。
 
 ## FAQ
 1. 如果使用布局运行时造成CPU的100%占用则表示出现约束冲突了，请检查子视图约束的设置。	
@@ -134,28 +140,3 @@ $ pod install
 3. 如果将布局视图放在非布局视图之中则只有部分属性有效，如果同时设置了leftMargin和rightMargin则表示设置自身的宽度，如果同时设置了topMargin,bottomMargin则表示设置自身的高度。
 4. 如果设置wrapContentWidth,和wrapContentHeight的话，而又设置高度和宽度话可能会引起布局冲突。
 5. 自动布局并不是不用设置位置和高宽，而只是通过一些手段或者关联减少设置绝对位置和高度而已。
-
-## 版本迁移（老版本迁移需要注意）
-  因为历史的原因，原先的枚举类型的值都是大写,以及原来的一些UIView的一些扩展方法可能会和其他的库的扩展方法产生冲突。下面列出新老名称的映射表：
-
-  名称：老命名 --> 新命名
- 
-1. 位置停靠枚举定义:MarignGravity --> MyMarginGravity 
-2.  位置停靠枚举值:大写格式 --> 大小写格式 
-3. 布局方向枚举定义:LineViewOrientation --> MyLayoutViewOrientation
-4. 布局方向枚举值:大写格式 --> 大小写格式
-5. 视图的xxMargin扩展方法:xxMargin --> myXXMargin
-6. 视图的高宽扩展方法:width,height --> myWidth,myHeight
-7. 视图的中心偏移:centerXXOffset --> myCenterXXOffset
-
-如果您在代码中还使用老的命名系统也会让您编译通过，但是会提示过期的警告，因此建议您将名称迁移到新的命名中来，对于类名以及枚举的迁移相对简单，只要利用工程中的查找替换功能就能完成。最麻烦的就是原先的leftMargin,rightMargin,topMargin,bottomMargin,centerXoffset,centerYOffset,centerOffset,width,height这9个属性方法的迁移会比较麻烦，您不能用全局查找替换的方法，最好是通过编译出现的错误进行一一替换,或者通过全局查找替换功能并使用Preview进行有选择的替换（这里深表对不起）。  
-
-如果您不想进行迁移，但是又不出现告警提示的话，则可以在***pch文件中***，***工程的宏定义中***，以及在***MyLayoutDef.h的最开头***这三种方法的任意一种方法中定义四个宏：
-
-`  #define MY_USEOLDMETHODDEF 1 `   //表示继续使用那些老的方法， 
-
-`  #define MY_USEOLDMETHODNOWARNING 1 `   //表示使用老方法时不出现告警
-
-`  #define MY_USEOLDENUMDEF 1 `  //表示继续使用老的枚举类型定义 
-
-`  #define MY_USEOLDENUMNOWARNING 1 ` //表示使用老的枚举类型时不出现警告
