@@ -38,6 +38,7 @@
 
 ![演示图](http://7xoymz.com1.z0.glb.clouddn.com/mylayout.gif)
 ![演示图](http://7xoymz.com1.z0.glb.clouddn.com/sizeClassLayout.gif)
+![演示图](http://7xoymz.com1.z0.glb.clouddn.com/testfloatlayout5.gif)
 
 ## 使用方式
 ### 直接拷贝
