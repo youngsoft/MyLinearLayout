@@ -45,7 +45,7 @@
     
     UILabel *tipLabel = [UILabel new];
     tipLabel.font = [UIFont systemFontOfSize:13];
-    tipLabel.text = @"  您可以拖动下面任意一个标签进行位置的调整，MyLayout可以通过子视图的useFrame，noLayout和布局视图的autoresizesSubviews属性结合使用来完成一些位置调整以及整体的动画特性：\n useFrame设置为YES时表示子视图不受布局视图的控制而是使用自身的frame来确定位置和尺寸。\n\n autoresizesSubviews设置为NO表示布局视图不会执行任何布局操作，而不是保持里面子视图的位置和尺寸。\n\n noLayout设置为YES表示子视图在布局时只会占用位置和尺寸而不会真实的调整位置和尺寸。";
+    tipLabel.text = @"  您可以拖动下面任意一个标签进行位置的调整，MyLayout可以通过子视图的useFrame，noLayout和布局视图的autoresizesSubviews属性结合使用来完成一些位置调整以及整体的动画特性：\n useFrame设置为YES时表示子视图不受布局视图的控制而是使用自身的frame来确定位置和尺寸。\n\n autoresizesSubviews设置为NO表示布局视图不会执行任何布局操作，且会保持里面子视图的位置和尺寸。\n\n noLayout设置为YES表示子视图在布局时只会占用位置和尺寸而不会真实的调整位置和尺寸。";
     tipLabel.numberOfLines = 0;
     tipLabel.flexedHeight = YES; //这两个属性结合着使用实现自动换行。
     [rootLayout addSubview:tipLabel];
