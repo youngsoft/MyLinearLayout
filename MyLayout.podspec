@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MyLayout"
-  s.version      = "1.1.6"
+  s.version      = "1.1.7"
   s.summary      = "A powerful iOS view layout library, suitable for all kinds of screen size. Don't need to learn AutoLayout and SizeClass. "
 
   s.description  = <<-DESC
@@ -79,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.1.6" }
+  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.1.7" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
