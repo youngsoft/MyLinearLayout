@@ -10,8 +10,10 @@
 #import "FOLTest1ViewController.h"
 
 @interface FOLTest1ViewController ()
-@property (weak, nonatomic) IBOutlet UITextField *whTextField;
+
 @property (weak, nonatomic) IBOutlet MyFloatLayout *floatLayout;
+
+@property (weak, nonatomic) IBOutlet UITextField *whTextField;
 @property (weak, nonatomic) IBOutlet UISwitch *reverseFloatSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *clearFloatSwitch;
 @property (weak, nonatomic) IBOutlet UIStepper *weightStepper;
@@ -24,10 +26,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-   // self.floatLayout.orientation = MyLayoutViewOrientation_Horz;
-   self.title = @"浮动布局1--Demo1";
     
-    
+    /*
+       本例子是一个XIB和MyLayout结合使用的例子， 您可以在输入框中输入一个子视图的尺寸或者尺寸和四周边距来测试浮动布局的各种特性和效果。
+     */
 }
 
 - (void)didReceiveMemoryWarning {
@@ -45,10 +47,13 @@
 }
 */
 
-#pragma mark -- Handle Method
+#pragma mark -- Layout Construction
 
 -(void)createTagButton:(NSString*)text
 {
+    //你可以输入: “宽,高” 来指定一个视图的宽度和高度
+    //你也可以输入: “宽,高,左边距,上边距,右边距,下边距“ 来指定一个视图的尺寸和边距。
+    
     NSArray *arr = [text componentsSeparatedByString:@","];
     if (arr.count != 2 && arr.count != 6)
         return;
@@ -57,7 +62,7 @@
     [tagButton setTitle:text forState:UIControlStateNormal];
     tagButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     tagButton.backgroundColor = [UIColor colorWithRed:random()%256 / 255.0 green:random()%256 / 255.0 blue:random()%256 / 255.0 alpha:1];
-    [tagButton addTarget:self action:@selector(handleDelTag:) forControlEvents:UIControlEventTouchUpInside];
+    [tagButton addTarget:self action:@selector(handleRemoveSubview:) forControlEvents:UIControlEventTouchUpInside];
     [self.floatLayout addSubview:tagButton];
     
     if (arr.count == 6)
@@ -74,27 +79,16 @@
     
     self.weightStepper.value = 0;
     self.weightLabel.text = @"0";
-    
     self.reverseFloatSwitch.on = NO;
     self.clearFloatSwitch.on = NO;
     
-    
-    self.floatLayout.beginLayoutBlock =^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.3];
-        
-    };
-    
-    self.floatLayout.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-    };
+    [self.floatLayout layoutAnimationWithDuration:0.3];
     
 }
 
+#pragma mark -- Handle Method
 
-- (IBAction)handleAddSubView:(id)sender {
+- (IBAction)handleAddSubview:(id)sender {
     
     if (self.whTextField.text.length == 0)
         return;
@@ -105,6 +99,14 @@
     
     
 }
+
+-(IBAction)handleRemoveSubview:(UIButton*)sender
+{
+    [sender removeFromSuperview];
+    [self.floatLayout layoutAnimationWithDuration:0.3];
+}
+
+
 - (IBAction)handleChangeOrientaion:(id)sender {
     
     if (self.floatLayout.orientation == MyLayoutViewOrientation_Vert)
@@ -112,41 +114,15 @@
     else
         self.floatLayout.orientation = MyLayoutViewOrientation_Vert;
     
-    self.floatLayout.beginLayoutBlock =^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.3];
-        
-    };
-    
-    self.floatLayout.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-    };
-
+    [self.floatLayout layoutAnimationWithDuration:0.3];
     
 }
+
 - (IBAction)handleWeightStepper:(id)sender {
     
     self.weightLabel.text = [NSString stringWithFormat:@"%.1f", self.weightStepper.value];
     
 }
 
--(IBAction)handleDelTag:(UIButton*)sender
-{
-    [sender removeFromSuperview];
-    self.floatLayout.beginLayoutBlock =^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.3];
-        
-    };
-    
-    self.floatLayout.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-    };
-
-}
 
 @end

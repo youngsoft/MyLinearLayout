@@ -36,14 +36,43 @@
 
 
 /**
- *设置尺寸的最小值。如果设置了则最小不能低于这个值。
+ *设置尺寸的最小值。如果设置了则最小不能低于这个值。A.min(10) <==>  A.lBound(@10, 0, 1)。min方法是lBound方法的简化版本。
  */
 -(MyLayoutDime* (^)(CGFloat val))min;
+/**
+ * 设置尺寸的最小边界值。min方法只能设置最小的数值，但是lBound方法除了能将最小值设置为数值外，还可以设置为MyLayoutDime值。并且还可以指定增加的偏移值和放大的偏移值。
+  *@sizeVal:指定边界的值类型，方法可以支持NSNumber和MyLayoutDime类型，前者表示最小限制为某个常量值，而后者表示最小限制为某个关联的视图的布局尺寸。
+  *@addVal: 指定边界值限制的增量，如果没有增量请设置为0
+  *@multiVal: 指定边界值限制的倍数，如果没有倍数请设置为1
+  *最终限制的尺寸为: sizeVal的真实尺寸 * multiVal + addVal
+  *1.比如我们有一个UILabel的宽度是由内容决定的，但是最小的宽度不能低于B视图的宽度，则设置为：
+    A.widthDime.equalTo(A.widthDime).lBound(B.widthDime, 0, 1);
+  *2.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度不能低于父视图宽度的1/2，则设置为：
+    A.widthDime.equalTo(A.widthDime).lBound(superview.widthDime, 0, 0.5);
+  *3.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度是父视图的宽度-30，则设置为：
+    A.widthDime.equalTo(A.widthDime).lBound(superview.widthDime, -30, 1);
+ */
+-(MyLayoutDime* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))lBound;
+
 
 /**
- *设置尺寸的最大值。如果设置了则最大不能超过这个值
+ *设置尺寸的最大值。如果设置了则最大不能超过这个值。A.max(10) <==>  A.uBound(@10, 0, 1)。max方法是uBound方法的简化版本。
  */
 -(MyLayoutDime* (^)(CGFloat val))max;
+/**
+ * 设置尺寸的最小边界值。min方法只能设置最小的数值，但是lBound方法除了能将最小值设置为数值外，还可以设置为MyLayoutDime值。并且还可以指定增加的偏移值和放大的偏移值。
+ *@sizeVal:指定边界的值类型，方法可以支持NSNumber和MyLayoutDime类型，前者表示最小限制为某个常量值，而后者表示最小限制为某个关联的视图的布局尺寸。
+ *@addVal: 指定边界值限制的增量，如果没有增量请设置为0
+ *@multiVal: 指定边界值限制的倍数，如果没有倍数请设置为1
+ *最终限制的尺寸为: sizeVal的真实尺寸 * multiVal + addVal
+ *1.比如我们有一个UILabel的宽度是由内容决定的，但是最大的宽度不能超过父视图的宽度，则设置为：
+ A.widthDime.equalTo(A.widthDime).uBound(superview.widthDime, 0, 1);
+ *2.比如我们有一个视图的宽度也是由内容决定的，但是最大的宽度不能超过父视图宽度的1/2，则设置为：
+ A.widthDime.equalTo(A.widthDime).uBound(superview.widthDime, 0, 0.5);
+ *3.比如我们有一个视图的宽度也是由内容决定的，但是最大的宽度不能超过父视图的宽度-30，则设置为：
+ A.widthDime.equalTo(A.widthDime).uBound(superview.widthDime, -30, 1);
+ */
+-(MyLayoutDime* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))uBound;
 
 
 /**

@@ -18,11 +18,15 @@
 
 -(void)loadView
 {
-    //竖屏顶部是菜单布局
+    /*
+       这个DEMO 主要介绍了MyLayout对SizeClass的支持能力。下面的代码分别针对iPhone设备的横竖屏以及iPad设备的横竖屏分别做了适配处理。
+     */
+    
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.gravity = MyMarginGravity_Horz_Fill;
     self.view = rootLayout;
     
+    //创建顶部的菜单布局部分。
     MyFlowLayout *menuLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
     menuLayout.averageArrange = YES;
     menuLayout.wrapContentHeight = YES;
@@ -119,17 +123,12 @@
     UILabel *menu3LabelSC = [menu3Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     menu3LabelSC.heightDime.max(200);
 
-    
-
-    
 
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"SizeClass--Demo2";
-
 }
 
 - (void)didReceiveMemoryWarning {

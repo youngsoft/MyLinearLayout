@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-/*子视图间距设置以及自动调整大小的属性*/
 @interface LLTest1ViewController : UIViewController
 
 @end

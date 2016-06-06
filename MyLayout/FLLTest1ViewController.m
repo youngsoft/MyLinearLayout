@@ -17,22 +17,11 @@
 
 @implementation FLLTest1ViewController
 
--(UIButton*)createActionButton:(NSString*)title action:(SEL)action
-{
-    UIButton *button = [UIButton new];
-    [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    button.myHeight = 44;
-    button.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    button.layer.borderWidth = 1.0;
-    
-    return button;
-    
-}
-
 -(void)loadView
 {
+    /*
+        这个例子用来介绍流式布局的特性，流式布局中的子视图总是按一定的规则一次排列，当数量到达一定程度或者内容到达一定程度时就会自动换行从新排列。
+     */
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.wrapContentWidth = NO;
@@ -43,7 +32,6 @@
     //添加操作按钮。
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:2];
     actionLayout.backgroundColor = [UIColor redColor];
-
     actionLayout.wrapContentHeight = YES;
     actionLayout.averageArrange = YES;
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -69,7 +57,6 @@
     
     self.flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
     self.flowLayout.backgroundColor = [UIColor lightGrayColor];
-    
     self.flowLayout.frame = CGRectMake(0, 0, 800, 800);
     self.flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.flowLayout.subviewVertMargin = 5;
@@ -91,7 +78,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"流式布局";
     // Do any additional setup after loading the view.
     
 }
@@ -102,21 +88,29 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark -- Layout Construction
+
+//创建动作操作按钮。
+-(UIButton*)createActionButton:(NSString*)title action:(SEL)action
+{
+    UIButton *button = [UIButton new];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    button.myHeight = 44;
+    button.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    button.layer.borderWidth = 1.0;
+    
+    return button;
+    
+}
+
+
 #pragma mark -- Handle Method
 
 -(void)handleAdjustOrientation:(id)sender
 {
-    self.flowLayout.beginLayoutBlock = ^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.4];
-    };
-    
-    self.flowLayout.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-        
-    };
+    [self.flowLayout layoutAnimationWithDuration:0.4];
     
     if (self.flowLayout.orientation == MyLayoutViewOrientation_Vert)
         self.flowLayout.orientation = MyLayoutViewOrientation_Horz;
@@ -127,17 +121,7 @@
 
 -(void)handleAdjustArrangedCount:(id)sender
 {
-    self.flowLayout.beginLayoutBlock = ^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.4];
-    };
-    
-    self.flowLayout.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-        
-    };
+    [self.flowLayout layoutAnimationWithDuration:0.4];
     
     self.flowLayout.arrangedCount = (self.flowLayout.arrangedCount + 1) % 6;
     
@@ -146,18 +130,7 @@
 -(void)handleAdjustAverageMeasure:(id)sender
 {
     
-    self.flowLayout.beginLayoutBlock = ^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.4];
-    };
-    
-    self.flowLayout.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-        
-    };
-    
+    [self.flowLayout layoutAnimationWithDuration:0.4];
     
     self.flowLayout.averageArrange = !self.flowLayout.averageArrange;
     
@@ -174,17 +147,7 @@
 
 -(void)handleAdjustGravity:(id)sender
 {
-    self.flowLayout.beginLayoutBlock = ^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.4];
-    };
-    
-    self.flowLayout.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-        
-    };
+    [self.flowLayout layoutAnimationWithDuration:0.4];
     
     if (self.flowLayout.gravity == MyMarginGravity_None)
         self.flowLayout.gravity = MyMarginGravity_Vert_Center;
@@ -206,17 +169,7 @@
 -(void)handleAdjustArrangeGravity:(id)sender
 {
     
-    self.flowLayout.beginLayoutBlock = ^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.4];
-    };
-    
-    self.flowLayout.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-        
-    };
+    [self.flowLayout layoutAnimationWithDuration:0.4];
     
     
     if (self.flowLayout.orientation == MyLayoutViewOrientation_Vert)
@@ -268,17 +221,7 @@
 
 -(void)handleAdjustMargin:(id)sender
 {
-    self.flowLayout.beginLayoutBlock = ^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.4];
-    };
-    
-    self.flowLayout.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-        
-    };
+    [self.flowLayout layoutAnimationWithDuration:0.4];
     
     if (self.flowLayout.subviewHorzMargin == 0)
         self.flowLayout.subviewHorzMargin = 5;

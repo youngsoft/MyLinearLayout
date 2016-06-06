@@ -15,6 +15,52 @@
 
 @implementation RLTest3ViewController
 
+-(void)loadView
+{
+    /*
+       这个例子展示的相对布局里面某些视图整体居中的实现机制。这个可以通过设置子视图的扩展属性的MyLayoutPos对象的equalTo方法的值为数组来实现。
+       对于AutoLayout来说一直被诟病的是要实现某些视图整体在父视图中居中时，需要在外层包裹一个视图，然后再将这个包裹的视图在父视图中居中。而对于MyRelativeLayout来说实现起来则非常的简单。
+     */
+    
+    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    self.view = rootLayout;
+    
+    MyRelativeLayout *layout1 = [self createLayout1];  //子视图整体水平居中的布局
+    MyRelativeLayout *layout2 = [self createLayout2];  //子视图整体垂直居中的布局
+    MyRelativeLayout *layout3 = [self createLayout3];  //子视图整体居中的布局。
+   
+    layout1.backgroundColor = [UIColor redColor];
+    layout2.backgroundColor = [UIColor greenColor];
+    layout3.backgroundColor = [UIColor blueColor];
+    
+    
+    layout1.widthDime.equalTo(rootLayout.widthDime);
+    layout2.widthDime.equalTo(rootLayout.widthDime);
+    layout3.widthDime.equalTo(rootLayout.widthDime);
+    layout1.heightDime.equalTo(@[layout2.heightDime, layout3.heightDime]); //均分三个布局的高度。
+    layout2.topPos.equalTo(layout1.bottomPos);
+    layout3.topPos.equalTo(layout2.bottomPos);
+    
+    
+    [rootLayout addSubview:layout1];
+    [rootLayout addSubview:layout2];
+    [rootLayout addSubview:layout3];
+
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark -- Layout Construction
+
+//子视图整体水平居中的布局
 -(MyRelativeLayout*)createLayout1
 {
     MyRelativeLayout *layout = [MyRelativeLayout new];
@@ -42,15 +88,13 @@
     
     //通过为centerXPos等于一个数组值，表示他们之间整体居中,还可以设置其他视图的偏移量。
     v1.centerXPos.equalTo(@[v2.centerXPos.offset(20)]);
-
-    
-    
     
     
     
     return layout;
 }
 
+//子视图整体垂直居中的布局
 -(MyRelativeLayout*)createLayout2
 {
     MyRelativeLayout *layout = [MyRelativeLayout new];
@@ -78,11 +122,11 @@
     
     //通过为centerYPos等于一个数组值，表示他们之间整体居中,还可以设置其他视图的偏移量。
     v1.centerYPos.equalTo(@[v2.centerYPos.offset(10)]);
-
+    
     return layout;
 }
 
-
+//子视图整体居中布局
 -(MyRelativeLayout*)createLayout3
 {
     MyRelativeLayout *layout = [MyRelativeLayout new];
@@ -146,53 +190,12 @@
     lb2down.centerXPos.equalTo(lb2up.centerXPos);
     lb3down.centerXPos.equalTo(lb3up.centerXPos);
     
-
+    
     
     
     return layout;
 }
 
-
--(void)loadView
-{
-    
-    
-    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-    self.view = rootLayout;
-    
-    MyRelativeLayout *layout1 =  [self createLayout1]; //[MyRelativeLayout new];
-    MyRelativeLayout *layout2 = [self createLayout2];
-    MyRelativeLayout *layout3 = [self createLayout3];
-   
-    layout1.backgroundColor = [UIColor redColor];
-    layout2.backgroundColor = [UIColor greenColor];
-    layout3.backgroundColor = [UIColor blueColor];
-    
-    
-    layout1.widthDime.equalTo(rootLayout.widthDime);
-    layout2.widthDime.equalTo(rootLayout.widthDime);
-    layout3.widthDime.equalTo(rootLayout.widthDime);
-    layout1.heightDime.equalTo(@[layout2.heightDime, layout3.heightDime]);
-    layout2.topPos.equalTo(layout1.bottomPos);
-    layout3.topPos.equalTo(layout2.bottomPos);
-    
-    
-    [rootLayout addSubview:layout1];
-    [rootLayout addSubview:layout2];
-    [rootLayout addSubview:layout3];
-
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.title = @"相对布局4-一组视图整体居中";
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 /*
 #pragma mark - Navigation

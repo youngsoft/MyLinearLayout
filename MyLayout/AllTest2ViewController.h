@@ -1,5 +1,5 @@
 //
-//  Test11ViewController.h
+//  AllTest2ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AllTest2ViewController : UIViewController
+
+@interface AllTest2ViewController : UITableViewController
 
 @end

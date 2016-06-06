@@ -49,7 +49,7 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
-                                <action selector="handleAddSubView:" destination="-1" eventType="touchUpInside" id="izG-dR-eLd"/>
+                                <action selector="handleAddSubview:" destination="-1" eventType="touchUpInside" id="Kqm-6W-RQI"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="y0e-9j-NQd">

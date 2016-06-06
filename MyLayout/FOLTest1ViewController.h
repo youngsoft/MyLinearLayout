@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-/**浮动视图控制器测试1**/
 @interface FOLTest1ViewController : UIViewController
 
 @end

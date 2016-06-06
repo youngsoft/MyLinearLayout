@@ -31,7 +31,7 @@
 
     
     //第一行固定高度固定宽度
-    [tbll addRow:30 colWidth:70];
+    [tbll addRow:30 colSize:70];
     [tbll viewAtRowIndex:0].backgroundColor = [UIColor colorWithWhite:0.1 alpha:1];
     
     UILabel *colView = [UILabel new];
@@ -59,7 +59,7 @@
     [tbll addCol:colView atRow:0];
     
     //第二行固定高度，均分宽度
-    [tbll addRow:40 colWidth:MTLCOLWIDTH_AVERAGE];
+    [tbll addRow:40 colSize:MTLSIZE_AVERAGE];
     [tbll viewAtRowIndex:1].backgroundColor = [UIColor colorWithWhite:0.2 alpha:1];
 
     
@@ -89,7 +89,7 @@
     [tbll addCol:colView atRow:1];
     
     //第三行固定高度，子视图自己决定宽度。
-    [tbll addRow:30 colWidth:MTLCOLWIDTH_WRAPCONTENT];
+    [tbll addRow:30 colSize:MTLSIZE_WRAPCONTENT];
     [tbll viewAtRowIndex:2].backgroundColor = [UIColor colorWithWhite:0.3 alpha:1];
     colView = [UILabel new];
     colView.text = @"Cell20";
@@ -106,7 +106,7 @@
     [tbll addCol:colView atRow:2];
     
     //第四行固定高度，子视图自己决定宽度。
-    [tbll addRow:30 colWidth:MTLCOLWIDTH_MATCHPARENT];
+    [tbll addRow:30 colSize:MTLSIZE_MATCHPARENT];
     [tbll viewAtRowIndex:3].backgroundColor = [UIColor colorWithWhite:0.4 alpha:1];
     colView = [UILabel new];
     colView.text = @"Cell30";
@@ -123,7 +123,7 @@
     [tbll addCol:colView atRow:3];
     
     //第五行高度均分.这里设置为0表示剩余高度再均分。宽度均分,
-    [tbll addRow:MTLROWHEIGHT_AVERAGE colWidth:MTLCOLWIDTH_AVERAGE];
+    [tbll addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_AVERAGE];
     MyLinearLayout *row4 = [tbll viewAtRowIndex:4];
     //可以设置行的属性.比如padding, 线条颜色，
     row4.padding = UIEdgeInsetsMake(3, 3, 3, 3);
@@ -144,7 +144,7 @@
     [tbll addCol:colView atRow:4];
     
     //第六行高度由子视图决定，均分宽度
-    [tbll addRow:MTLROWHEIGHT_WRAPCONTENT colWidth:MTLCOLWIDTH_AVERAGE];
+    [tbll addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_AVERAGE];
     [tbll viewAtRowIndex:5].backgroundColor = [UIColor colorWithWhite:0.6 alpha:1];
     
     colView = [UILabel new];
@@ -181,7 +181,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = @"表格布局-垂直表格";
 }
 
 - (void)didReceiveMemoryWarning {

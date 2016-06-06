@@ -14,46 +14,49 @@
 @interface MyTableRowLayout : MyLinearLayout
 
 
-+(id)rowWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth orientation:(MyLayoutViewOrientation)orientation;
++(id)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyLayoutViewOrientation)orientation;
 
-@property(nonatomic,assign, readonly) CGFloat rowHeight;
-@property(nonatomic,assign, readonly) CGFloat colWidth;
+@property(nonatomic,assign, readonly) CGFloat rowSize;
+@property(nonatomic,assign, readonly) CGFloat colSize;
 
 @end
 
-IB_DESIGNABLE
 @implementation MyTableRowLayout
 {
-   CGFloat _rowHeight;
-   CGFloat _colWidth;
+   CGFloat _rowSize;
+   CGFloat _colSize;
 }
 
--(id)initWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth orientation:(MyLayoutViewOrientation)orientation
+-(id)initWith:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyLayoutViewOrientation)orientation
 {
     self = [super initWithOrientation:orientation];
     if (self != nil)
     {
-        _rowHeight = rowHeight;
-        _colWidth = colWidth;
+        _rowSize = rowSize;
+        _colSize = colSize;
         
-        if (rowHeight == 0)
+        if (rowSize == MTLSIZE_AVERAGE)
             self.weight = 1;
-        else if (rowHeight > 0)
+        else if (rowSize > 0)
         {
             if (orientation == MyLayoutViewOrientation_Horz)
-                self.myHeight = rowHeight;
+                self.myHeight = rowSize;
             else
-                self.myWidth = rowHeight;
+                self.myWidth = rowSize;
         }
-        else
+        else if (rowSize == MTLSIZE_WRAPCONTENT)
         {
             if (orientation == MyLayoutViewOrientation_Horz)
                 self.wrapContentHeight = YES;
             else
                 self.wrapContentWidth = YES;
         }
+        else
+        {
+            NSCAssert(0, @"rowSize can not set to MTLSIZE_MATCHPARENT");
+        }
         
-        if (colWidth == 0)
+        if (colSize == MTLSIZE_AVERAGE)
         {
             if (orientation == MyLayoutViewOrientation_Horz)
             {
@@ -67,7 +70,7 @@ IB_DESIGNABLE
             }
             
         }
-        else if (colWidth == -2)
+        else if (colSize == MTLSIZE_MATCHPARENT)
         {
             if (orientation == MyLayoutViewOrientation_Horz)
             {
@@ -85,9 +88,9 @@ IB_DESIGNABLE
     return self;
 }
 
-+(id)rowWith:(CGFloat)rowHeight colWidth:(CGFloat)colWidth orientation:(MyLayoutViewOrientation)orientation
++(id)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyLayoutViewOrientation)orientation
 {
-    return [[self alloc] initWith:rowHeight colWidth:colWidth orientation:orientation];
+    return [[self alloc] initWith:rowSize colSize:colSize orientation:orientation];
 }
 
 
@@ -116,21 +119,48 @@ IB_DESIGNABLE
     return [self linearLayoutWithOrientation:orientation];
 }
 
-
--(void)addRow:(CGFloat)rowHeight colWidth:(CGFloat)colWidth
+-(void)setRowSpacing:(CGFloat)rowSpacing
 {
-    [self insertRow:rowHeight colWidth:colWidth atIndex:self.countOfRow];
+    self.subviewMargin = rowSpacing;
 }
 
--(void)insertRow:(CGFloat)rowHeight colWidth:(CGFloat)colWidth atIndex:(NSInteger)rowIndex
+-(CGFloat)rowSpacing
 {
-    MyLayoutViewOrientation ori = 0;
+    return self.subviewMargin;
+}
+
+-(void)setColSpacing:(CGFloat)colSpacing
+{
+    MyTableLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.colSpacing != colSpacing)
+    {
+        lsc.colSpacing = colSpacing;
+        [self setNeedsLayout];
+    }
+
+}
+
+-(CGFloat)colSpacing
+{
+    return self.myCurrentSizeClass.colSpacing;
+}
+
+
+-(void)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize
+{
+    [self insertRow:rowSize colSize:colSize atIndex:self.countOfRow];
+}
+
+-(void)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex
+{
+    MyLayoutViewOrientation ori = MyLayoutViewOrientation_Vert;
     if (self.orientation == MyLayoutViewOrientation_Vert)
         ori = MyLayoutViewOrientation_Horz;
     else
         ori = MyLayoutViewOrientation_Vert;
     
-    MyTableRowLayout *rowView = [MyTableRowLayout rowWith:rowHeight colWidth:colWidth orientation:ori];
+    MyTableRowLayout *rowView = [MyTableRowLayout rowSize:rowSize colSize:colSize orientation:ori];
+    rowView.subviewMargin = self.colSpacing;
     [super insertSubview:rowView atIndex:rowIndex];
 }
 
@@ -164,15 +194,15 @@ IB_DESIGNABLE
 {
     MyTableRowLayout *rowView = (MyTableRowLayout*)[self viewAtRowIndex:indexPath.row];
     
-    //colWidth为0表示均分宽度，为-1表示由子视图决定宽度，大于0表示固定宽度。
-    if (rowView.colWidth == 0)
+    //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
+    if (rowView.colSize == MTLSIZE_AVERAGE)
         colView.weight = 1;
-    else if (rowView.colWidth > 0)
+    else if (rowView.colSize > 0)
     {
         if (rowView.orientation == MyLayoutViewOrientation_Horz)
-            colView.myWidth = rowView.colWidth;
+            colView.myWidth = rowView.colSize;
         else
-            colView.myHeight = rowView.colWidth;
+            colView.myHeight = rowView.colSize;
     }
     
     if (rowView.orientation == MyLayoutViewOrientation_Horz)
@@ -243,12 +273,12 @@ IB_DESIGNABLE
 //不能直接调用如下的函数。
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index
 {
-    NSAssert(0, @"Can't call insertSubview");
+    NSCAssert(0, @"Can't call insertSubview");
 }
 
 - (void)exchangeSubviewAtIndex:(NSInteger)index1 withSubviewAtIndex:(NSInteger)index2
 {
-    NSAssert(0, @"Can't call exchangeSubviewAtIndex");
+    NSCAssert(0, @"Can't call exchangeSubviewAtIndex");
 }
 
 - (void)addSubview:(UIView *)view
@@ -258,11 +288,11 @@ IB_DESIGNABLE
 
 - (void)insertSubview:(UIView *)view belowSubview:(UIView *)siblingSubview
 {
-    NSAssert(0, @"Can't call insertSubview");
+    NSCAssert(0, @"Can't call insertSubview");
 }
 - (void)insertSubview:(UIView *)view aboveSubview:(UIView *)siblingSubview
 {
-    NSAssert(0, @"Can't call insertSubview");
+    NSCAssert(0, @"Can't call insertSubview");
 }
 
 
@@ -273,5 +303,11 @@ IB_DESIGNABLE
     // Drawing code
 }
 */
+
+-(id)createSizeClassInstance
+{
+    return [MyLayoutSizeClassTableLayout new];
+}
+
 
 @end

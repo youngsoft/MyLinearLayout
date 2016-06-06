@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-//SizeClass的测试
 @interface AllTest5ViewController : UIViewController
 
 @end

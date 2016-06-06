@@ -30,34 +30,14 @@
 -(BOOL)isRelativeMargin:(CGFloat)margin;
 
 
--(void)calcMatchParentWidth:(MyLayoutDime*)match
-                  selfWidth:(CGFloat)selfWidth
-                 leftMargin:(CGFloat)leftMargin
-               centerMargin:(CGFloat)centerMargin
-                rightMargin:(CGFloat)rightMargin
-                leftPadding:(CGFloat)leftPadding
-               rightPadding:(CGFloat)rightPadding
-                       rect:(CGRect*)pRect;
-
--(void)calcMatchParentHeight:(MyLayoutDime*)match
-                  selfHeight:(CGFloat)selfHeight
-                   topMargin:(CGFloat)topMargin
-                centerMargin:(CGFloat)centerMargin
-                bottomMargin:(CGFloat)bottomMargin
-                  topPadding:(CGFloat)topPadding
-               bottomPadding:(CGFloat)bottomPadding
-                        rect:(CGRect*)pRect;
-
-
-
 -(void)vertGravity:(MyMarginGravity)vert
-        selfHeight:(CGFloat)selfHeight
+        selfSize:(CGSize)selfSize
                sbv:(UIView*)sbv
               rect:(CGRect*)pRect;
 
 
 -(void)horzGravity:(MyMarginGravity)horz
-         selfWidth:(CGFloat)selfWidth
+         selfSize:(CGSize)selfSize
                sbv:(UIView*)sbv
               rect:(CGRect*)pRect;
 
@@ -66,7 +46,14 @@
 
 -(void)setWrapContentHeightNoLayout:(BOOL)wrapContentHeight;
 
+-(void)calcSizeOfWrapContentSubview:(UIView*)sbv;
 
+
+-(CGFloat)heightFromFlexedHeightView:(UIView*)sbv inWidth:(CGFloat)width;
+
+-(CGFloat)validMeasure:(MyLayoutDime*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize;
+
+-(CGFloat)validMargin:(MyLayoutPos*)pos sbv:(UIView*)sbv calcPos:(CGFloat)calcPos selfLayoutSize:(CGSize)selfLayoutSize;
 
 @end
 

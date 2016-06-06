@@ -11,181 +11,38 @@
 
 @interface TLTest2ViewController ()
 
+@property(nonatomic, strong) MyTableLayout *rootLayout;
+
 @end
 
 @implementation TLTest2ViewController
 
 -(void)loadView
-{
+{    
     [super loadView];
-    
+    self.view.backgroundColor = [UIColor blackColor];
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     scrollView.autoresizingMask =  UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:scrollView];
     
-    
-    
     /*
-     有的时候我们希望让一个布局视图放入到非布局视图中去，但又希望布局视图的宽高和非布局父视图宽高一致。
-     这时候我们可以设置myHeight,myWidth来指定自身的高宽，我们也可以通过myLeftMargin = 0,myRightMargin = 0来让其跟父视图保持一样的宽度，但如果是这样的话还需要设置wrapContentWidth = NO. 设置高度同理。
+       创建一个水平的表格布局，水平表格布局主要用于建立瀑布流视图。需要注意的是水平表格中row也就是行是从左到右排列的，而每行中的col也就是列是从上到下排列的。
      */
-    MyTableLayout *tbll = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Horz];
-    tbll.wrapContentHeight = YES; //这里设定高度由子视图决定。
-    tbll.wrapContentWidth = NO;
-    tbll.myWidth = 500;
-    [scrollView addSubview:tbll];
     
+    _rootLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    _rootLayout.wrapContentWidth = NO;
+    _rootLayout.rowSpacing = 5;
+    _rootLayout.colSpacing = 10;
+    _rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //分别设置表格布局里面的行间距、列间距、内部padding边距。
     
-    //需要注意的是因为这里的表格设置为水平表格，所以下面所的行高，其实是行宽，而列宽，其实是列高
+    _rootLayout.widthDime.equalTo(scrollView.widthDime);
+    _rootLayout.wrapContentHeight = YES; //布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
+    [scrollView addSubview:_rootLayout];
     
-    
-    //第一行固定高度固定宽度
-    [tbll addRow:60 colWidth:30];
-    [tbll viewAtRowIndex:0].backgroundColor = [UIColor colorWithWhite:0.1 alpha:1];
-    
-    UILabel *colView = [UILabel new];
-    colView.text = @"Cell00";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
-    colView.myLeftMargin = 5; //可以使用myLeftMargin,myTopMargin,myRightMargin,myBottomMargin来调整间隔
-    colView.myTopMargin = 5;
-    colView.myBottomMargin = 5;
-    colView.myRightMargin = 5;
-    [tbll addCol:colView atRow:0];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell10";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
-    colView.myTopMargin = 20;
-    [tbll addCol:colView atRow:0];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell20";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor blueColor];
-    [tbll addCol:colView atRow:0];
-    
-    //第二行固定高度，均分宽度
-    [tbll addRow:70 colWidth:MTLCOLWIDTH_AVERAGE];
-    [tbll viewAtRowIndex:1].backgroundColor = [UIColor colorWithWhite:0.2 alpha:1];
-    
-    
-    colView = [UILabel new];
-    colView.text = @"Cell01";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
-    [tbll addCol:colView atRow:1];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell11";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
-    [tbll addCol:colView atRow:1];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell21";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor blueColor];
-    [tbll addCol:colView atRow:1];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell31";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor yellowColor];
-    [tbll addCol:colView atRow:1];
-    
-    //第三行固定高度，子视图自己决定宽度。
-    [tbll addRow:60 colWidth:MTLCOLWIDTH_WRAPCONTENT];
-    [tbll viewAtRowIndex:2].backgroundColor = [UIColor colorWithWhite:0.3 alpha:1];
-    colView = [UILabel new];
-    colView.text = @"Cell02";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
-    colView.myHeight = 100;
-    [tbll addCol:colView atRow:2];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell12";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
-    colView.myHeight = 200;
-    [tbll addCol:colView atRow:2];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell22";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor blueColor];
-    colView.myHeight = 1000;
-    [tbll addCol:colView atRow:2];
-    
-    //第四行固定高度，子视图自己决定宽度。
-    [tbll addRow:60 colWidth:MTLCOLWIDTH_MATCHPARENT];
-    [tbll viewAtRowIndex:3].backgroundColor = [UIColor colorWithWhite:0.4 alpha:1];
-    colView = [UILabel new];
-    colView.text = @"Cell03";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
-    colView.myHeight = 80;
-    [tbll addCol:colView atRow:3];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell13";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
-    colView.myHeight = 200;
-    [tbll addCol:colView atRow:3];
-    
-    //第五行高度均分.这里设置为0表示剩余高度再均分。宽度均分,
-    [tbll addRow:MTLROWHEIGHT_AVERAGE colWidth:MTLCOLWIDTH_AVERAGE];
-    MyLinearLayout *row4 = [tbll viewAtRowIndex:4];
-    //可以设置行的属性.比如padding, 线条颜色，
-    row4.padding = UIEdgeInsetsMake(3, 3, 3, 3);
-    row4.leftBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
-    row4.leftBorderLine.thick = 2;
-    row4.backgroundColor = [UIColor colorWithWhite:0.5 alpha:1];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell04";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
-    [tbll addCol:colView atRow:4];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell14";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
-    [tbll addCol:colView atRow:4];
-    
-    //第六行高度由子视图决定，均分宽度
-    [tbll addRow:MTLROWHEIGHT_WRAPCONTENT colWidth:MTLCOLWIDTH_AVERAGE];
-    [tbll viewAtRowIndex:5].backgroundColor = [UIColor colorWithWhite:0.6 alpha:1];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell05";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
-    colView.myWidth = 80;
-    [tbll addCol:colView atRow:5];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell15";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
-    colView.myWidth = 120;
-    [tbll addCol:colView atRow:5];
-    
-    colView = [UILabel new];
-    colView.text = @"Cell25";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor blueColor];
-    colView.myWidth = 70;
-    [tbll addCol:colView atRow:5];
-    
-    
-    
-    
-    
+    //为瀑布流建立3个平均分配的行，每行的列的尺寸由内容决定。
+    [_rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
+    [_rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
+    [_rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
     
 }
 
@@ -193,8 +50,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    self.title = @"表格布局-水平表格(瀑布流)";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加列条目" style:UIBarButtonItemStylePlain target:self action:@selector(handleAddColLayout:)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -206,6 +62,86 @@
 {
     [super viewDidAppear:animated];
     
+}
+
+#pragma mark -- Layout Construction
+
+//创建列布局视图
+-(UIView*)createColLayout:(NSString*)image title:(NSString*)title
+{
+    MyLinearLayout *colLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    colLayout.gravity = MyMarginGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
+    colLayout.wrapContentHeight = YES;
+    colLayout.subviewMargin = 5;  //设置布局视图里面子视图之间的间距为5个点。
+    colLayout.backgroundColor = [UIColor whiteColor];
+    [colLayout setTarget:self action:@selector(handleColLayoutTap:)];
+    colLayout.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
+    
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:image]];
+    imageView.flexedHeight = YES;   //这个属性重点注意！！ 对于UIImageView来说，如果我们设置了这个属性为YES的话，表示视图的高度会根据视图的宽度进行等比例的缩放来确定，从而防止图片显示时出现变形的情况。
+    [colLayout addSubview:imageView];
+    
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = title;
+    titleLabel.font = [UIFont systemFontOfSize:13];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.adjustsFontSizeToFitWidth = YES;
+    titleLabel.myBottomMargin = 2;
+    [titleLabel sizeToFit];
+    [colLayout addSubview:titleLabel];
+    
+    
+    
+    return colLayout;
+}
+
+
+#pragma mark -- Handle Method
+
+-(void)handleAddColLayout:(id)sender
+{
+    //获取表格布局中的每行的高度，找到高度最小的一行，如果高度都相等则选择索引号小的行。
+    CGFloat minHeight = CGFLOAT_MAX;
+    NSInteger rowIndex = 0;
+    for (NSInteger i = 0; i < self.rootLayout.countOfRow; i++)
+    {
+        UIView *rowView = [self.rootLayout viewAtRowIndex:i];
+        if (CGRectGetMaxY(rowView.frame) < minHeight)
+        {
+            minHeight = CGRectGetMaxY(rowView.frame);
+            rowIndex = i;
+        }
+    }
+    
+    NSArray *images = @[@"p1-11",
+                        @"p1-12",
+                        @"p1-21",
+                        @"p1-31",
+                        @"p1-32",
+                        @"p1-33",
+                        @"p1-34",
+                        @"p1-35",
+                        @"p1-36",
+                        @"image1",
+                        @"image2",
+                        @"image3"
+                        ];
+    
+    static NSInteger sTag = 1000;
+    
+    
+    UIView *colLayout = [self createColLayout:images[arc4random_uniform((uint32_t)images.count)]
+                                          title:[NSString stringWithFormat:@"单元格标题:%03ld", (long)sTag]];
+    colLayout.tag = sTag++;
+    [self.rootLayout addCol:colLayout atRow:rowIndex];
+}
+
+-(void)handleColLayoutTap:(UIView*)sender
+{
+   UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"您选择了单元格标题:%03ld", (long)sender.tag] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    
+    [alertView show];
 }
 
 /*

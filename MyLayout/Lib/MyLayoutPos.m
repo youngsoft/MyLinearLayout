@@ -16,9 +16,8 @@
 {
     id _posVal;
     CGFloat _offsetVal;
-    CGFloat _minVal;
-    CGFloat _maxVal;
-
+    MyLayoutPos *_lBoundVal;
+    MyLayoutPos *_uBoundVal;
 }
 
 -(id)init
@@ -31,12 +30,30 @@
         _posVal = nil;
         _posValType = MyLayoutValueType_Nil;
         _offsetVal = 0;
-        _minVal = -CGFLOAT_MAX;
-        _maxVal = CGFLOAT_MAX;
+        _lBoundVal = [[MyLayoutPos alloc] initWithNoBound];
+        _lBoundVal.equalTo(@(-CGFLOAT_MAX));
+        _uBoundVal = [[MyLayoutPos alloc] initWithNoBound];
+        _uBoundVal.equalTo(@(CGFLOAT_MAX));
     }
     
     return self;
 }
+
+-(id)initWithNoBound
+{
+    self = [super init];
+    if (self !=nil)
+    {
+        _view = nil;
+        _pos = MyMarginGravity_None;
+        _posVal = nil;
+        _posValType = MyLayoutValueType_Nil;
+        _offsetVal = 0;
+    }
+    
+    return self;
+}
+
 
 -(MyLayoutPos* (^)(id val))equalTo
 {
@@ -48,7 +65,7 @@
             if ([val isKindOfClass:[NSNumber class]])
                 _posValType = MyLayoutValueType_NSNumber;
             else if ([val isKindOfClass:[MyLayoutPos class]])
-                _posValType = MyLayoutValueType_Layout;
+                _posValType = MyLayoutValueType_LayoutPos;
             else if ([val isKindOfClass:[NSArray class]])
                 _posValType = MyLayoutValueType_Array;
             else
@@ -80,9 +97,9 @@
 {
     return ^id(CGFloat val){
         
-        if (_minVal != val)
+        if (_lBoundVal.posNumVal.doubleValue != val)
         {
-            _minVal = val;
+            _lBoundVal.equalTo(@(val));
             
             [self setNeedLayout];
         }
@@ -91,18 +108,45 @@
     };
 }
 
+-(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))lBound
+{
+    return ^id(id posVal, CGFloat offsetVal){
+        
+        _lBoundVal.equalTo(posVal).offset(offsetVal);
+        
+        [self setNeedLayout];
+        
+        return self;
+    };
+    
+}
+
+
 -(MyLayoutPos* (^)(CGFloat val))max
 {
     return ^id(CGFloat val){
         
-        if (_maxVal != val)
+        if (_uBoundVal.posNumVal.doubleValue != val)
         {
-            _maxVal = val;
+            _uBoundVal.equalTo(@(val));
             [self setNeedLayout];
         }
         
         return self;
     };
+}
+
+-(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))uBound
+{
+    return ^id(id posVal, CGFloat offsetVal){
+        
+        _uBoundVal.equalTo(posVal).offset(offsetVal);
+        
+        [self setNeedLayout];
+        
+        return self;
+    };
+    
 }
 
 
@@ -112,8 +156,8 @@
     _posVal = nil;
     _posValType = MyLayoutValueType_Nil;
     _offsetVal = 0;
-    _minVal = -CGFLOAT_MAX;
-    _maxVal = CGFLOAT_MAX;
+    _lBoundVal.equalTo(@(-CGFLOAT_MAX)).offset(0);
+    _uBoundVal.equalTo(@(CGFLOAT_MAX)).offset(0);
     [self setNeedLayout];
 }
 
@@ -138,7 +182,7 @@
     if (_posVal == nil)
         return nil;
     
-    if (_posValType == MyLayoutValueType_Layout)
+    if (_posValType == MyLayoutValueType_LayoutPos)
         return _posVal;
     
     return nil;
@@ -158,6 +202,18 @@
     
 }
 
+-(MyLayoutPos*)lBoundVal
+{
+    return _lBoundVal;
+}
+
+-(MyLayoutPos*)uBoundVal
+{
+    return _uBoundVal;
+}
+
+
+
 
 -(CGFloat)margin
 {
@@ -166,7 +222,9 @@
     if (self.posNumVal != nil)
         retVal +=self.posNumVal.doubleValue;
     
-    return [self validMargin:retVal];
+    retVal = MIN(_uBoundVal.posNumVal.doubleValue, retVal);
+    retVal = MAX(_lBoundVal.posNumVal.doubleValue, retVal);
+    return retVal;
 }
 
 -(BOOL)isRelativeMargin:(CGFloat)margin
@@ -180,16 +238,9 @@
     if ([self isRelativeMargin:realMargin])
         realMargin *= size;
     
-    return [self validMargin:realMargin + _offsetVal];
+    return  realMargin + _offsetVal;
 }
 
-
-
--(CGFloat)validMargin:(CGFloat)margin
-{
-    margin = MAX(_minVal, margin);
-    return MIN(_maxVal, margin);
-}
 
 #pragma mark -- NSCopying  
 
@@ -200,8 +251,8 @@
     lp.pos = self.pos;
     lp.posValType = self.posValType;
     lp->_offsetVal = self.offsetVal;
-    lp->_minVal = self.minVal;
-    lp->_maxVal = self.maxVal;
+    lp->_lBoundVal.equalTo(_lBoundVal.posVal).offset(_lBoundVal.offsetVal);
+    lp->_uBoundVal.equalTo(_uBoundVal.posVal).offset(_uBoundVal.offsetVal);
     lp->_posVal = self->_posVal;
     
     return lp;
@@ -212,7 +263,7 @@
 #pragma mark -- Private Method
 -(void)setNeedLayout
 {
-    if (_view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
+    if (_view != nil && _view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
     {
         MyBaseLayout* lb = (MyBaseLayout*)_view.superview;
         if (!lb.isMyLayouting)
@@ -272,7 +323,7 @@
         case MyLayoutValueType_NSNumber:
             posValStr = [_posVal description];
             break;
-        case MyLayoutValueType_Layout:
+        case MyLayoutValueType_LayoutPos:
             posValStr = [MyLayoutPos posstrFromPos:_posVal showView:YES];
             break;
         case MyLayoutValueType_Array:
@@ -302,7 +353,7 @@
             break;
     }
     
-    return [NSString stringWithFormat:@"%@=%@, Offset=%g, Max=%g, Min=%g",[MyLayoutPos posstrFromPos:self showView:NO], posValStr, _offsetVal, _maxVal == CGFLOAT_MAX ? NAN : _maxVal , _minVal == -CGFLOAT_MAX ? NAN : _minVal];
+    return [NSString stringWithFormat:@"%@=%@, Offset=%g, Max=%g, Min=%g",[MyLayoutPos posstrFromPos:self showView:NO], posValStr, _offsetVal, _uBoundVal.posNumVal.doubleValue == CGFLOAT_MAX ? NAN : _uBoundVal.posNumVal.doubleValue , _uBoundVal.posNumVal.doubleValue == -CGFLOAT_MAX ? NAN : _lBoundVal.posNumVal.doubleValue];
     
 }
 

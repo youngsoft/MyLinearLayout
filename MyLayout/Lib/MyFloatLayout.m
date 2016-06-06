@@ -68,7 +68,6 @@
 
 @implementation MyFloatLayout
 
-
 -(id)initWithOrientation:(MyLayoutViewOrientation)orientation
 {
     self = [super init];
@@ -117,6 +116,68 @@
     return self.myCurrentSizeClass.gravity;
 }
 
+-(void)setSubviewHorzMargin:(CGFloat)subviewHorzMargin
+{
+    MyFloatLayout *lsc = self.myCurrentSizeClass;
+    
+    if (lsc.subviewHorzMargin != subviewHorzMargin)
+    {
+        lsc.subviewHorzMargin = subviewHorzMargin;
+        [self setNeedsLayout];
+    }
+}
+
+-(CGFloat)subviewHorzMargin
+{
+    return self.myCurrentSizeClass.subviewHorzMargin;
+}
+
+-(void)setSubviewVertMargin:(CGFloat)subviewVertMargin
+{
+    MyFloatLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.subviewVertMargin != subviewVertMargin)
+    {
+        lsc.subviewVertMargin = subviewVertMargin;
+        [self setNeedsLayout];
+    }
+}
+
+-(CGFloat)subviewVertMargin
+{
+    return self.myCurrentSizeClass.subviewVertMargin;
+}
+
+-(CGFloat)subviewMargin
+{
+    return self.myCurrentSizeClass.subviewMargin;
+}
+
+-(void)setSubviewMargin:(CGFloat)subviewMargin
+{
+    MyFloatLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.subviewMargin != subviewMargin)
+    {
+        lsc.subviewMargin = subviewMargin;
+        [self setNeedsLayout];
+    }
+}
+
+
+-(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin;
+{
+    [self setSubviewFloatMargin:subviewSize minMargin:minMargin inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+}
+
+-(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin inSizeClass:(MySizeClass)sizeClass
+{
+    MyLayoutSizeClassFloatLayout *lsc = (MyLayoutSizeClassFloatLayout*)[self fetchLayoutSizeClass:sizeClass];
+    lsc.subviewSize = subviewSize;
+    lsc.minMargin = minMargin;
+    [self setNeedsLayout];
+}
+
+
+
 
 /*
  // Only override drawRect: if you perform custom drawing.
@@ -136,6 +197,7 @@
     {
         
         CGRect rightCandidateRect = ((NSValue*)rightCandidateRects[i]).CGRectValue;
+        
         //如果有比重则不能相等只能小于。
         if ((hasWeight ? CGRectGetMaxX(leftCandidateRect) + width < CGRectGetMinX(rightCandidateRect) : CGRectGetMaxX(leftCandidateRect) + width <= CGRectGetMinX(rightCandidateRect)) &&
             CGRectGetMaxY(leftCandidateRect) > lastHeight)
@@ -266,18 +328,9 @@
 
 
 
--(CGRect)layoutSubviewsForVert:(CGRect)selfRect
+-(CGRect)layoutSubviewsForVert:(CGRect)selfRect sbs:(NSArray*)sbs
 {
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     UIEdgeInsets padding = self.padding;
-    
-    for (UIView *sbv in self.subviews)
-    {
-        if (sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
-            continue;
-        
-        [sbs addObject:sbv];
-    }
     
     //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
     if (self.wrapContentWidth)
@@ -290,7 +343,6 @@
             CGRect rect = sbv.absPos.frame;
             
             //因为这里是计算包裹宽度属性，所以只会计算那些设置了固定宽度的子视图
-            rect.size.width  = [sbv.widthDime validMeasure:rect.size.width];
             
             //这里有可能设置了固定的宽度
             if (sbv.widthDime.dimeNumVal != nil)
@@ -299,16 +351,18 @@
             //有可能宽度是和他的高度相等。
             if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
             {
-                rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
                 if (sbv.heightDime.dimeNumVal != nil)
                     rect.size.height = sbv.heightDime.measure;
                 
                 if (sbv.heightDime.dimeRelaVal == self.heightDime)
-                    rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+                    rect.size.height = (selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
                 
-                rect.size.width = [sbv.widthDime validMeasure:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+                rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+                
+                rect.size.width = rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
             }
             
+            rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
             
             if (leftMargin + rect.size.width + rightMargin > maxContentWidth &&
                 sbv.widthDime.dimeRelaVal != self.widthDime &&
@@ -321,7 +375,21 @@
         selfRect.size.width = padding.left + maxContentWidth + padding.right;
     }
     
-    
+    //支持浮动水平间距。
+    CGFloat vertMargin = self.subviewVertMargin;
+    CGFloat horzMargin = self.subviewHorzMargin;
+    CGFloat subviewSize = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).subviewSize;
+    if (subviewSize != 0)
+    {
+        CGFloat minMargin = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).minMargin;
+        
+        NSInteger rowCount =  floor((selfRect.size.width - padding.left - padding.right  + minMargin) / (subviewSize + minMargin));
+        if (rowCount > 1)
+        {
+            horzMargin = (selfRect.size.width - padding.left - padding.right - subviewSize * rowCount)/(rowCount - 1);
+        }
+    }
+
     
     //左边候选区域数组，保存的是CGRect值。
     NSMutableArray *leftCandidateRects = [NSMutableArray new];
@@ -350,10 +418,6 @@
         CGFloat rightMargin = sbv.rightPos.margin;
         CGRect rect = sbv.absPos.frame;
         
-        //控制最大最小尺寸
-        rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
-        rect.size.width  = [sbv.widthDime validMeasure:rect.size.width];
-        
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
         
@@ -361,35 +425,39 @@
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-            rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+            rect.size.height = (selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         
         if (sbv.widthDime.dimeRelaVal == self.widthDime)
-            rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            rect.size.width = (selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+        
+        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-            rect.size.height = [sbv.heightDime validMeasure:rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+            rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        
+        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
         
         if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-            rect.size.width = [sbv.widthDime validMeasure:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            rect.size.width = rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         
         if (sbv.widthDime.dimeRelaVal != nil &&  sbv.widthDime.dimeRelaVal.view != nil &&  sbv.widthDime.dimeRelaVal.view != self && sbv.widthDime.dimeRelaVal.view != sbv)
         {
-            rect.size.width = [sbv.widthDime validMeasure:sbv.widthDime.dimeRelaVal.view.absPos.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            rect.size.width = sbv.widthDime.dimeRelaVal.view.absPos.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         }
         
         if (sbv.heightDime.dimeRelaVal != nil &&  sbv.heightDime.dimeRelaVal.view != nil &&  sbv.heightDime.dimeRelaVal.view != self && sbv.heightDime.dimeRelaVal.view != sbv)
         {
-            rect.size.height = [sbv.heightDime validMeasure:sbv.heightDime.dimeRelaVal.view.absPos.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+            rect.size.height = sbv.heightDime.dimeRelaVal.view.absPos.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         }
-
         
+        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
         
         //如果高度是浮动的则需要调整高度。
         if (sbv.isFlexedHeight)
-        {
-            CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
-            rect.size.height = [sbv.heightDime validMeasure:sz.height];
-        }
+            rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
+        
+        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+        
         
         if (sbv.reverseFloat)
         {
@@ -427,16 +495,18 @@
             //重新设置宽度
             if (sbv.weight != 0)
             {
-                rect.size.width = [sbv.widthDime validMeasure:(nextPoint.x - leftCandidateXBoundary - leftMargin - rightMargin) * sbv.weight];
+                
+                rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:(nextPoint.x - leftCandidateXBoundary - leftMargin - rightMargin) * sbv.weight sbvSize:rect.size selfLayoutSize:selfRect.size];
+                
                 
                 if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-                    rect.size.height = [sbv.heightDime validMeasure:rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+                    rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
                 
                 if (sbv.isFlexedHeight)
-                {
-                    CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
-                    rect.size.height = [sbv.heightDime validMeasure:sz.height];
-                }
+                    rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
+                
+                rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+                
             }
             
             
@@ -472,10 +542,9 @@
                 }
             }
             
-
             
             //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
-            CGRect cRect = CGRectMake(rect.origin.x - leftMargin, rect.origin.y - topMargin, MIN((rect.size.width + leftMargin + rightMargin),(selfRect.size.width - padding.left - padding.right)), rect.size.height + topMargin + bottomMargin);
+            CGRect cRect = CGRectMake(MAX((rect.origin.x - leftMargin - horzMargin),padding.left), rect.origin.y - topMargin, MIN((rect.size.width + leftMargin + rightMargin),(selfRect.size.width - padding.left - padding.right)), rect.size.height + topMargin + bottomMargin + vertMargin);
             
             
             //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
@@ -498,8 +567,8 @@
             [rightCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             rightLastYOffset = rect.origin.y - topMargin;
             
-            if (rect.origin.y + rect.size.height + bottomMargin > rightMaxHeight)
-                rightMaxHeight = rect.origin.y + rect.size.height + bottomMargin;
+            if (rect.origin.y + rect.size.height + bottomMargin + vertMargin > rightMaxHeight)
+                rightMaxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
         }
         else
         {
@@ -541,22 +610,21 @@
             //重新设置宽度
             if (sbv.weight != 0)
             {
-                rect.size.width = [sbv.widthDime validMeasure:(rightCandidateXBoundary - nextPoint.x - leftMargin - rightMargin) * sbv.weight];
+                rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:(rightCandidateXBoundary - nextPoint.x - leftMargin - rightMargin) * sbv.weight sbvSize:rect.size selfLayoutSize:selfRect.size];
                 
                 if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-                    rect.size.height = [sbv.heightDime validMeasure:rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+                    rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
                 
                 if (sbv.isFlexedHeight)
-                {
-                    CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
-                    rect.size.height = [sbv.heightDime validMeasure:sz.height];
-                }
+                    rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
+                
+                rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+                
             }
             
             rect.origin.x = nextPoint.x + leftMargin;
             rect.origin.y = MIN(nextPoint.y,maxHeight) + topMargin;
-            
-            
+        
             if (self.IntelligentBorderLine != nil)
             {
                 //优先绘制左边和上边的。绘制左边的和上边的。
@@ -585,10 +653,9 @@
                     
                 }
             }
-            
 
             
-            CGRect cRect = CGRectMake(rect.origin.x - leftMargin, rect.origin.y - topMargin, MIN((rect.size.width + leftMargin + rightMargin),(selfRect.size.width - padding.left - padding.right)), rect.size.height + topMargin + bottomMargin);
+            CGRect cRect = CGRectMake(rect.origin.x - leftMargin, rect.origin.y - topMargin, MIN((rect.size.width + leftMargin + rightMargin + horzMargin),(selfRect.size.width - padding.left - padding.right)), rect.size.height + topMargin + bottomMargin + vertMargin);
             
             
             //把新添加到候选中去。并删除高度小于的候选键。和高度
@@ -610,17 +677,20 @@
             [leftCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             leftLastYOffset = rect.origin.y - topMargin;
             
-            if (rect.origin.y + rect.size.height + bottomMargin > leftMaxHeight)
-                leftMaxHeight = rect.origin.y + rect.size.height + bottomMargin;
+            if (rect.origin.y + rect.size.height + bottomMargin + vertMargin > leftMaxHeight)
+                leftMaxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
             
         }
         
-        if (rect.origin.y + rect.size.height + bottomMargin > maxHeight)
-            maxHeight = rect.origin.y + rect.size.height + bottomMargin;
+        if (rect.origin.y + rect.size.height + bottomMargin + vertMargin > maxHeight)
+            maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
         
         sbv.absPos.frame = rect;
         
     }
+    
+    if (sbs.count > 0)
+        maxHeight -= vertMargin;
     
     maxHeight += padding.bottom;
     
@@ -654,18 +724,9 @@
     return selfRect;
 }
 
--(CGRect)layoutSubviewsForHorz:(CGRect)selfRect
+-(CGRect)layoutSubviewsForHorz:(CGRect)selfRect sbs:(NSArray*)sbs
 {
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     UIEdgeInsets padding = self.padding;
-    
-    for (UIView *sbv in self.subviews)
-    {
-        if (sbv.useFrame || ( sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
-            continue;
-        
-        [sbs addObject:sbv];
-    }
     
     //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
     if (self.wrapContentHeight)
@@ -677,31 +738,32 @@
             CGFloat bottomMargin = sbv.bottomPos.margin;
             CGRect rect = sbv.absPos.frame;
             
-            //因为这里是计算包裹高度属性，所以只会计算那些设置了固定高度的子视图
-            rect.size.height  = [sbv.heightDime validMeasure:rect.size.height];
             
             //这里有可能设置了固定的高度
             if (sbv.heightDime.dimeNumVal != nil)
                 rect.size.height = sbv.heightDime.measure;
             
+            rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
+            
             //有可能高度是和他的宽度相等。
             if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
             {
-                rect.size.width = [sbv.widthDime validMeasure:rect.size.width];
                 if (sbv.widthDime.dimeNumVal != nil)
                     rect.size.width = sbv.widthDime.measure;
                 
                 if (sbv.widthDime.dimeRelaVal == self.widthDime)
-                    rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+                    rect.size.width = (selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
                 
-                rect.size.height = [sbv.heightDime validMeasure:rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+                rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
+                
+                
+                rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
             }
             
             if (sbv.isFlexedHeight)
-            {
-                CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
-                rect.size.height = [sbv.heightDime validMeasure:sz.height];
-            }
+                rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
+            
+            rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
             
             if (topMargin + rect.size.height + bottomMargin > maxContentHeight &&
                 sbv.heightDime.dimeRelaVal != self.heightDime &&
@@ -714,7 +776,21 @@
         selfRect.size.height = padding.top + maxContentHeight + padding.bottom;
     }
     
-    
+    //支持浮动垂直间距。
+    CGFloat horzMargin = self.subviewHorzMargin;
+    CGFloat vertMargin = self.subviewVertMargin;
+    CGFloat subviewSize = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).subviewSize;
+    if (subviewSize != 0)
+    {
+        CGFloat minMargin = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).minMargin;
+
+        NSInteger rowCount =  floor((selfRect.size.height - padding.top - padding.bottom  + minMargin) / (subviewSize + minMargin));
+        if (rowCount > 1)
+        {
+            vertMargin = (selfRect.size.height - padding.top - padding.bottom - subviewSize * rowCount)/(rowCount - 1);
+        }
+    }
+
     
     //上边候选区域数组，保存的是CGRect值。
     NSMutableArray *topCandidateRects = [NSMutableArray new];
@@ -743,10 +819,6 @@
         CGFloat rightMargin = sbv.rightPos.margin;
         CGRect rect = sbv.absPos.frame;
         
-        //控制最大最小尺寸
-        rect.size.height = [sbv.heightDime validMeasure:rect.size.height];
-        rect.size.width  = [sbv.widthDime validMeasure:rect.size.width];
-        
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
         
@@ -754,34 +826,42 @@
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.heightDime.dimeRelaVal == self.heightDime)
-            rect.size.height = [sbv.heightDime validMeasure:(selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+            rect.size.height = (selfRect.size.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         
         if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-            rect.size.width = [sbv.widthDime validMeasure:(selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            rect.size.width = (selfRect.size.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+        
+        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-            rect.size.height = [sbv.heightDime validMeasure:rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+            rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        
+        
+        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
         
         if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-            rect.size.width = [sbv.widthDime validMeasure:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            rect.size.width = rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         
         if (sbv.widthDime.dimeRelaVal != nil &&  sbv.widthDime.dimeRelaVal.view != nil &&  sbv.widthDime.dimeRelaVal.view != self && sbv.widthDime.dimeRelaVal.view != sbv)
         {
-            rect.size.width = [sbv.widthDime validMeasure:sbv.widthDime.dimeRelaVal.view.absPos.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+            rect.size.width = sbv.widthDime.dimeRelaVal.view.absPos.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         }
         
         if (sbv.heightDime.dimeRelaVal != nil &&  sbv.heightDime.dimeRelaVal.view != nil &&  sbv.heightDime.dimeRelaVal.view != self && sbv.heightDime.dimeRelaVal.view != sbv)
         {
-            rect.size.height = [sbv.heightDime validMeasure:sbv.heightDime.dimeRelaVal.view.absPos.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
+            rect.size.height = sbv.heightDime.dimeRelaVal.view.absPos.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         }
 
+        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
+        
         
         //如果高度是浮动的则需要调整高度。
         if (sbv.isFlexedHeight)
-        {
-            CGSize sz = [sbv sizeThatFits:CGSizeMake(rect.size.width, 0)];
-            rect.size.height = [sbv.heightDime validMeasure:sz.height];
-        }
+            rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
+        
+        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+        
+        
         
         if (sbv.reverseFloat)
         {
@@ -818,10 +898,10 @@
             
             if (sbv.weight != 0)
             {
-                rect.size.height = [sbv.heightDime validMeasure:(nextPoint.y - topCandidateYBoundary - topMargin - bottomMargin) * sbv.weight];
+                rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(nextPoint.y - topCandidateYBoundary - topMargin - bottomMargin) * sbv.weight sbvSize:rect.size selfLayoutSize:selfRect.size];
                 
                 if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-                    rect.size.width = [sbv.widthDime validMeasure:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+                    rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:rect.size selfLayoutSize:selfRect.size];
                 
             }
             
@@ -860,8 +940,8 @@
             }
 
             
-            //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
-            CGRect cRect = CGRectMake(rect.origin.x - leftMargin, rect.origin.y - topMargin, rect.size.width + leftMargin + rightMargin, MIN((rect.size.height + topMargin + bottomMargin),(selfRect.size.height - padding.top - padding.bottom)));
+            //这里有可能子视图本身的高度会超过布局视图本身，但是我们的候选区域则不存储超过的高度部分。
+            CGRect cRect = CGRectMake(rect.origin.x - leftMargin, MAX((rect.origin.y - topMargin - vertMargin),padding.top), rect.size.width + leftMargin + rightMargin + horzMargin, MIN((rect.size.height + topMargin + bottomMargin),(selfRect.size.height - padding.top - padding.bottom)));
             
             //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
             for (NSInteger i = bottomCandidateRects.count - 1; i >= 0; i--)
@@ -882,8 +962,8 @@
             [bottomCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             bottomLastXOffset = rect.origin.x - leftMargin;
             
-            if (rect.origin.x + rect.size.width + rightMargin > bottomMaxWidth)
-                bottomMaxWidth = rect.origin.x + rect.size.width + rightMargin;
+            if (rect.origin.x + rect.size.width + rightMargin + horzMargin > bottomMaxWidth)
+                bottomMaxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin;
         }
         else
         {
@@ -923,10 +1003,10 @@
             
             if (sbv.weight != 0)
             {
-                rect.size.height = [sbv.heightDime validMeasure:(bottomCandidateYBoundary - nextPoint.y - topMargin - bottomMargin) * sbv.weight];
+                rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(bottomCandidateYBoundary - nextPoint.y - topMargin - bottomMargin) * sbv.weight sbvSize:rect.size selfLayoutSize:selfRect.size];
                 
                 if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-                    rect.size.width = [sbv.widthDime validMeasure:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
+                    rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:rect.size selfLayoutSize:selfRect.size];
                 
             }
             
@@ -963,7 +1043,7 @@
             }
 
             
-            CGRect cRect = CGRectMake(rect.origin.x - leftMargin, rect.origin.y - topMargin,rect.size.width + leftMargin + rightMargin,MIN((rect.size.height + topMargin + bottomMargin),(selfRect.size.height - padding.top - padding.bottom)));
+            CGRect cRect = CGRectMake(rect.origin.x - leftMargin, rect.origin.y - topMargin,rect.size.width + leftMargin + rightMargin + horzMargin,MIN((rect.size.height + topMargin + bottomMargin + vertMargin),(selfRect.size.height - padding.top - padding.bottom)));
             
             
             //把新添加到候选中去。并删除宽度小于的最新候选区域的候选区域
@@ -986,17 +1066,20 @@
             [topCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             topLastXOffset = rect.origin.x - leftMargin;
             
-            if (rect.origin.x + rect.size.width + rightMargin > topMaxWidth)
-                topMaxWidth = rect.origin.x + rect.size.width + rightMargin;
+            if (rect.origin.x + rect.size.width + rightMargin + horzMargin > topMaxWidth)
+                topMaxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin;
             
         }
         
-        if (rect.origin.x + rect.size.width + rightMargin > maxWidth)
-            maxWidth = rect.origin.x + rect.size.width + rightMargin;
+        if (rect.origin.x + rect.size.width + rightMargin + horzMargin > maxWidth)
+            maxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin;
         
         sbv.absPos.frame = rect;
         
     }
+    
+    if (sbs.count > 0)
+        maxWidth -= horzMargin;
     
     maxWidth += padding.right;
     
@@ -1036,31 +1119,22 @@
 {
     CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
     for (UIView *sbv in self.subviews)
     {
-        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
+        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
             continue;
         
+        [sbs addObject:sbv];
+    }
+    
+    
+    for (UIView *sbv in sbs)
+    {
         if (!isEstimate)
         {
             sbv.absPos.frame = sbv.frame;
-            
-            //处理尺寸等于内容时并且需要添加额外尺寸的情况。
-            if (sbv.widthDime.dimeSelfVal != nil || sbv.heightDime.dimeSelfVal != nil)
-            {
-                CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
-                if (sbv.widthDime.dimeSelfVal != nil)
-                {
-                    sbv.absPos.width = [sbv.widthDime validMeasure:fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal];
-                }
-                
-                if (sbv.heightDime.dimeSelfVal != nil)
-                {
-                    sbv.absPos.height = [sbv.heightDime validMeasure:fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal];
-                }
-            }
-
-            
+            [self calcSizeOfWrapContentSubview:sbv];    
         }
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
@@ -1068,8 +1142,25 @@
             if (pHasSubLayout != NULL)
                 *pHasSubLayout = YES;
             
-            //流式布局因为左右边距和自身的宽高没有限制所以这里不需要进行wrapContent的约束控制。
             MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
+            
+            if (sbvl.wrapContentWidth)
+            {
+                if (sbvl.widthDime.dimeVal != nil || (self.orientation == MyLayoutViewOrientation_Vert && sbvl.weight != 0))
+                {
+                    [sbvl setWrapContentWidthNoLayout:NO];
+                }
+            }
+            
+            if (sbvl.wrapContentHeight)
+            {
+                if (sbvl.heightDime.dimeVal != nil || (self.orientation == MyLayoutViewOrientation_Horz && sbvl.weight != 0))
+                {
+                    [sbvl setWrapContentHeightNoLayout:NO];
+                }
+            }
+            
+            
             if (isEstimate)
             {
                 [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
@@ -1080,23 +1171,21 @@
     
     
     if (self.orientation == MyLayoutViewOrientation_Vert)
-        selfRect = [self layoutSubviewsForVert:selfRect];
+        selfRect = [self layoutSubviewsForVert:selfRect sbs:sbs];
     else
-        selfRect = [self layoutSubviewsForHorz:selfRect];
+        selfRect = [self layoutSubviewsForHorz:selfRect sbs:sbs];
     
     
+    selfRect.size.height = [self validMeasure:self.heightDime sbv:self calcSize:selfRect.size.height sbvSize:selfRect.size selfLayoutSize:self.superview.frame.size];
     
-    
-    selfRect.size.height = [self.heightDime validMeasure:selfRect.size.height];
-    selfRect.size.width = [self.widthDime validMeasure:selfRect.size.width];
-    
+    selfRect.size.width = [self validMeasure:self.widthDime sbv:self calcSize:selfRect.size.width sbvSize:selfRect.size selfLayoutSize:self.superview.frame.size];
     
     return selfRect;
 }
 
 -(id)createSizeClassInstance
 {
-    return [MyLayoutSizeClassLinearLayout new];
+    return [MyLayoutSizeClassFloatLayout new];
 }
 
 

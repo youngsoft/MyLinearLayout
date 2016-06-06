@@ -376,6 +376,49 @@
 
 @end
 
+@implementation MyLayoutSizeClassTableLayout
+
+
+-(CGFloat)rowSpacing
+{
+    return self.subviewMargin;
+}
+
+-(void)setRowSpacing:(CGFloat)rowSpacing
+{
+    self.subviewMargin = rowSpacing;
+}
+
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutSizeClassTableLayout *lsc = [super copyWithZone:zone];
+    
+    lsc.rowSpacing = self.rowSpacing;
+    lsc.colSpacing = self.colSpacing;
+    
+    return lsc;
+}
+
+
+
+@end
+
+@implementation MyLayoutSizeClassFloatLayout
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutSizeClassFloatLayout *lsc = [super copyWithZone:zone];
+    
+    lsc.subviewSize = self.subviewSize;
+    lsc.minMargin = self.minMargin;
+    
+    return lsc;
+}
+
+
+@end
+
 
 @implementation MyLayoutSizeClassFlowLayout
 

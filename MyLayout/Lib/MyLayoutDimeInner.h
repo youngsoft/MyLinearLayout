@@ -21,6 +21,9 @@
 @property(nonatomic, readonly, strong) NSArray *dimeArrVal;
 @property(nonatomic, readonly, strong) MyLayoutDime *dimeSelfVal;
 
+@property(nonatomic, readonly, strong) MyLayoutDime *lBoundVal;
+@property(nonatomic, readonly, strong) MyLayoutDime *uBoundVal;
+
 
 //是否跟父视图相关
 @property(nonatomic, readonly,assign) BOOL isMatchParent;
@@ -29,9 +32,6 @@
 
 //只有为数值时才有意义。
 @property(nonatomic, readonly, assign) CGFloat measure;
-
-//有效的尺寸， 有效的尺寸取值 minVal <= measure <= maxVal
--(CGFloat)validMeasure:(CGFloat)measure;
 
 
 @end

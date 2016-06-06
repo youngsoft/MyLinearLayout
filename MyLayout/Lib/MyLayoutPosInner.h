@@ -20,12 +20,13 @@
 @property(nonatomic, readonly, strong) MyLayoutPos *posRelaVal;
 @property(nonatomic, readonly, strong) NSArray *posArrVal;
 
+@property(nonatomic, readonly, strong) MyLayoutPos *lBoundVal;
+@property(nonatomic, readonly, strong) MyLayoutPos *uBoundVal;
+
+
 // minVal <= posNumVal + offsetVal <=maxVal . 注意这个只试用于相对布局。对于线性布局和框架布局来说，因为可以支持相对边距。
 // 所以线性布局和框架布局不能使用这个属性。
 @property(nonatomic,readonly, assign) CGFloat margin;
-
-//计算有效的margin值，有效的margin  minVal <= margin <=maxVal
--(CGFloat)validMargin:(CGFloat)margin;
 
 //获取真实的位置值
 -(CGFloat)realMarginInSize:(CGFloat)size;

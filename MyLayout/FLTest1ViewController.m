@@ -19,23 +19,30 @@
 
 -(void)loadView
 {
+    /*
+       这个例子主要介绍了框架布局的功能。框架布局里面的所有子视图的布局位置都只跟框架布局相关。
+       框架布局中的子视图通过设置marginGravity扩展属性来实现位置和尺寸的设置。
+       框架布局中的子视图可以层叠显示，因此框架布局常用来作为视图控制器里面的跟视图。
+     */
+    
     [super loadView];
     
-    //建立13个子视图。并进行布局
-    
-    MyFrameLayout *fl = [MyFrameLayout new];
-    fl.myLeftMargin = fl.myRightMargin = 0;
-    fl.myTopMargin = fl.myBottomMargin = 0;
-    fl.padding = UIEdgeInsetsMake(20, 20, 20, 20);
-    fl.backgroundColor = [UIColor grayColor];
+    MyFrameLayout *frameLayout = [MyFrameLayout new];
+    frameLayout.myMargin = 0;              //这个表示框架布局的尺寸和self.view保持一致,四周离父视图的边距都是0
+    frameLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
+    frameLayout.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:frameLayout];
+
+    /*
+     建立13个子视图，并进行布局。这13个子视图表示可以在框架布局中定位和填充的13个位置和尺寸。
+     */
     
     //显示全屏
     UILabel *fill = UILabel.new;
     fill.text = @"                fill";
     fill.backgroundColor = [UIColor blueColor];
     fill.marginGravity = MyMarginGravity_Fill;
-    [fl addSubview:fill];
-    
+    [frameLayout addSubview:fill];
     
     
     //左右填充。
@@ -46,7 +53,7 @@
     horzFill.backgroundColor = [UIColor greenColor];
     horzFill.marginGravity = MyMarginGravity_Horz_Fill | MyMarginGravity_Vert_Top;
     horzFill.myTopMargin = 40;
-    [fl addSubview:horzFill];
+    [frameLayout addSubview:horzFill];
     
     
     //左右居中
@@ -55,7 +62,7 @@
     [horzCenter sizeToFit];
     horzCenter.backgroundColor = [UIColor whiteColor];
     horzCenter.marginGravity = MyMarginGravity_Horz_Center | MyMarginGravity_Vert_Top;
-    [fl addSubview:horzCenter];
+    [frameLayout addSubview:horzCenter];
     
     
     //左上
@@ -64,7 +71,7 @@
     [topLeft sizeToFit];
     topLeft.backgroundColor = [UIColor whiteColor];
     topLeft.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Top;
-    [fl addSubview:topLeft];
+    [frameLayout addSubview:topLeft];
     
     //左中
     UILabel *centerLeft = UILabel.new;
@@ -72,7 +79,7 @@
     [centerLeft sizeToFit];
     centerLeft.backgroundColor = [UIColor whiteColor];
     centerLeft.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Center;
-    [fl addSubview:centerLeft];
+    [frameLayout addSubview:centerLeft];
     
     
     //左下
@@ -81,7 +88,7 @@
     [bottomLeft sizeToFit];
     bottomLeft.backgroundColor = [UIColor whiteColor];
     bottomLeft.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Bottom;
-    [fl addSubview:bottomLeft];
+    [frameLayout addSubview:bottomLeft];
     
     
     //中上
@@ -90,7 +97,7 @@
     [topCenter sizeToFit];
     topCenter.backgroundColor = [UIColor greenColor];
     topCenter.marginGravity = MyMarginGravity_Horz_Center | MyMarginGravity_Vert_Top;
-    [fl addSubview:topCenter];
+    [frameLayout addSubview:topCenter];
     
     
     //中中。
@@ -99,7 +106,7 @@
     [centerCenter sizeToFit];
     centerCenter.backgroundColor = [UIColor greenColor];
     centerCenter.marginGravity = MyMarginGravity_Horz_Center | MyMarginGravity_Vert_Center;
-    [fl addSubview:centerCenter];
+    [frameLayout addSubview:centerCenter];
     
     
     //中下
@@ -108,7 +115,7 @@
     [bottomCenter sizeToFit];
     bottomCenter.backgroundColor = [UIColor greenColor];
     bottomCenter.marginGravity = MyMarginGravity_Horz_Center | MyMarginGravity_Vert_Bottom;
-    [fl addSubview:bottomCenter];
+    [frameLayout addSubview:bottomCenter];
     
     
     //右上
@@ -117,7 +124,7 @@
     [topRight sizeToFit];
     topRight.backgroundColor = [UIColor greenColor];
     topRight.marginGravity = MyMarginGravity_Horz_Right | MyMarginGravity_Vert_Top;
-    [fl addSubview:topRight];
+    [frameLayout addSubview:topRight];
     
     
     //右中
@@ -126,15 +133,16 @@
     [centerRight sizeToFit];
     centerRight.backgroundColor = [UIColor greenColor];
     centerRight.marginGravity = MyMarginGravity_Horz_Right | MyMarginGravity_Vert_Center;
-    [fl addSubview:centerRight];
+    [frameLayout addSubview:centerRight];
     
     
+    //右下
     UILabel *bottomRight = UILabel.new;
     bottomRight.text = @"bottomRight";
     [bottomRight sizeToFit];
     bottomRight.backgroundColor = [UIColor greenColor];
     bottomRight.marginGravity = MyMarginGravity_Horz_Right | MyMarginGravity_Vert_Bottom;
-    [fl addSubview:bottomRight];
+    [frameLayout addSubview:bottomRight];
     
     
     //居中显示。
@@ -143,10 +151,9 @@
     [center sizeToFit];
     center.backgroundColor = [UIColor orangeColor];
     center.marginGravity = MyMarginGravity_Center;
-    [fl addSubview:center];
+    [frameLayout addSubview:center];
     
     
-    [self.view addSubview:fl];
     
     
     
@@ -157,7 +164,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = @"框架布局1";
 }
 
 - (void)didReceiveMemoryWarning {

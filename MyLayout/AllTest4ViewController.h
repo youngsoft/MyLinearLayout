@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *  用MyLayout来实现UICollectionView的方法。
+ */
 @interface AllTest4ViewController : UIViewController
 
 @end

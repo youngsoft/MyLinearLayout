@@ -10,15 +10,15 @@
 #import "MyLayout.h"
 
 //数据模型
-@interface DataModel : NSObject
+@interface FOLTest3DataModel : NSObject
 
-@property(nonatomic,strong)  NSString *imageName; //图像的名称，如果为nil则没有图像
-@property(nonatomic, strong) NSString *title; //标题
-@property(nonatomic, strong) NSString *source; //来源
+@property(nonatomic, strong) NSString *imageName;    //图像的名称，如果为nil则没有图像
+@property(nonatomic, strong) NSString *title;        //标题
+@property(nonatomic, strong) NSString *source;       //来源
 
 @end
 
-@implementation DataModel
+@implementation FOLTest3DataModel
 
 @end
 
@@ -36,69 +36,71 @@
 
 @implementation FOLTest3ViewController
 
+
+-(NSMutableArray*)datas
+{
+    if (_datas == nil)
+    {
+        _datas = [NSMutableArray new];
+        
+        NSArray *dataSource = @[@{
+                                    @"imageName":@"p1",
+                                    @"title":@"广西鱼塘现大坑 一夜”吃掉“五万斤鱼"
+                                    },
+                                @{
+                                    @"title":@"习近平发展中国经济两个大局观",
+                                    @"source":@"专题"
+                                    },
+                                @{
+                                    @"title":@"习近平抵达不拉格开始对捷克国事访问",
+                                    @"source":@"专题"
+                                    },
+                                @{
+                                    @"title":@"解读：为何数万在缅汉族要入籍缅族",
+                                    @"source":@"海外网"
+                                    },
+                                @{
+                                    @"title":@"消费贷仍可用于首付银行：不可能杜绝",
+                                    @"source":@"新闻晨报"
+                                    },
+                                @{
+                                    @"title":@"3代人接力29年养保姆至108岁",
+                                    @"source":@"人民日报"
+                                    }
+                                ];
+        
+        for (NSDictionary *dict in dataSource)
+        {
+            FOLTest3DataModel *model = [FOLTest3DataModel new];
+            [dict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [model setValue:obj forKey:key];
+            }];
+            
+            [_datas addObject:model];
+        }
+        
+    }
+    
+    return _datas;
+}
+
+
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
-    self.title = @"仿ZAKER新闻卡片布局";
-    
-    
-    //构造6条数据,为了处理方便我们总是将有图的数据作为第一条，而实际中则会按新闻的时间返回数据数组。
-    self.datas = [[NSMutableArray alloc] initWithCapacity:6];
-    
-    DataModel *data1 = [DataModel new];
-    data1.imageName = @"p1";
-    data1.title = @"广西鱼塘现大坑 一夜”吃掉“五万斤鱼";
-    data1.source = @"";
-    [self.datas addObject:data1];
-
-    
-    DataModel *data2 = [DataModel new];
-    data2.imageName = nil;
-    data2.title = @"习近平发展中国经济两个大局观";
-    data2.source = @"专题";
-    [self.datas addObject:data2];
-    
-    DataModel *data3 = [DataModel new];
-    data3.imageName = nil;
-    data3.title = @"习近平抵达不拉格开始对捷克国事访问";
-    data3.source = @"专题";
-    [self.datas addObject:data3];
-    
-    DataModel *data4 = [DataModel new];
-    data4.imageName = nil;
-    data4.title = @"解读：为何数万在缅汉族要入籍缅族";
-    data4.source = @"海外网";
-    [self.datas addObject:data4];
-    
-    
-    DataModel *data5 = [DataModel new];
-    data5.imageName = nil;
-    data5.title = @"消费贷仍可用于首付银行：不可能杜绝";
-    data5.source = @"新闻晨报";
-    [self.datas addObject:data5];
-    
-    DataModel *data6 = [DataModel new];
-    data6.imageName = nil;
-    data6.title = @"3代人接力29年养保姆至108岁";
-    data6.source = @"人民日报";
-    [self.datas addObject:data6];
-    
-    
-    // Do any additional setup after loading the view.
     _floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    _floatLayout.myMargin = 0;
+    _floatLayout.myMargin = 0;  //浮动布局和父视图四周的边界是0，也就是说浮动布局的宽度和高度和父视图相等。
+     [self.view addSubview:_floatLayout];
     
     //通过智能分界线的使用，浮动布局里面的所有子布局视图的分割线都会进行智能的设置，从而解决了我们需求中需要提供边界线的问题。
     _floatLayout.IntelligentBorderLine = [[MyBorderLineDraw alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
-    _floatLayout.IntelligentBorderLine.headIndent = _floatLayout.IntelligentBorderLine.tailIndent = 5;
-   // _floatLayout.IntelligentBorderLine.dash = 3;
-    [self.view addSubview:_floatLayout];
-    
-    
-    [self handleChangeStyle:nil];
 
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"布局变换" style:UIBarButtonItemStylePlain target:self action:@selector(handleChangeStyle:)];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"布局变换" style:UIBarButtonItemStylePlain target:self action:@selector(handleStyleChange:)];
+    
+    [self handleStyleChange:nil];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -116,113 +118,128 @@
 }
 */
 
--(MyBaseLayout*)createPicNew:(DataModel*)dataModel
+#pragma mark -- Layout Construction
+
+//创建宽度和父布局宽度相等且具有图片新闻的浮动布局
+-(UIView*)createPictureNewsItemLayout:(FOLTest3DataModel*)dataModel tag:(NSInteger)tag
 {
-    
+    //创建一个左右浮动布局。这个DEMO是为了介绍浮动布局,在实践中你可以用其他布局来创建条目布局
     MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     itemLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    [itemLayout setTarget:self action:@selector(handleItemLayoutClick:)];
+    [itemLayout setTarget:self action:@selector(handleItemLayoutTap:)];
     itemLayout.highlightedBackgroundColor = [UIColor lightGrayColor];
-    //让文字放入底部对齐。
-    itemLayout.gravity = MyMarginGravity_Vert_Bottom;
+    itemLayout.tag = tag;
     
-    itemLayout.backgroundImage = [UIImage imageNamed:dataModel.imageName];
     
+    //图片作为布局的背景图片
+    itemLayout.backgroundImage = [UIImage imageNamed:dataModel.imageName];  //将图片作为布局的背景图片
+    
+    
+    //新闻的标题文本
     UILabel *titleLabel = [UILabel new];
-    titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.weight = 1;
-    titleLabel.numberOfLines = 0;
-    titleLabel.flexedHeight = YES;
     titleLabel.text = dataModel.title;
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.weight = 1;         //向左浮动，宽度和父视图保持一致。
+    titleLabel.numberOfLines = 0;
+    titleLabel.flexedHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。
     [itemLayout addSubview:titleLabel];
     
-    itemLayout.heightDime.equalTo(_floatLayout.heightDime).multiply(2.0/5);
-    itemLayout.widthDime.equalTo(_floatLayout.widthDime);
+    itemLayout.gravity = MyMarginGravity_Vert_Bottom; //将整个布局中的所有子视图垂直居底部。
+    itemLayout.heightDime.equalTo(_floatLayout.heightDime).multiply(2.0/5);  //布局的高度是父布局的2/5。
+    itemLayout.widthDime.equalTo(_floatLayout.widthDime);   //布局的宽度和父布局相等。
    
     return itemLayout;
 }
 
--(MyBaseLayout*)createWholeWidthTextNew:(DataModel*)dataModel
+//创建宽度和父布局宽度相等只有文字新闻的浮动布局
+-(UIView*)createWholeWidthTextNewsItemLayout:(FOLTest3DataModel*)dataModel tag:(NSInteger)tag
 {
-    //里面每个元素可以是各种布局，这里为了突出浮动布局，因此条目布局也做成了浮动布局。
+    //创建一个左右浮动布局。这个DEMO是为了介绍浮动布局,在实践中你可以用其他布局来创建条目布局
     MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     itemLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    [itemLayout setTarget:self action:@selector(handleItemLayoutClick:)];
+    [itemLayout setTarget:self action:@selector(handleItemLayoutTap:)];
     itemLayout.highlightedBackgroundColor = [UIColor lightGrayColor];
+    itemLayout.tag = tag;
     
-    //让文字整体居中对齐
-    itemLayout.gravity = MyMarginGravity_Vert_Center;
+    //标题文本部分
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    titleLabel.weight =1;   //向左浮动，宽度和父视图保持一致。
     titleLabel.numberOfLines = 0;
-    titleLabel.flexedHeight = YES;
-    titleLabel.weight =1;
+    titleLabel.flexedHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。
     [itemLayout addSubview:titleLabel];
     
+    //来源部分
     UILabel *sourceLabel = [UILabel new];
     sourceLabel.text = dataModel.source;
-    sourceLabel.clearFloat = YES;
-    sourceLabel.myTopMargin = 5;
     sourceLabel.font = [UIFont systemFontOfSize:11];
     sourceLabel.textColor = [UIColor lightGrayColor];
+    sourceLabel.clearFloat = YES;     //换行向左浮动。
+    sourceLabel.myTopMargin = 5;
     [sourceLabel sizeToFit];
     [itemLayout addSubview:sourceLabel];
     
-    itemLayout.heightDime.equalTo(_floatLayout.heightDime).multiply(1.0/5);
-    itemLayout.widthDime.equalTo(_floatLayout.widthDime);
+    itemLayout.gravity = MyMarginGravity_Vert_Center;  //将整个布局中的所有子视图整体垂直居中。
+    itemLayout.heightDime.equalTo(_floatLayout.heightDime).multiply(1.0/5);  //布局高度是父布局的1/5
+    itemLayout.widthDime.equalTo(_floatLayout.widthDime);   //布局宽度和父布局相等。
     
     return itemLayout;
     
 }
 
--(MyBaseLayout*)createHalfWidthTextNew:(DataModel*)dataModel
+//创建宽度是父布局宽度一半的只有文字新闻的浮动布局
+-(MyBaseLayout*)createHalfWidthTextNewsItemLayout:(FOLTest3DataModel*)dataModel tag:(NSInteger)tag
 {
     //里面每个元素可以是各种布局，这里为了突出浮动布局，因此条目布局也做成了浮动布局。
     MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     itemLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    [itemLayout setTarget:self action:@selector(handleItemLayoutClick:)];
+    [itemLayout setTarget:self action:@selector(handleItemLayoutTap:)];
     itemLayout.highlightedBackgroundColor = [UIColor lightGrayColor];
+    itemLayout.tag = tag;
     
-    //让文字整体居中对齐
-    itemLayout.gravity = MyMarginGravity_Vert_Center;
+    //标题文本部分
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
+    titleLabel.weight =1;   //向左浮动，宽度和父视图保持一致。
     titleLabel.numberOfLines = 0;
-    titleLabel.flexedHeight = YES;
-    titleLabel.weight =1;
+    titleLabel.flexedHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。
     [itemLayout addSubview:titleLabel];
     
+    //来源部分
     UILabel *sourceLabel = [UILabel new];
     sourceLabel.text = dataModel.source;
-    sourceLabel.clearFloat = YES;
-    sourceLabel.myTopMargin = 5;
     sourceLabel.font = [UIFont systemFontOfSize:11];
     sourceLabel.textColor = [UIColor lightGrayColor];
+    sourceLabel.clearFloat = YES;  //换行向左浮动。
+    sourceLabel.myTopMargin = 5;
     [sourceLabel sizeToFit];
     [itemLayout addSubview:sourceLabel];
     
-    itemLayout.heightDime.equalTo(_floatLayout.heightDime).multiply(1.0/5);
-    itemLayout.widthDime.equalTo(_floatLayout.widthDime).multiply(0.5);
+    itemLayout.gravity = MyMarginGravity_Vert_Center;   //将整个布局中的所有子视图整体垂直居中。
+    itemLayout.heightDime.equalTo(_floatLayout.heightDime).multiply(1.0/5);  //布局高度是父布局的1/5
+    itemLayout.widthDime.equalTo(_floatLayout.widthDime).multiply(0.5);      //布局宽度是父布局的一半。
     
     return itemLayout;
 
 }
 
--(void)handleChangeStyle:(id)sender
+#pragma mark -- Handle Method
+
+-(void)handleStyleChange:(id)sender
 {
     
-    //zaker的每页新闻中都有6条新闻，其中一条图片新闻和5条文字新闻。在布局上则高度分为5份，其中的图片新闻则占据了2/5，而高度则是全屏。
-    //其他的5条新闻则分为3行来均分剩余的高度，而宽度则是有4条是屏幕宽度的一半，一条是全部屏幕的宽度。然后zaker通过配置好的模板来展示每个
-    //不同的页，我们的例子为了展现效果。我们将随机产生4条半屏和1条全屏文字新闻和一张图片新闻。
+    /*
+     zaker的每页新闻中都有6条新闻，其中有1条图片新闻和5条文字新闻。在布局上则每页新闻高度分为5份，其中的图片新闻则占据了2/5，宽度则是全屏，其他的5条新闻则分为3行来均分剩余的高度，宽度则有4条是屏幕宽度的一半，一条全屏宽度。
     
-    //6条新闻中，我们有有一条图片新闻的宽度和屏幕宽度一致，高度是屏幕高度的2/5。 有一条新闻的宽度和屏幕宽度一致，高度为屏幕高度的1/5。另外四条新闻
-    //的宽度是屏幕宽度的一半，高度是屏幕高度的1/5。
-    //我们将宽度为全屏宽度的文字新闻定义为1，而将半屏宽度的文字新闻视图定义为2，而将图片新闻的视图定义为3 这样就会形成1322,3122,1232,3212,1223,3221,2123,2321, 2132,2312, 2213,2231 一共12种布局
-    //这样我们可以随机选取一种布局方式
+     zaker内部的实现是通过配置好的模板来展示每个不同的页。我们的例子为了展现效果。我们将随机产生4条半屏和1条全屏文字新闻和一张图片新闻。
     
-    //所有可能的布局数组。
-    int layoutStyless[12][4] = {
+     我们将宽度为全屏宽度的文字新闻定义为1，而将半屏宽度的文字新闻定义为2，而将图片新闻的定义为3。这样就会形成1322,3122,1232,3212,1223,3221,2123,2321, 2132,2312, 2213,2231 一共12种布局。我们界面右上角的“布局变换”按钮每次将随机选择一种布局进行显示。
+     */
+    
+    //所有可能的布局样式数组。
+    int layoutStyless[12][4] =
+    {
         {1,3,2,2},
         {3,1,2,2},
         {1,2,3,2},
@@ -234,43 +251,46 @@
         {2,1,3,2},
         {2,3,1,2},
         {2,2,1,3},
-        {2,2,3,1}};
+        {2,2,3,1}
+    };
     
-    //随机取得一个布局。
-    int *pLayoutStyles = layoutStyless[rand() % 12];
+    //随机取得一个布局样式
+    int *pLayoutStyles = layoutStyless[arc4random_uniform(12)];
     
-    
+    //布局前先把所有子视图删除掉。
     while (self.floatLayout.subviews.count > 0) {
         [self.floatLayout.subviews.lastObject removeFromSuperview];
     }
     
-    int index = 1;
-    for (int i = 0; i < 4; i++)
+    NSInteger index = 1;
+    for (NSInteger i = 0; i < 4; i++)
     {
         int layoutStyle = pLayoutStyles[i];
+        if (layoutStyle == 1)  //全部宽度文字新闻布局
+        {
+            [self.floatLayout addSubview:[self createWholeWidthTextNewsItemLayout:self.datas[index] tag:index]];
+            index++;
+        }
+        else if (layoutStyle == 2)  //半宽文字新闻布局
+        {
+            [self.floatLayout addSubview:[self createHalfWidthTextNewsItemLayout:self.datas[index] tag:index]];
+            index++;
+            [self.floatLayout addSubview:[self createHalfWidthTextNewsItemLayout:self.datas[index] tag:index]];
+            index++;
+        }
+        else //图片新闻布局
+        {
+            [self.floatLayout addSubview:[self createPictureNewsItemLayout:self.datas[0] tag:0]];
+        }
         
-       if (layoutStyle == 1)  //全部宽度文字新闻布局
-       {
-           [self.floatLayout addSubview:[self createWholeWidthTextNew:self.datas[index]]];
-           index++;
-       }
-       else if (layoutStyle == 3)  //图片新闻布局
-       {
-           [self.floatLayout addSubview:[self createPicNew:self.datas[0]]];
-       }
-       else   //半宽文字新闻布局
-       {
-           [self.floatLayout addSubview:[self createHalfWidthTextNew:self.datas[index]]];
-           index++;
-           [self.floatLayout addSubview:[self createHalfWidthTextNew:self.datas[index]]];
-           index++;
-       }
+        
     }
 }
 
--(void)handleItemLayoutClick:(id)sender
+-(void)handleItemLayoutTap:(UIView*)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"详情" message:@"详情信息" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    NSString *message = [NSString stringWithFormat:@"您单击了:%ld", (long)sender.tag];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
 }
 

@@ -648,6 +648,7 @@ BOOL _hasBegin;
 
 -(void)dealloc
 {
+    //如果您在使用时出现了KVO的异常崩溃，原因是您将这个视图被多次加入为子视图，请检查您的代码，是否这个视图被多次加入！！
 }
 
 #pragma  mark -- Public Method
@@ -764,6 +765,22 @@ BOOL _hasBegin;
 }
 
 
+-(void)layoutAnimationWithDuration:(NSTimeInterval)duration
+{
+    self.beginLayoutBlock = ^{
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:duration];
+    };
+    
+    self.endLayoutBlock = ^{
+    
+        [UIView commitAnimations];
+    };
+}
+
+
+
 -(void)setBottomBorderLine:(MyBorderLineDraw *)bottomBorderLine
 {
     if (_bottomBorderLine != bottomBorderLine)
@@ -836,6 +853,7 @@ BOOL _hasBegin;
         self.layer.contents = (id)_backgroundImage.CGImage;
     }
 }
+
 
 
 //只获取计算得到尺寸，不进行真正的布局。
@@ -1121,49 +1139,27 @@ BOOL _hasBegin;
         if ([keyPath isEqualToString:@"frame"] ||
             [keyPath isEqualToString:@"bounds"] )
         {
-            
-            //如果同时设置了左边和右边值则
-            if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) ||
-                [self.widthDime isMatchView:object] ||
-                (self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) ||
-                [self.heightDime isMatchView:object])
-            {
-                CGRect rectSuper = object.bounds;
-                CGRect rectSelf = self.frame;
-                
-                if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) || [self.widthDime isMatchView:object])
-                {
-                    //如果是外部视图不支持相对间距。
-                    [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin centerMargin:0  rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf];
-                }
-                
-                
-                if ((self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) || [self.heightDime isMatchView:object])
-                {
-                    [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin centerMargin:0 bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf];
-                }
-                
-                rectSelf.size.height = [self.heightDime validMeasure:rectSelf.size.height];
-                rectSelf.size.width = [self.widthDime validMeasure:rectSelf.size.width];
-                self.frame = rectSelf;
-                
-            }
+            [self setLayoutRectInNoLayoutSuperview:object];
         }
-        
+        return;
     }
     
     
     //监控子视图的frame的变化以便重新进行布局
-    if (!_isMyLayouting && [self.subviews containsObject:object])
+    if ([keyPath isEqualToString:@"frame"] ||
+        [keyPath isEqualToString:@"hidden"] )
     {
-        if (![object useFrame])
+        if (!_isMyLayouting && [self.subviews containsObject:object])
         {
-            [self setNeedsLayout];
-            
-            //这里添加的原因是有可能子视图取消隐藏后不会绘制自身，所以这里要求子视图重新绘制自身
-            if ([keyPath isEqualToString:@"hidden"] && ![change[NSKeyValueChangeNewKey] boolValue])
+            if (![object useFrame])
             {
-                [(UIView*)object setNeedsDisplay];
+                [self setNeedsLayout];
+                
+                //这里添加的原因是有可能子视图取消隐藏后不会绘制自身，所以这里要求子视图重新绘制自身
+                if ([keyPath isEqualToString:@"hidden"] && ![change[NSKeyValueChangeNewKey] boolValue])
+                {
+                    [(UIView*)object setNeedsDisplay];
+                }
             }
         }
     }
@@ -1228,41 +1224,77 @@ BOOL _hasBegin;
 {
     [super willMoveToSuperview:newSuperview];
     
-
+#ifdef DEBUG
+    
+    if (self.wrapContentHeight && self.heightDime.dimeVal != nil)
+    {
+        NSLog(@"警告！%@设置的wrapContentHeight和设置的heightDime可能有约束冲突。",self);
+    }
+    
+    if (self.wrapContentWidth && self.widthDime.dimeVal != nil)
+    {
+        NSLog(@"警告！%@设置的wrapContentWidth和设置的widthDime可能有约束冲突。",self);
+    }
+    
+#endif
+    
+    
     
     //将要添加到父视图时，如果不是MyLayout派生则则跟需要根据父视图的frame的变化而调整自身的位置和尺寸
     if (newSuperview != nil && ![newSuperview isKindOfClass:[MyBaseLayout class]])
     {
 
-        //如果同时设置了左边和右边值则
-        if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) ||
-            [self.widthDime isMatchView:newSuperview] ||
-            (self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) ||
-            [self.heightDime isMatchView:newSuperview])
+#ifdef DEBUG
+        
+        if (self.leftPos.posRelaVal != nil)
         {
-            CGRect rectSuper = newSuperview.bounds;
-            CGRect rectSelf = self.frame;
+            NSCAssert(self.leftPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@左边距依赖的视图:%@不是父视图",self, self.leftPos.posRelaVal.view);
+        }
+        
+        if (self.rightPos.posRelaVal != nil)
+        {
+            NSCAssert(self.rightPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@右边距依赖的视图:%@不是父视图",self,self.rightPos.posRelaVal.view);
+        }
+        
+        if (self.centerXPos.posRelaVal != nil)
+        {
+            NSCAssert(self.centerXPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@水平中心依赖的视图:%@不是父视图",self, self.centerXPos.posRelaVal.view);
+        }
+        
+        if (self.topPos.posRelaVal != nil)
+        {
+            NSCAssert(self.topPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@上边距依赖的视图:%@不是父视图",self, self.topPos.posRelaVal.view);
+        }
+        
+        if (self.bottomPos.posRelaVal != nil)
+        {
+            NSCAssert(self.bottomPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@下边距依赖的视图:%@不是父视图",self, self.bottomPos.posRelaVal.view);
             
-            if ((self.leftPos.posNumVal != nil && self.rightPos.posNumVal != nil) || [self.widthDime isMatchView:newSuperview])
-            {
-                self.wrapContentWidth = NO;
-                [self calcMatchParentWidth:self.widthDime selfWidth:rectSuper.size.width leftMargin:self.leftPos.margin centerMargin:0  rightMargin:self.rightPos.margin leftPadding:0 rightPadding:0 rect:&rectSelf];
-            }
-            
-            
-            if ((self.topPos.posNumVal != nil && self.bottomPos.posNumVal != nil) || [self.heightDime isMatchView:newSuperview])
-            {
-                self.wrapContentHeight = NO;
-                [self calcMatchParentHeight:self.heightDime selfHeight:rectSuper.size.height topMargin:self.topPos.margin centerMargin:0 bottomMargin:self.bottomPos.margin topPadding:0 bottomPadding:0 rect:&rectSelf];
-            }
+        }
+        
+        if (self.centerYPos.posRelaVal != nil)
+        {
+            NSCAssert(self.centerYPos.posRelaVal.view == newSuperview, @"oops! 垂直中心依赖的视图:%@不是父视图",self.centerYPos.posRelaVal.view);
+        }
+        
+        if (self.widthDime.dimeRelaVal != nil)
+        {
+            NSCAssert(self.widthDime.dimeRelaVal.view == newSuperview, @"oops! 宽度依赖的视图:%@不是父视图",self.widthDime.dimeRelaVal.view);
+        }
+        
+        if (self.heightDime.dimeRelaVal != nil)
+        {
+            NSCAssert(self.heightDime.dimeRelaVal.view == newSuperview, @"oops! 高度依赖的视图:%@不是父视图",self.heightDime.dimeRelaVal.view);
+        }
+        
+#endif
 
-            rectSelf.size.height = [self.heightDime validMeasure:rectSelf.size.height];
-            rectSelf.size.width = [self.widthDime validMeasure:rectSelf.size.width];
-            
-            self.frame = rectSelf;
-            
+        if ([self setLayoutRectInNoLayoutSuperview:newSuperview])
+        {
             //有可能父视图不为空，所以这里先把以前父视图的KVO删除。否则会导致程序崩溃
             
+            //如果您在这里出现了崩溃时，不要惊慌，是因为您开启了异常断点调试的原因。这个在release下是不会出现的，要想清除异常断点调试功能，请按下CMD+7键
+            //然后在左边将异常断点清除即可
             
             if (self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
             {
@@ -1293,28 +1325,15 @@ BOOL _hasBegin;
             
             [newSuperview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
             [newSuperview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
-
         }
-        else
-        {
-            CGRect rectSelf = self.frame;
-            if (self.widthDime.dimeNumVal != nil)
-                rectSelf.size.width = self.widthDime.measure;
-            
-            if (self.heightDime.dimeNumVal != nil)
-                rectSelf.size.height = self.heightDime.measure;
-            
-            if (!CGRectEqualToRect(rectSelf, self.frame))
-            {
-                self.frame = rectSelf;
-            }
-            
-            
-        }
+        
     }
     
     if (newSuperview == nil && self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
     {
+        
+        //如果您在这里出现了崩溃时，不要惊慌，是因为您开启了异常断点调试的原因。这个在release下是不会出现的，要想清除异常断点调试功能，请按下CMD+7键
+        //然后在左边将异常断点清除即可
         
         @try {
             [self.superview removeObserver:self forKeyPath:@"frame"];
@@ -1339,6 +1358,14 @@ BOOL _hasBegin;
         }
         
         
+    }
+    
+    
+    if (newSuperview != nil)
+    {
+        //不支持放在UITableView和UICollectionView下,因为有肯能是tableheaderView或者section下。
+        if ([newSuperview isKindOfClass:[UIScrollView class]] && ![newSuperview isKindOfClass:[UITableView class]] && ![newSuperview isKindOfClass:[UICollectionView class]])
+            self.adjustScrollViewContentSize = YES;
     }
     
     
@@ -1472,54 +1499,31 @@ BOOL _hasBegin;
 
 
 -(void)vertGravity:(MyMarginGravity)vert
-        selfHeight:(CGFloat)selfHeight
+        selfSize:(CGSize)selfSize
                sbv:(UIView *)sbv
               rect:(CGRect*)pRect
 {
-    CGFloat  tm = sbv.topPos.posNumVal.doubleValue;
-    CGFloat  cm = sbv.centerYPos.posNumVal.doubleValue;
-    CGFloat  bm = sbv.bottomPos.posNumVal.doubleValue;
-    
-    
-    CGFloat topMargin;
-    CGFloat centerMargin;
-    CGFloat bottomMargin;
-    
     
     CGFloat fixedHeight = self.padding.top + self.padding.bottom;
-    
-    if ([self isRelativeMargin:tm])
-        topMargin = (selfHeight - fixedHeight) * tm;
-    else
-        topMargin = tm;
-    
-    if ([self isRelativeMargin:cm])
-        centerMargin = (selfHeight - fixedHeight) * cm;
-    else
-        centerMargin = cm;
 
     
-    if ([self isRelativeMargin:bm])
-        bottomMargin = (selfHeight - fixedHeight) * bm;
-    else
-        bottomMargin = bm;
+   CGFloat  topMargin =  [self validMargin:sbv.topPos sbv:sbv calcPos:[sbv.topPos realMarginInSize:selfSize.height - fixedHeight] selfLayoutSize:selfSize];
     
+   CGFloat  centerMargin = [self validMargin:sbv.centerYPos sbv:sbv calcPos:[sbv.centerYPos realMarginInSize:selfSize.height - fixedHeight] selfLayoutSize:selfSize];
     
-    topMargin = [sbv.topPos validMargin:topMargin + sbv.topPos.offsetVal];
-    centerMargin = [sbv.centerYPos validMargin:centerMargin + sbv.centerYPos.offsetVal];
-    bottomMargin = [sbv.bottomPos validMargin:bottomMargin + sbv.bottomPos.offsetVal];
+   CGFloat  bottomMargin = [self validMargin:sbv.bottomPos sbv:sbv calcPos:[sbv.bottomPos realMarginInSize:selfSize.height - fixedHeight] selfLayoutSize:selfSize];
 
     
     if (vert == MyMarginGravity_Vert_Fill)
     {
         
         pRect->origin.y = self.padding.top + topMargin;
-        pRect->size.height = [sbv.heightDime validMeasure:selfHeight - self.padding.bottom - bottomMargin - pRect->origin.y];
+        pRect->size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:selfSize.height - self.padding.bottom - bottomMargin - pRect->origin.y sbvSize:pRect->size selfLayoutSize:selfSize];
     }
     else if (vert == MyMarginGravity_Vert_Center)
     {
         
-        pRect->origin.y = (selfHeight - self.padding.top - self.padding.bottom - topMargin - bottomMargin - pRect->size.height)/2 + self.padding.top + topMargin + centerMargin;
+        pRect->origin.y = (selfSize.height - self.padding.top - self.padding.bottom - topMargin - bottomMargin - pRect->size.height)/2 + self.padding.top + topMargin + centerMargin;
     }
     else if (vert == MyMarginGravity_Vert_Window_Center)
     {
@@ -1535,7 +1539,7 @@ BOOL _hasBegin;
     else if (vert == MyMarginGravity_Vert_Bottom)
     {
         
-        pRect->origin.y = selfHeight - self.padding.bottom - bottomMargin - pRect->size.height;
+        pRect->origin.y = selfSize.height - self.padding.bottom - bottomMargin - pRect->size.height;
     }
     else if (vert == MyMarginGravity_Vert_Top)
     {
@@ -1550,52 +1554,30 @@ BOOL _hasBegin;
 }
 
 -(void)horzGravity:(MyMarginGravity)horz
-         selfWidth:(CGFloat)selfWidth
+         selfSize:(CGSize)selfSize
                sbv:(UIView *)sbv
               rect:(CGRect*)pRect
 {
-    CGFloat  lm = sbv.leftPos.posNumVal.doubleValue;
-    CGFloat  cm = sbv.centerXPos.posNumVal.doubleValue;
-    CGFloat  rm = sbv.rightPos.posNumVal.doubleValue;
-
-    
-    CGFloat leftMargin;
-    CGFloat centerMargin;
-    CGFloat rightMargin;
-    
-    
     CGFloat fixedWidth = self.padding.left + self.padding.right;
-    if ([self isRelativeMargin:lm])
-        leftMargin = (selfWidth - fixedWidth) * lm;
-    else
-        leftMargin = lm;
     
-    if ([self isRelativeMargin:cm])
-        centerMargin = (selfWidth - fixedWidth) * cm;
-    else
-        centerMargin = cm;
+    CGFloat leftMargin = [self validMargin:sbv.leftPos sbv:sbv calcPos:[sbv.leftPos realMarginInSize:selfSize.width - fixedWidth] selfLayoutSize:selfSize];
+    
+    CGFloat centerMargin = [self validMargin:sbv.centerXPos sbv:sbv calcPos:[sbv.centerXPos realMarginInSize:selfSize.width - fixedWidth] selfLayoutSize:selfSize];
+    
+   CGFloat  rightMargin = [self validMargin:sbv.rightPos sbv:sbv calcPos:[sbv.rightPos realMarginInSize:selfSize.width - fixedWidth] selfLayoutSize:selfSize];
 
-    
-    if ([self isRelativeMargin:rm])
-        rightMargin = (selfWidth - fixedWidth) * rm;
-    else
-        rightMargin = rm;
-    
-    leftMargin = [sbv.leftPos validMargin:leftMargin + sbv.leftPos.offsetVal];
-    centerMargin = [sbv.centerXPos validMargin:centerMargin + sbv.centerXPos.offsetVal];
-    rightMargin = [sbv.rightPos validMargin:rightMargin + sbv.rightPos.offsetVal];
-
-    
     
     if (horz == MyMarginGravity_Horz_Fill)
     {
         
         pRect->origin.x = self.padding.left + leftMargin;
-        pRect->size.width = [sbv.widthDime validMeasure:selfWidth - self.padding.right - rightMargin - pRect->origin.x];
+        pRect->size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:selfSize.width - self.padding.right - rightMargin - pRect->origin.x sbvSize:pRect->size selfLayoutSize:selfSize];
+
+        
     }
     else if (horz == MyMarginGravity_Horz_Center)
     {
-        pRect->origin.x = (selfWidth - self.padding.left - self.padding.right - leftMargin - rightMargin - pRect->size.width)/2 + self.padding.left + leftMargin + centerMargin;
+        pRect->origin.x = (selfSize.width - self.padding.left - self.padding.right - leftMargin - rightMargin - pRect->size.width)/2 + self.padding.left + leftMargin + centerMargin;
     }
     else if (horz == MyMarginGravity_Horz_Window_Center)
     {
@@ -1612,7 +1594,7 @@ BOOL _hasBegin;
     else if (horz == MyMarginGravity_Horz_Right)
     {
         
-        pRect->origin.x = selfWidth - self.padding.right - rightMargin - pRect->size.width;
+        pRect->origin.x = selfSize.width - self.padding.right - rightMargin - pRect->size.width;
     }
     else if (horz == MyMarginGravity_Horz_Left)
     {
@@ -1622,31 +1604,6 @@ BOOL _hasBegin;
     {
         pRect->origin.x = self.padding.left + leftMargin;
     }
-}
-
-
-
--(void)calcMatchParentWidth:(MyLayoutDime*)match selfWidth:(CGFloat)selfWidth leftMargin:(CGFloat)leftMargin centerMargin:(CGFloat)centerMargin rightMargin:(CGFloat)rightMargin leftPadding:(CGFloat)leftPadding rightPadding:(CGFloat)rightPadding rect:(CGRect*)pRect
-{
-    
-    CGFloat vTotalWidth = 0;
-    
-    vTotalWidth = (selfWidth - leftPadding - rightPadding)*match.mutilVal + match.addVal;
-    
-    
-    pRect->size.width = [match validMeasure:vTotalWidth - leftMargin - centerMargin - rightMargin];
-    pRect->origin.x = (selfWidth - pRect->size.width - leftPadding - rightPadding - leftMargin - rightMargin )/2 + leftPadding + leftMargin + centerMargin;
-    
-}
-
--(void)calcMatchParentHeight:(MyLayoutDime*)match selfHeight:(CGFloat)selfHeight topMargin:(CGFloat)topMargin centerMargin:(CGFloat)centerMargin  bottomMargin:(CGFloat)bottomMargin topPadding:(CGFloat)topPadding bottomPadding:(CGFloat)bottomPadding rect:(CGRect*)pRect
-{
-    CGFloat vTotalHeight = (selfHeight - topPadding - bottomPadding)*match.mutilVal + match.addVal;
-    
-    pRect->size.height = [match validMeasure:vTotalHeight - topMargin - centerMargin - bottomMargin];
-    pRect->origin.y = (selfHeight - pRect->size.height - topPadding - bottomPadding - topMargin - bottomMargin )/2 + topPadding + topMargin + centerMargin;
-    
-    
 }
 
 
@@ -1661,6 +1618,289 @@ BOOL _hasBegin;
     MyBaseLayout *lsc = self.myCurrentSizeClass;
     lsc.wrapContentHeight = wrapContentHeight;
 }
+
+-(void)calcSizeOfWrapContentSubview:(UIView*)sbv
+{
+    if (sbv.widthDime.dimeSelfVal != nil || sbv.heightDime.dimeSelfVal != nil)
+    {
+        CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
+        if (sbv.widthDime.dimeSelfVal != nil)
+        {
+            sbv.absPos.width = fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            
+        }
+        
+        if (sbv.heightDime.dimeSelfVal != nil)
+        {
+            sbv.absPos.height = fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        }
+    }    
+}
+
+
+-(BOOL)setLayoutRectInNoLayoutSuperview:(UIView*)newSuperview
+{
+    BOOL isAdjust = NO;
+    
+    CGRect rectSuper = newSuperview.bounds;
+    CGRect rectSelf = self.frame;
+    
+    //确定左右边距和宽度。
+    if (self.widthDime.dimeVal != nil)
+    {
+        [self setWrapContentWidthNoLayout:NO];
+        
+        if (self.widthDime.dimeRelaVal != nil)
+        {
+            rectSelf.size.width = rectSuper.size.width*self.widthDime.mutilVal + self.widthDime.addVal;
+            isAdjust = YES;
+        }
+        else
+            rectSelf.size.width = self.widthDime.measure;
+    }
+    
+    rectSelf.size.width = [self validMeasure:self.widthDime sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
+    
+    if (self.leftPos.posVal != nil && self.rightPos.posVal != nil)
+    {
+        isAdjust = YES;
+        [self setWrapContentWidthNoLayout:NO];
+        rectSelf.size.width = rectSuper.size.width - self.leftPos.margin - self.rightPos.margin;
+        rectSelf.size.width = [self validMeasure:self.widthDime sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
+        
+        rectSelf.origin.x = self.leftPos.margin;
+    }
+    else if (self.centerXPos.posVal != nil)
+    {
+        isAdjust = YES;
+        rectSelf.origin.x = (rectSuper.size.width - rectSelf.size.width)/2 + self.centerXPos.margin;
+    }
+    else if (self.leftPos.posVal != nil)
+    {
+        rectSelf.origin.x = self.leftPos.margin;
+    }
+    else if (self.rightPos.posVal != nil)
+    {
+        isAdjust = YES;
+        rectSelf.origin.x  = rectSuper.size.width - rectSelf.size.width - self.rightPos.margin;
+    }
+    else;
+    
+    
+    if (self.heightDime.dimeVal != nil)
+    {
+        [self setWrapContentHeightNoLayout:NO];
+        
+        if (self.heightDime.dimeRelaVal != nil)
+        {
+            rectSelf.size.height = rectSuper.size.height*self.heightDime.mutilVal + self.heightDime.addVal;
+            isAdjust = YES;
+        }
+        else
+            rectSelf.size.height = self.heightDime.measure;
+    }
+    
+    rectSelf.size.height = [self validMeasure:self.heightDime sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
+    
+    if (self.topPos.posVal != nil && self.bottomPos.posVal != nil)
+    {
+        isAdjust = YES;
+        [self setWrapContentHeightNoLayout:NO];
+        rectSelf.size.height = rectSuper.size.height - self.topPos.margin - self.bottomPos.margin;
+        rectSelf.size.height = [self validMeasure:self.heightDime sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
+        
+        rectSelf.origin.y = self.topPos.margin;
+    }
+    else if (self.centerYPos.posVal != nil)
+    {
+        isAdjust = YES;
+        rectSelf.origin.y = (rectSuper.size.height - rectSelf.size.height)/2 + self.centerYPos.margin;
+    }
+    else if (self.topPos.posVal != nil)
+    {
+        rectSelf.origin.y = self.topPos.margin;
+    }
+    else if (self.bottomPos.posVal != nil)
+    {
+        isAdjust = YES;
+        rectSelf.origin.y  = rectSuper.size.height - rectSelf.size.height - self.bottomPos.margin;
+    }
+    else;
+    
+
+
+    if (!CGRectEqualToRect(rectSelf, self.frame))
+    {
+        self.frame = rectSelf;
+    }
+    
+    return isAdjust;
+
+}
+
+-(CGFloat)heightFromFlexedHeightView:(UIView*)sbv inWidth:(CGFloat)width
+{
+    if ([sbv isKindOfClass:[UIImageView class]])
+    {
+        //根据图片的尺寸进行等比缩放得到合适的高度。
+        UIImage *img = ((UIImageView*)sbv).image;
+        if (img != nil && img.size.width != 0)
+        {
+            return img.size.height * (width / img.size.width);
+        }
+        else
+        {
+            CGSize sz = [sbv sizeThatFits:CGSizeMake(width, 0)];
+            return sz.height;
+            
+        }
+    }
+    else
+    {
+        CGSize sz = [sbv sizeThatFits:CGSizeMake(width, 0)];
+        return sz.height;
+    }
+}
+
+
+-(CGFloat)getBoundLimitMeasure:(MyLayoutDime*)boundDime sbv:(UIView*)sbv dimeType:(MyMarginGravity)dimeType sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize isUBound:(BOOL)isUBound
+{
+    CGFloat value = isUBound ? CGFLOAT_MAX : -CGFLOAT_MAX;
+    
+    MyLayoutValueType lValueType = boundDime.dimeValType;
+    if (lValueType == MyLayoutValueType_NSNumber)
+    {
+        value = boundDime.dimeNumVal.doubleValue;
+    }
+    else if (lValueType == MyLayoutValueType_LayoutDime)
+    {
+        if (boundDime.dimeRelaVal.view == self || boundDime.dimeRelaVal.view == self.superview)
+        {
+            if (boundDime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
+                value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.leftPadding - self.rightPadding) : 0);
+            else
+                value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.topPadding - self.bottomPadding) :0);
+        }
+        else if (boundDime.dimeRelaVal.view == sbv)
+        {
+            if (boundDime.dimeRelaVal.dime == dimeType)
+            {
+                NSCAssert(0, @"%@无效的边界设置方法",sbv);
+            }
+            else
+            {
+                if (boundDime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
+                    value = sbvSize.width;
+                else
+                    value = sbvSize.height;
+            }
+        }
+        else
+        {
+            if (boundDime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
+            {
+                if (boundDime.dimeRelaVal.view.absPos.width != CGFLOAT_MAX)
+                    value = boundDime.dimeRelaVal.view.absPos.width;
+            }
+            else
+            {
+                if (boundDime.dimeRelaVal.view.absPos.height != CGFLOAT_MAX)
+                    value = boundDime.dimeRelaVal.view.absPos.height;
+            }
+        }
+        
+    }
+    else
+    {
+        NSCAssert(0, @"%@无效的边界设置方法",sbv);
+    }
+    
+    if (value == CGFLOAT_MAX || value == -CGFLOAT_MAX)
+        return value;
+    
+    return value * boundDime.mutilVal + boundDime.addVal;
+
+}
+
+
+
+-(CGFloat)validMeasure:(MyLayoutDime*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize
+{    
+    //算出最大最小值。
+    CGFloat min = [self getBoundLimitMeasure:dime.lBoundVal sbv:sbv dimeType:dime.dime sbvSize:sbvSize selfLayoutSize:selfLayoutSize isUBound:NO];
+    CGFloat max = [self getBoundLimitMeasure:dime.uBoundVal sbv:sbv dimeType:dime.dime sbvSize:sbvSize selfLayoutSize:selfLayoutSize isUBound:YES];
+    
+    calcSize = MAX(min, calcSize);
+    calcSize = MIN(max, calcSize);
+    
+    return calcSize;
+}
+
+
+-(CGFloat)getBoundLimitMargin:(MyLayoutPos*)boundPos sbv:(UIView*)sbv selfLayoutSize:(CGSize)selfLayoutSize
+{
+    CGFloat value = 0;
+    
+    MyLayoutValueType lValueType = boundPos.posValType;
+    if (lValueType == MyLayoutValueType_NSNumber)
+        value = boundPos.posNumVal.doubleValue;
+    else if (lValueType == MyLayoutValueType_LayoutPos)
+    {
+        CGRect rect = boundPos.posRelaVal.view.absPos.frame;
+        
+        MyMarginGravity pos = boundPos.posRelaVal.pos;
+        if (pos == MyMarginGravity_Horz_Left)
+        {
+            if (rect.origin.x != CGFLOAT_MAX)
+                value = CGRectGetMinX(rect);
+        }
+        else if (pos == MyMarginGravity_Horz_Center)
+        {
+            if (rect.origin.x != CGFLOAT_MAX)
+                value = CGRectGetMidX(rect);
+        }
+        else if (pos == MyMarginGravity_Horz_Right)
+        {
+            if (rect.origin.x != CGFLOAT_MAX)
+                value = CGRectGetMaxX(rect);
+        }
+        else if (pos == MyMarginGravity_Vert_Top)
+        {
+            if (rect.origin.y != CGFLOAT_MAX)
+                value = CGRectGetMinY(rect);
+        }
+        else if (pos == MyMarginGravity_Vert_Center)
+        {
+            if (rect.origin.y != CGFLOAT_MAX)
+                value = CGRectGetMidY(rect);
+        }
+        else if (pos == MyMarginGravity_Vert_Bottom)
+        {
+            if (rect.origin.y != CGFLOAT_MAX)
+                value = CGRectGetMaxY(rect);
+        }
+    }
+    else
+    {
+        NSCAssert(0, @"%@无效的边界设置方法", sbv);
+
+    }
+    
+    return value + boundPos.offsetVal;
+}
+
+
+-(CGFloat)validMargin:(MyLayoutPos*)pos sbv:(UIView*)sbv calcPos:(CGFloat)calcPos selfLayoutSize:(CGSize)selfLayoutSize
+{
+    //算出最大最小值
+    CGFloat min = [self getBoundLimitMargin:pos.lBoundVal sbv:sbv selfLayoutSize:selfLayoutSize];
+    CGFloat max = [self getBoundLimitMargin:pos.uBoundVal sbv:sbv selfLayoutSize:selfLayoutSize];
+    
+    calcPos = MAX(min, calcPos);
+    calcPos = MIN(max, calcPos);
+    return calcPos;
+}
+
 
 
 - (void)alterScrollViewContentSize:(CGRect)newRect

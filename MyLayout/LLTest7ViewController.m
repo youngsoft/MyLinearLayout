@@ -17,75 +17,45 @@
 
 @implementation LLTest7ViewController
 
--(UIButton*)createButton:(NSString*)title tag:(NSInteger)tag
-{
-    UIButton *button = [UIButton new];
-    [button setTitle:title forState:UIControlStateNormal];
-    button.tag = tag;
-    [button addTarget:self action:@selector(handleAction:) forControlEvents:UIControlEventTouchUpInside];
-    button.backgroundColor = [UIColor redColor];
-    [button sizeToFit];
-    
-    button.layer.borderColor = [UIColor grayColor].CGColor;
-    button.layer.borderWidth = 1;
-    
-    return button;
-}
-
-
 -(void)loadView
 {
+    /*
+       这个例子用来介绍线性布局提供的均分尺寸和均分间距的功能。这可以通过线性布局里面的averageSubviews和averageMargin方法来实现。
+       需要注意的是这两个方法只能对当前已经加入了线性布局中的子视图有效。对后续再加入的子视图不会进行均分。因此要想后续加入的子视图也均分就需要再次调用者两个方法。
+     */
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    rootLayout.gravity = MyMarginGravity_Horz_Fill;  //设置里面所有子视图的宽度填充布局视图的宽度。
+    rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     rootLayout.wrapContentHeight = NO;
     rootLayout.wrapContentWidth = NO;
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;
-    rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.view = rootLayout;
     
-    
+    //创建动作布局
     MyLinearLayout *action1Layout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     action1Layout.wrapContentHeight = YES;
     [rootLayout addSubview:action1Layout];
     
-    
-    [action1Layout addSubview:[self createButton:@"均分视图1" tag:100]];
-    [action1Layout addSubview:[self createButton:@"均分视图2" tag:200]];
-    [action1Layout addSubview:[self createButton:@"均分视图3" tag:300]];
-    [action1Layout averageSubviews:NO withMargin:5];
+    [action1Layout addSubview:[self createActionButton:@"均分视图1" tag:100]];
+    [action1Layout addSubview:[self createActionButton:@"均分视图2" tag:200]];
+    [action1Layout addSubview:[self createActionButton:@"均分视图3" tag:300]];
+    [action1Layout averageSubviews:NO withMargin:5];  //均分action1Layout中的所有子视图的宽度
 
+    //创建动作布局
     MyLinearLayout *action2Layout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     action2Layout.wrapContentHeight = YES;
     action2Layout.myTopMargin = 5;
     [rootLayout addSubview:action2Layout];
     
-    
-    [action2Layout addSubview:[self createButton:@"均分视图4" tag:400]];
-    [action2Layout addSubview:[self createButton:@"均分边距1" tag:500]];
-    [action2Layout addSubview:[self createButton:@"均分边距2" tag:600]];
-    [action2Layout averageSubviews:NO withMargin:5];
+    [action2Layout addSubview:[self createActionButton:@"均分视图4" tag:400]];
+    [action2Layout addSubview:[self createActionButton:@"均分间距1" tag:500]];
+    [action2Layout addSubview:[self createActionButton:@"均分间距2" tag:600]];
+    [action2Layout averageSubviews:NO withMargin:5]; //均分action1Layout中的所有子视图的宽度
    
-   
-   
-    //你也可以用流式布局来实现上面的操作按钮的排列更简单。
-  /*  MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
-    actionLayout.averageArrange = YES;
-    actionLayout.wrapContentHeight = YES;
-    actionLayout.subviewVertMargin = 5;
-    actionLayout.subviewHorzMargin = 5;
-    [rootLayout addSubview:actionLayout];
-
-    [actionLayout addSubview:[self createButton:@"均分视图1" tag:100]];
-    [actionLayout addSubview:[self createButton:@"均分视图2" tag:200]];
-    [actionLayout addSubview:[self createButton:@"均分视图3" tag:300]];
-    [actionLayout addSubview:[self createButton:@"均分视图4" tag:400]];
-    [actionLayout addSubview:[self createButton:@"均分边距1" tag:500]];
-    [actionLayout addSubview:[self createButton:@"均分边距2" tag:600]];
-    */
-    
+    //创建供动作测试的布局。
     self.testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    self.testLayout.gravity = MyMarginGravity_Horz_Fill;  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
     self.testLayout.backgroundColor = [UIColor grayColor];
+    self.testLayout.gravity = MyMarginGravity_Horz_Fill;  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
     self.testLayout.wrapContentHeight = NO;
     self.testLayout.weight = 1.0;
     self.testLayout.leftPadding = 10;
@@ -96,19 +66,13 @@
     UIView *v1 = [UIView new];
     v1.backgroundColor = [UIColor redColor];
     v1.myHeight = 100;
-    
-    
     [self.testLayout addSubview:v1];
    
-    
     UIView *v2 = [UIView new];
     v2.backgroundColor = [UIColor greenColor];
     v2.myHeight = 50;
-   
     [self.testLayout addSubview:v2];
 
-    
-    
     UIView *v3 = [UIView new];
     v3.backgroundColor = [UIColor blueColor];
     v3.myHeight = 70;
@@ -122,7 +86,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"线性布局-均分视图和间距";
    
 }
 
@@ -130,6 +93,25 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark -- Layout Construction
+
+-(UIButton*)createActionButton:(NSString*)title tag:(NSInteger)tag
+{
+    UIButton *button = [UIButton new];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(handleAction:) forControlEvents:UIControlEventTouchUpInside];
+    button.backgroundColor = [UIColor redColor];
+    button.tag = tag;
+    [button sizeToFit];
+    button.layer.borderColor = [UIColor grayColor].CGColor;
+    button.layer.borderWidth = 1;
+    
+    return button;
+}
+
+
+#pragma mark -- Handle Method
 
 -(void)handleAction:(UIButton*)sender
 {
@@ -152,26 +134,29 @@
     
     switch (sender.tag) {
         case 100:
-            [self.testLayout averageSubviews:NO];
+            [self.testLayout averageSubviews:NO];  //均分所有子视图尺寸和间距不留最外面边距
             break;
         case 200:
-            [self.testLayout averageSubviews:YES];
+            [self.testLayout averageSubviews:YES];  //均分所有子视图的尺寸和间距保留最外边距
             break;
         case 300:
-            [self.testLayout averageSubviews:NO withMargin:40];
+            [self.testLayout averageSubviews:NO withMargin:40]; //均分所有子视图尺寸，固定边距，不保留最外边距
             break;
         case 400:
-            [self.testLayout averageSubviews:YES withMargin:40];
+            [self.testLayout averageSubviews:YES withMargin:40];  //均分所有子视图尺寸，固定边距，保留最外边距
             break;
         case 500:
-            [self.testLayout averageMargin:NO];
+            [self.testLayout averageMargin:NO];   //均分所有边距，子视图尺寸不变，不保留最外边距
             break;
         case 600:
-            [self.testLayout averageMargin:YES];
+            [self.testLayout averageMargin:YES];  //均分所有边距，子视图尺寸不变，保留最外边距。
             break;
         default:
             break;
     }
+    
+    //变化后产生动画效果。
+    [self.testLayout layoutAnimationWithDuration:0.2];
 }
 
 /*

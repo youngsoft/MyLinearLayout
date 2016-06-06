@@ -66,7 +66,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"SizeClass--Demo1";
 }
 
 - (void)didReceiveMemoryWarning {
