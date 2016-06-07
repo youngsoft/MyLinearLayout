@@ -122,6 +122,8 @@
 -(MyFrameLayout*)createCellLayout:(NSString*)value
 {
     MyFrameLayout *cellLayout = [MyFrameLayout new];
+    [cellLayout setTarget:self action:@selector(handleCellTap:)];
+    cellLayout.highlightedBackgroundColor = [UIColor lightGrayColor];
     
     UILabel *label = [UILabel new];
     label.text = value;
@@ -133,6 +135,18 @@
     
     return cellLayout;
 }
+
+
+#pragma mark -- Handle Method
+
+-(void)handleCellTap:(MyBaseLayout*)sender
+{
+    NSString *message = [NSString stringWithFormat:@"您单击了:%@", ((UILabel*)sender.subviews.firstObject).text];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+
+}
+
 
 
 /*
