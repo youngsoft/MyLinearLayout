@@ -146,12 +146,12 @@
 }
 
 
--(void)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize
+-(MyLinearLayout*)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize
 {
-    [self insertRow:rowSize colSize:colSize atIndex:self.countOfRow];
+    return [self insertRow:rowSize colSize:colSize atIndex:self.countOfRow];
 }
 
--(void)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex
+-(MyLinearLayout*)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex
 {
     MyLayoutViewOrientation ori = MyLayoutViewOrientation_Vert;
     if (self.orientation == MyLayoutViewOrientation_Vert)
@@ -161,7 +161,9 @@
     
     MyTableRowLayout *rowView = [MyTableRowLayout rowSize:rowSize colSize:colSize orientation:ori];
     rowView.subviewMargin = self.colSpacing;
+    rowView.IntelligentBorderLine = self.IntelligentBorderLine;
     [super insertSubview:rowView atIndex:rowIndex];
+    return rowView;
 }
 
 -(void)removeRowAt:(NSInteger)rowIndex

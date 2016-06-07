@@ -390,6 +390,7 @@
 
 -(MyFloatLayout*)createSegmentedLayout:(SEL)leftAction rightAction:(SEL)rightAction
 {
+    //建立一个左右浮动布局(注意左右浮动布局的orientation是MyLayoutViewOrientation_Vert)
     MyFloatLayout *segmentedLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     segmentedLayout.backgroundColor = [UIColor whiteColor];
     
@@ -399,7 +400,7 @@
     segmentedLayout.heightDime.equalTo(@50);
     segmentedLayout.gravity = MyMarginGravity_Vert_Center;
     
-    
+    //向左浮动
     UISegmentedControl *leftSegmented = [[UISegmentedControl alloc] initWithItems:@[@"  减  ",@"  加  "]];
     leftSegmented.momentary = YES;
     [leftSegmented addTarget:self action:leftAction forControlEvents:UIControlEventValueChanged];
@@ -410,7 +411,7 @@
     rightSegmented.momentary = YES;
     [rightSegmented addTarget:self action:rightAction forControlEvents:UIControlEventValueChanged];
     [segmentedLayout addSubview:rightSegmented];
-    rightSegmented.reverseFloat = YES;
+    rightSegmented.reverseFloat = YES;  //反向浮动也就是向右浮动。
 
     
     return segmentedLayout;

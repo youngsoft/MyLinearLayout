@@ -986,7 +986,16 @@ IB_DESIGNABLE
                         
                         if (prevSiblingView != nil)
                         {
-                            sbvl.topBorderLine = self.IntelligentBorderLine;
+                            BOOL ok = YES;
+                            if ([prevSiblingView isKindOfClass:[MyBaseLayout class]])
+                            {
+                                MyBaseLayout *prevSiblingLayout = (MyBaseLayout*)prevSiblingView;
+                                if (prevSiblingLayout.notUseIntelligentBorderLine)
+                                    ok = NO;
+                            }
+                            
+                            if (ok)
+                                sbvl.topBorderLine = self.IntelligentBorderLine;
                         }
                         
                         if (nextSiblingView != nil && ![nextSiblingView isKindOfClass:[MyBaseLayout class]])
@@ -1086,7 +1095,16 @@ IB_DESIGNABLE
                         
                         if (prevSiblingView != nil)
                         {
-                            sbvl.leftBorderLine = self.IntelligentBorderLine;
+                            BOOL ok = YES;
+                            if ([prevSiblingView isKindOfClass:[MyBaseLayout class]])
+                            {
+                                MyBaseLayout *prevSiblingLayout = (MyBaseLayout*)prevSiblingView;
+                                if (prevSiblingLayout.notUseIntelligentBorderLine)
+                                    ok = NO;
+                            }
+                            
+                            if (ok)
+                                sbvl.leftBorderLine = self.IntelligentBorderLine;
                         }
                         
                         if (nextSiblingView != nil && ![nextSiblingView isKindOfClass:[MyBaseLayout class]])

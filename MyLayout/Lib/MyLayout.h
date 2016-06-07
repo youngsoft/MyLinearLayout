@@ -35,6 +35,16 @@
  */
 
 /*
+   version1.1.8
+ 
+ New:
+   1.优化了表格布局MyTableLayout和智能边界线的结合的问题。(具体见：TLTest3ViewController)
+   2. 增加了浮动布局MyFloatLayout设置浮动间距的方法setSubviewFloatMargin (具体见：FOLTest4ViewController）
+
+ 
+ */
+
+/*
   version1.1.7
  
  New:
@@ -61,6 +71,8 @@
    1.在布局中，最容易出现约束冲突的情况是某个布局视图设置了wrapContentWidth或者wrapContentHeight，但是在加入到其他布局视图时又被动或者主动设置了明确的高度或者宽度这样导致的约束冲突最多。
  
  */
+
+
 
 #ifndef MyLayout_MyLayout_h
 #define MyLayout_MyLayout_h

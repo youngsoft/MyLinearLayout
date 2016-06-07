@@ -124,6 +124,7 @@
 -(void)createVertGravityLayout:(MyLinearLayout*)contentLayout
 {
     self.vertGravityLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    self.vertGravityLayout.wrapContentHeight = NO;
     self.vertGravityLayout.backgroundColor = [UIColor grayColor];
     self.vertGravityLayout.myHeight = 200;
     self.vertGravityLayout.myTopMargin = 10;

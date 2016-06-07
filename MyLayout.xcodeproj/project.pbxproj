@@ -20,6 +20,7 @@
 		189692701CF74E7E000A5B91 /* AllTest2TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1896926F1CF74E7E000A5B91 /* AllTest2TableViewCell.m */; };
 		189692731CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189692721CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m */; };
 		189692761CF74EC5000A5B91 /* AllTestDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 189692751CF74EC5000A5B91 /* AllTestDataModel.m */; };
+		18CFFA2E1D0723970032A789 /* TLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CFFA2D1D0723970032A789 /* TLTest3ViewController.m */; };
 		18D684301C4F421400A48BB4 /* AllTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683E81C4F421400A48BB4 /* AllTest1ViewController.m */; };
 		18D684311C4F421400A48BB4 /* AllTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683EA1C4F421400A48BB4 /* AllTest2ViewController.m */; };
 		18D684321C4F421400A48BB4 /* AllTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683EC1C4F421400A48BB4 /* AllTest3ViewController.m */; };
@@ -100,6 +101,8 @@
 		189692721CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewHeaderFooterView.m; sourceTree = "<group>"; };
 		189692741CF74EBB000A5B91 /* AllTestDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTestDataModel.h; sourceTree = "<group>"; };
 		189692751CF74EC5000A5B91 /* AllTestDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTestDataModel.m; sourceTree = "<group>"; };
+		18CFFA2C1D0723870032A789 /* TLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLTest3ViewController.h; sourceTree = "<group>"; };
+		18CFFA2D1D0723970032A789 /* TLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLTest3ViewController.m; sourceTree = "<group>"; };
 		18D683E71C4F421400A48BB4 /* AllTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AllTest1ViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		18D683E81C4F421400A48BB4 /* AllTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D683E91C4F421400A48BB4 /* AllTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AllTest2ViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -295,6 +298,8 @@
 				18D684291C4F421400A48BB4 /* RLTest3ViewController.m */,
 				18D6842A1C4F421400A48BB4 /* TLTest1ViewController.h */,
 				18D6842B1C4F421400A48BB4 /* TLTest1ViewController.m */,
+				18CFFA2C1D0723870032A789 /* TLTest3ViewController.h */,
+				18CFFA2D1D0723970032A789 /* TLTest3ViewController.m */,
 				18D6842C1C4F421400A48BB4 /* TLTest2ViewController.h */,
 				18D6842D1C4F421400A48BB4 /* TLTest2ViewController.m */,
 				18296B6D1C76D55B00273C3E /* FOLTest1ViewController.h */,
@@ -475,6 +480,7 @@
 				18D6844C1C4F421400A48BB4 /* main.m in Sources */,
 				18D684441C4F421400A48BB4 /* MyTableLayout.m in Sources */,
 				18D684421C4F421400A48BB4 /* MyMaker.m in Sources */,
+				18CFFA2E1D0723970032A789 /* TLTest3ViewController.m in Sources */,
 				188261CF1C647CB300996C2C /* AllTest6ViewController.m in Sources */,
 				18D684401C4F421400A48BB4 /* MyLayoutPos.m in Sources */,
 				18D684321C4F421400A48BB4 /* AllTest3ViewController.m in Sources */,

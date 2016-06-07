@@ -25,6 +25,7 @@
 
 #import "TLTest1ViewController.h"
 #import "TLTest2ViewController.h"
+#import "TLTest3ViewController.h"
 
 #import "FLLTest1ViewController.h"
 #import "FLLTest2ViewController.h"
@@ -102,46 +103,49 @@
                          @{@"title":@"14表格布局-水平表格实现瀑布流",
                            @"class":[TLTest2ViewController class]
                            },
-                         @{@"title":@"15流式布局-有规律的子视图排列",
+                         @{@"title":@"15表格布局-表格和智能边界线",
+                           @"class":[TLTest3ViewController class]
+                           },
+                         @{@"title":@"16流式布局-有规律的子视图排列",
                            @"class":[FLLTest1ViewController class]
                            },
-                         @{@"title":@"16流式布局-标签流",
+                         @{@"title":@"17流式布局-标签流",
                            @"class":[FLLTest2ViewController class]
                            },
-                         @{@"title":@"17流式布局-子视图的拖拽调整功能",
+                         @{@"title":@"18流式布局-子视图的拖拽调整功能",
                            @"class":[FLLTest3ViewController class]
                            },
-                         @{@"title":@"18浮动布局-浮动效果的演示",
+                         @{@"title":@"19浮动布局-浮动效果的演示",
                            @"class":[FOLTest1ViewController class]
                            },
-                         @{@"title":@"19浮动布局-仿天猫淘宝首页实现",
+                         @{@"title":@"20浮动布局-仿天猫淘宝首页实现",
                            @"class":[FOLTest2ViewController class]
                            },
-                         @{@"title":@"20浮动布局-仿ZAKER今日头条实现",
+                         @{@"title":@"21浮动布局-仿ZAKER今日头条实现",
                            @"class":[FOLTest3ViewController class]
                            },
-                         @{@"title":@"21浮动布局-标签流",
+                         @{@"title":@"22浮动布局-标签流",
                            @"class":[FOLTest4ViewController class]
                            },
-                         @{@"title":@"22浮动布局-左右排列的文本",
+                         @{@"title":@"23浮动布局-左右排列的文本",
                            @"class":[FOLTest5ViewController class]
                            },
-                         @{@"title":@"23综合布局-布局和UITableView(动态高度)",
+                         @{@"title":@"24综合布局-布局和UITableView(动态高度)",
                            @"class":[AllTest1ViewController class]
                            },
-                         @{@"title":@"24综合布局-布局和UITableView(静态高度)",
+                         @{@"title":@"25综合布局-布局和UITableView(静态高度)",
                            @"class":[AllTest2ViewController class]
                            },
-                         @{@"title":@"25综合布局-UITableView的替换方案",
+                         @{@"title":@"26综合布局-UITableView的替换方案",
                            @"class":[AllTest3ViewController class]
                            },
-                         @{@"title":@"26综合布局-UICollectionView的替换方案",
+                         @{@"title":@"27综合布局-UICollectionView的替换方案",
                            @"class":[AllTest4ViewController class]
                            },
-                         @{@"title":@"27SizeClass-不同屏幕下的布局样式1",
+                         @{@"title":@"28SizeClass-不同屏幕下的布局样式1",
                            @"class":[AllTest5ViewController class]
                            },
-                         @{@"title":@"28SizeClass-不同屏幕下的布局样式2",
+                         @{@"title":@"29SizeClass-不同屏幕下的布局样式2",
                            @"class":[AllTest6ViewController class]
                            }
                          ];

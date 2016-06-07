@@ -77,8 +77,8 @@
         UILabel *titleLabel = [UILabel new];
         titleLabel.text = titles[i];
         titleLabel.textColor = colors[i];
-        titleLabel.clearFloat = YES;
-        titleLabel.widthDime.equalTo(rootLayout.widthDime).multiply(0.25);
+        titleLabel.clearFloat = YES;     //换行重新布局。
+        titleLabel.widthDime.equalTo(rootLayout.widthDime).multiply(0.25); //宽度是父视图宽度的1/4
         titleLabel.adjustsFontSizeToFitWidth = YES;
         [titleLabel sizeToFit];
         [rootLayout addSubview:titleLabel];
@@ -86,9 +86,9 @@
         UILabel *descLabel = [UILabel new];
         descLabel.text = descs[i];
         descLabel.font = [UIFont systemFontOfSize:14];
-        descLabel.weight = 1;
+        descLabel.weight = 1;      //占用剩余的宽度
         descLabel.numberOfLines = 0;
-        descLabel.flexedHeight = YES;
+        descLabel.flexedHeight = YES; //多行自动换行。
         [descLabel sizeToFit];
         [rootLayout addSubview:descLabel];
         

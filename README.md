@@ -1,4 +1,4 @@
-# MyLayout1.1.7
+# MyLayout1.1.8
 
 
 ## 功能介绍
@@ -58,7 +58,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.1.7'
+pod 'MyLayout', '~> 1.1.8'
 ```
    
 Then, run the following command:
@@ -66,6 +66,9 @@ Then, run the following command:
 ```
 $ pod install
 ```
+## V1.1.8版本新功能
+1. 优化了表格布局MyTableLayout和智能边界线的结合的问题。(具体见：TLTest3ViewController)
+2. 增加了浮动布局MyFloatLayout设置浮动间距的方法setSubviewFloatMargin (具体见：FOLTest4ViewController）
 
 ## V1.1.7版本新功能
  1. 修改表格布局的addRow:colSize:以及insertRow:colSize:atIndex的方法名，将原来的colWidth改为了colSize。 (具体见：TLTest2ViewController)
