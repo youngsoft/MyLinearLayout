@@ -45,14 +45,14 @@ Read FAQ, or articles below:
 [http://www.jianshu.com/p/0c075f2fdab2](http://www.jianshu.com/p/0c075f2fdab2) 浮动布局
 
 
-Because my english is poor so I just only can support chinese articles，and I wish some body can help me translate to english.
+Because my english is poor so I just only can support chinese articles，and I wish somebody can help me translate to english.
 
 
 ##Communication
 ---
 
 - If you need help, use Stack Overflow or Baidu. (Tag 'mylayout')
-- If you'd like to contact me, used qq:156355113 or weibo:欧阳大哥 or email:obq0387_cn@sina.com
+- If you'd like to contact me, use qq:156355113 or weibo:欧阳大哥 or email:obq0387_cn@sina.com
 - If you found a bug, and can provide steps to reliably reproduce it, open an issue.
 - If you have a feature request, open an issue.
 - If you want to contribute, submit a pull request.
