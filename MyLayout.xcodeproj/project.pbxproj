@@ -11,12 +11,15 @@
 		18296B6F1C76D55B00273C3E /* FOLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18296B6E1C76D55B00273C3E /* FOLTest1ViewController.m */; };
 		18296B721C76D66C00273C3E /* FOLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18296B711C76D66C00273C3E /* FOLTest2ViewController.m */; };
 		18296B751C76D67F00273C3E /* FOLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18296B741C76D67F00273C3E /* FOLTest3ViewController.m */; };
-		18296B771C76D6D300273C3E /* FOLTest1ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18296B761C76D6D300273C3E /* FOLTest1ViewController.xib */; };
 		1830A6091CD6EC4500FF6B57 /* FLLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */; };
+		186B83D41D08F7B9001CA155 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186B83CF1D08F7B9001CA155 /* LaunchScreen.xib */; };
+		186B83DE1D090DE6001CA155 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 186B83DA1D090DE6001CA155 /* LaunchScreen.strings */; };
+		186B83DF1D090DE6001CA155 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 186B83DC1D090DE6001CA155 /* Localizable.strings */; };
+		186B83E01D094F11001CA155 /* FLLTest2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186B83E21D094F11001CA155 /* FLLTest2ViewController.xib */; };
+		186B83E41D095A49001CA155 /* FOLTest1ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186B83E61D095A49001CA155 /* FOLTest1ViewController.xib */; };
 		186C530C1C75A5BB0031B2A2 /* MyFloatLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186C530B1C75A5BB0031B2A2 /* MyFloatLayout.m */; };
 		188261CF1C647CB300996C2C /* AllTest6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188261CE1C647CB300996C2C /* AllTest6ViewController.m */; };
 		1890A22F1C6DD71600373B8B /* FLLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1890A22D1C6DD71600373B8B /* FLLTest2ViewController.m */; };
-		1890A2301C6DD71600373B8B /* FLLTest2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1890A22E1C6DD71600373B8B /* FLLTest2ViewController.xib */; };
 		189692701CF74E7E000A5B91 /* AllTest2TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1896926F1CF74E7E000A5B91 /* AllTest2TableViewCell.m */; };
 		189692731CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189692721CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m */; };
 		189692761CF74EC5000A5B91 /* AllTestDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 189692751CF74EC5000A5B91 /* AllTestDataModel.m */; };
@@ -26,7 +29,6 @@
 		18D684321C4F421400A48BB4 /* AllTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683EC1C4F421400A48BB4 /* AllTest3ViewController.m */; };
 		18D684331C4F421400A48BB4 /* AllTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683EE1C4F421400A48BB4 /* AllTest4ViewController.m */; };
 		18D684341C4F421400A48BB4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683F01C4F421400A48BB4 /* AppDelegate.m */; };
-		18D684351C4F421400A48BB4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D683F11C4F421400A48BB4 /* LaunchScreen.xib */; };
 		18D684361C4F421400A48BB4 /* FLLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683F41C4F421400A48BB4 /* FLLTest1ViewController.m */; };
 		18D684371C4F421400A48BB4 /* FLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683F61C4F421400A48BB4 /* FLTest1ViewController.m */; };
 		18D684381C4F421400A48BB4 /* FLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683F81C4F421400A48BB4 /* FLTest2ViewController.m */; };
@@ -83,18 +85,29 @@
 		18296B711C76D66C00273C3E /* FOLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest2ViewController.m; sourceTree = "<group>"; };
 		18296B731C76D67F00273C3E /* FOLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest3ViewController.h; sourceTree = "<group>"; };
 		18296B741C76D67F00273C3E /* FOLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest3ViewController.m; sourceTree = "<group>"; };
-		18296B761C76D6D300273C3E /* FOLTest1ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FOLTest1ViewController.xib; sourceTree = "<group>"; };
 		1830A6071CD6EC2F00FF6B57 /* FLLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest3ViewController.h; sourceTree = "<group>"; };
 		1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest3ViewController.m; sourceTree = "<group>"; };
 		1840828D1B2C46E8003F378B /* MyLayout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLayout.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		184082A61B2C46E8003F378B /* MyLayout.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyLayout.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		186B83D01D08F7B9001CA155 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		186B83DB1D090DE6001CA155 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = LaunchScreen.strings; sourceTree = "<group>"; };
+		186B83DD1D090DE6001CA155 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = Localizable.strings; sourceTree = "<group>"; };
+		186B83E11D094F11001CA155 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/FLLTest2ViewController.xib"; sourceTree = "<group>"; };
+		186B83E31D094F19001CA155 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FLLTest2ViewController.xib; sourceTree = "<group>"; };
+		186B83E51D095A49001CA155 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "zh-Hans"; path = "zh-Hans.lproj/FOLTest1ViewController.xib"; sourceTree = "<group>"; };
+		186B83E71D095A54001CA155 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FOLTest1ViewController.xib; sourceTree = "<group>"; };
 		186C530A1C75A5BB0031B2A2 /* MyFloatLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFloatLayout.h; sourceTree = "<group>"; };
 		186C530B1C75A5BB0031B2A2 /* MyFloatLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFloatLayout.m; sourceTree = "<group>"; };
 		188261CD1C647CB300996C2C /* AllTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest6ViewController.h; sourceTree = "<group>"; };
 		188261CE1C647CB300996C2C /* AllTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest6ViewController.m; sourceTree = "<group>"; };
+		1888CE7C1D0BE44300968C0C /* layoutdemo6.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo6.gif; sourceTree = "<group>"; };
+		1888CE7D1D0BE44300968C0C /* layoutdemo5.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo5.gif; sourceTree = "<group>"; };
+		1888CE7E1D0BE44300968C0C /* layoutdemo4.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo4.gif; sourceTree = "<group>"; };
+		1888CE7F1D0BE44300968C0C /* layoutdemo3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo3.gif; sourceTree = "<group>"; };
+		1888CE801D0BE44300968C0C /* layoutdemo2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo2.gif; sourceTree = "<group>"; };
+		1888CE811D0BE44300968C0C /* layoutdemo1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo1.gif; sourceTree = "<group>"; };
 		1890A22C1C6DD71600373B8B /* FLLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest2ViewController.h; sourceTree = "<group>"; };
 		1890A22D1C6DD71600373B8B /* FLLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest2ViewController.m; sourceTree = "<group>"; };
-		1890A22E1C6DD71600373B8B /* FLLTest2ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FLLTest2ViewController.xib; sourceTree = "<group>"; };
 		1896926E1CF74E6A000A5B91 /* AllTest2TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest2TableViewCell.h; sourceTree = "<group>"; };
 		1896926F1CF74E7E000A5B91 /* AllTest2TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest2TableViewCell.m; sourceTree = "<group>"; };
 		189692711CF74E9B000A5B91 /* AllTest1TableViewHeaderFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewHeaderFooterView.h; sourceTree = "<group>"; };
@@ -113,7 +126,6 @@
 		18D683EE1C4F421400A48BB4 /* AllTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest4ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D683EF1C4F421400A48BB4 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		18D683F01C4F421400A48BB4 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		18D683F21C4F421400A48BB4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		18D683F31C4F421400A48BB4 /* FLLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FLLTest1ViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		18D683F41C4F421400A48BB4 /* FLLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FLLTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D683F51C4F421400A48BB4 /* FLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FLTest1ViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -227,6 +239,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		186B83CE1D08F7B9001CA155 /* Base.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				186B83CF1D08F7B9001CA155 /* LaunchScreen.xib */,
+			);
+			path = Base.lproj;
+			sourceTree = "<group>";
+		};
+		186B83D91D090DE6001CA155 /* zh-Hans.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				186B83DA1D090DE6001CA155 /* LaunchScreen.strings */,
+				186B83DC1D090DE6001CA155 /* Localizable.strings */,
+			);
+			path = "zh-Hans.lproj";
+			sourceTree = "<group>";
+		};
 		1896926D1CF74E03000A5B91 /* AllTestModel&View */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,7 +280,6 @@
 				18D6842F1C4F421400A48BB4 /* ViewController.m */,
 				18D683EF1C4F421400A48BB4 /* AppDelegate.h */,
 				18D683F01C4F421400A48BB4 /* AppDelegate.m */,
-				18D683F11C4F421400A48BB4 /* LaunchScreen.xib */,
 				1896926D1CF74E03000A5B91 /* AllTestModel&View */,
 				18D683E71C4F421400A48BB4 /* AllTest1ViewController.h */,
 				18D683E81C4F421400A48BB4 /* AllTest1ViewController.m */,
@@ -269,7 +297,7 @@
 				18D683F41C4F421400A48BB4 /* FLLTest1ViewController.m */,
 				1890A22C1C6DD71600373B8B /* FLLTest2ViewController.h */,
 				1890A22D1C6DD71600373B8B /* FLLTest2ViewController.m */,
-				1890A22E1C6DD71600373B8B /* FLLTest2ViewController.xib */,
+				186B83E21D094F11001CA155 /* FLLTest2ViewController.xib */,
 				1830A6071CD6EC2F00FF6B57 /* FLLTest3ViewController.h */,
 				1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */,
 				18D683F51C4F421400A48BB4 /* FLTest1ViewController.h */,
@@ -298,13 +326,13 @@
 				18D684291C4F421400A48BB4 /* RLTest3ViewController.m */,
 				18D6842A1C4F421400A48BB4 /* TLTest1ViewController.h */,
 				18D6842B1C4F421400A48BB4 /* TLTest1ViewController.m */,
-				18CFFA2C1D0723870032A789 /* TLTest3ViewController.h */,
-				18CFFA2D1D0723970032A789 /* TLTest3ViewController.m */,
 				18D6842C1C4F421400A48BB4 /* TLTest2ViewController.h */,
 				18D6842D1C4F421400A48BB4 /* TLTest2ViewController.m */,
+				18CFFA2C1D0723870032A789 /* TLTest3ViewController.h */,
+				18CFFA2D1D0723970032A789 /* TLTest3ViewController.m */,
 				18296B6D1C76D55B00273C3E /* FOLTest1ViewController.h */,
 				18296B6E1C76D55B00273C3E /* FOLTest1ViewController.m */,
-				18296B761C76D6D300273C3E /* FOLTest1ViewController.xib */,
+				186B83E61D095A49001CA155 /* FOLTest1ViewController.xib */,
 				18296B701C76D66C00273C3E /* FOLTest2ViewController.h */,
 				18296B711C76D66C00273C3E /* FOLTest2ViewController.m */,
 				18296B731C76D67F00273C3E /* FOLTest3ViewController.h */,
@@ -367,6 +395,14 @@
 		18F83FBD1C4F6EB7003EF090 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1888CE7C1D0BE44300968C0C /* layoutdemo6.gif */,
+				1888CE7D1D0BE44300968C0C /* layoutdemo5.gif */,
+				1888CE7E1D0BE44300968C0C /* layoutdemo4.gif */,
+				1888CE7F1D0BE44300968C0C /* layoutdemo3.gif */,
+				1888CE801D0BE44300968C0C /* layoutdemo2.gif */,
+				1888CE811D0BE44300968C0C /* layoutdemo1.gif */,
+				186B83D91D090DE6001CA155 /* zh-Hans.lproj */,
+				186B83CE1D08F7B9001CA155 /* Base.lproj */,
 				18D683F91C4F421400A48BB4 /* Images.xcassets */,
 				18D683FA1C4F421400A48BB4 /* Info.plist */,
 				18D684231C4F421400A48BB4 /* main.m */,
@@ -436,8 +472,8 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 184082841B2C46E8003F378B;
 			productRefGroup = 1840828E1B2C46E8003F378B /* Products */;
@@ -455,9 +491,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18296B771C76D6D300273C3E /* FOLTest1ViewController.xib in Resources */,
-				1890A2301C6DD71600373B8B /* FLLTest2ViewController.xib in Resources */,
-				18D684351C4F421400A48BB4 /* LaunchScreen.xib in Resources */,
+				186B83E41D095A49001CA155 /* FOLTest1ViewController.xib in Resources */,
+				186B83DE1D090DE6001CA155 /* LaunchScreen.strings in Resources */,
+				186B83E01D094F11001CA155 /* FLLTest2ViewController.xib in Resources */,
+				186B83DF1D090DE6001CA155 /* Localizable.strings in Resources */,
+				186B83D41D08F7B9001CA155 /* LaunchScreen.xib in Resources */,
 				18D684391C4F421400A48BB4 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -547,12 +585,46 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		18D683F11C4F421400A48BB4 /* LaunchScreen.xib */ = {
+		186B83CF1D08F7B9001CA155 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				18D683F21C4F421400A48BB4 /* Base */,
+				186B83D01D08F7B9001CA155 /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		186B83DA1D090DE6001CA155 /* LaunchScreen.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				186B83DB1D090DE6001CA155 /* zh-Hans */,
+			);
+			name = LaunchScreen.strings;
+			sourceTree = "<group>";
+		};
+		186B83DC1D090DE6001CA155 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				186B83DD1D090DE6001CA155 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		186B83E21D094F11001CA155 /* FLLTest2ViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				186B83E11D094F11001CA155 /* zh-Hans */,
+				186B83E31D094F19001CA155 /* Base */,
+			);
+			name = FLLTest2ViewController.xib;
+			sourceTree = "<group>";
+		};
+		186B83E61D095A49001CA155 /* FOLTest1ViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				186B83E51D095A49001CA155 /* zh-Hans */,
+				186B83E71D095A54001CA155 /* Base */,
+			);
+			name = FOLTest1ViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

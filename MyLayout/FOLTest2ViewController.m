@@ -51,7 +51,7 @@ static NSInteger sBaseTag = 100000;
 @interface FOLTest2SectionModel : NSObject
 
 @property(nonatomic, strong) NSString *title;      //片段标题
-@property(nonatomic, strong) NSMutableArray<FOLTest2DataModel*> *datas;  //数据
+@property(nonatomic, strong) NSMutableArray *datas;  //数据
 
 @end
 
@@ -354,7 +354,7 @@ static NSInteger sBaseTag = 100000;
             for (NSDictionary *dict in sectionDict[@"datas"])
             {
                 FOLTest2DataModel *model = [FOLTest2DataModel new];
-                [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL * _Nonnull stop) {
+                [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL * stop) {
                     [model setValue:obj forKey:key];
                 }];
                 
@@ -814,7 +814,7 @@ static NSInteger sBaseTag = 100000;
     NSInteger sectionIndex = sender.tag / sBaseTag;
     NSInteger itemIndex = sender.tag % sBaseTag;
     
-    NSString *message = [NSString stringWithFormat:@"您选择了\nSectionIndex:%ld ItemIndex:%ld",(long)sectionIndex, (long)itemIndex];
+    NSString *message = [NSString stringWithFormat:@"You have select\nSectionIndex:%ld ItemIndex:%ld",(long)sectionIndex, (long)itemIndex];
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     

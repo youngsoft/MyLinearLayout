@@ -53,7 +53,7 @@
         }
         else
         {
-            NSCAssert(0, @"rowSize can not set to MTLSIZE_MATCHPARENT");
+            NSCAssert(0, @"Constraint exception !! rowSize can not set to MTLSIZE_MATCHPARENT");
         }
         
         if (colSize == MTLSIZE_AVERAGE)
@@ -275,12 +275,12 @@
 //不能直接调用如下的函数。
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index
 {
-    NSCAssert(0, @"Can't call insertSubview");
+    NSCAssert(0, @"Constraint exception!! Can't call insertSubview");
 }
 
 - (void)exchangeSubviewAtIndex:(NSInteger)index1 withSubviewAtIndex:(NSInteger)index2
 {
-    NSCAssert(0, @"Can't call exchangeSubviewAtIndex");
+    NSCAssert(0, @"Constraint exception!! Can't call exchangeSubviewAtIndex");
 }
 
 - (void)addSubview:(UIView *)view
@@ -290,11 +290,11 @@
 
 - (void)insertSubview:(UIView *)view belowSubview:(UIView *)siblingSubview
 {
-    NSCAssert(0, @"Can't call insertSubview");
+    NSCAssert(0, @"Constraint exception!! Can't call insertSubview");
 }
 - (void)insertSubview:(UIView *)view aboveSubview:(UIView *)siblingSubview
 {
-    NSCAssert(0, @"Can't call insertSubview");
+    NSCAssert(0, @"Constraint exception!! Can't call insertSubview");
 }
 
 

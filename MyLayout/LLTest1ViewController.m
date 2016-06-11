@@ -18,7 +18,6 @@
 
 -(void)loadView
 {
-
     /*
       一个视图可以通过对frame的设置来完成其在父视图中的布局。这种方法的缺点是要明确的指出视图所在的位置origin和视图所在的尺寸size，而且在代码中会出现大量的常数，以及需要进行大量的计算。MyLayout的出现就是为了解决布局时的大量常数的使用，以及大量的计算，以及自动适配的问题。需要明确的是用MyLayout进行布局时并不是不要指定视图的位置和尺寸，而是可以通过一些特定的上下文来省略或者隐式的指定视图的位置和尺寸。因此不管何种布局方式，视图布局时都必须要指定视图的位置和尺寸。
      */
@@ -35,7 +34,7 @@
      vertTitle是垂直布局下的子视图，因此位置部分的y轴部分会根据添加的先后顺序确定；x轴部分则根据myCenterXOffset为0表示视图的水平中心点和父布局视图的水平中心点相等而确定；视图的尺寸则根据sizeToFit函数而确定。
      */
     UILabel *vertTitleLabel = [UILabel new];
-    vertTitleLabel.text = @"垂直布局(从上到下)";
+    vertTitleLabel.text = NSLocalizedString(@"Vert(from top to bottom)",@"");
     vertTitleLabel.myCenterXOffset = 0;     //视图的水平中心点和布局视图的水平中心点保持一致。
     [vertTitleLabel sizeToFit];             //sizeToFit函数的意思是让视图的尺寸刚好包裹其内容。注意sizeToFit方法必要在设置字体、文字后调用才正确。
     [rootLayout addSubview:vertTitleLabel];
@@ -50,7 +49,7 @@
 
     
     UILabel *horzTitleLabel = [UILabel new];
-    horzTitleLabel.text = @"水平布局(从左到右)";
+    horzTitleLabel.text =  NSLocalizedString(@"Horz(from left to right)",@"");
     horzTitleLabel.myCenterXOffset = 0;  //视图的水平中心点和布局视图的水平中心点保持一致。
     [horzTitleLabel sizeToFit];          //sizeToFit函数的意思是让视图的尺寸刚好包裹其内容。
     [rootLayout addSubview:horzTitleLabel];
@@ -97,7 +96,7 @@
      */
     
     UILabel *v1 = [UILabel new];
-    v1.text = @"左边边距";
+    v1.text = NSLocalizedString(@"Left margin", @"");
     v1.textAlignment = NSTextAlignmentCenter;
     v1.adjustsFontSizeToFitWidth = YES;
     v1.backgroundColor = [UIColor redColor];
@@ -109,7 +108,7 @@
 
     
     UILabel *v2 = [UILabel new];
-    v2.text = @"水平居中";
+    v2.text = NSLocalizedString(@"Horz center", @"");
     v2.textAlignment = NSTextAlignmentCenter;
     v2.adjustsFontSizeToFitWidth = YES;
     v2.backgroundColor = [UIColor greenColor];
@@ -120,7 +119,7 @@
 
     
     UILabel *v3 = [UILabel new];
-    v3.text = @"右边边距";
+    v3.text = NSLocalizedString(@"Right margin", @"");
     v3.textAlignment = NSTextAlignmentCenter;
     v3.adjustsFontSizeToFitWidth = YES;
     v3.backgroundColor = [UIColor blueColor];
@@ -141,7 +140,7 @@
     
     
     UILabel *v4 = [UILabel new];
-    v4.text = @"左右边距";
+    v4.text = NSLocalizedString(@"Horz fill", @"");
     v4.textAlignment = NSTextAlignmentCenter;
     v4.adjustsFontSizeToFitWidth = YES;
     v4.backgroundColor = [UIColor orangeColor];
@@ -179,9 +178,9 @@
 
     
     UILabel *v1 = [UILabel new];
-    v1.text = @"上边边距";
+    v1.text = NSLocalizedString(@"Top margin", @"");
     v1.textAlignment = NSTextAlignmentCenter;
-    v1.adjustsFontSizeToFitWidth = YES;
+    v1.numberOfLines = 0;
     v1.backgroundColor = [UIColor redColor];
     v1.myLeftMargin = 10;
     v1.myTopMargin = 10; //上边边距10
@@ -192,9 +191,9 @@
     
     
     UILabel *v2 = [UILabel new];
-    v2.text = @"垂直居中";
+    v2.text = NSLocalizedString(@"Vert center", @"");
     v2.textAlignment = NSTextAlignmentCenter;
-    v2.adjustsFontSizeToFitWidth = YES;
+    v2.numberOfLines = 0;
     v2.backgroundColor = [UIColor greenColor];
     v2.myLeftMargin = 10;
     v2.myCenterYOffset = 0; //垂直居中，如果不等于0则会产生居中偏移
@@ -203,9 +202,9 @@
 
     
     UILabel *v3 = [UILabel new];
-    v3.text = @"下边边距";
+    v3.text = NSLocalizedString(@"Bottom margin", @"");
     v3.textAlignment = NSTextAlignmentCenter;
-    v3.adjustsFontSizeToFitWidth = YES;
+    v3.numberOfLines = 0;
     v3.backgroundColor = [UIColor blueColor];
     v3.myLeftMargin = 10;
     v3.myBottomMargin = 10; //下边边距10
@@ -215,9 +214,9 @@
 
     
     UILabel *v4 = [UILabel new];
-    v4.text = @"上下边距";
+    v4.text = NSLocalizedString(@"Vert fill", @"");
     v4.textAlignment = NSTextAlignmentCenter;
-    v4.adjustsFontSizeToFitWidth = YES;
+    v4.numberOfLines = 0;
     v4.backgroundColor = [UIColor orangeColor];
     v4.myLeftMargin = 10;
     v4.myRightMargin = 10;

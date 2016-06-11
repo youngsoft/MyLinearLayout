@@ -29,7 +29,7 @@
     UILabel *v1 = [UILabel new];
     v1.backgroundColor = [UIColor redColor];
     v1.numberOfLines = 0;
-    v1.text = @"本例子里面设置了在iPhone设备上竖屏时红绿蓝三个子视图垂直排列，而横屏时则水平排列。同时非6plus设备在横屏时蓝色子视图不显示，而在6plus设备上蓝色子视图才显示,您可以用不同的模拟器来测试各种设备的横竖屏场景";
+    v1.text = NSLocalizedString(@"The red、green、blue subwiews is arranged vertically when run in portrait screen on all the iPhone devices,but horizontal arranged when in landscape screen, the blue subview is not showed on any phone devices except on iPhone6plus.", @"");
     v1.weight = 1;
     [rootLayout addSubview:v1];
     
@@ -44,8 +44,7 @@
     v3.backgroundColor = [UIColor blueColor];
     v3.weight = 1;
     [rootLayout addSubview:v3];
-    
-    
+        
     //v3视图在其他任何iPhone设备横屏都不参与布局
     [v3 fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact].hidden = YES;
     //只有iphone6Plus的横屏才参与布局

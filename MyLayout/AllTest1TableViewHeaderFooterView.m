@@ -28,7 +28,7 @@
         rootLayout.heightDime.equalTo(self.contentView.heightDime);
         [self.contentView addSubview:rootLayout];
         
-        MyFrameLayout *leftItemLayout = [self createItemLayout:@"晒单" withTag:0];
+        MyFrameLayout *leftItemLayout = [self createItemLayout:NSLocalizedString(@"Show", @"") withTag:0];
         leftItemLayout.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
         leftItemLayout.marginGravity = MyMarginGravity_Vert_Fill | MyMarginGravity_Horz_Left;
         leftItemLayout.highlightedOpacity = 0.5;
@@ -37,7 +37,7 @@
         MyBorderLineDraw *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];
         bld.tailIndent = bld.headIndent = 5;
         
-        MyFrameLayout *centerItemLayout = [self createItemLayout:@"话题" withTag:1];
+        MyFrameLayout *centerItemLayout = [self createItemLayout:NSLocalizedString(@"Topic", @"") withTag:1];
         centerItemLayout.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
         centerItemLayout.marginGravity = MyMarginGravity_Vert_Fill | MyMarginGravity_Horz_Center;
         centerItemLayout.leftBorderLine = bld;
@@ -45,7 +45,7 @@
         [rootLayout addSubview:centerItemLayout];
         
         
-        MyFrameLayout *rightItemLayout = [self createItemLayout:@"关注" withTag:2];
+        MyFrameLayout *rightItemLayout = [self createItemLayout:NSLocalizedString(@"Follow", @"") withTag:2];
         rightItemLayout.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
         rightItemLayout.marginGravity = MyMarginGravity_Vert_Fill | MyMarginGravity_Horz_Right;
         rightItemLayout.leftBorderLine = bld;

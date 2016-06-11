@@ -67,7 +67,7 @@
     
     [self handleNavigationTitleCentre:nil];
     
-    self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:@"居中标题" style:UIBarButtonItemStylePlain target:self action:@selector(handleNavigationTitleCentre:) ],[[UIBarButtonItem alloc] initWithTitle:@"还原" style:UIBarButtonItemStylePlain target:self action:@selector(handleNavigationTitleRestore:)]];
+    self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"centered title", <#comment#>) style:UIBarButtonItemStylePlain target:self action:@selector(handleNavigationTitleCentre:) ],[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"reset", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleNavigationTitleRestore:)]];
     
 }
 
@@ -84,7 +84,8 @@
 {
     
     UILabel *actionTitleLabel = [UILabel new];
-    actionTitleLabel.text = @"垂直布局里面的停靠控制，您可以点击下面的不同停靠方式的按钮查看效果：";
+    actionTitleLabel.font = [UIFont systemFontOfSize:14];
+    actionTitleLabel.text = NSLocalizedString(@"Vertical layout gravity control, you can click the following different button to show the effect:", @"");
     actionTitleLabel.numberOfLines = 0;
     actionTitleLabel.flexedHeight = YES;
     actionTitleLabel.adjustsFontSizeToFitWidth = YES;
@@ -101,18 +102,16 @@
     [contentLayout addSubview:actionLayout];
     
     
-    NSArray *actions = @[@"上停靠",
-                         @"垂直居中停靠",
-                         @"下停靠",
-                         @"左停靠",
-                         @"水平居中停靠",
-                         @"右停靠",
-                         @"水平填充",
-                         @"屏幕垂直居中停靠",
-                         @"屏幕水平居中停靠",
-                         @"子视图间距设置"
-                         ];
-    
+    NSArray *actions = @[NSLocalizedString(@"top gravity",@""),
+                         NSLocalizedString(@"vert center gravity",@""),
+                         NSLocalizedString(@"bottom gravity",@""),
+                         NSLocalizedString(@"left gravity",@""),
+                         NSLocalizedString(@"horz center gravity",@""),
+                         NSLocalizedString(@"right gravity",@""),
+                         NSLocalizedString(@"horz fill",@""),
+                         NSLocalizedString(@"screen vert center gravity",@""),
+                         NSLocalizedString(@"screen horz center gravity",@""),
+                         NSLocalizedString(@"adjust view's spacing",@"")];
     
     for (NSInteger i = 0; i < actions.count; i++)
     {
@@ -134,27 +133,28 @@
 
     
     UILabel *v1 = [UILabel new];
-    v1.text = @"测试文本1";
+    v1.text = NSLocalizedString(@"test text1", @"");
     v1.backgroundColor = [UIColor redColor];
     [v1 sizeToFit];
     [self.vertGravityLayout addSubview:v1];
     
     UILabel *v2 = [UILabel new];
-    v2.text = @"测试文本2测试文本2";
+    v2.text = NSLocalizedString(@"test text2 test text2", @"");
     v2.backgroundColor = [UIColor greenColor];
     [v2 sizeToFit];
     [self.vertGravityLayout addSubview:v2];
     
     
     UILabel *v3 = [UILabel new];
-    v3.text = @"测试文本3测试文本3测试文本3";
+    v3.text = NSLocalizedString(@"test text3 test text3 test text3", @"");
     v3.backgroundColor = [UIColor blueColor];
     [v3 sizeToFit];
     [self.vertGravityLayout addSubview:v3];
     
     UILabel *v4 = [UILabel new];
-    v4.text = @"你可以自定义左右边距和宽度";
+    v4.text = NSLocalizedString(@"set left and right margin to determine width", @"");
     v4.backgroundColor = [UIColor orangeColor];
+    v4.adjustsFontSizeToFitWidth = YES;
     [v4 sizeToFit];
     v4.myLeftMargin = 20;
     v4.myRightMargin = 30;
@@ -168,7 +168,8 @@
 {
     
     UILabel *actionTitleLabel = [UILabel new];
-    actionTitleLabel.text = @"水平布局里面的停靠控制，您可以点击下面的不同停靠方式的按钮查看效果：";
+    actionTitleLabel.font = [UIFont systemFontOfSize:14];
+    actionTitleLabel.text =  NSLocalizedString(@"Horizontal layout gravity control, you can click the following different button to show the effect:", @"");
     actionTitleLabel.numberOfLines = 0;
     actionTitleLabel.flexedHeight = YES;
     actionTitleLabel.adjustsFontSizeToFitWidth = YES;
@@ -184,18 +185,16 @@
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [contentLayout addSubview:actionLayout];
     
-    NSArray *actions = @[@"左停靠",
-                         @"水平居中停靠",
-                         @"右停靠",
-                         @"上停靠",
-                         @"垂直居中停靠",
-                         @"下停靠",
-                         @"垂直填充",
-                         @"屏幕垂直居中停靠",
-                         @"屏幕水平居中停靠",
-                         @"子视图间距设置"
-                         ];
-    
+    NSArray *actions = @[NSLocalizedString(@"left gravity",@""),
+                         NSLocalizedString(@"horz center gravity",@""),
+                         NSLocalizedString(@"right gravity",@""),
+                         NSLocalizedString(@"top gravity",@""),
+                         NSLocalizedString(@"vert center gravity",@""),
+                         NSLocalizedString(@"bottom gravity",@""),
+                         NSLocalizedString(@"vert fill",@""),
+                         NSLocalizedString(@"screen vert center gravity",@""),
+                         NSLocalizedString(@"screen horz center gravity",@""),
+                         NSLocalizedString(@"adjust view's spacing",@"")];
     
     for (NSInteger i = 0; i < actions.count; i++)
     {
@@ -209,42 +208,50 @@
     self.horzGravityLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     self.horzGravityLayout.backgroundColor = [UIColor grayColor];
     self.horzGravityLayout.wrapContentWidth = NO;  //因为默认水平线性布局的宽度由子视图包裹，但这里的宽度由父布局决定的，所有这里必须设置为NO。
-    self.horzGravityLayout.myHeight = 100;
+    self.horzGravityLayout.myHeight = 200;
     self.horzGravityLayout.myTopMargin = 10;
     self.horzGravityLayout.myLeftMargin = 20;
     self.horzGravityLayout.subviewMargin = 5;  //设置子视图之间的水平间距为5
     [contentLayout addSubview:self.horzGravityLayout];
     
     UILabel *v1 = [UILabel new];
-    v1.text = @"测试1";
+    v1.text = NSLocalizedString(@"test text1", @"");
     v1.backgroundColor = [UIColor redColor];
     v1.numberOfLines = 0;
+    v1.flexedHeight = YES;
+    v1.myWidth = 60;
     [v1 sizeToFit];
     [self.horzGravityLayout addSubview:v1];
     
     UILabel *v2 = [UILabel new];
-    v2.text = @"测试2\n测试2";
+    v2.text = NSLocalizedString(@"test text2 test text2", @"");
     v2.backgroundColor = [UIColor greenColor];
     v2.numberOfLines = 0;
+    v2.flexedHeight = YES;
+    v2.myWidth = 60;
     [v2 sizeToFit];
     [self.horzGravityLayout addSubview:v2];
     
     
     UILabel *v3 = [UILabel new];
-    v3.text = @"测试3\n测试3\n测试3";
+    v3.text = NSLocalizedString(@"test text3 test text3 test text3", @"");
     v3.backgroundColor = [UIColor blueColor];
     v3.numberOfLines = 0;
+    v3.flexedHeight = YES;
+    v3.myWidth = 60;
     [v3 sizeToFit];
     [self.horzGravityLayout addSubview:v3];
     
     UILabel *v4 = [UILabel new];
-    v4.text = @"你可以\n自定义\n左右边\n距和宽度";
+    v4.text = NSLocalizedString(@"set top and bottom margin to determine height", @"");
     v4.backgroundColor = [UIColor orangeColor];
     v4.numberOfLines = 0;
+    v4.flexedHeight = YES;
     v4.adjustsFontSizeToFitWidth = YES;
     [v4 sizeToFit];
     v4.myTopMargin = 20;
     v4.myBottomMargin = 10;
+    v4.myWidth = 60;
     [self.horzGravityLayout addSubview:v4];
 }
 
@@ -357,7 +364,7 @@
     navigationItemLayout.frame = self.navigationController.navigationBar.bounds;
     
     UILabel *topLabel = [UILabel new];
-    topLabel.text = @"标题的在具有左边按钮和右边按钮时都可以居中";
+    topLabel.text = NSLocalizedString(@"title center in the screen", @"");
     topLabel.adjustsFontSizeToFitWidth = YES;
     topLabel.textAlignment = NSTextAlignmentCenter;
     topLabel.myLeftMargin = topLabel.myRightMargin = 10;
@@ -377,7 +384,7 @@
 -(void)handleNavigationTitleRestore:(id)sender
 {
     UILabel *topLabel = [UILabel new];
-    topLabel.text = @"标题的在具有左边按钮和右边按钮时都可以居中";
+    topLabel.text = NSLocalizedString(@"title not center in the screen", @"");
     topLabel.adjustsFontSizeToFitWidth = YES;
     topLabel.textAlignment = NSTextAlignmentCenter;
     [topLabel sizeToFit];

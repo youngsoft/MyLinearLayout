@@ -50,7 +50,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加列条目" style:UIBarButtonItemStylePlain target:self action:@selector(handleAddColLayout:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"add cell", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleAddColLayout:)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -132,14 +132,14 @@
     
     
     UIView *colLayout = [self createColLayout:images[arc4random_uniform((uint32_t)images.count)]
-                                          title:[NSString stringWithFormat:@"单元格标题:%03ld", (long)sTag]];
+                                          title:[NSString stringWithFormat:NSLocalizedString(@"cell title:%03ld", @""), (long)sTag]];
     colLayout.tag = sTag++;
     [self.rootLayout addCol:colLayout atRow:rowIndex];
 }
 
 -(void)handleColLayoutTap:(UIView*)sender
 {
-   UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"您选择了单元格标题:%03ld", (long)sender.tag] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+   UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:NSLocalizedString(@"cell:%03ld be selected", @""), (long)sender.tag] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     
     [alertView show];
 }

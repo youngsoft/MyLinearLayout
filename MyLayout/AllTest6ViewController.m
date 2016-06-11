@@ -35,7 +35,7 @@
     [rootLayout addSubview:menuLayout];
     
     UILabel *menu1Label = [UILabel new];
-    menu1Label.text = @"菜单1";
+    menu1Label.text = NSLocalizedString(@"Menu1", @"");
     menu1Label.textAlignment = NSTextAlignmentCenter;
     menu1Label.backgroundColor = [UIColor redColor];
     menu1Label.heightDime.equalTo(menu1Label.widthDime);
@@ -43,7 +43,7 @@
     [menuLayout addSubview:menu1Label];
     
     UILabel *menu2Label = [UILabel new];
-    menu2Label.text = @"菜单2";
+    menu2Label.text = NSLocalizedString(@"Menu2", @"");
     menu2Label.textAlignment = NSTextAlignmentCenter;
     menu2Label.backgroundColor = [UIColor greenColor];
     menu2Label.heightDime.equalTo(menu2Label.widthDime);
@@ -51,7 +51,7 @@
     [menuLayout addSubview:menu2Label];
     
     UILabel *menu3Label = [UILabel new];
-    menu3Label.text = @"菜单3";
+    menu3Label.text = NSLocalizedString(@"Menu3", @"");
     menu3Label.textAlignment = NSTextAlignmentCenter;
     menu3Label.backgroundColor = [UIColor blueColor];
     menu3Label.heightDime.equalTo(menu3Label.widthDime);
@@ -66,14 +66,14 @@
     
     
     UILabel *func1Label = [UILabel new];
-    func1Label.text = @"内容1";
+    func1Label.text = NSLocalizedString(@"Content1", @"");
     func1Label.textAlignment = NSTextAlignmentCenter;
     func1Label.backgroundColor = [UIColor orangeColor];
     func1Label.heightDime.equalTo(contentLayout.heightDime).multiply(0.5).add(-5);
     [contentLayout addSubview:func1Label];
     
     UILabel *func2Label = [UILabel new];
-    func2Label.text = @"内容2";
+    func2Label.text = NSLocalizedString(@"Content2", @"");
     func2Label.textAlignment = NSTextAlignmentCenter;
     func2Label.backgroundColor = [UIColor cyanColor];
     func2Label.heightDime.equalTo(contentLayout.heightDime).multiply(0.5).add(-5);
@@ -83,7 +83,7 @@
     func2Label.leftPos.equalTo(func1Label.rightPos);
     
     UILabel *func3Label = [UILabel new];
-    func3Label.text = @"内容3:请分别尝试iPhone设备的横竖屏以及iPad设备的横竖屏";
+    func3Label.text = NSLocalizedString(@"Content3:please run in different iPhone&iPad device and change different screen orientation", @"");
     func3Label.numberOfLines = 0;
     func3Label.textAlignment = NSTextAlignmentCenter;
     func3Label.backgroundColor = [UIColor brownColor];

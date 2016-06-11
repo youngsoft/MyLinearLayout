@@ -56,96 +56,95 @@
 
 @implementation ViewController
 
-
 -(NSArray*)demoVCLists
 {
     if (_demoVCLists == nil)
     {
-        _demoVCLists = @[@{@"title":@"1线性布局-垂直布局和水平布局",
+        _demoVCLists = @[@{@"title":NSLocalizedString(@"1.MyLinearLayout - Vert&Horz", @""),
                            @"class":[LLTest1ViewController class]
                            },
-                         @{@"title":@"2线性布局-和UIScrollView的结合",
+                         @{@"title":NSLocalizedString(@"2.MyLinearLayout - Combine with UIScrollView", @""),
                            @"class":[LLTest2ViewController class]
                            },
-                         @{@"title":@"3线性布局-子视图的停靠和填充",
+                         @{@"title":NSLocalizedString(@"3.MyLinearLayout - Gravity&Fill", @""),
                            @"class":[LLTest3ViewController class]
                            },
-                         @{@"title":@"4线性布局-布局尺寸由子视图决定",
+                         @{@"title":NSLocalizedString(@"4.MyLinearLayout - Wrap content", @""),
                            @"class":[LLTest4ViewController class]
                            },
-                         @{@"title":@"5线性布局-子视图尺寸由布局决定",
+                         @{@"title":NSLocalizedString(@"5.MyLinearLayout - Weight & Relative margin", @""),
                            @"class":[LLTest5ViewController class]
                            },
-                         @{@"title":@"6线性布局-子视图之间的浮动间距",
+                         @{@"title":NSLocalizedString(@"6.MyLinearLayout - Size limit & Flexed margin", @""),
                            @"class":[LLTest6ViewController class]
                            },
-                         @{@"title":@"7线性布局-均分子视图尺寸和间距",
+                         @{@"title":NSLocalizedString(@"7.MyLinearLayout - Average size&spacing", @""),
                            @"class":[LLTest7ViewController class]
                            },
-                         @{@"title":@"8框架布局-子视图在布局各方位停靠",
+                         @{@"title":NSLocalizedString(@"8.MyFrameLayout - Gravity&Fill", @""),
                            @"class":[FLTest1ViewController class],
                            },
-                         @{@"title":@"9框架布局-复杂的界面布局",
+                         @{@"title":NSLocalizedString(@"9.MyFrameLayout - Complex UI", @""),
                            @"class":[FLTest2ViewController class]
                            },
-                         @{@"title":@"10相对布局-子视图之间的约束依赖",
+                         @{@"title":NSLocalizedString(@"10.MyRelativeLayout - Constraint&Dependence", @""),
                            @"class":[RLTest1ViewController class]
                            },
-                         @{@"title":@"11相对布局-子视图的尺寸按比例分配",
+                         @{@"title":NSLocalizedString(@"11.MyRelativeLayout - Prorate size", @""),
                            @"class":[RLTest2ViewController class]
                            },
-                         @{@"title":@"12相对布局-子视图整体居中",
+                         @{@"title":NSLocalizedString(@"12.MyRelativeLayout - Centered", @""),
                            @"class":[RLTest3ViewController class]
                            },
-                         @{@"title":@"13表格布局-垂直表格",
+                         @{@"title":NSLocalizedString(@"13.MyTableLayout - Vert", @""),
                            @"class":[TLTest1ViewController class]
                            },
-                         @{@"title":@"14表格布局-水平表格实现瀑布流",
+                         @{@"title":NSLocalizedString(@"14.MyTableLayout - Waterfall(Horz)", @""),
                            @"class":[TLTest2ViewController class]
                            },
-                         @{@"title":@"15表格布局-表格和智能边界线",
+                         @{@"title":NSLocalizedString(@"15.MyTableLayout - Intelligent borderLine", @""),
                            @"class":[TLTest3ViewController class]
                            },
-                         @{@"title":@"16流式布局-有规律的子视图排列",
+                         @{@"title":NSLocalizedString(@"16.MyFlowLayout - Regular arrangement", @""),
                            @"class":[FLLTest1ViewController class]
                            },
-                         @{@"title":@"17流式布局-标签流",
+                         @{@"title":NSLocalizedString(@"17.MyFlowLayout - Tag cloud", @""),
                            @"class":[FLLTest2ViewController class]
                            },
-                         @{@"title":@"18流式布局-子视图的拖拽调整功能",
+                         @{@"title":NSLocalizedString(@"18.MyFlowLayout - Drag", @""),
                            @"class":[FLLTest3ViewController class]
                            },
-                         @{@"title":@"19浮动布局-浮动效果的演示",
+                         @{@"title":NSLocalizedString(@"19.MyFloatLayout - Float", @""),
                            @"class":[FOLTest1ViewController class]
                            },
-                         @{@"title":@"20浮动布局-仿天猫淘宝首页实现",
+                         @{@"title":NSLocalizedString(@"20.MyFloatLayout - Jagged", @""),
                            @"class":[FOLTest2ViewController class]
                            },
-                         @{@"title":@"21浮动布局-仿ZAKER今日头条实现",
+                         @{@"title":NSLocalizedString(@"21.MyFloatLayout - Card news", @""),
                            @"class":[FOLTest3ViewController class]
                            },
-                         @{@"title":@"22浮动布局-标签流",
+                         @{@"title":NSLocalizedString(@"22.MyFloatLayout - Tag cloud", @""),
                            @"class":[FOLTest4ViewController class]
                            },
-                         @{@"title":@"23浮动布局-左右排列的文本",
+                         @{@"title":NSLocalizedString(@"23.MyFloatLayout - Title & Description", @""),
                            @"class":[FOLTest5ViewController class]
                            },
-                         @{@"title":@"24综合布局-布局和UITableView(动态高度)",
+                         @{@"title":NSLocalizedString(@"24.UITableView - Dynamic height", @""),
                            @"class":[AllTest1ViewController class]
                            },
-                         @{@"title":@"25综合布局-布局和UITableView(静态高度)",
+                         @{@"title":NSLocalizedString(@"25.UITableView - Static height", @""),
                            @"class":[AllTest2ViewController class]
                            },
-                         @{@"title":@"26综合布局-UITableView的替换方案",
+                         @{@"title":NSLocalizedString(@"26.Replacement of UITableView", @""),
                            @"class":[AllTest3ViewController class]
                            },
-                         @{@"title":@"27综合布局-UICollectionView的替换方案",
+                         @{@"title":NSLocalizedString(@"27.Replacement of UICollectionView", @""),
                            @"class":[AllTest4ViewController class]
                            },
-                         @{@"title":@"28SizeClass-不同屏幕下的布局样式1",
+                         @{@"title":NSLocalizedString(@"28.SizeClass - Demo1", @""),
                            @"class":[AllTest5ViewController class]
                            },
-                         @{@"title":@"29SizeClass-不同屏幕下的布局样式2",
+                         @{@"title":NSLocalizedString(@"29.SizeClass - Demo2", @""),
                            @"class":[AllTest6ViewController class]
                            }
                          ];
@@ -162,7 +161,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.title = @"目录";
+    self.title = NSLocalizedString(@"Category",@"");
+    
+    UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
+    tipLabel.text = @"如果您在模拟器中运行时看到的不是中文则请到系统设置里面将语言设置为中文(english ignore this text)";
+    tipLabel.font = [UIFont systemFontOfSize:13];
+    tipLabel.numberOfLines = 0;
+    self.tableView.tableHeaderView = tipLabel;
     
 }
 
@@ -194,6 +199,7 @@
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"test"];
     
+    cell.textLabel.font = [UIFont systemFontOfSize:14];
     cell.textLabel.text = self.demoVCLists[indexPath.row][@"title"];
     return cell;
     

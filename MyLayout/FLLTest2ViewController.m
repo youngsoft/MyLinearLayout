@@ -27,11 +27,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
             
-    [self createTagButton:@"点击标签可删除"];
-    [self createTagButton:@"标签2"];
-    [self createTagButton:@"本例子通过用XIB来建立布局视图"];
-
-
+    [self createTagButton:NSLocalizedString(@"click to remove tag", @"")];
+    [self createTagButton:NSLocalizedString(@"tag2", @"")];
+    [self createTagButton:NSLocalizedString(@"MyLayout can used in XIB&SB", @"")];
 }
 
 - (void)didReceiveMemoryWarning {

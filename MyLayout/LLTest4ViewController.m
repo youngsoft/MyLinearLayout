@@ -94,12 +94,12 @@
     [wrapContentLayout addSubview:actionLayout];
     
     
-    [actionLayout addSubview:[self addActionButton:@"添加垂直布局" tag:100]];
-    [actionLayout addSubview:[self addActionButton:@"添加垂直按钮" tag:500]];
+    [actionLayout addSubview:[self addActionButton:NSLocalizedString(@"add vert layout", @"") tag:100]];
+    [actionLayout addSubview:[self addActionButton:NSLocalizedString(@"add vert button", @"") tag:500]];
     
     
-    [wrapContentLayout addSubview:[self addActionButton:@"添加水平按钮" tag:200]];
-    [wrapContentLayout addSubview:[self addActionButton:@"删除自身布局" tag:300]];
+    [wrapContentLayout addSubview:[self addActionButton:NSLocalizedString(@"add horz button", @"") tag:200]];
+    [wrapContentLayout addSubview:[self addActionButton:NSLocalizedString(@"remove layout", @"") tag:300]];
     
     return wrapContentLayout;
 }
@@ -113,7 +113,7 @@
     [button setTitle:title forState:UIControlStateNormal];
     button.tag = tag;
     button.myHeight = 50;
-    button.myWidth = 90;
+    button.myWidth = 110;
     
     return button;
 }
@@ -131,7 +131,7 @@
     else if (sender.tag == 200)
     {
         MyLinearLayout*actionLayout = (MyLinearLayout*)sender.superview;
-        [actionLayout addSubview:[self addActionButton:@"删除自己" tag:400]];
+        [actionLayout addSubview:[self addActionButton:NSLocalizedString(@"remove self", @"") tag:400]];
     }
     else if (sender.tag == 300)
     {
@@ -145,7 +145,7 @@
     else if (sender.tag == 500)
     {
         MyLinearLayout*addLayout = (MyLinearLayout*)sender.superview;
-        [addLayout addSubview:[self addActionButton:@"删除自己" tag:400]];
+        [addLayout addSubview:[self addActionButton:NSLocalizedString(@"remove self", @"") tag:400]];
     }
 }
 

@@ -51,7 +51,7 @@
    firstRow.notUseIntelligentBorderLine = YES;  //因为智能边界线会影响到里面的所有子布局，包括每行，但是这里我们希望这行不受智能边界线的影响而想自己定义边界线，则将这个属性设置为YES。
    firstRow.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blueColor]]; //我们自定义第一行的底部边界线为蓝色边界线。
     
-    NSArray *firstRowTitles = @[@"姓名",@"周一",@"周二",@"周三", @"周四",@"周五",@"周六",@"周日"];
+    NSArray *firstRowTitles = @[@"Name",@"Mon.",@"Tues.",@"Wed.", @"Thur.",@"Fri.",@"Sat.",@"Sun."];
     [firstRowTitles enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * stop) {
         
         UIView *cellView = [self createCellLayout:obj];  //这里为什么要用布局视图作为单元格视图，是因为智能边界线只会影响到布局子视图，非布局子视图是没有智能边界线的。
@@ -95,7 +95,7 @@
     lastRow.notUseIntelligentBorderLine = YES;
     lastRow.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor greenColor]];
     
-    UIView *cellLayout = [self createCellLayout:@"合计:"];
+    UIView *cellLayout = [self createCellLayout:@"Total:"];
     cellLayout.weight = 1;  //占用剩余宽度
     [tableLayout addSubview:cellLayout];
     

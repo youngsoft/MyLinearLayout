@@ -37,7 +37,7 @@
     [rootLayout addSubview:hiddenSwitch];
     
     UILabel *hiddenSwitchLabel = [UILabel new];
-    hiddenSwitchLabel.text = @"隐藏时伸缩其他子视图:";
+    hiddenSwitchLabel.text = NSLocalizedString(@"flex size when subview hidden switch:", @"");
     [hiddenSwitchLabel sizeToFit];
     hiddenSwitchLabel.leftPos.equalTo(@10);
     hiddenSwitchLabel.centerYPos.equalTo(hiddenSwitch.centerYPos);
@@ -47,7 +47,7 @@
     /**水平平分3个子视图**/
     UIButton *v1 = [UIButton new];
     v1.backgroundColor = [UIColor redColor];
-    [v1 setTitle:@"平均1/3宽度\n切换上面开关试试" forState:UIControlStateNormal];
+    [v1 setTitle:NSLocalizedString(@"average 1/3 width\nturn above switch", @"") forState:UIControlStateNormal];
     v1.titleLabel.numberOfLines = 2;
     v1.titleLabel.adjustsFontSizeToFitWidth = YES;
     v1.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -59,7 +59,7 @@
     
     UIButton *v2 = [UIButton new];
     v2.backgroundColor = [UIColor redColor];
-    [v2 setTitle:@"平均1/3宽度\n点击我隐藏" forState:UIControlStateNormal];
+    [v2 setTitle:NSLocalizedString(@"average 1/3 width\nhide me", @"") forState:UIControlStateNormal];
     [v2 addTarget:self action:@selector(handleHidden:) forControlEvents:UIControlEventTouchUpInside];
     v2.titleLabel.numberOfLines = 2;
     v2.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -72,7 +72,7 @@
 
     UIButton *v3 = [UIButton new];
     v3.backgroundColor = [UIColor redColor];
-    [v3 setTitle:@"平均1/3宽度\n点击我恢复" forState:UIControlStateNormal];
+    [v3 setTitle:NSLocalizedString(@"average 1/3 width\nshow me", @"") forState:UIControlStateNormal];
     [v3 addTarget:self action:@selector(handleShow:) forControlEvents:UIControlEventTouchUpInside];
     v3.titleLabel.numberOfLines = 2;
     v3.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -91,7 +91,7 @@
     /**某个视图宽度固定其他平分**/
     UILabel *v4 = [UILabel new];
     v4.backgroundColor = [UIColor greenColor];
-    v4.text = @"固定宽度为260";
+    v4.text = NSLocalizedString(@"width equal to 260", @"");
     v4.adjustsFontSizeToFitWidth = YES;
     v4.textAlignment = NSTextAlignmentCenter;
     v4.topPos.equalTo(v1.bottomPos).offset(30);
@@ -103,7 +103,7 @@
     
     UILabel *v5 = [UILabel new];
     v5.backgroundColor = [UIColor greenColor];
-    v5.text = @"剩余1/2宽度";
+    v5.text = NSLocalizedString(@"1/2 with of free superview", @"");
     v5.adjustsFontSizeToFitWidth = YES;
     v5.textAlignment = NSTextAlignmentCenter;
     v5.topPos.equalTo(v4.topPos);
@@ -114,7 +114,7 @@
 
     UILabel *v6 = [UILabel new];
     v6.backgroundColor = [UIColor greenColor];
-    v6.text = @"剩余1/2宽度";
+    v6.text = NSLocalizedString(@"1/2 with of free superview", @"");
     v6.adjustsFontSizeToFitWidth = YES;
     v6.textAlignment = NSTextAlignmentCenter;
     v6.topPos.equalTo(v4.topPos);
@@ -132,7 +132,7 @@
     /**子视图按比例平分**/
     UILabel *v7 = [UILabel new];
     v7.backgroundColor = [UIColor blueColor];
-    v7.text = @"2/10比例宽度";
+    v7.text = NSLocalizedString(@"20% with of superview", @"");
     v7.adjustsFontSizeToFitWidth = YES;
     v7.textAlignment = NSTextAlignmentCenter;
     v7.topPos.equalTo(v4.bottomPos).offset(30);
@@ -143,7 +143,7 @@
     
     UILabel *v8 = [UILabel new];
     v8.backgroundColor = [UIColor blueColor];
-    v8.text = @"3/10比例宽度";
+    v8.text = NSLocalizedString(@"30% with of superview", @"");
     v8.adjustsFontSizeToFitWidth = YES;
     v8.textAlignment = NSTextAlignmentCenter;
     v8.topPos.equalTo(v7.topPos);
@@ -154,7 +154,7 @@
     
     UILabel *v9 = [UILabel new];
     v9.backgroundColor = [UIColor blueColor];
-    v9.text = @"5/10比例宽度";
+    v9.text = NSLocalizedString(@"50% with of superview", @"");
     v9.adjustsFontSizeToFitWidth = YES;
     v9.textAlignment = NSTextAlignmentCenter;
     v9.topPos.equalTo(v7.topPos);

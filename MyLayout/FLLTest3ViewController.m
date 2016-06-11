@@ -42,14 +42,14 @@
     
     UILabel *tipLabel = [UILabel new];
     tipLabel.font = [UIFont systemFontOfSize:13];
-    tipLabel.text = @"  您可以拖动下面任意一个标签进行位置的调整，MyLayout可以通过子视图的useFrame，noLayout和布局视图的autoresizesSubviews属性结合使用来完成一些位置调整以及整体的动画特性：\n useFrame设置为YES时表示子视图不受布局视图的控制而是使用自身的frame来确定位置和尺寸。\n\n autoresizesSubviews设置为NO表示布局视图不会执行任何布局操作，且会保持里面子视图的位置和尺寸。\n\n noLayout设置为YES表示子视图在布局时只会占用位置和尺寸而不会真实的调整位置和尺寸。";
+    tipLabel.text = NSLocalizedString(@"  You can drag the following tag to adjust location in layout, MyLayout can use subview's useFrame,noLayout property and layout view's autoresizesSubviews propery to complete some position adjustment and the overall animation features: \n useFrame set to YES indicates subview is not controlled by the layout view but use its own frame to set the location and size instead.\n \n autoresizesSubviews set to NO indicate layout view will not do any layout operation, and will remain in the position and size of all subviews.\n \n noLayout set to YES indicate subview in the layout view just only take up the position and size but not real adjust the position and size when layouting.", @"");
     tipLabel.numberOfLines = 0;
     tipLabel.flexedHeight = YES; //这两个属性结合着使用实现自动换行和文本的动态高度。
     [rootLayout addSubview:tipLabel];
     
     
     UILabel *tip2Label = [UILabel new];
-    tip2Label.text = @"双击按钮删除标签";
+    tip2Label.text = NSLocalizedString(@"double click to remove tag", @"");
     tip2Label.font = [UIFont systemFontOfSize:13];
     tip2Label.textColor = [UIColor lightGrayColor];
     tip2Label.textAlignment = NSTextAlignmentCenter;
@@ -74,7 +74,7 @@
     
     for (NSInteger i = 0; i < 14; i++)
     {
-        NSString *label = [NSString stringWithFormat:@"拖动我%ld",i];
+        NSString *label = [NSString stringWithFormat:NSLocalizedString(@"drag me %ld", @""),i];
         [self.flowLayout addSubview:[self createTagButton:label]];
     }
     
@@ -115,7 +115,7 @@
 -(UIButton*)createAddButton
 {
     UIButton *addButton = [UIButton new];
-    [addButton setTitle:@"添加标签" forState:UIControlStateNormal];
+    [addButton setTitle:NSLocalizedString(@"add tag", @"") forState:UIControlStateNormal];
     addButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     [addButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     addButton.layer.cornerRadius = 20;
@@ -135,7 +135,7 @@
 
 -(void)handleAddTagButton:(id)sender
 {
-    NSString *label = [NSString stringWithFormat:@"拖动我%ld",self.flowLayout.subviews.count - 1];
+    NSString *label = [NSString stringWithFormat:NSLocalizedString(@"drag me %ld", @""),self.flowLayout.subviews.count - 1];
     [self.flowLayout insertSubview:[self createTagButton:label] atIndex:self.flowLayout.subviews.count - 1];
 
 }

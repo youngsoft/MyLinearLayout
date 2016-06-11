@@ -9,28 +9,26 @@
 #import "MyBaseLayout.h"
 
 /**
- 流式布局，支持从左到右以及从上到下的垂直布局方式，和从上到下以及从左到右的水平布局方式
- 流式布局除了支持两种方向的布局外，还分别支持按子视图内容填充约束和子视图数量约束两种，所谓按子视图内容填充约束是指子视图依次先按一个方向排列，当某个子视图的
- 空间不能容纳在流式布局视图下时则会另起一行或者一列重新排列；而按子视图数量约束则是指子视图依次先按一个方向排列，当一行或者一列的子视图的数量到达指定的数量后
- 则会另起一行或者一列重新排列。因此流式布局可以实现四种不同的流：
- 1.垂直内容填充约束流式布局.
+ *流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一行再重新排列的多行多列展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，而换行的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
+ 1.垂直数量约束流式布局
+ orientation为MyLayoutViewOrientation_Vert,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange,不支持autoArrange。
+
+ 2.垂直内容约束流式布局.
     orientation为MyLayoutViewOrientation_Vert,arrangedCount为0,支持wrapContentHeight,不支持wrapContentWidth,支持averageArrange,支持autoArrange。
  
- 2.垂直数量约束流式布局
-    orientation为MyLayoutViewOrientation_Vert,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange,不支持autoArrange。
-
- 3.水平内容填充约束流式布局
+ 
+ 3.水平数量约束流式布局。
+ orientation为MyLayoutViewOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange,不支持autoArrange。
+ 
+ 4.水平内容约束流式布局
     orientation为MyLayoutViewOrientation_Horz,arrangedCount为0,不支持wrapContentHeight,支持wrapContentWidth,支持averageArrange,支持autoArrange。
-
- 4.水平数量约束流式布局。
-    orientation为MyLayoutViewOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,支持averageArrange,不支持autoArrange。
  
  流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度,以及高度或者宽度依赖于流式布局本身的高度或者宽度
  */
 @interface MyFlowLayout : MyBaseLayout
 
 /**
- *初始化一个流式布局并指定布局的方向和布局的数量,如果数量为0则表示内容填充约束流式布局
+ *初始化一个流式布局并指定布局的方向和布局的数量,如果数量为0则表示内容约束流式布局
  */
 -(id)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
 +(id)flowLayoutWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
@@ -53,7 +51,7 @@
 
 
 /**
- *指定方向上的子视图的数量，默认是0表示为内容填充约束流式布局，当数量不为0时则是数量约束流式布局。当值为0时则表示当子视图在方向上的尺寸超过布局视图时则会新起一行或者一列。而如果数量不为0时则：
+ *指定方向上的子视图的数量，默认是0表示为内容约束流式布局，当数量不为0时则是数量约束流式布局。当值为0时则表示当子视图在方向上的尺寸超过布局视图时则会新起一行或者一列。而如果数量不为0时则：
  如果方向为MyLayoutViewOrientation_Vert，则表示从左到右的数量，当子视图从左往右满足这个数量后新的子视图将会换行再排列
  如果方向为MyLayoutViewOrientation_Horz，则表示从上到下的数量，当子视图从上往下满足这个数量后新的子视图将会换列再排列
  */

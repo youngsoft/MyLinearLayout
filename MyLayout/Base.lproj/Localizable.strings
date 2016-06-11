@@ -1,0 +1,239 @@
+/* 
+  Localizable.strings
+  MyLayout
+
+  Created by apple on 16/6/9.
+  Copyright © 2016年 YoungSoft. All rights reserved.
+*/
+
+//Category
+"Category"="目录";
+"1.MyLinearLayout - Vert&Horz" = "1线性布局-垂直布局和水平布局";
+"2.MyLinearLayout - Combine with UIScrollView" = "2线性布局-和UIScrollView的结合";
+"3.MyLinearLayout - Gravity&Fill" = "3线性布局-子视图的停靠和填充";
+"4.MyLinearLayout - Wrap content" = "4线性布局-布局尺寸由子视图决定";
+"5.MyLinearLayout - Weight & Relative margin" = "5线性布局-子视图尺寸由布局决定";
+"6.MyLinearLayout - Size limit & Flexed margin" = "6线性布局-子视图之间的浮动间距";
+"7.MyLinearLayout - Average size&spacing" = "7线性布局-均分子视图尺寸和间距";
+"8.MyFrameLayout - Gravity&Fill" = "8框架布局-子视图在布局各方位停靠";
+"9.MyFrameLayout - Complex UI" = "9框架布局-复杂的界面布局";
+"10.MyRelativeLayout - Constraint&Dependence" = "10相对布局-子视图之间的约束依赖";
+"11.MyRelativeLayout - Prorate size" = "11相对布局-子视图的尺寸按比例分配";
+"12.MyRelativeLayout - Centered" = "12相对布局-子视图整体居中";
+"13.MyTableLayout - Vert" = "13表格布局-垂直表格";
+"14.MyTableLayout - Waterfall(Horz)" = "14表格布局-水平表格实现瀑布流";
+"15.MyTableLayout - Intelligent borderLine" = "15表格布局-表格和智能边界线";
+"16.MyFlowLayout - Regular arrangement" = "16流式布局-有规律的子视图排列";
+"17.MyFlowLayout - Tag cloud" = "17流式布局-标签流";
+"18.MyFlowLayout - Drag" = "18流式布局-子视图的拖拽调整功能";
+"19.MyFloatLayout - Float" = "19浮动布局-浮动效果的演示";
+"20.MyFloatLayout - Jagged" = "20浮动布局-仿天猫淘宝首页实现" ;
+"21.MyFloatLayout - Card news" = "21浮动布局-仿ZAKER今日头条实现";
+"22.MyFloatLayout - Tag cloud" = "22浮动布局-标签流";
+"23.MyFloatLayout - Title & Description" = "23浮动布局-左右排列的文本";
+"24.UITableView - Dynamic height" = "24综合布局-布局和UITableView(动态高度)";
+"25.UITableView - Static height" = "25综合布局-布局和UITableView(静态高度)";
+"26.Replacement of UITableView" = "26综合布局-UITableView的替换方案";
+"27.Replacement of UICollectionView" = "27综合布局-UICollectionView的替换方案";
+"28.SizeClass - Demo1" = "28SizeClass-不同屏幕下的布局样式1";
+"29.SizeClass - Demo2" = "29SizeClass-不同屏幕下的布局样式2";
+
+//LLTest1ViewController
+"Vert(from top to bottom)" = "垂直布局(从上到下)";
+"Left margin" = "左边边距";
+"Horz center" = "水平居中";
+"Right margin" = "右边边距";
+"Horz fill" = "左右边距";
+"Horz(from left to right)" = "水平布局(从左到右)";
+"Top margin" = "上边边距";
+"Vert center" = "垂直居中";
+"Bottom margin" = "下边边距";
+"Vert fill" = "上下边距";
+
+//LLTest2ViewController
+"No.:"="编号：";
+"Input the No. here"="这里输入编号";
+"Name:欧阳大哥" = "姓名：欧阳大哥";
+"Nickname:醉里挑灯看键"="昵称：醉里挑灯看键";
+"Age:"="年龄：";
+"Address:"="地址：";
+"Winterless Building, West Dawang Road, Chaoyang district CBD, Beijing, People's Republic of China" = "中华人民共和国北京市朝阳区CBD西大望路温特莱中心";
+"Sex:"="性别：";
+"Show&Hide the Text"="点击按钮显示隐藏文本";
+"Show more》"="点击查看更多》";
+"Close up《" ="点击收起《";
+"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the flexedHeight to YES and set the numberOfLines to 0.You can try to switch different simulator or different orientation screen to see the effect."="这是一段可以自动换行的文本。为了实现这个功能，您需要设置明确的宽度，并且把属性flexedHeight设置为YES和numberOfLines设置为0。您可以尝试着切换不同尺寸的模拟器或者横竖屏来看看效果。";
+
+//LLTest3ViewController
+"centered title" = "标题居中";
+"reset"="还原";
+"Vertical layout gravity control, you can click the following different button to show the effect:"="垂直布局里面的停靠控制，您可以点击下面的不同停靠方式的按钮查看效果：";
+"Horizontal layout gravity control, you can click the following different button to show the effect:"="水平布局里面的停靠控制，您可以点击下面的不同停靠方式的按钮查看效果：";
+"top gravity" = "上停靠";
+"vert center gravity" = "垂直居中停靠";
+"bottom gravity"="下停靠";
+"left gravity" = "左停靠";
+"horz center gravity" = "水平居中停靠";
+"right gravity" = "右停靠";
+"horz fill"="水平填充";
+"vert fill"="垂直填充";
+"screen vert center gravity" = "屏幕垂直居中停靠";
+"screen horz center gravity" ="屏幕水平居中停靠";
+"adjust view's spacing" = "子视图间距设置";
+"test text1"="测试文本1";
+"test text2 test text2"="测试文本2测试文本2";
+"test text3 test text3 test text3"="测试文本3测试文本3测试文本3";
+"set left and right margin to determine width"="你可以自定义左右边距和宽度";
+"set top and bottom margin to determine height"="您可以自定义上下边距和高度";
+"title center in the screen"="标题在屏幕中居中";
+"title not center in the screen"="标题不在屏幕中居中";
+
+//LLTest4ViewController
+"add vert layout"="添加垂直布局";
+"add vert button"="添加垂直按钮";
+"add horz button"="添加水平按钮";
+"remove layout"="删除自身布局";
+"remove self" ="删除自身";
+
+//LLTest5ViewController
+"width equal to superview, height equal to 20% of free height of superview"="宽度和父视图相等 高度为父视图剩余空间的20%";
+"width equal to 80% of superview, height equal to 30% of free height of superview"="宽度是父视图的80% 高度为父视图剩余空间的30%";
+"width equal to superview - 20, height equal to 50% of free height of superview"="宽度是父视图的宽度-20 高度为父视图剩余空间的50%";
+"width equal to 200, height equal to 50"="宽度固定是200 高度固定是50";
+"left margin equal to 20% of superview, right margin equal to 30% of superview, width equal to 50% of superview, top spacing equal to 5% of free height of superview, bottom spacing equal to 10% of free height of superview"="左边20%，右边30%，宽度50%，高度是剩余的10%，顶部间距是剩余的5%，底部间距是剩余的10%";
+
+//LLTest6ViewController
+"user info(run in iPhone4 will have scroll effect)"="用户信息(请在iPhone4下看滚动效果)";
+"input user name here"="请输入用户名称";
+"desc info"="描述信息";
+"please try input text and carriage return continuous to see effect"="请尝试在这里连续输入文字以及连续回车换行的效果";
+"copy rights reserved by Youngsoft"="版权所有 Youngsoft";
+
+//LLTest7ViewController
+"average size&spacing no centered" = "均分视图和间距不居中";
+"average size&spacing centered" = "均分视图和间距居中";
+"average size,fixed spacing no centered"="均分视图固定间距不居中";
+"average size,fixed spacing centered"="均分视图固定间距居中";
+"average spacing no centered"="均分间距不居中";
+"average spacing centered"="均分间距居中";
+
+//RLTest2ViewController
+"flex size when subview hidden switch:"="隐藏时伸缩其他子视图:";
+"average 1/3 width\nturn above switch"="平均1/3宽度\n切换上面开关试试";
+"average 1/3 width\nhide me"="平均1/3宽度\n点击我隐藏";
+"average 1/3 width\nshow me"="平均1/3宽度\n点击我显示";
+"width equal to 260"="固定宽度为260";
+"1/2 with of free superview"="剩余1/2宽度";
+"20% with of superview"="20%比例宽度";
+"30% with of superview"="30%比例宽度";
+"50% with of superview"="50%比例宽度";
+
+//RLTest3ViewController
+"subviews horz centered in superview"="子视图整体水平居中";
+"subviews vert centered in superview"="子视图整体垂直居中";
+"subviews centered in superview"="子视图整体居中";
+
+//TLTest2ViewController
+"add cell"="添加列条目";
+"cell title:%03ld"="单元格标题:%03ld";
+"cell:%03ld be selected"="您选择了单元格:%03ld";
+
+//FLLTest1ViewController
+"adjust orientation"="调整方向";
+"adjust arrangedCount"="调整数量";
+"average size"="平均尺寸";
+"adjust gravity"="调整停靠";
+"adjust align"="调整对齐方式";
+"adjust spacing"="调整间隔";
+
+//FLLTest2ViewController
+"click to remove tag"="点击标签可删除";
+"tag2"="标签2";
+"MyLayout can used in XIB&SB"="本例子通过用XIB来建立布局视图";
+
+//FLLTest3ViewController
+"double click to remove tag"="双击按钮删除标签";
+"drag me %ld"="拖动我%ld";
+"add tag"="添加标签";
+"  You can drag the following tag to adjust location in layout, MyLayout can use subview's useFrame,noLayout property and layout view's autoresizesSubviews propery to complete some position adjustment and the overall animation features: \n useFrame set to YES indicates subview is not controlled by the layout view but use its own frame to set the location and size instead.\n \n autoresizesSubviews set to NO indicate layout view will not do any layout operation, and will remain in the position and size of all subviews.\n \n noLayout set to YES indicate subview in the layout view just only take up the position and size but not real adjust the position and size when layouting."= "  您可以拖动下面任意一个标签进行位置的调整，MyLayout可以通过子视图的useFrame，noLayout和布局视图的autoresizesSubviews属性结合使用来完成一些位置调整以及整体的动画特性：\n useFrame设置为YES时表示子视图不受布局视图的控制而是使用自身的frame来确定位置和尺寸。\n\n autoresizesSubviews设置为NO表示布局视图不会执行任何布局操作，且会保持里面子视图的位置和尺寸。\n\n noLayout设置为YES表示子视图在布局时只会占用位置和尺寸而不会真实的调整位置和尺寸。";
+
+
+//FOLTest2ViewController
+"change style"="布局变换";
+
+//FOLTest4ViewController
+"flexed width, fixed spacing"="浮动宽度,固定间距";
+"fixed width, flexed spacing"="固定宽度,浮动间距";
+
+//FOLTest5ViewController
+"Layout view:"="布局名称:";
+"MyLinearLayout:"="线性布局:";
+"MyTableLayout:"="表格布局";
+"MyFrameLayout:"="框架布局:";
+"MyRelativeLayout:"="相对布局:";
+"MyFlowLayout:"="流式布局:";
+"MyFloatLayout:"="浮动布局:";
+
+
+"MyLayout is a powerful view layout library, it support 6 kinds of layout views and SIZECLASS."="MyLayout布局是一套功能强大的界面布局体系，一共支持6种布局和支持SIZECLASS。";
+
+"Linear layout is a single line layout view that the subviews are arranged in sequence according to the added order（from top to bottom or from left to right). So the subviews' origin&size constraints are established by the added order. Subviews arranged in top-to-bottom order is called vertical linear layout view, and the subviews arranged in left-to-right order is called horizontal linear layout."="线性布局是一种里面的子视图按添加的顺序从上到下或者从左到右依次排列的单列(单行)布局视图，因此里面的子视图是通过添加的顺序建立约束和依赖关系的。 子视图从上到下依次排列的线性布局视图称为垂直线性布局视图，而子视图从左到右依次排列的线性布局视图则称为水平线性布局。";
+
+"Table layout is a layout view that the subviews are multi-row&col arranged like a table. First you must create a rowview and add it to the table layout, then add the subview to the rowview. If the rowviews arranged in top-to-bottom order,the tableview is caled vertical table layout,in which the subviews are arranged from left to right; If the rowviews arranged in in left-to-right order,the tableview is caled horizontal table layout,in which the subviews are arranged from top to bottom."="表格布局是一种里面的子视图可以像表格一样多行多列排列的布局视图。子视图添加到表格布局视图前必须先要建立并添加行视图，然后再将子视图添加到行视图里面。如果行视图在表格布局里面是从上到下排列的则表格布局为垂直表格布局，垂直表格布局里面的子视图在行视图里面是从左到右排列的；如果行视图在表格布局里面是从左到右排列的则表格布局为水平表格布局，水平表格布局里面的子视图在行视图里面是从上到下排列的。";
+
+"Frame layout is a layout view that the subviews can be overlapped and gravity in a special location of the superview.The subviews' layout position&size is not depended to the adding order and establish dependency constraint with the superview. Frame layout devided the vertical orientation to top,vertical center and bottom, while horizontal orientation is devided to left,horizontal center and right. Any of the subviews is just gravity in either vertical orientation or horizontal orientation."="框架布局是一种里面的子视图停靠在父视图特定方位并且可以重叠的布局视图。框架布局里面的子视图的布局位置和添加的顺序无关，只跟父视图建立布局约束依赖关系。框架布局将垂直方向上分为上、中、下三个方位，而水平方向上则分为左、中、右三个方位，任何一个子视图都只能定位在垂直方向和水平方向上的一个方位上。";
+
+"Relative layout is a layout view that the subviews layout and position through mutual constraints.The subviews in the relative layout are not depended to the adding order but layout and position by setting the subviews' constraints."="相对布局是一种里面的子视图通过相互之间的约束和依赖来进行布局和定位的布局视图。相对布局里面的子视图的布局位置和添加的顺序无关，而是通过设置子视图的相对依赖关系来进行定位和布局的。";
+
+"Flow layout is a layout view presents in multi-line that the subviews are arranged in sequence according to the added order, and when meeting with a arranging constraint it will start a new line and rearrange. The constrains mentioned here includes count constraints and size constraints. The orientation of the new line would be vertical and horizontal, so the flow layout is divided into: count constraints vertical flow layout, size constraints vertical flow layout, count constraints horizontal flow layout,  size constraints horizontal flow layout. Flow layout often used in the scenes that the subviews is  arranged regularly, it can be substitutive of UICollectionView to some extent."="流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一行再重新排列的多行展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，而换行的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些子视图有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。";
+
+"Float layout is a layout view that the subviews are floating gravity in the given orientations, when the size is not enough to be hold, it will automatically find the best location to gravity. float layout's conception is reference from the HTML/CSS's floating positioning technology, so the float layout can be designed in implementing irregular layout. According to the different orientation of the floating, float layout can be divided into left-right float layout and up-down float layout."="浮动布局是一种里面的子视图按照约定的方向浮动停靠，当尺寸不足以被容纳时会自动寻找最佳的位置进行浮动停靠的布局视图。浮动布局的理念源于HTML/CSS中的浮动定位技术,因此浮动布局可以专门用来实现那些不规则布局或者图文环绕的布局。根据浮动的方向不同，浮动布局可以分为左右浮动布局和上下浮动布局。";
+
+"MyLayout provided support to SIZECLASS in order to fit the different screen sizes of devices. You can combinate the SIZECLASS with any of the 6 kinds of layout views mentioned above to perfect fit the UI of all equipments."="MyLayout布局体系为了实现对不同屏幕尺寸的设备进行适配，提供了对SIZECLASS的支持。您可以将SIZECLASS和上述的6种布局搭配使用，以便实现各种设备界面的完美适配。";
+
+
+//AllTest1ViewController
+"add tableHeaderView(please touch me)"="设置tableHeaderView(点我试试)";
+" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView."="  布局视图实现具有动态高度的tableHeaderView时，宽度需要用frame指定，高度则设置wrapContentHeight为YES，并且在赋值给UITableview的tableHeaderView之前需要调用layoutIfNeeded方法来明确高度。";
+"add tableFooterView"="设置tableFooterView";
+"the layoutIfNeeded is not need to call when you use frame to set layout view's size"="如果通过frame设置了明确的尺寸则不需要调用layoutIfNeeded";
+
+"A single line text"="只有一行文本";
+"This Demo is used to introduce the solution when use layout view to realize the UITableViewCell's dynamic height. We only need to use the layout view's estimateLayoutRect method to evaluate the size of the layout view. and you can touch the Cell to shrink the height when the Cell has a picture."="这个例子用于介绍布局视图实现UITableViewCell动态高度的解决方案。我们只需要使用布局视图的estimateLayoutRect方法就可以对布局视图的尺寸进行评估。同时您可以在有图片的Cell中触摸查看自动伸缩的场景。";
+
+"Through layout view's estimateLayoutRect method can assess a UITableViewCell dynamic height.EstimateLayoutRect just to evaluate layout size but not set the size of the layout. here don't preach the width of 0 is the cause of the above UITableViewCell set the default width is 320 (regardless of any screen), so if we pass the width of 0 will be according to the width of 320 to evaluate UITableViewCell dynamic height, so when in 375 and 375 the width of the assessment of height will not be right, so here you need to specify the real width dimension;And the height is set to 0 mean height is not a fixed value need to evaluate. you can use all type layout view to realize UITableViewCell."="通过布局视图的estimateLayoutRect函数能够评估出UITableViewCell的动态高度。estimateLayoutRect并不会进行布局而只是评估布局的尺寸，这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们传递了宽度为0的话则会按320的宽度来评估UITableViewCell的动态高度，这样当在375和414的宽度时评估出来的高度将不会正确，因此这里需要指定出真实的宽度尺寸；而高度设置为0的意思是表示高度不是固定值需要评估出来。UITableViewCell的动态高度评估不局限于线性布局，其他布局也是同样适用。";
+
+"This section not only has text but also hav picture. and picture below at text, text will wrap"="这是一段既有文本也有图片，文本在上面，图片在下面。文本会自动的进行换行，而图片则在文本下面居中显示";
+
+"Show"="晒单";
+"Topic"="话题";
+"Follow"="关注";
+
+//AllTest3ViewController
+"Logout"="退出登录";
+"please touch here(no highlighted)"="请单击这里(没有高亮)";
+"please touch here(highlighted background color)"="请单击这里(有高亮颜色)";
+"please touch here(highlighted background image)"="请单击这里(有高亮图片)";
+"please touch here(will pop menu)"="请单击这里(弹出可伸缩的菜单视图)";
+"relayout switch when subview hidden&show"="下面的子视图隐藏重新布局开关";
+"touch hide me"="点击我隐藏";
+"touch show me"="点击我显示";
+"show all switch"="显示全部开关";
+"add item"="添加条目";
+"double tap remove:%d"="双击删除:%d";
+"close pop menu"="关闭弹出菜单";
+"you can add and remove item to shrink the pop menu."="您可以通过添加条目和删除条目看到菜单有自动缩放的功能。";
+
+//AllTest5ViewController
+"The red、green、blue subwiews is arranged vertically when run in portrait screen on all the iPhone devices,but horizontal arranged when in landscape screen, the blue subview is not showed on any phone devices except on iPhone6plus."="本例子实现了iPhone设备上竖屏时红绿蓝三个颜色的子视图垂直排列，而横屏时则水平排列,除了iPhone6plus设备外其他设备上蓝色子视图不显示,您可以用不同的模拟器来测试各种设备的横竖屏场景。";
+
+
+
+
+//AllTest6ViewController
+"Menu1"="菜单1";
+"Menu2"="菜单2";
+"Menu3"="菜单3";
+"Content1"="内容1";
+"Content2"="内容2";
+"Content3:please run in different iPhone&iPad device and change different screen orientation"="内容3:请分别尝试运行在iPhone设备的横竖屏以及iPad设备的横竖屏的情况";

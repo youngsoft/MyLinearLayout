@@ -945,7 +945,8 @@ IB_DESIGNABLE
         }
         
 #ifdef DEBUG
-        NSCAssert((self.gravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_Vert_Fill , @"布局约束冲突！！, 垂直线性布局:%@不能将gravity的垂直停靠值设置为MyMarginGravity_Vert_Fill。",self);
+        //"布局约束冲突:垂直线性布局不能将gravity的垂直停靠值设置为MyMarginGravity_Vert_Fill。"
+        NSCAssert((self.gravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_Vert_Fill , @"Constraint exception！！, vertical linear layout:%@ can not set gravity to MyMarginGravity_Vert_Fill.",self);
 #endif
         if ((self.gravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_None)
         {
@@ -1057,7 +1058,8 @@ IB_DESIGNABLE
         }
         
 #ifdef DEBUG
-        NSCAssert((self.gravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_Horz_Fill , @"布局约束冲突！！, 水平线性布局:%@不能将gravity的水平停靠值设置为MyMarginGravity_Horz_Fill。",self);
+        //布局约束冲突：水平线性布局:%@不能将gravity的水平停靠值设置为MyMarginGravity_Horz_Fill。"
+        NSCAssert((self.gravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_Horz_Fill , @"Constraint exception!! horizontal linear layout:%@ can not set gravity to MyMarginGravity_Horz_Fill",self);
 #endif
         
         if ((self.gravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_None)

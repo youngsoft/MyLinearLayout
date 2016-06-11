@@ -73,7 +73,7 @@ static NSInteger sBaseTag = 100000;
         for (NSInteger j = 0; j < cellCount; j++)
         {
             UIView *cellLayout = [self createCellLayout1:images[arc4random_uniform((uint32_t)images.count)]
-                                                     title:[NSString stringWithFormat:@"单元格标题:%ld",(long)j]];
+                                                     title:[NSString stringWithFormat:NSLocalizedString(@"cell title:%03ld", @""),(long)j]];
             cellLayout.tag = sBaseTag *i + j; //用于确定所在的辅助编号和单元格编号。
             
             [cellContainerLayout addSubview:cellLayout];
@@ -171,7 +171,7 @@ static NSInteger sBaseTag = 100000;
     NSInteger supplementaryIndex = sender.tag / sBaseTag;
     NSInteger cellIndex = sender.tag % sBaseTag;
     
-    NSString *message = [NSString stringWithFormat:@"您选择了\nSupplementaryIndex:%ld CellIndex:%ld",(long)supplementaryIndex, (long)cellIndex];
+    NSString *message = [NSString stringWithFormat:@"You have select:\nSupplementaryIndex:%ld CellIndex:%ld",(long)supplementaryIndex, (long)cellIndex];
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     

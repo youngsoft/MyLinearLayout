@@ -328,38 +328,29 @@ static CGFloat sTagWidth = 70;
 -(UIView*)createActionLayout
 {
     MyFloatLayout *actionLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    actionLayout.subviewHorzMargin = 5;
     actionLayout.wrapContentHeight = YES;
     actionLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
     
     
-    NSArray *actions = @[@"浮动宽度,固定间距风格",
-                         @"固定宽度,浮动间距风格",
+    NSArray *actions = @[NSLocalizedString(@"flexed width, fixed spacing", @""),
+                         NSLocalizedString(@"fixed width, flexed spacing", @"")
                          ];
     for (NSInteger  i = 0; i < actions.count; i++)
     {
-        UIButton *button = [UIButton new];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
         [button setTitle:actions[i] forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont systemFontOfSize:14];
         button.layer.cornerRadius = 5;
         button.layer.borderColor = [UIColor lightGrayColor].CGColor;
         button.layer.borderWidth = 1;
         button.myHeight = 44;
-        button.widthDime.equalTo(actionLayout.widthDime).multiply(1.0/actions.count);  //宽度均分
+        button.widthDime.equalTo(actionLayout.widthDime).multiply(1.0/actions.count).add(-2.5);  //宽度均分,这里减去2.5是因为有视图之间的间距为5
         button.tag = i + 100;
         [button addTarget:self action:@selector(handleStyleChange:) forControlEvents:UIControlEventTouchUpInside];
         [actionLayout addSubview:button];
     }
-    
-    UILabel *actionDesc = [UILabel new];
-    actionDesc.text = @"*风格布局1里面每行固定放4个标签子视图，子视图左右间距固定，子视图宽度浮动。\n*风格布局2里面每个标签子视图宽度固定，子视图左右间距浮动，但有最小间距限制。\n您可以在两个风格下切换横竖屏或者切换模拟器查看不同的效果。";
-    actionDesc.backgroundColor = [UIColor whiteColor];
-    actionDesc.numberOfLines = 0;
-    actionDesc.flexedHeight = YES;
-    actionDesc.myTopMargin = 10;
-    actionDesc.clearFloat = YES;  //换行
-    actionDesc.weight = 1;        //占用全部宽度。
-    [actionLayout addSubview:actionDesc];
     
     return actionLayout;
 }
@@ -417,7 +408,7 @@ static CGFloat sTagWidth = 70;
     NSInteger sectionIndex = (sender.tag / 1000) % 1000;
     NSInteger tagIndex = sender.tag % 1000;
     
-    NSString *message = [NSString stringWithFormat:@"您单击了:\npartIndex:%ld\nsectionIndex:%ld\ntagIndex:%ld", (long)partIndex, (long)sectionIndex, (long)tagIndex];
+    NSString *message = [NSString stringWithFormat:@"you have select:\npartIndex:%ld\nsectionIndex:%ld\ntagIndex:%ld", (long)partIndex, (long)sectionIndex, (long)tagIndex];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
 
@@ -428,7 +419,7 @@ static CGFloat sTagWidth = 70;
     NSInteger partIndex = sender.tag / 1000;
     NSInteger sectionIndex = sender.tag % 1000;
     
-    NSString *message = [NSString stringWithFormat:@"您单击了:\npartIndex:%ld\nsectionIndex:%ld", (long)partIndex, (long)sectionIndex];
+    NSString *message = [NSString stringWithFormat:@"You have select:\npartIndex:%ld\nsectionIndex:%ld", (long)partIndex, (long)sectionIndex];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
 

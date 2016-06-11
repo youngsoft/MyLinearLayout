@@ -36,9 +36,9 @@
     action1Layout.wrapContentHeight = YES;
     [rootLayout addSubview:action1Layout];
     
-    [action1Layout addSubview:[self createActionButton:@"均分视图1" tag:100]];
-    [action1Layout addSubview:[self createActionButton:@"均分视图2" tag:200]];
-    [action1Layout addSubview:[self createActionButton:@"均分视图3" tag:300]];
+    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&spacing no centered", @"") tag:100]];
+    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&spacing centered", @"") tag:200]];
+    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size,fixed spacing no centered",@"") tag:300]];
     [action1Layout averageSubviews:NO withMargin:5];  //均分action1Layout中的所有子视图的宽度
 
     //创建动作布局
@@ -47,9 +47,9 @@
     action2Layout.myTopMargin = 5;
     [rootLayout addSubview:action2Layout];
     
-    [action2Layout addSubview:[self createActionButton:@"均分视图4" tag:400]];
-    [action2Layout addSubview:[self createActionButton:@"均分间距1" tag:500]];
-    [action2Layout addSubview:[self createActionButton:@"均分间距2" tag:600]];
+    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average size,fixed spacing centered",@"") tag:400]];
+    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average spacing no centered",@"") tag:500]];
+    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average spacing centered",@"") tag:600]];
     [action2Layout averageSubviews:NO withMargin:5]; //均分action1Layout中的所有子视图的宽度
    
     //创建供动作测试的布局。
@@ -98,12 +98,14 @@
 
 -(UIButton*)createActionButton:(NSString*)title tag:(NSInteger)tag
 {
-    UIButton *button = [UIButton new];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setTitle:title forState:UIControlStateNormal];
     [button addTarget:self action:@selector(handleAction:) forControlEvents:UIControlEventTouchUpInside];
-    button.backgroundColor = [UIColor redColor];
     button.tag = tag;
+    button.titleLabel.numberOfLines = 2;
+    button.titleLabel.adjustsFontSizeToFitWidth = YES;
     [button sizeToFit];
+    button.heightDime.equalTo(button.heightDime).add(20);  //高度等于内容的高度再加20
     button.layer.borderColor = [UIColor grayColor].CGColor;
     button.layer.borderWidth = 1;
     

@@ -68,7 +68,7 @@
     
     UIButton *button = [UIButton new];
     button.backgroundColor = [UIColor redColor];
-    [button setTitle:@"退出登录" forState:UIControlStateNormal];
+    [button setTitle:NSLocalizedString(@"Logout", @"") forState:UIControlStateNormal];
     button.myHeight = 50;
     button.marginGravity = MyMarginGravity_Vert_Bottom | MyMarginGravity_Horz_Fill;  //按钮定位在框架布局的底部并且宽度填充。
     [self.view addSubview:button];
@@ -160,7 +160,7 @@
     //如果您只想要高亮效果而不想处理事件则方法：setTarget中的action为nil即可。
     
     //具有事件处理的layout,以及边界线效果的layout
-    MyLinearLayout *layout1 = [self createActionLayout:@"请单击这里(没有高亮)" action:@selector(handleTap:)];
+    MyLinearLayout *layout1 = [self createActionLayout:NSLocalizedString(@"please touch here(no highlighted)", @"") action:@selector(handleTap:)];
     layout1.myTopMargin = 10;
     layout1.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor yellowColor]];
     layout1.topBorderLine.headIndent = -10;
@@ -169,7 +169,7 @@
     [contentLayout addSubview:layout1];
     
     //具有事件处理的layout,高亮背景色的设置。
-    MyLinearLayout *layout2 = [self createActionLayout:@"请单击这里(有高亮颜色)" action:@selector(handleTap:)];
+    MyLinearLayout *layout2 = [self createActionLayout:NSLocalizedString(@"please touch here(highlighted background)", @"") action:@selector(handleTap:)];
     layout2.highlightedBackgroundColor = [UIColor lightGrayColor]; //可以设置高亮的背景色用于单击事件
     layout2.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]];
     layout2.bottomBorderLine.thick = 4; //设置底部有红色的线，并且粗细为4
@@ -179,7 +179,7 @@
     [contentLayout addSubview:layout2];
     
     //具有事件处理的layout, 可以设置触摸时的高亮背景图。虚线边界线。
-    MyLinearLayout *layout3 = [self createActionLayout:@"请单击这里(有高亮图片)" action:@selector(handleTap:)];
+    MyLinearLayout *layout3 = [self createActionLayout:NSLocalizedString(@"please touch here(highlighted background image)", @"") action:@selector(handleTap:)];
     layout3.highlightedBackgroundImage = [UIImage imageNamed:@"image2"]; //设置单击时的高亮背景图片。
     MyBorderLineDraw *dashLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor greenColor]];
     dashLine.dash = 3;    //设置为非0表示虚线边界线。
@@ -191,7 +191,7 @@
 
 -(void)addPopmenuLayout:(MyLinearLayout *)contentLayout
 {
-    MyLinearLayout *layout = [self createActionLayout:@"请单击这里(弹出可伸缩的菜单视图)" action:@selector(handleShowPopMenu:)];
+    MyLinearLayout *layout = [self createActionLayout:NSLocalizedString(@"please touch here(will pop menu)", @"") action:@selector(handleShowPopMenu:)];
     layout.highlightedOpacity = 0.2;  //按下时的高亮透明度。为1全部透明。
     layout.myTopMargin = 10;
     [contentLayout addSubview:layout];
@@ -201,7 +201,7 @@
 -(void)addHideSubviewReLayoutLayout:(MyLinearLayout *)contentLayout
 {
     //下面两个布局用来测试布局视图的hideSubviewReLayout属性。
-    MyLinearLayout *switchLayout = [self createSwitchLayout:@"下面的子视图隐藏重新布局开关" action:@selector(handleReLayoutSwitch:)];
+    MyLinearLayout *switchLayout = [self createSwitchLayout:NSLocalizedString(@"relayout switch when subview hidden&show", @"") action:@selector(handleReLayoutSwitch:)];
     switchLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
     switchLayout.bottomBorderLine.headIndent = 10;
     switchLayout.bottomBorderLine.tailIndent = 10;
@@ -225,7 +225,7 @@
     [testLayout addSubview:leftButton];
     
     UIButton *centerButton = [UIButton new];
-    [centerButton setTitle:@"点击我隐藏" forState:UIControlStateNormal];
+    [centerButton setTitle:NSLocalizedString(@"touch hide me", @"") forState:UIControlStateNormal];
     [centerButton addTarget:self action:@selector(handleHideSelf:) forControlEvents:UIControlEventTouchUpInside];
     centerButton.backgroundColor = [UIColor redColor];
     [centerButton sizeToFit];
@@ -233,7 +233,7 @@
     self.hiddenTestButton = centerButton;
     
     UIButton *rightButton = [UIButton new];
-    [rightButton setTitle:@"点击我显示" forState:UIControlStateNormal];
+    [rightButton setTitle:NSLocalizedString(@"touch show me", @"") forState:UIControlStateNormal];
     [rightButton addTarget:self action:@selector(handleShowBrother:) forControlEvents:UIControlEventTouchUpInside];
     rightButton.backgroundColor = [UIColor blueColor];
     [rightButton sizeToFit];
@@ -292,7 +292,7 @@
 -(void)addShrinkLayout:(MyLinearLayout*)contentLayout
 {
     //下面两个布局用来测试布局视图的hideSubviewReLayout属性。
-    MyLinearLayout *switchLayout = [self createSwitchLayout:@"显示全部开关" action:@selector(handleShrinkSwitch:)];
+    MyLinearLayout *switchLayout = [self createSwitchLayout:NSLocalizedString(@"show all switch", @"") action:@selector(handleShrinkSwitch:)];
     switchLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
     switchLayout.bottomBorderLine.headIndent = 10;
     switchLayout.bottomBorderLine.tailIndent = 10;
@@ -401,13 +401,13 @@
     segmentedLayout.gravity = MyMarginGravity_Vert_Center;
     
     //向左浮动
-    UISegmentedControl *leftSegmented = [[UISegmentedControl alloc] initWithItems:@[@"  减  ",@"  加  "]];
+    UISegmentedControl *leftSegmented = [[UISegmentedControl alloc] initWithItems:@[@"  -  ",@"  +  "]];
     leftSegmented.momentary = YES;
     [leftSegmented addTarget:self action:leftAction forControlEvents:UIControlEventValueChanged];
     [segmentedLayout addSubview:leftSegmented];
     
     
-    UISegmentedControl *rightSegmented = [[UISegmentedControl alloc] initWithItems:@[@"  加  ",@"  减  "]];
+    UISegmentedControl *rightSegmented = [[UISegmentedControl alloc] initWithItems:@[@"  +  ",@"  -  "]];
     rightSegmented.momentary = YES;
     [rightSegmented addTarget:self action:rightAction forControlEvents:UIControlEventValueChanged];
     [segmentedLayout addSubview:rightSegmented];
@@ -424,14 +424,14 @@
 
 -(void)handleTap:(MyBaseLayout*)sender
 {
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"test" message:@"执行单击测试" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"test" message:@"you touched this section" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     
     [av show];
 }
 
 -(void)handleTouchDown:(MyBaseLayout*)sender
 {
-    UILabel *label = [sender viewWithTag:1000];
+    UILabel *label = (UILabel*)[sender viewWithTag:1000];
     label.textColor = [UIColor blueColor];
     
     NSLog(@"按下动作");
@@ -439,7 +439,7 @@
 
 -(void)handleTouchCancel:(MyBaseLayout*)sender
 {
-    UILabel *label = [sender viewWithTag:1000];
+    UILabel *label = (UILabel*)[sender viewWithTag:1000];
     label.textColor = [UIColor blackColor];
     NSLog(@"按下取消");
 }
@@ -608,13 +608,14 @@
         UIButton *button = [UIButton new];
         if (i == 5)  //最后一个特殊处理！！！用于添加按钮。
         {
-            [button setTitle:@"添加条目" forState:UIControlStateNormal];
+            [button setTitle:NSLocalizedString(@"add item", @"") forState:UIControlStateNormal];
             [button addTarget:self action:@selector(handleAddMe:) forControlEvents:UIControlEventTouchUpInside];
             button.backgroundColor = [UIColor redColor];
         }
         else
         {
-            [button setTitle:[NSString stringWithFormat:@"双击删除:%d",i] forState:UIControlStateNormal];
+            [button setTitle:[NSString stringWithFormat:NSLocalizedString(@"double tap remove:%d", @""),i] forState:UIControlStateNormal];
+            button.titleLabel.adjustsFontSizeToFitWidth = YES;
             [button addTarget:self action:@selector(handleDelMe:) forControlEvents:UIControlEventTouchDownRepeat];
             button.backgroundColor = [UIColor blueColor];
         }
@@ -629,7 +630,7 @@
     UIButton *closeButton = [UIButton new];
     closeButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
     closeButton.layer.borderWidth = 1;
-    [closeButton setTitle:@"关闭弹出菜单" forState:UIControlStateNormal];
+    [closeButton setTitle:NSLocalizedString(@"close pop menu", @"") forState:UIControlStateNormal];
     [closeButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     closeButton.backgroundColor = [UIColor whiteColor];
     [closeButton addTarget:self action:@selector(handleClosePopmenu:) forControlEvents:UIControlEventTouchUpInside];
@@ -638,7 +639,7 @@
     [containerLayout addSubview:closeButton];
     
     UILabel *tipLabel = [UILabel new];
-    tipLabel.text = @"您可以通过添加条目和删除条目看到菜单有自动缩放的功能。";
+    tipLabel.text = NSLocalizedString(@"you can add and remove item to shrink the pop menu.", @"");
     tipLabel.adjustsFontSizeToFitWidth = YES;
     [tipLabel sizeToFit];
     [containerLayout addSubview:tipLabel];
@@ -657,7 +658,8 @@
 -(void)handleAddMe:(UIButton*)sender
 {
     UIButton *button = [UIButton new];
-    [button setTitle:[NSString stringWithFormat:@"双击删除:%lu",sender.superview.subviews.count ] forState:UIControlStateNormal];
+    [button setTitle:[NSString stringWithFormat:NSLocalizedString(@"double tap remove:%d", @""), sender.superview.subviews.count ] forState:UIControlStateNormal];
+    button.titleLabel.adjustsFontSizeToFitWidth = YES;
     [button addTarget:self action:@selector(handleDelMe:) forControlEvents:UIControlEventTouchDownRepeat];
     button.backgroundColor = [UIColor blueColor];
     [button sizeToFit];

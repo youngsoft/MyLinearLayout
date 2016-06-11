@@ -26,33 +26,35 @@
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:scrollView];
     
-    NSArray *titles = @[@"布局名称:",
-                        @"线性布局:",
-                        @"表格布局:",
-                        @"框架布局:",
-                        @"相对布局:",
-                        @"流式布局:",
-                        @"浮动布局:",
+    NSArray *titles = @[NSLocalizedString(@"Layout view:", @""),
+                        NSLocalizedString(@"MyLinearLayout:",@""),
+                        NSLocalizedString(@"MyTableLayout:",@""),
+                        NSLocalizedString(@"MyFrameLayout:",@""),
+                        NSLocalizedString(@"MyRelativeLayout:",@""),
+                        NSLocalizedString(@"MyFlowLayout:",@""),
+                        NSLocalizedString(@"MyFloatLayout:",@""),
                         @"SIZECLASS:"
                         ];
     
-    NSArray *descs = @[@"MyLayout布局是一套功能强大的界面布局体系，一共支持6种布局和支持SIZECLASS。",
-                       @"是一种里面的子视图按添加的顺序并依照规定的方向依次排列的布局。根据其规定的方向可以分为垂直线性布局和水平线性布局。垂直线性布局里面的子视图按照添加的顺序从上到下依次排列，水平线性布局里面的子视图按照添加的顺序从左到右依次排列。",
-                       @"是一种具有多行多列展示的布局。表格布局分为垂直表格和水平表格，垂直表格的行是从上到下排列，而列则是从左到又排列。水平表格的行是从左到右排列，而列则是从上到下排列。水平表格的一个典型的应用就是用来实现瀑布流的功能。",
-                       @"是一种里面的子视图按照布局视图方位停靠的布局。框架布局里面垂直方向上分为上、中、下三个方位，而水平方向上则分为左、中、右三个方位。任何一个子视图都只能定位在垂直方向和水平方向上的一个方位上。",
-                       @"是一种里面的子视图通过设置视图与视图之间依赖约束而进行定位和尺寸确认的布局。相对布局实现的机制以及约束设置的方式跟AutoLayout中设置子视图之间的约束方式是一致的。",
-                       @"是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一行再重新按添加的顺序排列的布局。这里的约束限制主要有数量的约束和尺寸的约束两种，而排列的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。",
-                       @"是一种里面的子视图按照约定的方向浮动，当尺寸不足以被容纳时，会自动寻找最佳的位置进行停靠的布局。浮动布局的理念源于HTML/CSS中的浮动定位技术,因此浮动布局可以专门用来实现那些不规则布局或者图文环绕的布局。根据浮动的方向不同，浮动布局可以分为左右浮动布局和上下浮动布局。",
-                       @"MyLayout体系为了实现对不同设备的屏幕进行适配，提供了对SIZECLASS的支持能力，您可以将SIZECLASS和上述的6种布局搭配使用，以便实现各种设备下的完美适配。"
+    NSArray *descs = @[NSLocalizedString(@"MyLayout is a powerful view layout library, it support 6 kinds of layout views and SIZECLASS.", @""),
+                       NSLocalizedString(@"Linear layout is a single line layout view that the subviews are arranged in sequence according to the added order（from top to bottom or from left to right). So the subviews' origin&size constraints are established by the added order. Subviews arranged in top-to-bottom order is called vertical linear layout view, and the subviews arranged in left-to-right order is called horizontal linear layout.", @""),
+                       NSLocalizedString(@"Table layout is a layout view that the subviews are multi-row&col arranged like a table. First you must create a rowview and add it to the table layout, then add the subview to the rowview. If the rowviews arranged in top-to-bottom order,the tableview is caled vertical table layout,in which the subviews are arranged from left to right; If the rowviews arranged in in left-to-right order,the tableview is caled horizontal table layout,in which the subviews are arranged from top to bottom.",@""),
+                       
+                       NSLocalizedString(@"Frame layout is a layout view that the subviews can be overlapped and gravity in a special location of the superview.The subviews' layout position&size is not depended to the adding order and establish dependency constraint with the superview. Frame layout devided the vertical orientation to top,vertical center and bottom, while horizontal orientation is devided to left,horizontal center and right. Any of the subviews is just gravity in either vertical orientation or horizontal orientation.", @""),
+                       
+                       NSLocalizedString(@"Relative layout is a layout view that the subviews layout and position through mutual constraints.The subviews in the relative layout are not depended to the adding order but layout and position by setting the subviews' constraints.", @""),
+                       NSLocalizedString(@"Flow layout is a layout view presents in multi-line that the subviews are arranged in sequence according to the added order, and when meeting with a arranging constraint it will start a new line and rearrange. The constrains mentioned here includes count constraints and size constraints. The orientation of the new line would be vertical and horizontal, so the flow layout is divided into: count constraints vertical flow layout, size constraints vertical flow layout, count constraints horizontal flow layout,  size constraints horizontal flow layout. Flow layout often used in the scenes that the subviews is  arranged regularly, it can be substitutive of UICollectionView to some extent.", @""),
+                       NSLocalizedString(@"Float layout is a layout view that the subviews are floating gravity in the given orientations, when the size is not enough to be hold, it will automatically find the best location to gravity. float layout's conception is reference from the HTML/CSS's floating positioning technology, so the float layout can be designed in implementing irregular layout. According to the different orientation of the floating, float layout can be divided into left-right float layout and up-down float layout.", @""),
+                       NSLocalizedString(@"MyLayout provided support to SIZECLASS in order to fit the different screen sizes of devices. You can combinate the SIZECLASS with any of the 6 kinds of layout views mentioned above to perfect fit the UI of all equipments.", @"")
                        ];
     
 
     NSArray *colors = @[[UIColor redColor],
-                        [UIColor greenColor],
+                        [UIColor darkGrayColor],
                         [UIColor blueColor],
                         [UIColor orangeColor],
                         [UIColor blackColor],
-                        [UIColor yellowColor],
+                        [UIColor purpleColor],
                         [UIColor magentaColor],
                         [UIColor brownColor]
                         ];
@@ -67,7 +69,7 @@
     
     
     UILabel *label = [UILabel new];
-    label.text = @"MyLayout布局介绍：";
+    label.text = @"MyLayout Introduction：";
     label.myBottomMargin = 10;
     [label sizeToFit];
     [rootLayout addSubview:label];

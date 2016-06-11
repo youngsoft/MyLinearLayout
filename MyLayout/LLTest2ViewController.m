@@ -118,7 +118,7 @@
 {
     //numTitleLabel的sizeToFit确定了视图的尺寸；myLeftMargin确定了视图在x轴的位置；垂直线性布局下的子视图可以自动算出在y轴的位置。
     UILabel *numTitleLabel = [UILabel new];
-    numTitleLabel.text = @"编号:";
+    numTitleLabel.text = NSLocalizedString(@"No.:", @"");
     [numTitleLabel sizeToFit];
     numTitleLabel.myLeftMargin = 5;
     [contentLayout addSubview:numTitleLabel];
@@ -126,7 +126,7 @@
     //numField的myHeight确定了视图的高度；myLeftMargin,myRightMargin确定了视图的宽度和x轴的位置；myTopMargin确定了y轴上离兄弟视图偏移5.
     UITextField *numField = [UITextField new];
     numField.borderStyle = UITextBorderStyleRoundedRect;
-    numField.placeholder = @"这里输入编号";
+    numField.placeholder = NSLocalizedString(@"Input the No. here", @"");
     numField.myTopMargin = 5;
     numField.myLeftMargin = numField.myRightMargin = 0;
     numField.myHeight = 40;
@@ -162,13 +162,13 @@
     
     //userNameLabel的sizeToFit确定视图的尺寸;x轴位置和父布局左对齐;y轴位置由添加到父布局中的顺序决定。
     UILabel *userNameLabel = [UILabel new];
-    userNameLabel.text = @"姓名：欧阳大哥";
+    userNameLabel.text = NSLocalizedString(@"Name:欧阳大哥", @"");
     [userNameLabel sizeToFit];
     [nameLayout addSubview:userNameLabel];
 
     //nickNameLabel的sizeToFit确定视图的尺寸;x轴位置和父布局左对齐;y轴位置由添加到父布局中的顺序决定。
     UILabel *nickNameLabel = [UILabel new];
-    nickNameLabel.text  = @"昵称：醉里挑灯看键";
+    nickNameLabel.text  = NSLocalizedString(@"Nickname:醉里挑灯看键", @"");
     nickNameLabel.textColor = [UIColor darkGrayColor];
     [nickNameLabel sizeToFit];
     [nameLayout addSubview:nickNameLabel];
@@ -190,7 +190,7 @@
     
     
     UILabel *ageTitleLabel = [UILabel new];
-    ageTitleLabel.text = @"年龄:";
+    ageTitleLabel.text = NSLocalizedString(@"Age:", @"");
     [ageTitleLabel sizeToFit];
     [ageLayout addSubview:ageTitleLabel];
     
@@ -228,14 +228,14 @@
     
     
     UILabel *addressTitleLabel = [UILabel new];
-    addressTitleLabel.text = @"地址：";
+    addressTitleLabel.text = NSLocalizedString(@"Address:", @"");
     [addressTitleLabel sizeToFit];
     [addressLayout addSubview:addressTitleLabel];
     
     
     //addressLabel的y轴位置和父布局视图上边对齐;x轴的位置则根据添加到父布局的顺序确定；视图的宽度由weight=1表示占用父视图的剩余宽度决定；视图的高度由flexedHeight设置为YES表示高度由内容动态决定。
     UILabel *addressLabel = [UILabel new];
-    addressLabel.text = @"中华人民共和国北京市朝阳区CBD西大望路温特莱中心";
+    addressLabel.text = NSLocalizedString(@"Winterless Building, West Dawang Road, Chaoyang district CBD, Beijing, People's Republic of China", @"");
     addressLabel.myLeftMargin = 10;
     addressLabel.weight = 1.0;
     addressLabel.numberOfLines = 0;
@@ -259,7 +259,7 @@
     
     //sexLabel, sexSwitch两个子视图在水平线性布局里面一个左一个右的原理是使用了相对间距的原因。假设某个水平线性布局的宽度是100，里面有两个子视图A，B。其中A的宽度是20，B的宽度是30。同时假设A的myRightMargin = 0.5。B的myLeftMarigin=0.5。则这时候A的右边距 = (100 - 20 - 30) * 0.5 / (0.5 + 0.5) = 25， B的左边距也是25。通过相对间距可以实现动态的视图之间的间距。
     UILabel *sexTitleLabel = [UILabel new];
-    sexTitleLabel.text = @"性别:";
+    sexTitleLabel.text = NSLocalizedString(@"Sex:", @"");
     [sexTitleLabel sizeToFit];
     sexTitleLabel.myCenterYOffset = 0;
     sexTitleLabel.myRightMargin = 0.5;  //线性布局中的子视图的边距如果设置为大于0小于1的值表示的是相对间距，0.5的右边距表示右边是父布局剩余空间的50%。
@@ -276,7 +276,7 @@
 -(void)createSection6:(MyLinearLayout*)contentLayout
 {
     UILabel *shrinkLabel = [UILabel new];
-    shrinkLabel.text = @"这是一段可以缩放的字符串，点击下面的按钮就可以实现文本高度的缩放，同时可以支持根据文字内容动态调整高度，这需要把flexedHeight设置为YES.为了看到滚动以及自动换行的效果你可以尝试着转动屏幕看看结果！！！";
+    shrinkLabel.text = NSLocalizedString(@"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the flexedHeight to YES and set the numberOfLines to 0.You can try to switch different simulator or different orientation screen to see the effect.", @"");
     shrinkLabel.backgroundColor = [UIColor redColor];
     shrinkLabel.clipsToBounds = YES;  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
     shrinkLabel.myTopMargin = 20;
@@ -288,7 +288,7 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button addTarget:self action:@selector(handleLabelShrink:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"点击按钮显示隐藏文本" forState:UIControlStateNormal];
+    [button setTitle:NSLocalizedString(@"Show&Hide the Text", @"") forState:UIControlStateNormal];
     button.myCenterXOffset = 0;
     button.myHeight = 60;
     [button sizeToFit];
@@ -300,7 +300,7 @@
 -(void)createSection7:(MyLinearLayout*)contentLayout
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setTitle:@"点击查看更多》" forState:UIControlStateNormal];
+    [button setTitle:NSLocalizedString(@"Show more》", @"") forState:UIControlStateNormal];
     [button addTarget:self action:@selector(handleHideAndShowMore:) forControlEvents:UIControlEventTouchUpInside];
     button.myTopMargin = 50;
     button.myRightMargin = 0;
@@ -346,13 +346,13 @@
     if (self.hiddenView.isHidden)
     {
         self.hiddenView.hidden = NO;
-        [sender setTitle:@"点击收起《" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"Close up《", @"") forState:UIControlStateNormal];
         [sender sizeToFit];
     }
     else
     {
         self.hiddenView.hidden = YES;
-        [sender setTitle:@"点击查看更多》" forState:UIControlStateNormal];
+        [sender setTitle:NSLocalizedString(@"Show more》", @"") forState:UIControlStateNormal];
         [sender sizeToFit];
     }
 }

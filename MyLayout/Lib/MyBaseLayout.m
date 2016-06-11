@@ -641,6 +641,8 @@ IB_DESIGNABLE
     BOOL _canCallAction;
     CGPoint _beginPoint;
     MyBorderLineLayerDelegate *_layerDelegate;
+    
+    BOOL _isAddSuperviewKVO;
 
 }
 
@@ -1219,7 +1221,6 @@ BOOL _hasBegin;
     [subview removeObserver:self forKeyPath:@"frame"];
 }
 
-
 - (void)willMoveToSuperview:(UIView*)newSuperview
 {
     [super willMoveToSuperview:newSuperview];
@@ -1228,12 +1229,14 @@ BOOL _hasBegin;
     
     if (self.wrapContentHeight && self.heightDime.dimeVal != nil)
     {
-        NSLog(@"警告！%@设置的wrapContentHeight和设置的heightDime可能有约束冲突。",self);
+        //约束警告：wrapContentHeight和设置的heightDime可能有约束冲突
+        NSLog(@"Constraint warning！%@'s wrapContentHeight and heightDime setting may be constraint.",self);
     }
     
     if (self.wrapContentWidth && self.widthDime.dimeVal != nil)
     {
-        NSLog(@"警告！%@设置的wrapContentWidth和设置的widthDime可能有约束冲突。",self);
+        //约束警告：wrapContentWidth和设置的widthDime可能有约束冲突
+        NSLog(@"Constraint warning！%@'s wrapContentWidth and widthDime setting may be constraint.",self);
     }
     
 #endif
@@ -1248,43 +1251,51 @@ BOOL _hasBegin;
         
         if (self.leftPos.posRelaVal != nil)
         {
-            NSCAssert(self.leftPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@左边距依赖的视图:%@不是父视图",self, self.leftPos.posRelaVal.view);
+            //约束冲突：左边距依赖的视图不是父视图
+            NSCAssert(self.leftPos.posRelaVal.view == newSuperview, @"Constraint exception!! %@left margin dependent on:%@is not superview",self, self.leftPos.posRelaVal.view);
         }
         
         if (self.rightPos.posRelaVal != nil)
         {
-            NSCAssert(self.rightPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@右边距依赖的视图:%@不是父视图",self,self.rightPos.posRelaVal.view);
+            //约束冲突：右边距依赖的视图不是父视图
+            NSCAssert(self.rightPos.posRelaVal.view == newSuperview, @"Constraint exception!! %@right margin dependent on:%@is not superview",self,self.rightPos.posRelaVal.view);
         }
         
         if (self.centerXPos.posRelaVal != nil)
         {
-            NSCAssert(self.centerXPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@水平中心依赖的视图:%@不是父视图",self, self.centerXPos.posRelaVal.view);
+            //约束冲突：水平中心点依赖的视图不是父视图
+            NSCAssert(self.centerXPos.posRelaVal.view == newSuperview, @"Constraint exception!! %@horizontal center margin dependent on:%@is not superview",self, self.centerXPos.posRelaVal.view);
         }
         
         if (self.topPos.posRelaVal != nil)
         {
-            NSCAssert(self.topPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@上边距依赖的视图:%@不是父视图",self, self.topPos.posRelaVal.view);
+            //约束冲突：上边距依赖的视图不是父视图
+            NSCAssert(self.topPos.posRelaVal.view == newSuperview, @"Constraint exception!! %@top margin dependent on:%@is not superview",self, self.topPos.posRelaVal.view);
         }
         
         if (self.bottomPos.posRelaVal != nil)
         {
-            NSCAssert(self.bottomPos.posRelaVal.view == newSuperview, @"布局约束冲突!! %@下边距依赖的视图:%@不是父视图",self, self.bottomPos.posRelaVal.view);
+            //约束冲突：下边距依赖的视图不是父视图
+            NSCAssert(self.bottomPos.posRelaVal.view == newSuperview, @"Constraint exception!! %@bottom margin dependent on:%@is not superview",self, self.bottomPos.posRelaVal.view);
             
         }
         
         if (self.centerYPos.posRelaVal != nil)
         {
-            NSCAssert(self.centerYPos.posRelaVal.view == newSuperview, @"oops! 垂直中心依赖的视图:%@不是父视图",self.centerYPos.posRelaVal.view);
+            //约束冲突：垂直中心点依赖的视图不是父视图
+            NSCAssert(self.centerYPos.posRelaVal.view == newSuperview, @"Constraint exception!! vertical center margin dependent on:%@is not superview",self.centerYPos.posRelaVal.view);
         }
         
         if (self.widthDime.dimeRelaVal != nil)
         {
-            NSCAssert(self.widthDime.dimeRelaVal.view == newSuperview, @"oops! 宽度依赖的视图:%@不是父视图",self.widthDime.dimeRelaVal.view);
+            //约束冲突：宽度依赖的视图不是父视图
+            NSCAssert(self.widthDime.dimeRelaVal.view == newSuperview, @"Constraint exception!! %@width dependent on:%@is not superview",self, self.widthDime.dimeRelaVal.view);
         }
         
         if (self.heightDime.dimeRelaVal != nil)
         {
-            NSCAssert(self.heightDime.dimeRelaVal.view == newSuperview, @"oops! 高度依赖的视图:%@不是父视图",self.heightDime.dimeRelaVal.view);
+            //约束冲突：高度依赖的视图不是父视图
+            NSCAssert(self.heightDime.dimeRelaVal.view == newSuperview, @"Constraint exception!! %@height dependent on:%@is not superview",self,self.heightDime.dimeRelaVal.view);
         }
         
 #endif
@@ -1296,7 +1307,7 @@ BOOL _hasBegin;
             //如果您在这里出现了崩溃时，不要惊慌，是因为您开启了异常断点调试的原因。这个在release下是不会出现的，要想清除异常断点调试功能，请按下CMD+7键
             //然后在左边将异常断点清除即可
             
-            if (self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
+            if (_isAddSuperviewKVO && self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
             {
                 @try {
                     [self.superview removeObserver:self forKeyPath:@"frame"];
@@ -1325,16 +1336,18 @@ BOOL _hasBegin;
             
             [newSuperview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
             [newSuperview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
+            _isAddSuperviewKVO = YES;
         }
         
     }
     
-    if (newSuperview == nil && self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
+    if (_isAddSuperviewKVO && newSuperview == nil && self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
     {
         
         //如果您在这里出现了崩溃时，不要惊慌，是因为您开启了异常断点调试的原因。这个在release下是不会出现的，要想清除异常断点调试功能，请按下CMD+7键
         //然后在左边将异常断点清除即可
         
+        _isAddSuperviewKVO = NO;
         @try {
             [self.superview removeObserver:self forKeyPath:@"frame"];
             
@@ -1785,7 +1798,8 @@ BOOL _hasBegin;
         {
             if (boundDime.dimeRelaVal.dime == dimeType)
             {
-                NSCAssert(0, @"%@无效的边界设置方法",sbv);
+                //约束冲突：无效的边界设置方法
+                NSCAssert(0, @"Constraint exception!! %@ has invalid lBound or uBound setting",sbv);
             }
             else
             {
@@ -1812,7 +1826,8 @@ BOOL _hasBegin;
     }
     else
     {
-        NSCAssert(0, @"%@无效的边界设置方法",sbv);
+        //约束冲突：无效的边界设置方法
+        NSCAssert(0, @"Constraint exception!! %@ has invalid lBound or uBound setting",sbv);
     }
     
     if (value == CGFLOAT_MAX || value == -CGFLOAT_MAX)
@@ -1882,8 +1897,8 @@ BOOL _hasBegin;
     }
     else
     {
-        NSCAssert(0, @"%@无效的边界设置方法", sbv);
-
+        //约束冲突：无效的边界设置方法
+        NSCAssert(0, @"Constraint exception!! %@ has invalid lBound or uBound setting",sbv);
     }
     
     return value + boundPos.offsetVal;

@@ -72,7 +72,7 @@
         for (NSDictionary *dict in dataSource)
         {
             FOLTest3DataModel *model = [FOLTest3DataModel new];
-            [dict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            [dict enumerateKeysAndObjectsUsingBlock:^(id key, id  obj, BOOL * stop) {
                 [model setValue:obj forKey:key];
             }];
             
@@ -97,7 +97,7 @@
     _floatLayout.IntelligentBorderLine = [[MyBorderLineDraw alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
 
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"布局变换" style:UIBarButtonItemStylePlain target:self action:@selector(handleStyleChange:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"change style", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleStyleChange:)];
     
     [self handleStyleChange:nil];
 

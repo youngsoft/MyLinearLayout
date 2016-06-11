@@ -48,11 +48,10 @@
                                ];
         
         NSArray *textMessages = @[@"",
-                                  @"只有一行文本",
-                                  @"这个例子是用于测试自动布局在UITableView中实现动态高度的解决方案，我们只需要使用布局视图的estimateLayoutRect就可以对布局的尺寸进行评估,您也可以在有图片的Cell中触摸查看自动伸缩的情况",
-                                  @"通过布局视图的estimateLayoutRect函数能够评估出UITableViewCell的动态高度。estimateLayoutRect并不会进行布局而只是评估布局的尺寸，这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们传递了宽度为0的话则会按320的宽度来评估UITableViewCell的动态高度，这样当在375和414的宽度时评估出来的高度将不会正确，因此这里需要指定出真实的宽度尺寸；而高度设置为0的意思是表示高度不是固定值需要评估出来。UITableViewCell的动态高度评估不局限于线性布局，相对布局也是同样适用的。",
-                                  @"这是一段既有文本也有图片，文本在上面，图片在下面。文本会自动的进行换行，而图片则在文本下面居中显示",
-                                  @"这个布局的DEMO可以分别用线性布局、相对布局、浮动布局来实现。其中的线性布局需要进行布局的嵌套，而相对布局则需要通过设置视图之间的依赖来实现，而浮动布局则会自动根据内容进行对应的浮动来进行自适应的布局，因此浮动布局这里的实现比较强大。"
+                                  NSLocalizedString(@"a single line text", @""),
+                                  NSLocalizedString(@"This Demo is used to introduce the solution when use layout view to realize the UITableViewCell's dynamic height. We only need to use the layout view's estimateLayoutRect method to evaluate the size of the layout view. and you can touch the Cell to shrink the height when the Cell has a picture.", @""),
+                                  NSLocalizedString(@"Through layout view's estimateLayoutRect method can assess a UITableViewCell dynamic height.EstimateLayoutRect just to evaluate layout size but not set the size of the layout. here don't preach the width of 0 is the cause of the above UITableViewCell set the default width is 320 (regardless of any screen), so if we pass the width of 0 will be according to the width of 320 to evaluate UITableViewCell dynamic height, so when in 375 and 375 the width of the assessment of height will not be right, so here you need to specify the real width dimension;And the height is set to 0 mean height is not a fixed value need to evaluate. you can use all type layout view to realize UITableViewCell.", @""),
+                                  NSLocalizedString(@"This section not only has text but also hav picture. and picture below at text, text will wrap", @"")
                                   ];
         
         NSArray *imageMessages = @[@"",
@@ -127,7 +126,7 @@
     [tableHeaderViewLayout setTarget:self action:@selector(handleTableHeaderViewLayoutClick:)];
     
     UILabel *label1 = [UILabel new];
-    label1.text = @"设置tableHeaderView(点我试试)";
+    label1.text = NSLocalizedString(@"add tableHeaderView(please touch me)", @"");
     label1.tag = 1000;
     label1.textColor = [UIColor whiteColor];
     label1.font = [UIFont systemFontOfSize:17];
@@ -137,7 +136,7 @@
     
     
     UILabel *label2 = [UILabel new];
-    label2.text = @"  设置具有动态高度的tableHeaderView的时候需要用frame指定明确的宽度，高度则可以设置wrapContentHeight为YES，并且在赋值给tableView之前要调用layoutIfNeeded方法来明确高度。";
+    label2.text = NSLocalizedString(@" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", @"");
     label2.textColor = [UIColor redColor];
     label2.myLeftMargin = label2.myRightMargin = 5;
     label2.numberOfLines = 0;
@@ -164,13 +163,13 @@
     tableFooterViewLayout.gravity = MyMarginGravity_Vert_Center | MyMarginGravity_Horz_Fill;
     
     UILabel *label3 = [UILabel new];
-    label3.text = @"设置tableFooterView";
+    label3.text = NSLocalizedString(@"add tableFooterView", @"");
     label3.textAlignment = NSTextAlignmentCenter;
     [label3 sizeToFit];
     [tableFooterViewLayout addSubview:label3];
     
     UILabel *label4 = [UILabel new];
-    label4.text = @"如果通过frame设置了明确的尺寸则不需要调用layoutIfNeeded";
+    label4.text = NSLocalizedString(@"the layoutIfNeeded is not need to call when you use frame to set layout view's size", @"");
     label4.textAlignment = NSTextAlignmentCenter;
     label4.myTopMargin = 10;
     label4.adjustsFontSizeToFitWidth = YES;
@@ -227,7 +226,7 @@
     
     [headerFooterView setItemChangedAction:^(NSInteger index){
     
-        NSString *message = [NSString stringWithFormat:@"section:%ld, index:%ld", (long)section, (long)index];
+        NSString *message = [NSString stringWithFormat:@"You have select index:%ld",(long)index];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         
         [alertView show];

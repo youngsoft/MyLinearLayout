@@ -60,10 +60,11 @@
 
     
     UILabel *v1 = [UILabel new];
-    v1.text = @"宽度和父视图相等 高度为父视图剩余空间的20%";
+    v1.text = NSLocalizedString(@"width equal to superview, height equal to 20% of free height of superview", @"");
     v1.adjustsFontSizeToFitWidth = YES;
     v1.textAlignment = NSTextAlignmentCenter;
     v1.backgroundColor = [UIColor redColor];
+    v1.numberOfLines = 3;
     v1.myTopMargin = 10;
     v1.myLeftMargin = v1.myRightMargin = 0; //宽度和父视图相等,等价于v1.widthDime.equalTo(rootLayout.widthDime);
     v1.weight = 0.2;     //高度的比重是剩余空间的20%
@@ -71,10 +72,11 @@
     
     
     UILabel *v2 = [UILabel new];
-    v2.text = @"宽度是父视图的80% 高度为父视图剩余空间的30%";
+    v2.text = NSLocalizedString(@"width equal to 80% of superview, height equal to 30% of free height of superview", @"");
     v2.adjustsFontSizeToFitWidth = YES;
     v2.textAlignment = NSTextAlignmentCenter;
     v2.backgroundColor = [UIColor greenColor];
+    v2.numberOfLines = 2;
     v2.myTopMargin = 10;
     v2.widthDime.equalTo(rootLayout.widthDime).multiply(0.8);  //子视图的宽度是父视图宽度的0.8
     v2.myCenterXOffset = 0;
@@ -83,10 +85,11 @@
     
     
     UILabel *v3 = [UILabel new];
-    v3.text = @"宽度是父视图的宽度-20 高度为父视图剩余空间的50%";
+    v3.text =NSLocalizedString(@"width equal to superview - 20, height equal to 50% of free height of superview", @"");
     v3.adjustsFontSizeToFitWidth = YES;
     v3.textAlignment = NSTextAlignmentCenter;
     v3.backgroundColor = [UIColor blueColor];
+    v3.numberOfLines = 0;
     v3.myTopMargin = 10;
     v3.widthDime.equalTo(rootLayout.widthDime).add(-20);  //父视图的宽度-20 或者v3.myLeftMargin = 20; v3.myRightMargin = 0;
     v3.myRightMargin = 0;
@@ -95,9 +98,10 @@
     
     
     UILabel *v4 = [UILabel new];
-    v4.text = @"宽度固定是200 高度固定是50";
+    v4.text = NSLocalizedString(@"width equal to 200, height equal to 50", @"");
     v4.textAlignment = NSTextAlignmentCenter;
     v4.adjustsFontSizeToFitWidth = YES;
+    v4.numberOfLines = 2;
     v4.backgroundColor = [UIColor yellowColor];
     v4.myTopMargin = 10;
     v4.myWidth = 200;
@@ -106,7 +110,7 @@
     
     
     UILabel *v5 = [UILabel new];
-    v5.text = @"左边20%，右边30%，宽度50%，高度是剩余的10%，顶部间距是剩余的5%，底部间距是剩余的10%";
+    v5.text = NSLocalizedString(@"left margin equal to 20% of superview, right margin equal to 30% of superview, width equal to 50% of superview, top spacing equal to 5% of free height of superview, bottom spacing equal to 10% of free height of superview", @"");
     v5.numberOfLines = 0;
     v5.textAlignment = NSTextAlignmentCenter;
     v5.adjustsFontSizeToFitWidth = YES;

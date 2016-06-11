@@ -19,6 +19,7 @@
 {
     [super loadView];
     
+    //注意这个DEMO进来慢的原因是其中使用了UITextView,和MyLayout无关。UITextView会在第一次使用时非常的慢，后续就快了。。
     
     
     /*
@@ -49,7 +50,7 @@
     [scrollView addSubview:rootLayout];
     
     UILabel *userInfoLabel = [UILabel new];
-    userInfoLabel.text = @"用户信息(请在iPhone4下看滚动效果)";
+    userInfoLabel.text = NSLocalizedString(@"user info(run in iPhone4 will have scroll effect)",@"");
     [userInfoLabel sizeToFit];
     userInfoLabel.myTopMargin = 10;
     userInfoLabel.myCenterXOffset = 0;
@@ -69,7 +70,7 @@
     
     UITextField *nameField = [UITextField new];
     nameField.borderStyle = UITextBorderStyleLine;
-    nameField.placeholder = @"请输入用户名称";
+    nameField.placeholder = NSLocalizedString(@"input user name here", @"");
     nameField.textAlignment = NSTextAlignmentCenter;
     nameField.backgroundColor = [UIColor whiteColor];
     nameField.myHeight = 40;
@@ -86,7 +87,7 @@
      如果在iPhone6上左边距按0.05算的话是18.75,没有超过最小最大限制，所以iPhone6上的左边距就是18.75
      */
     UILabel *userDescLabel = [UILabel new];
-    userDescLabel.text = @"描述信息";
+    userDescLabel.text = NSLocalizedString(@"desc info", @"");
     [userDescLabel sizeToFit];
     userDescLabel.myTopMargin = 10;
     userDescLabel.leftPos.equalTo(@0.05).min(17).max(19);
@@ -95,7 +96,7 @@
     
     UITextView *textView = [UITextView new];
     textView.backgroundColor = [UIColor whiteColor];
-    textView.text = @"请尝试在这里连续输入文字以及连续回车换行的效果";
+    textView.text = NSLocalizedString(@"please try input text and carriage return continuous to see effect", @"");
     textView.delegate = self;
 
     //左右间距为布局的10%，距离底部间距为65%,浮动高度，但高度最高为300，最低为30
@@ -109,7 +110,7 @@
     
     
     UILabel *copyRightLabel = [UILabel new];
-    copyRightLabel.text = @"版权所有 XXX 公司";
+    copyRightLabel.text = NSLocalizedString(@"copy rights reserved by Youngsoft", @"");
     copyRightLabel.myBottomMargin = 20;   //总是固定在底部20的边距,因为上面的textView用了底部相对间距。
     copyRightLabel.myCenterXOffset = 0;
     [copyRightLabel sizeToFit];

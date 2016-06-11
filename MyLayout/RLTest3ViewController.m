@@ -66,7 +66,7 @@
     MyRelativeLayout *layout = [MyRelativeLayout new];
     
     UILabel *titleLabel = [UILabel new];
-    titleLabel.text = @"子视图整体水平居中";
+    titleLabel.text = NSLocalizedString(@"subviews horz centered in superview", @"");
     [titleLabel sizeToFit];
     [layout addSubview:titleLabel];
     
@@ -100,7 +100,7 @@
     MyRelativeLayout *layout = [MyRelativeLayout new];
     
     UILabel *titleLabel = [UILabel new];
-    titleLabel.text = @"子视图整体垂直居中";
+    titleLabel.text = NSLocalizedString(@"subviews vert centered in superview", @"");
     [titleLabel sizeToFit];
     [layout addSubview:titleLabel];
     
@@ -132,46 +132,46 @@
     MyRelativeLayout *layout = [MyRelativeLayout new];
     
     UILabel *titleLabel = [UILabel new];
-    titleLabel.text = @"子视图整体居中";
+    titleLabel.text = NSLocalizedString(@"subviews centered in superview", @"");
     [titleLabel sizeToFit];
     [layout addSubview:titleLabel];
     
     UILabel *lb1up = [UILabel new];
-    lb1up.text = @"左上面";
+    lb1up.text = @"TopLeft";
     lb1up.backgroundColor = [UIColor redColor];
     lb1up.font = [UIFont systemFontOfSize:17];
     [lb1up sizeToFit];
     [layout addSubview:lb1up];
     
     UILabel *lb1down = [UILabel new];
-    lb1down.text = @"我左在下面";
+    lb1down.text = @"BottomLeft";
     lb1down.backgroundColor = [UIColor greenColor];
     [lb1down sizeToFit];
     [layout addSubview:lb1down];
     
     
     UILabel *lb2up = [UILabel new];
-    lb2up.text = @"我在中间上面";
+    lb2up.text = @"TopCenter";
     lb2up.backgroundColor = [UIColor redColor];
     lb2up.font = [UIFont systemFontOfSize:12];
     [lb2up sizeToFit];
     [layout addSubview:lb2up];
     
     UILabel *lb2down = [UILabel new];
-    lb2down.text = @"中";
+    lb2down.text = @"Center";
     lb2down.backgroundColor = [UIColor greenColor];
     [lb2down sizeToFit];
     [layout addSubview:lb2down];
     
     
     UILabel *lb3up = [UILabel new];
-    lb3up.text = @"右上";
+    lb3up.text = @"TopRight";
     lb3up.backgroundColor = [UIColor redColor];
     [lb3up sizeToFit];
     [layout addSubview:lb3up];
     
     UILabel *lb3down = [UILabel new];
-    lb3down.text = @"右边的下方";
+    lb3down.text = @"BottomRight";
     lb3down.backgroundColor = [UIColor greenColor];
     lb3down.font = [UIFont systemFontOfSize:16];
     [lb3down sizeToFit];

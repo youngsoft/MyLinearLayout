@@ -31,7 +31,6 @@
     
     //添加操作按钮。
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:2];
-    actionLayout.backgroundColor = [UIColor redColor];
     actionLayout.wrapContentHeight = YES;
     actionLayout.averageArrange = YES;
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -39,12 +38,18 @@
     actionLayout.subviewVertMargin = 5;
     [rootLayout addSubview:actionLayout];
     
-    [actionLayout addSubview:[self createActionButton:@"调整方向" action:@selector(handleAdjustOrientation:)]];
-    [actionLayout addSubview:[self createActionButton:@"调整数量" action:@selector(handleAdjustArrangedCount:)]];
-    [actionLayout addSubview:[self createActionButton:@"平均尺寸" action:@selector(handleAdjustAverageMeasure:)]];
-    [actionLayout addSubview:[self createActionButton:@"调整停靠" action:@selector(handleAdjustGravity:)]];
-    [actionLayout addSubview:[self createActionButton:@"调整排列对齐" action:@selector(handleAdjustArrangeGravity:)]];
-    [actionLayout addSubview:[self createActionButton:@"间隔设置" action:@selector(handleAdjustMargin:)]];
+    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust orientation", @"")
+                                               action:@selector(handleAdjustOrientation:)]];
+    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust arrangedCount", @"")
+                                               action:@selector(handleAdjustArrangedCount:)]];
+    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"average size", @"")
+                                               action:@selector(handleAdjustAverageMeasure:)]];
+    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust gravity", @"")
+                                               action:@selector(handleAdjustGravity:)]];
+    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust align", @"")
+                                               action:@selector(handleAdjustArrangeGravity:)]];
+    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust spacing", @"")
+                                               action:@selector(handleAdjustMargin:)]];
 
 
     UIScrollView *scrollView = [UIScrollView new];
@@ -93,9 +98,8 @@
 //创建动作操作按钮。
 -(UIButton*)createActionButton:(NSString*)title action:(SEL)action
 {
-    UIButton *button = [UIButton new];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     button.myHeight = 44;
     button.layer.borderColor = [UIColor lightGrayColor].CGColor;
