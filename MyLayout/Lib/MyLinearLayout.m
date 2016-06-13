@@ -255,6 +255,9 @@ IB_DESIGNABLE
         if (sbv.widthDime.isMatchParent)
             rect.size.width = (selfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         
+        if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
+            rect.size.width = selfRect.size.width - self.leftPadding - self.rightPadding - sbv.leftPos.margin - sbv.rightPos.margin;
+        
         MyMarginGravity mg = MyMarginGravity_Horz_Left;
         if ((self.gravity & MyMarginGravity_Vert_Mask)!= MyMarginGravity_None)
             mg =self.gravity & MyMarginGravity_Vert_Mask;
@@ -582,6 +585,9 @@ IB_DESIGNABLE
             rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(selfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal sbvSize:rect.size selfLayoutSize:selfRect.size];
         }
         
+        if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
+            rect.size.height = selfRect.size.height - self.topPadding - self.bottomPadding - sbv.topPos.margin - sbv.bottomPos.margin;
+
         //优先以容器中的指定为标准
         MyMarginGravity mg = MyMarginGravity_Vert_Top;
         if ((self.gravity & MyMarginGravity_Horz_Mask)!= MyMarginGravity_None)
@@ -647,7 +653,9 @@ IB_DESIGNABLE
         {
             rect.size.width = (selfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         }
-
+        
+        if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
+            rect.size.width = selfRect.size.width - self.leftPadding - self.rightPadding - sbv.leftPos.margin - sbv.rightPos.margin;
         
         //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
         MyMarginGravity mg = MyMarginGravity_Horz_Left;
@@ -849,6 +857,9 @@ IB_DESIGNABLE
         {
             rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(selfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal sbvSize:rect.size selfLayoutSize:selfRect.size];
         }
+        
+        if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
+            rect.size.height = selfRect.size.height - self.topPadding - self.bottomPadding - sbv.topPos.margin - sbv.bottomPos.margin;
         
         MyMarginGravity mg = MyMarginGravity_Vert_Top;
         if ((self.gravity & MyMarginGravity_Horz_Mask)!= MyMarginGravity_None)
