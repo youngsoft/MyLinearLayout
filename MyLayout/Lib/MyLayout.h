@@ -34,6 +34,17 @@
  SOFTWARE.
  */
 
+
+/*
+   version1.2.0
+    1. 修复了垂直线性布局中同时设置myLeftMargin,myRightMargin并且设置了gravity=MyMarginGravity_Horz_Center时前者设置失效的问题。水平线性布局亦然。
+ */
+
+/*
+   version1.1.9
+    1.增加了对国际化的支持。
+ */
+
 /*
    version1.1.8
  

@@ -1,4 +1,4 @@
-#MyLayout1.1.9
+#MyLayout1.2.0
 
 
 ## Introduction
@@ -76,7 +76,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.1.9'
+pod 'MyLayout', '~> 1.2.0'
 ```
    
 Then, run the following command:
@@ -167,7 +167,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.1.9'
+pod 'MyLayout', '~> 1.2.0'
 ```
    
 然后运行如下命令:
@@ -179,6 +179,12 @@ $ pod install
 
 
 ##新功能
+
+---
+### V1.2.0版本新功能
+1. 修复了垂直线性布局中同时设置myLeftMargin,myRightMargin并且设置了gravity=MyMarginGravity_Horz_Center时前者设置失效的问题。水平线性布局亦然。
+
+
 ---
 ### V1.1.9版本新功能
 1. 添加对国际化的支持。
