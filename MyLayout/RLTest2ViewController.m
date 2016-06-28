@@ -106,6 +106,7 @@
     v5.text = NSLocalizedString(@"1/2 with of free superview", @"");
     v5.adjustsFontSizeToFitWidth = YES;
     v5.textAlignment = NSTextAlignmentCenter;
+    v5.numberOfLines = 2;
     v5.topPos.equalTo(v4.topPos);
     v5.leftPos.equalTo(v4.rightPos).offset(10);
     v5.heightDime.equalTo(v4.heightDime);
@@ -117,6 +118,7 @@
     v6.text = NSLocalizedString(@"1/2 with of free superview", @"");
     v6.adjustsFontSizeToFitWidth = YES;
     v6.textAlignment = NSTextAlignmentCenter;
+    v6.numberOfLines = 2;
     v6.topPos.equalTo(v4.topPos);
     v6.leftPos.equalTo(v5.rightPos).offset(10);
     v6.heightDime.equalTo(v4.heightDime);
@@ -135,6 +137,7 @@
     v7.text = NSLocalizedString(@"20% with of superview", @"");
     v7.adjustsFontSizeToFitWidth = YES;
     v7.textAlignment = NSTextAlignmentCenter;
+    v7.numberOfLines = 2;
     v7.topPos.equalTo(v4.bottomPos).offset(30);
     v7.leftPos.equalTo(@10);
     v7.heightDime.equalTo(@40);
@@ -146,6 +149,7 @@
     v8.text = NSLocalizedString(@"30% with of superview", @"");
     v8.adjustsFontSizeToFitWidth = YES;
     v8.textAlignment = NSTextAlignmentCenter;
+    v8.numberOfLines = 2;
     v8.topPos.equalTo(v7.topPos);
     v8.leftPos.equalTo(v7.rightPos).offset(10);
     v8.heightDime.equalTo(v7.heightDime);
@@ -157,6 +161,7 @@
     v9.text = NSLocalizedString(@"50% with of superview", @"");
     v9.adjustsFontSizeToFitWidth = YES;
     v9.textAlignment = NSTextAlignmentCenter;
+    v9.numberOfLines = 2;
     v9.topPos.equalTo(v7.topPos);
     v9.leftPos.equalTo(v8.rightPos).offset(10);
     v9.heightDime.equalTo(v7.heightDime);

@@ -1469,11 +1469,10 @@ BOOL _hasBegin;
     }
     
     if (self.endLayoutBlock != nil)
-    {
         self.endLayoutBlock();
-        self.beginLayoutBlock = nil;
-        self.endLayoutBlock = nil;
-    }
+    
+    self.beginLayoutBlock = nil;
+    self.endLayoutBlock = nil;
 }
 
 
@@ -1531,7 +1530,7 @@ BOOL _hasBegin;
     {
         
         pRect->origin.y = self.padding.top + topMargin;
-        pRect->size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:selfSize.height - self.padding.bottom - bottomMargin - pRect->origin.y sbvSize:pRect->size selfLayoutSize:selfSize];
+        pRect->size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:selfSize.height - fixedHeight - bottomMargin - topMargin sbvSize:pRect->size selfLayoutSize:selfSize];
     }
     else if (vert == MyMarginGravity_Vert_Center)
     {
@@ -1543,9 +1542,7 @@ BOOL _hasBegin;
         if (self.window != nil)
         {
             pRect->origin.y = (self.window.frame.size.height - topMargin - bottomMargin - pRect->size.height)/2 + topMargin + centerMargin;
-            
-            CGPoint pt = pRect->origin;
-            pRect->origin.y =  [self.window convertPoint:pt toView:self].y;
+            pRect->origin.y =  [self.window convertPoint:pRect->origin toView:self].y;
         }
 
     }
@@ -1553,10 +1550,6 @@ BOOL _hasBegin;
     {
         
         pRect->origin.y = selfSize.height - self.padding.bottom - bottomMargin - pRect->size.height;
-    }
-    else if (vert == MyMarginGravity_Vert_Top)
-    {
-        pRect->origin.y = self.padding.top + topMargin;
     }
     else
     {
@@ -1597,9 +1590,7 @@ BOOL _hasBegin;
         if (self.window != nil)
         {
             pRect->origin.x = (self.window.frame.size.width - leftMargin - rightMargin - pRect->size.width)/2 + leftMargin + centerMargin;
-            
-            CGPoint pt = pRect->origin;
-            pRect->origin.x =  [self.window convertPoint:pt toView:self].x;
+            pRect->origin.x =  [self.window convertPoint:pRect->origin toView:self].x;
         }
 
 
@@ -1608,10 +1599,6 @@ BOOL _hasBegin;
     {
         
         pRect->origin.x = selfSize.width - self.padding.right - rightMargin - pRect->size.width;
-    }
-    else if (horz == MyMarginGravity_Horz_Left)
-    {
-        pRect->origin.x = self.padding.left + leftMargin;
     }
     else
     {
@@ -1916,6 +1903,25 @@ BOOL _hasBegin;
     return calcPos;
 }
 
+-(BOOL)isNoLayoutSubview:(UIView*)sbv
+{
+    return ((sbv.isHidden || sbv.absPos.sizeClass.isHidden) && self.hideSubviewReLayout) || sbv.useFrame;
+}
+
+-(NSMutableArray*)getLayoutSubviews
+{
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    for (UIView *sbv in self.subviews)
+    {
+        if ([self isNoLayoutSubview:sbv])
+            continue;
+        
+        [sbs addObject:sbv];
+        
+    }
+    
+    return sbs;
+}
 
 
 - (void)alterScrollViewContentSize:(CGRect)newRect

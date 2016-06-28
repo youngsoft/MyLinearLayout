@@ -1,4 +1,4 @@
-#MyLayout1.2.0
+#MyLayout1.2.1
 
 
 ## Introduction
@@ -76,7 +76,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.2.0'
+pod 'MyLayout', '~> 1.2.1'
 ```
    
 Then, run the following command:
@@ -167,7 +167,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.2.0'
+pod 'MyLayout', '~> 1.2.1'
 ```
    
 然后运行如下命令:
@@ -179,6 +179,12 @@ $ pod install
 
 
 ##新功能
+
+---
+### V1.2.1版本新功能
+1. 修正了相对布局中子视图隐藏时，相关子视图重新排列布局可能导致不正确的问题。相对布局中子视图隐藏时其他视图重新排列布局的算法是：隐藏的子视图的尺寸设置为0，所以依赖隐藏的子视图的边距依赖无效，变为依赖隐藏子视图所依赖的边距。
+2. 垂直线性布局里面添加了A.heightDime.equalTo(A.widthDime)的支持。水平线性布局不支持。
+3. 优化了代码结构，增加了代码的可读性。
 
 ---
 ### V1.2.0版本新功能

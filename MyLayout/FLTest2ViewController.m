@@ -50,8 +50,8 @@
     headImage.layer.cornerRadius = 4;
     headImage.layer.borderWidth = 1;
     headImage.backgroundColor = [UIColor whiteColor];
-    headImage.heightDime.equalTo(rootLayout.heightDime).multiply(0.3); //高度是父布局高度1/3
-    headImage.widthDime.equalTo(headImage.heightDime);    //宽度和高度相等。
+    headImage.heightDime.equalTo(rootLayout.heightDime).multiply(1.0/3); //高度是父布局高度1/3
+    headImage.widthDime.equalTo(headImage.heightDime);    //宽度等于高度
     headImage.marginGravity = MyMarginGravity_Center;    //整体在父布局中居中。
     [rootLayout addSubview:headImage];
     

@@ -55,6 +55,10 @@
 
 -(CGFloat)validMargin:(MyLayoutPos*)pos sbv:(UIView*)sbv calcPos:(CGFloat)calcPos selfLayoutSize:(CGSize)selfLayoutSize;
 
+-(BOOL)isNoLayoutSubview:(UIView*)sbv;
+
+-(NSMutableArray*)getLayoutSubviews;
+
 @end
 
 

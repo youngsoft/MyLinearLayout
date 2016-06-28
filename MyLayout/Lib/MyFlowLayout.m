@@ -1169,21 +1169,11 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     
     
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
-    for (UIView *sbv in self.subviews)
-    {
-        if ((sbv.isHidden && self.hideSubviewReLayout) || sbv.useFrame || sbv.absPos.sizeClass.isHidden)
-            continue;
-        
-        [sbs addObject:sbv];
-    }
-
+    NSMutableArray *sbs = [self getLayoutSubviews];
     
     
     for (UIView *sbv in sbs)
     {
-        if (sbv.useFrame || (sbv.isHidden && self.hideSubviewReLayout) || sbv.absPos.sizeClass.isHidden)
-            continue;
         
         if (!isEstimate)
         {
