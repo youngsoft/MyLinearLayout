@@ -39,6 +39,7 @@
 -(MyMaker*)rightPadding;
 -(MyMaker*)wrapContentHeight;
 -(MyMaker*)wrapContentWidth;
+-(MyMaker*)reverseLayout;
 
 
 
@@ -61,7 +62,7 @@
 
 
 
-//线性布局和浮动布局子视图独有
+//线性布局和浮动布局和流式布局子视图独有
 -(MyMaker*)weight;
 
 //浮动布局子视图独有

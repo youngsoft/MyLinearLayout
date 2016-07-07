@@ -89,6 +89,8 @@ IB_DESIGNABLE
     return self.myCurrentSizeClass.gravity;
 }
 
+
+
 -(void)setSubviewMargin:(CGFloat)subviewMargin
 {
     MyLinearLayout *lsc = self.myCurrentSizeClass;

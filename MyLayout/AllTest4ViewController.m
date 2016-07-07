@@ -15,6 +15,8 @@ static NSInteger sBaseTag = 100000;
 
 @property(nonatomic, strong) MyLinearLayout *rootLayout;
 
+@property(nonatomic,strong) NSMutableArray *containerLayouts;
+
 
 @end
 
@@ -58,6 +60,8 @@ static NSInteger sBaseTag = 100000;
     _rootLayout.wrapContentHeight = YES; //布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
     [scrollView addSubview:_rootLayout];
     
+    self.containerLayouts = [NSMutableArray new];
+    
     for (NSInteger i = 0; i < sections.count; i++)
     {
         //添加辅助视图
@@ -66,6 +70,7 @@ static NSInteger sBaseTag = 100000;
         //添加单元格容器视图
         MyFlowLayout *cellContainerLayout = [self createCellContainerLayout:i + 2];
         cellContainerLayout.myBottomMargin = 10;
+        [self.containerLayouts addObject:cellContainerLayout];
         [_rootLayout addSubview:cellContainerLayout];
         
         //添加单元格视图
@@ -79,6 +84,9 @@ static NSInteger sBaseTag = 100000;
             [cellContainerLayout addSubview:cellLayout];
         }
     }
+    
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Reverse" style:UIBarButtonItemStyleDone target:self action:@selector(handleReverse:)];
     
 }
 
@@ -176,6 +184,17 @@ static NSInteger sBaseTag = 100000;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     
     [alertView show];
+}
+
+-(void)handleReverse:(id)sender
+{
+    //MyBaseLayout的属性reverseLayout可以将子视图按照添加的顺序逆序布局。
+    
+    for (MyBaseLayout *layout in self.containerLayouts)
+    {
+        layout.reverseLayout = !layout.reverseLayout;
+        [layout layoutAnimationWithDuration:0.3];
+    }
 }
 
 /*

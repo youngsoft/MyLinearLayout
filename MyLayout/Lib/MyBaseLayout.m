@@ -749,6 +749,24 @@ BOOL _hasBegin;
 }
 
 
+-(void)setReverseLayout:(BOOL)reverseLayout
+{
+    
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.reverseLayout != reverseLayout)
+    {
+        lsc.reverseLayout = reverseLayout;
+        [self setNeedsLayout];
+    }
+}
+
+-(BOOL)reverseLayout
+{
+    return self.myCurrentSizeClass.reverseLayout;
+}
+
+
+
 -(void)setHideSubviewReLayout:(BOOL)hideSubviewReLayout
 {
     MyBaseLayout *lsc = self.myCurrentSizeClass;
@@ -1911,14 +1929,18 @@ BOOL _hasBegin;
 -(NSMutableArray*)getLayoutSubviews
 {
     NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    BOOL isReverseLayout = self.reverseLayout;
     for (UIView *sbv in self.subviews)
     {
         if ([self isNoLayoutSubview:sbv])
             continue;
         
-        [sbs addObject:sbv];
-        
+        if (isReverseLayout)
+            [sbs insertObject:sbv atIndex:0];
+        else
+            [sbs addObject:sbv];
     }
+    
     
     return sbs;
 }

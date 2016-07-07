@@ -173,6 +173,9 @@ typedef enum : unsigned char{
 
 @property(nonatomic, assign) BOOL hideSubviewReLayout;
 
+@property(nonatomic, assign) BOOL reverseLayout;   //逆序布局，子视图从后往前。
+
+
 
 @end
 

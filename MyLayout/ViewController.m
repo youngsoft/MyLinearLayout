@@ -30,6 +30,7 @@
 #import "FLLTest1ViewController.h"
 #import "FLLTest2ViewController.h"
 #import "FLLTest3ViewController.h"
+#import "FLLTest4ViewController.h"
 
 
 #import "AllTest1ViewController.h"
@@ -114,37 +115,40 @@
                          @{@"title":NSLocalizedString(@"18.MyFlowLayout - Drag", @""),
                            @"class":[FLLTest3ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"19.MyFloatLayout - Float", @""),
+                         @{@"title":NSLocalizedString(@"19.MyFlowLayout - Weight", @""),
+                           @"class":[FLLTest4ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"20.MyFloatLayout - Float", @""),
                            @"class":[FOLTest1ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"20.MyFloatLayout - Jagged", @""),
+                         @{@"title":NSLocalizedString(@"21.MyFloatLayout - Jagged", @""),
                            @"class":[FOLTest2ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"21.MyFloatLayout - Card news", @""),
+                         @{@"title":NSLocalizedString(@"22.MyFloatLayout - Card news", @""),
                            @"class":[FOLTest3ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"22.MyFloatLayout - Tag cloud", @""),
+                         @{@"title":NSLocalizedString(@"23.MyFloatLayout - Tag cloud", @""),
                            @"class":[FOLTest4ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"23.MyFloatLayout - Title & Description", @""),
+                         @{@"title":NSLocalizedString(@"24.MyFloatLayout - Title & Description", @""),
                            @"class":[FOLTest5ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"24.UITableView - Dynamic height", @""),
+                         @{@"title":NSLocalizedString(@"25.UITableView - Dynamic height", @""),
                            @"class":[AllTest1ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"25.UITableView - Static height", @""),
+                         @{@"title":NSLocalizedString(@"26.UITableView - Static height", @""),
                            @"class":[AllTest2ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"26.Replacement of UITableView", @""),
+                         @{@"title":NSLocalizedString(@"27.Replacement of UITableView", @""),
                            @"class":[AllTest3ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"27.Replacement of UICollectionView", @""),
+                         @{@"title":NSLocalizedString(@"28.Replacement of UICollectionView", @""),
                            @"class":[AllTest4ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"28.SizeClass - Demo1", @""),
+                         @{@"title":NSLocalizedString(@"29.SizeClass - Demo1", @""),
                            @"class":[AllTest5ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"29.SizeClass - Demo2", @""),
+                         @{@"title":NSLocalizedString(@"30.SizeClass - Demo2", @""),
                            @"class":[AllTest6ViewController class]
                            }
                          ];

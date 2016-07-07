@@ -101,6 +101,7 @@
     return self.myCurrentSizeClass.orientation;
 }
 
+
 -(void)setGravity:(MyMarginGravity)gravity
 {
     MyFloatLayout *lsc = self.myCurrentSizeClass;
@@ -496,7 +497,7 @@
             if (sbv.weight != 0)
             {
                 
-                rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:(nextPoint.x - leftCandidateXBoundary - leftMargin - rightMargin) * sbv.weight sbvSize:rect.size selfLayoutSize:selfRect.size];
+                rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:(nextPoint.x - leftCandidateXBoundary + sbv.widthDime.addVal) * sbv.weight - leftMargin - rightMargin sbvSize:rect.size selfLayoutSize:selfRect.size];
                 
                 
                 if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
@@ -610,7 +611,7 @@
             //重新设置宽度
             if (sbv.weight != 0)
             {
-                rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:(rightCandidateXBoundary - nextPoint.x - leftMargin - rightMargin) * sbv.weight sbvSize:rect.size selfLayoutSize:selfRect.size];
+                rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:(rightCandidateXBoundary - nextPoint.x + sbv.widthDime.addVal) * sbv.weight - leftMargin - rightMargin sbvSize:rect.size selfLayoutSize:selfRect.size];
                 
                 if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
                     rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
@@ -898,7 +899,7 @@
             
             if (sbv.weight != 0)
             {
-                rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(nextPoint.y - topCandidateYBoundary - topMargin - bottomMargin) * sbv.weight sbvSize:rect.size selfLayoutSize:selfRect.size];
+                rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(nextPoint.y - topCandidateYBoundary + sbv.heightDime.addVal) * sbv.weight - topMargin - bottomMargin sbvSize:rect.size selfLayoutSize:selfRect.size];
                 
                 if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
                     rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:rect.size selfLayoutSize:selfRect.size];
@@ -1003,7 +1004,7 @@
             
             if (sbv.weight != 0)
             {
-                rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(bottomCandidateYBoundary - nextPoint.y - topMargin - bottomMargin) * sbv.weight sbvSize:rect.size selfLayoutSize:selfRect.size];
+                rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(bottomCandidateYBoundary - nextPoint.y + sbv.heightDime.addVal) * sbv.weight - topMargin - bottomMargin sbvSize:rect.size selfLayoutSize:selfRect.size];
                 
                 if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
                     rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:rect.size selfLayoutSize:selfRect.size];

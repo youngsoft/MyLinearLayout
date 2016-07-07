@@ -348,6 +348,13 @@
 
 
 /**
+ *流式布局里面的所有子视图按添加的顺序逆序进行布局。默认是NO。
+ */
+@property(nonatomic, assign) IBInspectable BOOL reverseLayout;
+
+
+
+/**
  *把一个布局视图放入到UIScrollView内时是否自动调整UIScrollView的contentSize值，默认是YES。你可以将这个属性设置NO而不调整contentSize的值，要设置这个属性值为NO请在将布局视图添加到UIScrollView以后再设置才能生效
  */
 @property(nonatomic, assign, getter = isAdjustScrollViewContentSize) BOOL adjustScrollViewContentSize;

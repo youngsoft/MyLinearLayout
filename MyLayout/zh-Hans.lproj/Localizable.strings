@@ -26,17 +26,18 @@
 "16.MyFlowLayout - Regular arrangement" = "16流式布局-有规律的子视图排列";
 "17.MyFlowLayout - Tag cloud" = "17流式布局-标签流";
 "18.MyFlowLayout - Drag" = "18流式布局-子视图的拖拽调整功能";
-"19.MyFloatLayout - Float" = "19浮动布局-浮动效果的演示";
-"20.MyFloatLayout - Jagged" = "20浮动布局-仿天猫淘宝首页实现" ;
-"21.MyFloatLayout - Card news" = "21浮动布局-仿ZAKER今日头条实现";
-"22.MyFloatLayout - Tag cloud" = "22浮动布局-标签流";
-"23.MyFloatLayout - Title & Description" = "23浮动布局-左右排列的文本";
-"24.UITableView - Dynamic height" = "24综合布局-布局和UITableView(动态高度)";
-"25.UITableView - Static height" = "25综合布局-布局和UITableView(静态高度)";
-"26.Replacement of UITableView" = "26综合布局-UITableView的替换方案";
-"27.Replacement of UICollectionView" = "27综合布局-UICollectionView的替换方案";
-"28.SizeClass - Demo1" = "28SizeClass-不同屏幕下的布局样式1";
-"29.SizeClass - Demo2" = "29SizeClass-不同屏幕下的布局样式2";
+"19.MyFlowLayout - Weight" = "19流式布局-对线性布局的替代方案";
+"20.MyFloatLayout - Float" = "20浮动布局-浮动效果的演示";
+"21.MyFloatLayout - Jagged" = "21浮动布局-仿天猫淘宝首页实现" ;
+"22.MyFloatLayout - Card news" = "22浮动布局-仿ZAKER今日头条实现";
+"23.MyFloatLayout - Tag cloud" = "23浮动布局-标签流";
+"24.MyFloatLayout - Title & Description" = "24浮动布局-左右排列的文本";
+"25.UITableView - Dynamic height" = "25综合布局-布局和UITableView(动态高度)";
+"26.UITableView - Static height" = "26综合布局-布局和UITableView(静态高度)";
+"27.Replacement of UITableView" = "27综合布局-UITableView的替换方案";
+"28.Replacement of UICollectionView" = "28综合布局-UICollectionView的替换方案";
+"29.SizeClass - Demo1" = "29SizeClass-不同屏幕下的布局样式1";
+"30.SizeClass - Demo2" = "30SizeClass-不同屏幕下的布局样式2";
 
 //LLTest1ViewController
 "Vert(from top to bottom)" = "垂直布局(从上到下)";

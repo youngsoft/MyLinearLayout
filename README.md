@@ -1,4 +1,4 @@
-#MyLayout1.2.1
+#MyLayout1.2.2(2016.7.8)
 
 
 ## Introduction
@@ -76,7 +76,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.2.1'
+pod 'MyLayout', '~> 1.2.2'
 ```
    
 Then, run the following command:
@@ -105,8 +105,12 @@ Then, run the following command:
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo5.gif)
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo6.gif)
 
+
+## License
 ---
----
+
+MyLayout is released under the MIT license. See LICENSE for details.
+
 
 
 #中文介绍
@@ -167,7 +171,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.2.1'
+pod 'MyLayout', '~> 1.2.2'
 ```
    
 然后运行如下命令:
@@ -179,6 +183,13 @@ $ pod install
 
 
 ##新功能
+
+---
+### V1.2.2版本新功能
+ 1. 流式布局MyFlowLayout中的子视图添加了对weight属性的支持，流式布局中的weight属性表示的是剩余空间的占比。通过weight属性的使用，我们可以在很多用线性布局实现的布局，改用流式布局来完成，从而减少布局的嵌套。流式布局具有HTML中的Flex的特性。具体例子见FLLTest4ViewController
+ 2. 布局视图增加了子视图反序排列的功能属性：@property(nonatomic, assign) BOOL reverseLayout; 这个属性可以按子视图添加的逆顺序进行界面布局。具体例子见：AllTest4ViewController
+ 3. 修正了浮动布局MyFloatLayout中weight计算的问题，由原先的减间距再乘比例改为先乘比例再减间距
+
 
 ---
 ### V1.2.1版本新功能

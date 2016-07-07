@@ -30,7 +30,7 @@
  *当浮动布局视图是水平布局时，这个属性用来设置高度占用当前的剩余高度的比重，这样子视图就不需要明确的设定高度值。
  
  举例来说，假设布局视图的宽度是100，而当前视图的前面一个视图已经占据了20的宽度，那么当设置当前视图的weight为1时则当前视图的宽度就会被设定为80。这样当前视图是不会浮动
- 到一个新的行的。而如果设定为0.8则当前视图的宽度则为(100-20)*0.8 = 16了。
+ 到一个新的行的。而如果设定为0.8则当前视图的宽度则为(100-20)*0.8 = 64了。
  */
 @property(nonatomic, assign) IBInspectable CGFloat weight;
 
@@ -60,6 +60,7 @@
  *如果是MyLayoutViewOrientation_Horz则表示从上到下，从左到右的水平布局方式
  */
 @property(nonatomic,assign) MyLayoutViewOrientation orientation;
+
 
 
 /**
