@@ -11,6 +11,8 @@
 
 @interface TLTest3ViewController ()
 
+@property(nonatomic, strong) MyTableLayout *tableLayout;
+
 @end
 
 @implementation TLTest3ViewController
@@ -29,25 +31,25 @@
     [self.view addSubview:scrollView];
     
     //建立一个垂直表格
-    MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    tableLayout.myLeftMargin = tableLayout.myRightMargin = 0;  //宽度和非布局父视图一样宽
-    [scrollView addSubview:tableLayout];
+    self.tableLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    self.tableLayout.myLeftMargin = self.tableLayout.myRightMargin = 0;  //宽度和非布局父视图一样宽
+    [scrollView addSubview:self.tableLayout];
     
     
     //建立一个表格外边界的边界线。颜色为黑色，粗细为3.
     MyBorderLineDraw *outerBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
     outerBorderLine.thick = 3;
-    tableLayout.boundBorderLine = outerBorderLine;
+    self.tableLayout.boundBorderLine = outerBorderLine;
     
     //建立智能边界线。所谓智能边界线就是布局里面的如果有子布局视图，则子布局视图会根据自身的布局位置智能的设置边界线。
     //智能边界线只支持表格布局、线性布局、流式布局、浮动布局。
     //如果要想完美使用智能分界线，则请将cellview建立为一个布局视图，比如本例子中的createCellLayout。
     MyBorderLineDraw *innerBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]];
-    tableLayout.IntelligentBorderLine = innerBorderLine;
+    self.tableLayout.IntelligentBorderLine = innerBorderLine;
 
 
     //添加第一行。行高为50，每列宽由自己确定。
-   MyLinearLayout *firstRow = [tableLayout addRow:50 colSize:MTLSIZE_MATCHPARENT];
+   MyLinearLayout *firstRow = [self.tableLayout addRow:50 colSize:MTLSIZE_MATCHPARENT];
    firstRow.notUseIntelligentBorderLine = YES;  //因为智能边界线会影响到里面的所有子布局，包括每行，但是这里我们希望这行不受智能边界线的影响而想自己定义边界线，则将这个属性设置为YES。
    firstRow.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blueColor]]; //我们自定义第一行的底部边界线为蓝色边界线。
     
@@ -60,7 +62,7 @@
         else
             cellView.weight = 1; //我们这里定义第一列的宽度为80，而其他的列宽平均分配。
         
-        [tableLayout addSubview:cellView];  //表格布局重写了addSubview，表示总是添加到最后一行上。
+        [self.tableLayout addSubview:cellView];  //表格布局重写了addSubview，表示总是添加到最后一行上。
     }];
     
     
@@ -70,7 +72,7 @@
     //建立10行的数据。
     for (int i = 0; i < 10; i++)
     {
-        [tableLayout addRow:40 colSize:MTLSIZE_MATCHPARENT]; //添加新的一行。
+        [self.tableLayout addRow:40 colSize:MTLSIZE_MATCHPARENT]; //添加新的一行。
         
         for (int j = 0; j < firstRowTitles.count; j++)
         {
@@ -86,22 +88,22 @@
                 cellView.weight = 1;
             }
             
-            [tableLayout addSubview:cellView];
+            [self.tableLayout addSubview:cellView];
         }
     }
     
     //最后一行：
-     MyLinearLayout *lastRow = [tableLayout addRow:60 colSize:MTLSIZE_MATCHPARENT];
+     MyLinearLayout *lastRow = [self.tableLayout addRow:60 colSize:MTLSIZE_MATCHPARENT];
     lastRow.notUseIntelligentBorderLine = YES;
     lastRow.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor greenColor]];
     
     UIView *cellLayout = [self createCellLayout:@"Total:"];
     cellLayout.weight = 1;  //占用剩余宽度
-    [tableLayout addSubview:cellLayout];
+    [self.tableLayout addSubview:cellLayout];
     
     cellLayout = [self createCellLayout:@"$1234.11"];
     cellLayout.myWidth = 100;  //固定宽度。
-    [tableLayout addSubview:cellLayout];
+    [self.tableLayout addSubview:cellLayout];
     
 }
 
@@ -109,6 +111,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Space" style:UIBarButtonItemStylePlain target:self action:@selector(handleSpace:)];
     
 }
 
@@ -147,7 +151,18 @@
 
 }
 
-
+-(void)handleSpace:(id)sender
+{
+    if (self.tableLayout.rowSpacing == 0)
+        self.tableLayout.rowSpacing = 5;
+    else if (self.tableLayout.colSpacing == 0)
+        self.tableLayout.colSpacing = 5;
+    else
+        self.tableLayout.rowSpacing = self.tableLayout.colSpacing = 0;
+    
+    [self.tableLayout layoutAnimationWithDuration:0.3];
+    
+}
 
 /*
 #pragma mark - Navigation

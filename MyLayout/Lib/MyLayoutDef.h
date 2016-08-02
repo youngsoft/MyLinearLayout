@@ -83,6 +83,15 @@ typedef enum : NSUInteger {
 
 
 
+//设置当布局视图嵌入到UIScrollView以及其派生类时对UIScrollView的contentSize的调整模式。
+typedef enum :NSUInteger
+{
+    MyLayoutAdjustScrollViewContentSizeModeAuto = 0,   //自动调整，在添加到UIScrollView之前(UITableView, UICollectionView除外)。如果值被设置Auto则自动会变化YES。如果值被设置为NO则不进行任何调整。
+    MyLayoutAdjustScrollViewContentSizeModeNo = 1,     //不调整，任何加入到UIScrollView中的布局视图在尺寸变化时都不会调整contentSize的值。
+    MyLayoutAdjustScrollViewContentSizeModeYes = 2     //会调整，任何加入到UIScrollView中的布局视图在尺寸变化时都会调整contentSize的值。
+}MyLayoutAdjustScrollViewContentSizeMode;
+
+
 //内部使用
 typedef enum : unsigned char
 {

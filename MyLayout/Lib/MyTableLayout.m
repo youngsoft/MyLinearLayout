@@ -135,7 +135,12 @@
     if (lsc.colSpacing != colSpacing)
     {
         lsc.colSpacing = colSpacing;
-        [self setNeedsLayout];
+        
+        for (int i = 0; i < self.countOfRow; i++)
+        {
+            [self viewAtRowIndex:i].subviewMargin = colSpacing;
+        }
+        
     }
 
 }
@@ -209,7 +214,7 @@
     
     if (rowView.orientation == MyLayoutViewOrientation_Horz)
     {
-        if (colView.frame.size.height == 0 && colView.heightDime.dimeVal == nil)
+        if (CGRectGetHeight(colView.bounds) == 0 && colView.heightDime.dimeVal == nil)
         {
             if ([colView isKindOfClass:[MyBaseLayout class]])
             {
@@ -222,7 +227,7 @@
     }
     else
     {
-        if (colView.frame.size.width == 0 && colView.widthDime.dimeVal == nil)
+        if (CGRectGetWidth(colView.bounds) == 0 && colView.widthDime.dimeVal == nil)
         {
             
             if ([colView isKindOfClass:[MyBaseLayout class]])

@@ -265,6 +265,18 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 }
 
 
+-(void (^)(MyBaseLayout*, UIView*))viewLayoutCompleteBlock
+{
+    return self.myCurrentSizeClass.viewLayoutCompleteBlock;
+}
+
+-(void)setViewLayoutCompleteBlock:(void (^)(MyBaseLayout *, UIView *))viewLayoutCompleteBlock
+{
+    UIView *lsc = self.myCurrentSizeClass;
+    lsc.viewLayoutCompleteBlock = viewLayoutCompleteBlock;
+}
+
+
 
 
 
@@ -892,15 +904,15 @@ BOOL _hasBegin;
     }
     
     BOOL hasSubLayout = NO;
-    CGRect rect;
-    self.absPos.frame = [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
-    if (!hasSubLayout)
-        rect = self.absPos.frame;
-    else
+    CGSize selfSize= [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
+    if (hasSubLayout)
     {
-        rect = [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
-        self.absPos.frame = rect;
+        selfSize = [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
     }
+    
+    self.absPos.width = selfSize.width;
+    self.absPos.height = selfSize.height;
+
 
     
     //计算后还原为默认sizeClass
@@ -912,7 +924,7 @@ BOOL _hasBegin;
     self.absPos.sizeClass = self.myDefaultSizeClass;
     
     
-    return rect;
+    return CGRectMake(0, 0, selfSize.width, selfSize.height);
     
 }
 
@@ -1153,7 +1165,7 @@ BOOL _hasBegin;
 {
     
     //监控非布局父视图的frame的变化，而改变自身的位置和尺寸
-    if (object == self.superview && ![object isKindOfClass:[MyBaseLayout class]])
+    if (object == self.superview && ![object isKindOfClass:[MyBaseLayout class]] && !self.useFrame)
     {
         
         if ([keyPath isEqualToString:@"frame"] ||
@@ -1167,14 +1179,14 @@ BOOL _hasBegin;
     
     //监控子视图的frame的变化以便重新进行布局
     if ([keyPath isEqualToString:@"frame"] ||
-        [keyPath isEqualToString:@"hidden"] )
+        [keyPath isEqualToString:@"hidden"] ||
+        [keyPath isEqualToString:@"center"])
     {
         if (!_isMyLayouting && [self.subviews containsObject:object])
         {
             if (![object useFrame])
             {
                 [self setNeedsLayout];
-                
                 //这里添加的原因是有可能子视图取消隐藏后不会绘制自身，所以这里要求子视图重新绘制自身
                 if ([keyPath isEqualToString:@"hidden"] && ![change[NSKeyValueChangeNewKey] boolValue])
                 {
@@ -1229,6 +1241,9 @@ BOOL _hasBegin;
     //添加hidden, frame,center的属性通知。
     [subview addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
     [subview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+  //  [subview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew |NSKeyValueObservingOptionOld context:nil];
+    [subview addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:nil];
+
 }
 
 - (void)willRemoveSubview:(UIView *)subview
@@ -1237,6 +1252,9 @@ BOOL _hasBegin;
     
     [subview removeObserver:self forKeyPath:@"hidden"];
     [subview removeObserver:self forKeyPath:@"frame"];
+  //  [subview removeObserver:self forKeyPath:@"bounds"];
+    [subview removeObserver:self forKeyPath:@"center"];
+
 }
 
 - (void)willMoveToSuperview:(UIView*)newSuperview
@@ -1396,7 +1414,12 @@ BOOL _hasBegin;
     {
         //不支持放在UITableView和UICollectionView下,因为有肯能是tableheaderView或者section下。
         if ([newSuperview isKindOfClass:[UIScrollView class]] && ![newSuperview isKindOfClass:[UITableView class]] && ![newSuperview isKindOfClass:[UICollectionView class]])
-            self.adjustScrollViewContentSize = YES;
+        {
+            if (self.adjustScrollViewContentSizeMode == MyLayoutAdjustScrollViewContentSizeModeAuto)
+            {
+                self.adjustScrollViewContentSizeMode = MyLayoutAdjustScrollViewContentSizeModeYes;
+            }
+        }
     }
     
     
@@ -1409,12 +1432,14 @@ BOOL _hasBegin;
     if (!self.autoresizesSubviews)
         return;
     
-    if (self.beginLayoutBlock != nil)
-        self.beginLayoutBlock();
-    
     if (!self.isMyLayouting)
-    {        
+    {
         _isMyLayouting = YES;
+
+        if (self.beginLayoutBlock != nil)
+            self.beginLayoutBlock();
+        self.beginLayoutBlock = nil;
+        
     
         if (self.priorAutoresizingMask)
             [super layoutSubviews];
@@ -1440,17 +1465,31 @@ BOOL _hasBegin;
         }
 
         //计算布局
-        CGRect oldSelfRect = self.frame;
-        CGRect newSelfRect = [self calcLayoutRect:CGSizeZero isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass];
+        CGSize oldSelfSize = self.bounds.size;
+        CGSize newSelfSize = [self calcLayoutRect:CGSizeZero isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass];
         
         //设置子视图的frame并还原
         for (UIView *sbv in self.subviews)
         {
+            CGPoint ptorigin = sbv.bounds.origin;
+            
             if (sbv.absPos.leftPos != CGFLOAT_MAX && sbv.absPos.topPos != CGFLOAT_MAX && !sbv.noLayout)
-                sbv.frame = sbv.absPos.frame;
+            {
+                sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, sbv.absPos.width, sbv.absPos.height);
+                
+                sbv.center = CGPointMake(sbv.absPos.leftPos + sbv.layer.anchorPoint.x * sbv.absPos.width, sbv.absPos.topPos + sbv.layer.anchorPoint.y * sbv.absPos.height);
+                
+
+            }
             
             if (sbv.absPos.sizeClass.isHidden)
-                sbv.frame = CGRectZero;
+                sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, 0, 0);
+            
+            if (sbv.viewLayoutCompleteBlock != nil)
+            {
+                sbv.viewLayoutCompleteBlock(self, sbv);
+                sbv.viewLayoutCompleteBlock = nil;
+            }
             
             sbv.absPos.sizeClass = [sbv myDefaultSizeClass];
             [sbv.absPos reset];
@@ -1458,9 +1497,10 @@ BOOL _hasBegin;
         self.absPos.sizeClass = [self myDefaultSizeClass];
         
         //调整自身
-        if (!CGRectEqualToRect(oldSelfRect,newSelfRect) && newSelfRect.origin.x != CGFLOAT_MAX)
+        if (!CGSizeEqualToSize(oldSelfSize,newSelfSize) && newSelfSize.width != CGFLOAT_MAX)
         {
-            self.frame = newSelfRect;
+            self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, newSelfSize.width, newSelfSize.height);
+            self.center = CGPointMake(self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x, self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y);
         }
         
         if (_topBorderLineLayer != nil)
@@ -1477,20 +1517,17 @@ BOOL _hasBegin;
             [_rightBorderLineLayer setNeedsLayout];
 
         
-        //这里只用origin.x判断的原因是如果newSelfRect被计算成功则rect中的所有值都不是CGFLOAT_MAX，所以这里选origin.x只是其中一个代表。
-        if (newSelfRect.origin.x != CGFLOAT_MAX)
-            [self alterScrollViewContentSize:newSelfRect];
+        //这里只用width判断的原因是如果newSelfSize被计算成功则size中的所有值都不是CGFLOAT_MAX，所以这里选width只是其中一个代表。
+        if (newSelfSize.width != CGFLOAT_MAX)
+            [self alterScrollViewContentSize:newSelfSize];
        
-        
-        
+        if (self.endLayoutBlock != nil)
+            self.endLayoutBlock();
+        self.endLayoutBlock = nil;
+
         _isMyLayouting = NO;
     }
     
-    if (self.endLayoutBlock != nil)
-        self.endLayoutBlock();
-    
-    self.beginLayoutBlock = nil;
-    self.endLayoutBlock = nil;
 }
 
 
@@ -1499,24 +1536,24 @@ BOOL _hasBegin;
 
 #pragma mark -- Private Method
 
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
+-(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
-    CGRect selfRect;
+    CGSize selfSize;
     if (isEstimate)
-        selfRect = self.absPos.frame;
+        selfSize = self.absPos.frame.size;
     else
     {
-        selfRect = self.frame;
+        selfSize = self.bounds.size;
         if (size.width != 0)
-            selfRect.size.width = size.width;
+            selfSize.width = size.width;
         if (size.height != 0)
-            selfRect.size.height = size.height;
+            selfSize.height = size.height;
     }
     
     if (pHasSubLayout != nil)
         *pHasSubLayout = NO;
     
-    return selfRect;
+    return selfSize;
     
 }
 
@@ -1559,7 +1596,7 @@ BOOL _hasBegin;
     {
         if (self.window != nil)
         {
-            pRect->origin.y = (self.window.frame.size.height - topMargin - bottomMargin - pRect->size.height)/2 + topMargin + centerMargin;
+            pRect->origin.y = (CGRectGetHeight(self.window.bounds) - topMargin - bottomMargin - pRect->size.height)/2 + topMargin + centerMargin;
             pRect->origin.y =  [self.window convertPoint:pRect->origin toView:self].y;
         }
 
@@ -1607,7 +1644,7 @@ BOOL _hasBegin;
     {
         if (self.window != nil)
         {
-            pRect->origin.x = (self.window.frame.size.width - leftMargin - rightMargin - pRect->size.width)/2 + leftMargin + centerMargin;
+            pRect->origin.x = (CGRectGetWidth(self.window.bounds) - leftMargin - rightMargin - pRect->size.width)/2 + leftMargin + centerMargin;
             pRect->origin.x =  [self.window convertPoint:pRect->origin toView:self].x;
         }
 
@@ -1928,9 +1965,14 @@ BOOL _hasBegin;
 
 -(NSMutableArray*)getLayoutSubviews
 {
-    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:self.subviews.count];
+    return [self getLayoutSubviewsFrom:self.subviews];
+}
+
+-(NSMutableArray*)getLayoutSubviewsFrom:(NSArray*)sbsFrom
+{
+    NSMutableArray *sbs = [NSMutableArray arrayWithCapacity:sbsFrom.count];
     BOOL isReverseLayout = self.reverseLayout;
-    for (UIView *sbv in self.subviews)
+    for (UIView *sbv in sbsFrom)
     {
         if ([self isNoLayoutSubview:sbv])
             continue;
@@ -1943,20 +1985,22 @@ BOOL _hasBegin;
     
     
     return sbs;
+
 }
 
 
-- (void)alterScrollViewContentSize:(CGRect)newRect
+
+- (void)alterScrollViewContentSize:(CGSize)newSize
 {
-    if (self.adjustScrollViewContentSize && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
+    if (self.adjustScrollViewContentSizeMode == MyLayoutAdjustScrollViewContentSizeModeYes && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
     {
         UIScrollView *scrolv = (UIScrollView*)self.superview;
         CGSize contsize = scrolv.contentSize;
         
-        if (contsize.height != newRect.size.height)
-            contsize.height = newRect.size.height;
-        if (contsize.width != newRect.size.width)
-            contsize.width = newRect.size.width;
+        if (contsize.height != newSize.height)
+            contsize.height = newSize.height;
+        if (contsize.width != newSize.width)
+            contsize.width = newSize.width;
         
         scrolv.contentSize = contsize;
         

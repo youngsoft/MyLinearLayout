@@ -126,11 +126,10 @@ IB_DESIGNABLE
     
 }
 
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
+-(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
     
-    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
-    CGSize selfSize = selfRect.size;
+    CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     CGFloat maxWidth = self.leftPadding;
     CGFloat maxHeight = self.topPadding;
     
@@ -140,7 +139,7 @@ IB_DESIGNABLE
         
         if (!isEstimate)
         {
-            sbv.absPos.frame = sbv.frame;
+            sbv.absPos.frame = sbv.bounds;
             [self calcSizeOfWrapContentSubview:sbv];
         }
 
@@ -190,17 +189,17 @@ IB_DESIGNABLE
     
     if (self.wrapContentWidth)
     {
-        selfRect.size.width = maxWidth + self.rightPadding;
+        selfSize.width = maxWidth + self.rightPadding;
     }
     
     if (self.wrapContentHeight)
     {
-        selfRect.size.height = maxHeight + self.bottomPadding;
+        selfSize.height = maxHeight + self.bottomPadding;
     }
     
-    selfRect.size.height = [self validMeasure:self.heightDime sbv:self calcSize:selfRect.size.height sbvSize:selfRect.size selfLayoutSize:self.superview.frame.size];
+    selfSize.height = [self validMeasure:self.heightDime sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
-    selfRect.size.width = [self validMeasure:self.widthDime sbv:self calcSize:selfRect.size.width sbvSize:selfRect.size selfLayoutSize:self.superview.frame.size];
+    selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     //调整尺寸和父布局相等的视图的尺寸。
     if (self.wrapContentWidth || self.wrapContentHeight)
@@ -210,14 +209,14 @@ IB_DESIGNABLE
             if ((sbv.marginGravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Fill || (sbv.marginGravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Fill)
             {
                 CGRect rect = sbv.absPos.frame;
-                [self calcSubView:sbv pRect:&rect inSize:selfRect.size];
+                [self calcSubView:sbv pRect:&rect inSize:selfSize];
                 sbv.absPos.frame = rect;
             }
             
         }
     }
     
-    return selfRect;
+    return selfSize;
 
 }
 

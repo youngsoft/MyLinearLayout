@@ -40,11 +40,14 @@
      */
     UIView *greenCircle = [UIView new];
     greenCircle.backgroundColor = [UIColor greenColor];
-    greenCircle.layer.cornerRadius = 100;
     greenCircle.widthDime.equalTo(rootLayout.widthDime).multiply(3/5.0).max(200); //宽度是父视图宽度的3/5,且最大只能是200。
     greenCircle.heightDime.equalTo(greenCircle.widthDime);    //高度和自身宽度相等。
     greenCircle.leftPos.equalTo(@10);    //左边距离父视图10
     greenCircle.topPos.equalTo(@90);     //顶部距离父视图90
+    greenCircle.viewLayoutCompleteBlock = ^(MyBaseLayout *layout, UIView *sbv)
+    {//viewLayoutCompleteBlock是在子视图布局完成后给子视图一个机会进行一些特殊设置的block。这里面我们将子视图的半径设置为尺寸的一半，这样就可以实现在任意的屏幕上，这个子视图总是呈现为圆形。viewLayoutCompleteBlock只会在布局完成后调用一次，就会被布局系统销毁。
+        sbv.layer.cornerRadius = sbv.frame.size.width / 2;
+    };
     [rootLayout addSubview:greenCircle];
 
     
@@ -81,11 +84,14 @@
      */
     UIView *blueCircle = [UIView new];
     blueCircle.backgroundColor = [UIColor blueColor];
-    blueCircle.layer.cornerRadius = 60;
     blueCircle.topPos.equalTo(greenCircle.topPos).offset(-10);  //顶部和greenCircle顶部对齐，并且往上偏移10个点。
     blueCircle.rightPos.equalTo(rootLayout.rightPos).offset(10);  //右边和布局视图右对齐，并且往左边偏移10个点。
     blueCircle.widthDime.equalTo(@120);                           //宽度是120
     blueCircle.heightDime.equalTo(blueCircle.widthDime);           //高度和宽度相等。
+    blueCircle.viewLayoutCompleteBlock = ^(MyBaseLayout *layout, UIView *sbv)
+    {//viewLayoutCompleteBlock是在子视图布局完成后给子视图一个机会进行一些特殊设置的block。这里面我们将子视图的半径设置为尺寸的一半，这样就可以实现在任意的屏幕上，这个子视图总是呈现为圆形。viewLayoutCompleteBlock只会在布局完成后调用一次，就会被布局系统销毁。
+        sbv.layer.cornerRadius = sbv.frame.size.width / 2;
+    };
     [rootLayout addSubview:blueCircle];
     
     

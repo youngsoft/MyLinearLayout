@@ -11,6 +11,8 @@
 #import "MyLayoutDime.h"
 #import "MyLayoutSizeClass.h"
 
+@class MyBaseLayout;
+
 
 @interface UIView(MyLayoutExt)
 
@@ -40,6 +42,8 @@
  |Vert MyFloatLayout  |   -              | T,B,R,L              |  -            |   -       |    -               | -     | -     |
  |--------------------+------------------+----------------------+---------------+-----------+--------------------+-------+-------|
  |Horz MyFloatLayout  |   -              | T,B,R,L              |  -            |   -       |    -               | -	 | -     |
+ |--------------------+------------------+----------------------+---------------+-----------+--------------------+-------+-------|
+ |MyPathLayout        |   -              | T,L                  |  -            |   -       |    -               | -	 | -     |
  +--------------------+------------------+----------------------+---------------+-----------+--------------------+-------+-------+
 
  *上面表格中L=leftPos, R=rightPos, T=topPos, B=bottomPos,CX=centerXPos,CY=centerYPos,ALL是所有布局位置对象,-表示不支持。
@@ -196,15 +200,15 @@
  为了表示方便我们把：
      线性布局简写为L、垂直线性布局简写为L-V、水平线性布局简写为L-H 相对布局简写为R、表格布局简写为T、框架布局简写为FR、
      流式布局简写为FL、垂直流式布局简写为FL-V，水平流式布局简写为FL-H、浮动布局简写为FO、左右浮动布局简写为FO-V、上下浮动布局简写为FO-H、
-     全部简写为ALL，不支持为-，
+     路径布局简写为P、全部简写为ALL，不支持为-，
  
  定义A为操作的视图本身，B为A的兄弟视图，P为A的父视图。
  +-------------+----------+------------------+--------------+------------+--------------+---------------+--------------+----------------------+
  | 对象 \ 值    | NSNumber |A.widthDime	     |A.heightDime  |B.widthDime | B.heightDime |	P.widthDime |P.heightDime  |NSArray<MyLayoutDime*>|
  +-------------+----------+------------------+--------------+------------+--------------+---------------+--------------+----------------------+
- |A.widthDime  | ALL	  |ALL	             |FR/R/FL-H/FO  |FR/R/FO	 | R	        |L/FR/R/FL/FO   | R	           |R                     |
+ |A.widthDime  | ALL	  |ALL	             |FR/R/FL-H/FO  |FR/R/FO/P	 | R	        |L/FR/R/FL/FO/P | R	           |R                     |
  +-------------+----------+------------------+--------------+------------+--------------+---------------+--------------+----------------------+
- |A.heightDime | ALL	  |FR/R/FL-V/FO/L-V	 |ALL           |R	         |FR/R/FO       |R              |L/FR/R/FL/FO  |R                     |
+ |A.heightDime | ALL	  |FR/R/FL-V/FO/L-V	 |ALL           |R	         |FR/R/FO/P     |R              |L/FR/R/FL/FO/P|R                     |
  +-------------+----------+------------------+--------------+------------+--------------+---------------+--------------+----------------------+
 
   上表中所有的布局尺寸的值都支持设置为数值，而且所有布局下的子视图的宽度和高度尺寸都可以设置为等于自身的宽度和高度尺寸，布局库这里做了特殊处理，是不会造成循环引用的。比如：
@@ -273,6 +277,12 @@
  *设置视图在进行布局时只占位置而不真实的调整位置和尺寸。也就是视图的真实位置和尺寸不变，但在布局视图布局时会保留出子视图的布局位置和布局尺寸的空间，这个属性通常和useFrame混合使用来实现一些动画特效。通常在处理时设置：noLayout为YES同时useFrame为NO时布局时视图的frame是不会改变的，而当useFrame设置为YES时则noLayout属性无效。
  */
 @property(nonatomic, assign) IBInspectable BOOL noLayout;
+
+
+/**
+ *视图在布局视图中布局完成后执行的块，执行完block后会被重置为nil。通过在viewLayoutCompleteBlock中我们可以得到这个视图真实的frame值。还可以设置一些属性，主要是用来实现一些动画特效。
+ */
+@property(nonatomic,copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
 
 
 /**
@@ -353,11 +363,11 @@
 @property(nonatomic, assign) IBInspectable BOOL reverseLayout;
 
 
-
 /**
- *把一个布局视图放入到UIScrollView内时是否自动调整UIScrollView的contentSize值，默认是YES。你可以将这个属性设置NO而不调整contentSize的值，要设置这个属性值为NO请在将布局视图添加到UIScrollView以后再设置才能生效
+ *把一个布局视图放入到UIScrollView内时是否自动调整UIScrollView的contentSize值。默认是MyLayoutAdjustScrollViewContentSizeModeAuto，你可以将这个属性设置NO而不调整contentSize的值，设置为YES则一定会调整contentSize.
  */
-@property(nonatomic, assign, getter = isAdjustScrollViewContentSize) BOOL adjustScrollViewContentSize;
+@property(nonatomic, assign) MyLayoutAdjustScrollViewContentSizeMode adjustScrollViewContentSizeMode;
+@property(nonatomic, assign, getter = isAdjustScrollViewContentSize) BOOL adjustScrollViewContentSize MYDEPRECATED("use adjustScrollViewContentSizeMode to instead");
 
 
 /**

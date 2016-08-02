@@ -32,6 +32,7 @@
    
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     nav.navigationBar.translucent = NO;
+    nav.toolbar.translucent = NO;
     self.window.rootViewController = nav;
     
     [self.window makeKeyAndVisible];

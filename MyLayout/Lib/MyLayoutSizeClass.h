@@ -138,6 +138,8 @@ typedef enum : unsigned char{
 @property(nonatomic, assign) BOOL useFrame;
 @property(nonatomic, assign) BOOL noLayout;
 
+@property(nonatomic, copy) void (^viewLayoutCompleteBlock)(UIView* layout, UIView *v);
+
 /*
  隐藏不参与布局，这个属性是默认sizeClass外可以用来设置某个视图是否参与布局的标志，如果设置为YES则表示不参与布局。默认是NO。
  对于默认的sizeClass来说，就可以直接使用子视图本身的hidden属性来设置。
@@ -180,6 +182,8 @@ typedef enum : unsigned char{
 @end
 
 
+
+
 @interface MyLayoutSizeClassLinearLayout : MyLayoutSizeClassLayout
 
 @property(nonatomic,assign) MyLayoutViewOrientation orientation;
@@ -190,6 +194,8 @@ typedef enum : unsigned char{
 @property(nonatomic, assign) CGFloat subviewMargin;
 
 @end
+
+
 
 @interface MyLayoutSizeClassTableLayout : MyLayoutSizeClassLinearLayout
 
@@ -226,6 +232,11 @@ typedef enum : unsigned char{
 
 @end
 
+
+@interface MyLayoutSizeClassPathLayout  : MyLayoutSizeClassLayout
+
+
+@end
 
 
 

@@ -23,7 +23,7 @@
 
 
 //派生类重载这个函数进行布局
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass;
+-(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass;
 
 
 //判断margin是否是相对margin
@@ -58,6 +58,7 @@
 -(BOOL)isNoLayoutSubview:(UIView*)sbv;
 
 -(NSMutableArray*)getLayoutSubviews;
+-(NSMutableArray*)getLayoutSubviewsFrom:(NSArray*)sbsFrom;
 
 @end
 

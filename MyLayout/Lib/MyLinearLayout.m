@@ -189,7 +189,7 @@ IB_DESIGNABLE
 #pragma mark -- Private Method
 
 
-- (CGRect)AdjustSelfWidth:(NSArray *)sbs selfRect:(CGRect)selfRect
+- (CGSize)AdjustSelfWidth:(NSArray *)sbs selfSize:(CGSize)selfSize
 {
     
     CGFloat maxSubviewWidth = 0;
@@ -206,7 +206,7 @@ IB_DESIGNABLE
                 if (sbv.widthDime.dimeNumVal != nil)
                     vWidth = sbv.widthDime.measure;
                 
-                vWidth = [self validMeasure:sbv.widthDime sbv:sbv calcSize:vWidth sbvSize:sbv.absPos.frame.size selfLayoutSize:selfRect.size];
+                vWidth = [self validMeasure:sbv.widthDime sbv:sbv calcSize:vWidth sbvSize:sbv.absPos.frame.size selfLayoutSize:selfSize];
                 
                 //左边 + 中间偏移+ 宽度 + 右边
                 maxSubviewWidth = [self calcSelfMeasure:maxSubviewWidth
@@ -219,19 +219,19 @@ IB_DESIGNABLE
             }
         }
         
-        selfRect.size.width = maxSubviewWidth + self.leftPadding + self.rightPadding;
+        selfSize.width = maxSubviewWidth + self.leftPadding + self.rightPadding;
     }
     
-    return selfRect;
+    return selfSize;
 }
 
--(CGRect)layoutSubviewsForVert:(CGRect)selfRect sbs:(NSArray*)sbs
+-(CGSize)layoutSubviewsForVert:(CGSize)selfSize sbs:(NSArray*)sbs
 {
     
     CGFloat fixedHeight = 0;   //计算固定部分的高度
     CGFloat floatingHeight = 0; //浮动的高度。
     CGFloat totalWeight = 0;    //剩余部分的总比重
-    selfRect = [self AdjustSelfWidth:sbs selfRect:selfRect];   //调整自身的宽度
+    selfSize = [self AdjustSelfWidth:sbs selfSize:selfSize];   //调整自身的宽度
     
     NSMutableArray *fixedSbs = [NSMutableArray new];
      for (UIView *sbv in sbs)
@@ -251,14 +251,14 @@ IB_DESIGNABLE
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.heightDime.isMatchParent && !self.wrapContentHeight)
-             rect.size.height = (selfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+             rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         
         //调整子视图的宽度，如果子视图为matchParent的话
         if (sbv.widthDime.isMatchParent)
-            rect.size.width = (selfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         
         if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
-            rect.size.width = selfRect.size.width - self.leftPadding - self.rightPadding - sbv.leftPos.margin - sbv.rightPos.margin;
+            rect.size.width = selfSize.width - self.leftPadding - self.rightPadding - sbv.leftPos.margin - sbv.rightPos.margin;
         
         MyMarginGravity mg = MyMarginGravity_Horz_Left;
         if ((self.gravity & MyMarginGravity_Vert_Mask)!= MyMarginGravity_None)
@@ -275,9 +275,9 @@ IB_DESIGNABLE
                 mg = MyMarginGravity_Horz_Right;
         }
         
-        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
+        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
-        [self horzGravity:mg selfSize:selfRect.size sbv:sbv rect:&rect];
+        [self horzGravity:mg selfSize:selfSize sbv:sbv rect:&rect];
         
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
@@ -289,7 +289,7 @@ IB_DESIGNABLE
         if (isFlexedHeight)
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
         
-        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         
         //计算固定高度和浮动高度。
@@ -329,10 +329,10 @@ IB_DESIGNABLE
     }
     
     //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
-    floatingHeight = selfRect.size.height - fixedHeight - self.topPadding - self.bottomPadding;
+    floatingHeight = selfSize.height - fixedHeight - self.topPadding - self.bottomPadding;
     if (floatingHeight <= 0 || floatingHeight == -0.0)
     {
-        if (fixedSbs.count > 0 && totalWeight != 0 && floatingHeight < 0)
+        if (fixedSbs.count > 0 && totalWeight != 0 && floatingHeight < 0 && selfSize.height > 0)
         {
             CGFloat averageHeight = floatingHeight / fixedSbs.count;
             for (UIView *fsbv in fixedSbs)
@@ -363,7 +363,7 @@ IB_DESIGNABLE
                 topMargin = 0;
             
         }
-        pos += [self validMargin:sbv.topPos sbv:sbv calcPos:topMargin + sbv.topPos.offsetVal selfLayoutSize:selfRect.size];
+        pos += [self validMargin:sbv.topPos sbv:sbv calcPos:topMargin + sbv.topPos.offsetVal selfLayoutSize:selfSize];
         
         //分别处理相对高度和绝对高度
         rect.origin.y = pos;
@@ -373,7 +373,7 @@ IB_DESIGNABLE
             if (h <= 0 || h == -0.0)
                 h = 0;
             
-            rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:h sbvSize:rect.size selfLayoutSize:selfRect.size];
+            rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:h sbvSize:rect.size selfLayoutSize:selfSize];
         }
         
         pos += rect.size.height;
@@ -386,7 +386,7 @@ IB_DESIGNABLE
                 bottomMargin = 0;
             
         }
-        pos += [self validMargin:sbv.bottomPos sbv:sbv calcPos:bottomMargin + sbv.bottomPos.offsetVal selfLayoutSize:selfRect.size];
+        pos += [self validMargin:sbv.bottomPos sbv:sbv calcPos:bottomMargin + sbv.bottomPos.offsetVal selfLayoutSize:selfSize];
         
         if (sbv != sbs.lastObject)
             pos += self.subviewMargin;
@@ -399,13 +399,13 @@ IB_DESIGNABLE
     
     if (self.wrapContentHeight && totalWeight == 0)
     {
-        selfRect.size.height = pos;
+        selfSize.height = pos;
     }
     
-    return selfRect;
+    return selfSize;
 }
 
--(CGRect)layoutSubviewsForHorz:(CGRect)selfRect sbs:(NSArray*)sbs
+-(CGSize)layoutSubviewsForHorz:(CGSize)selfSize sbs:(NSArray*)sbs
 {
     
     CGFloat fixedWidth = 0;   //计算固定部分的高度
@@ -447,9 +447,9 @@ IB_DESIGNABLE
                 vWidth = sbv.widthDime.measure;
 
             if (sbv.widthDime.isMatchParent && !self.wrapContentWidth)
-                  vWidth = (selfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                  vWidth = (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
             
-            fixedWidth += [self validMeasure:sbv.widthDime sbv:sbv calcSize:vWidth sbvSize:sbv.absPos.frame.size selfLayoutSize:selfRect.size];
+            fixedWidth += [self validMeasure:sbv.widthDime sbv:sbv calcSize:vWidth sbvSize:sbv.absPos.frame.size selfLayoutSize:selfSize];
             [fixedSbs addObject:sbv];
         }
         
@@ -458,10 +458,10 @@ IB_DESIGNABLE
     }
     
     //剩余的可浮动的宽度，那些weight不为0的从这个高度来进行分发
-    floatingWidth = selfRect.size.width - fixedWidth - self.leftPadding - self.rightPadding;
+    floatingWidth = selfSize.width - fixedWidth - self.leftPadding - self.rightPadding;
     if (floatingWidth <= 0 || floatingWidth == -0.0)
     {
-        if (fixedSbs.count > 0 && totalWeight != 0 && floatingWidth < 0)
+        if (fixedSbs.count > 0 && totalWeight != 0 && floatingWidth < 0 && selfSize.width > 0)
         {
             CGFloat averageWidth = floatingWidth / fixedSbs.count;
             for (UIView *fsbv in fixedSbs)
@@ -490,10 +490,10 @@ IB_DESIGNABLE
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.widthDime.isMatchParent && !self.wrapContentWidth)
-            rect.size.width= (selfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width= (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         
         if (sbv.heightDime.isMatchParent)
-            rect.size.height= (selfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height= (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         
         
         //计算出先对左边边距和绝对左边边距
@@ -504,7 +504,7 @@ IB_DESIGNABLE
                 leftMargin = 0;
             
         }
-       pos += [self validMargin:sbv.leftPos sbv:sbv calcPos:leftMargin + sbv.leftPos.offsetVal selfLayoutSize:selfRect.size];
+       pos += [self validMargin:sbv.leftPos sbv:sbv calcPos:leftMargin + sbv.leftPos.offsetVal selfLayoutSize:selfSize];
         
         //计算出相对宽度和绝对宽度
         rect.origin.x = pos;
@@ -517,7 +517,7 @@ IB_DESIGNABLE
             rect.size.width = w;
             
         }
-        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
+        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         pos += rect.size.width;
         
@@ -528,7 +528,7 @@ IB_DESIGNABLE
             if (rightMargin <= 0 || rightMargin == -0.0)
                 rightMargin = 0;
         }
-        pos += [self validMargin:sbv.rightPos sbv:sbv calcPos:rightMargin + sbv.rightPos.offsetVal selfLayoutSize:selfRect.size];
+        pos += [self validMargin:sbv.rightPos sbv:sbv calcPos:rightMargin + sbv.rightPos.offsetVal selfLayoutSize:selfSize];
         
         
         if (sbv != sbs.lastObject)
@@ -540,7 +540,7 @@ IB_DESIGNABLE
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
         }
         
-        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         
         //计算最高的高度。
@@ -555,7 +555,7 @@ IB_DESIGNABLE
     
     if (self.wrapContentHeight)
     {
-        selfRect.size.height = maxSubviewHeight + self.topPadding + self.bottomPadding;
+        selfSize.height = maxSubviewHeight + self.topPadding + self.bottomPadding;
     }
     
     
@@ -568,11 +568,11 @@ IB_DESIGNABLE
         //计算高度
         if (sbv.heightDime.isMatchParent)
         {
-            rect.size.height = (selfRect.size.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         }
         
         if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
-            rect.size.height = selfRect.size.height - self.topPadding - self.bottomPadding - sbv.topPos.margin - sbv.bottomPos.margin;
+            rect.size.height = selfSize.height - self.topPadding - self.bottomPadding - sbv.topPos.margin - sbv.bottomPos.margin;
 
         //优先以容器中的指定为标准
         MyMarginGravity mg = MyMarginGravity_Vert_Top;
@@ -590,8 +590,8 @@ IB_DESIGNABLE
                 mg = MyMarginGravity_Vert_Bottom;
         }
         
-        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
-        [self vertGravity:mg selfSize:selfRect.size sbv:sbv rect:&rect];
+        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        [self vertGravity:mg selfSize:selfSize sbv:sbv rect:&rect];
         
         sbv.absPos.frame = rect;
     }
@@ -600,23 +600,23 @@ IB_DESIGNABLE
     
     if (self.wrapContentWidth && totalWeight == 0)
     {
-        selfRect.size.width = pos;
+        selfSize.width = pos;
     }
     
-    return selfRect;
+    return selfSize;
 }
 
 
--(CGRect)layoutSubviewsForVertGravity:(CGRect)selfRect sbs:(NSArray*)sbs
+-(CGSize)layoutSubviewsForVertGravity:(CGSize)selfSize sbs:(NSArray*)sbs
 {
     
     CGFloat totalHeight = 0;
     if (sbs.count > 1)
         totalHeight += (sbs.count - 1) * self.subviewMargin;
     
-    selfRect = [self AdjustSelfWidth:sbs selfRect:selfRect];
+    selfSize = [self AdjustSelfWidth:sbs selfSize:selfSize];
     
-    CGFloat floatingHeight = selfRect.size.height - self.topPadding - self.bottomPadding - totalHeight;
+    CGFloat floatingHeight = selfSize.height - self.topPadding - self.bottomPadding - totalHeight;
     if (floatingHeight <=0)
         floatingHeight = 0;
     
@@ -633,16 +633,16 @@ IB_DESIGNABLE
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.heightDime.isMatchParent && !self.wrapContentHeight)
-            rect.size.height = (selfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         
         //调整子视图的宽度，如果子视图为matchParent的话
         if (sbv.widthDime.isMatchParent)
         {
-            rect.size.width = (selfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         }
         
         if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
-            rect.size.width = selfRect.size.width - self.leftPadding - self.rightPadding - sbv.leftPos.margin - sbv.rightPos.margin;
+            rect.size.width = selfSize.width - self.leftPadding - self.rightPadding - sbv.leftPos.margin - sbv.rightPos.margin;
         
         //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
         MyMarginGravity mg = MyMarginGravity_Horz_Left;
@@ -660,10 +660,10 @@ IB_DESIGNABLE
                 mg = MyMarginGravity_Horz_Right;
         }
         
-        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
+        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         
-        [self horzGravity:mg selfSize:selfRect.size sbv:sbv rect:&rect];
+        [self horzGravity:mg selfSize:selfSize sbv:sbv rect:&rect];
         
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
@@ -677,14 +677,14 @@ IB_DESIGNABLE
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
        }
         
-        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
     
         
-        totalHeight += [self validMargin:sbv.topPos sbv:sbv calcPos:[sbv.topPos realMarginInSize:floatingHeight] selfLayoutSize:selfRect.size];
+        totalHeight += [self validMargin:sbv.topPos sbv:sbv calcPos:[sbv.topPos realMarginInSize:floatingHeight] selfLayoutSize:selfSize];
         
         totalHeight += rect.size.height;
         
-        totalHeight += [self validMargin:sbv.bottomPos sbv:sbv calcPos:[sbv.bottomPos realMarginInSize:floatingHeight] selfLayoutSize:selfRect.size];
+        totalHeight += [self validMargin:sbv.bottomPos sbv:sbv calcPos:[sbv.bottomPos realMarginInSize:floatingHeight] selfLayoutSize:selfSize];
         
         sbv.absPos.frame = rect;
     }
@@ -698,14 +698,14 @@ IB_DESIGNABLE
     }
     else if ((self.gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Center)
     {
-        pos = (selfRect.size.height - totalHeight - self.bottomPadding - self.topPadding)/2.0;
+        pos = (selfSize.height - totalHeight - self.bottomPadding - self.topPadding)/2.0;
         pos += self.topPadding;
     }
     else if ((self.gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Window_Center)
     {
         if (self.window != nil)
         {
-            pos = (self.window.frame.size.height - totalHeight)/2.0;
+            pos = (CGRectGetHeight(self.window.bounds) - totalHeight)/2.0;
             
             CGPoint pt = CGPointMake(0, pos);
             pos = [self.window convertPoint:pt toView:self].y;
@@ -715,29 +715,29 @@ IB_DESIGNABLE
     }
     else
     {
-        pos = selfRect.size.height - totalHeight - self.bottomPadding;
+        pos = selfSize.height - totalHeight - self.bottomPadding;
     }
     
     
     for (UIView *sbv in sbs)
     {
-        pos += [self validMargin:sbv.topPos sbv:sbv calcPos:[sbv.topPos realMarginInSize:floatingHeight] selfLayoutSize:selfRect.size];
+        pos += [self validMargin:sbv.topPos sbv:sbv calcPos:[sbv.topPos realMarginInSize:floatingHeight] selfLayoutSize:selfSize];
         
         sbv.absPos.topPos = pos;
         
         pos +=  sbv.absPos.height;
     
-        pos += [self validMargin:sbv.bottomPos sbv:sbv calcPos:[sbv.bottomPos realMarginInSize:floatingHeight] selfLayoutSize:selfRect.size];
+        pos += [self validMargin:sbv.bottomPos sbv:sbv calcPos:[sbv.bottomPos realMarginInSize:floatingHeight] selfLayoutSize:selfSize];
         
         if (sbv != sbs.lastObject)
             pos += self.subviewMargin;
     }
     
-    return selfRect;
+    return selfSize;
     
 }
 
--(CGRect)layoutSubviewsForHorzGravity:(CGRect)selfRect sbs:(NSArray*)sbs
+-(CGSize)layoutSubviewsForHorzGravity:(CGSize)selfSize sbs:(NSArray*)sbs
 {
     
     CGFloat totalWidth = 0;
@@ -749,7 +749,7 @@ IB_DESIGNABLE
     
     CGFloat maxSubviewHeight = 0;
     
-    floatingWidth = selfRect.size.width - self.leftPadding - self.rightPadding - totalWidth;
+    floatingWidth = selfSize.width - self.leftPadding - self.rightPadding - totalWidth;
     if (floatingWidth <= 0)
         floatingWidth = 0;
     
@@ -768,12 +768,12 @@ IB_DESIGNABLE
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.widthDime.isMatchParent)
-            rect.size.width= (selfRect.size.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width= (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         
         if (sbv.heightDime.isMatchParent)
-            rect.size.height= (selfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height= (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
                 
-        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfRect.size];
+        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         
         //如果高度是浮动的则需要调整高度。
@@ -782,7 +782,7 @@ IB_DESIGNABLE
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
         }
         
-        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         //计算以子视图为大小的情况
         if (self.wrapContentHeight && !sbv.heightDime.isMatchParent && (sbv.topPos.posVal == nil || sbv.bottomPos.posVal == nil))
@@ -791,11 +791,11 @@ IB_DESIGNABLE
         }
         
         
-        totalWidth += [self validMargin:sbv.leftPos sbv:sbv calcPos:[sbv.leftPos realMarginInSize:floatingWidth] selfLayoutSize:selfRect.size];
+        totalWidth += [self validMargin:sbv.leftPos sbv:sbv calcPos:[sbv.leftPos realMarginInSize:floatingWidth] selfLayoutSize:selfSize];
         
         totalWidth += rect.size.width;
     
-        totalWidth += [self validMargin:sbv.rightPos sbv:sbv calcPos:[sbv.rightPos realMarginInSize:floatingWidth] selfLayoutSize:selfRect.size];
+        totalWidth += [self validMargin:sbv.rightPos sbv:sbv calcPos:[sbv.rightPos realMarginInSize:floatingWidth] selfLayoutSize:selfSize];
         
         
         sbv.absPos.frame = rect;
@@ -805,7 +805,7 @@ IB_DESIGNABLE
     //调整自己的高度。
     if (self.wrapContentHeight)
     {
-        selfRect.size.height = maxSubviewHeight + self.topPadding + self.bottomPadding;
+        selfSize.height = maxSubviewHeight + self.topPadding + self.bottomPadding;
     }
     
     //根据对齐的方位来定位子视图的布局对齐
@@ -816,14 +816,14 @@ IB_DESIGNABLE
     }
     else if ((self.gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Center)
     {
-        pos = (selfRect.size.width - totalWidth - self.leftPadding - self.rightPadding)/2.0;
+        pos = (selfSize.width - totalWidth - self.leftPadding - self.rightPadding)/2.0;
         pos += self.leftPadding;
     }
     else if ((self.gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Window_Center)
     {
         if (self.window != nil)
         {
-            pos = (self.window.frame.size.width - totalWidth)/2.0;
+            pos = (CGRectGetWidth(self.window.bounds) - totalWidth)/2.0;
             
             CGPoint pt = CGPointMake(pos, 0);
             pos = [self.window convertPoint:pt toView:self].x;
@@ -831,14 +831,14 @@ IB_DESIGNABLE
     }
     else
     {
-        pos = selfRect.size.width - totalWidth - self.rightPadding;
+        pos = selfSize.width - totalWidth - self.rightPadding;
     }
     
     
     for (UIView *sbv in sbs)
     {
         
-        pos += [self validMargin:sbv.leftPos sbv:sbv calcPos:[sbv.leftPos realMarginInSize:floatingWidth] selfLayoutSize:selfRect.size];
+        pos += [self validMargin:sbv.leftPos sbv:sbv calcPos:[sbv.leftPos realMarginInSize:floatingWidth] selfLayoutSize:selfSize];
         
         
         CGRect rect = sbv.absPos.frame;
@@ -847,11 +847,11 @@ IB_DESIGNABLE
         //计算高度
         if (sbv.heightDime.isMatchParent)
         {
-            rect.size.height = (selfRect.size.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         }
         
         if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
-            rect.size.height = selfRect.size.height - self.topPadding - self.bottomPadding - sbv.topPos.margin - sbv.bottomPos.margin;
+            rect.size.height = selfSize.height - self.topPadding - self.bottomPadding - sbv.topPos.margin - sbv.bottomPos.margin;
         
         MyMarginGravity mg = MyMarginGravity_Vert_Top;
         if ((self.gravity & MyMarginGravity_Horz_Mask)!= MyMarginGravity_None)
@@ -868,28 +868,28 @@ IB_DESIGNABLE
                 mg = MyMarginGravity_Vert_Bottom;
         }
         
-         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfRect.size];
+         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
-        [self vertGravity:mg selfSize:selfRect.size sbv:sbv rect:&rect];
+        [self vertGravity:mg selfSize:selfSize sbv:sbv rect:&rect];
         
         sbv.absPos.frame = rect;
         
         pos += rect.size.width;
         
-        pos += [self validMargin:sbv.rightPos sbv:sbv calcPos:[sbv.rightPos realMarginInSize:floatingWidth] selfLayoutSize:selfRect.size];
+        pos += [self validMargin:sbv.rightPos sbv:sbv calcPos:[sbv.rightPos realMarginInSize:floatingWidth] selfLayoutSize:selfSize];
         
         
         if (sbv != sbs.lastObject)
             pos += self.subviewMargin;
     }
     
-    return selfRect;
+    return selfSize;
 }
 
 
--(CGRect)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
+-(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
-    CGRect selfRect = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
+    CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     
     NSArray *sbs = [self getLayoutSubviews];
     
@@ -902,7 +902,7 @@ IB_DESIGNABLE
             
             if (!isEstimate)
             {
-                sbv.absPos.frame = sbv.frame;
+                sbv.absPos.frame = sbv.bounds;
                 [self calcSizeOfWrapContentSubview:sbv];
                 
             }
@@ -947,11 +947,11 @@ IB_DESIGNABLE
 #endif
         if ((self.gravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_None)
         {
-            selfRect = [self layoutSubviewsForVertGravity:selfRect sbs:sbs];
+            selfSize = [self layoutSubviewsForVertGravity:selfSize sbs:sbs];
         }
         else
         {
-            selfRect = [self layoutSubviewsForVert:selfRect sbs:sbs];
+            selfSize = [self layoutSubviewsForVert:selfSize sbs:sbs];
         }
         
         //绘制智能线。
@@ -985,7 +985,7 @@ IB_DESIGNABLE
                         if (prevSiblingView != nil)
                         {
                             BOOL ok = YES;
-                            if ([prevSiblingView isKindOfClass:[MyBaseLayout class]])
+                            if ([prevSiblingView isKindOfClass:[MyBaseLayout class]] && self.subviewMargin == 0)
                             {
                                 MyBaseLayout *prevSiblingLayout = (MyBaseLayout*)prevSiblingView;
                                 if (prevSiblingLayout.notUseIntelligentBorderLine)
@@ -996,7 +996,7 @@ IB_DESIGNABLE
                                 sbvl.topBorderLine = self.IntelligentBorderLine;
                         }
                         
-                        if (nextSiblingView != nil && ![nextSiblingView isKindOfClass:[MyBaseLayout class]])
+                        if (nextSiblingView != nil && (![nextSiblingView isKindOfClass:[MyBaseLayout class]] || self.subviewMargin != 0))
                         {
                             sbvl.bottomBorderLine = self.IntelligentBorderLine;
                         }
@@ -1014,7 +1014,7 @@ IB_DESIGNABLE
             
             if (!isEstimate)
             {
-                sbv.absPos.frame = sbv.frame;
+                sbv.absPos.frame = sbv.bounds;
                 [self calcSizeOfWrapContentSubview:sbv];
 
             }
@@ -1060,9 +1060,9 @@ IB_DESIGNABLE
 #endif
         
         if ((self.gravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_None)
-            selfRect = [self layoutSubviewsForHorzGravity:selfRect sbs:sbs];
+            selfSize = [self layoutSubviewsForHorzGravity:selfSize sbs:sbs];
         else
-            selfRect = [self layoutSubviewsForHorz:selfRect sbs:sbs];
+            selfSize = [self layoutSubviewsForHorz:selfSize sbs:sbs];
         
         //绘制智能线。
         if (!isEstimate && self.IntelligentBorderLine != nil)
@@ -1095,7 +1095,7 @@ IB_DESIGNABLE
                         if (prevSiblingView != nil)
                         {
                             BOOL ok = YES;
-                            if ([prevSiblingView isKindOfClass:[MyBaseLayout class]])
+                            if ([prevSiblingView isKindOfClass:[MyBaseLayout class]] && self.subviewMargin == 0)
                             {
                                 MyBaseLayout *prevSiblingLayout = (MyBaseLayout*)prevSiblingView;
                                 if (prevSiblingLayout.notUseIntelligentBorderLine)
@@ -1106,7 +1106,7 @@ IB_DESIGNABLE
                                 sbvl.leftBorderLine = self.IntelligentBorderLine;
                         }
                         
-                        if (nextSiblingView != nil && ![nextSiblingView isKindOfClass:[MyBaseLayout class]])
+                        if (nextSiblingView != nil && (![nextSiblingView isKindOfClass:[MyBaseLayout class]] || self.subviewMargin != 0))
                         {
                             sbvl.rightBorderLine = self.IntelligentBorderLine;
                         }
@@ -1119,12 +1119,12 @@ IB_DESIGNABLE
         
     }
     
-    selfRect.size.height = [self validMeasure:self.heightDime sbv:self calcSize:selfRect.size.height sbvSize:selfRect.size selfLayoutSize:self.superview.frame.size];
+    selfSize.height = [self validMeasure:self.heightDime sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
-    selfRect.size.width = [self validMeasure:self.widthDime sbv:self calcSize:selfRect.size.width sbvSize:selfRect.size selfLayoutSize:self.superview.frame.size];
+    selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     
-    return selfRect;
+    return selfSize;
     
 }
 

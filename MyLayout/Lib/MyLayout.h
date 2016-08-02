@@ -35,6 +35,17 @@
  */
 
 /*
+ version1.2.3
+ 1.添加了新的布局：路径布局MyPathLayout。通过路径布局您只需要提供一个生成路径曲线的方程、以及指定子视图在路径曲线之中的距离等信息就可以让子视图按照指定的路径曲线进行布局，因此路径布局可以实现一些非常酷炫的效果。具体例子见：PLTest1,2,3,4ViewController
+ 2.添加了子视图的新方法:@property(nonatomic,copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v); 这个方法是在每个子视图布局完成后会调用一次，然后自动销毁。您可以实现这个block来进行一些子视图布局完成后的设置，一般实现这个块用来完成一些特定的动画效果，以及取值操作。具体例子见RLTest1ViewController,PLTest1ViewController
+ 3.添加了对布局视图里面的子视图通过transform进行坐标变换的支持功能，在您对子视图进行坐标变换操作时，您可以可以通过设置扩展属性来确定子视图的尺寸和位置。具体能力见PLTest系列DEMO。
+ 4.完善了智能边界线的能力，如果您在布局视图中设置了subviewMargin属性的话，布局系统将会自动的将智能边界线一分为2.具体例子见TLTest3ViewController
+ 5.布局基类的属性：adjustScrollViewContentSize被设置为过期，改为通过adjustScrollViewContentSizeMode属性来设置当布局视图加入到UIScrollView时调整其contentSize的方式。
+ 6.修正了一个线性布局中当布局视图的尺寸没有子视图尺寸大，而子视图又设置了weight属性时可能导致的计算不正确的问题。
+ 
+ */
+
+/*
  version1.2.2
  1.流式布局MyFlowLayout中的子视图添加了对weight属性的支持，流式布局中的weight属性表示的是剩余空间的占比。通过weight属性的使用，我们可以在很多用线性布局实现的布局，改用流式布局来完成，从而减少布局的嵌套。流式布局具有HTML中的Flex的特性。具体例子见FLLTest4ViewController
  2.布局视图增加了子视图反序排列的功能属性：@property(nonatomic, assign) BOOL reverseLayout; 这个属性可以按子视图添加的逆顺序进行界面布局。具体例子见：AllTest4ViewController
@@ -114,6 +125,7 @@
 #import "MyTableLayout.h"
 #import "MyFlowLayout.h"
 #import "MyFloatLayout.h"
+#import "MyPathLayout.h"
 #import "MyMaker.h"
 
 #endif

@@ -1,10 +1,10 @@
-#MyLayout1.2.2(2016.7.8)
+#MyLayout1.2.3(2016.8.3)
 
 
 ## Introduction
 ---
 
-**MyLayout is a powerful iOS UI layout framework which is not an encapsulation based on the AutoLayout but is based on primary *frame* property and by overwriting the *layoutSubview* method to realize the subview's layout. So It is unlimited to run in any version of iOS system. Its idea and principle is referenced from the layout of the Android system, iOS AutoLayout and SizeClass. You can implement the UI layout through the six kinds of layout class below: *MyLinearLayout*, *MyRelativeLayout*, *MyFrameLayout* *MyTableLayout*, *MyFlowLayout*,*MyFloatLayout* and the support for *SizeClass*.**
+**MyLayout is a powerful iOS UI layout framework which is not an encapsulation based on the AutoLayout but is based on primary *frame* property and by overwriting the *layoutSubview* method to realize the subview's layout. So It is unlimited to run in any version of iOS system. Its idea and principle is referenced from the layout of the Android system, iOS AutoLayout and SizeClass. You can implement the UI layout through the seven kinds of layout class below: *MyLinearLayout*, *MyRelativeLayout*, *MyFrameLayout* *MyTableLayout*, *MyFlowLayout*,*MyFloatLayout* ,*MyPathLayout* and the support for *SizeClass*.**
 
 **Powerful function, easy to use, barely constraint 
 setting and fit various screen size perfectly are MyLayout's main advantages.**
@@ -28,6 +28,9 @@ Flow layout is a layout view presents in multi-line that the subviews are arrang
 	
 #### MyFloatLayout
 Float layout is a layout view that the subviews are floating gravity in the given orientations, when the size is not enough to be hold, it will automatically find the best location to gravity. float layout's conception is reference from the HTML/CSS's floating positioning technology, so the float layout can be designed in implementing irregular layout. According to the different orientation of the floating, float layout can be divided into left-right float layout and up-down float layout.
+
+#### MyPathLayout
+ Path layout is a layout view that the subviews are according to a specified path curve to layout. You must provide a type of Functional equation，a coordinate and a type of distance setting to create a Path Curve than all subview are equidistance layout in the Path layout. path layout usually used to create some irregular and gorgeous UI layout.
 
 ####  SizeClass
 MyLayout provided support to SizeClass in order to fit the different screen sizes of devices. You can combinate the SizeClass with any of the 6 kinds of layout views mentioned above to perfect fit the UI of all equipments.
@@ -76,7 +79,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.2.2'
+pod 'MyLayout', '~> 1.2.3'
 ```
    
 Then, run the following command:
@@ -104,6 +107,7 @@ Then, run the following command:
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo4.gif)
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo5.gif)
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo6.gif)
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo7.gif)
 
 
 ## License
@@ -116,7 +120,7 @@ MyLayout is released under the MIT license. See LICENSE for details.
 #中文介绍
 ---
 
-   一套功能强大的iOS界面布局库，他不是在AutoLayout的基础上进行的封装，而是一套基于对frame属性的设置，并通过重载layoutSubview函数来实现对子视图进行布局的布局框架。因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了Android的布局体系和iOS自动布局以及SizeClass的功能，通过提供的：**线性布局MyLinearLayout**、**相对布局MyRelativeLayout**、**框架布局MyFrameLayout**、**表格布局MyTableLayout**、**流式布局MyFlowLayout**、**浮动布局MyFloatLayout**六个布局类，以及对**SizeClass**的支持，来完成对界面的布局。MyLayout具有功能强大、简单易用、几乎不用设置任何约束、可以完美适配各种尺寸的屏幕等优势。具体的使用方法请看Demo中的演示代码以及到我的CSDN主页中了解：
+   一套功能强大的iOS界面布局库，他不是在AutoLayout的基础上进行的封装，而是一套基于对frame属性的设置，并通过重载layoutSubview函数来实现对子视图进行布局的布局框架。因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了Android的布局体系和iOS自动布局以及SizeClass的功能，通过提供的：**线性布局MyLinearLayout**、**相对布局MyRelativeLayout**、**框架布局MyFrameLayout**、**表格布局MyTableLayout**、**流式布局MyFlowLayout**、**浮动布局MyFloatLayout**、**路径布局MyPathLayout**七个布局类，以及对**SizeClass**的支持，来完成对界面的布局。MyLayout具有功能强大、简单易用、几乎不用设置任何约束、可以完美适配各种尺寸的屏幕等优势。具体的使用方法请看Demo中的演示代码以及到我的CSDN主页中了解：
    
 [http://blog.csdn.net/yangtiang/article/details/46483999](http://blog.csdn.net/yangtiang/article/details/46483999)   线性布局  
 [http://blog.csdn.net/yangtiang/article/details/46795231](http://blog.csdn.net/yangtiang/article/details/46795231)   相对布局  
@@ -147,6 +151,9 @@ MyLayout is released under the MIT license. See LICENSE for details.
 #### 浮动布局MyFloatLayout
 浮动布局是一种里面的子视图按照约定的方向浮动停靠，当尺寸不足以被容纳时会自动寻找最佳的位置进行浮动停靠的布局视图。浮动布局的理念源于HTML/CSS中的浮动定位技术,因此浮动布局可以专门用来实现那些不规则布局或者图文环绕的布局。根据浮动的方向不同，浮动布局可以分为左右浮动布局和上下浮动布局。
 
+#### 路径布局MyPathLayout
+路径布局是一种里面的子视图根据您提供的一条特定的曲线函数形成的路径来进行布局的布局视图。您需要提供一个实现曲线路径的函数、一个特定的坐标体系、一种特定的子视图在曲线上的距离设置这三个要素来实现界面布局。当曲线路径形成后，子视图将按相等的距离依次环绕着曲线进行布局。路径布局主要应用于那些具有特定规律的不规则排列，而且效果很酷炫的的界面布局。
+
 ####  SizeClass的支持
 MyLayout布局体系为了实现对不同屏幕尺寸的设备进行适配，提供了对SIZECLASS的支持。您可以将SIZECLASS和上述的6种布局搭配使用，以便实现各种设备界面的完美适配。
 	
@@ -171,7 +178,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.2.2'
+pod 'MyLayout', '~> 1.2.3'
 ```
    
 然后运行如下命令:
@@ -185,6 +192,16 @@ $ pod install
 ##新功能
 
 ---
+###  V1.2.3版本新功能
+
+1. 添加了新的布局：路径布局MyPathLayout。通过路径布局您只需要提供一个生成路径曲线的方程、以及指定子视图在路径曲线之中的距离等信息就可以让子视图按照指定的路径曲线进行布局，因此路径布局可以实现一些非常酷炫的效果。具体例子见：PLTest1,2,3,4ViewController
+ 2. 添加了子视图的新方法:@property(nonatomic,copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v); 这个方法是在每个子视图布局完成后会调用一次，然后自动销毁。您可以实现这个block来进行一些子视图布局完成后的设置，一般实现这个块用来完成一些特定的动画效果，以及取值操作。具体例子见RLTest1ViewController,PLTest1ViewController
+ 3. 添加了对布局视图里面的子视图通过transform进行坐标变换的支持功能，在您对子视图进行坐标变换操作时，您可以可以通过设置扩展属性来确定子视图的尺寸和位置。具体能力见PLTest系列DEMO。
+ 4. 完善了智能边界线的能力，如果您在布局视图中设置了subviewMargin属性的话，布局系统将会自动的将智能边界线一分为2.具体例子见TLTest3ViewController
+ 5. 布局基类的属性：adjustScrollViewContentSize被设置为过期，改为通过adjustScrollViewContentSizeMode属性来设置当布局视图加入到UIScrollView时调整其contentSize的方式。
+ 6. 修正了一个线性布局中当布局视图的尺寸没有子视图尺寸大，而子视图又设置了weight属性时可能导致的计算不正确的问题。
+ 
+ ---
 ### V1.2.2版本新功能
  1. 流式布局MyFlowLayout中的子视图添加了对weight属性的支持，流式布局中的weight属性表示的是剩余空间的占比。通过weight属性的使用，我们可以在很多用线性布局实现的布局，改用流式布局来完成，从而减少布局的嵌套。流式布局具有HTML中的Flex的特性。具体例子见FLLTest4ViewController
  2. 布局视图增加了子视图反序排列的功能属性：@property(nonatomic, assign) BOOL reverseLayout; 这个属性可以按子视图添加的逆顺序进行界面布局。具体例子见：AllTest4ViewController
