@@ -124,7 +124,8 @@
 -(void)handleDel:(UIButton *)sender
 {
     
-    [UIView animateWithDuration:0.2 animations:^{
+    sender.useFrame = YES;
+    [UIView animateWithDuration:0.3 animations:^{
         
         sender.center = self.pathLayout.originView.center;
         sender.alpha = 0;
@@ -133,8 +134,10 @@
     } completion:^(BOOL finished) {
         
         [sender removeFromSuperview];
-        [self.pathLayout layoutAnimationWithDuration:0.3];
     }];
+    
+    [self.pathLayout layoutAnimationWithDuration:0.3];
+
     
 
 }
