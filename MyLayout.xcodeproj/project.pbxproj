@@ -104,6 +104,13 @@
 		186B83E71D095A54001CA155 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FOLTest1ViewController.xib; sourceTree = "<group>"; };
 		186C530A1C75A5BB0031B2A2 /* MyFloatLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFloatLayout.h; sourceTree = "<group>"; };
 		186C530B1C75A5BB0031B2A2 /* MyFloatLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFloatLayout.m; sourceTree = "<group>"; };
+		186DF36C1D523EDB00039E44 /* ll.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ll.png; sourceTree = "<group>"; };
+		186DF36D1D523EDB00039E44 /* pl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pl.png; sourceTree = "<group>"; };
+		186DF36E1D523EDB00039E44 /* rl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rl.png; sourceTree = "<group>"; };
+		186DF36F1D523EDB00039E44 /* tl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tl.png; sourceTree = "<group>"; };
+		186DF3701D523EDB00039E44 /* fl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fl.png; sourceTree = "<group>"; };
+		186DF3711D523EDB00039E44 /* fll.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fll.png; sourceTree = "<group>"; };
+		186DF3721D523EDB00039E44 /* flo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flo.png; sourceTree = "<group>"; };
 		1871D25D1D2F5ABA00D37F55 /* MyPathLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPathLayout.h; sourceTree = "<group>"; };
 		1871D25E1D2F5ABA00D37F55 /* MyPathLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPathLayout.m; sourceTree = "<group>"; };
 		188261CD1C647CB300996C2C /* AllTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest6ViewController.h; sourceTree = "<group>"; };
@@ -275,6 +282,20 @@
 			path = "zh-Hans.lproj";
 			sourceTree = "<group>";
 		};
+		186DF36B1D523EA100039E44 /* layoutpngs */ = {
+			isa = PBXGroup;
+			children = (
+				186DF36C1D523EDB00039E44 /* ll.png */,
+				186DF36D1D523EDB00039E44 /* pl.png */,
+				186DF36E1D523EDB00039E44 /* rl.png */,
+				186DF36F1D523EDB00039E44 /* tl.png */,
+				186DF3701D523EDB00039E44 /* fl.png */,
+				186DF3711D523EDB00039E44 /* fll.png */,
+				186DF3721D523EDB00039E44 /* flo.png */,
+			);
+			name = layoutpngs;
+			sourceTree = "<group>";
+		};
 		1896926D1CF74E03000A5B91 /* AllTestModel&View */ = {
 			isa = PBXGroup;
 			children = (
@@ -426,6 +447,7 @@
 		18F83FBD1C4F6EB7003EF090 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				186DF36B1D523EA100039E44 /* layoutpngs */,
 				18BF0BE41D5109C300395960 /* layoutdemo7.gif */,
 				1888CE7C1D0BE44300968C0C /* layoutdemo6.gif */,
 				1888CE7D1D0BE44300968C0C /* layoutdemo5.gif */,
