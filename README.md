@@ -4,12 +4,12 @@
 ## Introduction
 ---
 
-**MyLayout is a powerful iOS UI layout framework which is not an encapsulation based on the AutoLayout but is based on primary *frame* property and by overwriting the *layoutSubview* method to realize the subview's layout. So It is unlimited to run in any version of iOS system. Its idea and principle is referenced from the layout of the Android system, iOS AutoLayout and SizeClass. You can implement the UI layout through the seven kinds of layout class below: MyLinearLayout, MyRelativeLayout, MyFrameLayout MyTableLayout, MyFlowLayout,MyFloatLayout ,MyPathLayout and the support for SizeClass.**
+**MyLayout is a powerful iOS UI layout framework which is not an encapsulation based on the AutoLayout but is based on primary *frame* property and by overwriting the *layoutSubview* method to realize the subview's layout. So It is unlimited to run in any version of iOS system. Its idea and principle is referenced from the layout of the Android system, HTML/CSS float&flexbox, iOS AutoLayout and SizeClass. You can implement the UI layout through the seven kinds of layout class below: MyLinearLayout, MyRelativeLayout, MyFrameLayout MyTableLayout, MyFlowLayout,MyFloatLayout ,MyPathLayout and the support for SizeClass.**
 
 **Powerful function, easy to use, barely constraint 
 setting and fit various screen size perfectly are MyLayout's main advantages.**
 
-**I wish you use MyLayout right now or in your next project will be happy!**
+**I hope you use MyLayout right now or in your next project will be happy!**
 
 #### MyLinearLayout
 Linear layout is a single line layout view that the subviews are arranged in sequence according to the added order（from top to bottom or from left to right). So the subviews' origin&size constraints are established by the added order. Subviews arranged in top-to-bottom order is called vertical linear layout view, and 
@@ -161,7 +161,7 @@ Table layout is a layout view that the subviews are multi-row&col arranged like 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/tl.png)
 
 #### MyFlowLayout
-Flow layout is a layout view presents in multi-line that the subviews are arranged in sequence according to the added order, and when meeting with a arranging constraint it will start a new line and rearrange. The constrains mentioned here includes count constraints and size constraints. The orientation of the new line would be vertical and horizontal, so the flow layout is divided into: count constraints vertical flow layout, size constraints vertical flow layout, count constraints horizontal flow layout,  size constraints horizontal flow layout. Flow layout often used in the scenes that the subviews is  arranged regularly, it can be substitutive of UICollectionView to some extent.
+Flow layout is a layout view presents in multi-line that the subviews are arranged in sequence according to the added order, and when meeting with a arranging constraint it will start a new line and rearrange. The constrains mentioned here includes count constraints and size constraints. The orientation of the new line would be vertical and horizontal, so the flow layout is divided into: count constraints vertical flow layout, size constraints vertical flow layout, count constraints horizontal flow layout,  size constraints horizontal flow layout. Flow layout often used in the scenes that the subviews is  arranged regularly, it can be substitutive of UICollectionView to some extent. the MyFlowLayout is almost implement the flex-box function of the HTML/CSS.
 
 ```objective-c
    MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
