@@ -15,6 +15,7 @@ setting and fit various screen size perfectly are MyLayout's main advantages.**
 ### MyLinearLayout
 Linear layout is a single line layout view that the subviews are arranged in sequence according to the added order（from top to bottom or from left to right). So the subviews' origin&size constraints are established by the added order. Subviews arranged in top-to-bottom order is called vertical linear layout view, and 
 the subviews arranged in left-to-right order is called horizontal linear layout.
+
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/ll.png)
 
 Sample code:
@@ -47,7 +48,7 @@ D.myHeight = 40;
 
 ```
 
-**\*MyLinearLayout be equivalent to LinearLayout of Android and UIStackView**
+**MyLinearLayout be equivalent to LinearLayout of Android and UIStackView**
 
 ---
 ### MyRelativeLayout
@@ -97,11 +98,12 @@ E.widthDime.equalTo(rootLayout.widthDime);
 //...F,G
 
 ```
-**\*MyRelativeLayout be equivalent to RelativeLayout of Android and AutoLayout**
+**MyRelativeLayout be equivalent to RelativeLayout of Android and AutoLayout**
 
 ---
 ### MyFrameLayout
 Frame layout is a layout view that the subviews can be overlapped and gravity in a special location of the superview.The subviews' layout position&size is not depended to the adding order and establish dependency constraint with the superview. Frame layout devided the vertical orientation to top,vertical center and bottom, while horizontal orientation is devided to left,horizontal center and right. Any of the subviews is just gravity in either vertical orientation or horizontal orientation.
+
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fl.png)
 
 Sample code:
@@ -134,11 +136,12 @@ Sample code:
   
 ```
 
-**\*MyFrameLayout be equivalent to FrameLayout of Android **
+**MyFrameLayout be equivalent to FrameLayout of Android**
 
 ---
 ### MyTableLayout
 Table layout is a layout view that the subviews are multi-row&col arranged like a table. First you must create a rowview and add it to the table layout, then add the subview to the rowview. If the rowviews arranged in top-to-bottom order,the tableview is caled vertical table layout,in which the subviews are arranged from left to right; If the rowviews arranged in in left-to-right order,the tableview is caled horizontal table layout,in which the subviews are arranged from top to bottom.
+
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/tl.png)
 
 Sample code:
@@ -172,7 +175,7 @@ Sample code:
   
 ```
 
-**\*MyTableLayout be equivalent to TableLayout of Android and table element of HTML**
+**MyTableLayout be equivalent to TableLayout of Android and table element of HTML**
 
 ---
 
@@ -201,7 +204,7 @@ Sample code:
 
 ```
 
-**\*MyFlowLayout be equivalent to flexbox of CSS3**
+**MyFlowLayout be equivalent to flexbox of CSS3**
 
 ---	
 ### MyFloatLayout
@@ -244,7 +247,7 @@ Sample code:
 
 ```
 
-**\*MyFloatLayout be equivalent to float of CSS**
+**MyFloatLayout be equivalent to float of CSS**
 
 ---
 ### MyPathLayout
@@ -273,13 +276,13 @@ Sample code:
  
  ```
   
-  **\*MyPathLayout is only implement in MyLayout**
+  **MyPathLayout is only implement in MyLayout**
   
 ---
 ###  MySizeClass
 MyLayout provided support to SizeClass in order to fit the different screen sizes of devices. You can combinate the SizeClass with any of the 6 kinds of layout views mentioned above to perfect fit the UI of all equipments.
 
-**\*MySizeClass be equivalent to SizeClass of iOS**
+**MySizeClass be equivalent to SizeClass of iOS**
 
 
 ##How To Get Started
