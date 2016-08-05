@@ -11,14 +11,18 @@ setting and fit various screen size perfectly are MyLayout's main advantages.**
 
 **I hope you use MyLayout right now or in your next project will be happy!**
 
-#### MyLinearLayout
+---
+### MyLinearLayout
 Linear layout is a single line layout view that the subviews are arranged in sequence according to the added order（from top to bottom or from left to right). So the subviews' origin&size constraints are established by the added order. Subviews arranged in top-to-bottom order is called vertical linear layout view, and 
 the subviews arranged in left-to-right order is called horizontal linear layout.
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/ll.png)
+
+Sample code:
 
 ```objective-c
-
 MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
 rootLayout.wrapContentWidth = YES;
+rootLayout.subviewMargin = 10;
 
 UIView *A = [UIView new];
 A.myLeftMargin = A.myRightMargin = 5;
@@ -31,7 +35,7 @@ B.myWidth = B.myHeight = 40;
 [rootLayout addSubview:B];
 
 UIView *C = [UIView new];
-C.myLeftMargin = 30;
+C.myRightMargin = 40;
 C.myWidth = 50;
 C.myHeight = 40;
 [rootLayout addSubview:C];
@@ -42,10 +46,16 @@ D.myHeight = 40;
 [rootLayout addSubview:D];
 
 ```
-![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/ll.png)
 
-#### MyRelativeLayout
+**\*MyLinearLayout be equivalent to LinearLayout of Android and UIStackView**
+
+---
+### MyRelativeLayout
 Relative layout is a layout view that the subviews layout and position through mutual constraints.The subviews in the relative layout are not depended to the adding order but layout and position by setting the subviews' constraints.
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/rl.png)
+
+Sample code:
 
 ```objective-c
 MyRelativeLayout *rootLayout = [MyRelativeLayout new];
@@ -87,11 +97,14 @@ E.widthDime.equalTo(rootLayout.widthDime);
 //...F,G
 
 ```
+**\*MyRelativeLayout be equivalent to RelativeLayout of Android and AutoLayout**
 
-![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/rl.png)
-
-#### MyFrameLayout
+---
+### MyFrameLayout
 Frame layout is a layout view that the subviews can be overlapped and gravity in a special location of the superview.The subviews' layout position&size is not depended to the adding order and establish dependency constraint with the superview. Frame layout devided the vertical orientation to top,vertical center and bottom, while horizontal orientation is devided to left,horizontal center and right. Any of the subviews is just gravity in either vertical orientation or horizontal orientation.
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fl.png)
+
+Sample code:
 
 ```objective-c
   MyFrameLayout *rootLayout = [MyFrameLayout new];
@@ -119,16 +132,16 @@ Frame layout is a layout view that the subviews can be overlapped and gravity in
   
   //..E，F,G
   
-  
-  
-  
-
 ```
-![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fl.png)
 
+**\*MyFrameLayout be equivalent to FrameLayout of Android **
 
-#### MyTableLayout
+---
+### MyTableLayout
 Table layout is a layout view that the subviews are multi-row&col arranged like a table. First you must create a rowview and add it to the table layout, then add the subview to the rowview. If the rowviews arranged in top-to-bottom order,the tableview is caled vertical table layout,in which the subviews are arranged from left to right; If the rowviews arranged in in left-to-right order,the tableview is caled horizontal table layout,in which the subviews are arranged from top to bottom.
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/tl.png)
+
+Sample code:
 
 ```objective-c
   MyTableLayout *rootLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
@@ -158,10 +171,17 @@ Table layout is a layout view that the subviews are multi-row&col arranged like 
   
   
 ```
-![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/tl.png)
 
-#### MyFlowLayout
+**\*MyTableLayout be equivalent to TableLayout of Android and table element of HTML**
+
+---
+
+### MyFlowLayout
 Flow layout is a layout view presents in multi-line that the subviews are arranged in sequence according to the added order, and when meeting with a arranging constraint it will start a new line and rearrange. The constrains mentioned here includes count constraints and size constraints. The orientation of the new line would be vertical and horizontal, so the flow layout is divided into: count constraints vertical flow layout, size constraints vertical flow layout, count constraints horizontal flow layout,  size constraints horizontal flow layout. Flow layout often used in the scenes that the subviews is  arranged regularly, it can be substitutive of UICollectionView to some extent. the MyFlowLayout is almost implement the flex-box function of the HTML/CSS.
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fll.png)
+
+Sample code:
 
 ```objective-c
    MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
@@ -180,12 +200,16 @@ Flow layout is a layout view presents in multi-line that the subviews are arrang
    
 
 ```
-![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fll.png)
 
+**\*MyFlowLayout be equivalent to flexbox of CSS3**
 
-	
-#### MyFloatLayout
+---	
+### MyFloatLayout
 Float layout is a layout view that the subviews are floating gravity in the given orientations, when the size is not enough to be hold, it will automatically find the best location to gravity. float layout's conception is reference from the HTML/CSS's floating positioning technology, so the float layout can be designed in implementing irregular layout. According to the different orientation of the floating, float layout can be divided into left-right float layout and up-down float layout.
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/flo.png)
+
+Sample code:
 
 ```objective-c
      MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
@@ -219,10 +243,16 @@ Float layout is a layout view that the subviews are floating gravity in the give
      
 
 ```
-![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/flo.png)
 
-#### MyPathLayout
+**\*MyFloatLayout be equivalent to float of CSS**
+
+---
+### MyPathLayout
  Path layout is a layout view that the subviews are according to a specified path curve to layout. You must provide a type of Functional equation，a coordinate and a type of distance setting to create a Path Curve than all subview are equidistance layout in the Path layout. path layout usually used to create some irregular and gorgeous UI layout.
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/pl.png)
+
+Sample code:
  
  ```objective-c
     MyPathLayout *rootLayout = [MyPathLayout new];
@@ -242,10 +272,15 @@ Float layout is a layout view that the subviews are floating gravity in the give
    }
  
  ```
- ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/pl.png)
-
-####  SizeClass
+  
+  **\*MyPathLayout is only implement in MyLayout**
+  
+---
+###  MySizeClass
 MyLayout provided support to SizeClass in order to fit the different screen sizes of devices. You can combinate the SizeClass with any of the 6 kinds of layout views mentioned above to perfect fit the UI of all equipments.
+
+**\*MySizeClass be equivalent to SizeClass of iOS**
+
 
 ##How To Get Started
 ---
@@ -267,7 +302,7 @@ Because my english is poor so I just only can support chinese articles，and I w
 ---
 
 - If you need help, use Stack Overflow or Baidu. (Tag 'mylayout')
-- If you'd like to contact me, use qq:156355113 or weibo:欧阳大哥 or email:obq0387_cn@sina.com
+- If you'd like to contact me, use *qq:156355113 or weibo:欧阳大哥 or email:obq0387_cn@sina.com*
 - If you found a bug, and can provide steps to reliably reproduce it, open an issue.
 - If you have a feature request, open an issue.
 - If you want to contribute, submit a pull request.
