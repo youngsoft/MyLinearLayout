@@ -8,11 +8,10 @@
 
 #MyLayout(2016.8.3)
 
-#### **English **: [Introduction](README.md)
+#### English : [Introduction](README.md)
 
 ##功能介绍
 ---
-
    一套功能强大的iOS界面布局库，他不是在AutoLayout的基础上进行的封装，而是一套基于对frame属性的设置，并通过重载layoutSubview函数来实现对子视图进行布局的布局框架。因此可以无限制的运行在任何版本的iOS系统中。其设计思想以及原理则参考了Android的布局体系和iOS自动布局以及SizeClass的功能，通过提供的：**线性布局MyLinearLayout**、**相对布局MyRelativeLayout**、**框架布局MyFrameLayout**、**表格布局MyTableLayout**、**流式布局MyFlowLayout**、**浮动布局MyFloatLayout**、**路径布局MyPathLayout**七个布局类，以及对**SizeClass**的支持，来完成对界面的布局。MyLayout具有功能强大、简单易用、几乎不用设置任何约束、可以完美适配各种尺寸的屏幕等优势。具体的使用方法请看Demo中的演示代码以及到我的CSDN主页中了解：
    
 [http://blog.csdn.net/yangtiang/article/details/46483999](http://blog.csdn.net/yangtiang/article/details/46483999)   线性布局  
