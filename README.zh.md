@@ -1,6 +1,6 @@
 [![Version](https://img.shields.io/cocoapods/v/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
-[![License](https://img.shields.io/cocoapods/l/JHUD.svg?style=flat)](http://cocoapods.org/pods/JHUD)
-[![Platform](https://img.shields.io/cocoapods/p/JHUD.svg?style=flat)](http://cocoapods.org/pods/JHUD)
+[![License](https://img.shields.io/cocoapods/l/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
+[![Platform](https://img.shields.io/cocoapods/p/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
 [![Support](https://img.shields.io/badge/support-iOS%205%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
 [![Weibo](https://img.shields.io/badge/Sina微博-@欧阳大哥2013-yellow.svg?style=flat)](http://weibo.com/1411091507)
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
