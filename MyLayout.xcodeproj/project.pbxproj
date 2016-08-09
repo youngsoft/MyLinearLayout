@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		18014BA51C9079DA0088133B /* MyDimeScale.m in Sources */ = {isa = PBXBuildFile; fileRef = 18014BA41C9079DA0088133B /* MyDimeScale.m */; };
+		181ECE631D570CA1007803BE /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 181ECE5F1D570CA1007803BE /* YYFPSLabel.m */; };
+		181ECE641D570CA1007803BE /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 181ECE601D570CA1007803BE /* YYWeakProxy.m */; };
 		18296B6F1C76D55B00273C3E /* FOLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18296B6E1C76D55B00273C3E /* FOLTest1ViewController.m */; };
 		18296B721C76D66C00273C3E /* FOLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18296B711C76D66C00273C3E /* FOLTest2ViewController.m */; };
 		18296B751C76D67F00273C3E /* FOLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18296B741C76D67F00273C3E /* FOLTest3ViewController.m */; };
@@ -85,6 +87,10 @@
 /* Begin PBXFileReference section */
 		18014BA31C9079DA0088133B /* MyDimeScale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDimeScale.h; sourceTree = "<group>"; };
 		18014BA41C9079DA0088133B /* MyDimeScale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDimeScale.m; sourceTree = "<group>"; };
+		181ECE5F1D570CA1007803BE /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYFPSLabel.m; sourceTree = "<group>"; };
+		181ECE601D570CA1007803BE /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
+		181ECE611D570CA1007803BE /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
+		181ECE621D570CA1007803BE /* YYFPSLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYFPSLabel.h; sourceTree = "<group>"; };
 		18296B6D1C76D55B00273C3E /* FOLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest1ViewController.h; sourceTree = "<group>"; };
 		18296B6E1C76D55B00273C3E /* FOLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest1ViewController.m; sourceTree = "<group>"; };
 		18296B701C76D66C00273C3E /* FOLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest2ViewController.h; sourceTree = "<group>"; };
@@ -299,6 +305,10 @@
 		1896926D1CF74E03000A5B91 /* AllTestModel&View */ = {
 			isa = PBXGroup;
 			children = (
+				181ECE5F1D570CA1007803BE /* YYFPSLabel.m */,
+				181ECE601D570CA1007803BE /* YYWeakProxy.m */,
+				181ECE611D570CA1007803BE /* YYWeakProxy.h */,
+				181ECE621D570CA1007803BE /* YYFPSLabel.h */,
 				189692741CF74EBB000A5B91 /* AllTestDataModel.h */,
 				189692751CF74EC5000A5B91 /* AllTestDataModel.m */,
 				18DC7F531CF5510F008E5FCB /* AllTest1TableViewCell.h */,
@@ -610,6 +620,7 @@
 				18D684501C4F421400A48BB4 /* TLTest1ViewController.m in Sources */,
 				18D684361C4F421400A48BB4 /* FLLTest1ViewController.m in Sources */,
 				18D684481C4F421400A48BB4 /* LLTest4ViewController.m in Sources */,
+				181ECE631D570CA1007803BE /* YYFPSLabel.m in Sources */,
 				18D684431C4F421400A48BB4 /* MyRelativeLayout.m in Sources */,
 				18C8F1641D4DA6B800DC1FD3 /* PLTest3ViewController.m in Sources */,
 				18D684451C4F421400A48BB4 /* LLTest1ViewController.m in Sources */,
@@ -620,6 +631,7 @@
 				46DB7E6B1C54B4BC001B409D /* AllTest5ViewController.m in Sources */,
 				18D6844B1C4F421400A48BB4 /* LLTest7ViewController.m in Sources */,
 				18D6843F1C4F421400A48BB4 /* MyLayoutMeasure.m in Sources */,
+				181ECE641D570CA1007803BE /* YYWeakProxy.m in Sources */,
 				18D684371C4F421400A48BB4 /* FLTest1ViewController.m in Sources */,
 				186C530C1C75A5BB0031B2A2 /* MyFloatLayout.m in Sources */,
 				1830A6091CD6EC4500FF6B57 /* FLLTest3ViewController.m in Sources */,

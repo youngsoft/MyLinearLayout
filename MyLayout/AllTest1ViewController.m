@@ -12,7 +12,7 @@
 #import "AllTest1TableViewHeaderFooterView.h"
 
 #import "MyLayout.h"
-
+#import "YYFPSLabel.h"
 
 @interface AllTest1ViewController ()
 
@@ -83,6 +83,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    self.navigationItem.titleView = [[YYFPSLabel alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
+    
     /**
         布局视图和UITableView的结合可以很简单的实现静态和动态高度的tableviewcell。以及tableview的section,tableheaderfooter部分使用布局视图的方法
      */
