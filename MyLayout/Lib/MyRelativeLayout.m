@@ -873,9 +873,7 @@ IB_DESIGNABLE
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
-            if (pHasSubLayout != NULL)
-                *pHasSubLayout = YES;
-            
+           
             MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
             
             if (sbvl.wrapContentWidth)
@@ -891,8 +889,10 @@ IB_DESIGNABLE
                     [sbvl setWrapContentHeightNoLayout:NO];
             }
             
+            if (pHasSubLayout != nil && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
+                *pHasSubLayout = YES;
             
-            if (isEstimate)
+            if (isEstimate && (sbvl.wrapContentWidth || sbvl.wrapContentHeight))
             {
                 [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
                 

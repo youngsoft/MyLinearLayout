@@ -145,8 +145,6 @@ IB_DESIGNABLE
 
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
-            if (pHasSubLayout != nil)
-                *pHasSubLayout = YES;
             
             MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
             
@@ -160,7 +158,11 @@ IB_DESIGNABLE
                 [sbvl setWrapContentWidthNoLayout:NO];
             }
             
-            if (isEstimate)
+            
+            if (pHasSubLayout != nil && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
+                *pHasSubLayout = YES;
+            
+            if (isEstimate && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
             {
                [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
                 sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置

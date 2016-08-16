@@ -1453,8 +1453,6 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
-            if (pHasSubLayout != NULL)
-                *pHasSubLayout = YES;
             
             MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
             
@@ -1478,9 +1476,10 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
                 }
             }
 
+            if (pHasSubLayout != nil && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
+                *pHasSubLayout = YES;
             
-            
-            if (isEstimate)
+            if (isEstimate && (sbvl.wrapContentWidth || sbvl.wrapContentHeight))
             {
                 [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
                 sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置

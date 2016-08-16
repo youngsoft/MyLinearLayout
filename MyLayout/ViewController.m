@@ -21,6 +21,7 @@
 #import "RLTest1ViewController.h"
 #import "RLTest2ViewController.h"
 #import "RLTest3ViewController.h"
+#import "RLTest4ViewController.h"
 
 
 #import "TLTest1ViewController.h"
@@ -101,6 +102,9 @@
                            },
                          @{@"title":NSLocalizedString(@"3.RelativeLayout - Centered", @""),
                            @"class":[RLTest3ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"4.RelativeLayout - Scroll&Dock", @""),
+                           @"class":[RLTest4ViewController class]
                            },
                          @{@"title":NSLocalizedString(@"1.TableLayout - Vert", @""),
                            @"class":[TLTest1ViewController class]

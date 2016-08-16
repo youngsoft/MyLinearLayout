@@ -20,6 +20,7 @@
 "1.RelativeLayout - Constraint&Dependence" = "1.相对布局-子视图之间的约束依赖";
 "2.RelativeLayout - Prorate size" = "2.相对布局-子视图的尺寸按比例分配";
 "3.RelativeLayout - Centered" = "3.相对布局-子视图整体居中";
+"4.RelativeLayout - Scroll&Dock" = "4.相对布局-滚动和停靠";
 "1.TableLayout - Vert" = "1.表格布局-垂直表格";
 "2.TableLayout - Waterfall(Horz)" = "2.表格布局-水平表格实现瀑布流";
 "3.TableLayout - Intelligent borderLine" = "3.表格布局-表格和智能边界线";
@@ -137,6 +138,10 @@
 "subviews horz centered in superview"="子视图整体水平居中";
 "subviews vert centered in superview"="子视图整体垂直居中";
 "subviews centered in superview"="子视图整体居中";
+
+//RLTest4ViewController
+"Scroll the view please"="请滚动视图看看效果";
+"This view will Dock to top when scroll"="这是一段随着视图滚动会停靠在顶部的子视图";
 
 //TLTest2ViewController
 "add cell"="添加列条目";

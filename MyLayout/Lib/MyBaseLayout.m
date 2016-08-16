@@ -520,7 +520,11 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 
 /**绘制线条层委托实现类**/
+#ifdef MAC_OS_X_VERSION_10_12
+@interface MyBorderLineLayerDelegate : NSObject<CALayerDelegate>
+#else
 @interface MyBorderLineLayerDelegate : NSObject
+#endif
 
 @property(nonatomic ,weak) MyBaseLayout *layout;
 
@@ -905,6 +909,10 @@ BOOL _hasBegin;
     
     BOOL hasSubLayout = NO;
     CGSize selfSize= [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
+    
+    self.absPos.width = selfSize.width;
+    self.absPos.height = selfSize.height;
+    
     if (hasSubLayout)
     {
         selfSize = [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass];

@@ -68,8 +68,8 @@
     float fps = _count / delta;
     _count = 0;
     
-    CGFloat progress = fps / 60.0;
-    UIColor *color = [UIColor colorWithHue:0.27 * (progress - 0.2) saturation:1 brightness:0.9 alpha:1];
+ //   CGFloat progress = fps / 60.0;
+   // UIColor *color = [UIColor colorWithHue:0.27 * (progress - 0.2) saturation:1 brightness:0.9 alpha:1];
     
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d FPS",(int)round(fps)]];
     
