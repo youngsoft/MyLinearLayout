@@ -47,6 +47,7 @@
 #import "FOLTest3ViewController.h"
 #import "FOLTest4ViewController.h"
 #import "FOLTest5ViewController.h"
+#import "FOLTest6ViewController.h"
 
 #import "PLTest1ViewController.h"
 #import "PLTest2ViewController.h"
@@ -141,6 +142,9 @@
                            },
                          @{@"title":NSLocalizedString(@"5.FloatLayout - Title & Description", @""),
                            @"class":[FOLTest5ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"6.FloatLayout - User Profiles", @""),
+                           @"class":[FOLTest6ViewController class]
                            },
                          @{@"title":NSLocalizedString(@"1.PathLayout - Animations", @""),
                            @"class":[PLTest1ViewController class]

@@ -12,7 +12,8 @@
 @interface RLTest4ViewController ()<UIScrollViewDelegate>
 
 
-@property(nonatomic, strong) UIView *testView;
+@property(nonatomic, strong) UIView *testTopDockView;
+
 
 @end
 
@@ -70,7 +71,7 @@
     v4.numberOfLines = 0;
     v4.text = NSLocalizedString(@"This view will Dock to top when scroll", @"");
     [rootLayout addSubview:v4];
-    self.testView = v4;
+    self.testTopDockView = v4;
     
     v2.topPos.equalTo(v4.bottomPos);
     
@@ -99,24 +100,24 @@
         //所以当特定的子视图的noLayout设置为YES后，我们就可以手动的设置其frame值来达到悬停的能力。
         //需要注意的是这个特定的子视图一定要最后加入到布局视图中去。
         //代码就是这么简单，这么任性。。。
-        if (!self.testView.noLayout)
+        if (!self.testTopDockView.noLayout)
         {
-            self.testView.noLayout = YES;
+            self.testTopDockView.noLayout = YES;
         }
         
-        if (self.testView.noLayout)
+        if (self.testTopDockView.noLayout)
         {
-            CGRect rect = self.testView.frame;
-            self.testView.frame = CGRectMake(rect.origin.x, scrollView.contentOffset.y, rect.size.width, rect.size.height);
+            CGRect rect = self.testTopDockView.frame;
+            self.testTopDockView.frame = CGRectMake(rect.origin.x, scrollView.contentOffset.y, rect.size.width, rect.size.height);
             
         }
         
     }
     else
     {
-        if (self.testView.noLayout)
+        if (self.testTopDockView.noLayout)
         {
-            self.testView.noLayout = NO;
+            self.testTopDockView.noLayout = NO;
         }
     }
 }

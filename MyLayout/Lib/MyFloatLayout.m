@@ -117,6 +117,23 @@
     return self.myCurrentSizeClass.gravity;
 }
 
+
+-(void)setNoBoundaryLimit:(BOOL)noBoundaryLimit
+{
+    MyFloatLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.noBoundaryLimit != noBoundaryLimit)
+    {
+        lsc.noBoundaryLimit = noBoundaryLimit;
+        [self setNeedsLayout];
+    }
+}
+
+-(BOOL)noBoundaryLimit
+{
+    return self.myCurrentSizeClass.noBoundaryLimit;
+}
+
+
 -(void)setSubviewHorzMargin:(CGFloat)subviewHorzMargin
 {
     MyFloatLayout *lsc = self.myCurrentSizeClass;
@@ -332,9 +349,17 @@
 -(CGSize)layoutSubviewsForVert:(CGSize)selfSize sbs:(NSArray*)sbs
 {
     UIEdgeInsets padding = self.padding;
+    BOOL hasBoundaryLimit = YES;
+    if (self.wrapContentWidth && self.noBoundaryLimit)
+        hasBoundaryLimit = NO;
+    
+    //如果没有边界限制我们将高度设置为最大。。
+    if (!hasBoundaryLimit)
+        selfSize.width = CGFLOAT_MAX;
+
     
     //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-    if (self.wrapContentWidth)
+    if (self.wrapContentWidth && hasBoundaryLimit)
     {
         CGFloat maxContentWidth = selfSize.width - padding.left - padding.right;
         for (UIView *sbv in sbs)
@@ -382,6 +407,13 @@
     CGFloat subviewSize = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).subviewSize;
     if (subviewSize != 0)
     {
+        
+#ifdef DEBUG
+        //异常崩溃：当布局视图设置了noBoundaryLimit为YES时，不能设置最小垂直间距。
+        NSCAssert(hasBoundaryLimit, @"Constraint exception！！, vertical float layout:%@ can not set noBoundaryLimit to YES when call  setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin  method",self);
+#endif
+
+        
         CGFloat minMargin = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).minMargin;
         
         NSInteger rowCount =  floor((selfSize.width - padding.left - padding.right  + minMargin) / (subviewSize + minMargin));
@@ -410,6 +442,7 @@
     CGFloat leftMaxHeight = padding.top;
     CGFloat rightMaxHeight = padding.top;
     CGFloat maxHeight = padding.top;
+    CGFloat maxWidth = padding.left;
     
     for (UIView *sbv in sbs)
     {
@@ -462,6 +495,11 @@
         
         if (sbv.reverseFloat)
         {
+#ifdef DEBUG
+            //异常崩溃：当布局视图设置了noBoundaryLimit为YES时子视图不能设置逆向浮动
+            NSCAssert(hasBoundaryLimit, @"Constraint exception！！, vertical float layout:%@ can not set noBoundaryLimit to YES when the subview:%@ set reverseFloat to YES.",self, sbv);
+#endif
+
             CGPoint nextPoint = {selfSize.width - padding.right, leftLastYOffset};
             CGFloat leftCandidateXBoundary = padding.left;
             if (sbv.clearFloat)
@@ -593,7 +631,7 @@
                 //找到最低点。
                 nextPoint.y = MAX(leftMaxHeight, rightLastYOffset);
                 
-                CGPoint rightPoint = [self findRightCandidatePoint:CGRectMake(padding.left, nextPoint.y, 0, CGFLOAT_MAX) width:leftMargin + (sbv.weight != 0 ? 0 : rect.size.width) + rightMargin rightBoundary:selfSize.width - padding.right rightCandidateRects:rightCandidateRects hasWeight:NO ];
+                CGPoint rightPoint = [self findRightCandidatePoint:CGRectMake(padding.left, nextPoint.y, 0, CGFLOAT_MAX) width:leftMargin + (sbv.weight != 0 ? 0 : rect.size.width) + rightMargin rightBoundary:rightCandidateXBoundary rightCandidateRects:rightCandidateRects hasWeight:NO ];
                 if (rightPoint.y != CGFLOAT_MAX)
                 {
                     nextPoint.y = MAX(leftMaxHeight, rightPoint.y);
@@ -622,6 +660,11 @@
             //重新设置宽度
             if (sbv.weight != 0)
             {
+#ifdef DEBUG
+                //异常崩溃：当布局视图设置了noBoundaryLimit为YES时子视图不能设置weight大于0
+                NSCAssert(hasBoundaryLimit, @"Constraint exception！！, vertical float layout:%@ can not set noBoundaryLimit to YES when the subview:%@ set weight big than zero.",self, sbv);
+#endif
+
                 rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:(rightCandidateXBoundary - nextPoint.x + sbv.widthDime.addVal) * sbv.weight - leftMargin - rightMargin sbvSize:rect.size selfLayoutSize:selfSize];
                 
                 if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
@@ -698,14 +741,24 @@
         if (rect.origin.y + rect.size.height + bottomMargin + vertMargin > maxHeight)
             maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
         
+        if (rect.origin.x + rect.size.width + rightMargin + horzMargin > maxWidth)
+            maxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin;
+        
         sbv.absPos.frame = rect;
         
     }
     
     if (sbs.count > 0)
+    {
         maxHeight -= vertMargin;
+        maxWidth -= horzMargin;
+    }
     
     maxHeight += padding.bottom;
+    maxWidth += padding.right;
+    
+    if (!hasBoundaryLimit)
+        selfSize.width = maxWidth;
     
     if (self.wrapContentHeight)
         selfSize.height = maxHeight;
@@ -740,9 +793,16 @@
 -(CGSize)layoutSubviewsForHorz:(CGSize)selfSize sbs:(NSArray*)sbs
 {
     UIEdgeInsets padding = self.padding;
+    BOOL hasBoundaryLimit = YES;
+    if (self.wrapContentHeight && self.noBoundaryLimit)
+        hasBoundaryLimit = NO;
+
+    //如果没有边界限制我们将高度设置为最大。。
+    if (!hasBoundaryLimit)
+        selfSize.height = CGFLOAT_MAX;
     
     //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-    if (self.wrapContentHeight)
+    if (self.wrapContentHeight && hasBoundaryLimit)
     {
         CGFloat maxContentHeight = selfSize.height - padding.top - padding.bottom;
         for (UIView *sbv in sbs)
@@ -795,6 +855,11 @@
     CGFloat subviewSize = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).subviewSize;
     if (subviewSize != 0)
     {
+#ifdef DEBUG
+        //异常崩溃：当布局视图设置了noBoundaryLimit为YES时，不能设置最小垂直间距。
+        NSCAssert(hasBoundaryLimit, @"Constraint exception！！, horizontal float layout:%@ can not set noBoundaryLimit to YES when call  setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin  method",self);
+#endif
+        
         CGFloat minMargin = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).minMargin;
 
         NSInteger rowCount =  floor((selfSize.height - padding.top - padding.bottom  + minMargin) / (subviewSize + minMargin));
@@ -812,8 +877,8 @@
     
     //右边候选区域数组，保存的是CGRect值。
     NSMutableArray *bottomCandidateRects = [NSMutableArray new];
-    //为了计算方便总是把最下边的个虚拟区域作为一个候选区域
-    [bottomCandidateRects addObject:[NSValue valueWithCGRect:CGRectMake(padding.left, selfSize.height - padding.bottom,CGFLOAT_MAX, 0)]];
+    //为了计算方便总是把最下边的个虚拟区域作为一个候选区域,如果没有边界限制则
+    [bottomCandidateRects addObject:[NSValue valueWithCGRect:CGRectMake(padding.left, selfSize.height - padding.bottom, CGFLOAT_MAX, 0)]];
     
     //分别记录上边和下边的最后一个视图在X轴的偏移量
     CGFloat topLastXOffset = padding.left;
@@ -823,6 +888,7 @@
     CGFloat topMaxWidth = padding.left;
     CGFloat bottomMaxWidth = padding.left;
     CGFloat maxWidth = padding.left;
+    CGFloat maxHeight = padding.top;
     
     for (UIView *sbv in sbs)
     {
@@ -878,13 +944,18 @@
         
         if (sbv.reverseFloat)
         {
+#ifdef DEBUG
+            //异常崩溃：当布局视图设置了noBoundaryLimit为YES时子视图不能设置逆向浮动
+            NSCAssert(hasBoundaryLimit, @"Constraint exception！！, horizontal float layout:%@ can not set noBoundaryLimit to YES when the subview:%@ set reverseFloat to YES.",self, sbv);
+#endif
+            
             CGPoint nextPoint = {topLastXOffset, selfSize.height - padding.bottom};
             CGFloat topCandidateYBoundary = padding.top;
             if (sbv.clearFloat)
             {
                 //找到最底部的位置。
                 nextPoint.x = MAX(bottomMaxWidth, topLastXOffset);
-                CGPoint topPoint = [self findTopCandidatePoint:CGRectMake(nextPoint.x, selfSize.height - padding.bottom, CGFLOAT_MAX, 0) height:topMargin + (sbv.weight != 0 ? 0 : rect.size.height) + bottomMargin topBoundary:padding.top topCandidateRects:topCandidateRects hasWeight:NO ];
+                CGPoint topPoint = [self findTopCandidatePoint:CGRectMake(nextPoint.x, selfSize.height - padding.bottom, CGFLOAT_MAX, 0) height:topMargin + (sbv.weight != 0 ? 0 : rect.size.height) + bottomMargin topBoundary:topCandidateYBoundary topCandidateRects:topCandidateRects hasWeight:NO ];
                 if (topPoint.x != CGFLOAT_MAX)
                 {
                     nextPoint.x = MAX(bottomMaxWidth, topPoint.x);
@@ -994,7 +1065,7 @@
                 //找到最低点。
                 nextPoint.x = MAX(topMaxWidth, bottomLastXOffset);
                 
-                CGPoint bottomPoint = [self findBottomCandidatePoint:CGRectMake(nextPoint.x, padding.top,CGFLOAT_MAX,0) height:topMargin + (sbv.weight != 0 ? 0: rect.size.height) + bottomMargin bottomBoundary:selfSize.height - padding.bottom bottomCandidateRects:bottomCandidateRects hasWeight:NO];
+                CGPoint bottomPoint = [self findBottomCandidatePoint:CGRectMake(nextPoint.x, padding.top,CGFLOAT_MAX,0) height:topMargin + (sbv.weight != 0 ? 0: rect.size.height) + bottomMargin bottomBoundary:bottomCandidateYBoundary bottomCandidateRects:bottomCandidateRects hasWeight:NO];
                 if (bottomPoint.x != CGFLOAT_MAX)
                 {
                     nextPoint.x = MAX(topMaxWidth, bottomPoint.x);
@@ -1022,6 +1093,12 @@
             
             if (sbv.weight != 0)
             {
+                
+#ifdef DEBUG
+                //异常崩溃：当布局视图设置了noBoundaryLimit为YES时子视图不能设置weight大于0
+                NSCAssert(hasBoundaryLimit, @"Constraint exception！！, horizontal float layout:%@ can not set noBoundaryLimit to YES when the subview:%@ set weight big than zero.",self, sbv);
+#endif
+
                 rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(bottomCandidateYBoundary - nextPoint.y + sbv.heightDime.addVal) * sbv.weight - topMargin - bottomMargin sbvSize:rect.size selfLayoutSize:selfSize];
                 
                 if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
@@ -1093,14 +1170,24 @@
         if (rect.origin.x + rect.size.width + rightMargin + horzMargin > maxWidth)
             maxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin;
         
+        if (rect.origin.y + rect.size.height + bottomMargin + vertMargin > maxHeight)
+            maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
+        
         sbv.absPos.frame = rect;
         
     }
     
     if (sbs.count > 0)
+    {
         maxWidth -= horzMargin;
+        maxHeight -= vertMargin;
+    }
     
     maxWidth += padding.right;
+    
+    maxHeight += padding.bottom;
+    if (!hasBoundaryLimit)
+        selfSize.height = maxHeight;
     
     if (self.wrapContentWidth)
         selfSize.width = maxWidth;

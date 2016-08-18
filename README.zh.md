@@ -6,7 +6,7 @@
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/MyLinearLayout.svg)](https://github.com/youngsoft/MyLinearLayout/stargazers)
 
-#MyLayout(2016.8.3)
+#MyLayout(2016.8.18)
 
 #### English : [Introduction](README.md)
 
@@ -338,7 +338,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.2.3'
+pod 'MyLayout', '~> 1.2.4'
 ```
    
 然后运行如下命令:
@@ -350,6 +350,13 @@ $ pod install
 
 
 ##版本历史
+
+---
+### V1.2.4版本新功能
+  1. 浮动布局MyFloatLayout增加了新属性noBoundaryLimit，用来实现那些只要单向浮动且没有边界限制的场景。具体例子见FOLTest6ViewController。
+  2. 优化了布局方法estimateLayoutRect，优化了那些布局套布局的尺寸的评估的计算方法，加快了对动态高度评估计算的速度。
+  3. 添加了2个DEMO，一个是RLTest4ViewController用来介绍布局在滚动条上滚动式停靠的实现。一个是FOLTest6ViewController用来介绍用浮动布局实现一些用户配置方面的DEMO。
+
 
 ---
 ###  V1.2.3版本新功能

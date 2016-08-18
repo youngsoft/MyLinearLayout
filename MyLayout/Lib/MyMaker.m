@@ -133,6 +133,10 @@
     return [self addMethod:@"clearFloat"];
 }
 
+-(MyMaker*)noBoundaryLimit
+{
+    return [self addMethod:@"noBoundaryLimit"];
+}
 
 -(MyMaker*)topPadding
 {

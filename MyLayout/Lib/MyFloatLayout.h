@@ -80,6 +80,16 @@
 @property(nonatomic, assign) IBInspectable CGFloat subviewMargin;  //同时设置水平和垂直间距。
 
 /**
+ *不做布局边界的限制，子视图不会自动换行，因此当设置为YES时，子视图需要设置clearFloat来实现主动换行的处理。默认为NO。
+ *当布局的orientation为MyLayoutViewOrientation_Vert并且wrapContentWidth为YES时,这个属性设置为YES才生效。
+ *当布局的orientation为MyLayoutViewOrientation_Horz并且wrapContentHeight为YES时，这个属性设置为YES才生效。
+ *当属性设置为YES时，子视图不能将扩展属性reverseFloat设置为YES，同时不能设置weight属性，否则将导致结果异常。
+ *这个属性设置为YES时，在左右浮动布局中，子视图只能向左浮动，并且没有右边界的限制，因此如果子视图没有clearFloat时则总是排列在前一个子视图的右边，并不会自动换行,因此为了让这个属性生效，布局视图必须要同时设置wrapContentWidth为YES。
+ *这个属性设置为YES时，在上下浮动布局中，子视图只能向上浮动，并且没有下边界的限制，因此如果子视图没有设置clearFloat时则总是排列在前一个子视图的下边，并不会自动换行，因此为了让这个属性生效，布局视图必须要同时设置wrapContentHeight为YES.
+ */
+@property(nonatomic,assign) BOOL noBoundaryLimit;
+
+/**
  *根据浮动视图的方向设置子视图的间距为浮动间距而不是上面确定的固定间距。在一些应用场景我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的。因此您可以通过如下方法来设置浮动间距。这个方法会根据您当前布局的orientation方向不同而意义不同：
  1.如果您的布局方向是MyLayoutViewOrientation_Vert表示设置的是子视图的水平间距，其中的subviewSize指定的是子视图的宽度，minMargin指定的是最小的水平间距。
  2.如果您的布局方向是MyLayoutViewOrientation_Horz表示设置的是子视图的垂直间距，其中的subviewSize指定的是子视图的高度，minMargin指定的是最小的垂直间距。

@@ -34,6 +34,14 @@
  SOFTWARE.
  */
 
+
+/*
+ version1.2.4
+   1.浮动布局MyFloatLayout增加了新属性noBoundaryLimit，用来实现那些只要单向浮动且没有边界限制的场景。具体例子见FOLTest6ViewController。
+   2.优化了布局方法estimateLayoutRect，优化了那些布局套布局的尺寸的评估的计算方法，加快了对动态高度评估计算的速度。
+   3.添加了2个DEMO，一个是RLTest4ViewController用来介绍布局在滚动条上滚动式停靠的实现。一个是FOLTest6ViewController用来介绍用浮动布局实现一些用户配置方面的DEMO。
+ */
+
 /*
  version1.2.3
  1.添加了新的布局：路径布局MyPathLayout。通过路径布局您只需要提供一个生成路径曲线的方程、以及指定子视图在路径曲线之中的距离等信息就可以让子视图按照指定的路径曲线进行布局，因此路径布局可以实现一些非常酷炫的效果。具体例子见：PLTest1,2,3,4ViewController

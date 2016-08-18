@@ -413,6 +413,7 @@
     
     lsc.subviewSize = self.subviewSize;
     lsc.minMargin = self.minMargin;
+    lsc.noBoundaryLimit = self.noBoundaryLimit;
     
     return lsc;
 }

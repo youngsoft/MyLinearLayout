@@ -220,6 +220,7 @@ typedef enum : unsigned char{
 
 @property(nonatomic, assign) CGFloat subviewSize;
 @property(nonatomic, assign) CGFloat minMargin;
+@property(nonatomic,assign) BOOL noBoundaryLimit;
 
 @end
 
