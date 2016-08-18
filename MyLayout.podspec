@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.name         = "MyLayout"
   s.version      = "1.2.4"
-  s.summary      = "MyLayout is A powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions. You can use LinearLayout,RelativeLayout,FrameLayout,TableLayout,FlowLayout,FloatLayout,PathLayout,LayoutSizeClass  to build your UI Layout."
+  s.summary      = "MyLayout is A powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions."
 
   s.description  = <<-DESC
                    **MyLayout is a powerful iOS UI layout framework which is not an encapsulation based on the AutoLayout but is based on primary *frame* property and by overwriting the *layoutSubview* method to realize the subview's layout. So It is unlimited to run in any version of iOS system. Its idea and principle is referenced from the layout of the Android system, HTML/CSS float&flexbox, iOS AutoLayout and SizeClass. You can implement the UI layout through the seven kinds of layout class below: MyLinearLayout, MyRelativeLayout, MyFrameLayout MyTableLayout, MyFlowLayout,MyFloatLayout ,MyPathLayout and the support for SizeClass.**
