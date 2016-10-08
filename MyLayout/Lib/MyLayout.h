@@ -36,6 +36,12 @@
 
 
 /*
+ version1.2.5
+    1.优化了beginLayoutBlock和endLayoutBlock的调用时机，以及解决了可能这两个block块会出现循环引用的问题，同时优化了viewLayoutCompleteBlock可能会出现循环引用的问题
+    2.修复了布局视图隐藏属性hidden设置时可能会出现的布局的问题，尤其是当布局视图作为相对布局视图里面的子视图时。
+ */
+
+/*
  version1.2.4
    1.浮动布局MyFloatLayout增加了新属性noBoundaryLimit，用来实现那些只要单向浮动且没有边界限制的场景。具体例子见FOLTest6ViewController。
    2.优化了布局方法estimateLayoutRect，优化了那些布局套布局的尺寸的评估的计算方法，加快了对动态高度评估计算的速度。

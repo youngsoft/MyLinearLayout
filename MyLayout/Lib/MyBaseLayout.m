@@ -1222,6 +1222,9 @@ BOOL _hasBegin;
 
 -(void)setHidden:(BOOL)hidden
 {
+    if (self.isHidden == hidden)
+        return;
+    
     [super setHidden:hidden];
     if (hidden == NO)
     {
@@ -1237,7 +1240,19 @@ BOOL _hasBegin;
         
         if (_rightBorderLineLayer != nil)
             [_rightBorderLineLayer setNeedsLayout];
+        
+        if ([self.superview isKindOfClass:[MyBaseLayout class]])
+        {
+            MyBaseLayout *supl = (MyBaseLayout*)self.superview;
+            
+            if (supl.hideSubviewReLayout && !self.useFrame)
+            {
+                [self setNeedsLayout];
+            }
+        }
+        
     }
+   
 }
 
 
@@ -1249,7 +1264,6 @@ BOOL _hasBegin;
     //添加hidden, frame,center的属性通知。
     [subview addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
     [subview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-  //  [subview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew |NSKeyValueObservingOptionOld context:nil];
     [subview addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:nil];
 
 }
@@ -1258,9 +1272,9 @@ BOOL _hasBegin;
 {
     [super willRemoveSubview:subview];  //删除后恢复其原来的实现。
     
+    subview.viewLayoutCompleteBlock = nil;
     [subview removeObserver:self forKeyPath:@"hidden"];
     [subview removeObserver:self forKeyPath:@"frame"];
-  //  [subview removeObserver:self forKeyPath:@"bounds"];
     [subview removeObserver:self forKeyPath:@"center"];
 
 }
@@ -1429,6 +1443,11 @@ BOOL _hasBegin;
             }
         }
     }
+    else
+    {
+        self.beginLayoutBlock = nil;
+        self.endLayoutBlock = nil;
+    }
     
     
 }
@@ -1439,16 +1458,15 @@ BOOL _hasBegin;
 {
     if (!self.autoresizesSubviews)
         return;
+
+    if (self.beginLayoutBlock != nil)
+        self.beginLayoutBlock();
+    self.beginLayoutBlock = nil;
     
     if (!self.isMyLayouting)
     {
         _isMyLayouting = YES;
 
-        if (self.beginLayoutBlock != nil)
-            self.beginLayoutBlock();
-        self.beginLayoutBlock = nil;
-        
-    
         if (self.priorAutoresizingMask)
             [super layoutSubviews];
         
@@ -1507,8 +1525,19 @@ BOOL _hasBegin;
         //调整自身
         if (!CGSizeEqualToSize(oldSelfSize,newSelfSize) && newSelfSize.width != CGFLOAT_MAX)
         {
-            self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, newSelfSize.width, newSelfSize.height);
-            self.center = CGPointMake(self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x, self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y);
+            //如果父视图也是布局视图，并且自己隐藏则不调整自身的尺寸和位置。
+            BOOL isAdjustSelf = YES;
+            if ([self.superview isKindOfClass:[MyBaseLayout class]])
+            {
+                MyBaseLayout *supl = (MyBaseLayout*)self.superview;
+                if ([supl isNoLayoutSubview:self])
+                    isAdjustSelf = NO;
+            }
+            if (isAdjustSelf)
+            {
+                self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, newSelfSize.width, newSelfSize.height);
+                self.center = CGPointMake(self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x, self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y);
+            }
         }
         
         if (_topBorderLineLayer != nil)
@@ -1529,12 +1558,13 @@ BOOL _hasBegin;
         if (newSelfSize.width != CGFLOAT_MAX)
             [self alterScrollViewContentSize:newSelfSize];
        
-        if (self.endLayoutBlock != nil)
-            self.endLayoutBlock();
-        self.endLayoutBlock = nil;
-
         _isMyLayouting = NO;
     }
+    
+    if (self.endLayoutBlock != nil)
+        self.endLayoutBlock();
+    self.endLayoutBlock = nil;
+
     
 }
 
@@ -1809,19 +1839,18 @@ BOOL _hasBegin;
         UIImage *img = ((UIImageView*)sbv).image;
         if (img != nil && img.size.width != 0)
         {
-            return img.size.height * (width / img.size.width);
+            return (img.size.height * (width / img.size.width)) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         }
         else
         {
             CGSize sz = [sbv sizeThatFits:CGSizeMake(width, 0)];
-            return sz.height;
-            
+            return sz.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         }
     }
     else
     {
         CGSize sz = [sbv sizeThatFits:CGSizeMake(width, 0)];
-        return sz.height;
+        return sz.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
     }
 }
 

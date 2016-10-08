@@ -16,16 +16,16 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MyLayout"
-  s.version      = "1.2.4"
+  s.version      = "1.2.5"
   s.summary      = "MyLayout is A powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions."
 
   s.description  = <<-DESC
-                   **MyLayout is a powerful iOS UI layout framework which is not an encapsulation based on the AutoLayout but is based on primary *frame* property and by overwriting the *layoutSubview* method to realize the subview's layout. So It is unlimited to run in any version of iOS system. Its idea and principle is referenced from the layout of the Android system, HTML/CSS float&flexbox, iOS AutoLayout and SizeClass. You can implement the UI layout through the seven kinds of layout class below: MyLinearLayout, MyRelativeLayout, MyFrameLayout MyTableLayout, MyFlowLayout,MyFloatLayout ,MyPathLayout and the support for SizeClass.**
-
-**Powerful function, easy to use, barely constraint 
-setting and fit various screen size perfectly are MyLayout's main advantages.**
-
-**I hope you use MyLayout right now or in your next project will be happy!**
+                   *MyLayout is a powerful iOS UI layout framework which is not an encapsulation based on the AutoLayout but is based on primary frame property and by overwriting the layoutSubview method to realize the subview's layout. 
+                   *So It is unlimited to run in any version of iOS system. 
+                   *Its idea and principle is referenced from the layout of the Android system, HTML/CSS float&flexbox, iOS AutoLayout and SizeClass. 
+                   *You can implement the UI layout through the seven kinds of layout class below: MyLinearLayout, MyRelativeLayout, MyFrameLayout MyTableLayout, MyFlowLayout,MyFloatLayout ,MyPathLayout and the support for SizeClass.
+                   *Powerful function, easy to use, barely constraint setting and fit various screen size perfectly are MyLayout's main advantages.
+                   *I hope you use MyLayout right now or in your next project will be happy!.
                    DESC
 
   s.homepage     = "https://github.com/youngsoft/MyLinearLayout"
@@ -79,7 +79,7 @@ setting and fit various screen size perfectly are MyLayout's main advantages.**
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.2.4" }
+  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.2.5" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
