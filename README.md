@@ -6,7 +6,7 @@
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/MyLinearLayout.svg)](https://github.com/youngsoft/MyLinearLayout/stargazers)
 
-#MyLayout(2016.10.8)
+#MyLayout(2016.10.27)
 
 
 ## Introduction
@@ -17,6 +17,8 @@
 setting and fit various screen size perfectly are MyLayout's main advantages.**
 
 **I hope you use MyLayout right now or in your next project will be happy!**
+
+#### MyLayout's Swift version are Called：[TangramKit](https://github.com/youngsoft/TangramKit)
 
 #### ![cn](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/China.png) **Chinese (Simplified)**: [中文说明](README.zh.md)
 
@@ -350,7 +352,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.2.5'
+pod 'MyLayout', '~> 1.2.6'
 ```
    
 Then, run the following command:

@@ -6,7 +6,9 @@
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/MyLinearLayout.svg)](https://github.com/youngsoft/MyLinearLayout/stargazers)
 
-#MyLayout(2016.10.8)
+#MyLayout(2016.10.27)
+
+#### MyLayout的Swift版本叫：[TangramKit](https://github.com/youngsoft/TangramKit)
 
 #### English : [Introduction](README.md)
 
@@ -338,7 +340,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.2.5'
+pod 'MyLayout', '~> 1.2.6'
 ```
    
 然后运行如下命令:
@@ -350,8 +352,11 @@ $ pod install
 
 
 ##版本历史
-
 ---
+### V1.2.6版本新功能
+ 1. 优化代码，修复一个设置尺寸的uBound,lBound方法时可以指定其他任意视图的问题。
+ 2. 为了解决和Masonry两个库共存时，打开了Masonry的宏MAS_SHORTHAND_GLOBALS时造成offset, equalTo方法无法使用的问题，解决的方法是您可以在PCH或者在使用MyLayout.h之前定义：#define MY_USEPREFIXMETHOD 这个宏，这样所有MyLayoutPos, MyLayoutDime中的方法都增加了前缀my。 比如原来的A.leftPos.equalTo(@10) ==> A.leftPos.myEqualTo(@10)
+
 ### V1.2.5版本新功能
 1. 优化了beginLayoutBlock和endLayoutBlock的调用时机，以及解决了可能这两个block块会出现循环引用的问题，同时优化了viewLayoutCompleteBlock可能会出现循环引用的问题
     2. 修复了布局视图隐藏属性hidden设置时可能会出现的布局的问题，尤其是当布局视图作为相对布局视图里面的子视图时。

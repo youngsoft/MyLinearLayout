@@ -61,7 +61,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setMyLeftMargin:(CGFloat)leftMargin
 {
-    self.leftPos.equalTo(@(leftMargin));
+    [self.leftPos __equalTo:@(leftMargin)];
     
 }
 
@@ -72,7 +72,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setMyTopMargin:(CGFloat)topMargin
 {
-    self.topPos.equalTo(@(topMargin));
+    [self.topPos __equalTo:@(topMargin)];
 }
 
 -(CGFloat)myRightMargin
@@ -82,7 +82,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setMyRightMargin:(CGFloat)rightMargin
 {
-    self.rightPos.equalTo(@(rightMargin));
+    [self.rightPos __equalTo:@(rightMargin)];
 }
 
 -(CGFloat)myBottomMargin
@@ -92,7 +92,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setMyBottomMargin:(CGFloat)bottomMargin
 {
-    self.bottomPos.equalTo(@(bottomMargin));
+    [self.bottomPos __equalTo:@(bottomMargin)];
 }
 
 -(CGFloat)myMargin
@@ -102,10 +102,10 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setMyMargin:(CGFloat)myMargin
 {
-    self.topPos.equalTo(@(myMargin));
-    self.leftPos.equalTo(@(myMargin));
-    self.rightPos.equalTo(@(myMargin));
-    self.bottomPos.equalTo(@(myMargin));
+    [self.topPos __equalTo:@(myMargin)];
+    [self.leftPos __equalTo:@(myMargin)];
+    [self.rightPos __equalTo:@(myMargin)];
+     [self.bottomPos __equalTo:@(myMargin)];
 }
 
 -(MyLayoutDime*)widthDime
@@ -135,7 +135,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setMyWidth:(CGFloat)width
 {
-    self.widthDime.equalTo(@(width));
+    [self.widthDime __equalTo:@(width)];
 }
 
 -(CGFloat)myHeight
@@ -145,7 +145,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setMyHeight:(CGFloat)height
 {
-    self.heightDime.equalTo(@(height));
+    [self.heightDime __equalTo:@(height)];
 }
 
 -(CGSize)mySize
@@ -187,7 +187,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setMyCenterXOffset:(CGFloat)centerXOffset
 {
-    self.centerXPos.equalTo(@(centerXOffset));
+    [self.centerXPos __equalTo:@(centerXOffset)];
 }
 
 -(CGFloat)myCenterYOffset
@@ -197,7 +197,7 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 
 -(void)setMyCenterYOffset:(CGFloat)centerYOffset
 {
-    self.centerYPos.equalTo(@(centerYOffset));
+    [self.centerYPos __equalTo:@(centerYOffset)];
 }
 
 
@@ -1866,7 +1866,7 @@ BOOL _hasBegin;
     }
     else if (lValueType == MyLayoutValueType_LayoutDime)
     {
-        if (boundDime.dimeRelaVal.view == self || boundDime.dimeRelaVal.view == self.superview)
+        if (boundDime.dimeRelaVal.view == self)
         {
             if (boundDime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
                 value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.leftPadding - self.rightPadding) : 0);
@@ -1892,13 +1892,11 @@ BOOL _hasBegin;
         {
             if (boundDime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
             {
-                if (boundDime.dimeRelaVal.view.absPos.width != CGFLOAT_MAX)
-                    value = boundDime.dimeRelaVal.view.absPos.width;
+                value = boundDime.dimeRelaVal.view.estimatedRect.size.width;
             }
             else
             {
-                if (boundDime.dimeRelaVal.view.absPos.height != CGFLOAT_MAX)
-                    value = boundDime.dimeRelaVal.view.absPos.height;
+                value = boundDime.dimeRelaVal.view.estimatedRect.size.height;
             }
         }
         

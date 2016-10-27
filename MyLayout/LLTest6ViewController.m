@@ -43,7 +43,7 @@
     
     //设置布局视图的宽度等于父视图的宽度，这个方法等价于 rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
     rootLayout.widthDime.equalTo(scrollView.widthDime);
-    //设置布局视图的高度等于父视图的高度，并且最低高度不能低于568-64.这两个数字的意思是iPhone5的高度减去导航条的高度部分。这句话的意思也就是说明最低不能低于iPhone5的高度，因此在iPhone4上就会出现滚动的效果！！！通过min,max方法的应用可以很容易实现各种屏幕的完美适配！！。
+    //设置布局视图的高度等于父视图的高度，并且最低高度不能低于568-64.这两个数字的意思是iPhone5的高度减去导航条的高度部分。这句话的意思也就是说明最低不能低于iPhone5的高度，因此在iPhone4上就会出现滚动的效果！！！通过lBound,uBound方法的应用可以很容易实现各种屏幕的完美适配！！。
     //rootLayout.heightDime.equalTo(scrollView.heightDime)等于于rootLayout.myTopMargin = rootLayout.myBottomMargin = 0;
     //请您分别测试在iPhone4设备和非iPhone4设备上的情况，看看这个神奇的效果。你不再需要写if条件来做适配处理了。
     rootLayout.heightDime.equalTo(scrollView.heightDime).min(568 - 64);

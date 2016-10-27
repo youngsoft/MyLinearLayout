@@ -720,11 +720,11 @@ IB_DESIGNABLE
             leftOffset += self.leftPadding;
             
             id prev = @(leftOffset);
-            sbv.leftPos.equalTo(prev);
+            [sbv.leftPos __equalTo:prev];
             prev = sbv.rightPos;
             for (MyLayoutPos *pos in centerArray)
             {
-                pos.view.leftPos.equalTo(prev).offset(pos.view.centerXPos.margin);
+                [[pos.view.leftPos __equalTo:prev] __offset:pos.view.centerXPos.margin];
                 prev = pos.view.rightPos;
             }
         }
@@ -775,11 +775,11 @@ IB_DESIGNABLE
             topOffset += self.topPadding;
             
             id prev = @(topOffset);
-            sbv.topPos.equalTo(prev);
+            [sbv.topPos __equalTo:prev];
             prev = sbv.bottomPos;
             for (MyLayoutPos *pos in centerArray)
             {
-                pos.view.topPos.equalTo(prev).offset(pos.view.centerYPos.margin);
+                [[pos.view.topPos __equalTo:prev] __offset:pos.view.centerYPos.margin];
                 prev = pos.view.bottomPos;
             }
 

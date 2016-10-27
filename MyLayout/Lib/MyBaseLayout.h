@@ -358,7 +358,7 @@
 
 
 /**
- *流式布局里面的所有子视图按添加的顺序逆序进行布局。默认是NO。
+ *布局里面的所有子视图按添加的顺序逆序进行布局。默认是NO。
  */
 @property(nonatomic, assign) IBInspectable BOOL reverseLayout;
 

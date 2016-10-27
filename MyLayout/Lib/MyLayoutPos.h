@@ -63,6 +63,16 @@
  */
 @interface MyLayoutPos : NSObject<NSCopying>
 
+//because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
+//if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.
+#ifdef MY_USEPREFIXMETHOD
+-(MyLayoutPos* (^)(id val))myEqualTo;
+-(MyLayoutPos* (^)(CGFloat val))myOffset;
+-(MyLayoutPos* (^)(CGFloat val))myMin;
+-(MyLayoutPos* (^)(CGFloat val))myMax;
+-(void)myClear;
+
+#else
 
 /**
  *设置布局位置的值。参数val可以接收下面四种类型的值：
@@ -96,6 +106,8 @@
  *清除上面方法设置的值
  */
 -(void)clear;
+
+#endif
 
 //通过如下属性获取上面方法设置的值。
 @property(nonatomic, strong, readonly) id posVal;

@@ -40,6 +40,7 @@
 #import "AllTest4ViewController.h"
 #import "AllTest5ViewController.h"
 #import "AllTest6ViewController.h"
+#import "AllTest7ViewController.h"
 
 
 #import "FOLTest1ViewController.h"
@@ -113,7 +114,7 @@
                          @{@"title":NSLocalizedString(@"2.TableLayout - Waterfall(Horz)", @""),
                            @"class":[TLTest2ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"3.TableLayout - Intelligent borderLine", @""),
+                         @{@"title":NSLocalizedString(@"3.TableLayout - Intelligent Borderline", @""),
                            @"class":[TLTest3ViewController class]
                            },
                          @{@"title":NSLocalizedString(@"1.FlowLayout - Regular arrangement", @""),
@@ -175,6 +176,9 @@
                            },
                          @{@"title":NSLocalizedString(@"2.SizeClass - Demo2", @""),
                            @"class":[AllTest6ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"1.Screen perfect fit - Demo1", @""),
+                           @"class":[AllTest7ViewController class]
                            }
                          ];
         

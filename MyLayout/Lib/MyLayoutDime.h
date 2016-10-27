@@ -14,6 +14,23 @@
 @interface MyLayoutDime : NSObject<NSCopying>
 
 
+//because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
+//if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.
+#ifdef MY_USEPREFIXMETHOD
+
+-(MyLayoutDime* (^)(id val))myEqualTo;
+-(MyLayoutDime* (^)(CGFloat val))myAdd;
+-(MyLayoutDime* (^)(CGFloat val))myMultiply;
+-(MyLayoutDime* (^)(CGFloat val))myMin;
+-(MyLayoutDime* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myLBound;
+-(MyLayoutDime* (^)(CGFloat val))myMax;
+-(MyLayoutDime* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myUBound;
+-(void)myClear;
+
+
+#else
+
+
 /**
  *设置尺寸的具体值，这个具体值可以设置为NSNumber, MyLayoutDime以及NSArray<MyLayoutDime*>数组和nil值。
  设置为NSNumber值表示指定具体的宽度或者高度数值
@@ -80,6 +97,7 @@
  */
 -(void)clear;
 
+#endif
 
 //上面方法设置的属性的获取。
 @property(nonatomic, strong, readonly) id dimeVal;

@@ -1212,15 +1212,15 @@ IB_DESIGNABLE
     for (UIView *sbv in sbs)
     {
         
-        sbv.bottomPos.equalTo(@0);
-        sbv.topPos.equalTo(@(scale2));
+        [sbv.bottomPos __equalTo:@0];
+        [sbv.topPos __equalTo:@(scale2)];
         sbv.weight = scale;
         
         if (sbv == sbs.firstObject && !centered)
-            sbv.topPos.equalTo(@0);
+            [sbv.topPos __equalTo:@0];
         
         if (sbv == sbs.lastObject && centered)
-            sbv.bottomPos.equalTo(@(scale2));
+            [sbv.bottomPos __equalTo:@(scale2)];
     }
     
 }
@@ -1249,14 +1249,14 @@ IB_DESIGNABLE
     
     for (UIView *sbv in sbs)
     {
-        sbv.leftPos.equalTo(@(scale2));
+        [sbv.leftPos __equalTo:@(scale2)];
         sbv.weight = scale;
         
         if (sbv == sbs.firstObject && !centered)
-            sbv.leftPos.equalTo(@0);
+            [sbv.leftPos __equalTo:@0];
         
         if (sbv == sbs.lastObject && centered)
-            sbv.rightPos.equalTo(@(scale2));
+            [sbv.rightPos __equalTo:@(scale2)];
     }
     
 }
@@ -1275,13 +1275,13 @@ IB_DESIGNABLE
     for (UIView *sbv in sbs)
     {
         
-        sbv.topPos.equalTo(@(scale));
+        [sbv.topPos __equalTo:@(scale)];
         
         if (sbv == sbs.firstObject && !centered)
-            sbv.topPos.equalTo(@0);
+            [sbv.topPos __equalTo:@0];
         
         if (sbv == sbs.lastObject && centered)
-            sbv.bottomPos.equalTo(@(scale));
+            [sbv.bottomPos __equalTo:@(scale)];
     }
     
     
@@ -1297,13 +1297,13 @@ IB_DESIGNABLE
     
     for (UIView *sbv in sbs)
     {
-        sbv.leftPos.equalTo(@(scale));
+        [sbv.leftPos __equalTo:@(scale)];
         
         if (sbv == sbs.firstObject && !centered)
-            sbv.leftPos.equalTo(@0);
+            [sbv.leftPos __equalTo:@0];
         
         if (sbv == sbs.lastObject && centered)
-            sbv.rightPos.equalTo(@(scale));
+            [sbv.rightPos __equalTo:@(scale)];
     }
 }
 

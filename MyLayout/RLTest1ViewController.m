@@ -100,7 +100,7 @@
     cycleLabel.textColor = [UIColor blueColor];
     [cycleLabel sizeToFit];
     cycleLabel.centerXPos.equalTo(blueCircle.centerXPos);        //和blueCircle水平居中对齐
-    cycleLabel.bottomPos.equalTo(blueCircle.topPos).offset(5);   //底部在blueCircle的上面，再往上偏移5个点。
+    cycleLabel.bottomPos.equalTo(blueCircle.topPos).offset(5);   //底部在blueCircle的上面，再往下偏移5个点。
     [rootLayout addSubview:cycleLabel];
     
     

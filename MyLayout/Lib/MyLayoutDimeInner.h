@@ -25,6 +25,16 @@
 @property(nonatomic, readonly, strong) MyLayoutDime *uBoundVal;
 
 
+-(MyLayoutDime*)__equalTo:(id)val;
+-(MyLayoutDime*)__add:(CGFloat)val;
+-(MyLayoutDime*)__multiply:(CGFloat)val;
+-(MyLayoutDime*)__min:(CGFloat)val;
+-(MyLayoutDime*)__lBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
+-(MyLayoutDime*)__max:(CGFloat)val;
+-(MyLayoutDime*)__uBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
+-(void)__clear;
+
+
 //是否跟父视图相关
 @property(nonatomic, readonly,assign) BOOL isMatchParent;
 

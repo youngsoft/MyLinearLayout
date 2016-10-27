@@ -7,8 +7,10 @@
 //  Email:    obq0387_cn@sina.com
 //  QQ:       156355113
 //  QQ群:     178573773
-//  Github:   https://github.com/youngsoft/MyLinearLayout
-//  个人主页:  http://www.jianshu.com/users/3c9287519f58/latest_articles  http://blog.csdn.net/yangtiang
+//  Github:   https://github.com/youngsoft/MyLinearLayout  forObjective-C
+//  Github:   https://github.com/youngsoft/TangramKit      forSwift
+//  HomePage: http://www.jianshu.com/users/3c9287519f58
+//  HomePage: http://blog.csdn.net/yangtiang
 //
 /*
  The MIT License (MIT)
@@ -32,6 +34,13 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
+ */
+
+
+/*
+ version1.2.6
+ 1.优化代码，修复一个设置尺寸的uBound,lBound方法时可以指定其他任意视图的问题。
+ 2.为了解决和Masonry两个库共存时，打开了Masonry的宏MAS_SHORTHAND_GLOBALS时造成offset, equalTo方法无法使用的问题，解决的方法是您可以在PCH或者在使用MyLayout.h之前定义：#define MY_USEPREFIXMETHOD 这个宏，这样所有MyLayoutPos, MyLayoutDime中的方法都增加了前缀my。 比如原来的A.leftPos.equalTo(@10) ==> A.leftPos.myEqualTo(@10)
  */
 
 

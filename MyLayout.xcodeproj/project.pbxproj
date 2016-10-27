@@ -14,6 +14,7 @@
 		18296B721C76D66C00273C3E /* FOLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18296B711C76D66C00273C3E /* FOLTest2ViewController.m */; };
 		18296B751C76D67F00273C3E /* FOLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18296B741C76D67F00273C3E /* FOLTest3ViewController.m */; };
 		1830A6091CD6EC4500FF6B57 /* FLLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */; };
+		183C14631DB9DD1A00C38448 /* AllTest7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 183C14621DB9DD1A00C38448 /* AllTest7ViewController.m */; };
 		186B83D41D08F7B9001CA155 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186B83CF1D08F7B9001CA155 /* LaunchScreen.xib */; };
 		186B83DE1D090DE6001CA155 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 186B83DA1D090DE6001CA155 /* LaunchScreen.strings */; };
 		186B83DF1D090DE6001CA155 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 186B83DC1D090DE6001CA155 /* Localizable.strings */; };
@@ -101,6 +102,8 @@
 		18296B741C76D67F00273C3E /* FOLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest3ViewController.m; sourceTree = "<group>"; };
 		1830A6071CD6EC2F00FF6B57 /* FLLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest3ViewController.h; sourceTree = "<group>"; };
 		1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest3ViewController.m; sourceTree = "<group>"; };
+		183C14611DB9DD1A00C38448 /* AllTest7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest7ViewController.h; sourceTree = "<group>"; };
+		183C14621DB9DD1A00C38448 /* AllTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest7ViewController.m; sourceTree = "<group>"; };
 		1840828D1B2C46E8003F378B /* MyLayout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLayout.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		184082A61B2C46E8003F378B /* MyLayout.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyLayout.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		186B83D01D08F7B9001CA155 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = LaunchScreen.xib; sourceTree = "<group>"; };
@@ -411,6 +414,8 @@
 				18C8F1631D4DA6B800DC1FD3 /* PLTest3ViewController.m */,
 				18C8F1651D4E3E4E00DC1FD3 /* PLTest4ViewController.h */,
 				18C8F1661D4E3E4E00DC1FD3 /* PLTest4ViewController.m */,
+				183C14611DB9DD1A00C38448 /* AllTest7ViewController.h */,
+				183C14621DB9DD1A00C38448 /* AllTest7ViewController.m */,
 			);
 			path = MyLayout;
 			sourceTree = "<group>";
@@ -642,6 +647,7 @@
 				46DB7E6B1C54B4BC001B409D /* AllTest5ViewController.m in Sources */,
 				18D6844B1C4F421400A48BB4 /* LLTest7ViewController.m in Sources */,
 				18D6843F1C4F421400A48BB4 /* MyLayoutMeasure.m in Sources */,
+				183C14631DB9DD1A00C38448 /* AllTest7ViewController.m in Sources */,
 				18EDEC811D64B70D00F8B1CD /* FOLTest6ViewController.m in Sources */,
 				181ECE641D570CA1007803BE /* YYWeakProxy.m in Sources */,
 				18D684371C4F421400A48BB4 /* FLTest1ViewController.m in Sources */,

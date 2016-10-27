@@ -100,25 +100,18 @@
         //所以当特定的子视图的noLayout设置为YES后，我们就可以手动的设置其frame值来达到悬停的能力。
         //需要注意的是这个特定的子视图一定要最后加入到布局视图中去。
         //代码就是这么简单，这么任性。。。
-        if (!self.testTopDockView.noLayout)
-        {
-            self.testTopDockView.noLayout = YES;
-        }
+        self.testTopDockView.noLayout = YES;
         
-        if (self.testTopDockView.noLayout)
-        {
-            CGRect rect = self.testTopDockView.frame;
-            self.testTopDockView.frame = CGRectMake(rect.origin.x, scrollView.contentOffset.y, rect.size.width, rect.size.height);
-            
-        }
+        CGRect rect = self.testTopDockView.frame;
+        self.testTopDockView.frame = CGRectMake(rect.origin.x, scrollView.contentOffset.y, rect.size.width, rect.size.height);
+        
+        
         
     }
     else
     {
-        if (self.testTopDockView.noLayout)
-        {
-            self.testTopDockView.noLayout = NO;
-        }
+        
+        self.testTopDockView.noLayout = NO;
     }
 }
 

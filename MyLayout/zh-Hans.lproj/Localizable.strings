@@ -23,7 +23,7 @@
 "4.RelativeLayout - Scroll&Dock" = "4.相对布局-滚动和停靠";
 "1.TableLayout - Vert" = "1.表格布局-垂直表格";
 "2.TableLayout - Waterfall(Horz)" = "2.表格布局-水平表格实现瀑布流";
-"3.TableLayout - Intelligent borderLine" = "3.表格布局-表格和智能边界线";
+"3.TableLayout - Intelligent Borderline" = "3.表格布局-表格和智能边界线";
 "1.FlowLayout - Regular arrangement" = "1.流式布局-有规律的子视图排列";
 "2.FlowLayout - Tag cloud" = "2.流式布局-标签流";
 "3.FlowLayout - Drag" = "3.流式布局-子视图的拖拽调整功能";

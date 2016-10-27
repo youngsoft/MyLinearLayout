@@ -31,9 +31,10 @@
         _addVal = 0;
         _mutilVal = 1;
         _lBoundVal = [[MyLayoutDime alloc] initWithNoBound];
-        _lBoundVal.equalTo(@(-CGFLOAT_MAX));
+        [_lBoundVal __equalTo:@(-CGFLOAT_MAX)];
         _uBoundVal = [[MyLayoutDime alloc] initWithNoBound];
-        _uBoundVal.equalTo(@(CGFLOAT_MAX));
+        [_uBoundVal __equalTo:@(CGFLOAT_MAX)];
+
         
     }
     
@@ -59,152 +60,267 @@
 }
 
 
--(MyLayoutDime* (^)(id val))equalTo
+-(MyLayoutDime*)__equalTo:(id)val
 {
-    return ^id(id val){
+    
+    if (![_dimeVal isEqual:val])
+    {
+        _dimeVal = val;
         
-        if (![_dimeVal isEqual:val])
+        if ([val isKindOfClass:[NSNumber class]])
         {
-            _dimeVal = val;
+            _dimeValType = MyLayoutValueType_NSNumber;
+        }
+        else if ([val isKindOfClass:[MyLayoutDime class]])
+        {
+            _dimeValType = MyLayoutValueType_LayoutDime;
             
-            if ([val isKindOfClass:[NSNumber class]])
-            {
-                _dimeValType = MyLayoutValueType_NSNumber;
-            }
-            else if ([val isKindOfClass:[MyLayoutDime class]])
-            {
-                _dimeValType = MyLayoutValueType_LayoutDime;
-                
-                //我们支持尺寸等于自己的情况，用来支持那些尺寸包裹内容但又想扩展尺寸的场景，为了不造成循环引用这里做特殊处理
-                //当尺寸等于自己时，我们只记录_dimeValType，而把值设置为nil
-                if (val == self)
-                    _dimeVal = nil;
-            }
-            else if ([val isKindOfClass:[NSArray class]])
-            {
-                _dimeValType = MyLayoutValueType_Array;
-            }
-            else
-            {
-                _dimeValType = MyLayoutValueType_Nil;
-            }
-            
-            [self setNeedLayout];
+            //我们支持尺寸等于自己的情况，用来支持那些尺寸包裹内容但又想扩展尺寸的场景，为了不造成循环引用这里做特殊处理
+            //当尺寸等于自己时，我们只记录_dimeValType，而把值设置为nil
+            if (val == self)
+                _dimeVal = nil;
+        }
+        else if ([val isKindOfClass:[NSArray class]])
+        {
+            _dimeValType = MyLayoutValueType_Array;
         }
         else
         {
-            //参考上面自己等于自己的特殊情况需要特殊处理。
-            if (val == nil && _dimeVal == nil && _dimeValType == MyLayoutValueType_LayoutDime)
-            {
-                _dimeValType = MyLayoutValueType_Nil;
-                [self setNeedLayout];
-            }
+            _dimeValType = MyLayoutValueType_Nil;
         }
         
-        return self;
-    };
+        [self setNeedLayout];
+    }
+    else
+    {
+        //参考上面自己等于自己的特殊情况需要特殊处理。
+        if (val == nil && _dimeVal == nil && _dimeValType == MyLayoutValueType_LayoutDime)
+        {
+            _dimeValType = MyLayoutValueType_Nil;
+            [self setNeedLayout];
+        }
+    }
     
+    return self;
 }
 
 //加
--(MyLayoutDime* (^)(CGFloat val))add
+-(MyLayoutDime*)__add:(CGFloat)val
 {
-    return ^id(CGFloat val){
-        
-        if (_addVal != val)
-        {
-            _addVal = val;
-            [self setNeedLayout];
-        }
-        
-        return self;
-        
-    };
     
+    
+    if (_addVal != val)
+    {
+        _addVal = val;
+        [self setNeedLayout];
+    }
+    
+    return self;
 }
 
 
 //乘
--(MyLayoutDime* (^)(CGFloat val))multiply
+-(MyLayoutDime*)__multiply:(CGFloat)val
 {
-    return ^id(CGFloat val){
-        
-        if (_mutilVal != val)
-        {
-            _mutilVal = val;
-            [self setNeedLayout];
-        }
-        
-        return self;
-    };
+    
+    if (_mutilVal != val)
+    {
+        _mutilVal = val;
+        [self setNeedLayout];
+    }
+    
+    return self;
     
 }
 
 
--(MyLayoutDime* (^)(CGFloat val))min
+-(MyLayoutDime*)__min:(CGFloat)val
+{
+    if (_lBoundVal.dimeNumVal.doubleValue != val)
+    {
+        [_lBoundVal __equalTo:@(val)];
+        [self setNeedLayout];
+    }
+    
+    return self;
+}
+
+
+-(MyLayoutDime*)__lBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal
+{
+    
+    [[[_lBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
+    [self setNeedLayout];
+    
+    return self;
+}
+
+
+-(MyLayoutDime*)__max:(CGFloat)val
+{
+    if (_uBoundVal.dimeNumVal.doubleValue != val)
+    {
+        [_uBoundVal __equalTo:@(val)];
+        [self setNeedLayout];
+    }
+    
+    return self;
+}
+
+-(MyLayoutDime*)__uBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal
+{
+    [[[_uBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
+    [self setNeedLayout];
+    
+    return self;
+}
+
+
+
+-(void)__clear
+{
+    _addVal = 0;
+    _mutilVal = 1;
+    [[[_lBoundVal __equalTo:@(-CGFLOAT_MAX)] __add:0] __multiply:1];
+    [[[_uBoundVal __equalTo:@(CGFLOAT_MAX)] __add:0] __multiply:1];
+    _dimeVal = nil;
+    _dimeValType = MyLayoutValueType_Nil;
+    
+    [self setNeedLayout];
+}
+
+
+-(MyLayoutDime* (^)(id val))myEqualTo
+{
+    return ^id(id val){
+        
+        return [self __equalTo:val];
+    };
+}
+
+-(MyLayoutDime* (^)(CGFloat val))myAdd
 {
     return ^id(CGFloat val){
         
-        if (_lBoundVal.dimeNumVal.doubleValue != val)
-        {
-            _lBoundVal.equalTo(@(val));
-            [self setNeedLayout];
-        }
-        
-        return self;
+        return [self __add:val];
     };
+}
+
+-(MyLayoutDime* (^)(CGFloat val))myMultiply
+{
+    return ^id(CGFloat val){
+        
+        return [self __multiply:val];
+    };
+    
+}
+
+-(MyLayoutDime* (^)(CGFloat val))myMin
+{
+    return ^id(CGFloat val){
+        
+        return [self __min:val];
+    };
+    
+}
+
+-(MyLayoutDime* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myLBound
+{
+    
+    return ^id(id sizeVal, CGFloat addVal, CGFloat multiVal){
+        
+        return [self __lBound:sizeVal addVal:addVal multiVal:multiVal];
+        
+    };
+}
+
+-(MyLayoutDime* (^)(CGFloat val))myMax
+{
+    return ^id(CGFloat val){
+        
+        return [self __max:val];
+    };
+}
+
+-(MyLayoutDime* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myUBound
+{
+    return ^id(id sizeVal, CGFloat addVal, CGFloat multiVal){
+        
+        return [self __uBound:sizeVal addVal:addVal multiVal:multiVal];
+    };
+    
+}
+
+-(void)myClear
+{
+    [self __clear];
+}
+
+
+-(MyLayoutDime* (^)(id val))equalTo
+{
+    return ^id(id val){
+        
+        return [self __equalTo:val];
+    };
+}
+
+-(MyLayoutDime* (^)(CGFloat val))add
+{
+     return ^id(CGFloat val){
+     
+         return [self __add:val];
+     };
+}
+
+-(MyLayoutDime* (^)(CGFloat val))multiply
+{
+    return ^id(CGFloat val){
+        
+        return [self __multiply:val];
+    };
+
+}
+
+-(MyLayoutDime* (^)(CGFloat val))min
+{
+    return ^id(CGFloat val){
+    
+        return [self __min:val];
+    };
+
 }
 
 -(MyLayoutDime* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))lBound
 {
+    
     return ^id(id sizeVal, CGFloat addVal, CGFloat multiVal){
-       
-        _lBoundVal.equalTo(sizeVal).add(addVal).multiply(multiVal);
-        [self setNeedLayout];
+      
+        return [self __lBound:sizeVal addVal:addVal multiVal:multiVal];
         
-        return self;
     };
-
 }
-
 
 -(MyLayoutDime* (^)(CGFloat val))max
 {
     return ^id(CGFloat val){
         
-        if (_uBoundVal.dimeNumVal.doubleValue != val)
-        {
-            _uBoundVal.equalTo(@(val));
-            [self setNeedLayout];
-        }
-        
-        return self;
+        return [self __max:val];
     };
 }
 
 -(MyLayoutDime* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))uBound
 {
     return ^id(id sizeVal, CGFloat addVal, CGFloat multiVal){
-        
-        _uBoundVal.equalTo(sizeVal).add(addVal).multiply(multiVal);
-        [self setNeedLayout];
-        
-        return self;
+    
+        return [self __uBound:sizeVal addVal:addVal multiVal:multiVal];
     };
+
 }
-
-
 
 -(void)clear
 {
-    _addVal = 0;
-    _mutilVal = 1;
-    _lBoundVal.equalTo(@(-CGFLOAT_MAX)).add(0).multiply(1);
-    _uBoundVal.equalTo(@(CGFLOAT_MAX)).add(0).multiply(1);
-    _dimeVal = nil;
-    _dimeValType = MyLayoutValueType_Nil;
-    
-    [self setNeedLayout];
+    [self __clear];
 }
 
 
@@ -293,8 +409,8 @@
     ld.view = self.view;
     ld.dime = self.dime;
     ld->_addVal = self.addVal;
-    ld->_lBoundVal.equalTo(_lBoundVal.dimeVal).add(_lBoundVal.addVal).multiply(_lBoundVal.mutilVal);
-    ld->_uBoundVal.equalTo(_uBoundVal.dimeVal).add(_uBoundVal.addVal).multiply(_uBoundVal.mutilVal);
+    [[[ld->_lBoundVal __equalTo:_lBoundVal.dimeVal] __add:_lBoundVal.addVal] __multiply:_lBoundVal.mutilVal];
+    [[[ld->_uBoundVal __equalTo:_uBoundVal.dimeVal] __add:_uBoundVal.addVal] __multiply:_uBoundVal.mutilVal];
     ld->_mutilVal = self.mutilVal;
     ld->_dimeVal = self->_dimeVal;
     ld.dimeValType = self.dimeValType;

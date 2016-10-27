@@ -95,7 +95,7 @@
 
 -(void)setMyLeftMargin:(CGFloat)leftMargin
 {
-    self.leftPos.equalTo(@(leftMargin));
+    [self.leftPos __equalTo:@(leftMargin)];
     
 }
 
@@ -106,7 +106,7 @@
 
 -(void)setMyTopMargin:(CGFloat)topMargin
 {
-    self.topPos.equalTo(@(topMargin));
+    [self.topPos __equalTo:@(topMargin)];
 }
 
 -(CGFloat)myRightMargin
@@ -116,7 +116,7 @@
 
 -(void)setMyRightMargin:(CGFloat)rightMargin
 {
-    self.rightPos.equalTo(@(rightMargin));
+    [self.rightPos __equalTo:@(rightMargin)];
 }
 
 -(CGFloat)myBottomMargin
@@ -126,7 +126,7 @@
 
 -(void)setMyBottomMargin:(CGFloat)bottomMargin
 {
-    self.bottomPos.equalTo(@(bottomMargin));
+    [self.bottomPos __equalTo:@(bottomMargin)];
 }
 
 -(CGFloat)myMargin
@@ -136,10 +136,10 @@
 
 -(void)setMyMargin:(CGFloat)myMargin
 {
-    self.topPos.equalTo(@(myMargin));
-    self.leftPos.equalTo(@(myMargin));
-    self.rightPos.equalTo(@(myMargin));
-    self.bottomPos.equalTo(@(myMargin));
+    [self.topPos __equalTo:@(myMargin)];
+    [self.leftPos __equalTo:@(myMargin)];
+    [self.rightPos __equalTo:@(myMargin)];
+    [self.bottomPos __equalTo:@(myMargin)];
 }
 
 
@@ -150,7 +150,7 @@
 
 -(void)setMyCenterXOffset:(CGFloat)centerXOffset
 {
-    self.centerXPos.equalTo(@(centerXOffset));
+    [self.centerXPos __equalTo:@(centerXOffset)];
 }
 
 -(CGFloat)myCenterYOffset
@@ -160,7 +160,7 @@
 
 -(void)setMyCenterYOffset:(CGFloat)centerYOffset
 {
-    self.centerYPos.equalTo(@(centerYOffset));
+    [self.centerYPos __equalTo:@(centerYOffset)];
 }
 
 
@@ -209,7 +209,7 @@
 
 -(void)setMyWidth:(CGFloat)width
 {
-    self.widthDime.equalTo(@(width));
+    [self.widthDime __equalTo:@(width)];
 }
 
 -(CGFloat)myHeight
@@ -219,7 +219,7 @@
 
 -(void)setMyHeight:(CGFloat)height
 {
-    self.heightDime.equalTo(@(height));
+    [self.heightDime __equalTo:@(height)];
 }
 
 -(CGSize)mySize
