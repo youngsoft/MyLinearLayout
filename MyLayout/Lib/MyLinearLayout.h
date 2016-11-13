@@ -54,6 +54,11 @@
  */
 @property(nonatomic, assign) IBInspectable CGFloat subviewMargin;
 
+/**
+ *设置当子视图里面有设置weight或者相对尺寸时，并且有固定尺寸和间距的子视图的总和大于布局视图的高度时，如何压缩那些固定尺寸和间距的视图的方式。默认的值是：MySubviewsShrink_Average|MySubviewsShrink_Size， 也就是0。表明会平均的缩小固定的视图的尺寸。在设置时可以进行压缩类型和压缩方式的或运算方法。具体的方法见MySubviewsShrinkType中的各种值的定义。
+ */
+@property(nonatomic, assign) MySubviewsShrinkType shrinkType;
+
 
 /**
  *均分子视图和间距,布局会根据里面的子视图的数量来平均分配子视图的高度或者宽度以及间距。

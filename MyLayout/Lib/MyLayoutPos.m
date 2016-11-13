@@ -312,7 +312,12 @@
     if ([self isRelativeMargin:realMargin])
         realMargin *= size;
     
-    return  realMargin + _offsetVal;
+    CGFloat retVal =  realMargin + _offsetVal;
+        
+    retVal = MIN(_uBoundVal.posNumVal.doubleValue, retVal);
+    retVal = MAX(_lBoundVal.posNumVal.doubleValue, retVal);
+    return retVal;
+
 }
 
 
@@ -361,22 +366,22 @@
     
     switch (posobj.pos) {
         case MyMarginGravity_Horz_Left:
-            posStr = @"LeftPos";
+            posStr = @"leftPos";
             break;
         case MyMarginGravity_Horz_Center:
-            posStr = @"CenterXPos";
+            posStr = @"centerXPos";
             break;
         case MyMarginGravity_Horz_Right:
-            posStr = @"RightPos";
+            posStr = @"rightPos";
             break;
         case MyMarginGravity_Vert_Top:
-            posStr = @"TopPos";
+            posStr = @"topPos";
             break;
         case MyMarginGravity_Vert_Center:
-            posStr = @"CenterYPos";
+            posStr = @"centerYPos";
             break;
         case MyMarginGravity_Vert_Bottom:
-            posStr = @"BottomPos";
+            posStr = @"bottomPos";
             break;
         default:
             break;

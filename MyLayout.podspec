@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MyLayout"
-  s.version      = "1.2.6"
+  s.version      = "1.2.7"
   s.summary      = "MyLayout is A powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions."
 
   s.description  = <<-DESC
@@ -79,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.2.6" }
+  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.2.7" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

@@ -245,6 +245,30 @@
 }
 
 
+-(NSString*)debugDescription
+{
+    
+    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nflexedHeight=%@\nmarginGravity=%d\nreverseFloat=%@\nclearFloat=%@",
+                    self.leftPos,
+                    self.topPos,
+                    self.bottomPos,
+                    self.rightPos,
+                    self.centerXPos,
+                    self.centerYPos,
+                    self.widthDime,
+                    self.heightDime,
+                    self.weight,
+                    self.useFrame ? @"YES":@"NO",
+                    self.noLayout? @"YES":@"NO",
+                    self.flexedHeight? @"YES":@"NO",
+                    self.marginGravity,
+                    self.reverseFloat ? @"YES":@"NO",
+                    self.clearFloat ? @"YES":@"NO"];
+    
+    
+    return dbgDesc;
+}
+
 
 #pragma mark -- NSCopying
 
@@ -343,6 +367,23 @@
     return lsc;
 }
 
+-(NSString*)debugDescription
+{
+    NSString *dbgDesc = [super debugDescription];
+    
+    dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nwrapContentWidth=%@\nwrapContentHeight=%@\nhideSubviewRelayout=%@\nreverseLayout=%@",
+                        dbgDesc,
+                        NSStringFromUIEdgeInsets(self.padding),
+                        self.wrapContentWidth ? @"YES":@"NO",
+                        self.wrapContentHeight ? @"YES":@"NO",
+                        self.hideSubviewReLayout?@"YES":@"NO",
+                        self.reverseLayout ? @"YES":@"NO"
+               ];
+    
+    
+    return dbgDesc;
+}
+
 
 @end
 
@@ -369,8 +410,26 @@
     lsc.gravity = self.gravity;
     lsc.subviewVertMargin = self.subviewVertMargin;
     lsc.subviewHorzMargin = self.subviewHorzMargin;
+    lsc.shrinkType = self.shrinkType;
     
      return lsc;
+}
+
+-(NSString*)debugDescription
+{
+    NSString *dbgDesc = [super debugDescription];
+    
+    dbgDesc = [NSString stringWithFormat:@"%@\nLinearLayout: \norientation=%ld\ngravity=%hu\nsubviewVertMargin=%f\nsubviewHorzMargin=%f\nshrinkType=%ld",
+               dbgDesc,
+              self.orientation,
+               self.gravity,
+               self.subviewVertMargin,
+               self.subviewHorzMargin,
+               self.shrinkType
+               ];
+    
+    
+    return dbgDesc;
 }
 
 
@@ -401,6 +460,17 @@
     return lsc;
 }
 
+-(NSString*)debugDescription
+{
+    NSString *dbgDesc = [super debugDescription];
+    
+    dbgDesc = [NSString stringWithFormat:@"%@\nTableLayout: \nrowSpacing=%f\ncolSpacing=%f",
+               dbgDesc,
+               self.rowSpacing,
+               self.colSpacing];
+    
+    return dbgDesc;
+}
 
 
 @end
@@ -417,6 +487,19 @@
     
     return lsc;
 }
+
+
+-(NSString*)debugDescription
+{
+    NSString *dbgDesc = [super debugDescription];
+    
+    dbgDesc = [NSString stringWithFormat:@"%@\nFloatLayout: \nnoBoundaryLimit=%@",
+               dbgDesc,
+               self.noBoundaryLimit ? @"YES":@"NO"];
+    
+    return dbgDesc;
+}
+
 
 
 @end
@@ -437,6 +520,22 @@
 }
 
 
+-(NSString*)debugDescription
+{
+    NSString *dbgDesc = [super debugDescription];
+    
+    dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\naverageArrange=%@\nautoArrange=%@\narrangedGravity=%d",
+                                          dbgDesc,
+                                          self.arrangedCount,
+                                          self.averageArrange ? @"YES":@"NO",
+                                          self.autoArrange ? @"YES":@"NO",
+                                          self.arrangedGravity
+                                          ];
+    
+    return dbgDesc;
+}
+
+
 @end
 
 
@@ -449,6 +548,20 @@
     lsc.flexOtherViewHeightWhenSubviewHidden = self.flexOtherViewHeightWhenSubviewHidden;
     
     return lsc;
+}
+
+
+-(NSString*)debugDescription
+{
+    NSString *dbgDesc = [super debugDescription];
+    
+    dbgDesc = [NSString stringWithFormat:@"%@\nRelativeLayout: \nflexOtherViewWidthWhenSubviewHidden=%@\nflexOtherViewHeightWhenSubviewHidden=%@",
+               dbgDesc,
+               self.flexOtherViewWidthWhenSubviewHidden ? @"YES":@"NO",
+               self.flexOtherViewHeightWhenSubviewHidden ? @"YES":@"NO"
+               ];
+    
+    return dbgDesc;
 }
 
 

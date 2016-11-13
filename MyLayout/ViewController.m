@@ -177,7 +177,7 @@
                          @{@"title":NSLocalizedString(@"2.SizeClass - Demo2", @""),
                            @"class":[AllTest6ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"1.Screen perfect fit - Demo1", @""),
+                         @{@"title":NSLocalizedString(@"❁1.Screen perfect fit - Demo1", @""),
                            @"class":[AllTest7ViewController class]
                            }
                          ];

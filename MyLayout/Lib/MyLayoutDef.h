@@ -91,6 +91,70 @@ typedef enum :NSUInteger
 }MyLayoutAdjustScrollViewContentSizeMode;
 
 
+/**
+ * 这个枚举定义在线性布局里面当某个子视图的尺寸为weight或者尺寸为相对尺寸时，而当剩余的有固定尺寸和间距的子视图的尺寸总和要大于
+ * 视图本身的尺寸时，对那些具有固定尺寸或者固定间距的子视图的处理方式。需要注意的是只有当子视图的尺寸和间距总和大于布局视图的尺寸时才有意义，否则无意义。
+ * 比如某个垂直线性布局的高度是100。 里面分别有A,B,C,D四个子视图。其中:
+ A.topPos = 10
+ A.height = 50
+ B.topPos = 0.1
+ B.weight = 0.2
+ C.height = 60
+ D.topPos = 20
+ D.weight = 0.7
+ 
+ 那么这时候总的固定高度 = A.topPos + A.height + C.height +D.topPos = 140 > 100。
+ 也就是多出了40的尺寸值，那么这时候我们可以用如下压缩类型的组合进行特殊的处理：
+ 
+ 1. MySubviewsShrink_Average | MySubviewsShrink_Size: (布局的默认设置。)
+ 这种情况下，我们只会压缩那些具有固定尺寸的视图的高度A,C的尺寸，每个子视图的压缩的值是：剩余的尺寸40 / 固定尺寸的视图数量2 = 20。 这样:
+ A的最终高度 = 50 - 20 = 30
+ C的最终高度 = 60 - 20 = 40
+ 2. MySubviewsShrink_Average | MySubviewsShrink_Space: (暂时不支持！)
+ 这种情况下，我们只会压缩那些具有固定间距的视图:A,D的间距，每个子视图的压缩的值是：剩余的尺寸40 / 固定间距的视图的数量2 = 20。 这样：
+ A的最终topPos = 10 - 20 = -10
+ D的最终topPos = 20 - 20 = 0
+ 3. MySubviewsShrink_Average | MySubviewsShrink_SizeAndSpace:  (暂时不支持！)
+ 这种情况下，我们会压缩那些具有固定高度和固定间距的视图：A,C,D. 每个子视图的压缩值是： 剩余的尺寸40 /固定值的数量4 = 10。 这样：
+ A的最终topPos = 10 - 10 = 0
+ A的最终高度 = 50 - 10 = 40
+ C的最终高度 = 60 - 10 = 50
+ D的最终topPos = 20 - 10 = 10
+ 
+ 4.MySubviewsShrink_Weight | MySubviewsShrink_Size:
+ 这种情况下，我们只会压缩那些具有固定尺寸的视图的高度A,C的尺寸，这些总的高度为50 + 60 = 110. 这样：
+ A的最终高度 = 50 - 40 *(50/110) = 32
+ C的最终高度 = 60 - 40 *（60/110) = 38
+ 
+ 5. MySubviewsShrink_Weight | MySubviewsShrink_Space: (暂时不支持！)
+ 这种情况下，我们只会压缩那些具有固定间距的视图:A,D的间距，这些总的间距为10+20 = 30. 这样：
+ A的最终topPos = 10 - 40 *(10/30) = -3
+ D的最终topPos = 20 - 40 *(20/30) = -7
+ 
+ 6. MySubviewsShrink_Weight | MySubviewsShrink_SizeAndSpace: (暂时不支持！)
+ 这种情况下，我们会压缩那些具有固定高度和固定间距的视图：A,C,D. 这些总的高度为10+50+60+20 = 140。这样：
+ A的最终topPos = 10 - 40 *(10/140) = 7
+ A的最终高度 = 50 - 40 *(50/140) = 36
+ C的最终高度 = 60 - 40*(60/140) = 43
+ D的最终topPos = 20 - 40 *(20/140) = 14
+ 
+ 7. MySubviewsShrink_None:
+ 这种情况下即使是固定的视图的尺寸超出也不会进行任何压缩！！！！这个属性设置后，MySubviewsShrink_Size，MySubviewsShrink_Space，MySubviewsShrink_SizeAndSpace的设置无意义。
+ 
+ */
+typedef enum : NSUInteger {
+    MySubviewsShrink_Average = 0,  //平均压缩。
+    MySubviewsShrink_Weight = 1,   //比例压缩。
+    MySubviewsShrink_None = 8,     //不压缩。
+    
+    MySubviewsShrink_Size =   0 << 4,    //只压缩尺寸，因为这里是0所以这部分可以不设置。
+    MySubviewsShrink_Space =  1 << 4,    //只压缩间距，暂时不支持！！
+    MySubviewsShrink_SizeAndSpace = 2 << 4  //压缩尺寸和间距。暂时不支持！！！
+} MySubviewsShrinkType;
+
+
+
+
 //内部使用
 typedef enum : unsigned char
 {

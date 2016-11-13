@@ -148,6 +148,8 @@
 
 -(MyLayoutDime*)__lBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal
 {
+    if (sizeVal == self)
+        sizeVal = _lBoundVal;
     
     [[[_lBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
     [self setNeedLayout];
@@ -169,6 +171,9 @@
 
 -(MyLayoutDime*)__uBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal
 {
+    if (sizeVal == self)
+        sizeVal = _uBoundVal;
+    
     [[[_uBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
     [self setNeedLayout];
     
@@ -401,6 +406,13 @@
     return self.dimeNumVal.doubleValue * _mutilVal + _addVal;
 }
 
+-(CGFloat)measureWith:(CGFloat)size
+{
+    return size * _mutilVal + _addVal;
+}
+
+
+
 #pragma mark -- NSCopying
 
 -(id)copyWithZone:(NSZone *)zone
@@ -445,10 +457,10 @@
     
     switch (dimeobj.dime) {
         case MyMarginGravity_Horz_Fill:
-            dimeStr = @"WidthDime";
+            dimeStr = @"widthDime";
             break;
         case MyMarginGravity_Vert_Fill:
-            dimeStr = @"HeightDime";
+            dimeStr = @"heightDime";
             break;
         default:
             break;

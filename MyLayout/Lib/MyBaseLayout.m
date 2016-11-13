@@ -660,6 +660,7 @@ IB_DESIGNABLE
     
     BOOL _isAddSuperviewKVO;
 
+    int _lastScreenOrientation; //为0为初始状态，为1为竖屏，为2为横屏。内部使用。
 }
 
 BOOL _hasBegin;
@@ -667,6 +668,9 @@ BOOL _hasBegin;
 -(void)dealloc
 {
     //如果您在使用时出现了KVO的异常崩溃，原因是您将这个视图被多次加入为子视图，请检查您的代码，是否这个视图被多次加入！！
+    _endLayoutBlock = nil;
+    _beginLayoutBlock = nil;
+    _rotationToDeviceOrientationBlock = nil;
 }
 
 #pragma  mark -- Public Method
@@ -1462,6 +1466,8 @@ BOOL _hasBegin;
     if (self.beginLayoutBlock != nil)
         self.beginLayoutBlock();
     self.beginLayoutBlock = nil;
+
+    int  currentScreenOrientation = 0;
     
     if (!self.isMyLayouting)
     {
@@ -1479,9 +1485,15 @@ BOOL _hasBegin;
         
         UIDeviceOrientation ori =   [UIDevice currentDevice].orientation;
         if (UIDeviceOrientationIsPortrait(ori))
+        {
             sizeClass |= MySizeClass_Portrait;
+            currentScreenOrientation  = 1;
+        }
         else if (UIDeviceOrientationIsLandscape(ori))
+        {
             sizeClass |= MySizeClass_Landscape;
+            currentScreenOrientation = 2;
+        }
         else;
         
         self.absPos.sizeClass = [self myBestSizeClass:sizeClass];
@@ -1565,11 +1577,27 @@ BOOL _hasBegin;
         self.endLayoutBlock();
     self.endLayoutBlock = nil;
 
+    //执行屏幕旋转的处理逻辑。
+    if (self.rotationToDeviceOrientationBlock != nil && currentScreenOrientation != 0)
+    {
+        if (_lastScreenOrientation == 0)
+        {
+            _lastScreenOrientation = currentScreenOrientation;
+            self.rotationToDeviceOrientationBlock(self,YES, currentScreenOrientation == 1);
+        }
+        else
+        {
+            if (_lastScreenOrientation != currentScreenOrientation)
+            {
+                _lastScreenOrientation = currentScreenOrientation;
+                self.rotationToDeviceOrientationBlock(self, NO, currentScreenOrientation == 1);
+            }
+        }
+        
+        _lastScreenOrientation = currentScreenOrientation;
+    }
     
 }
-
-
-
 
 
 #pragma mark -- Private Method
@@ -1712,7 +1740,7 @@ BOOL _hasBegin;
     lsc.wrapContentHeight = wrapContentHeight;
 }
 
--(void)calcSizeOfWrapContentSubview:(UIView*)sbv
+-(void)calcSizeOfWrapContentSubview:(UIView*)sbv selfLayoutSize:(CGSize)selfLayoutSize
 {
     if (sbv.widthDime.dimeSelfVal != nil || sbv.heightDime.dimeSelfVal != nil)
     {
@@ -1736,6 +1764,10 @@ BOOL _hasBegin;
     BOOL isAdjust = NO;
     
     CGRect rectSuper = newSuperview.bounds;
+    CGFloat leftMargin = [self.leftPos realMarginInSize:rectSuper.size.width];
+    CGFloat rightMargin = [self.rightPos realMarginInSize:rectSuper.size.width];
+    CGFloat topMargin = [self.topPos realMarginInSize:rectSuper.size.height];
+    CGFloat bottomMargin = [self.bottomPos realMarginInSize:rectSuper.size.height];
     CGRect rectSelf = self.frame;
     
     //确定左右边距和宽度。
@@ -1745,7 +1777,14 @@ BOOL _hasBegin;
         
         if (self.widthDime.dimeRelaVal != nil)
         {
-            rectSelf.size.width = rectSuper.size.width*self.widthDime.mutilVal + self.widthDime.addVal;
+            if (self.widthDime.dimeRelaVal.view == newSuperview)
+            {
+                rectSelf.size.width = [self.widthDime measureWith:rectSuper.size.width];
+            }
+            else
+            {
+                rectSelf.size.width = [self.widthDime measureWith:self.widthDime.dimeRelaVal.view.estimatedRect.size.width];
+            }
             isAdjust = YES;
         }
         else
@@ -1758,24 +1797,24 @@ BOOL _hasBegin;
     {
         isAdjust = YES;
         [self setWrapContentWidthNoLayout:NO];
-        rectSelf.size.width = rectSuper.size.width - self.leftPos.margin - self.rightPos.margin;
+        rectSelf.size.width = rectSuper.size.width - leftMargin - rightMargin;
         rectSelf.size.width = [self validMeasure:self.widthDime sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
         
-        rectSelf.origin.x = self.leftPos.margin;
+        rectSelf.origin.x = leftMargin;
     }
     else if (self.centerXPos.posVal != nil)
     {
         isAdjust = YES;
-        rectSelf.origin.x = (rectSuper.size.width - rectSelf.size.width)/2 + self.centerXPos.margin;
+        rectSelf.origin.x = (rectSuper.size.width - rectSelf.size.width)/2 + [self.centerXPos realMarginInSize:rectSuper.size.width];
     }
     else if (self.leftPos.posVal != nil)
     {
-        rectSelf.origin.x = self.leftPos.margin;
+        rectSelf.origin.x = leftMargin;
     }
     else if (self.rightPos.posVal != nil)
     {
         isAdjust = YES;
-        rectSelf.origin.x  = rectSuper.size.width - rectSelf.size.width - self.rightPos.margin;
+        rectSelf.origin.x  = rectSuper.size.width - rectSelf.size.width - rightMargin;
     }
     else;
     
@@ -1786,7 +1825,14 @@ BOOL _hasBegin;
         
         if (self.heightDime.dimeRelaVal != nil)
         {
-            rectSelf.size.height = rectSuper.size.height*self.heightDime.mutilVal + self.heightDime.addVal;
+            if (self.heightDime.dimeRelaVal.view == newSuperview)
+            {
+                rectSelf.size.height = [self.heightDime measureWith:rectSuper.size.height];
+            }
+            else
+            {
+                rectSelf.size.height = [self.heightDime measureWith:self.heightDime.dimeRelaVal.view.estimatedRect.size.height];
+            }
             isAdjust = YES;
         }
         else
@@ -1799,24 +1845,24 @@ BOOL _hasBegin;
     {
         isAdjust = YES;
         [self setWrapContentHeightNoLayout:NO];
-        rectSelf.size.height = rectSuper.size.height - self.topPos.margin - self.bottomPos.margin;
+        rectSelf.size.height = rectSuper.size.height - topMargin - bottomMargin;
         rectSelf.size.height = [self validMeasure:self.heightDime sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
         
-        rectSelf.origin.y = self.topPos.margin;
+        rectSelf.origin.y = topMargin;
     }
     else if (self.centerYPos.posVal != nil)
     {
         isAdjust = YES;
-        rectSelf.origin.y = (rectSuper.size.height - rectSelf.size.height)/2 + self.centerYPos.margin;
+        rectSelf.origin.y = (rectSuper.size.height - rectSelf.size.height)/2 + [self.centerYPos realMarginInSize:rectSuper.size.height];
     }
     else if (self.topPos.posVal != nil)
     {
-        rectSelf.origin.y = self.topPos.margin;
+        rectSelf.origin.y = topMargin;
     }
     else if (self.bottomPos.posVal != nil)
     {
         isAdjust = YES;
-        rectSelf.origin.y  = rectSuper.size.height - rectSelf.size.height - self.bottomPos.margin;
+        rectSelf.origin.y  = rectSuper.size.height - rectSelf.size.height - bottomMargin;
     }
     else;
     
@@ -1825,6 +1871,10 @@ BOOL _hasBegin;
     if (!CGRectEqualToRect(rectSelf, self.frame))
     {
         self.frame = rectSelf;
+    }
+    else if (self.wrapContentWidth || self.wrapContentHeight)
+    {
+        [self setNeedsLayout];
     }
     
     return isAdjust;
@@ -1869,9 +1919,9 @@ BOOL _hasBegin;
         if (boundDime.dimeRelaVal.view == self)
         {
             if (boundDime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
-                value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.leftPadding - self.rightPadding) : 0);
+                value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.leftPadding + self.rightPadding) : 0);
             else
-                value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.topPadding - self.bottomPadding) :0);
+                value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.topPadding + self.bottomPadding) :0);
         }
         else if (boundDime.dimeRelaVal.view == sbv)
         {
@@ -1887,6 +1937,13 @@ BOOL _hasBegin;
                 else
                     value = sbvSize.height;
             }
+        }
+        else if (boundDime.dimeSelfVal != nil)
+        {
+            if (dimeType == MyMarginGravity_Horz_Fill)
+                value = sbvSize.width;
+            else
+                value = sbvSize.height;
         }
         else
         {

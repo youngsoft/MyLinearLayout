@@ -280,7 +280,7 @@
 
 
 /**
- *视图在布局视图中布局完成后执行的块，执行完block后会被重置为nil。通过在viewLayoutCompleteBlock中我们可以得到这个视图真实的frame值。还可以设置一些属性，主要是用来实现一些动画特效。
+ *视图在布局视图中布局完成后执行的块，执行完block后会被重置为nil。通过在viewLayoutCompleteBlock中我们可以得到这个视图真实的frame值。还可以设置一些属性，主要是用来实现一些动画特效。这里面layout就是父布局视图，而v就是视图本身，用这两个参数返回的目的是为了防止循环引用的问题。
  */
 @property(nonatomic,copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
 
@@ -406,6 +406,15 @@
  */
 -(void)layoutAnimationWithDuration:(NSTimeInterval)duration;
 
+/**
+ *设置布局视图在第一次布局完成之后或者有横竖屏切换时进行处理的block。这个block不像beginLayoutBlock以及endLayoutBlock那样只会执行一次,而是会一直存在
+ *因此需要注意代码块里面的循环引用的问题。这个block调用的时机是第一次布局完成或者每次横竖屏切换时布局完成被调用。
+ *这个方法会在endLayoutBlock后调用。
+ *layout参数就是布局视图本身
+ *isFirst表明当前是否是第一次布局时调用。
+ *isPortrait表明当前是横屏还是竖屏。
+ */
+@property(nonatomic,copy) void (^rotationToDeviceOrientationBlock)(MyBaseLayout *layout, BOOL isFirst, BOOL isPortrait);
 
 
 /**当前是否正在布局中,如果正在布局中则返回YES,否则返回NO*/

@@ -11,6 +11,9 @@
 
 @interface LLTest6ViewController ()<UITextViewDelegate>
 
+@property(nonatomic, weak) UIButton *editButton;
+
+
 @end
 
 @implementation LLTest6ViewController
@@ -54,6 +57,9 @@
     [userInfoLabel sizeToFit];
     userInfoLabel.myTopMargin = 10;
     userInfoLabel.myCenterXOffset = 0;
+    userInfoLabel.widthDime.uBound(rootLayout.widthDime, 0, 1);  //最大的宽度和父视图相等。
+    userInfoLabel.adjustsFontSizeToFitWidth = YES;
+    userInfoLabel.textAlignment = NSTextAlignmentCenter;
     [rootLayout addSubview:userInfoLabel];
     
     
@@ -116,6 +122,28 @@
     [copyRightLabel sizeToFit];
     [rootLayout addSubview:copyRightLabel];
     
+    
+    //因为在垂直线性布局里面每一列只能有一个子视图，但在实际中我们希望某个子视图边缘有一个子视图并列，为了不破坏线性布局的能力，而又能实现这种功能
+    //我们可以用如下的方法。
+    __weak LLTest6ViewController *weakVC = self;
+    __weak UIImageView *weakHeadImageView = headImageView;
+    rootLayout.rotationToDeviceOrientationBlock = ^(MyBaseLayout *ll, BOOL isFirst, BOOL isPortrait)
+    {//rotationToDeviceOrientationBlock方法会在第一次完成布局或者因为屏幕旋转而完成布局时调用这个block。而且布局不会在调用完成后释放这个block。
+      //因此需要注意循环引用的问题。
+        if (isFirst)
+        {
+            UIButton *editButton = [UIButton buttonWithType:UIButtonTypeSystem];
+            [editButton setTitle:@"Edit" forState:UIControlStateNormal];
+            [editButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            editButton.useFrame = YES;  //注意这里必须要设置为useFrame为YES，目的是为了不破坏线性布局的概念，而改用直接frame的设置。
+            [ll addSubview:editButton];
+            weakVC.editButton = editButton;
+        }
+        //下面是直接用frame设置editButton的位置和尺寸。这里设置在头像图片的右边。。
+        weakVC.editButton.frame = CGRectMake(CGRectGetMaxX(weakHeadImageView.frame) + 5, CGRectGetMaxY(weakHeadImageView.frame) - 30, 50, 30);
+        
+    };
+
     
 }
 

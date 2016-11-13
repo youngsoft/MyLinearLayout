@@ -193,6 +193,9 @@ typedef enum : unsigned char{
 @property(nonatomic, assign) CGFloat subviewHorzMargin;
 @property(nonatomic, assign) CGFloat subviewMargin;
 
+@property(nonatomic, assign) MySubviewsShrinkType shrinkType;
+
+
 @end
 
 

@@ -48,7 +48,7 @@
  *  添加一个新行。对于垂直表格来说每一行是从上往下排列的，而水平表格则每一行是从左往右排列的。
  *
  *  @param rowSize 为MTLSIZE_WRAPCONTENT表示由子视图决定本行尺寸，子视图需要自己设置尺寸；为MTLSIZE_AVERAGE表示均分尺寸，子视图不需要设置尺寸；大于0表示固定尺寸，子视图不需要设置尺寸;不能设置为MTLSIZE_MATCHPARENT。
- *  @param colSize  为MTLSIZE_MATCHPARENT表示子视图需要自己指定尺寸，整体行尺寸和父视图一样的尺寸；为MTLSIZE_WRAPCONTENT表示由子视图需要自己设置尺寸，行尺寸包裹所有子视图；为MTLSIZE_AVERAGE表示均分尺寸，这时候子视图不必设置尺寸；大于0表示子视图固定尺寸，这时候子视图可以不必设置尺寸。
+ *  @param colSize  为MTLSIZE_MATCHPARENT表示子视图需要自己指定尺寸，整体列尺寸和父视图一样的尺寸；为MTLSIZE_WRAPCONTENT表示由子视图需要自己设置尺寸，列尺寸包裹所有子视图；为MTLSIZE_AVERAGE表示均分尺寸，这时候子视图不必设置尺寸；大于0表示子视图固定尺寸，这时候子视图可以不必设置尺寸。
  */
 -(MyLinearLayout*)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize;
 

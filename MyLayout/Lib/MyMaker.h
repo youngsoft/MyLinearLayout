@@ -51,6 +51,8 @@
 -(MyMaker*)gravity;
 -(MyMaker*)subviewMargin;
 
+//线性布局独有
+-(MyMaker*)shrinkType;
 
 //流式布局独有
 -(MyMaker*)arrangedCount;

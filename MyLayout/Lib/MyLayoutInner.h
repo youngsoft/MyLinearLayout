@@ -46,7 +46,7 @@
 
 -(void)setWrapContentHeightNoLayout:(BOOL)wrapContentHeight;
 
--(void)calcSizeOfWrapContentSubview:(UIView*)sbv;
+-(void)calcSizeOfWrapContentSubview:(UIView*)sbv selfLayoutSize:(CGSize)selfLayoutSize;
 
 
 -(CGFloat)heightFromFlexedHeightView:(UIView*)sbv inWidth:(CGFloat)width;

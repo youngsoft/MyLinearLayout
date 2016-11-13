@@ -68,6 +68,7 @@
 		18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684551C4F423400A48BB4 /* MyLayoutTests.m */; };
 		18DBC56A1CFB451800BD73D2 /* FOLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DBC5691CFB451800BD73D2 /* FOLTest4ViewController.m */; };
 		18DC7F551CF5510F008E5FCB /* AllTest1TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DC7F541CF5510F008E5FCB /* AllTest1TableViewCell.m */; };
+		18DF8A1B1DD83A9A009FD703 /* layoutdemo8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 18DF8A1A1DD83A9A009FD703 /* layoutdemo8.gif */; };
 		18E7C5181D47A1CA00F61A3E /* PLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E7C5171D47A1CA00F61A3E /* PLTest1ViewController.m */; };
 		18E7C51B1D47BA9400F61A3E /* PLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E7C51A1D47BA9400F61A3E /* PLTest2ViewController.m */; };
 		18E8084D1B3A5D170059C410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8084C1B3A5D170059C410 /* QuartzCore.framework */; };
@@ -227,6 +228,7 @@
 		18DBC5691CFB451800BD73D2 /* FOLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest4ViewController.m; sourceTree = "<group>"; };
 		18DC7F531CF5510F008E5FCB /* AllTest1TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewCell.h; sourceTree = "<group>"; };
 		18DC7F541CF5510F008E5FCB /* AllTest1TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewCell.m; sourceTree = "<group>"; };
+		18DF8A1A1DD83A9A009FD703 /* layoutdemo8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo8.gif; sourceTree = "<group>"; };
 		18E7C5161D47A1CA00F61A3E /* PLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTest1ViewController.h; sourceTree = "<group>"; };
 		18E7C5171D47A1CA00F61A3E /* PLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTest1ViewController.m; sourceTree = "<group>"; };
 		18E7C5191D47BA9400F61A3E /* PLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTest2ViewController.h; sourceTree = "<group>"; };
@@ -352,6 +354,8 @@
 				46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */,
 				188261CD1C647CB300996C2C /* AllTest6ViewController.h */,
 				188261CE1C647CB300996C2C /* AllTest6ViewController.m */,
+				183C14611DB9DD1A00C38448 /* AllTest7ViewController.h */,
+				183C14621DB9DD1A00C38448 /* AllTest7ViewController.m */,
 				18D683F31C4F421400A48BB4 /* FLLTest1ViewController.h */,
 				18D683F41C4F421400A48BB4 /* FLLTest1ViewController.m */,
 				1890A22C1C6DD71600373B8B /* FLLTest2ViewController.h */,
@@ -414,8 +418,6 @@
 				18C8F1631D4DA6B800DC1FD3 /* PLTest3ViewController.m */,
 				18C8F1651D4E3E4E00DC1FD3 /* PLTest4ViewController.h */,
 				18C8F1661D4E3E4E00DC1FD3 /* PLTest4ViewController.m */,
-				183C14611DB9DD1A00C38448 /* AllTest7ViewController.h */,
-				183C14621DB9DD1A00C38448 /* AllTest7ViewController.m */,
 			);
 			path = MyLayout;
 			sourceTree = "<group>";
@@ -480,6 +482,7 @@
 				1888CE7F1D0BE44300968C0C /* layoutdemo3.gif */,
 				1888CE801D0BE44300968C0C /* layoutdemo2.gif */,
 				1888CE811D0BE44300968C0C /* layoutdemo1.gif */,
+				18DF8A1A1DD83A9A009FD703 /* layoutdemo8.gif */,
 				186B83D91D090DE6001CA155 /* zh-Hans.lproj */,
 				186B83CE1D08F7B9001CA155 /* Base.lproj */,
 				18D683F91C4F421400A48BB4 /* Images.xcassets */,
@@ -574,6 +577,7 @@
 				186B83DE1D090DE6001CA155 /* LaunchScreen.strings in Resources */,
 				186B83E01D094F11001CA155 /* FLLTest2ViewController.xib in Resources */,
 				186B83DF1D090DE6001CA155 /* Localizable.strings in Resources */,
+				18DF8A1B1DD83A9A009FD703 /* layoutdemo8.gif in Resources */,
 				186B83D41D08F7B9001CA155 /* LaunchScreen.xib in Resources */,
 				18D684391C4F421400A48BB4 /* Images.xcassets in Resources */,
 			);

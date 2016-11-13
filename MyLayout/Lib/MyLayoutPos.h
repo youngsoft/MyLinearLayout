@@ -92,12 +92,12 @@
 -(MyLayoutPos* (^)(CGFloat val))offset;
 
 /**
- *设置布局位置的最小值。这个方法一般和相对位置值配合使用。
+ *设置布局位置的最小值。这个方法一般和相对位置值配合使用，不设置默认是-CGFLOAT_MAX
  */
 -(MyLayoutPos* (^)(CGFloat val))min;
 
 /**
- *设置布局位置的最大值。这个方法一般和相对位置值配合使用。
+ *设置布局位置的最大值。这个方法一般和相对位置值配合使用，不设置默认是CGFLOAT_MAX
  */
 -(MyLayoutPos* (^)(CGFloat val))max;
 

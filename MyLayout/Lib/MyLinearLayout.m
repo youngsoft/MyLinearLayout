@@ -108,6 +108,23 @@ IB_DESIGNABLE
 }
 
 
+-(void)setShrinkType:(MySubviewsShrinkType)shrinkType
+{
+    MyLinearLayout *lsc = self.myCurrentSizeClass;
+    
+    if (lsc.shrinkType != shrinkType)
+    {
+        lsc.shrinkType = shrinkType;
+        [self setNeedsLayout];
+    }
+}
+
+-(MySubviewsShrinkType)shrinkType
+{
+    return self.myCurrentSizeClass.shrinkType;
+}
+
+
 -(void)averageSubviews:(BOOL)centered
 {
     [self averageSubviews:centered withMargin:CGFLOAT_MAX];
@@ -233,7 +250,8 @@ IB_DESIGNABLE
     CGFloat totalWeight = 0;    //剩余部分的总比重
     selfSize = [self AdjustSelfWidth:sbs selfSize:selfSize];   //调整自身的宽度
     
-    NSMutableArray *fixedSbs = [NSMutableArray new];
+    NSMutableArray *fixedSizeSbs = [NSMutableArray new];
+    CGFloat fixedSizeHeight = 0;
      for (UIView *sbv in sbs)
     {
         
@@ -296,20 +314,25 @@ IB_DESIGNABLE
         if ([self isRelativeMargin:tm])
         {
             totalWeight += tm;
-            fixedHeight += sbv.topPos.offsetVal;
+            
+            fixedHeight += MAX(sbv.topPos.offsetVal, sbv.topPos.minVal);
         }
         else
+        {
             fixedHeight += sbv.topPos.margin;
+        }
         
         
         
         if ([self isRelativeMargin:bm])
         {
             totalWeight += bm;
-            fixedHeight += sbv.bottomPos.offsetVal;
+            fixedHeight += MAX(sbv.bottomPos.offsetVal,sbv.bottomPos.minVal);
         }
         else
+        {
             fixedHeight += sbv.bottomPos.margin;
+        }
         
         
         if (sbv.weight > 0.0)
@@ -319,7 +342,13 @@ IB_DESIGNABLE
         else
         {
             fixedHeight += rect.size.height;
-            [fixedSbs addObject:sbv];
+            
+            //如果最小高度不为自身则可以进行缩小。
+            if (sbv.heightDime.lBoundVal.dimeSelfVal == nil)
+            {
+                fixedSizeHeight += rect.size.height;
+                [fixedSizeSbs addObject:sbv];
+            }
         }
         
         if (sbv != sbs.lastObject)
@@ -328,17 +357,47 @@ IB_DESIGNABLE
         sbv.absPos.frame = rect;
     }
     
+    
+    //在包裹宽度且总体比重不为0时则，则需要还原最小的宽度，这样就不会使得宽度在横竖屏或者多次计算后越来越宽。
+    if (self.wrapContentHeight && totalWeight != 0)
+    {
+        CGFloat tempSelfHeight = self.topPadding + self.bottomPadding;
+        if (sbs.count > 1)
+            tempSelfHeight += (sbs.count - 1) * self.subviewMargin;
+        
+        selfSize.height = [self validMeasure:self.heightDime sbv:self calcSize:tempSelfHeight sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+        
+    }
+
+    
     //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
     floatingHeight = selfSize.height - fixedHeight - self.topPadding - self.bottomPadding;
     if (floatingHeight <= 0 || floatingHeight == -0.0)
     {
-        if (fixedSbs.count > 0 && totalWeight != 0 && floatingHeight < 0 && selfSize.height > 0)
+        //取出shrinkType中的方式和压缩的类型：
+        MySubviewsShrinkType smd = self.shrinkType & 0x0F; //压缩的模式
+        if (smd != MySubviewsShrink_None)
         {
-            CGFloat averageHeight = floatingHeight / fixedSbs.count;
-            for (UIView *fsbv in fixedSbs)
+            if (fixedSizeSbs.count > 0 && totalWeight != 0 && floatingHeight < 0 && selfSize.height > 0)
             {
-                fsbv.absPos.height += averageHeight;
+                //均分。
+                if (smd == MySubviewsShrink_Average)
+                {
+                    CGFloat averageHeight = floatingHeight / fixedSizeSbs.count;
                 
+                    for (UIView *fsbv in fixedSizeSbs)
+                    {
+                            fsbv.absPos.height += averageHeight;
+                    }
+                }
+                else if (fixedSizeHeight != 0)
+                {//按比例分配。
+                    for (UIView *fsbv in fixedSizeSbs)
+                    {
+                        fsbv.absPos.height += floatingHeight * (fsbv.absPos.height / fixedSizeHeight);
+                    }
+
+                }
             }
         }
 
@@ -397,7 +456,7 @@ IB_DESIGNABLE
     pos += self.bottomPadding;
     
     
-    if (self.wrapContentHeight && totalWeight == 0)
+    if (self.wrapContentHeight)
     {
         selfSize.height = pos;
     }
@@ -414,16 +473,18 @@ IB_DESIGNABLE
     
     CGFloat maxSubviewHeight = 0;
     
+    
     //计算出固定的子视图宽度的总和以及宽度比例总和
     
-    NSMutableArray *fixedSbs = [NSMutableArray new];
+    NSMutableArray *fixedSizeSbs = [NSMutableArray new];
+    CGFloat fixedSizeWidth = 0;
     for (UIView *sbv in sbs)
     {
         
         if ([self isRelativeMargin:sbv.leftPos.posNumVal.doubleValue])
         {
             totalWeight += sbv.leftPos.posNumVal.doubleValue;
-            fixedWidth += sbv.leftPos.offsetVal;
+            fixedWidth += MAX(sbv.leftPos.offsetVal,sbv.leftPos.minVal);
         }
         else
             fixedWidth += sbv.leftPos.margin;
@@ -431,7 +492,7 @@ IB_DESIGNABLE
         if ([self isRelativeMargin:sbv.rightPos.posNumVal.doubleValue])
         {
             totalWeight += sbv.rightPos.posNumVal.doubleValue;
-            fixedWidth += sbv.rightPos.offsetVal;
+            fixedWidth += MAX(sbv.rightPos.offsetVal,sbv.rightPos.minVal);
         }
         else
             fixedWidth += sbv.rightPos.margin;
@@ -449,27 +510,65 @@ IB_DESIGNABLE
             if (sbv.widthDime.isMatchParent && !self.wrapContentWidth)
                   vWidth = (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
             
-            fixedWidth += [self validMeasure:sbv.widthDime sbv:sbv calcSize:vWidth sbvSize:sbv.absPos.frame.size selfLayoutSize:selfSize];
-            [fixedSbs addObject:sbv];
+            vWidth = [self validMeasure:sbv.widthDime sbv:sbv calcSize:vWidth sbvSize:sbv.absPos.frame.size selfLayoutSize:selfSize];
+            sbv.absPos.width = vWidth;
+            fixedWidth += vWidth;
+            
+            //如果最小宽度不为自身则可以进行缩小。
+            if (sbv.widthDime.lBoundVal.dimeSelfVal == nil)
+            {
+               fixedSizeWidth += vWidth;
+               [fixedSizeSbs addObject:sbv];
+            }
         }
         
         if (sbv != sbs.lastObject)
             fixedWidth += self.subviewMargin;
     }
     
+    //在包裹宽度且总体比重不为0时则，则需要还原最小的宽度，这样就不会使得宽度在横竖屏或者多次计算后越来越宽。
+    if (self.wrapContentWidth && totalWeight != 0)
+    {
+        CGFloat tempSelfWidth = self.leftPadding + self.rightPadding;
+        if (sbs.count > 1)
+            tempSelfWidth += (sbs.count - 1) * self.subviewMargin;
+        
+        selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:tempSelfWidth sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+
+    }
+    
     //剩余的可浮动的宽度，那些weight不为0的从这个高度来进行分发
     floatingWidth = selfSize.width - fixedWidth - self.leftPadding - self.rightPadding;
     if (floatingWidth <= 0 || floatingWidth == -0.0)
     {
-        if (fixedSbs.count > 0 && totalWeight != 0 && floatingWidth < 0 && selfSize.width > 0)
+        //取出shrinkType中的方式和压缩的类型：
+        MySubviewsShrinkType smd = self.shrinkType & 0x0F; //压缩的模式
+        if (smd != MySubviewsShrink_None)
         {
-            CGFloat averageWidth = floatingWidth / fixedSbs.count;
-            for (UIView *fsbv in fixedSbs)
+            if (fixedSizeSbs.count > 0 && totalWeight != 0 && floatingWidth < 0 && selfSize.width > 0)
             {
-                fsbv.absPos.width += averageWidth;
-                
+                //均分。
+                if (smd == MySubviewsShrink_Average)
+                {
+                    CGFloat averageWidth = floatingWidth / fixedSizeSbs.count;
+                    
+                    for (UIView *fsbv in fixedSizeSbs)
+                    {
+                       fsbv.absPos.width += averageWidth;
+                        
+                    }
+                }
+                else if (fixedSizeWidth != 0)
+                {//按比例分配。
+                    for (UIView *fsbv in fixedSizeSbs)
+                    {
+                       fsbv.absPos.width += floatingWidth * (fsbv.absPos.width / fixedSizeWidth);
+                    }
+                    
+                }
             }
         }
+        
         
         floatingWidth = 0;
     }
@@ -484,13 +583,9 @@ IB_DESIGNABLE
         BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
         CGRect rect =  sbv.absPos.frame;
         
-        if (sbv.widthDime.dimeNumVal != nil)
-            rect.size.width = sbv.widthDime.measure;
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
-        if (sbv.widthDime.isMatchParent && !self.wrapContentWidth)
-            rect.size.width= (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         
         if (sbv.heightDime.isMatchParent)
             rect.size.height= (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
@@ -598,7 +693,7 @@ IB_DESIGNABLE
     
     pos += self.rightPadding;
     
-    if (self.wrapContentWidth && totalWeight == 0)
+    if (self.wrapContentWidth)
     {
         selfSize.width = pos;
     }
@@ -903,7 +998,7 @@ IB_DESIGNABLE
             if (!isEstimate)
             {
                 sbv.absPos.frame = sbv.bounds;
-                [self calcSizeOfWrapContentSubview:sbv];
+                [self calcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
                 
             }
             
@@ -1016,7 +1111,7 @@ IB_DESIGNABLE
             if (!isEstimate)
             {
                 sbv.absPos.frame = sbv.bounds;
-                [self calcSizeOfWrapContentSubview:sbv];
+                [self calcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
 
             }
             

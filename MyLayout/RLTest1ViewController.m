@@ -44,11 +44,15 @@
     greenCircle.heightDime.equalTo(greenCircle.widthDime);    //高度和自身宽度相等。
     greenCircle.leftPos.equalTo(@10);    //左边距离父视图10
     greenCircle.topPos.equalTo(@90);     //顶部距离父视图90
-    greenCircle.viewLayoutCompleteBlock = ^(MyBaseLayout *layout, UIView *sbv)
-    {//viewLayoutCompleteBlock是在子视图布局完成后给子视图一个机会进行一些特殊设置的block。这里面我们将子视图的半径设置为尺寸的一半，这样就可以实现在任意的屏幕上，这个子视图总是呈现为圆形。viewLayoutCompleteBlock只会在布局完成后调用一次，就会被布局系统销毁。
-        sbv.layer.cornerRadius = sbv.frame.size.width / 2;
-    };
     [rootLayout addSubview:greenCircle];
+    
+    __weak UIView* weakGreenCircle = greenCircle;
+    rootLayout.rotationToDeviceOrientationBlock = ^(MyBaseLayout *layout, BOOL isFirst, BOOL isPortrait)
+    {//rotationToDeviceOrientationBlock是在布局视图第一次布局后或者有屏幕旋转时给布局视图一个机会进行一些特殊设置的block。这里面我们将子视图的半径设置为尺寸的一半，这样就可以实现在任意的屏幕上，这个子视图总是呈现为圆形。这里rotationToDeviceOrientationBlock和子视图的viewLayoutCompleteBlock的区别是前者是针对布局的，后者是针对子视图的。前者是在布局视图第一次完成布局或者后续屏幕有变化时布局视图调用，而后者则是子视图在布局视图完成后调用。
+        //这里不用子视图的viewLayoutCompleteBlock原因是，viewLayoutCompleteBlock只会在布局后执行一次，无法捕捉屏幕旋转的情况，而因为这里面的子视图的宽度是依赖于父视图的，所以必须要用rotationToDeviceOrientationBlock来实现。
+        weakGreenCircle.layer.cornerRadius = weakGreenCircle.frame.size.width / 2;
+
+    };
 
     
     UILabel *walkLabel = [UILabel new];
@@ -147,7 +151,7 @@
 
     
     UIView *lineView3 = [UIView new];
-    lineView3.backgroundColor = [UIColor greenColor];
+    lineView3.backgroundColor = [UIColor orangeColor];
     lineView3.widthDime.equalTo(@5);
     lineView3.heightDime.equalTo(@50);
     lineView3.bottomPos.equalTo(bottomHalfCircleView.topPos);

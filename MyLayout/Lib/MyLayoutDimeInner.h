@@ -44,4 +44,6 @@
 @property(nonatomic, readonly, assign) CGFloat measure;
 
 
+-(CGFloat)measureWith:(CGFloat)size;
+
 @end

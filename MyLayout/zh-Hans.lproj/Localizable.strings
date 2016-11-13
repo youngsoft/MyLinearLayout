@@ -44,6 +44,7 @@
 "4.Replacement of UICollectionView" = "4.综合布局-UICollectionView的替换方案";
 "1.SizeClass - Demo1" = "1.SizeClass-不同屏幕下的布局样式1";
 "2.SizeClass - Demo2" = "2.SizeClass-不同屏幕下的布局样式2";
+"❁1.Screen perfect fit - Demo1" = "☞1.界面的完美适配DEMO";
 
 //LLTest1ViewController
 "Vert(from top to bottom)" = "垂直布局(从上到下)";

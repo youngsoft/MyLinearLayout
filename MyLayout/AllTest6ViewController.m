@@ -23,6 +23,7 @@
      */
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyMarginGravity_Horz_Fill;
     self.view = rootLayout;
     

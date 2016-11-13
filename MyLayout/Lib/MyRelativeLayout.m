@@ -523,7 +523,7 @@ IB_DESIGNABLE
     //遍历所有子视图，算出所有宽度和高度根据自身内容确定的子视图的尺寸.以及计算出那些有依赖关系的尺寸限制。。。
     for (UIView *sbv in self.subviews)
     {
-        [self calcSizeOfWrapContentSubview:sbv];
+        [self calcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
         
         if (sbv.absPos.width != CGFLOAT_MAX)
         {

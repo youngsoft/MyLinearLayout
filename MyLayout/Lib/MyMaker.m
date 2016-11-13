@@ -213,6 +213,13 @@
     
 }
 
+-(MyMaker*)shrinkType
+{
+    return [self addMethod:@"shrinkType"];
+    
+}
+
+
 -(MyMaker*)arrangedCount
 {
     return [self addMethod:@"arrangedCount"];

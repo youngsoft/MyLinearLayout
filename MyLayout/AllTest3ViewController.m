@@ -229,6 +229,7 @@
     [centerButton addTarget:self action:@selector(handleHideSelf:) forControlEvents:UIControlEventTouchUpInside];
     centerButton.backgroundColor = [UIColor redColor];
     [centerButton sizeToFit];
+    centerButton.weight = 1; //均分剩余的宽度。
     [testLayout addSubview:centerButton];
     self.hiddenTestButton = centerButton;
     
@@ -237,6 +238,7 @@
     [rightButton addTarget:self action:@selector(handleShowBrother:) forControlEvents:UIControlEventTouchUpInside];
     rightButton.backgroundColor = [UIColor blueColor];
     [rightButton sizeToFit];
+    rightButton.weight = 1; //均分剩余的宽度。
     [testLayout addSubview:rightButton];
     
 }
@@ -375,14 +377,14 @@
     label.font = [UIFont systemFontOfSize:14];
     label.adjustsFontSizeToFitWidth = YES;
     [label sizeToFit];
-    label.rightPos.equalTo(@0.5).min(0);  //设置右间距为相对距离，并且最小为0
+    label.weight = 1;
     [switchLayout addSubview:label];
     
     
     
     UISwitch *switchCtrl = [UISwitch new];
     [switchCtrl addTarget:self action:action forControlEvents:UIControlEventValueChanged];
-    switchCtrl.leftPos.equalTo(@0.5);
+    switchCtrl.rightPos.min(5);
     [switchLayout addSubview:switchCtrl];
     
     return switchLayout;
