@@ -18,7 +18,7 @@
      3.线性布局里面的子视图的比重值的和不一定要求是1，比如线性布局里面两个视图的比重都设置为1和都设置为0.5以及都设置为0.1的意义是一样的，都是占用50%。
  *
  */
-@property(nonatomic, assign) IBInspectable CGFloat weight;
+@property(nonatomic, assign)  CGFloat weight;
 
 @end
 
@@ -40,19 +40,19 @@
 /**
  *线性布局的布局方向。
  */
-@property(nonatomic,assign) IBInspectable MyLayoutViewOrientation orientation;
+@property(nonatomic,assign)  MyLayoutViewOrientation orientation;
 
 
 /**
  *线性布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
  */
-@property(nonatomic, assign) IBInspectable MyMarginGravity gravity;
+@property(nonatomic, assign)  MyMarginGravity gravity;
 
 
 /**
  *设置布局视图里面子视图之间的间距。如果是垂直线性布局则设置的是垂直间距，如果是水平线性布局则设置的是水平间距。两个视图之间的最终间距等于MyLayoutPos设置的间距加上subviewMargin设置的间距的和。
  */
-@property(nonatomic, assign) IBInspectable CGFloat subviewMargin;
+@property(nonatomic, assign)  CGFloat subviewMargin;
 
 /**
  *设置当子视图里面有设置weight或者相对尺寸时，并且有固定尺寸和间距的子视图的总和大于布局视图的高度时，如何压缩那些固定尺寸和间距的视图的方式。默认的值是：MySubviewsShrink_Average|MySubviewsShrink_Size， 也就是0。表明会平均的缩小固定的视图的尺寸。在设置时可以进行压缩类型和压缩方式的或运算方法。具体的方法见MySubviewsShrinkType中的各种值的定义。

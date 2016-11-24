@@ -8,9 +8,29 @@
 
 #import "MyLayoutDef.h"
 #import "MyLayoutPosInner.h"
-#import "MyLayoutDimeInner.h"
-#import "MyLayoutMeasure.h"
+#import "MyLayoutSizeInner.h"
 #import "MyLayoutSizeClass.h"
+
+
+//视图在布局中的评估测量值
+@interface MyFrame : NSObject
+
+@property(nonatomic, assign) CGFloat leftPos;
+@property(nonatomic, assign) CGFloat rightPos;
+@property(nonatomic, assign) CGFloat topPos;
+@property(nonatomic, assign) CGFloat bottomPos;
+@property(nonatomic, assign) CGFloat width;
+@property(nonatomic, assign) CGFloat height;
+
+@property(nonatomic, weak) UIView *sizeClass;
+
+
+-(void)reset;
+
+@property(nonatomic,assign) CGRect frame;
+
+@end
+
 
 
 @interface MyBaseLayout()
@@ -51,7 +71,7 @@
 
 -(CGFloat)heightFromFlexedHeightView:(UIView*)sbv inWidth:(CGFloat)width;
 
--(CGFloat)validMeasure:(MyLayoutDime*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize;
+-(CGFloat)validMeasure:(MyLayoutSize*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize;
 
 -(CGFloat)validMargin:(MyLayoutPos*)pos sbv:(UIView*)sbv calcPos:(CGFloat)calcPos selfLayoutSize:(CGSize)selfLayoutSize;
 
@@ -70,7 +90,7 @@
 
 @interface UIView(MyLayoutExtInner)
 
-@property(nonatomic, strong, readonly) MyLayoutMeasure *absPos;
+@property(nonatomic, strong, readonly) MyFrame *myFrame;
 
 
 -(instancetype)myDefaultSizeClass;

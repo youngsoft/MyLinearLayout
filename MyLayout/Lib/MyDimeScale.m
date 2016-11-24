@@ -8,6 +8,8 @@
 
 #import "MyDimeScale.h"
 
+#if TARGET_OS_IPHONE
+
 @implementation MyDimeScale
 
 CGFloat _rate = 1;
@@ -51,3 +53,5 @@ CGFloat _hrate = 1;
 
 
 @end
+
+#endif

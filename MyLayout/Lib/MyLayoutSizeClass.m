@@ -8,9 +8,9 @@
 
 #import "MyLayoutSizeClass.h"
 #import "MyLayoutPosInner.h"
-#import "MyLayoutDimeInner.h"
+#import "MyLayoutSizeInner.h"
 
-@implementation MyLayoutSizeClass
+@implementation MyViewSizeClass
 
 
 -(MyLayoutPos*)leftPos
@@ -176,11 +176,11 @@
 }
 
 
--(MyLayoutDime*)widthDime
+-(MyLayoutSize*)widthDime
 {
     if (_widthDime == nil)
     {
-        _widthDime = [MyLayoutDime new];
+        _widthDime = [MyLayoutSize new];
         _widthDime.dime = MyMarginGravity_Horz_Fill;
         
     }
@@ -189,11 +189,11 @@
 }
 
 
--(MyLayoutDime*)heightDime
+-(MyLayoutSize*)heightDime
 {
     if (_heightDime == nil)
     {
-        _heightDime = [MyLayoutDime new];
+        _heightDime = [MyLayoutSize new];
         _heightDime.dime = MyMarginGravity_Vert_Fill;
         
     }
@@ -274,7 +274,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    MyLayoutSizeClass *lsc = [[[self class] allocWithZone:zone] init];
+    MyViewSizeClass *lsc = [[[self class] allocWithZone:zone] init];
     
   
     //这里不会复制hidden属性
@@ -302,7 +302,7 @@
 
 @end
 
-@implementation MyLayoutSizeClassLayout
+@implementation MyLayoutViewSizeClass
 
 -(id)init
 {
@@ -357,7 +357,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    MyLayoutSizeClassLayout *lsc = [super copyWithZone:zone];
+    MyLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     lsc.padding = self.padding;
     lsc.wrapContentWidth = self.wrapContentWidth;
     lsc.wrapContentHeight = self.wrapContentHeight;
@@ -388,7 +388,7 @@
 @end
 
 
-@implementation MyLayoutSizeClassLinearLayout
+@implementation MySequentLayoutViewSizeClass
 
 -(CGFloat)subviewMargin
 {
@@ -404,13 +404,12 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    MyLayoutSizeClassLinearLayout *lsc = [super copyWithZone:zone];
+    MySequentLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     
     lsc.orientation = self.orientation;
     lsc.gravity = self.gravity;
     lsc.subviewVertMargin = self.subviewVertMargin;
     lsc.subviewHorzMargin = self.subviewHorzMargin;
-    lsc.shrinkType = self.shrinkType;
     
      return lsc;
 }
@@ -419,12 +418,40 @@
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nLinearLayout: \norientation=%ld\ngravity=%hu\nsubviewVertMargin=%f\nsubviewHorzMargin=%f\nshrinkType=%ld",
+    dbgDesc = [NSString stringWithFormat:@"%@\nSequentLayout: \norientation=%ld\ngravity=%hu\nsubviewVertMargin=%f\nsubviewHorzMargin=%f",
                dbgDesc,
               self.orientation,
                self.gravity,
                self.subviewVertMargin,
-               self.subviewHorzMargin,
+               self.subviewHorzMargin
+               ];
+    
+    
+    return dbgDesc;
+}
+
+
+
+@end
+
+
+@implementation MyLinearLayoutViewSizeClass
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLinearLayoutViewSizeClass *lsc = [super copyWithZone:zone];
+    
+    lsc.shrinkType = self.shrinkType;
+    
+    return lsc;
+}
+
+-(NSString*)debugDescription
+{
+    NSString *dbgDesc = [super debugDescription];
+    
+    dbgDesc = [NSString stringWithFormat:@"%@\nLinearLayout: \nshrinkType=%ld",
+               dbgDesc,
                self.shrinkType
                ];
     
@@ -436,7 +463,8 @@
 
 @end
 
-@implementation MyLayoutSizeClassTableLayout
+
+@implementation MyTableLayoutViewSizeClass
 
 
 -(CGFloat)rowSpacing
@@ -452,7 +480,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    MyLayoutSizeClassTableLayout *lsc = [super copyWithZone:zone];
+    MyTableLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     
     lsc.rowSpacing = self.rowSpacing;
     lsc.colSpacing = self.colSpacing;
@@ -475,11 +503,11 @@
 
 @end
 
-@implementation MyLayoutSizeClassFloatLayout
+@implementation MyFloatLayoutViewSizeClass
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    MyLayoutSizeClassFloatLayout *lsc = [super copyWithZone:zone];
+    MyFloatLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     
     lsc.subviewSize = self.subviewSize;
     lsc.minMargin = self.minMargin;
@@ -505,11 +533,11 @@
 @end
 
 
-@implementation MyLayoutSizeClassFlowLayout
+@implementation MyFlowLayoutViewSizeClass
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    MyLayoutSizeClassFlowLayout *lsc = [super copyWithZone:zone];
+    MyFlowLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     
     lsc.arrangedCount = self.arrangedCount;
     lsc.averageArrange = self.averageArrange;
@@ -539,11 +567,11 @@
 @end
 
 
-@implementation MyLayoutSizeClassRelativeLayout
+@implementation MyRelativeLayoutViewSizeClass
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    MyLayoutSizeClassRelativeLayout *lsc = [super copyWithZone:zone];
+    MyRelativeLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     lsc.flexOtherViewWidthWhenSubviewHidden = self.flexOtherViewWidthWhenSubviewHidden;
     lsc.flexOtherViewHeightWhenSubviewHidden = self.flexOtherViewHeightWhenSubviewHidden;
     
@@ -568,6 +596,12 @@
 
 @end
 
-@implementation MyLayoutSizeClassPathLayout
+@implementation MyFrameLayoutViewSizeClass
+
+
+
+@end
+
+@implementation MyPathLayoutViewSizeClass
 
 @end

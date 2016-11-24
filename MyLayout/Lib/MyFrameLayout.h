@@ -14,7 +14,7 @@
 /**
  *设置当子视图添加到框架布局时垂直和水平所停靠的位置。默认是左上角停靠
  */
-@property(nonatomic, assign) IBInspectable MyMarginGravity marginGravity;
+@property(nonatomic, assign)  MyMarginGravity marginGravity;
 
 @end
 

@@ -39,8 +39,8 @@
 /**
  *  设置表格的行间距和列间距
  */
-@property(nonatomic ,assign) IBInspectable CGFloat rowSpacing;
-@property(nonatomic, assign) IBInspectable CGFloat colSpacing;
+@property(nonatomic ,assign)  CGFloat rowSpacing;
+@property(nonatomic, assign)  CGFloat colSpacing;
 
 
 

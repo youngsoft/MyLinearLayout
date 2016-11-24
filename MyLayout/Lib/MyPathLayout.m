@@ -963,7 +963,7 @@
         
         if (!isEstimate)
         {
-            sbv.absPos.frame = sbv.bounds;
+            sbv.myFrame.frame = sbv.bounds;
             [self calcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
         }
         
@@ -977,8 +977,8 @@
             
             if (isEstimate && (sbvl.wrapContentWidth || sbvl.wrapContentHeight))
             {
-                [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
-                sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                [sbvl estimateLayoutRect:sbvl.myFrame.frame.size inSizeClass:sizeClass];
+                sbvl.myFrame.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
             }
         }
     }
@@ -1015,7 +1015,7 @@
         
         //计算得到最大的高度和最大的宽度。
         
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
@@ -1068,7 +1068,7 @@
         if (CGRectGetMaxY(rect) > maxSize.height)
             maxSize.height = CGRectGetMaxY(rect);
         
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
     }
     
@@ -1076,7 +1076,7 @@
     UIView *sbv = [self originView];
     if (sbv != nil)
     {
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
@@ -1128,7 +1128,7 @@
         if (CGRectGetMaxY(rect) > maxSize.height)
             maxSize.height = CGRectGetMaxY(rect);
         
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
     }
     
@@ -1152,7 +1152,7 @@
 
 -(id)createSizeClassInstance
 {
-    return [MyLayoutSizeClassPathLayout new];
+    return [MyPathLayoutViewSizeClass new];
 }
 
 @end

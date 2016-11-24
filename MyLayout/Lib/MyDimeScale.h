@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#if TARGET_OS_IPHONE
+
 #import <UIKit/UIKit.h>
+
+
 
 /**
  *一个用于计算位置和尺寸在不同设备屏幕下缩放比例的辅助类，用于实现不同大小设备屏幕之间的位置和尺寸的适配。
@@ -40,3 +45,12 @@
 #define MYDIMESCALE(val)   ([MyDimeScale scale:val])
 #define MYDIMESCALEW(val)  ([MyDimeScale scaleW:val])
 #define MYDIMESCALEH(val)  ([MyDimeScale scaleH:val])
+
+#elif TARGET_OS_MAC
+
+#define MYDIMESCALE(val)   val
+#define MYDIMESCALEW(val)  val
+#define MYDIMESCALEH(val)  val
+
+
+#endif

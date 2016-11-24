@@ -8,7 +8,7 @@
 
 #import "MyLayoutDef.h"
 #import "MyLayoutPos.h"
-#import "MyLayoutDime.h"
+#import "MyLayoutSize.h"
 #import "MyLayoutSizeClass.h"
 
 @class MyBaseLayout;
@@ -121,7 +121,7 @@
 /**
  *Left layout position of the view. Equivalent to leftPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myLeftMargin;
+@property(nonatomic, assign)  CGFloat myLeftMargin;
 
 /**
  *视图上边的布局位置, 是topPos.equalTo方法的简化版本
@@ -129,7 +129,7 @@
 /**
  *Top layout position of the view. Equivalent to topPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myTopMargin;
+@property(nonatomic, assign)  CGFloat myTopMargin;
 
 /**
  *视图右边的布局位置, 是rightPos.equalTo方法的简化版本
@@ -137,7 +137,7 @@
 /**
  *Right layout position of the view. Equivalent to rightPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myRightMargin;
+@property(nonatomic, assign)  CGFloat myRightMargin;
 
 /**
  *视图下边的布局位置, 是bottomPos.equalTo方法的简化版本
@@ -145,7 +145,7 @@
 /**
  *Bottom layout position of the view. Equivalent to bottomPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myBottomMargin;
+@property(nonatomic, assign)  CGFloat myBottomMargin;
 
 /**
  *视图四边的布局位置, 是myLeftMargin,myTopMargin,myRightMargin,myBottomMargin的简化版本
@@ -153,7 +153,7 @@
 /**
  *Boundary layout position of the view. Equivalent to myLeftMargin,myTopMargin,myRightMargin,myBottomMargin set to the same number.
  */
-@property(nonatomic, assign) IBInspectable CGFloat myMargin;
+@property(nonatomic, assign)  CGFloat myMargin;
 
 /**
  *视图水平中心布局位置, 是centerXPos.equalTo方法的简化版本
@@ -161,7 +161,7 @@
 /**
  *Horizontal center layout position of the view. Equivalent to centerXPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myCenterXOffset;
+@property(nonatomic, assign)  CGFloat myCenterXOffset;
 
 /**
  *视图垂直中心布局位置, 是centerYPos.equalTo方法的简化版本
@@ -169,7 +169,7 @@
 /**
  *Vertical center layout position of the view. Equivalent to centerYPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myCenterYOffset;
+@property(nonatomic, assign)  CGFloat myCenterYOffset;
 
 /**
  *视图中心布局位置, 是myCenterXOffset,myCenterYOffset方法的简化版本
@@ -177,20 +177,20 @@
 /**
  *Center layout position of the view. Equivalent to set myCenterXOffset and myCenterYOffset .
  */
-@property(nonatomic, assign) IBInspectable CGPoint myCenterOffset;
+@property(nonatomic, assign)  CGPoint myCenterOffset;
 
 
 /*
- 视图的布局尺寸对象MyLayoutDime,用于设置视图的宽度和高度尺寸。视图可以通过设置frame值来设置自身的尺寸，也可以通过设置widthDime和heightDime来
- 设置布局尺寸，通过frame设置的结果会立即生效，而通过widthDime和heightDime设置则会在布局后才生效，如果同时设置了frame值和MyLayoutDime值则MyLayoutDime的设置值优先。
+ 视图的布局尺寸对象MyLayoutSize,用于设置视图的宽度和高度尺寸。视图可以通过设置frame值来设置自身的尺寸，也可以通过设置widthDime和heightDime来
+ 设置布局尺寸，通过frame设置的结果会立即生效，而通过widthDime和heightDime设置则会在布局后才生效，如果同时设置了frame值和MyLayoutSize值则MyLayoutSize的设置值优先。
  
  其中的equalTo方法可用于设置布局尺寸的具体值：
  1.如果设置为NSNumber则表示布局尺寸是一个具体的数值。比如widthDime.equalTo(@20)表示视图的宽度设置为20个点。
- 2.如果设置为MyLayoutDime则表示布局尺寸依赖于另外一个视图的布局尺寸。比如A.widthDime.equalTo(B.widthDime)表示A的宽度和B的宽度相等
- 3.如果设置为NSArray<MyLayoutDime*>则表示视图和数组里面的视图均分布局视图的宽度或者高度。比如A.widthDime.equalTo(@[B.widthDime,C.widthDime])表示视图A,B,C三个视图均分父视图的宽度。
+ 2.如果设置为MyLayoutSize则表示布局尺寸依赖于另外一个视图的布局尺寸。比如A.widthDime.equalTo(B.widthDime)表示A的宽度和B的宽度相等
+ 3.如果设置为NSArray<MyLayoutSize*>则表示视图和数组里面的视图均分布局视图的宽度或者高度。比如A.widthDime.equalTo(@[B.widthDime,C.widthDime])表示视图A,B,C三个视图均分父视图的宽度。
  4.如果设置为nil则表示取消布局尺寸的值的设置。
  
- 其中的add方法可以用于设置布局尺寸的增加值，一般只和equalTo设置为MyLayoutDime和NSArray时配合使用。比如A.widthDime.equalTo(B.widthDime).add(20)表示视图A的宽度等于视图B的宽度再加上20个点。
+ 其中的add方法可以用于设置布局尺寸的增加值，一般只和equalTo设置为MyLayoutSize和NSArray时配合使用。比如A.widthDime.equalTo(B.widthDime).add(20)表示视图A的宽度等于视图B的宽度再加上20个点。
  
  其中的multiply方法可用于设置布局尺寸放大的倍数值。比如A.widthDime.equalTo(B.widthDime).multiply(2)表示视图A的宽度是视图B的宽度的2倍。
  
@@ -204,7 +204,7 @@
  
  定义A为操作的视图本身，B为A的兄弟视图，P为A的父视图。
  +-------------+----------+------------------+--------------+------------+--------------+---------------+--------------+----------------------+
- | 对象 \ 值    | NSNumber |A.widthDime	     |A.heightDime  |B.widthDime | B.heightDime |	P.widthDime |P.heightDime  |NSArray<MyLayoutDime*>|
+ | 对象 \ 值    | NSNumber |A.widthDime	     |A.heightDime  |B.widthDime | B.heightDime |	P.widthDime |P.heightDime  |NSArray<MyLayoutSize*>|
  +-------------+----------+------------------+--------------+------------+--------------+---------------+--------------+----------------------+
  |A.widthDime  | ALL	  |ALL	             |FR/R/FL-H/FO  |FR/R/FO/P	 | R	        |L/FR/R/FL/FO/P | R	           |R                     |
  +-------------+----------+------------------+--------------+------------+--------------+---------------+--------------+----------------------+
@@ -218,20 +218,20 @@
  
  */
 /**
- the MyLayoutDime is layout dimension object object of the UIView. used to set the width and height of the View which is in Layout View
+ the MyLayoutSize is layout dimension object object of the UIView. used to set the width and height of the View which is in Layout View
  */
 
 
 
 /**
- *视图的宽度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutDime,NSArray<MyLayoutDime*>,nil这四种值
+ *视图的宽度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,nil这四种值
  */
-@property(nonatomic, readonly)  MyLayoutDime *widthDime;
+@property(nonatomic, readonly)  MyLayoutSize *widthDime;
 
 /**
- *视图的高度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutDime,NSArray<MyLayoutDime*>,nil这四种值
+ *视图的高度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,nil这四种值
  */
-@property(nonatomic, readonly)  MyLayoutDime *heightDime;
+@property(nonatomic, readonly)  MyLayoutSize *heightDime;
 
 
 
@@ -248,35 +248,35 @@
 /**
  *视图的宽度布局尺寸,是widthDime.equalTo方法的简化版本
  */
-@property(nonatomic,assign) IBInspectable CGFloat myWidth;
+@property(nonatomic,assign)  CGFloat myWidth;
 
 /**
  *视图的高度布局尺寸,是heightDime.equalTo方法的简化版本
  */
-@property(nonatomic,assign) IBInspectable CGFloat myHeight;
+@property(nonatomic,assign)  CGFloat myHeight;
 
 /**
  *视图的宽度高度布局尺寸,是myWidth,myHeight方法的简化版本
  */
-@property(nonatomic,assign) IBInspectable CGSize  mySize;
+@property(nonatomic,assign)  CGSize  mySize;
 
 
 
 /**
  *视图的高度根据内容自适应。当设置为YES时视图会在固定宽度的情况下自动调整高度来自适应视图的内容,默认设置为NO。这个属性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图，当设置这个属性为YES时，视图的宽度必须要明确的被指定。UILabel在使用这个属性时请同时设置numberOfLines不等于1。UITextView可以用这个属性以及heightDime中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果。UIImageView可以用这个属性来在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放。
  */
-@property(nonatomic, assign, getter=isFlexedHeight) IBInspectable BOOL flexedHeight;
+@property(nonatomic, assign, getter=isFlexedHeight)  BOOL flexedHeight;
 
 
 /**
  *设置视图不受布局视图的布局约束控制，所有的视图扩展属性失效而是用自身原始的frame的设置值来进行定位和布局，默认值是NO。这个属性一般用来实现视图在特定场景下的动画效果，以及可以和布局视图的autoresizesSubviews方法配合使用来实现一些特殊功能。
  */
-@property(nonatomic, assign) IBInspectable BOOL useFrame;
+@property(nonatomic, assign)  BOOL useFrame;
 
 /**
  *设置视图在进行布局时只占位置而不真实的调整位置和尺寸。也就是视图的真实位置和尺寸不变，但在布局视图布局时会保留出子视图的布局位置和布局尺寸的空间，这个属性通常和useFrame混合使用来实现一些动画特效。通常在处理时设置：noLayout为YES同时useFrame为NO时布局时视图的frame是不会改变的，而当useFrame设置为YES时则noLayout属性无效。
  */
-@property(nonatomic, assign) IBInspectable BOOL noLayout;
+@property(nonatomic, assign)  BOOL noLayout;
 
 
 /**
@@ -316,6 +316,8 @@
 /**布局的边界画线类，用于实现绘制布局的四周的边界线的功能**/
 @interface MyBorderLineDraw : NSObject
 
+
+
 /**边界线的颜色*/
 @property(nonatomic,strong) UIColor *color;
 /**边界线的厚度，默认是1*/
@@ -341,26 +343,26 @@
  * 设置布局视图四周的内边距值。所谓内边距是指布局视图内的所有子视图离布局视图四周的边距。通过为布局视图设置内边距可以减少为所有子视图设置外边距的工作，而外边距则是指视图离父视图四周的距离。
  */
 @property(nonatomic,assign) UIEdgeInsets padding;
-@property(nonatomic, assign) IBInspectable CGFloat topPadding;
-@property(nonatomic, assign) IBInspectable CGFloat leftPadding;
-@property(nonatomic, assign) IBInspectable CGFloat bottomPadding;
-@property(nonatomic, assign) IBInspectable CGFloat rightPadding;
+@property(nonatomic, assign)  CGFloat topPadding;
+@property(nonatomic, assign)  CGFloat leftPadding;
+@property(nonatomic, assign)  CGFloat bottomPadding;
+@property(nonatomic, assign)  CGFloat rightPadding;
 
 
 /**
  *布局视图的宽度包裹属性，表示布局视图的宽度等于所有子视图的整体宽度。默认值是NO。当设置为NO是必须要明确指定布局的宽度，而当设置为YES时则不需要明确的指定布局视图的宽度了，否则可能会产生约束冲突而导致死循环的出现。wrapContentWidth的优先级最低，一旦布局视图明确的指定了宽度则属性设置无效。
  */
-@property(nonatomic,assign) IBInspectable BOOL wrapContentWidth;
+@property(nonatomic,assign)  BOOL wrapContentWidth;
 /**
  *布局视图的高度包裹属性，表示布局视图的高度等于所有子视图的整体高度。默认值是NO。当设置为NO是必须要明确指定布局的高度，而当设置为YES时则不需要明确的指定布局视图的高度了，否则可能会产生约束冲突而导致死循环的出现。wrapContentHeight的优先级最低，一旦布局视图明确的指定了高度则属性设置无效。
  */
-@property(nonatomic,assign) IBInspectable BOOL wrapContentHeight;
+@property(nonatomic,assign)  BOOL wrapContentHeight;
 
 
 /**
  *布局里面的所有子视图按添加的顺序逆序进行布局。默认是NO。
  */
-@property(nonatomic, assign) IBInspectable BOOL reverseLayout;
+@property(nonatomic, assign)  BOOL reverseLayout;
 
 
 /**
@@ -445,22 +447,22 @@
 /**
  *设置布局按下时背景的高亮的颜色。只有设置了setTarget:action方法此属性才生效。
  */
-@property(nonatomic,strong) IBInspectable UIColor *highlightedBackgroundColor;
+@property(nonatomic,strong)  UIColor *highlightedBackgroundColor;
 
 /**
  *设置布局按下时的高亮不透明度。值的范围是[0,1]，默认是0表示完全不透明，为1表示完全透明。只有设置了setTarget:action方法此属性才生效。
  */
-@property(nonatomic,assign) IBInspectable CGFloat highlightedOpacity;
+@property(nonatomic,assign)  CGFloat highlightedOpacity;
 
 /**
  *设置布局的背景图片。这个属性的设置就是设置了布局的layer.contents的值，因此如果要实现背景图的局部拉伸请用layer.contentsXXX这些属性进行调整
  */
-@property(nonatomic,strong) IBInspectable UIImage *backgroundImage;
+@property(nonatomic,strong)  UIImage *backgroundImage;
 
 /**
  *设置布局按下时的高亮背景图片。只有设置了setTarget:action方法此属性才生效。
  */
-@property(nonatomic,strong) IBInspectable UIImage *highlightedBackgroundImage;
+@property(nonatomic,strong)  UIImage *highlightedBackgroundImage;
 
 /**
  *设置布局的Touch、按下、取消事件的处理动作,后两个事件的处理必须依赖于第一个事件的处理。请不要在这些处理动作中修改背景色，不透明度，以及背景图片。如果您只想要高亮效果但是不想处理事件则将action设置为nil即可了。

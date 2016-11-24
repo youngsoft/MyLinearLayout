@@ -313,7 +313,7 @@
 
 -(id)createSizeClassInstance
 {
-    return [MyLayoutSizeClassTableLayout new];
+    return [MyTableLayoutViewSizeClass new];
 }
 
 

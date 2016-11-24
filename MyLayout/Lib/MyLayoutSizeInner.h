@@ -6,32 +6,32 @@
 //  Copyright (c) 2015年 YoungSoft. All rights reserved.
 //
 
-#import "MyLayoutDime.h"
+#import "MyLayoutSize.h"
 
 
 //尺寸对象内部定义
-@interface MyLayoutDime()
+@interface MyLayoutSize()
 
 @property(nonatomic, weak) UIView *view;
 @property(nonatomic, assign) MyMarginGravity dime;
 @property(nonatomic, assign) MyLayoutValueType dimeValType;
 
 @property(nonatomic, readonly, strong) NSNumber *dimeNumVal;
-@property(nonatomic, readonly, strong) MyLayoutDime *dimeRelaVal;
+@property(nonatomic, readonly, strong) MyLayoutSize *dimeRelaVal;
 @property(nonatomic, readonly, strong) NSArray *dimeArrVal;
-@property(nonatomic, readonly, strong) MyLayoutDime *dimeSelfVal;
+@property(nonatomic, readonly, strong) MyLayoutSize *dimeSelfVal;
 
-@property(nonatomic, readonly, strong) MyLayoutDime *lBoundVal;
-@property(nonatomic, readonly, strong) MyLayoutDime *uBoundVal;
+@property(nonatomic, readonly, strong) MyLayoutSize *lBoundVal;
+@property(nonatomic, readonly, strong) MyLayoutSize *uBoundVal;
 
 
--(MyLayoutDime*)__equalTo:(id)val;
--(MyLayoutDime*)__add:(CGFloat)val;
--(MyLayoutDime*)__multiply:(CGFloat)val;
--(MyLayoutDime*)__min:(CGFloat)val;
--(MyLayoutDime*)__lBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
--(MyLayoutDime*)__max:(CGFloat)val;
--(MyLayoutDime*)__uBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
+-(MyLayoutSize*)__equalTo:(id)val;
+-(MyLayoutSize*)__add:(CGFloat)val;
+-(MyLayoutSize*)__multiply:(CGFloat)val;
+-(MyLayoutSize*)__min:(CGFloat)val;
+-(MyLayoutSize*)__lBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
+-(MyLayoutSize*)__max:(CGFloat)val;
+-(MyLayoutSize*)__uBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
 -(void)__clear;
 
 

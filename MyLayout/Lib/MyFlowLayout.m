@@ -30,7 +30,7 @@
 
 @end
 
-IB_DESIGNABLE
+
 @implementation MyFlowLayout
 
 -(id)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
@@ -200,8 +200,8 @@ IB_DESIGNABLE
         UIView *sbv = sbs[j];
         if (sbv.weight != 0)
         {
-            sbv.absPos.width =  [self validMeasure:sbv.widthDime sbv:sbv calcSize:(totalFloatWidth * sbv.weight / totalWeight) * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:sbv.absPos.frame.size selfLayoutSize:selfSize];
-            sbv.absPos.rightPos = sbv.absPos.leftPos + sbv.absPos.width;
+            sbv.myFrame.width =  [self validMeasure:sbv.widthDime sbv:sbv calcSize:(totalFloatWidth * sbv.weight / totalWeight) * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbv.myFrame.rightPos = sbv.myFrame.leftPos + sbv.myFrame.width;
         }
     }
 }
@@ -213,11 +213,11 @@ IB_DESIGNABLE
         UIView *sbv = sbs[j];
         if (sbv.weight != 0)
         {
-            sbv.absPos.height =  [self validMeasure:sbv.heightDime sbv:sbv calcSize:(totalFloatHeight * sbv.weight / totalWeight) * sbv.heightDime.mutilVal + sbv.heightDime.addVal sbvSize:sbv.absPos.frame.size selfLayoutSize:selfSize];
-            sbv.absPos.bottomPos = sbv.absPos.topPos + sbv.absPos.height;
+            sbv.myFrame.height =  [self validMeasure:sbv.heightDime sbv:sbv calcSize:(totalFloatHeight * sbv.weight / totalWeight) * sbv.heightDime.mutilVal + sbv.heightDime.addVal sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbv.myFrame.bottomPos = sbv.myFrame.topPos + sbv.myFrame.height;
             
             if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-                sbv.absPos.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:sbv.absPos.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:sbv.absPos.frame.size selfLayoutSize:selfSize];
+                sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:sbv.myFrame.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
             
         }
     }
@@ -323,41 +323,41 @@ IB_DESIGNABLE
         if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Vert_Top) || addXPos != 0 || addXFill != 0)
         {
             
-            sbv.absPos.leftPos += addXPos;
+            sbv.myFrame.leftPos += addXPos;
             
             if (self.arrangedCount == 0 && self.averageArrange)
             {
                 //只拉伸宽度不拉伸间距
-                sbv.absPos.width += addXFill;
+                sbv.myFrame.width += addXFill;
                 
                 if (j != startIndex - count)
                 {
-                    sbv.absPos.leftPos += addXFill * (j - (startIndex - count));
+                    sbv.myFrame.leftPos += addXFill * (j - (startIndex - count));
                     
                 }
             }
             else
             {
                 //只拉伸间距
-                sbv.absPos.leftPos += addXFill * (j - (startIndex - count));
+                sbv.myFrame.leftPos += addXFill * (j - (startIndex - count));
             }
             
             
             switch (amg) {
                 case MyMarginGravity_Vert_Center:
                 {
-                    sbv.absPos.topPos += (rowMaxHeight - sbv.topPos.margin - sbv.bottomPos.margin - sbv.absPos.height) / 2;
+                    sbv.myFrame.topPos += (rowMaxHeight - sbv.topPos.margin - sbv.bottomPos.margin - sbv.myFrame.height) / 2;
                     
                 }
                     break;
                 case MyMarginGravity_Vert_Bottom:
                 {
-                    sbv.absPos.topPos += rowMaxHeight - sbv.topPos.margin - sbv.bottomPos.margin - sbv.absPos.height;
+                    sbv.myFrame.topPos += rowMaxHeight - sbv.topPos.margin - sbv.bottomPos.margin - sbv.myFrame.height;
                 }
                     break;
                 case MyMarginGravity_Vert_Fill:
                 {
-                    sbv.absPos.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rowMaxHeight - sbv.topPos.margin - sbv.bottomPos.margin sbvSize:sbv.absPos.frame.size selfLayoutSize:selfSize];
+                    sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rowMaxHeight - sbv.topPos.margin - sbv.bottomPos.margin sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
                 }
                     break;
                 default:
@@ -472,41 +472,41 @@ IB_DESIGNABLE
         
         if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Horz_Left) || addYPos != 0 || addYFill != 0)
         {
-            sbv.absPos.topPos += addYPos;
+            sbv.myFrame.topPos += addYPos;
             
             if (self.arrangedCount == 0 && self.averageArrange)
             {
                 //只拉伸宽度不拉伸间距
-                sbv.absPos.height += addYFill;
+                sbv.myFrame.height += addYFill;
                 
                 if (j != startIndex - count)
                 {
-                    sbv.absPos.topPos += addYFill * (j - (startIndex - count));
+                    sbv.myFrame.topPos += addYFill * (j - (startIndex - count));
                     
                 }
             }
             else
             {
                 //只拉伸间距
-                sbv.absPos.topPos += addYFill * (j - (startIndex - count));
+                sbv.myFrame.topPos += addYFill * (j - (startIndex - count));
             }
             
             
             switch (amg) {
                 case MyMarginGravity_Horz_Center:
                 {
-                    sbv.absPos.leftPos += (colMaxWidth - sbv.leftPos.margin - sbv.rightPos.margin - sbv.absPos.width) / 2;
+                    sbv.myFrame.leftPos += (colMaxWidth - sbv.leftPos.margin - sbv.rightPos.margin - sbv.myFrame.width) / 2;
                     
                 }
                     break;
                 case MyMarginGravity_Horz_Right:
                 {
-                    sbv.absPos.leftPos += colMaxWidth - sbv.leftPos.margin - sbv.rightPos.margin - sbv.absPos.width;
+                    sbv.myFrame.leftPos += colMaxWidth - sbv.leftPos.margin - sbv.rightPos.margin - sbv.myFrame.width;
                 }
                     break;
                 case MyMarginGravity_Horz_Fill:
                 {
-                    sbv.absPos.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:colMaxWidth - sbv.leftPos.margin - sbv.rightPos.margin sbvSize:sbv.absPos.frame.size selfLayoutSize:selfSize];
+                    sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:colMaxWidth - sbv.leftPos.margin - sbv.rightPos.margin sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
                 }
                     break;
                 default:
@@ -522,7 +522,7 @@ IB_DESIGNABLE
     CGFloat size = 0;
     for (UIView *sbv in sbs)
     {
-        size += sbv.absPos.rightPos;
+        size += sbv.myFrame.rightPos;
         if (sbv != sbs.lastObject)
             size += margin;
     }
@@ -637,7 +637,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
 #endif
             CGFloat leftMargin = sbv.leftPos.margin;
             CGFloat rightMargin = sbv.rightPos.margin;
-            CGRect rect = sbv.absPos.frame;
+            CGRect rect = sbv.myFrame.frame;
             
             if (sbv.widthDime.dimeNumVal != nil)
                 rect.size.width = sbv.widthDime.measure;
@@ -648,10 +648,10 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             
             rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
-            //暂时把宽度存放sbv.absPos.rightPos上。因为浮动布局来说这个属性无用。
-            sbv.absPos.rightPos = leftMargin + rect.size.width + rightMargin;
-            if (sbv.absPos.rightPos > selfSize.width - self.leftPadding - self.rightPadding)
-                sbv.absPos.rightPos = selfSize.width - self.leftPadding - self.rightPadding;
+            //暂时把宽度存放sbv.myFrame.rightPos上。因为浮动布局来说这个属性无用。
+            sbv.myFrame.rightPos = leftMargin + rect.size.width + rightMargin;
+            if (sbv.myFrame.rightPos > selfSize.width - self.leftPadding - self.rightPadding)
+                sbv.myFrame.rightPos = selfSize.width - self.leftPadding - self.rightPadding;
         }
         
         [sbs setArray:[self getAutoArrangeSubviews:sbs selfSize:selfSize.width - self.leftPadding - self.rightPadding margin:self.subviewHorzMargin]];
@@ -669,7 +669,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         CGFloat leftMargin = sbv.leftPos.margin;
         CGFloat bottomMargin = sbv.bottomPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
         
         if (sbv.widthDime.dimeNumVal != nil)
@@ -768,7 +768,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
 
       
 
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
         arrangedIndex++;
 
@@ -800,7 +800,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             {
                 UIView *sbv = sbs[i];
                 
-                sbv.absPos.topPos += addYPos;
+                sbv.myFrame.topPos += addYPos;
             }
         }
         
@@ -850,7 +850,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         
         CGFloat leftMargin = sbv.leftPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
 
         if (sbv.weight != 0)
@@ -880,7 +880,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
              rowTotalFixedWidth += self.subviewHorzMargin;
         
         
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
         arrangedIndex++;
         
@@ -920,7 +920,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         CGFloat leftMargin = sbv.leftPos.margin;
         CGFloat bottomMargin = sbv.bottomPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
         
         BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
@@ -963,7 +963,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         
         
         
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
         arrangedIndex++;
         
@@ -992,7 +992,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             {
                 UIView *sbv = sbs[i];
                 
-                sbv.absPos.topPos += addYPos;
+                sbv.myFrame.topPos += addYPos;
             }
         }
 
@@ -1037,7 +1037,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             
             CGFloat topMargin = sbv.topPos.margin;
             CGFloat bottomMargin = sbv.bottomPos.margin;
-            CGRect rect = sbv.absPos.frame;
+            CGRect rect = sbv.myFrame.frame;
             
             if (sbv.widthDime.dimeNumVal != nil)
                 rect.size.width = sbv.widthDime.measure;
@@ -1068,10 +1068,10 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             }
 
             
-            //暂时把宽度存放sbv.absPos.rightPos上。因为浮动布局来说这个属性无用。
-            sbv.absPos.rightPos = topMargin + rect.size.height + bottomMargin;
-            if (sbv.absPos.rightPos > selfSize.height - self.topPadding - self.bottomPadding)
-                sbv.absPos.rightPos = selfSize.height - self.topPadding - self.bottomPadding;
+            //暂时把宽度存放sbv.myFrame.rightPos上。因为浮动布局来说这个属性无用。
+            sbv.myFrame.rightPos = topMargin + rect.size.height + bottomMargin;
+            if (sbv.myFrame.rightPos > selfSize.height - self.topPadding - self.bottomPadding)
+                sbv.myFrame.rightPos = selfSize.height - self.topPadding - self.bottomPadding;
         }
         
         [sbs setArray:[self getAutoArrangeSubviews:sbs selfSize:selfSize.height - self.topPadding - self.bottomPadding margin:self.subviewVertMargin]];
@@ -1090,7 +1090,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         CGFloat leftMargin = sbv.leftPos.margin;
         CGFloat bottomMargin = sbv.bottomPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
@@ -1185,7 +1185,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         
         
         
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
         arrangedIndex++;
         
@@ -1217,7 +1217,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             {
                 UIView *sbv = sbs[i];
                 
-                sbv.absPos.leftPos += addXPos;
+                sbv.myFrame.leftPos += addXPos;
             }
         }
         
@@ -1268,7 +1268,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         
         CGFloat topMargin = sbv.topPos.margin;
         CGFloat bottomMargin = sbv.bottomPos.margin;
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
         
         if (sbv.widthDime.dimeNumVal != nil)
@@ -1318,7 +1318,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             rowTotalFixedHeight += self.subviewVertMargin;
         
         
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
         arrangedIndex++;
         
@@ -1357,7 +1357,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         CGFloat leftMargin = sbv.leftPos.margin;
         CGFloat bottomMargin = sbv.bottomPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
         
         if (self.averageArrange)
@@ -1388,7 +1388,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             maxHeight = yPos;
         
         
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
         
         arrangedIndex++;
@@ -1422,7 +1422,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             {
                 UIView *sbv = sbs[i];
                 
-                sbv.absPos.leftPos += addXPos;
+                sbv.myFrame.leftPos += addXPos;
             }
         }
     }
@@ -1447,7 +1447,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         
         if (!isEstimate)
         {
-            sbv.absPos.frame = sbv.bounds;
+            sbv.myFrame.frame = sbv.bounds;
             [self calcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
         }
         
@@ -1481,8 +1481,8 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             
             if (isEstimate && (sbvl.wrapContentWidth || sbvl.wrapContentHeight))
             {
-                [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
-                sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                [sbvl estimateLayoutRect:sbvl.myFrame.frame.size inSizeClass:sizeClass];
+                sbvl.myFrame.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
             }
         }
     }
@@ -1513,7 +1513,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
 
 -(id)createSizeClassInstance
 {
-    return [MyLayoutSizeClassFlowLayout new];
+    return [MyFlowLayoutViewSizeClass new];
 }
 
 

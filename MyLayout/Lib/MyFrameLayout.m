@@ -32,7 +32,7 @@
 
 @end
 
-IB_DESIGNABLE
+
 @implementation MyFrameLayout
 
 /*
@@ -139,7 +139,7 @@ IB_DESIGNABLE
         
         if (!isEstimate)
         {
-            sbv.absPos.frame = sbv.bounds;
+            sbv.myFrame.frame = sbv.bounds;
             [self calcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
         }
 
@@ -164,16 +164,16 @@ IB_DESIGNABLE
             
             if (isEstimate && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
             {
-               [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
-                sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+               [sbvl estimateLayoutRect:sbvl.myFrame.frame.size inSizeClass:sizeClass];
+                sbvl.myFrame.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
             }
         }
         
     
         //计算自己的位置和高宽
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         [self calcSubView:sbv pRect:&rect inSize:selfSize];
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
         if ((sbv.marginGravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_Horz_Fill && sbv.widthDime.dimeRelaVal != self.widthDime)
         {
@@ -210,9 +210,9 @@ IB_DESIGNABLE
         {
             if ((sbv.marginGravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Fill || (sbv.marginGravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Fill)
             {
-                CGRect rect = sbv.absPos.frame;
+                CGRect rect = sbv.myFrame.frame;
                 [self calcSubView:sbv pRect:&rect inSize:selfSize];
-                sbv.absPos.frame = rect;
+                sbv.myFrame.frame = rect;
             }
             
         }
@@ -220,6 +220,11 @@ IB_DESIGNABLE
     
     return selfSize;
 
+}
+
+-(id)createSizeClassInstance
+{
+    return [MyFrameLayoutViewSizeClass new];
 }
 
 @end

@@ -22,7 +22,7 @@
  到一个新的行的。而如果设定为0.8则当前视图的宽度则为(100-20)*0.8 = 64了。
 
  */
-@property(nonatomic, assign) IBInspectable CGFloat weight;
+@property(nonatomic, assign)  CGFloat weight;
 
 @end
 
@@ -56,7 +56,7 @@
  *如果是MyLayoutViewOrientation_Vert则表示从左到右，从上到下的垂直布局方式，这个方式是默认方式。
  *如果是MyLayoutViewOrientation_Horz则表示从上到下，从左到右的水平布局方式
  */
-@property(nonatomic,assign) IBInspectable MyLayoutViewOrientation orientation;
+@property(nonatomic,assign)  MyLayoutViewOrientation orientation;
 
 
 
@@ -67,7 +67,7 @@
  *如果视图方向为MyLayoutViewOrientation_Horz时且averageArrange为YES时则垂直方向的停靠失效。
  *对于内容填充布局来说如果设置为MyMarginGravity_Horz_Fill或者MyMarginGravity_Vert_Fill则表示间距的拉伸
  */
-@property(nonatomic,assign) IBInspectable MyMarginGravity gravity;
+@property(nonatomic,assign)  MyMarginGravity gravity;
 
 
 /**
@@ -75,7 +75,7 @@
  如果方向为MyLayoutViewOrientation_Vert，则表示从左到右的数量，当子视图从左往右满足这个数量后新的子视图将会换行再排列
  如果方向为MyLayoutViewOrientation_Horz，则表示从上到下的数量，当子视图从上往下满足这个数量后新的子视图将会换列再排列
  */
-@property(nonatomic, assign) IBInspectable NSInteger arrangedCount;
+@property(nonatomic, assign)  NSInteger arrangedCount;
 
 /**
  *指定是否均分布局方向上的子视图的宽度或者高度，或者拉伸子视图的尺寸，默认是NO。
@@ -83,13 +83,13 @@
  如果是MyLayoutViewOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
 内容填充约束流式布局下averageArrange设置为YES时表示拉伸子视图的宽度或者高度以便填充满整个布局视图。
  */
-@property(nonatomic,assign) IBInspectable BOOL averageArrange;
+@property(nonatomic,assign)  BOOL averageArrange;
 
 /**
  *子视图自动排列,这个属性只有在内容填充约束流式布局下才有用,默认为NO.当设置为YES时则根据子视图的内容自动填充，而不是根据加入的顺序来填充，以便保证不会出现多余空隙的情况。
  *请在将所有子视图添加完毕并且初始布局完成后再设置这个属性，否则如果预先设置这个属性则在后续添加子视图时非常耗性能。
  */
-@property(nonatomic,assign) IBInspectable BOOL autoArrange;
+@property(nonatomic,assign)  BOOL autoArrange;
 
 
 /**
@@ -97,15 +97,15 @@
  如果是MyLayoutViewOrientation_Vert则只用于表示每行子视图的上中下停靠对齐位置，这个属性只支持MyMarginGravity_Vert_Top，MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom,MyMarginGravity_Vert_Fill这里的对齐基础是以每行中的最高的子视图为基准。
  如果是MyLayoutViewOrientation_Horz则只用于表示每列子视图的左中右停靠对齐位置，这个属性只支持MyMarginGravity_Horz_Left，MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right,MyMarginGravity_Horz_Fill这里的对齐基础是以每列中的最宽的子视图为基准。
  */
-@property(nonatomic,assign) IBInspectable MyMarginGravity arrangedGravity;
+@property(nonatomic,assign)  MyMarginGravity arrangedGravity;
 
 
 /**
  *子视图之间的垂直和水平的间距，默认为0。当子视图之间的间距是固定时可以通过直接设置这两个属性值来指定间距而不需要为每个子视图来设置margin值。
  */
-@property(nonatomic ,assign) IBInspectable CGFloat subviewVertMargin;
-@property(nonatomic, assign) IBInspectable CGFloat subviewHorzMargin;
-@property(nonatomic, assign) IBInspectable CGFloat subviewMargin;  //同时设置水平和垂直间距。
+@property(nonatomic ,assign)  CGFloat subviewVertMargin;
+@property(nonatomic, assign)  CGFloat subviewHorzMargin;
+@property(nonatomic, assign)  CGFloat subviewMargin;  //同时设置水平和垂直间距。
 
 
 

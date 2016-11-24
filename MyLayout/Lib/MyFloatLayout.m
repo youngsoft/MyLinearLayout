@@ -188,7 +188,7 @@
 
 -(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin inSizeClass:(MySizeClass)sizeClass
 {
-    MyLayoutSizeClassFloatLayout *lsc = (MyLayoutSizeClassFloatLayout*)[self fetchLayoutSizeClass:sizeClass];
+    MyFloatLayoutViewSizeClass *lsc = (MyFloatLayoutViewSizeClass*)[self fetchLayoutSizeClass:sizeClass];
     lsc.subviewSize = subviewSize;
     lsc.minMargin = minMargin;
     [self setNeedsLayout];
@@ -366,7 +366,7 @@
         {
             CGFloat leftMargin = sbv.leftPos.margin;
             CGFloat rightMargin = sbv.rightPos.margin;
-            CGRect rect = sbv.absPos.frame;
+            CGRect rect = sbv.myFrame.frame;
             
             //因为这里是计算包裹宽度属性，所以只会计算那些设置了固定宽度的子视图
             
@@ -404,7 +404,7 @@
     //支持浮动水平间距。
     CGFloat vertMargin = self.subviewVertMargin;
     CGFloat horzMargin = self.subviewHorzMargin;
-    CGFloat subviewSize = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).subviewSize;
+    CGFloat subviewSize = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
     if (subviewSize != 0)
     {
         
@@ -414,7 +414,7 @@
 #endif
 
         
-        CGFloat minMargin = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).minMargin;
+        CGFloat minMargin = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).minMargin;
         
         NSInteger rowCount =  floor((selfSize.width - padding.left - padding.right  + minMargin) / (subviewSize + minMargin));
         if (rowCount > 1)
@@ -450,7 +450,7 @@
         CGFloat leftMargin = sbv.leftPos.margin;
         CGFloat bottomMargin = sbv.bottomPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
@@ -476,12 +476,12 @@
         
         if (sbv.widthDime.dimeRelaVal != nil &&  sbv.widthDime.dimeRelaVal.view != nil &&  sbv.widthDime.dimeRelaVal.view != self && sbv.widthDime.dimeRelaVal.view != sbv)
         {
-            rect.size.width = sbv.widthDime.dimeRelaVal.view.absPos.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = sbv.widthDime.dimeRelaVal.view.myFrame.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         }
         
         if (sbv.heightDime.dimeRelaVal != nil &&  sbv.heightDime.dimeRelaVal.view != nil &&  sbv.heightDime.dimeRelaVal.view != self && sbv.heightDime.dimeRelaVal.view != sbv)
         {
-            rect.size.height = sbv.heightDime.dimeRelaVal.view.absPos.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = sbv.heightDime.dimeRelaVal.view.myFrame.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         }
         
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
@@ -744,7 +744,7 @@
         if (rect.origin.x + rect.size.width + rightMargin + horzMargin > maxWidth)
             maxWidth = rect.origin.x + rect.size.width + rightMargin + horzMargin;
         
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
     }
     
@@ -781,7 +781,7 @@
             {
                 UIView *sbv = sbs[i];
                 
-                sbv.absPos.topPos += addYPos;
+                sbv.myFrame.topPos += addYPos;
             }
         }
         
@@ -809,7 +809,7 @@
         {
             CGFloat topMargin = sbv.topPos.margin;
             CGFloat bottomMargin = sbv.bottomPos.margin;
-            CGRect rect = sbv.absPos.frame;
+            CGRect rect = sbv.myFrame.frame;
             
             
             //这里有可能设置了固定的高度
@@ -852,7 +852,7 @@
     //支持浮动垂直间距。
     CGFloat horzMargin = self.subviewHorzMargin;
     CGFloat vertMargin = self.subviewVertMargin;
-    CGFloat subviewSize = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).subviewSize;
+    CGFloat subviewSize = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
     if (subviewSize != 0)
     {
 #ifdef DEBUG
@@ -860,7 +860,7 @@
         NSCAssert(hasBoundaryLimit, @"Constraint exception！！, horizontal float layout:%@ can not set noBoundaryLimit to YES when call  setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin  method",self);
 #endif
         
-        CGFloat minMargin = ((MyLayoutSizeClassFloatLayout*)self.myCurrentSizeClass).minMargin;
+        CGFloat minMargin = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).minMargin;
 
         NSInteger rowCount =  floor((selfSize.height - padding.top - padding.bottom  + minMargin) / (subviewSize + minMargin));
         if (rowCount > 1)
@@ -896,7 +896,7 @@
         CGFloat leftMargin = sbv.leftPos.margin;
         CGFloat bottomMargin = sbv.bottomPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
-        CGRect rect = sbv.absPos.frame;
+        CGRect rect = sbv.myFrame.frame;
         
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
@@ -923,12 +923,12 @@
         
         if (sbv.widthDime.dimeRelaVal != nil &&  sbv.widthDime.dimeRelaVal.view != nil &&  sbv.widthDime.dimeRelaVal.view != self && sbv.widthDime.dimeRelaVal.view != sbv)
         {
-            rect.size.width = sbv.widthDime.dimeRelaVal.view.absPos.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = sbv.widthDime.dimeRelaVal.view.myFrame.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
         }
         
         if (sbv.heightDime.dimeRelaVal != nil &&  sbv.heightDime.dimeRelaVal.view != nil &&  sbv.heightDime.dimeRelaVal.view != self && sbv.heightDime.dimeRelaVal.view != sbv)
         {
-            rect.size.height = sbv.heightDime.dimeRelaVal.view.absPos.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = sbv.heightDime.dimeRelaVal.view.myFrame.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
         }
 
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
@@ -1173,7 +1173,7 @@
         if (rect.origin.y + rect.size.height + bottomMargin + vertMargin > maxHeight)
             maxHeight = rect.origin.y + rect.size.height + bottomMargin + vertMargin;
         
-        sbv.absPos.frame = rect;
+        sbv.myFrame.frame = rect;
         
     }
     
@@ -1210,7 +1210,7 @@
             {
                 UIView *sbv = sbs[i];
                 
-                sbv.absPos.leftPos += addXPos;
+                sbv.myFrame.leftPos += addXPos;
             }
         }
         
@@ -1231,7 +1231,7 @@
     {
         if (!isEstimate)
         {
-            sbv.absPos.frame = sbv.bounds;
+            sbv.myFrame.frame = sbv.bounds;
             [self calcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
         }
         
@@ -1261,8 +1261,8 @@
                         
             if (isEstimate && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
             {
-                [sbvl estimateLayoutRect:sbvl.absPos.frame.size inSizeClass:sizeClass];
-                sbvl.absPos.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                [sbvl estimateLayoutRect:sbvl.myFrame.frame.size inSizeClass:sizeClass];
+                sbvl.myFrame.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
             }
         }
     }
@@ -1283,7 +1283,7 @@
 
 -(id)createSizeClassInstance
 {
-    return [MyLayoutSizeClassFloatLayout new];
+    return [MyFloatLayoutViewSizeClass new];
 }
 
 

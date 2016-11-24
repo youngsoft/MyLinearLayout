@@ -38,15 +38,22 @@
 
 
 /*
+  version1.2.8
+    1.修复了将布局视图加入到非布局父视图上时，而当又在布局视图上设置了transform进行坐标变换时的布局可能失效的问题。
+    2.添加了在调试时使用po 视图对象.myFrame.sizeClass 或者expr -o -- 视图.myFrame.sizeClass 方法时可以输出布局设置的各种布局属性值。
+
+ */
+
+/*
  version1.2.7
  1.为线性布局MyLinearLayout新增加了属性shrinkType。这个属性可以用来控制当子视图中有比重尺寸或者相对间距，而又有固定尺寸比布局视图的尺寸还大时，如果缩小这些固定尺寸视图的尺寸值的方法。(具体例子见AllTest7ViewController)
  2.为布局视图添加了rotationToDeviceOrientationBlock属性。这个block给予用户在布局视图第一次完成或者有屏幕旋转时进行界面布局处理的机会。我们可以通过这个block块来处理设备屏幕旋转而需要改动布局的场景。这个block块不像beginLayoutBlock以及endLayoutBlock那样只调用一次，而是第一次布局完成以及每次屏幕旋转并布局完成后都会调用，因此要注意循环引用的问题。(具体见例子见：LLTest6ViewController）
  3.线性布局MyLinearLayout中去掉了当子视图中有设置比重，或者子视图中设置相对间距时而又设置了布局视图的wrapContentWidth或者wrapContentHeight属性时,wrapContentWidth或者wrapContentHeight设置失效的限制。具体例子请看(AllTest7ViewController)
  4.线性布局MyLinearLayout中的水平线性布局中修复了一个当子视图中有比重尺寸或者相对间距，而又有固定尺寸比布局视图的尺寸还大时，缩小那些具有固定尺寸的子视图的宽度的一个BUG。见(AllTest3ViewController)中的左右文字拉升的情况。
- 5.添加了MyLayoutDime中的uBound和lBound方法中最大最小值设置时可以等于自己的情况，这样目的是为了保证视图本身的尺寸不被压缩。具体见(AllTest7ViewController)
+ 5.添加了MyLayoutSize中的uBound和lBound方法中最大最小值设置时可以等于自己的情况，这样目的是为了保证视图本身的尺寸不被压缩。具体见(AllTest7ViewController)
  6.添加了在调试时使用po 视图对象.absPos.sizeClass 或者expr -o -- 视图.absPos.sizeClass 方法时可以输出布局设置的各种布局属性值。
  7.添加了将布局视图作为非布局视图的子视图的四周边距值可以是相对边距的支持，也就是当布局视图作为非布局视图的子视图时设置的topPos,rightPos,topPos,bottomPos的值是大于0且小于1时表明的是相对边距。
- 8.修复了视图尺寸MyLayoutDime的uBound,lBound方法的最大最小尺寸设置为父布局视图时，而布局视图又有padding时，没有减去padding值的BUG。
+ 8.修复了视图尺寸MyLayoutSize的uBound,lBound方法的最大最小尺寸设置为父布局视图时，而布局视图又有padding时，没有减去padding值的BUG。
  9.添加了AllTest7ViewController这个新的DEMO，用来解决一些实践中各种屏幕尺寸下布局的完美处理方案。
  */
 
@@ -55,7 +62,7 @@
 /*
  version1.2.6
  1.优化代码，修复一个设置尺寸的uBound,lBound方法时可以指定其他任意视图的问题。
- 2.为了解决和Masonry两个库共存时，打开了Masonry的宏MAS_SHORTHAND_GLOBALS时造成offset, equalTo方法无法使用的问题，解决的方法是您可以在PCH或者在使用MyLayout.h之前定义：#define MY_USEPREFIXMETHOD 这个宏，这样所有MyLayoutPos, MyLayoutDime中的方法都增加了前缀my。 比如原来的A.leftPos.equalTo(@10) ==> A.leftPos.myEqualTo(@10)
+ 2.为了解决和Masonry两个库共存时，打开了Masonry的宏MAS_SHORTHAND_GLOBALS时造成offset, equalTo方法无法使用的问题，解决的方法是您可以在PCH或者在使用MyLayout.h之前定义：#define MY_USEPREFIXMETHOD 这个宏，这样所有MyLayoutPos, MyLayoutSize中的方法都增加了前缀my。 比如原来的A.leftPos.equalTo(@10) ==> A.leftPos.myEqualTo(@10)
  */
 
 
@@ -131,7 +138,7 @@
   4.为布局添加方法：layoutAnimationWithDuration用来实现布局时的动画效果。  (具体见：各个DEMO)
   5.扩展flexedHeight属性对于UIImageView的支持。当对一个UIImageView设置flexedHeight为YES时则其在布局时会自动根据UIImageView设置的宽度等比例缩放其高度。这个特性在瀑布流实现中非常实用。   (具体见：TLTest2ViewController)
   6.为浮动布局MyFloat提供subviewMargin、subviewVertMargin、subviewHorzMargin三个新属性，用来设置浮动布局中各视图的水平和垂直间距。 (具体见：FOLTest4ViewController，FOLTest5ViewController)
-  7.为布局视图下的子视图的尺寸提供了设置最大尺寸以及最小尺寸的新功能，原先的MyLayoutDime中的min,max两个方法只能用来设置最小最大的常数值。MyLayoutDime新增加的方法lBound,uBound则功能更加强大。除了可以设置常数限制尺寸外，还可以设置对象限制尺寸。(具体见：AllTest2ViewController，AllTest3ViewController)
+  7.为布局视图下的子视图的尺寸提供了设置最大尺寸以及最小尺寸的新功能，原先的MyLayoutSize中的min,max两个方法只能用来设置最小最大的常数值。MyLayoutSize新增加的方法lBound,uBound则功能更加强大。除了可以设置常数限制尺寸外，还可以设置对象限制尺寸。(具体见：AllTest2ViewController，AllTest3ViewController)
   8.对线性布局中的浮动间距进行优化，支持宽度自动调整的能力.(具体见：AllTest3ViewController)
   9.完善了将布局视图加入到非布局父视图时的位置和尺寸设置。您可以用myXXXMargin方法以及myHeight,myWidth方法设置其在非布局父视图上的位置和尺寸。
   10.系统自动处理了大部分可能出现布局约束冲突的地方，减少了约束冲突出现的可能性。以及出现了约束冲突时告警以及crash的提示。
@@ -153,10 +160,11 @@
 #ifndef MyLayout_MyLayout_h
 #define MyLayout_MyLayout_h
 
+
 #import "MyLayoutDef.h"
 #import "MyDimeScale.h"
 #import "MyLayoutPos.h"
-#import "MyLayoutDime.h"
+#import "MyLayoutSize.h"
 #import "MyLinearLayout.h"
 #import "MyFrameLayout.h"
 #import "MyRelativeLayout.h"
