@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MyLayout"
-  s.version      = "1.2.7"
-  s.summary      = "MyLayout is A powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions."
+  s.version      = "1.2.8"
+  s.summary      = "MyLayout is a powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions."
 
   s.description  = <<-DESC
                    *MyLayout is a powerful iOS UI layout framework which is not an encapsulation based on the AutoLayout but is based on primary frame property and by overwriting the layoutSubview method to realize the subview's layout. 
@@ -79,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.2.7" }
+  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.2.8" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

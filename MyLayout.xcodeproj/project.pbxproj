@@ -23,6 +23,7 @@
 		186C530C1C75A5BB0031B2A2 /* MyFloatLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186C530B1C75A5BB0031B2A2 /* MyFloatLayout.m */; };
 		1871D25F1D2F5ABA00D37F55 /* MyPathLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1871D25E1D2F5ABA00D37F55 /* MyPathLayout.m */; };
 		188261CF1C647CB300996C2C /* AllTest6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188261CE1C647CB300996C2C /* AllTest6ViewController.m */; };
+		188D90E01DE736BB0034F76E /* MyLayoutClass.png in Resources */ = {isa = PBXBuildFile; fileRef = 188D90DF1DE736BB0034F76E /* MyLayoutClass.png */; };
 		1890A22F1C6DD71600373B8B /* FLLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1890A22D1C6DD71600373B8B /* FLLTest2ViewController.m */; };
 		189692701CF74E7E000A5B91 /* AllTest2TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1896926F1CF74E7E000A5B91 /* AllTest2TableViewCell.m */; };
 		189692731CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189692721CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m */; };
@@ -132,6 +133,7 @@
 		1888CE7F1D0BE44300968C0C /* layoutdemo3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo3.gif; sourceTree = "<group>"; };
 		1888CE801D0BE44300968C0C /* layoutdemo2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo2.gif; sourceTree = "<group>"; };
 		1888CE811D0BE44300968C0C /* layoutdemo1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo1.gif; sourceTree = "<group>"; };
+		188D90DF1DE736BB0034F76E /* MyLayoutClass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyLayoutClass.png; sourceTree = "<group>"; };
 		1890A22C1C6DD71600373B8B /* FLLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest2ViewController.h; sourceTree = "<group>"; };
 		1890A22D1C6DD71600373B8B /* FLLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest2ViewController.m; sourceTree = "<group>"; };
 		1896926E1CF74E6A000A5B91 /* AllTest2TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest2TableViewCell.h; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				186DF3701D523EDB00039E44 /* fl.png */,
 				186DF3711D523EDB00039E44 /* fll.png */,
 				186DF3721D523EDB00039E44 /* flo.png */,
+				188D90DF1DE736BB0034F76E /* MyLayoutClass.png */,
 			);
 			name = layoutpngs;
 			sourceTree = "<group>";
@@ -571,6 +574,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				186B83E41D095A49001CA155 /* FOLTest1ViewController.xib in Resources */,
+				188D90E01DE736BB0034F76E /* MyLayoutClass.png in Resources */,
 				186B83DE1D090DE6001CA155 /* LaunchScreen.strings in Resources */,
 				186B83E01D094F11001CA155 /* FLLTest2ViewController.xib in Resources */,
 				186B83DF1D090DE6001CA155 /* Localizable.strings in Resources */,
