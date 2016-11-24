@@ -320,7 +320,7 @@
             }
         }
         
-        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Vert_Top) || addXPos != 0 || addXFill != 0)
+        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Vert_Top) || /*addXPos != 0*/_myCGFloatNotEqual(addXPos, 0)  || /*addXFill != 0*/ _myCGFloatNotEqual(addXFill, 0))
         {
             
             sbv.myFrame.leftPos += addXPos;
@@ -470,7 +470,7 @@
         }
         
         
-        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Horz_Left) || addYPos != 0 || addYFill != 0)
+        if ((amg != MyMarginGravity_None && amg != MyMarginGravity_Horz_Left) || /*addYPos != 0*/_myCGFloatNotEqual(addYPos, 0) || /*addYFill != 0*/_myCGFloatNotEqual(addYFill, 0) )
         {
             sbv.myFrame.topPos += addYPos;
             
@@ -569,7 +569,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     {
         CGFloat s1 = [self calcSingleLineSize:calcArray margin:margin];
         CGFloat s2 = [self calcSingleLineSize:bestSingleLineArray margin:margin];
-        if (fabs(selfSize - s1) < fabs(selfSize - s2) && s1 <= selfSize)
+        if (fabs(selfSize - s1) < fabs(selfSize - s2) && /*s1 <= selfSize*/ _myCGFloatLessOrEqual(s1, selfSize) )
         {
             [bestSingleLineArray setArray:calcArray];
         }
@@ -585,7 +585,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         [calcArray2 addObject:sbs[i]];
         
         CGFloat s1 = [self calcSingleLineSize:calcArray2 margin:margin];
-        if (s1 <= selfSize)
+        if (/*s1 <= selfSize*/ _myCGFloatLessOrEqual(s1, selfSize))
         {
             CGFloat s2 = [self calcSingleLineSize:bestSingleLineArray margin:margin];
             if (fabs(selfSize - s1) < fabs(selfSize - s2))
@@ -593,7 +593,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
                 [bestSingleLineArray setArray:calcArray2];
             }
             
-            if (s1 == selfSize)
+            if (/*s1 == selfSize*/ _myCGFloatEqual(s1, selfSize))
                 break;
             
             [self calcAutoArrangeSingleLineSubviews:sbs
@@ -689,7 +689,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         {
             //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
             CGFloat floatWidth = selfSize.width - padding.left - padding.right - rowMaxWidth;
-            if (floatWidth <= 0)
+            if (/*floatWidth <= 0*/ _myCGFloatLessOrEqual(floatWidth, 0))
             {
                 floatWidth += rowMaxWidth;
                 arrangedIndex = 0;
@@ -889,6 +889,9 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     //最后一行。
     if (rowTotalWeight != 0 && !self.averageArrange)
     {
+        if (arrangedIndex < arrangedCount)
+            rowTotalFixedWidth -= self.subviewHorzMargin;
+        
         [self calcVertLayoutWeight:selfSize totalFloatWidth:selfSize.width - padding.left - padding.right - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
     }
     
@@ -1109,7 +1112,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         {
             //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
             CGFloat floatHeight = selfSize.height - padding.top - padding.bottom - colMaxHeight;
-            if (floatHeight <= 0)
+            if (/*floatHeight <= 0*/ _myCGFloatLessOrEqual(floatHeight, 0))
             {
                 floatHeight += colMaxHeight;
                 arrangedIndex = 0;
@@ -1327,6 +1330,9 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     //最后一行。
     if (rowTotalWeight != 0 && !self.averageArrange)
     {
+        if (arrangedIndex < arrangedCount)
+            rowTotalFixedHeight -= self.subviewVertMargin;
+        
         [self calcHorzLayoutWeight:selfSize totalFloatHeight:selfSize.height - padding.top - padding.bottom - rowTotalFixedHeight totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
     }
 

@@ -467,7 +467,7 @@
     //提供一个  x = 0;  的方程，注意这里面是因为将isReverse设置为YES表示变量为y轴，值为x轴。
     self.pathLayout.rectangularEquation =^(CGFloat y)
     {
-        return 0.0;
+        return (CGFloat)0.0;
     };
     
 }
@@ -484,7 +484,7 @@
     //提供一个： y = sqrt(200 * x) + 40的方程。
      self.pathLayout.rectangularEquation = ^(CGFloat x)
     {
-        return sqrt(200 * x) + 40;
+        return (CGFloat)(sqrt(200 * x) + 40);
     };
 
 }

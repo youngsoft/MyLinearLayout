@@ -8,6 +8,7 @@
 
 #import "AllTest6ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface AllTest6ViewController ()
 
@@ -38,7 +39,8 @@
     UILabel *menu1Label = [UILabel new];
     menu1Label.text = NSLocalizedString(@"Menu1", @"");
     menu1Label.textAlignment = NSTextAlignmentCenter;
-    menu1Label.backgroundColor = [UIColor redColor];
+    menu1Label.backgroundColor = [CFTool color:5];
+    menu1Label.font = [CFTool font:16];
     menu1Label.heightDime.equalTo(menu1Label.widthDime);
     menu1Label.widthDime.equalTo(menu1Label.heightDime);
     [menuLayout addSubview:menu1Label];
@@ -46,7 +48,8 @@
     UILabel *menu2Label = [UILabel new];
     menu2Label.text = NSLocalizedString(@"Menu2", @"");
     menu2Label.textAlignment = NSTextAlignmentCenter;
-    menu2Label.backgroundColor = [UIColor greenColor];
+    menu2Label.backgroundColor = [CFTool color:6];
+    menu2Label.font = [CFTool font:16];
     menu2Label.heightDime.equalTo(menu2Label.widthDime);
     menu2Label.widthDime.equalTo(menu2Label.heightDime);
     [menuLayout addSubview:menu2Label];
@@ -54,14 +57,15 @@
     UILabel *menu3Label = [UILabel new];
     menu3Label.text = NSLocalizedString(@"Menu3", @"");
     menu3Label.textAlignment = NSTextAlignmentCenter;
-    menu3Label.backgroundColor = [UIColor blueColor];
+    menu3Label.backgroundColor = [CFTool color:7];
+    menu3Label.font = [CFTool font:16];
     menu3Label.heightDime.equalTo(menu3Label.widthDime);
     menu3Label.widthDime.equalTo(menu3Label.heightDime);
     [menuLayout addSubview:menu3Label];
     
     MyRelativeLayout *contentLayout = [MyRelativeLayout new];
     contentLayout.weight = 1;
-    contentLayout.backgroundColor = [UIColor grayColor];
+    contentLayout.backgroundColor = [CFTool color:0];
     contentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [rootLayout addSubview:contentLayout];
     
@@ -69,14 +73,16 @@
     UILabel *func1Label = [UILabel new];
     func1Label.text = NSLocalizedString(@"Content1", @"");
     func1Label.textAlignment = NSTextAlignmentCenter;
-    func1Label.backgroundColor = [UIColor orangeColor];
+    func1Label.backgroundColor = [CFTool color:5];
+    func1Label.font = [CFTool font:16];
     func1Label.heightDime.equalTo(contentLayout.heightDime).multiply(0.5).add(-5);
     [contentLayout addSubview:func1Label];
     
     UILabel *func2Label = [UILabel new];
     func2Label.text = NSLocalizedString(@"Content2", @"");
     func2Label.textAlignment = NSTextAlignmentCenter;
-    func2Label.backgroundColor = [UIColor cyanColor];
+    func2Label.backgroundColor = [CFTool color:6];
+    func2Label.font = [CFTool font:16];
     func2Label.heightDime.equalTo(contentLayout.heightDime).multiply(0.5).add(-5);
     [contentLayout addSubview:func2Label];
     
@@ -87,7 +93,8 @@
     func3Label.text = NSLocalizedString(@"Content3:please run in different iPhone&iPad device and change different screen orientation", @"");
     func3Label.numberOfLines = 0;
     func3Label.textAlignment = NSTextAlignmentCenter;
-    func3Label.backgroundColor = [UIColor brownColor];
+    func3Label.backgroundColor = [CFTool color:7];
+    func3Label.font = [CFTool font:16];
     func3Label.heightDime.equalTo(contentLayout.heightDime).multiply(0.5).add(-5);
     func3Label.widthDime.equalTo(contentLayout.widthDime);
     func3Label.topPos.equalTo(func1Label.bottomPos).offset(10);

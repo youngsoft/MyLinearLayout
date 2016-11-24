@@ -188,7 +188,7 @@
         
         self.pathLayout.rectangularEquation = ^(CGFloat x)
         {
-            return 100 * sin(x / 180.0 * M_PI);
+            return (CGFloat)(100 * sin(x / 180.0 * M_PI));
         };
         
     }
@@ -236,7 +236,7 @@
         
         self.pathLayout.polarEquation = ^(CGFloat angle)
         {
-            return 120 * (1 + cos(angle));
+            return (CGFloat)(120 * (1 + cos(angle)));
         };
         
     }

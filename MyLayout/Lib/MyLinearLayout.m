@@ -315,7 +315,7 @@
         {
             totalWeight += tm;
             
-            fixedHeight += MAX(sbv.topPos.offsetVal, sbv.topPos.minVal);
+            fixedHeight += sbv.topPos.offsetVal;
         }
         else
         {
@@ -327,7 +327,7 @@
         if ([self isRelativeMargin:bm])
         {
             totalWeight += bm;
-            fixedHeight += MAX(sbv.bottomPos.offsetVal,sbv.bottomPos.minVal);
+            fixedHeight += sbv.bottomPos.offsetVal;
         }
         else
         {
@@ -372,7 +372,7 @@
     
     //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
     floatingHeight = selfSize.height - fixedHeight - self.topPadding - self.bottomPadding;
-    if (floatingHeight <= 0 || floatingHeight == -0.0)
+    if (/*floatingHeight <= 0 || floatingHeight == -0.0*/ _myCGFloatLessOrEqual(floatingHeight, 0))
     {
         //取出shrinkType中的方式和压缩的类型：
         MySubviewsShrinkType smd = self.shrinkType & 0x0F; //压缩的模式
@@ -390,7 +390,7 @@
                             fsbv.myFrame.height += averageHeight;
                     }
                 }
-                else if (fixedSizeHeight != 0)
+                else if (/*fixedSizeHeight != 0*/ _myCGFloatNotEqual(fixedSizeHeight, 0))
                 {//按比例分配。
                     for (UIView *fsbv in fixedSizeSbs)
                     {
@@ -418,7 +418,7 @@
         if ([self isRelativeMargin:topMargin])
         {
             topMargin = (topMargin / totalWeight) * floatingHeight;
-            if (topMargin <= 0 || topMargin == -0.0)
+            if (/*topMargin <= 0 || topMargin == -0.0*/ _myCGFloatLessOrEqual(topMargin, 0))
                 topMargin = 0;
             
         }
@@ -429,7 +429,7 @@
         if (weight > 0)
         {
             CGFloat h = (weight / totalWeight) * floatingHeight;
-            if (h <= 0 || h == -0.0)
+            if (/*h <= 0 || h == -0.0*/ _myCGFloatLessOrEqual(h, 0))
                 h = 0;
             
             rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:h sbvSize:rect.size selfLayoutSize:selfSize];
@@ -441,7 +441,7 @@
         if ([self isRelativeMargin:bottomMargin])
         {
             bottomMargin = (bottomMargin / totalWeight) * floatingHeight;
-            if (bottomMargin <= 0 || bottomMargin == -0.0)
+            if (/*bottomMargin <= 0 || bottomMargin == -0.0*/ _myCGFloatLessOrEqual(bottomMargin, 0))
                 bottomMargin = 0;
             
         }
@@ -484,7 +484,7 @@
         if ([self isRelativeMargin:sbv.leftPos.posNumVal.doubleValue])
         {
             totalWeight += sbv.leftPos.posNumVal.doubleValue;
-            fixedWidth += MAX(sbv.leftPos.offsetVal,sbv.leftPos.minVal);
+            fixedWidth += sbv.leftPos.offsetVal;
         }
         else
             fixedWidth += sbv.leftPos.margin;
@@ -492,7 +492,7 @@
         if ([self isRelativeMargin:sbv.rightPos.posNumVal.doubleValue])
         {
             totalWeight += sbv.rightPos.posNumVal.doubleValue;
-            fixedWidth += MAX(sbv.rightPos.offsetVal,sbv.rightPos.minVal);
+            fixedWidth += sbv.rightPos.offsetVal;
         }
         else
             fixedWidth += sbv.rightPos.margin;
@@ -539,7 +539,7 @@
     
     //剩余的可浮动的宽度，那些weight不为0的从这个高度来进行分发
     floatingWidth = selfSize.width - fixedWidth - self.leftPadding - self.rightPadding;
-    if (floatingWidth <= 0 || floatingWidth == -0.0)
+    if (/*floatingWidth <= 0 || floatingWidth == -0.0*/ _myCGFloatLessOrEqual(floatingWidth, 0))
     {
         //取出shrinkType中的方式和压缩的类型：
         MySubviewsShrinkType smd = self.shrinkType & 0x0F; //压缩的模式
@@ -558,7 +558,7 @@
                         
                     }
                 }
-                else if (fixedSizeWidth != 0)
+                else if (/*fixedSizeWidth != 0*/_myCGFloatNotEqual(fixedSizeWidth, 0))
                 {//按比例分配。
                     for (UIView *fsbv in fixedSizeSbs)
                     {
@@ -595,7 +595,7 @@
         if ([self isRelativeMargin:leftMargin])
         {
             leftMargin = (leftMargin / totalWeight) * floatingWidth;
-            if (leftMargin <= 0 || leftMargin == -0.0)
+            if (/*leftMargin <= 0 || leftMargin == -0.0*/ _myCGFloatLessOrEqual(leftMargin, 0))
                 leftMargin = 0;
             
         }
@@ -606,7 +606,7 @@
         if (weight > 0)
         {
             CGFloat w = (weight / totalWeight) * floatingWidth;
-            if (w <= 0 || w == -0.0)
+            if (/*w <= 0 || w == -0.0*/ _myCGFloatLessOrEqual(w, 0))
                 w = 0;
             
             rect.size.width = w;
@@ -620,7 +620,7 @@
         if ([self isRelativeMargin:rightMargin])
         {
             rightMargin = (rightMargin / totalWeight) * floatingWidth;
-            if (rightMargin <= 0 || rightMargin == -0.0)
+            if (/*rightMargin <= 0 || rightMargin == -0.0*/ _myCGFloatLessOrEqual(rightMargin, 0))
                 rightMargin = 0;
         }
         pos += [self validMargin:sbv.rightPos sbv:sbv calcPos:rightMargin + sbv.rightPos.offsetVal selfLayoutSize:selfSize];
@@ -712,7 +712,7 @@
     selfSize = [self AdjustSelfWidth:sbs selfSize:selfSize];
     
     CGFloat floatingHeight = selfSize.height - self.topPadding - self.bottomPadding - totalHeight;
-    if (floatingHeight <=0)
+    if (/*floatingHeight <=0*/ _myCGFloatLessOrEqual(floatingHeight, 0))
         floatingHeight = 0;
     
     //调整子视图的宽度。并根据情况调整子视图的高度。并计算出固定高度和浮动高度。
@@ -845,7 +845,7 @@
     CGFloat maxSubviewHeight = 0;
     
     floatingWidth = selfSize.width - self.leftPadding - self.rightPadding - totalWidth;
-    if (floatingWidth <= 0)
+    if (/*floatingWidth <= 0*/ _myCGFloatLessOrEqual(floatingWidth, 0))
         floatingWidth = 0;
     
     //计算出固定的高度
@@ -1259,7 +1259,7 @@
     temp += tailPos.offsetVal;
     
     
-    if (1  <= tempWeight)
+    if (/*1 <= tempWeight*/ _myCGFloatLessOrEqual(1, tempWeight))
         temp = 0;
     else
         temp /=(1 - tempWeight);  //在有相对

@@ -8,7 +8,7 @@
 
 #import "FOLTest6ViewController.h"
 #import "MyLayout.h"
-
+#import "CFTool.h"
 
 @interface FOLTest6ViewController ()
 
@@ -27,7 +27,7 @@
     self.view = scrollView;
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.backgroundColor = [UIColor lightGrayColor];
+    rootLayout.backgroundColor = [CFTool color:0];
     rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
     rootLayout.heightDime.lBound(scrollView.heightDime,0,1); //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
     rootLayout.subviewMargin = 10;
@@ -93,7 +93,8 @@
     
     UILabel *nameLabel = [UILabel new];
     nameLabel.text = @"欧阳大哥";
-    nameLabel.font = [UIFont boldSystemFontOfSize:14];
+    nameLabel.font = [CFTool font:17];
+    nameLabel.textColor = [CFTool color:4];
     nameLabel.clearFloat = YES; //注意这里要另外起一行。
     nameLabel.widthDime.equalTo(contentLayout.widthDime).add(-45); //40的头像宽度外加5的左右间距。
     [nameLabel sizeToFit];
@@ -102,15 +103,15 @@
     
     UILabel *nickNameLabel = [UILabel new];
     nickNameLabel.text = @"醉里挑灯看键";
-    nickNameLabel.font = [UIFont systemFontOfSize:13];
-    nickNameLabel.textColor = [UIColor lightGrayColor];
+    nickNameLabel.font = [CFTool font:15];
+    nickNameLabel.textColor = [CFTool color:3];
     [nickNameLabel sizeToFit];
     [contentLayout addSubview:nickNameLabel];
     
     UILabel *addressLabel = [UILabel new];
     addressLabel.text = @"联系地址：中华人民共和国北京市朝阳区盈科中心B座2楼,其他的我就不会再告诉你了。";
-    addressLabel.font = [UIFont systemFontOfSize:13];
-    addressLabel.textColor = [UIColor lightGrayColor];
+    addressLabel.font = [CFTool font:15];
+    addressLabel.textColor = [CFTool color:4];
     addressLabel.numberOfLines = 0;
     addressLabel.flexedHeight = YES;
     addressLabel.widthDime.equalTo(contentLayout.widthDime).add(-45); //40的头像宽度外加5的左右间距。
@@ -119,15 +120,15 @@
     
     UILabel *qqlabel = [UILabel new];
     qqlabel.text = @"QQ群:178573773";
-    qqlabel.textColor = [UIColor magentaColor];
-    qqlabel.font = [UIFont systemFontOfSize:13];
+    qqlabel.textColor = [CFTool color:4];
+    qqlabel.font = [CFTool font:15];
     [qqlabel sizeToFit];
     [contentLayout addSubview:qqlabel];
     
     UILabel *githublabel = [UILabel new];
     githublabel.text = @"github: https://github.com/youngsoft";
-    githublabel.font = [UIFont italicSystemFontOfSize:13];
-    githublabel.textColor = [UIColor blueColor];
+    githublabel.font = [CFTool font:15];
+    githublabel.textColor = [CFTool color:9];
     githublabel.widthDime.equalTo(contentLayout.widthDime).add(-45); //40的头像宽度外加5的左右间距。
     githublabel.adjustsFontSizeToFitWidth = YES;
     [githublabel sizeToFit];
@@ -135,8 +136,8 @@
     
     UILabel *detailLabel = [UILabel new];
     detailLabel.text = @"坚持原创，以造轮子为乐!";
-    detailLabel.textColor = [UIColor redColor];
-    detailLabel.font = [UIFont boldSystemFontOfSize:16];
+    detailLabel.textColor = [CFTool color:2];
+    detailLabel.font = [CFTool font:20];
     detailLabel.widthDime.equalTo(contentLayout.widthDime).add(-45); //40的头像宽度外加5的左右间距。
     detailLabel.adjustsFontSizeToFitWidth = YES;
     [detailLabel sizeToFit];
@@ -165,7 +166,8 @@
 
     UILabel *nameLabel = [UILabel new];
     nameLabel.text = @"欧阳大哥";
-    nameLabel.font = [UIFont boldSystemFontOfSize:14];
+    nameLabel.font = [CFTool font:17];
+    nameLabel.textColor = [CFTool color:4];
     nameLabel.textAlignment = NSTextAlignmentCenter;
     nameLabel.weight = 1;
     nameLabel.myTopMargin = 10;
@@ -175,8 +177,8 @@
     
     UILabel *nickNameLabel = [UILabel new];
     nickNameLabel.text = @"醉里挑灯看键";
-    nickNameLabel.font = [UIFont systemFontOfSize:13];
-    nickNameLabel.textColor = [UIColor lightGrayColor];
+    nickNameLabel.font = [CFTool font:15];
+    nickNameLabel.textColor =  [CFTool color:3];
     nickNameLabel.textAlignment = NSTextAlignmentCenter;
     nickNameLabel.weight = 1;
     nickNameLabel.myTopMargin = 5;
@@ -203,7 +205,8 @@
     {
         UILabel *menuLabel = [UILabel new];
         menuLabel.text = menus[i];
-        menuLabel.textColor = [UIColor lightGrayColor];
+        menuLabel.textColor = [CFTool color:20];
+        menuLabel.font = [CFTool font:14];
         menuLabel.textAlignment = NSTextAlignmentCenter;
         menuLabel.adjustsFontSizeToFitWidth = YES;
         menuLabel.weight = 1.0/ (3 - i);
@@ -217,7 +220,8 @@
     {
         UILabel *valueLabel = [UILabel new];
         valueLabel.text = values[i];
-        valueLabel.font = [UIFont boldSystemFontOfSize:14];
+        valueLabel.textColor = [CFTool color:2];
+        valueLabel.font = [CFTool font:14];
         valueLabel.textAlignment = NSTextAlignmentCenter;
         valueLabel.adjustsFontSizeToFitWidth = YES;
         valueLabel.weight = 1.0/ (3 - i);
@@ -247,7 +251,7 @@
     headImageView.myRightMargin = 10;
     headImageView.layer.cornerRadius = 5;
     headImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    headImageView.layer.borderWidth = 1;
+    headImageView.layer.borderWidth = 0.5;
     [contentLayout addSubview:headImageView];
     headImageView.viewLayoutCompleteBlock = ^(MyBaseLayout *layout, UIView *sbv)
     {
@@ -255,11 +259,11 @@
         UILabel *label = [UILabel new];
         label.useFrame = YES;  //这里我们设置useFrame为YES表示他不会参与布局，这样这个视图就可以摆脱浮动布局视图的约束。
         label.text = @"99";
-        label.font = [UIFont systemFontOfSize:12];
+        label.font = [CFTool font:12];
         label.textColor = [UIColor whiteColor];
-        label.backgroundColor = [UIColor redColor];
+        label.backgroundColor = [CFTool color:2];
         [label sizeToFit]; //这里内部会设置frame值。
-        label.layer.cornerRadius = label.frame.size.height/2;
+        label.layer.cornerRadius = label.frame.size.width/2;
         label.layer.masksToBounds = YES;
         CGRect labelRect = label.frame;
         labelRect.origin.x = CGRectGetMaxX(sbv.frame) - label.frame.size.width / 2;
@@ -272,22 +276,23 @@
     
     UILabel *nameLabel = [UILabel new];
     nameLabel.text = @"欧阳大哥";
-    nameLabel.font = [UIFont boldSystemFontOfSize:14];
+    nameLabel.font = [CFTool font:17];
+    nameLabel.textColor = [CFTool color:4];
     [nameLabel sizeToFit];
     [contentLayout addSubview:nameLabel];
     
     UILabel *nickNameLabel = [UILabel new];
     nickNameLabel.text = @"醉里挑灯看键";
-    nickNameLabel.font = [UIFont systemFontOfSize:13];
-    nickNameLabel.textColor = [UIColor lightGrayColor];
+    nickNameLabel.font = [CFTool font:15];
+    nickNameLabel.textColor =  [CFTool color:3];
     [nickNameLabel sizeToFit];
     [contentLayout addSubview:nickNameLabel];
     
     
     UILabel *detailLabel = [UILabel new];
     detailLabel.text = @"坚持原创，以造轮子为乐!";
-    detailLabel.textColor = [UIColor redColor];
-    detailLabel.font = [UIFont boldSystemFontOfSize:16];
+    detailLabel.textColor = [CFTool color:2];
+    detailLabel.font = [CFTool font:20];
     detailLabel.adjustsFontSizeToFitWidth = YES;
     detailLabel.reverseFloat = YES;
     [detailLabel sizeToFit];
@@ -312,15 +317,15 @@
     headImageView.myRightMargin = 10;
     headImageView.layer.cornerRadius = 5;
     headImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    headImageView.layer.borderWidth = 1;
+    headImageView.layer.borderWidth = 0.5;
     [contentLayout addSubview:headImageView];
     
     
     UILabel *editButton = [UILabel new];
     editButton.text = @"Edit";
     editButton.textAlignment = NSTextAlignmentCenter;
-    editButton.backgroundColor = [UIColor greenColor];
-    editButton.textColor = [UIColor whiteColor];
+    editButton.backgroundColor = [CFTool color:5];
+    editButton.textColor = [CFTool color:4];
     editButton.layer.cornerRadius = 5;
     editButton.layer.masksToBounds = YES;
     editButton.widthDime.equalTo(editButton.widthDime).add(20);
@@ -330,7 +335,8 @@
     
     UILabel *nameLabel = [UILabel new];
     nameLabel.text = @"欧阳大哥";
-    nameLabel.font = [UIFont boldSystemFontOfSize:14];
+    nameLabel.font = [CFTool font:17];
+    nameLabel.textColor = [CFTool color:4];
     nameLabel.weight  = 1;
     [nameLabel sizeToFit];
     [contentLayout addSubview:nameLabel];
@@ -342,8 +348,8 @@
     
     UILabel *nickNameLabel = [UILabel new];
     nickNameLabel.text = @"醉里挑灯看键";
-    nickNameLabel.font = [UIFont systemFontOfSize:13];
-    nickNameLabel.textColor = [UIColor lightGrayColor];
+    nickNameLabel.font = [CFTool font:15];
+    nickNameLabel.textColor =  [CFTool color:3];
     [nickNameLabel sizeToFit];
     nickNameLabel.myTopMargin = 5;
     [contentLayout addSubview:nickNameLabel];
@@ -351,8 +357,8 @@
     
     UILabel *detailLabel = [UILabel new];
     detailLabel.text = @"坚持原创，以造轮子为乐!";
-    detailLabel.textColor = [UIColor redColor];
-    detailLabel.font = [UIFont boldSystemFontOfSize:16];
+    detailLabel.textColor = [CFTool color:2];
+    detailLabel.font = [CFTool font:20];
     detailLabel.adjustsFontSizeToFitWidth = YES;
     [detailLabel sizeToFit];
     detailLabel.weight = 1;

@@ -8,6 +8,7 @@
 
 #import "RLTest2ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface RLTest2ViewController ()
 
@@ -17,17 +18,32 @@
 
 @implementation RLTest2ViewController
 
+-(UIButton*)createButton:(NSString*)title backgroundColor:(UIColor*)color
+{
+    UIButton *v = [UIButton new];
+    v.backgroundColor = color;
+    [v setTitle:title forState:UIControlStateNormal];
+    [v setTitleColor:[CFTool color:4] forState:UIControlStateNormal];
+    v.titleLabel.font = [CFTool font:14];
+    v.titleLabel.numberOfLines = 2;
+    v.titleLabel.adjustsFontSizeToFitWidth = YES;
+    v.layer.shadowOffset = CGSizeMake(3, 3);
+    v.layer.shadowColor = [CFTool color:4].CGColor;
+    v.layer.shadowRadius = 2;
+    v.layer.shadowOpacity = 0.3;
 
+
+    return v;
+}
 
 -(void)loadView
 {
     /*
-       这个例子展示的是相对布局里面 多个子视图按比例分配宽度或者高度的实现机制，通过对子视图扩展的MyLayoutDime尺寸对象的equalTo方法的值设置为一个数组对象，即可实现尺寸的按比例分配能力。而这个方法要比AutoLayout实现起来要简单的多。
+       这个例子展示的是相对布局里面 多个子视图按比例分配宽度或者高度的实现机制，通过对子视图扩展的MyLayoutSize尺寸对象的equalTo方法的值设置为一个数组对象，即可实现尺寸的按比例分配能力。而这个方法要比AutoLayout实现起来要简单的多。
      */
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
     rootLayout.padding = UIEdgeInsetsMake(0, 0, 0, 10);
-    rootLayout.backgroundColor = [UIColor grayColor];
     self.view = rootLayout;
     
     UISwitch *hiddenSwitch = [UISwitch new];
@@ -38,6 +54,8 @@
     
     UILabel *hiddenSwitchLabel = [UILabel new];
     hiddenSwitchLabel.text = NSLocalizedString(@"flex size when subview hidden switch:", @"");
+    hiddenSwitchLabel.textColor = [CFTool color:4];
+    hiddenSwitchLabel.font = [CFTool font:15];
     [hiddenSwitchLabel sizeToFit];
     hiddenSwitchLabel.leftPos.equalTo(@10);
     hiddenSwitchLabel.centerYPos.equalTo(hiddenSwitch.centerYPos);
@@ -45,38 +63,23 @@
     
     
     /**水平平分3个子视图**/
-    UIButton *v1 = [UIButton new];
-    v1.backgroundColor = [UIColor redColor];
-    [v1 setTitle:NSLocalizedString(@"average 1/3 width\nturn above switch", @"") forState:UIControlStateNormal];
-    v1.titleLabel.numberOfLines = 2;
-    v1.titleLabel.adjustsFontSizeToFitWidth = YES;
-    v1.titleLabel.textAlignment = NSTextAlignmentCenter;
+    UIButton *v1 = [self createButton:NSLocalizedString(@"average 1/3 width\nturn above switch", @"") backgroundColor:[CFTool color:5]];
     v1.heightDime.equalTo(@40);
     v1.topPos.equalTo(@60);
     v1.leftPos.equalTo(@10);
     [rootLayout addSubview:v1];
     
     
-    UIButton *v2 = [UIButton new];
-    v2.backgroundColor = [UIColor redColor];
-    [v2 setTitle:NSLocalizedString(@"average 1/3 width\nhide me", @"") forState:UIControlStateNormal];
+    UIButton *v2 = [self createButton:NSLocalizedString(@"average 1/3 width\nhide me", @"") backgroundColor:[CFTool color:6]];
     [v2 addTarget:self action:@selector(handleHidden:) forControlEvents:UIControlEventTouchUpInside];
-    v2.titleLabel.numberOfLines = 2;
-    v2.titleLabel.adjustsFontSizeToFitWidth = YES;
-    v2.titleLabel.textAlignment = NSTextAlignmentCenter;
     v2.heightDime.equalTo(v1.heightDime);
     v2.topPos.equalTo(v1.topPos);
     v2.leftPos.equalTo(v1.rightPos).offset(10);
     [rootLayout addSubview:v2];
     
 
-    UIButton *v3 = [UIButton new];
-    v3.backgroundColor = [UIColor redColor];
-    [v3 setTitle:NSLocalizedString(@"average 1/3 width\nshow me", @"") forState:UIControlStateNormal];
+    UIButton *v3 = [self createButton:NSLocalizedString(@"average 1/3 width\nshow me", @"") backgroundColor:[CFTool color:7]];
     [v3 addTarget:self action:@selector(handleShow:) forControlEvents:UIControlEventTouchUpInside];
-    v3.titleLabel.numberOfLines = 2;
-    v3.titleLabel.adjustsFontSizeToFitWidth = YES;
-    v3.titleLabel.textAlignment = NSTextAlignmentCenter;
     v3.heightDime.equalTo(v1.heightDime);
     v3.topPos.equalTo(v1.topPos);
     v3.leftPos.equalTo(v2.rightPos).offset(10);
@@ -89,11 +92,7 @@
 
     
     /**某个视图宽度固定其他平分**/
-    UILabel *v4 = [UILabel new];
-    v4.backgroundColor = [UIColor greenColor];
-    v4.text = NSLocalizedString(@"width equal to 260", @"");
-    v4.adjustsFontSizeToFitWidth = YES;
-    v4.textAlignment = NSTextAlignmentCenter;
+    UIButton *v4 = [self createButton:NSLocalizedString(@"width equal to 260", @"") backgroundColor:[CFTool color:5]];
     v4.topPos.equalTo(v1.bottomPos).offset(30);
     v4.leftPos.equalTo(@10);
     v4.heightDime.equalTo(@40);
@@ -101,24 +100,14 @@
     [rootLayout addSubview:v4];
     
     
-    UILabel *v5 = [UILabel new];
-    v5.backgroundColor = [UIColor greenColor];
-    v5.text = NSLocalizedString(@"1/2 with of free superview", @"");
-    v5.adjustsFontSizeToFitWidth = YES;
-    v5.textAlignment = NSTextAlignmentCenter;
-    v5.numberOfLines = 2;
+    UIButton *v5 = [self createButton:NSLocalizedString(@"1/2 with of free superview", @"") backgroundColor:[CFTool color:6]];
     v5.topPos.equalTo(v4.topPos);
     v5.leftPos.equalTo(v4.rightPos).offset(10);
     v5.heightDime.equalTo(v4.heightDime);
     [rootLayout addSubview:v5];
     
 
-    UILabel *v6 = [UILabel new];
-    v6.backgroundColor = [UIColor greenColor];
-    v6.text = NSLocalizedString(@"1/2 with of free superview", @"");
-    v6.adjustsFontSizeToFitWidth = YES;
-    v6.textAlignment = NSTextAlignmentCenter;
-    v6.numberOfLines = 2;
+    UIButton *v6 = [self createButton:NSLocalizedString(@"1/2 with of free superview", @"") backgroundColor:[CFTool color:7]];
     v6.topPos.equalTo(v4.topPos);
     v6.leftPos.equalTo(v5.rightPos).offset(10);
     v6.heightDime.equalTo(v4.heightDime);
@@ -132,36 +121,21 @@
     
     
     /**子视图按比例平分**/
-    UILabel *v7 = [UILabel new];
-    v7.backgroundColor = [UIColor blueColor];
-    v7.text = NSLocalizedString(@"20% with of superview", @"");
-    v7.adjustsFontSizeToFitWidth = YES;
-    v7.textAlignment = NSTextAlignmentCenter;
-    v7.numberOfLines = 2;
+    UIButton *v7 = [self createButton:NSLocalizedString(@"20% with of superview", @"") backgroundColor:[CFTool color:5]];
     v7.topPos.equalTo(v4.bottomPos).offset(30);
     v7.leftPos.equalTo(@10);
     v7.heightDime.equalTo(@40);
     [rootLayout addSubview:v7];
     
     
-    UILabel *v8 = [UILabel new];
-    v8.backgroundColor = [UIColor blueColor];
-    v8.text = NSLocalizedString(@"30% with of superview", @"");
-    v8.adjustsFontSizeToFitWidth = YES;
-    v8.textAlignment = NSTextAlignmentCenter;
-    v8.numberOfLines = 2;
+    UIButton *v8 = [self createButton:NSLocalizedString(@"30% with of superview", @"") backgroundColor:[CFTool color:6]];
     v8.topPos.equalTo(v7.topPos);
     v8.leftPos.equalTo(v7.rightPos).offset(10);
     v8.heightDime.equalTo(v7.heightDime);
     [rootLayout addSubview:v8];
     
     
-    UILabel *v9 = [UILabel new];
-    v9.backgroundColor = [UIColor blueColor];
-    v9.text = NSLocalizedString(@"50% with of superview", @"");
-    v9.adjustsFontSizeToFitWidth = YES;
-    v9.textAlignment = NSTextAlignmentCenter;
-    v9.numberOfLines = 2;
+    UIButton *v9 = [self createButton:NSLocalizedString(@"50% with of superview", @"") backgroundColor:[CFTool color:7]];
     v9.topPos.equalTo(v7.topPos);
     v9.leftPos.equalTo(v8.rightPos).offset(10);
     v9.heightDime.equalTo(v7.heightDime);
@@ -176,7 +150,7 @@
      */
     
     MyRelativeLayout * bottomLayout = [MyRelativeLayout new];
-    bottomLayout.backgroundColor = [UIColor lightGrayColor];
+    bottomLayout.backgroundColor = [CFTool color:0];
     bottomLayout.leftPos.equalTo(@10);
     bottomLayout.rightPos.equalTo(@0);
     bottomLayout.topPos.equalTo(v7.bottomPos).offset(30);
@@ -184,15 +158,13 @@
     [rootLayout addSubview:bottomLayout];
     
     /*高度均分*/
-    UIView *v10 = [UIView new];
-    v10.backgroundColor = [UIColor redColor];
+    UIButton *v10 = [self createButton:@"" backgroundColor:[CFTool color:5]];
     v10.widthDime.equalTo(@40);
     v10.rightPos.equalTo(bottomLayout.centerXPos).offset(50);
     v10.topPos.equalTo(@10);
     [bottomLayout addSubview:v10];
     
-    UIView *v11 = [UIView new];
-    v11.backgroundColor = [UIColor redColor];
+    UIButton *v11 = [self createButton:@"" backgroundColor:[CFTool color:6]];
     v11.widthDime.equalTo(v10.widthDime);
     v11.rightPos.equalTo(v10.rightPos);
     v11.topPos.equalTo(v10.bottomPos).offset(10);
@@ -202,22 +174,19 @@
     v10.heightDime.equalTo(@[v11.heightDime.add(-20)]).add(-10);
     
     
-    UIView *v12 = [UIView new];
-    v12.backgroundColor = [UIColor greenColor];
+    UIButton *v12 = [self createButton:@"" backgroundColor:[CFTool color:5]];
     v12.widthDime.equalTo(@40);
     v12.leftPos.equalTo(bottomLayout.centerXPos).offset(50);
     v12.topPos.equalTo(@10);
     [bottomLayout addSubview:v12];
     
-    UIView *v13 = [UIView new];
-    v13.backgroundColor = [UIColor greenColor];
+    UIButton *v13 = [self createButton:@"" backgroundColor:[CFTool color:6]];
     v13.widthDime.equalTo(v12.widthDime);
     v13.leftPos.equalTo(v12.leftPos);
     v13.topPos.equalTo(v12.bottomPos).offset(10);
     [bottomLayout addSubview:v13];
     
-    UIView *v14 = [UIView new];
-    v14.backgroundColor = [UIColor greenColor];
+    UIButton *v14 = [self createButton:@"" backgroundColor:[CFTool color:7]];
     v14.widthDime.equalTo(v12.widthDime);
     v14.leftPos.equalTo(v12.leftPos);
     v14.topPos.equalTo(v13.bottomPos).offset(10);

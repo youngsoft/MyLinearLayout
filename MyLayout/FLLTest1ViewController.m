@@ -8,6 +8,7 @@
 
 #import "FLLTest1ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface FLLTest1ViewController ()
 
@@ -61,7 +62,7 @@
     
     
     self.flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
-    self.flowLayout.backgroundColor = [UIColor lightGrayColor];
+    self.flowLayout.backgroundColor = [CFTool color:0];
     self.flowLayout.frame = CGRectMake(0, 0, 800, 800);
     self.flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.flowLayout.subviewVertMargin = 5;
@@ -74,8 +75,8 @@
     {
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageArray[random()%5]]];
         [imageView sizeToFit];
-        imageView.layer.borderColor = [UIColor redColor].CGColor;
-        imageView.layer.borderWidth = 1;
+        imageView.layer.borderColor = [CFTool color:5].CGColor;
+        imageView.layer.borderWidth = 0.5;
         [self.flowLayout addSubview:imageView];
     }
     
@@ -100,10 +101,11 @@
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setTitle:title forState:UIControlStateNormal];
+    button.titleLabel.font = [CFTool font:14];
     [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     button.myHeight = 44;
     button.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    button.layer.borderWidth = 1.0;
+    button.layer.borderWidth = 0.5;
     
     return button;
     

@@ -248,7 +248,7 @@
 -(NSString*)debugDescription
 {
     
-    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nflexedHeight=%@\nmarginGravity=%d\nreverseFloat=%@\nclearFloat=%@",
+    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nflexedHeight=%@\nmarginGravity=%hu\nreverseFloat=%@\nclearFloat=%@",
                     self.leftPos,
                     self.topPos,
                     self.bottomPos,
@@ -418,9 +418,9 @@
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nSequentLayout: \norientation=%ld\ngravity=%hu\nsubviewVertMargin=%f\nsubviewHorzMargin=%f",
+    dbgDesc = [NSString stringWithFormat:@"%@\nSequentLayout: \norientation=%lu\ngravity=%hu\nsubviewVertMargin=%f\nsubviewHorzMargin=%f",
                dbgDesc,
-              self.orientation,
+              (unsigned long)self.orientation,
                self.gravity,
                self.subviewVertMargin,
                self.subviewHorzMargin
@@ -450,9 +450,9 @@
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nLinearLayout: \nshrinkType=%ld",
+    dbgDesc = [NSString stringWithFormat:@"%@\nLinearLayout: \nshrinkType=%lu",
                dbgDesc,
-               self.shrinkType
+               (unsigned long)self.shrinkType
                ];
     
     
@@ -552,9 +552,9 @@
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\naverageArrange=%@\nautoArrange=%@\narrangedGravity=%d",
+    dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\naverageArrange=%@\nautoArrange=%@\narrangedGravity=%hu",
                                           dbgDesc,
-                                          self.arrangedCount,
+                                          (long)self.arrangedCount,
                                           self.averageArrange ? @"YES":@"NO",
                                           self.autoArrange ? @"YES":@"NO",
                                           self.arrangedGravity

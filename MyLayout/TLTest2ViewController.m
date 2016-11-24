@@ -8,6 +8,7 @@
 
 #import "TLTest2ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface TLTest2ViewController ()
 
@@ -20,7 +21,7 @@
 -(void)loadView
 {    
     [super loadView];
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = [CFTool color:5];
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     scrollView.autoresizingMask =  UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:scrollView];
@@ -73,7 +74,7 @@
     colLayout.gravity = MyMarginGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
     colLayout.wrapContentHeight = YES;
     colLayout.subviewMargin = 5;  //设置布局视图里面子视图之间的间距为5个点。
-    colLayout.backgroundColor = [UIColor whiteColor];
+    colLayout.backgroundColor = [CFTool color:0];
     [colLayout setTarget:self action:@selector(handleColLayoutTap:)];
     colLayout.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
     
@@ -84,7 +85,8 @@
     
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = title;
-    titleLabel.font = [UIFont systemFontOfSize:13];
+    titleLabel.font = [CFTool font:14];
+    titleLabel.textColor = [CFTool color:4];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.adjustsFontSizeToFitWidth = YES;
     titleLabel.myBottomMargin = 2;
@@ -122,10 +124,10 @@
                         @"p1-33",
                         @"p1-34",
                         @"p1-35",
-                        @"p1-36",
                         @"image1",
                         @"image2",
-                        @"image3"
+                        @"image3",
+                        @"image4"
                         ];
     
     static NSInteger sTag = 1000;

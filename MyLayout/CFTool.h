@@ -7,7 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
+//字体颜色工具
 @interface CFTool : NSObject
+
++(UIColor*)color:(NSInteger)idx;
+
++(UIFont*)font:(CGFloat)size;
+
+
 
 @end

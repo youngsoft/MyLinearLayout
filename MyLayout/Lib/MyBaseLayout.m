@@ -587,6 +587,9 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     }
     else
     {
+        layerRect = CGRectZero;
+        fromPoint = CGPointZero;
+        toPoint = CGPointZero;
         NSAssert(0, @"oops!");
     }
     
@@ -2218,3 +2221,40 @@ BOOL _hasBegin;
 @end
 
 
+BOOL _myCGFloatEqual(CGFloat f1, CGFloat f2)
+{
+#if CGFLOAT_IS_DOUBLE == 1
+    return fabs(f1 - f2) < 1e-7;
+#else
+    return fabsf(f1 - f2) < 1e-4;
+#endif
+}
+
+BOOL _myCGFloatNotEqual(CGFloat f1, CGFloat f2)
+{
+#if CGFLOAT_IS_DOUBLE == 1
+    return fabs(f1 - f2) > 1e-7;
+#else
+    return fabsf(f1 - f2) > 1e-4;
+#endif
+}
+
+
+BOOL _myCGFloatLessOrEqual(CGFloat f1, CGFloat f2)
+{
+    
+#if CGFLOAT_IS_DOUBLE == 1
+    return f1 < f2 || fabs(f1 - f2) < 1e-7;
+#else
+    return f1 < f2 || fabsf(f1 - f2) < 1e-4;
+#endif
+}
+
+BOOL _myCGFloatGreatOrEqual(CGFloat f1, CGFloat f2)
+{
+#if CGFLOAT_IS_DOUBLE == 1
+    return f1 > f2 || fabs(f1 - f2) < 1e-7;
+#else
+    return f1 > f2 || fabsf(f1 - f2) < 1e-4;
+#endif
+}

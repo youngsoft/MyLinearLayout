@@ -8,6 +8,7 @@
 
 #import "PLTest4ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface PLTest4ViewController ()
 
@@ -23,7 +24,7 @@
     _pathLayout = [MyPathLayout new];
     self.view = _pathLayout;
     
-    _pathLayout.backgroundColor = [UIColor lightGrayColor];
+    _pathLayout.backgroundColor = [CFTool color:0];
     _pathLayout.leftPadding = 20;
     _pathLayout.coordinateSetting.origin = CGPointMake(0, 0.5);  //原点坐标在(0,0.5)的位置。
     _pathLayout.coordinateSetting.start = -60.0 / 180.0 * M_PI;  //从-60度到60度
@@ -31,7 +32,7 @@
     _pathLayout.distanceError = 0.01;  //因为曲线半径非常的小，为了要求高精度的距离间距，所以要把距离误差调整的非常的小。
     _pathLayout.polarEquation = ^(CGFloat angle)
     {
-        return 1.0;
+        return (CGFloat)1.0;
     };
     
     //设置原点视图。
@@ -52,6 +53,8 @@
         label.text = [NSString stringWithFormat:@"Text:%d",i];
         label.textAlignment = NSTextAlignmentRight;
         label.backgroundColor = [UIColor whiteColor];
+        label.textColor = [CFTool color:4];
+        label.font = [CFTool font:15];
         label.layer.cornerRadius = 2;
         label.layer.shadowColor = [UIColor darkGrayColor].CGColor;
         label.layer.shadowOffset = CGSizeMake(0, 0);

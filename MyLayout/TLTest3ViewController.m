@@ -8,6 +8,7 @@
 
 #import "TLTest3ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface TLTest3ViewController ()
 
@@ -37,21 +38,21 @@
     
     
     //建立一个表格外边界的边界线。颜色为黑色，粗细为3.
-    MyBorderLineDraw *outerBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
+    MyBorderLineDraw *outerBorderLine = [[MyBorderLineDraw alloc] initWithColor:[CFTool color:4]];
     outerBorderLine.thick = 3;
     self.tableLayout.boundBorderLine = outerBorderLine;
     
     //建立智能边界线。所谓智能边界线就是布局里面的如果有子布局视图，则子布局视图会根据自身的布局位置智能的设置边界线。
     //智能边界线只支持表格布局、线性布局、流式布局、浮动布局。
     //如果要想完美使用智能分界线，则请将cellview建立为一个布局视图，比如本例子中的createCellLayout。
-    MyBorderLineDraw *innerBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]];
+    MyBorderLineDraw *innerBorderLine = [[MyBorderLineDraw alloc] initWithColor:[CFTool color:5]];
     self.tableLayout.IntelligentBorderLine = innerBorderLine;
 
 
     //添加第一行。行高为50，每列宽由自己确定。
    MyLinearLayout *firstRow = [self.tableLayout addRow:50 colSize:MTLSIZE_MATCHPARENT];
    firstRow.notUseIntelligentBorderLine = YES;  //因为智能边界线会影响到里面的所有子布局，包括每行，但是这里我们希望这行不受智能边界线的影响而想自己定义边界线，则将这个属性设置为YES。
-   firstRow.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blueColor]]; //我们自定义第一行的底部边界线为蓝色边界线。
+   firstRow.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[CFTool color:7]]; //我们自定义第一行的底部边界线为蓝色边界线。
     
     NSArray *firstRowTitles = @[@"Name",@"Mon.",@"Tues.",@"Wed.", @"Thur.",@"Fri.",@"Sat.",@"Sun."];
     [firstRowTitles enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * stop) {
@@ -95,7 +96,7 @@
     //最后一行：
      MyLinearLayout *lastRow = [self.tableLayout addRow:60 colSize:MTLSIZE_MATCHPARENT];
     lastRow.notUseIntelligentBorderLine = YES;
-    lastRow.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor greenColor]];
+    lastRow.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]];
     
     UIView *cellLayout = [self createCellLayout:@"Total:"];
     cellLayout.weight = 1;  //占用剩余宽度
@@ -127,13 +128,13 @@
 {
     MyFrameLayout *cellLayout = [MyFrameLayout new];
     [cellLayout setTarget:self action:@selector(handleCellTap:)];
-    cellLayout.highlightedBackgroundColor = [UIColor lightGrayColor];
+    cellLayout.highlightedBackgroundColor = [CFTool color:8];
     
     UILabel *label = [UILabel new];
     label.text = value;
+    label.font = [CFTool font:15];
     label.adjustsFontSizeToFitWidth = YES;
     label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize:14];
     label.marginGravity = MyMarginGravity_Fill;
     [cellLayout addSubview:label];
     

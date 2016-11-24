@@ -14,7 +14,7 @@
 "4.LinearLayout - Wrap content" = "4.线性布局-布局尺寸由子视图决定";
 "5.LinearLayout - Weight & Relative margin" = "5.线性布局-子视图尺寸由布局决定";
 "6.LinearLayout - Size limit & Flexed margin" = "6.线性布局-子视图之间的浮动间距";
-"7.LinearLayout - Average size&spacing" = "7.线性布局-均分子视图尺寸和间距";
+"7.LinearLayout - Average size&space" = "7.线性布局-均分子视图尺寸和间距";
 "1.FrameLayout - Gravity&Fill" = "1.框架布局-子视图在布局各方位停靠";
 "2.FrameLayout - Complex UI" = "2.框架布局-复杂的界面布局";
 "1.RelativeLayout - Constraint&Dependence" = "1.相对布局-子视图之间的约束依赖";
@@ -44,19 +44,19 @@
 "4.Replacement of UICollectionView" = "4.综合布局-UICollectionView的替换方案";
 "1.SizeClass - Demo1" = "1.SizeClass-不同屏幕下的布局样式1";
 "2.SizeClass - Demo2" = "2.SizeClass-不同屏幕下的布局样式2";
-"❁1.Screen perfect fit - Demo1" = "☞1.界面的完美适配DEMO";
+"❁1.Screen perfect fit - Demo1" = "❁1.界面的完美适配DEMO";
 
 //LLTest1ViewController
-"Vert(from top to bottom)" = "垂直布局(从上到下)";
-"Left margin" = "左边边距";
-"Horz center" = "水平居中";
-"Right margin" = "右边边距";
-"Horz fill" = "左右边距";
-"Horz(from left to right)" = "水平布局(从左到右)";
-"Top margin" = "上边边距";
-"Vert center" = "垂直居中";
-"Bottom margin" = "下边边距";
-"Vert fill" = "上下边距";
+"vertical(from top to bottom)" = "垂直布局(从上到下)";
+"left margin" = "左边边距";
+"horz center" = "水平居中";
+"right margin" = "右边边距";
+"horz fill" = "左右边距";
+"horizontal(from left to right)" = "水平布局(从左到右)";
+"top margin" = "上边边距";
+"vert center" = "垂直居中";
+"bottom margin" = "下边边距";
+"vert fill" = "上下边距";
 
 //LLTest2ViewController
 "No.:"="编号：";
@@ -77,17 +77,17 @@
 "reset"="还原";
 "Vertical layout gravity control, you can click the following different button to show the effect:"="垂直布局里面的停靠控制，您可以点击下面的不同停靠方式的按钮查看效果：";
 "Horizontal layout gravity control, you can click the following different button to show the effect:"="水平布局里面的停靠控制，您可以点击下面的不同停靠方式的按钮查看效果：";
-"top gravity" = "上停靠";
-"vert center gravity" = "垂直居中停靠";
-"bottom gravity"="下停靠";
-"left gravity" = "左停靠";
-"horz center gravity" = "水平居中停靠";
-"right gravity" = "右停靠";
+"top" = "上停靠";
+"vert center" = "垂直居中";
+"bottom"="下停靠";
+"left" = "左停靠";
+"horz center" = "水平居中";
+"right" = "右停靠";
 "horz fill"="水平填充";
 "vert fill"="垂直填充";
-"screen vert center gravity" = "屏幕垂直居中停靠";
-"screen horz center gravity" ="屏幕水平居中停靠";
-"adjust view's spacing" = "子视图间距设置";
+"screen vert center" = "屏幕垂直居中";
+"screen horz center" ="屏幕水平居中";
+"space" = "间距调整";
 "test text1"="测试文本1";
 "test text2 test text2"="测试文本2测试文本2";
 "test text3 test text3 test text3"="测试文本3测试文本3测试文本3";
@@ -118,12 +118,12 @@
 "copy rights reserved by Youngsoft"="版权所有 Youngsoft";
 
 //LLTest7ViewController
-"average size&spacing no centered" = "均分视图和间距不居中";
-"average size&spacing centered" = "均分视图和间距居中";
-"average size,fixed spacing no centered"="均分视图固定间距不居中";
-"average size,fixed spacing centered"="均分视图固定间距居中";
-"average spacing no centered"="均分间距不居中";
-"average spacing centered"="均分间距居中";
+"average size&space no centered" = "均分视图和间距不居中";
+"average size&space centered" = "均分视图和间距居中";
+"average size no centered"="均分视图不居中";
+"average size centered"="均分视图居中";
+"average space no centered"="均分间距不居中";
+"average space centered"="均分间距居中";
 
 //RLTest2ViewController
 "flex size when subview hidden switch:"="隐藏时伸缩其他子视图:";
@@ -174,8 +174,8 @@
 "change style"="布局变换";
 
 //FOLTest4ViewController
-"flexed width, fixed spacing"="浮动宽度,固定间距";
-"fixed width, flexed spacing"="固定宽度,浮动间距";
+"flexed width, fixed space"="浮动宽度,固定间距";
+"fixed width, flexed space"="固定宽度,浮动间距";
 
 //FOLTest5ViewController
 "Layout view:"="布局名称:";

@@ -8,6 +8,7 @@
 
 #import "LLTest5ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface LLTest5ViewController ()
 
@@ -15,6 +16,23 @@
 
 @implementation LLTest5ViewController
 
+
+-(UILabel*)createLabel:(NSString*)title backgroundColor:(UIColor*)color
+{
+    UILabel *v = [UILabel new];
+    v.text = title;
+    v.adjustsFontSizeToFitWidth = YES;
+    v.textAlignment = NSTextAlignmentCenter;
+    v.backgroundColor = color;
+    v.font = [CFTool font:15];
+    v.layer.shadowOffset = CGSizeMake(3, 3);
+    v.layer.shadowColor = [CFTool color:4].CGColor;
+    v.layer.shadowRadius = 2;
+    v.layer.shadowOpacity = 0.3;
+    
+    return v;
+
+}
 
 -(void)loadView
 {
@@ -53,17 +71,13 @@
      */
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.backgroundColor = [UIColor grayColor];
+    rootLayout.backgroundColor = [CFTool color:0];
     rootLayout.wrapContentWidth = NO;
     rootLayout.wrapContentHeight = NO;
     self.view = rootLayout;
 
     
-    UILabel *v1 = [UILabel new];
-    v1.text = NSLocalizedString(@"width equal to superview, height equal to 20% of free height of superview", @"");
-    v1.adjustsFontSizeToFitWidth = YES;
-    v1.textAlignment = NSTextAlignmentCenter;
-    v1.backgroundColor = [UIColor redColor];
+    UILabel *v1 = [self createLabel:NSLocalizedString(@"width equal to superview, height equal to 20% of free height of superview", @"") backgroundColor:[CFTool color:5]];
     v1.numberOfLines = 3;
     v1.myTopMargin = 10;
     v1.myLeftMargin = v1.myRightMargin = 0; //宽度和父视图相等,等价于v1.widthDime.equalTo(rootLayout.widthDime);
@@ -71,11 +85,7 @@
     [rootLayout addSubview:v1];
     
     
-    UILabel *v2 = [UILabel new];
-    v2.text = NSLocalizedString(@"width equal to 80% of superview, height equal to 30% of free height of superview", @"");
-    v2.adjustsFontSizeToFitWidth = YES;
-    v2.textAlignment = NSTextAlignmentCenter;
-    v2.backgroundColor = [UIColor greenColor];
+    UILabel *v2 = [self createLabel:NSLocalizedString(@"width equal to 80% of superview, height equal to 30% of free height of superview", @"") backgroundColor:[CFTool color:6]];
     v2.numberOfLines = 2;
     v2.myTopMargin = 10;
     v2.widthDime.equalTo(rootLayout.widthDime).multiply(0.8);  //子视图的宽度是父视图宽度的0.8
@@ -84,11 +94,7 @@
     [rootLayout addSubview:v2];
     
     
-    UILabel *v3 = [UILabel new];
-    v3.text =NSLocalizedString(@"width equal to superview - 20, height equal to 50% of free height of superview", @"");
-    v3.adjustsFontSizeToFitWidth = YES;
-    v3.textAlignment = NSTextAlignmentCenter;
-    v3.backgroundColor = [UIColor blueColor];
+    UILabel *v3 = [self createLabel:NSLocalizedString(@"width equal to superview - 20, height equal to 50% of free height of superview", @"") backgroundColor:[CFTool color:7]];
     v3.numberOfLines = 0;
     v3.myTopMargin = 10;
     v3.widthDime.equalTo(rootLayout.widthDime).add(-20);  //父视图的宽度-20 或者v3.myLeftMargin = 20; v3.myRightMargin = 0;
@@ -97,24 +103,16 @@
     [rootLayout addSubview:v3];
     
     
-    UILabel *v4 = [UILabel new];
-    v4.text = NSLocalizedString(@"width equal to 200, height equal to 50", @"");
-    v4.textAlignment = NSTextAlignmentCenter;
-    v4.adjustsFontSizeToFitWidth = YES;
+    UILabel *v4 = [self createLabel:NSLocalizedString(@"width equal to 200, height equal to 50", @"") backgroundColor:[CFTool color:8]];
     v4.numberOfLines = 2;
-    v4.backgroundColor = [UIColor yellowColor];
     v4.myTopMargin = 10;
     v4.myWidth = 200;
     v4.myHeight = 50;
     [rootLayout addSubview:v4];
     
     
-    UILabel *v5 = [UILabel new];
-    v5.text = NSLocalizedString(@"left margin equal to 20% of superview, right margin equal to 30% of superview, width equal to 50% of superview, top spacing equal to 5% of free height of superview, bottom spacing equal to 10% of free height of superview", @"");
+    UILabel *v5 = [self createLabel:NSLocalizedString(@"left margin equal to 20% of superview, right margin equal to 30% of superview, width equal to 50% of superview, top spacing equal to 5% of free height of superview, bottom spacing equal to 10% of free height of superview", @"") backgroundColor:[CFTool color:9]];
     v5.numberOfLines = 0;
-    v5.textAlignment = NSTextAlignmentCenter;
-    v5.adjustsFontSizeToFitWidth = YES;
-    v5.backgroundColor = [UIColor cyanColor];
     //下面设置的值都是0和1之间的值。表示都是相对。
     v5.myLeftMargin = 0.2;   //左边的边距是父视图的20%
     v5.myRightMargin = 0.3;  //左右的边距是父视图的30%， 这样也就是说视图的宽度是父视图的50%

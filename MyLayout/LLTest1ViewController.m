@@ -8,6 +8,7 @@
 
 #import "LLTest1ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface LLTest1ViewController ()
 
@@ -24,7 +25,6 @@
     
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.wrapContentHeight = NO;
     rootLayout.wrapContentWidth = NO;   //如果将布局视图作为视图控制器的根视图则必须将wrapContentWidth和wrapContentHeight设置为NO,
     self.view = rootLayout;
@@ -33,10 +33,8 @@
     /*
      vertTitle是垂直布局下的子视图，因此位置部分的y轴部分会根据添加的先后顺序确定；x轴部分则根据myCenterXOffset为0表示视图的水平中心点和父布局视图的水平中心点相等而确定；视图的尺寸则根据sizeToFit函数而确定。
      */
-    UILabel *vertTitleLabel = [UILabel new];
-    vertTitleLabel.text = NSLocalizedString(@"Vert(from top to bottom)",@"");
-    vertTitleLabel.myCenterXOffset = 0;     //视图的水平中心点和布局视图的水平中心点保持一致。
-    [vertTitleLabel sizeToFit];             //sizeToFit函数的意思是让视图的尺寸刚好包裹其内容。注意sizeToFit方法必要在设置字体、文字后调用才正确。
+    UILabel *vertTitleLabel = [self createSectionLabel:NSLocalizedString(@"vertical(from top to bottom)",@"")];
+    vertTitleLabel.myTopMargin = 10;  //顶部边距距离前面的视图10
     [rootLayout addSubview:vertTitleLabel];
 
     /*
@@ -48,16 +46,15 @@
     
 
     
-    UILabel *horzTitleLabel = [UILabel new];
-    horzTitleLabel.text =  NSLocalizedString(@"Horz(from left to right)",@"");
-    horzTitleLabel.myCenterXOffset = 0;  //视图的水平中心点和布局视图的水平中心点保持一致。
-    [horzTitleLabel sizeToFit];          //sizeToFit函数的意思是让视图的尺寸刚好包裹其内容。
+    UILabel *horzTitleLabel = [self createSectionLabel:NSLocalizedString(@"horizontal(from left to right)",@"")];
+    horzTitleLabel.myTopMargin = 10;
     [rootLayout addSubview:horzTitleLabel];
     
     /*
      horzLayout是垂直布局下的水平布局子视图，因此位置部分的y轴部分会根据添加的先后顺序确定；x轴部分则如果没有设置则默认是和父视图左对齐；宽度则因为水平线性布局在建立时默认wrapContentWidth=YES,也就是说宽度由里面的子视图决定的，所以宽度也就是确定的；高度则由weight设置为1确定的，表示其高度将占用整个垂直线性布局父视图的剩余高度，具体weight属性的意义参考类库中的属性介绍。
      */
     MyLinearLayout *horzLayout = [self createHorzSubviewLayout];
+    horzLayout.myLeftMargin = horzLayout.myRightMargin = 0;  //对于垂直线性布局的子视图来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
     horzLayout.weight = 1.0;     //高度占用父视图的剩余高度
     [rootLayout addSubview:horzLayout];
     
@@ -75,6 +72,32 @@
 
 #pragma mark -- Layout Construction
 
+-(UILabel*)createSectionLabel:(NSString*)title
+{
+    UILabel *sectionLabel = [UILabel new];
+    sectionLabel.text = title;
+    sectionLabel.font = [CFTool font:17];
+    [sectionLabel sizeToFit];             //sizeToFit函数的意思是让视图的尺寸刚好包裹其内容。注意sizeToFit方法必要在设置字体、文字后调用才正确。
+    return sectionLabel;
+}
+
+-(UILabel*)createLabel:(NSString*)title backgroundColor:(UIColor*)color
+{
+    UILabel *v = [UILabel new];
+    v.text = title;
+    v.font = [CFTool font:15];
+    v.numberOfLines = 0;
+    v.textAlignment = NSTextAlignmentCenter;
+    v.adjustsFontSizeToFitWidth = YES;
+    v.backgroundColor =  color;
+    v.layer.shadowOffset = CGSizeMake(3, 3);
+    v.layer.shadowColor = [CFTool color:4].CGColor;
+    v.layer.shadowRadius = 2;
+    v.layer.shadowOpacity = 0.3;
+
+    return v;
+}
+
 /**
  * 创建一个垂直的线性子布局。
  */
@@ -82,7 +105,7 @@
 {
     //创建垂直布局视图。
     MyLinearLayout *vertLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    vertLayout.backgroundColor = [UIColor lightGrayColor];
+    vertLayout.backgroundColor = [CFTool color:0];
 
     /*
       对于垂直线性布局里面的子视图来说:
@@ -95,37 +118,25 @@
        7.myCenterYOffset的设置没有意义。
      */
     
-    UILabel *v1 = [UILabel new];
-    v1.text = NSLocalizedString(@"Left margin", @"");
-    v1.textAlignment = NSTextAlignmentCenter;
-    v1.adjustsFontSizeToFitWidth = YES;
-    v1.backgroundColor = [UIColor redColor];
+    UILabel *v1 = [self createLabel:NSLocalizedString(@"left margin", @"") backgroundColor:[CFTool color:5]];
     v1.myTopMargin = 10;  //上边边距10
     v1.myLeftMargin = 10; //左边边距10
     v1.myWidth = 200;
-    v1.myHeight = 25;     //设置布局尺寸
+    v1.myHeight = 35;     //设置布局尺寸
     [vertLayout addSubview:v1];
 
     
-    UILabel *v2 = [UILabel new];
-    v2.text = NSLocalizedString(@"Horz center", @"");
-    v2.textAlignment = NSTextAlignmentCenter;
-    v2.adjustsFontSizeToFitWidth = YES;
-    v2.backgroundColor = [UIColor greenColor];
+    UILabel *v2 = [self createLabel:NSLocalizedString(@"horz center", @"") backgroundColor:[CFTool color:6]];
     v2.myTopMargin = 10;
     v2.myCenterXOffset = 0;            //水平居中,如果不等于0则会产生居中偏移
-    v2.mySize = CGSizeMake(200, 25);   //效果和上面意义一致！
+    v2.mySize = CGSizeMake(200, 35);   //效果和上面意义一致！
     [vertLayout addSubview:v2];
 
     
-    UILabel *v3 = [UILabel new];
-    v3.text = NSLocalizedString(@"Right margin", @"");
-    v3.textAlignment = NSTextAlignmentCenter;
-    v3.adjustsFontSizeToFitWidth = YES;
-    v3.backgroundColor = [UIColor blueColor];
+    UILabel *v3 = [self createLabel:NSLocalizedString(@"right margin", @"") backgroundColor:[CFTool color:7]];
     v3.myTopMargin = 10;
     v3.myRightMargin = 10; //右边边距10
-    v3.frame = CGRectMake(0, 0, 200, 25);  //设置视图的尺寸，详见下面的注释。
+    v3.frame = CGRectMake(0, 0, 200, 35);  //设置视图的尺寸，详见下面的注释。
     [vertLayout addSubview:v3];
 
     /*
@@ -139,16 +150,12 @@
      */
     
     
-    UILabel *v4 = [UILabel new];
-    v4.text = NSLocalizedString(@"Horz fill", @"");
-    v4.textAlignment = NSTextAlignmentCenter;
-    v4.adjustsFontSizeToFitWidth = YES;
-    v4.backgroundColor = [UIColor orangeColor];
+    UILabel *v4 = [self createLabel:NSLocalizedString(@"horz fill", @"") backgroundColor:[CFTool color:8]];
     v4.myTopMargin = 10;
     v4.myBottomMargin = 10;
     v4.myLeftMargin = 10;
     v4.myRightMargin = 10; //上面两行代码将左右边距设置为10。对于垂直线性布局来说如果子视图同时设置了左右边距则宽度会自动算出，因此不需要设置myWidth的值了。
-    v4.myHeight = 25;
+    v4.myHeight = 35;
     [vertLayout addSubview:v4];
 
     
@@ -163,7 +170,7 @@
 {
     //创建水平布局视图。
     MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
-    horzLayout.backgroundColor = [UIColor darkGrayColor];
+    horzLayout.backgroundColor = [CFTool color:0];
 
     /*
      对于水平线性布局里面的子视图来说:
@@ -177,51 +184,35 @@
      */
 
     
-    UILabel *v1 = [UILabel new];
-    v1.text = NSLocalizedString(@"Top margin", @"");
-    v1.textAlignment = NSTextAlignmentCenter;
-    v1.numberOfLines = 0;
-    v1.backgroundColor = [UIColor redColor];
-    v1.myLeftMargin = 10;
+    UILabel *v1 = [self createLabel:NSLocalizedString(@"top margin", @"") backgroundColor:[CFTool color:5]];
     v1.myTopMargin = 10; //上边边距10
+    v1.myLeftMargin = 10;
     v1.myWidth = 60;
     v1.myHeight = 60;
     [horzLayout addSubview:v1];
 
     
     
-    UILabel *v2 = [UILabel new];
-    v2.text = NSLocalizedString(@"Vert center", @"");
-    v2.textAlignment = NSTextAlignmentCenter;
-    v2.numberOfLines = 0;
-    v2.backgroundColor = [UIColor greenColor];
+    UILabel *v2 = [self createLabel:NSLocalizedString(@"vert center", @"") backgroundColor:[CFTool color:6]];
     v2.myLeftMargin = 10;
     v2.myCenterYOffset = 0; //垂直居中，如果不等于0则会产生居中偏移
     v2.mySize = CGSizeMake(60, 60);
     [horzLayout addSubview:v2];
 
     
-    UILabel *v3 = [UILabel new];
-    v3.text = NSLocalizedString(@"Bottom margin", @"");
-    v3.textAlignment = NSTextAlignmentCenter;
-    v3.numberOfLines = 0;
-    v3.backgroundColor = [UIColor blueColor];
-    v3.myLeftMargin = 10;
+    UILabel *v3 = [self createLabel:NSLocalizedString(@"bottom margin", @"") backgroundColor:[CFTool color:7]];
     v3.myBottomMargin = 10; //下边边距10
+    v3.myLeftMargin = 10;
     v3.myRightMargin = 5;
     v3.frame = CGRectMake(0, 0, 60, 60);
     [horzLayout addSubview:v3];
 
     
-    UILabel *v4 = [UILabel new];
-    v4.text = NSLocalizedString(@"Vert fill", @"");
-    v4.textAlignment = NSTextAlignmentCenter;
-    v4.numberOfLines = 0;
-    v4.backgroundColor = [UIColor orangeColor];
-    v4.myLeftMargin = 10;
-    v4.myRightMargin = 10;
+    UILabel *v4 = [self createLabel:NSLocalizedString(@"vert fill", @"") backgroundColor:[CFTool color:8]];
     v4.myTopMargin = 10;
     v4.myBottomMargin = 10; //上面两行代码将上下边距设置为10,对于水平线性布局来说如果子视图同时设置了上下边距则高度会自动算出,因此不需要设置myHeight的值了。
+    v4.myLeftMargin = 10;
+    v4.myRightMargin = 10;
     v4.myWidth = 60;
     [horzLayout addSubview:v4];
 

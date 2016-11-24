@@ -388,6 +388,15 @@
     return _uBoundVal;
 }
 
+-(CGFloat)minVal
+{
+    return _lBoundVal.dimeNumVal.doubleValue;
+}
+
+-(CGFloat)maxVal
+{
+    return _uBoundVal.dimeNumVal.doubleValue;
+}
 
 -(BOOL)isMatchParent
 {

@@ -8,6 +8,7 @@
 
 #import "LLTest4ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface LLTest4ViewController ()
 
@@ -27,7 +28,8 @@
     self.view = scrollView;
     
     self.rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    self.rootLayout.backgroundColor = [UIColor grayColor];
+    self.rootLayout.layer.borderWidth = 1;
+    self.rootLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.rootLayout.wrapContentHeight = YES;
     self.rootLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
     self.rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -74,7 +76,7 @@
      MyLayout中的布局视图可以设置四周的边界线，这可以通过布局视图的leftBorderLine、topBorderLine、bottomBorderLine、rightBorderLine四个属性来实现。
      属性的值是一个MyBorderLineDraw对象，这个对象可以设置边界线的颜色、粗细、点划线、缩进功能。在使用布局视图的边界线功能时，请先设置好MyBorderLineDraw对象的各属性后再赋值给布局视图的四个属性上。
      */
-    MyBorderLineDraw *bl = [[MyBorderLineDraw alloc] initWithColor:[UIColor greenColor]]; //绿色的边界线
+    MyBorderLineDraw *bl = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]]; //边界线
     bl.headIndent = 10;  //头部缩进10个点
     bl.tailIndent = 30;  //尾部缩进30个点。
     bl.thick = 1;        //粗细为1
@@ -86,7 +88,8 @@
     
     
     MyLinearLayout *actionLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    actionLayout.backgroundColor = [UIColor blueColor];
+    actionLayout.layer.borderWidth = 1;
+    actionLayout.layer.borderColor = [CFTool color:9].CGColor;
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewMargin = 5;
     actionLayout.wrapContentWidth = YES;
@@ -108,9 +111,13 @@
 -(UIButton*)addActionButton:(NSString *)title tag:(NSInteger)tag
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.backgroundColor = [UIColor greenColor];
     [button addTarget:self action:@selector(handleAction:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:title forState:UIControlStateNormal];
+    button.titleLabel.font = [CFTool font:14];
+    button.backgroundColor = [CFTool color:14];
+    button.layer.cornerRadius = 10;
+    button.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    button.layer.borderWidth  = 0.5;
     button.tag = tag;
     button.myHeight = 50;
     button.myWidth = 110;

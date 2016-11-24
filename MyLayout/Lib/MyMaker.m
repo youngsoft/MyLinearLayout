@@ -7,6 +7,9 @@
 //
 
 #import "MyMaker.h"
+
+#if TARGET_OS_IPHONE
+
 #import "MyLayoutPos.h"
 #import "MyLayoutSize.h"
 #import "MyLayoutPosInner.h"
@@ -434,4 +437,6 @@
 
 
 @end
+
+#endif
 

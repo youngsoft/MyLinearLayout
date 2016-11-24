@@ -11,6 +11,7 @@
 #import "MyLayoutPos.h"
 #import "MyLayoutSize.h"
 
+@class MyBaseLayout;
 
 /*
  SizeClass的尺寸定义,用于定义苹果设备的各种屏幕的尺寸，对于任意一种设备来说某个纬度的尺寸都可以描述为：Any任意，Compact压缩，Regular常规
@@ -138,7 +139,7 @@ typedef enum : unsigned char{
 @property(nonatomic, assign) BOOL useFrame;
 @property(nonatomic, assign) BOOL noLayout;
 
-@property(nonatomic, copy) void (^viewLayoutCompleteBlock)(UIView* layout, UIView *v);
+@property(nonatomic, copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
 
 /*
  隐藏不参与布局，这个属性是默认sizeClass外可以用来设置某个视图是否参与布局的标志，如果设置为YES则表示不参与布局。默认是NO。

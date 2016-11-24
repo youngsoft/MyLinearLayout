@@ -8,6 +8,7 @@
 
 #import "AllTest4ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 static NSInteger sBaseTag = 100000;
 
@@ -26,7 +27,7 @@ static NSInteger sBaseTag = 100000;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor darkGrayColor];
+    self.view.backgroundColor = [CFTool color:0];
     
     NSArray *sections = @[@"品牌推荐",
                           @"时尚风格",
@@ -115,6 +116,8 @@ static NSInteger sBaseTag = 100000;
     UILabel *sectionTitleLabel = [UILabel new];
     sectionTitleLabel.text = sectionTitle;
     sectionTitleLabel.adjustsFontSizeToFitWidth = YES;
+    sectionTitleLabel.textColor = [CFTool color:4];
+    sectionTitleLabel.font = [CFTool font:17];
     sectionTitleLabel.minimumScaleFactor = 0.7;
     sectionTitleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     sectionTitleLabel.centerYPos.equalTo(supplementaryLayout.centerYPos);  //垂直居中
@@ -159,7 +162,8 @@ static NSInteger sBaseTag = 100000;
     
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = title;
-    titleLabel.font = [UIFont systemFontOfSize:13];
+    titleLabel.font = [CFTool font:14];
+    titleLabel.textColor = [CFTool color:4];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.adjustsFontSizeToFitWidth = YES;
     titleLabel.myBottomMargin = 2;
@@ -176,6 +180,7 @@ static NSInteger sBaseTag = 100000;
 
 -(void)handleCellLayoutTap:(UIView*)sender
 {
+   
     NSInteger supplementaryIndex = sender.tag / sBaseTag;
     NSInteger cellIndex = sender.tag % sBaseTag;
     
@@ -184,6 +189,7 @@ static NSInteger sBaseTag = 100000;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     
     [alertView show];
+   
 }
 
 -(void)handleReverse:(id)sender

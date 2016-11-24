@@ -8,6 +8,7 @@
 
 #import "LLTest6ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface LLTest6ViewController ()<UITextViewDelegate>
 
@@ -26,7 +27,7 @@
     
     
     /*
-       这个例子主要说的是视图之间的浮动间距设置，以及间距和尺寸的最大最小值限制的应用场景。子视图的布局尺寸类MyLayoutDime可以通过设置min,max的方法来实现最低尺寸和最高尺寸的限制设置。
+       这个例子主要说的是视图之间的浮动间距设置，以及间距和尺寸的最大最小值限制的应用场景。子视图的布局尺寸类MyLayoutSize可以通过设置min,max的方法来实现最低尺寸和最高尺寸的限制设置。
      */
     
     /*
@@ -41,7 +42,7 @@
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.wrapContentHeight = NO;
-    rootLayout.backgroundColor = [UIColor grayColor];
+    rootLayout.backgroundColor = [UIColor whiteColor];
     [rootLayout setTarget:self action:@selector(handleHideKeyboard:)];  //设置布局上的触摸事件。布局视图支持触摸事件的设置，可以使用setTarget方法来实现。
     
     //设置布局视图的宽度等于父视图的宽度，这个方法等价于 rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
@@ -54,12 +55,14 @@
     
     UILabel *userInfoLabel = [UILabel new];
     userInfoLabel.text = NSLocalizedString(@"user info(run in iPhone4 will have scroll effect)",@"");
+    userInfoLabel.textColor = [CFTool color:4];
+    userInfoLabel.font = [CFTool font:15];
+    userInfoLabel.adjustsFontSizeToFitWidth = YES;
+    userInfoLabel.textAlignment = NSTextAlignmentCenter;
     [userInfoLabel sizeToFit];
     userInfoLabel.myTopMargin = 10;
     userInfoLabel.myCenterXOffset = 0;
     userInfoLabel.widthDime.uBound(rootLayout.widthDime, 0, 1);  //最大的宽度和父视图相等。
-    userInfoLabel.adjustsFontSizeToFitWidth = YES;
-    userInfoLabel.textAlignment = NSTextAlignmentCenter;
     [rootLayout addSubview:userInfoLabel];
     
     
@@ -67,7 +70,7 @@
     //头像
     UIImageView *headImageView = [UIImageView new];
     headImageView.image = [UIImage imageNamed:@"head1"];
-    headImageView.backgroundColor = [UIColor whiteColor];
+    headImageView.backgroundColor = [CFTool color:1];
     [headImageView sizeToFit];
     headImageView.myTopMargin = 0.25;
     headImageView.myCenterXOffset = 0;     //距离顶部间隙剩余空间的25%，水平居中对齐。
@@ -75,10 +78,10 @@
     
     
     UITextField *nameField = [UITextField new];
-    nameField.borderStyle = UITextBorderStyleLine;
+    nameField.borderStyle = UITextBorderStyleRoundedRect;
     nameField.placeholder = NSLocalizedString(@"input user name here", @"");
     nameField.textAlignment = NSTextAlignmentCenter;
-    nameField.backgroundColor = [UIColor whiteColor];
+    nameField.font = [CFTool font:15];
     nameField.myHeight = 40;
     nameField.myLeftMargin = 0.1;
     nameField.myRightMargin = 0.1;
@@ -94,6 +97,8 @@
      */
     UILabel *userDescLabel = [UILabel new];
     userDescLabel.text = NSLocalizedString(@"desc info", @"");
+    userDescLabel.textColor = [CFTool color:4];
+    userDescLabel.font = [CFTool font:14];
     [userDescLabel sizeToFit];
     userDescLabel.myTopMargin = 10;
     userDescLabel.leftPos.equalTo(@0.05).min(17).max(19);
@@ -101,8 +106,11 @@
     
     
     UITextView *textView = [UITextView new];
-    textView.backgroundColor = [UIColor whiteColor];
     textView.text = NSLocalizedString(@"please try input text and carriage return continuous to see effect", @"");
+    textView.font = [CFTool font:15];
+    textView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    textView.layer.borderWidth = 0.5;
+    textView.layer.cornerRadius = 5;
     textView.delegate = self;
 
     //左右间距为布局的10%，距离底部间距为65%,浮动高度，但高度最高为300，最低为30
@@ -117,6 +125,8 @@
     
     UILabel *copyRightLabel = [UILabel new];
     copyRightLabel.text = NSLocalizedString(@"copy rights reserved by Youngsoft", @"");
+    copyRightLabel.textColor = [CFTool color:4];
+    copyRightLabel.font = [CFTool font:15];
     copyRightLabel.myBottomMargin = 20;   //总是固定在底部20的边距,因为上面的textView用了底部相对间距。
     copyRightLabel.myCenterXOffset = 0;
     [copyRightLabel sizeToFit];
@@ -134,7 +144,7 @@
         {
             UIButton *editButton = [UIButton buttonWithType:UIButtonTypeSystem];
             [editButton setTitle:@"Edit" forState:UIControlStateNormal];
-            [editButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            editButton.titleLabel.font = [CFTool font:15];
             editButton.useFrame = YES;  //注意这里必须要设置为useFrame为YES，目的是为了不破坏线性布局的概念，而改用直接frame的设置。
             [ll addSubview:editButton];
             weakVC.editButton = editButton;

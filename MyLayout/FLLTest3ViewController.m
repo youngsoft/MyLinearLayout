@@ -8,6 +8,7 @@
 
 #import "FLLTest3ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface FLLTest3ViewController ()
 
@@ -41,8 +42,9 @@
     self.view = rootLayout;
     
     UILabel *tipLabel = [UILabel new];
-    tipLabel.font = [UIFont systemFontOfSize:13];
+    tipLabel.font = [CFTool font:13];
     tipLabel.text = NSLocalizedString(@"  You can drag the following tag to adjust location in layout, MyLayout can use subview's useFrame,noLayout property and layout view's autoresizesSubviews propery to complete some position adjustment and the overall animation features: \n useFrame set to YES indicates subview is not controlled by the layout view but use its own frame to set the location and size instead.\n \n autoresizesSubviews set to NO indicate layout view will not do any layout operation, and will remain in the position and size of all subviews.\n \n noLayout set to YES indicate subview in the layout view just only take up the position and size but not real adjust the position and size when layouting.", @"");
+    tipLabel.textColor = [CFTool color:4];
     tipLabel.numberOfLines = 0;
     tipLabel.flexedHeight = YES; //这两个属性结合着使用实现自动换行和文本的动态高度。
     [rootLayout addSubview:tipLabel];
@@ -50,15 +52,15 @@
     
     UILabel *tip2Label = [UILabel new];
     tip2Label.text = NSLocalizedString(@"double click to remove tag", @"");
-    tip2Label.font = [UIFont systemFontOfSize:13];
-    tip2Label.textColor = [UIColor lightGrayColor];
+    tip2Label.font = [CFTool font:13];
+    tip2Label.textColor = [CFTool color:3];
     tip2Label.textAlignment = NSTextAlignmentCenter;
     tip2Label.myTopMargin = 3;
     [tip2Label sizeToFit];
     [rootLayout addSubview:tip2Label];
     
     self.flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:4];
-    self.flowLayout.backgroundColor = [UIColor lightGrayColor];
+    self.flowLayout.backgroundColor = [CFTool color:0];
     self.flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     self.flowLayout.subviewMargin = 10;   //流式布局里面的子视图的水平和垂直间距都设置为10
     self.flowLayout.averageArrange = YES;  //流式布局里面的子视图的宽度将平均分配。
@@ -97,9 +99,9 @@
 {
     UIButton *tagButton = [UIButton new];
     [tagButton setTitle:text forState:UIControlStateNormal];
-    tagButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    tagButton.titleLabel.font = [CFTool font:14];
     tagButton.layer.cornerRadius = 20;
-    tagButton.backgroundColor = [UIColor colorWithRed:random()%256 / 255.0 green:random()%256 / 255.0 blue:random()%256 / 255.0 alpha:1];
+    tagButton.backgroundColor = [CFTool color:random()%15];
     tagButton.heightDime.equalTo(@44);
     
     [tagButton addTarget:self action:@selector(handleTouchDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside]; //注册拖动事件。
@@ -114,13 +116,12 @@
 //创建添加按钮
 -(UIButton*)createAddButton
 {
-    UIButton *addButton = [UIButton new];
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [addButton setTitle:NSLocalizedString(@"add tag", @"") forState:UIControlStateNormal];
-    addButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    [addButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    addButton.titleLabel.font = [CFTool font:14];
     addButton.layer.cornerRadius = 20;
-    addButton.layer.borderWidth = 2;
-    addButton.layer.borderColor = [UIColor redColor].CGColor;
+    addButton.layer.borderWidth = 0.5;
+    addButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     addButton.heightDime.equalTo(@44);
     
     [addButton addTarget:self action:@selector(handleAddTagButton:) forControlEvents:UIControlEventTouchUpInside];

@@ -286,6 +286,16 @@
     return _uBoundVal;
 }
 
+-(CGFloat)minVal
+{
+    return _lBoundVal.posNumVal.doubleValue;
+}
+
+-(CGFloat)maxVal
+{
+    return _uBoundVal.posNumVal.doubleValue;
+}
+
 
 
 

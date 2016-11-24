@@ -8,6 +8,7 @@
 
 #import "AllTest3ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface AllTest3ViewController ()
 
@@ -57,7 +58,7 @@
     
     //根视图用框架布局的原因是底部有一个退出登录按钮是固定在底部的，因此这里用框架布局来实现整体布局是最好的方法。一般框架布局都是用来实现视图控制器的根本视图。
     MyFrameLayout *frameLayout = [MyFrameLayout new];
-    frameLayout.backgroundColor = [UIColor grayColor];
+    frameLayout.backgroundColor = [CFTool color:0];
     self.view = frameLayout;
     self.frameLayout = frameLayout;
     
@@ -67,8 +68,10 @@
     [self.view addSubview:scrollView];
     
     UIButton *button = [UIButton new];
-    button.backgroundColor = [UIColor redColor];
     [button setTitle:NSLocalizedString(@"Logout", @"") forState:UIControlStateNormal];
+    button.backgroundColor = [CFTool color:3];
+    button.titleLabel.font = [CFTool font:16];
+    button.tintColor = [CFTool color:0];
     button.myHeight = 50;
     button.marginGravity = MyMarginGravity_Vert_Bottom | MyMarginGravity_Horz_Fill;  //按钮定位在框架布局的底部并且宽度填充。
     [self.view addSubview:button];
@@ -130,15 +133,16 @@
     [contentLayout addSubview:headerLayout];
     
     UIImageView *headerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"head2"]];
-    [headerImageView sizeToFit];
+    headerImageView.layer.cornerRadius = headerImageView.estimatedRect.size.height / 2; //
+    headerImageView.backgroundColor = [UIColor whiteColor];
     headerImageView.centerXPos.equalTo(@0);
     headerImageView.centerYPos.equalTo(@0);  //在父视图中居中。
-    headerImageView.backgroundColor = [UIColor whiteColor];
-    headerImageView.layer.cornerRadius = headerImageView.estimatedRect.size.height / 2; //
     [headerLayout addSubview:headerImageView];
     
     UILabel *headerNameLabel = [UILabel new];
     headerNameLabel.text = @"欧阳大哥";
+    headerNameLabel.font = [CFTool font:17];
+    headerNameLabel.textColor = [CFTool color:4];
     [headerNameLabel sizeToFit];
     headerNameLabel.centerXPos.equalTo(@0);
     headerNameLabel.topPos.equalTo(headerImageView.bottomPos).offset(10);
@@ -170,8 +174,8 @@
     
     //具有事件处理的layout,高亮背景色的设置。
     MyLinearLayout *layout2 = [self createActionLayout:NSLocalizedString(@"please touch here(highlighted background)", @"") action:@selector(handleTap:)];
-    layout2.highlightedBackgroundColor = [UIColor lightGrayColor]; //可以设置高亮的背景色用于单击事件
-    layout2.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]];
+    layout2.highlightedBackgroundColor = [CFTool color:5]; //可以设置高亮的背景色用于单击事件
+    layout2.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[CFTool color:3]];
     layout2.bottomBorderLine.thick = 4; //设置底部有红色的线，并且粗细为4
     //您还可以为布局视图设置按下、按下取消的事件处理逻辑。
     [layout2 setTouchDownTarget:self action:@selector(handleTouchDown:)];
@@ -221,13 +225,14 @@
     
     UIButton *leftButton = [UIButton new];
     leftButton.myWidth = 50;
-    leftButton.backgroundColor = [UIColor greenColor];
+    leftButton.backgroundColor = [CFTool color:5];
     [testLayout addSubview:leftButton];
     
     UIButton *centerButton = [UIButton new];
     [centerButton setTitle:NSLocalizedString(@"touch hide me", @"") forState:UIControlStateNormal];
     [centerButton addTarget:self action:@selector(handleHideSelf:) forControlEvents:UIControlEventTouchUpInside];
-    centerButton.backgroundColor = [UIColor redColor];
+    centerButton.backgroundColor = [CFTool color:6];
+    centerButton.titleLabel.font = [CFTool font:14];
     [centerButton sizeToFit];
     centerButton.weight = 1; //均分剩余的宽度。
     [testLayout addSubview:centerButton];
@@ -236,7 +241,8 @@
     UIButton *rightButton = [UIButton new];
     [rightButton setTitle:NSLocalizedString(@"touch show me", @"") forState:UIControlStateNormal];
     [rightButton addTarget:self action:@selector(handleShowBrother:) forControlEvents:UIControlEventTouchUpInside];
-    rightButton.backgroundColor = [UIColor blueColor];
+    rightButton.backgroundColor = [CFTool color:7];
+    rightButton.titleLabel.font = [CFTool font:14];
     [rightButton sizeToFit];
     rightButton.weight = 1; //均分剩余的宽度。
     [testLayout addSubview:rightButton];
@@ -268,7 +274,8 @@
     leftLabel.textAlignment = NSTextAlignmentRight;
     leftLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     leftLabel.textColor = [UIColor whiteColor];
-    leftLabel.backgroundColor = [UIColor redColor];
+    leftLabel.backgroundColor = [CFTool color:5];
+    leftLabel.font = [CFTool font:14];
     [leftLabel sizeToFit];
     leftLabel.rightPos.equalTo(@0.5).min(0); //右边浮动间距为0.5,最小为0
     leftLabel.widthDime.lBound(@(10),0,1).uBound(testLayout.widthDime, -10, 1); //宽度最小为10，最大为布局视图的宽度减10
@@ -280,7 +287,8 @@
     rightLabel.textAlignment = NSTextAlignmentRight;
     rightLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     rightLabel.textColor = [UIColor whiteColor];
-    rightLabel.backgroundColor = [UIColor blueColor];
+    rightLabel.backgroundColor = [CFTool color:6];
+    rightLabel.font = [CFTool font:14];
     [rightLabel sizeToFit];
     rightLabel.leftPos.equalTo(@0.5).min(0);   //左边浮动间距为0.5，最小为0
     rightLabel.widthDime.lBound(@(10),0,1).uBound(testLayout.widthDime, -10, 1); //宽度最小为10，最大为布局视图的宽度减10
@@ -316,7 +324,8 @@
     for (int i = 0 ; i < 10; i++)
     {
         UILabel *label = [UILabel new];
-        label.backgroundColor = [UIColor blueColor];
+        label.backgroundColor = [CFTool color:i + 1];
+        label.font = [CFTool font:14];
         label.text = [NSString stringWithFormat:@"%d",i];
         label.textAlignment = NSTextAlignmentCenter;
         [label sizeToFit];
@@ -343,7 +352,9 @@
     
     UILabel *label = [UILabel new];
     label.text = title;
-    label.font = [UIFont systemFontOfSize:14];
+    label.font = [CFTool font:14];
+    label.textColor = [CFTool color:4];
+    label.adjustsFontSizeToFitWidth = YES;
     [label sizeToFit];
     label.tag = 1000;
     label.rightPos.equalTo(@0.5);  //水平线性布局通过相对间距来实现左右分开排列。
@@ -374,7 +385,8 @@
     
     UILabel *label = [UILabel new];
     label.text = title;
-    label.font = [UIFont systemFontOfSize:14];
+    label.font = [CFTool font:14];
+    label.textColor = [CFTool color:4];
     label.adjustsFontSizeToFitWidth = YES;
     [label sizeToFit];
     label.weight = 1;
@@ -404,12 +416,14 @@
     
     //向左浮动
     UISegmentedControl *leftSegmented = [[UISegmentedControl alloc] initWithItems:@[@"  -  ",@"  +  "]];
+    leftSegmented.tintColor = [CFTool color:7];
     leftSegmented.momentary = YES;
     [leftSegmented addTarget:self action:leftAction forControlEvents:UIControlEventValueChanged];
     [segmentedLayout addSubview:leftSegmented];
     
     
     UISegmentedControl *rightSegmented = [[UISegmentedControl alloc] initWithItems:@[@"  +  ",@"  -  "]];
+    rightSegmented.tintColor = [CFTool color:7];
     rightSegmented.momentary = YES;
     [rightSegmented addTarget:self action:rightAction forControlEvents:UIControlEventValueChanged];
     [segmentedLayout addSubview:rightSegmented];
@@ -570,6 +584,9 @@
 
 -(void)handleShowPopMenu:(MyBaseLayout*)sender
 {
+    if (self.popmenuLayout.superview != nil)
+        return;
+    
    CGRect rc = [sender convertRect:sender.bounds toView:self.frameLayout]; // 计算应该弹出的位置。要转化为框架布局的rect
     
     MyLinearLayout *menuLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
@@ -586,6 +603,10 @@
     MyLinearLayout *containerLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     containerLayout.backgroundColor = [UIColor colorWithRed:0xBF/255.0f green:0xBD/255.0 blue:0xBF/255.0 alpha:1];
     containerLayout.layer.cornerRadius = 4;
+    containerLayout.layer.shadowRadius = 5;
+    containerLayout.layer.shadowOffset = CGSizeZero;
+    containerLayout.layer.shadowOpacity = 0.5;
+    containerLayout.layer.shadowColor = [CFTool color:4].CGColor;
     containerLayout.myLeftMargin = containerLayout.myRightMargin = 0;
     containerLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     containerLayout.gravity = MyMarginGravity_Horz_Fill;
@@ -612,14 +633,19 @@
         {
             [button setTitle:NSLocalizedString(@"add item", @"") forState:UIControlStateNormal];
             [button addTarget:self action:@selector(handleAddMe:) forControlEvents:UIControlEventTouchUpInside];
-            button.backgroundColor = [UIColor redColor];
+            button.backgroundColor = [CFTool color:3];
+            button.layer.cornerRadius = 5;
+            button.titleLabel.font = [CFTool font:14];
         }
         else
         {
             [button setTitle:[NSString stringWithFormat:NSLocalizedString(@"double tap remove:%d", @""),i] forState:UIControlStateNormal];
             button.titleLabel.adjustsFontSizeToFitWidth = YES;
             [button addTarget:self action:@selector(handleDelMe:) forControlEvents:UIControlEventTouchDownRepeat];
-            button.backgroundColor = [UIColor blueColor];
+            button.backgroundColor = [CFTool color:2];
+            button.layer.cornerRadius = 5;
+            button.titleLabel.font = [CFTool font:14];
+            
         }
         [button sizeToFit];
         [itemLayout addSubview:button];
@@ -631,9 +657,11 @@
     
     UIButton *closeButton = [UIButton new];
     closeButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
-    closeButton.layer.borderWidth = 1;
+    closeButton.layer.borderWidth = 0.5;
+    closeButton.layer.cornerRadius = 5;
     [closeButton setTitle:NSLocalizedString(@"close pop menu", @"") forState:UIControlStateNormal];
-    [closeButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [closeButton setTitleColor:[CFTool color:4] forState:UIControlStateNormal];
+    closeButton.titleLabel.font = [CFTool font:14];
     closeButton.backgroundColor = [UIColor whiteColor];
     [closeButton addTarget:self action:@selector(handleClosePopmenu:) forControlEvents:UIControlEventTouchUpInside];
     closeButton.myTopMargin = 5;
@@ -642,6 +670,8 @@
     
     UILabel *tipLabel = [UILabel new];
     tipLabel.text = NSLocalizedString(@"you can add and remove item to shrink the pop menu.", @"");
+    tipLabel.textColor = [CFTool color:3];
+    tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
     [tipLabel sizeToFit];
     [containerLayout addSubview:tipLabel];
@@ -662,8 +692,10 @@
     UIButton *button = [UIButton new];
     [button setTitle:[NSString stringWithFormat:NSLocalizedString(@"double tap remove:%d", @""), sender.superview.subviews.count ] forState:UIControlStateNormal];
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
+    button.backgroundColor = [CFTool color:2];
+    button.layer.cornerRadius = 5;
+    button.titleLabel.font = [CFTool font:14];
     [button addTarget:self action:@selector(handleDelMe:) forControlEvents:UIControlEventTouchDownRepeat];
-    button.backgroundColor = [UIColor blueColor];
     [button sizeToFit];
     [self.popmenuItemLayout insertSubview:button belowSubview:sender];
     

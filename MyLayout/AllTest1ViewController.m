@@ -13,6 +13,7 @@
 
 #import "MyLayout.h"
 #import "YYFPSLabel.h"
+#import "CFTool.h"
 
 @interface AllTest1ViewController ()
 
@@ -55,12 +56,12 @@
                                   ];
         
         NSArray *imageMessages = @[@"",
+                                   @"bk3",
                                    @"image1",
-                                   @"image2",
-                                   @"image3"
+                                   @"image2"
                                    ];
         
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 30; i++)
         {
             AllTest1DataModel *model = [AllTest1DataModel new];
             
@@ -131,8 +132,8 @@
     UILabel *label1 = [UILabel new];
     label1.text = NSLocalizedString(@"add tableHeaderView(please touch me)", @"");
     label1.tag = 1000;
-    label1.textColor = [UIColor whiteColor];
-    label1.font = [UIFont systemFontOfSize:17];
+    label1.textColor = [CFTool color:0];
+    label1.font = [CFTool font:17];
     label1.myCenterXOffset = 0;
     [label1 sizeToFit];
     [tableHeaderViewLayout addSubview:label1];
@@ -140,7 +141,8 @@
     
     UILabel *label2 = [UILabel new];
     label2.text = NSLocalizedString(@" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", @"");
-    label2.textColor = [UIColor redColor];
+    label2.textColor = [CFTool color:4];
+    label2.font = [CFTool font:15];
     label2.myLeftMargin = label2.myRightMargin = 5;
     label2.numberOfLines = 0;
     label2.flexedHeight = YES;
@@ -162,11 +164,13 @@
     tableFooterViewLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     tableFooterViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 80); //这里明确设定高度。
     tableFooterViewLayout.myLeftMargin = tableFooterViewLayout.myRightMargin = 0; //这里注意设置宽度和父布局保持一致。
-    tableFooterViewLayout.backgroundColor = [UIColor magentaColor];
+    tableFooterViewLayout.backgroundColor = [CFTool color:6];
     tableFooterViewLayout.gravity = MyMarginGravity_Vert_Center | MyMarginGravity_Horz_Fill;
     
     UILabel *label3 = [UILabel new];
     label3.text = NSLocalizedString(@"add tableFooterView", @"");
+    label3.textColor = [CFTool color:4];
+    label3.font = [CFTool font:16];
     label3.textAlignment = NSTextAlignmentCenter;
     [label3 sizeToFit];
     [tableFooterViewLayout addSubview:label3];
@@ -174,6 +178,8 @@
     UILabel *label4 = [UILabel new];
     label4.text = NSLocalizedString(@"the layoutIfNeeded is not need to call when you use frame to set layout view's size", @"");
     label4.textAlignment = NSTextAlignmentCenter;
+    label4.textColor = [CFTool color:3];
+    label4.font = [CFTool font:14];
     label4.myTopMargin = 10;
     label4.adjustsFontSizeToFitWidth = YES;
     [label4 sizeToFit];

@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "CFTool.h"
 #import "LLTest1ViewController.h"
 #import "LLTest2ViewController.h"
 #import "LLTest3ViewController.h"
@@ -87,7 +88,7 @@
                          @{@"title":NSLocalizedString(@"6.LinearLayout - Size limit & Flexed margin", @""),
                            @"class":[LLTest6ViewController class]
                            },
-                         @{@"title":NSLocalizedString(@"7.LinearLayout - Average size&spacing", @""),
+                         @{@"title":NSLocalizedString(@"7.LinearLayout - Average size&space", @""),
                            @"class":[LLTest7ViewController class]
                            },
                          @{@"title":NSLocalizedString(@"1.FrameLayout - Gravity&Fill", @""),
@@ -195,11 +196,13 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     self.title = NSLocalizedString(@"Category",@"");
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[CFTool font:15],NSForegroundColorAttributeName:[CFTool color:4]};
     
     UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 50)];
     tipLabel.text = @"如果您在模拟器中运行时看到的不是中文则请到系统设置里面将语言设置为中文(english ignore this text)";
-    tipLabel.font = [UIFont systemFontOfSize:13];
+    tipLabel.font = [CFTool font:16];
     tipLabel.numberOfLines = 0;
+    tipLabel.adjustsFontSizeToFitWidth = YES;
     self.tableView.tableHeaderView = tipLabel;
     
 }
@@ -232,7 +235,9 @@
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"test"];
     
-    cell.textLabel.font = [UIFont systemFontOfSize:14];
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.textLabel.font = [CFTool font:15];
+    cell.textLabel.textColor = [CFTool color:4];
     cell.textLabel.text = self.demoVCLists[indexPath.row][@"title"];
     return cell;
     

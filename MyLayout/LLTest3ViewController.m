@@ -8,6 +8,7 @@
 
 #import "LLTest3ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface LLTest3ViewController ()
 
@@ -78,17 +79,35 @@
 
 #pragma mark -- Layout Construction
 
+-(UILabel*)createLabel:(NSString*)title backgroundColor:(UIColor*)color
+{
+    UILabel *v = [UILabel new];
+    v.text = title;
+    v.backgroundColor = color;
+    v.adjustsFontSizeToFitWidth = YES;
+    v.font = [CFTool font:15];
+    v.layer.shadowOffset = CGSizeMake(3, 3);
+    v.layer.shadowColor = [CFTool color:4].CGColor;
+    v.layer.shadowRadius = 2;
+    v.layer.shadowOpacity = 0.3;
+    [v sizeToFit];
+    
+    return v;
+
+}
 
 //创建垂直线性布局停靠操作动作布局。
 -(void)createVertLayoutGravityActionLayout:(MyLinearLayout*)contentLayout
 {
     
     UILabel *actionTitleLabel = [UILabel new];
-    actionTitleLabel.font = [UIFont systemFontOfSize:14];
+    actionTitleLabel.font = [CFTool font:15];
     actionTitleLabel.text = NSLocalizedString(@"Vertical layout gravity control, you can click the following different button to show the effect:", @"");
+    actionTitleLabel.textColor = [CFTool color:4];
     actionTitleLabel.numberOfLines = 0;
-    actionTitleLabel.flexedHeight = YES;
     actionTitleLabel.adjustsFontSizeToFitWidth = YES;
+    actionTitleLabel.flexedHeight = YES;
+    actionTitleLabel.myTopMargin = 10;
     [contentLayout addSubview:actionTitleLabel];
     
     
@@ -102,16 +121,16 @@
     [contentLayout addSubview:actionLayout];
     
     
-    NSArray *actions = @[NSLocalizedString(@"top gravity",@""),
-                         NSLocalizedString(@"vert center gravity",@""),
-                         NSLocalizedString(@"bottom gravity",@""),
-                         NSLocalizedString(@"left gravity",@""),
-                         NSLocalizedString(@"horz center gravity",@""),
-                         NSLocalizedString(@"right gravity",@""),
+    NSArray *actions = @[NSLocalizedString(@"top",@""),
+                         NSLocalizedString(@"vert center",@""),
+                         NSLocalizedString(@"bottom",@""),
+                         NSLocalizedString(@"left",@""),
+                         NSLocalizedString(@"horz center",@""),
+                         NSLocalizedString(@"right",@""),
                          NSLocalizedString(@"horz fill",@""),
-                         NSLocalizedString(@"screen vert center gravity",@""),
-                         NSLocalizedString(@"screen horz center gravity",@""),
-                         NSLocalizedString(@"adjust view's spacing",@"")];
+                         NSLocalizedString(@"screen vert center",@""),
+                         NSLocalizedString(@"screen horz center",@""),
+                         NSLocalizedString(@"space",@"")];
     
     for (NSInteger i = 0; i < actions.count; i++)
     {
@@ -124,38 +143,24 @@
 {
     self.vertGravityLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     self.vertGravityLayout.wrapContentHeight = NO;
-    self.vertGravityLayout.backgroundColor = [UIColor grayColor];
-    self.vertGravityLayout.myHeight = 200;
+    self.vertGravityLayout.backgroundColor = [CFTool color:0];
+    self.vertGravityLayout.myHeight = 160;
     self.vertGravityLayout.myTopMargin = 10;
     self.vertGravityLayout.myLeftMargin = 20;
     self.vertGravityLayout.subviewMargin = 10; //设置每个子视图之间的间距为10
     [contentLayout addSubview:self.vertGravityLayout];
 
     
-    UILabel *v1 = [UILabel new];
-    v1.text = NSLocalizedString(@"test text1", @"");
-    v1.backgroundColor = [UIColor redColor];
-    [v1 sizeToFit];
+    UILabel *v1 = [self createLabel:NSLocalizedString(@"test text1", @"") backgroundColor:[CFTool color:5]];
     [self.vertGravityLayout addSubview:v1];
     
-    UILabel *v2 = [UILabel new];
-    v2.text = NSLocalizedString(@"test text2 test text2", @"");
-    v2.backgroundColor = [UIColor greenColor];
-    [v2 sizeToFit];
+    UILabel *v2 = [self createLabel:NSLocalizedString(@"test text2 test text2", @"") backgroundColor:[CFTool color:6]];
     [self.vertGravityLayout addSubview:v2];
     
-    
-    UILabel *v3 = [UILabel new];
-    v3.text = NSLocalizedString(@"test text3 test text3 test text3", @"");
-    v3.backgroundColor = [UIColor blueColor];
-    [v3 sizeToFit];
+    UILabel *v3 = [self createLabel:NSLocalizedString(@"test text3 test text3 test text3", @"") backgroundColor:[CFTool color:7]];
     [self.vertGravityLayout addSubview:v3];
     
-    UILabel *v4 = [UILabel new];
-    v4.text = NSLocalizedString(@"set left and right margin to determine width", @"");
-    v4.backgroundColor = [UIColor orangeColor];
-    v4.adjustsFontSizeToFitWidth = YES;
-    [v4 sizeToFit];
+    UILabel *v4 = [self createLabel:NSLocalizedString(@"set left and right margin to determine width", @"") backgroundColor:[CFTool color:8]];
     v4.myLeftMargin = 20;
     v4.myRightMargin = 30;
     [self.vertGravityLayout addSubview:v4];
@@ -168,11 +173,13 @@
 {
     
     UILabel *actionTitleLabel = [UILabel new];
-    actionTitleLabel.font = [UIFont systemFontOfSize:14];
+    actionTitleLabel.font = [CFTool font:15];
+    actionTitleLabel.textColor = [CFTool color:4];
     actionTitleLabel.text =  NSLocalizedString(@"Horizontal layout gravity control, you can click the following different button to show the effect:", @"");
+    actionTitleLabel.adjustsFontSizeToFitWidth = YES;
     actionTitleLabel.numberOfLines = 0;
     actionTitleLabel.flexedHeight = YES;
-    actionTitleLabel.adjustsFontSizeToFitWidth = YES;
+    actionTitleLabel.myTopMargin = 10;
     [contentLayout addSubview:actionTitleLabel];
 
     
@@ -185,16 +192,16 @@
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [contentLayout addSubview:actionLayout];
     
-    NSArray *actions = @[NSLocalizedString(@"left gravity",@""),
-                         NSLocalizedString(@"horz center gravity",@""),
-                         NSLocalizedString(@"right gravity",@""),
-                         NSLocalizedString(@"top gravity",@""),
-                         NSLocalizedString(@"vert center gravity",@""),
-                         NSLocalizedString(@"bottom gravity",@""),
+    NSArray *actions = @[NSLocalizedString(@"left",@""),
+                         NSLocalizedString(@"horz center",@""),
+                         NSLocalizedString(@"right",@""),
+                         NSLocalizedString(@"top",@""),
+                         NSLocalizedString(@"vert center",@""),
+                         NSLocalizedString(@"bottom",@""),
                          NSLocalizedString(@"vert fill",@""),
-                         NSLocalizedString(@"screen vert center gravity",@""),
-                         NSLocalizedString(@"screen horz center gravity",@""),
-                         NSLocalizedString(@"adjust view's spacing",@"")];
+                         NSLocalizedString(@"screen vert center",@""),
+                         NSLocalizedString(@"screen horz center",@""),
+                         NSLocalizedString(@"space",@"")];
     
     for (NSInteger i = 0; i < actions.count; i++)
     {
@@ -206,7 +213,7 @@
 -(void)createHorzGravityLayout:(MyLinearLayout*)contentLayout
 {
     self.horzGravityLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
-    self.horzGravityLayout.backgroundColor = [UIColor grayColor];
+    self.horzGravityLayout.backgroundColor = [CFTool color:0];
     self.horzGravityLayout.wrapContentWidth = NO;  //因为默认水平线性布局的宽度由子视图包裹，但这里的宽度由父布局决定的，所有这里必须设置为NO。
     self.horzGravityLayout.myHeight = 200;
     self.horzGravityLayout.myTopMargin = 10;
@@ -214,41 +221,28 @@
     self.horzGravityLayout.subviewMargin = 5;  //设置子视图之间的水平间距为5
     [contentLayout addSubview:self.horzGravityLayout];
     
-    UILabel *v1 = [UILabel new];
-    v1.text = NSLocalizedString(@"test text1", @"");
-    v1.backgroundColor = [UIColor redColor];
+    UILabel *v1 = [self createLabel:NSLocalizedString(@"test text1", @"") backgroundColor:[CFTool color:5]];
     v1.numberOfLines = 0;
     v1.flexedHeight = YES;
     v1.myWidth = 60;
-    [v1 sizeToFit];
     [self.horzGravityLayout addSubview:v1];
     
-    UILabel *v2 = [UILabel new];
-    v2.text = NSLocalizedString(@"test text2 test text2", @"");
-    v2.backgroundColor = [UIColor greenColor];
+    UILabel *v2 = [self createLabel:NSLocalizedString(@"test text2 test text2", @"") backgroundColor:[CFTool color:6]];
     v2.numberOfLines = 0;
     v2.flexedHeight = YES;
     v2.myWidth = 60;
-    [v2 sizeToFit];
     [self.horzGravityLayout addSubview:v2];
     
     
-    UILabel *v3 = [UILabel new];
-    v3.text = NSLocalizedString(@"test text3 test text3 test text3", @"");
-    v3.backgroundColor = [UIColor blueColor];
+    UILabel *v3 = [self createLabel:NSLocalizedString(@"test text3 test text3 test text3", @"") backgroundColor:[CFTool color:7]];
     v3.numberOfLines = 0;
     v3.flexedHeight = YES;
     v3.myWidth = 60;
-    [v3 sizeToFit];
     [self.horzGravityLayout addSubview:v3];
     
-    UILabel *v4 = [UILabel new];
-    v4.text = NSLocalizedString(@"set top and bottom margin to determine height", @"");
-    v4.backgroundColor = [UIColor orangeColor];
+    UILabel *v4 = [self createLabel:NSLocalizedString(@"set top and bottom margin to determine height", @"") backgroundColor:[CFTool color:8]];
     v4.numberOfLines = 0;
     v4.flexedHeight = YES;
-    v4.adjustsFontSizeToFitWidth = YES;
-    [v4 sizeToFit];
     v4.myTopMargin = 20;
     v4.myBottomMargin = 10;
     v4.myWidth = 60;
@@ -259,14 +253,15 @@
 //创建动作按钮
 -(UIButton*)createActionButton:(NSString*)title tag:(NSInteger)tag
 {
-    UIButton *actionButton = [UIButton new];
+    UIButton *actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [actionButton setTitle:title forState:UIControlStateNormal];
-    [actionButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     actionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+    actionButton.titleLabel.font = [CFTool font:14];
     actionButton.tag = tag;
     [actionButton addTarget:self action:@selector(handleGravity:) forControlEvents:UIControlEventTouchUpInside];
     actionButton.layer.borderColor = [UIColor grayColor].CGColor;
-    actionButton.layer.borderWidth = 1.0;
+    actionButton.layer.cornerRadius = 4;
+    actionButton.layer.borderWidth = 0.5;
     [actionButton sizeToFit];
     return actionButton;
 }
@@ -367,6 +362,8 @@
     topLabel.text = NSLocalizedString(@"title center in the screen", @"");
     topLabel.adjustsFontSizeToFitWidth = YES;
     topLabel.textAlignment = NSTextAlignmentCenter;
+    topLabel.textColor = [CFTool color:4];
+    topLabel.font = [CFTool font:17];
     topLabel.myLeftMargin = topLabel.myRightMargin = 10;
     [topLabel sizeToFit];
     [navigationItemLayout addSubview:topLabel];
@@ -385,6 +382,8 @@
 {
     UILabel *topLabel = [UILabel new];
     topLabel.text = NSLocalizedString(@"title not center in the screen", @"");
+    topLabel.textColor = [CFTool color:4];
+    topLabel.font = [CFTool font:17];
     topLabel.adjustsFontSizeToFitWidth = YES;
     topLabel.textAlignment = NSTextAlignmentCenter;
     [topLabel sizeToFit];

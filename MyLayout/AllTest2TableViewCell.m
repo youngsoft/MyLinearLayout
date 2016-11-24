@@ -8,6 +8,7 @@
 
 #import "AllTest2TableViewCell.h"
 
+#import "CFTool.h"
 
 
 @interface AllTest2TableViewCell()
@@ -112,7 +113,8 @@
     [userInfoLayout addSubview:userNameLayout];
     
     _nameLabel = [UILabel new];
-    _nameLabel.font = [UIFont systemFontOfSize:16];
+    _nameLabel.font = [CFTool font:17];
+    _nameLabel.textColor = [CFTool color:3];
     //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
     //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
     //您可以通过uBound方法设置尺寸的最大上边界。具体参见对uBound的方法的详细介绍。
@@ -127,8 +129,8 @@
     
     //描述部分
     _descLabel = [UILabel new];
-    _descLabel.textColor = [UIColor darkGrayColor];
-    _descLabel.font = [UIFont systemFontOfSize:13];
+    _descLabel.textColor = [CFTool color:4];
+    _descLabel.font = [CFTool font:15];
     _descLabel.adjustsFontSizeToFitWidth = YES;
     _descLabel.numberOfLines = 2;
     _descLabel.flexedHeight = YES;  //2行高度，高度根据内容确定。
@@ -138,10 +140,10 @@
     
     //右边的价格。
     _priceLabel = [UILabel new];
-    _priceLabel.textColor = [UIColor orangeColor];
+    _priceLabel.textColor = [CFTool color:4];
+    _priceLabel.font = [CFTool font:14];
     _priceLabel.textAlignment = NSTextAlignmentRight;
     _priceLabel.adjustsFontSizeToFitWidth = YES;
-    _priceLabel.font = [UIFont systemFontOfSize:14];
     //宽度最宽为100,注意到这里使用了宏MYDIMESCALEW表示会根据屏幕的宽度来对100进行缩放。这个100是按iPhone6为标准设置的。具体请参考MyDimeScale类。
     _priceLabel.widthDime.equalTo(_priceLabel.widthDime).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
     _priceLabel.myLeftMargin = 10;
@@ -173,10 +175,10 @@
     [rootLayout addSubview:_headImageView];
     
     _priceLabel = [UILabel new];
-    _priceLabel.textColor = [UIColor orangeColor];
+    _priceLabel.textColor = [CFTool color:4];
+    _priceLabel.font = [CFTool font:14];
     _priceLabel.textAlignment = NSTextAlignmentRight;
     _priceLabel.adjustsFontSizeToFitWidth = YES;
-    _priceLabel.font = [UIFont systemFontOfSize:14];
     _priceLabel.rightPos.equalTo(rootLayout.rightPos);
     _priceLabel.centerYPos.equalTo(rootLayout.centerYPos);
     //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了宏MYDIMESCALEW表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考MyDimeScale类的介绍。
@@ -185,7 +187,8 @@
 
     
     _nameLabel = [UILabel new];
-    _nameLabel.font = [UIFont systemFontOfSize:16];
+    _nameLabel.font = [CFTool font:17];
+    _nameLabel.textColor = [CFTool color:3];
     //相对布局在后续的版本中会增加对边界的限制方法来实现更加灵活的尺寸限制，这里暂时先设置为140经过测试效果最好。
     _nameLabel.widthDime.equalTo(_nameLabel.widthDime).uBound(rootLayout.widthDime, -1 * MYDIMESCALEW(140), 1);  //视图的最大宽度和父视图宽度-140。
     _nameLabel.leftPos.equalTo(_headImageView.rightPos);
@@ -205,8 +208,8 @@
 
     
     _descLabel = [UILabel new];
-    _descLabel.textColor = [UIColor darkGrayColor];
-    _descLabel.font = [UIFont systemFontOfSize:13];
+    _descLabel.textColor = [CFTool color:4];
+    _descLabel.font = [CFTool font:15];
     _descLabel.adjustsFontSizeToFitWidth = YES;
     _descLabel.numberOfLines = 2;
     _descLabel.flexedHeight = YES;  //2行高度，高度根据内容确定。
@@ -241,10 +244,10 @@
     
     
     _priceLabel = [UILabel new];
-    _priceLabel.textColor = [UIColor orangeColor];
+    _priceLabel.textColor = [CFTool color:4];
+    _priceLabel.font = [CFTool font:14];
     _priceLabel.textAlignment = NSTextAlignmentRight;
     _priceLabel.adjustsFontSizeToFitWidth = YES;
-    _priceLabel.font = [UIFont systemFontOfSize:14];
     _priceLabel.reverseFloat = YES;
     _priceLabel.myLeftMargin = 10;
     //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了宏MYDIMESCALEW表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考MyDimeScale类的介绍。
@@ -262,7 +265,8 @@
     [rootLayout addSubview:userInfoLayout];
     
     _nameLabel = [UILabel new];
-    _nameLabel.font = [UIFont systemFontOfSize:16];
+    _nameLabel.font = [CFTool font:17];
+    _nameLabel.textColor = [CFTool color:3];
     //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
     //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
     //您可以通过uBound方法设置尺寸的最大上边界。具体参见对uBound的方法的详细介绍。
@@ -276,8 +280,8 @@
     [userInfoLayout addSubview:shareImageView];
     
     _descLabel = [UILabel new];
-    _descLabel.textColor = [UIColor darkGrayColor];
-    _descLabel.font = [UIFont systemFontOfSize:13];
+    _descLabel.textColor = [CFTool color:4];
+    _descLabel.font = [CFTool font:15];
     _descLabel.adjustsFontSizeToFitWidth = YES;
     _descLabel.numberOfLines = 2;
     _descLabel.flexedHeight = YES;  //2行高度，高度根据内容确定。

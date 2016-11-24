@@ -8,6 +8,7 @@
 
 #import "FLLTest2ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface FLLTest2ViewController ()
 
@@ -53,9 +54,9 @@
 {
     UIButton *tagButton = [UIButton new];
     [tagButton setTitle:text forState:UIControlStateNormal];
+    tagButton.titleLabel.font = [CFTool font:15];
     tagButton.layer.cornerRadius = 15;
-    tagButton.backgroundColor = [UIColor colorWithRed:random()%256 / 255.0 green:random()%256 / 255.0 blue:random()%256 / 255.0 alpha:1];
-    
+    tagButton.backgroundColor = [CFTool color:random()%15];    
     //这里可以看到尺寸宽度等于自己的尺寸宽度并且再增加10，且最小是40，意思是按钮的宽度是等于自身内容的宽度再加10，但最小的宽度是40
     //如果没有这个设置，而是直接调用了sizeToFit则按钮的宽度就是内容的宽度。
     tagButton.widthDime.equalTo(tagButton.widthDime).add(10).min(40);

@@ -8,6 +8,7 @@
 
 #import "MyLayoutDef.h"
 
+#if TARGET_OS_IPHONE
 
 /**
  *专门为布局设置的简化操作类，以便在统一的地方进行布局设置
@@ -100,5 +101,6 @@
 
 @end
 
+#endif
 
 

@@ -8,6 +8,7 @@
 
 #import "RLTest3ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface RLTest3ViewController ()
 
@@ -29,17 +30,17 @@
     MyRelativeLayout *layout2 = [self createLayout2];  //子视图整体垂直居中的布局
     MyRelativeLayout *layout3 = [self createLayout3];  //子视图整体居中的布局。
    
-    layout1.backgroundColor = [UIColor redColor];
-    layout2.backgroundColor = [UIColor greenColor];
-    layout3.backgroundColor = [UIColor blueColor];
+    layout1.backgroundColor = [CFTool color:0];
+    layout2.backgroundColor = [CFTool color:0];
+    layout3.backgroundColor = [CFTool color:0];
     
     
     layout1.widthDime.equalTo(rootLayout.widthDime);
     layout2.widthDime.equalTo(rootLayout.widthDime);
     layout3.widthDime.equalTo(rootLayout.widthDime);
-    layout1.heightDime.equalTo(@[layout2.heightDime, layout3.heightDime]); //均分三个布局的高度。
-    layout2.topPos.equalTo(layout1.bottomPos);
-    layout3.topPos.equalTo(layout2.bottomPos);
+    layout1.heightDime.equalTo(@[layout2.heightDime.add(-10), layout3.heightDime]).add(-10); //均分三个布局的高度。
+    layout2.topPos.equalTo(layout1.bottomPos).offset(10);
+    layout3.topPos.equalTo(layout2.bottomPos).offset(10);
     
     
     [rootLayout addSubview:layout1];
@@ -60,6 +61,23 @@
 
 #pragma mark -- Layout Construction
 
+-(UILabel*)createLabel:(NSString*)title backgroundColor:(UIColor*)color
+{
+    UILabel *v = [UILabel new];
+    v.backgroundColor = color;
+    v.text = title;
+    v.font = [CFTool font:17];
+    [v sizeToFit];
+    v.layer.shadowOffset = CGSizeMake(3, 3);
+    v.layer.shadowColor = [CFTool color:4].CGColor;
+    v.layer.shadowRadius = 2;
+    v.layer.shadowOpacity = 0.3;
+    
+    
+    return v;
+}
+
+
 //子视图整体水平居中的布局
 -(MyRelativeLayout*)createLayout1
 {
@@ -67,20 +85,21 @@
     
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = NSLocalizedString(@"subviews horz centered in superview", @"");
+    titleLabel.font = [CFTool font:16];
+    titleLabel.textColor = [CFTool color:4];
     [titleLabel sizeToFit];
+    titleLabel.myLeftMargin = 5;
     [layout addSubview:titleLabel];
     
     
-    UIView *v1 = [UIView new];
-    v1.backgroundColor = [UIColor greenColor];
+    UIView *v1 = [self createLabel:@"" backgroundColor:[CFTool color:5]];
     v1.widthDime.equalTo(@100);
     v1.heightDime.equalTo(@50);
     v1.centerYPos.equalTo(@0);
     [layout addSubview:v1];
     
     
-    UIView *v2 = [UIView new];
-    v2.backgroundColor = [UIColor blueColor];
+    UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:6]];
     v2.widthDime.equalTo(@50);
     v2.heightDime.equalTo(@50);
     v2.centerYPos.equalTo(@0);
@@ -101,20 +120,21 @@
     
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = NSLocalizedString(@"subviews vert centered in superview", @"");
+    titleLabel.font = [CFTool font:16];
+    titleLabel.textColor = [CFTool color:4];
     [titleLabel sizeToFit];
+    titleLabel.myLeftMargin = 5;
     [layout addSubview:titleLabel];
     
     
-    UIView *v1 = [UIView new];
-    v1.backgroundColor = [UIColor redColor];
+    UIView *v1 = [self createLabel:@"" backgroundColor:[CFTool color:5]];
     v1.widthDime.equalTo(@200);
     v1.heightDime.equalTo(@50);
     v1.centerXPos.equalTo(@0);
     [layout addSubview:v1];
     
     
-    UIView *v2 = [UIView new];
-    v2.backgroundColor = [UIColor blueColor];
+    UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:6]];
     v2.widthDime.equalTo(@200);
     v2.heightDime.equalTo(@30);
     v2.centerXPos.equalTo(@0);
@@ -133,48 +153,30 @@
     
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = NSLocalizedString(@"subviews centered in superview", @"");
+    titleLabel.font = [CFTool font:16];
+    titleLabel.textColor = [CFTool color:4];
     [titleLabel sizeToFit];
+    titleLabel.myLeftMargin = 5;
     [layout addSubview:titleLabel];
     
-    UILabel *lb1up = [UILabel new];
-    lb1up.text = @"TopLeft";
-    lb1up.backgroundColor = [UIColor redColor];
-    lb1up.font = [UIFont systemFontOfSize:17];
-    [lb1up sizeToFit];
+    UILabel *lb1up = [self createLabel:@"top left" backgroundColor:[CFTool color:5]];
     [layout addSubview:lb1up];
     
-    UILabel *lb1down = [UILabel new];
-    lb1down.text = @"BottomLeft";
-    lb1down.backgroundColor = [UIColor greenColor];
-    [lb1down sizeToFit];
-    [layout addSubview:lb1down];
+    UILabel *lb1down = [self createLabel:@"bottom left" backgroundColor:[CFTool color:6]];
+     [layout addSubview:lb1down];
     
     
-    UILabel *lb2up = [UILabel new];
-    lb2up.text = @"TopCenter";
-    lb2up.backgroundColor = [UIColor redColor];
-    lb2up.font = [UIFont systemFontOfSize:12];
-    [lb2up sizeToFit];
+    UILabel *lb2up = [self createLabel:@"top center" backgroundColor:[CFTool color:7]];
     [layout addSubview:lb2up];
     
-    UILabel *lb2down = [UILabel new];
-    lb2down.text = @"Center";
-    lb2down.backgroundColor = [UIColor greenColor];
-    [lb2down sizeToFit];
+    UILabel *lb2down = [self createLabel:@"center" backgroundColor:[CFTool color:8]];
     [layout addSubview:lb2down];
     
     
-    UILabel *lb3up = [UILabel new];
-    lb3up.text = @"TopRight";
-    lb3up.backgroundColor = [UIColor redColor];
-    [lb3up sizeToFit];
+    UILabel *lb3up = [self createLabel:@"top right" backgroundColor:[CFTool color:9]];
     [layout addSubview:lb3up];
     
-    UILabel *lb3down = [UILabel new];
-    lb3down.text = @"BottomRight";
-    lb3down.backgroundColor = [UIColor greenColor];
-    lb3down.font = [UIFont systemFontOfSize:16];
-    [lb3down sizeToFit];
+    UILabel *lb3down = [self createLabel:@"bottom right" backgroundColor:[CFTool color:10]];
     [layout addSubview:lb3down];
     
     //左，中，右三组视图分别垂直居中显示，并且下面和上面间隔10

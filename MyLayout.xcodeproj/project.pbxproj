@@ -44,8 +44,7 @@
 		18D6843B1C4F421400A48BB4 /* MyFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683FD1C4F421400A48BB4 /* MyFlowLayout.m */; };
 		18D6843C1C4F421400A48BB4 /* MyFrameLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D683FF1C4F421400A48BB4 /* MyFrameLayout.m */; };
 		18D6843D1C4F421400A48BB4 /* MyBaseLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684021C4F421400A48BB4 /* MyBaseLayout.m */; };
-		18D6843E1C4F421400A48BB4 /* MyLayoutDime.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684051C4F421400A48BB4 /* MyLayoutDime.m */; };
-		18D6843F1C4F421400A48BB4 /* MyLayoutMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684091C4F421400A48BB4 /* MyLayoutMeasure.m */; };
+		18D6843E1C4F421400A48BB4 /* MyLayoutSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684051C4F421400A48BB4 /* MyLayoutSize.m */; };
 		18D684401C4F421400A48BB4 /* MyLayoutPos.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D6840B1C4F421400A48BB4 /* MyLayoutPos.m */; };
 		18D684411C4F421400A48BB4 /* MyLinearLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D6840E1C4F421400A48BB4 /* MyLinearLayout.m */; };
 		18D684421C4F421400A48BB4 /* MyMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684101C4F421400A48BB4 /* MyMaker.m */; };
@@ -68,7 +67,7 @@
 		18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684551C4F423400A48BB4 /* MyLayoutTests.m */; };
 		18DBC56A1CFB451800BD73D2 /* FOLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DBC5691CFB451800BD73D2 /* FOLTest4ViewController.m */; };
 		18DC7F551CF5510F008E5FCB /* AllTest1TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DC7F541CF5510F008E5FCB /* AllTest1TableViewCell.m */; };
-		18DF8A1B1DD83A9A009FD703 /* layoutdemo8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 18DF8A1A1DD83A9A009FD703 /* layoutdemo8.gif */; };
+		18DF8AE91DDCBF34009FD703 /* CFTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DF8AE81DDCBF34009FD703 /* CFTool.m */; };
 		18E7C5181D47A1CA00F61A3E /* PLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E7C5171D47A1CA00F61A3E /* PLTest1ViewController.m */; };
 		18E7C51B1D47BA9400F61A3E /* PLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E7C51A1D47BA9400F61A3E /* PLTest2ViewController.m */; };
 		18E8084D1B3A5D170059C410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8084C1B3A5D170059C410 /* QuartzCore.framework */; };
@@ -178,12 +177,10 @@
 		18D684011C4F421400A48BB4 /* MyBaseLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyBaseLayout.h; sourceTree = "<group>"; };
 		18D684021C4F421400A48BB4 /* MyBaseLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBaseLayout.m; sourceTree = "<group>"; };
 		18D684031C4F421400A48BB4 /* MyLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDef.h; sourceTree = "<group>"; };
-		18D684041C4F421400A48BB4 /* MyLayoutDime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDime.h; sourceTree = "<group>"; };
-		18D684051C4F421400A48BB4 /* MyLayoutDime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDime.m; sourceTree = "<group>"; };
-		18D684061C4F421400A48BB4 /* MyLayoutDimeInner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDimeInner.h; sourceTree = "<group>"; };
+		18D684041C4F421400A48BB4 /* MyLayoutSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutSize.h; sourceTree = "<group>"; };
+		18D684051C4F421400A48BB4 /* MyLayoutSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutSize.m; sourceTree = "<group>"; };
+		18D684061C4F421400A48BB4 /* MyLayoutSizeInner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutSizeInner.h; sourceTree = "<group>"; };
 		18D684071C4F421400A48BB4 /* MyLayoutInner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutInner.h; sourceTree = "<group>"; };
-		18D684081C4F421400A48BB4 /* MyLayoutMeasure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutMeasure.h; sourceTree = "<group>"; };
-		18D684091C4F421400A48BB4 /* MyLayoutMeasure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutMeasure.m; sourceTree = "<group>"; };
 		18D6840A1C4F421400A48BB4 /* MyLayoutPos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutPos.h; sourceTree = "<group>"; };
 		18D6840B1C4F421400A48BB4 /* MyLayoutPos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutPos.m; sourceTree = "<group>"; };
 		18D6840C1C4F421400A48BB4 /* MyLayoutPosInner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutPosInner.h; sourceTree = "<group>"; };
@@ -228,7 +225,8 @@
 		18DBC5691CFB451800BD73D2 /* FOLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest4ViewController.m; sourceTree = "<group>"; };
 		18DC7F531CF5510F008E5FCB /* AllTest1TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewCell.h; sourceTree = "<group>"; };
 		18DC7F541CF5510F008E5FCB /* AllTest1TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewCell.m; sourceTree = "<group>"; };
-		18DF8A1A1DD83A9A009FD703 /* layoutdemo8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo8.gif; sourceTree = "<group>"; };
+		18DF8AE71DDCBF34009FD703 /* CFTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFTool.h; sourceTree = "<group>"; };
+		18DF8AE81DDCBF34009FD703 /* CFTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFTool.m; sourceTree = "<group>"; };
 		18E7C5161D47A1CA00F61A3E /* PLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTest1ViewController.h; sourceTree = "<group>"; };
 		18E7C5171D47A1CA00F61A3E /* PLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTest1ViewController.m; sourceTree = "<group>"; };
 		18E7C5191D47BA9400F61A3E /* PLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTest2ViewController.h; sourceTree = "<group>"; };
@@ -418,6 +416,8 @@
 				18C8F1631D4DA6B800DC1FD3 /* PLTest3ViewController.m */,
 				18C8F1651D4E3E4E00DC1FD3 /* PLTest4ViewController.h */,
 				18C8F1661D4E3E4E00DC1FD3 /* PLTest4ViewController.m */,
+				18DF8AE71DDCBF34009FD703 /* CFTool.h */,
+				18DF8AE81DDCBF34009FD703 /* CFTool.m */,
 			);
 			path = MyLayout;
 			sourceTree = "<group>";
@@ -444,16 +444,14 @@
 				1871D25D1D2F5ABA00D37F55 /* MyPathLayout.h */,
 				1871D25E1D2F5ABA00D37F55 /* MyPathLayout.m */,
 				18D684071C4F421400A48BB4 /* MyLayoutInner.h */,
-				18D684041C4F421400A48BB4 /* MyLayoutDime.h */,
-				18D684061C4F421400A48BB4 /* MyLayoutDimeInner.h */,
-				18D684051C4F421400A48BB4 /* MyLayoutDime.m */,
+				18D684041C4F421400A48BB4 /* MyLayoutSize.h */,
+				18D684061C4F421400A48BB4 /* MyLayoutSizeInner.h */,
+				18D684051C4F421400A48BB4 /* MyLayoutSize.m */,
 				18D6840A1C4F421400A48BB4 /* MyLayoutPos.h */,
 				18D6840C1C4F421400A48BB4 /* MyLayoutPosInner.h */,
 				18D6840B1C4F421400A48BB4 /* MyLayoutPos.m */,
 				46D45B141C525FC400A8362C /* MyLayoutSizeClass.h */,
 				46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */,
-				18D684081C4F421400A48BB4 /* MyLayoutMeasure.h */,
-				18D684091C4F421400A48BB4 /* MyLayoutMeasure.m */,
 				18014BA31C9079DA0088133B /* MyDimeScale.h */,
 				18014BA41C9079DA0088133B /* MyDimeScale.m */,
 				18D6840F1C4F421400A48BB4 /* MyMaker.h */,
@@ -482,7 +480,6 @@
 				1888CE7F1D0BE44300968C0C /* layoutdemo3.gif */,
 				1888CE801D0BE44300968C0C /* layoutdemo2.gif */,
 				1888CE811D0BE44300968C0C /* layoutdemo1.gif */,
-				18DF8A1A1DD83A9A009FD703 /* layoutdemo8.gif */,
 				186B83D91D090DE6001CA155 /* zh-Hans.lproj */,
 				186B83CE1D08F7B9001CA155 /* Base.lproj */,
 				18D683F91C4F421400A48BB4 /* Images.xcassets */,
@@ -541,7 +538,7 @@
 				TargetAttributes = {
 					1840828C1B2C46E8003F378B = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = 9JJMH944SE;
+						DevelopmentTeam = UUR7J35L27;
 					};
 					184082A51B2C46E8003F378B = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -577,7 +574,6 @@
 				186B83DE1D090DE6001CA155 /* LaunchScreen.strings in Resources */,
 				186B83E01D094F11001CA155 /* FLLTest2ViewController.xib in Resources */,
 				186B83DF1D090DE6001CA155 /* Localizable.strings in Resources */,
-				18DF8A1B1DD83A9A009FD703 /* layoutdemo8.gif in Resources */,
 				186B83D41D08F7B9001CA155 /* LaunchScreen.xib in Resources */,
 				18D684391C4F421400A48BB4 /* Images.xcassets in Resources */,
 			);
@@ -611,7 +607,7 @@
 				18D6843D1C4F421400A48BB4 /* MyBaseLayout.m in Sources */,
 				18D684471C4F421400A48BB4 /* LLTest3ViewController.m in Sources */,
 				18DC7F551CF5510F008E5FCB /* AllTest1TableViewCell.m in Sources */,
-				18D6843E1C4F421400A48BB4 /* MyLayoutDime.m in Sources */,
+				18D6843E1C4F421400A48BB4 /* MyLayoutSize.m in Sources */,
 				18D6843C1C4F421400A48BB4 /* MyFrameLayout.m in Sources */,
 				18EA81451CFFD3E90006530A /* FOLTest5ViewController.m in Sources */,
 				18D684521C4F421400A48BB4 /* ViewController.m in Sources */,
@@ -623,6 +619,7 @@
 				18E7C51B1D47BA9400F61A3E /* PLTest2ViewController.m in Sources */,
 				18D684491C4F421400A48BB4 /* LLTest5ViewController.m in Sources */,
 				18D684331C4F421400A48BB4 /* AllTest4ViewController.m in Sources */,
+				18DF8AE91DDCBF34009FD703 /* CFTool.m in Sources */,
 				189692731CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m in Sources */,
 				18D6844E1C4F421400A48BB4 /* RLTest2ViewController.m in Sources */,
 				1890A22F1C6DD71600373B8B /* FLLTest2ViewController.m in Sources */,
@@ -650,7 +647,6 @@
 				189692761CF74EC5000A5B91 /* AllTestDataModel.m in Sources */,
 				46DB7E6B1C54B4BC001B409D /* AllTest5ViewController.m in Sources */,
 				18D6844B1C4F421400A48BB4 /* LLTest7ViewController.m in Sources */,
-				18D6843F1C4F421400A48BB4 /* MyLayoutMeasure.m in Sources */,
 				183C14631DB9DD1A00C38448 /* AllTest7ViewController.m in Sources */,
 				18EDEC811D64B70D00F8B1CD /* FOLTest6ViewController.m in Sources */,
 				181ECE641D570CA1007803BE /* YYWeakProxy.m in Sources */,
@@ -809,15 +805,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: haitao wu (B4DGT9NA35)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: haitao wu (B4DGT9NA35)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayout/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jimubox.jimustock;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jimubox.jimu1;
 				PRODUCT_NAME = MyLayout;
-				PROVISIONING_PROFILE = "0ef75381-63dd-4405-b96b-d2ff3692a229";
+				PROVISIONING_PROFILE = "4bac08b2-6788-4e38-8e3e-241ebd7fba1e";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -826,15 +822,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: haitao wu (B4DGT9NA35)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: haitao wu (B4DGT9NA35)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayout/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jimubox.jimustock;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jimubox.jimu1;
 				PRODUCT_NAME = MyLayout;
-				PROVISIONING_PROFILE = "0ef75381-63dd-4405-b96b-d2ff3692a229";
+				PROVISIONING_PROFILE = "4bac08b2-6788-4e38-8e3e-241ebd7fba1e";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

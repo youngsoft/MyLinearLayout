@@ -8,6 +8,7 @@
 
 #import "FLLTest4ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface FLLTest4ViewController ()
 
@@ -30,7 +31,7 @@
     self.view = scrollView;
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.backgroundColor = [UIColor grayColor];
+    rootLayout.backgroundColor = [CFTool color:11];
     rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
     rootLayout.wrapContentHeight = YES;
     rootLayout.subviewMargin = 10; //子视图之间的间距设置为10
@@ -80,7 +81,6 @@
     UIImageView *headerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions1"]];
     headerImageView.myTopMargin = 20;
     headerImageView.myBottomMargin = 20;
-    [headerImageView sizeToFit];
     [flowLayout addSubview:headerImageView];
     
     UIView *placeholderView1 = [UIView new]; //因为流式布局这里面每行两列，所以这里建立一个宽高为0的占位视图。我们可以在流式布局中通过使用占位视图来充满行的数量。
@@ -91,6 +91,8 @@
     //the second line: user name
     UILabel *userNameLabel = [UILabel new];
     userNameLabel.text = @"User Name:";
+    userNameLabel.textColor = [CFTool color:4];
+    userNameLabel.font = [CFTool font:15];
     [userNameLabel sizeToFit];
     [flowLayout addSubview:userNameLabel];
     
@@ -106,6 +108,8 @@
     //the third line: password
     UILabel *passwordLabel = [UILabel new];
     passwordLabel.text = @"Password:";
+    passwordLabel.textColor = [CFTool color:4];
+    passwordLabel.font = [CFTool font:15];
     passwordLabel.widthDime.lBound(userNameLabel.widthDime,0,1);  //注意这里，因为"password"的长度要小于"User name",所以我们这里设定passwordLabel的最小宽度要和userNameLabel相等。这样目的是为了让后面的输入框具有左对齐的效果。
     passwordLabel.myTopMargin = 20;  //距离上行的顶部间距为20
     [passwordLabel sizeToFit];
@@ -134,6 +138,8 @@
     //the fifth line: remember me
     UILabel *rememberLabel = [UILabel new];
     rememberLabel.text = @"Remember me:";
+    rememberLabel.textColor = [CFTool color:4];
+    rememberLabel.font = [CFTool font:15];
     rememberLabel.weight = 1;
     [rememberLabel sizeToFit];
     [flowLayout addSubview:rememberLabel];
@@ -146,7 +152,10 @@
     //the sixth line: submit button
     UIButton *submitButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [submitButton setTitle:@"Submit" forState:UIControlStateNormal];
-    submitButton.backgroundColor = [UIColor redColor];
+    submitButton.titleLabel.font = [CFTool font:15];
+    submitButton.layer.cornerRadius = 5;
+    submitButton.layer.borderColor = [CFTool color:3].CGColor;
+    submitButton.layer.borderWidth = 0.5;
     submitButton.myTopMargin = 20;
     submitButton.myHeight = 44;
     submitButton.widthDime.equalTo(flowLayout.widthDime).add(-40);  //宽度等于父视图的宽度再减去40。
@@ -163,7 +172,7 @@
 {
     //这个例子建立一个水平流式布局来
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Horz arrangedCount:3];
-    flowLayout.backgroundImage = [UIImage imageNamed:@"bk1"];
+    flowLayout.backgroundColor = [CFTool color:7];
     flowLayout.myHeight = 240;
     flowLayout.gravity = MyMarginGravity_Vert_Bottom | MyMarginGravity_Horz_Center;   //子视图整体垂直底部对齐，水平居中对齐。
     flowLayout.arrangedGravity = MyMarginGravity_Horz_Center;  //每列子视图水平居中对齐。
@@ -172,7 +181,7 @@
     
     
     //the first col
-    UIImageView *headerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image1"]];
+    UIImageView *headerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions4"]];
     headerImageView.mySize = CGSizeMake(80, 80);
     headerImageView.layer.cornerRadius = 40;
     headerImageView.layer.masksToBounds = YES;
@@ -181,7 +190,7 @@
     UIView *lineView = [UIView new];
     lineView.myWidth = 2;
     lineView.weight = 1;    //高度占用剩余空间
-    lineView.backgroundColor = [UIColor redColor];
+    lineView.backgroundColor = [CFTool color:2];
     [flowLayout addSubview:lineView];
     
     UIView *placeholderView1 = [UIView new];
@@ -189,12 +198,12 @@
     
     
     //the second，third, fourth cols
-    NSArray *images = @[@"image2", @"image3",@"p1-11", @"p1"];
+    NSArray *images = @[@"image2", @"image3",@"image3", @"image4"];
     for (int i = 0; i < 9; i++)
     {
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:images[arc4random_uniform((uint32_t)images.count)]]];
-        imageView.layer.cornerRadius = 5;
-        imageView.layer.masksToBounds = YES;
+      //  imageView.layer.cornerRadius = 5;
+       // imageView.layer.masksToBounds = YES;
         imageView.weight = 1;      //每个子视图的高度比重都是1，也就是意味着均分处理。
         imageView.myLeftMargin = 10;
         imageView.myRightMargin = 10;
@@ -218,7 +227,7 @@
 -(void)createFlowLayout3:(MyLinearLayout *)rootLayout
 {
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:0];
-    flowLayout.backgroundColor = [UIColor whiteColor];
+    flowLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:flowLayout];
    flowLayout.wrapContentHeight = YES;
     flowLayout.subviewMargin = 10;
@@ -226,34 +235,34 @@
     
     //第一行占据全部
     UIView *v1 = [UIView new];
-    v1.backgroundColor = [UIColor redColor];
+    v1.backgroundColor = [CFTool color:5];
     v1.weight = 1;
     v1.myHeight = 50;
     [flowLayout addSubview:v1];
     
     //第二行第一个固定，剩余的占据全部
     UIView *v2 = [UIView new];
-    v2.backgroundColor = [UIColor greenColor];
+    v2.backgroundColor = [CFTool color:6];
     v2.myWidth = 50;
     v2.myHeight = 50;
     [flowLayout addSubview:v2];
     
     UIView *v3 = [UIView new];
-    v3.backgroundColor = [UIColor blueColor];
+    v3.backgroundColor = [CFTool color:7];
     v3.weight = 1;
     v3.myHeight = 50;
     [flowLayout addSubview:v3];
     
     //第三行，三个子视图均分。
     UIView *v4 = [UIView new];
-    v4.backgroundColor = [UIColor orangeColor];
+    v4.backgroundColor = [CFTool color:5];
     v4.weight = 1/3.0;
     v4.widthDime.add(-20);  //因为要均分为3部分，而我们设置了水平间距subviewHorzMargin为10.所以我们这里要减去20。也就是减去2个间隔。
     v4.myHeight = 50;
     [flowLayout addSubview:v4];
     
     UIView *v5 = [UIView new];
-    v5.backgroundColor = [UIColor cyanColor];
+    v5.backgroundColor = [CFTool color:6];
     v5.weight = 1/2.0;
     v5.widthDime.add(-10); //因为剩下的要均分为2部分，而我们设置了水平间距subviewHorzMargin为10.所以我们这里要减去10。也就是减去1个间隔。
     v5.myHeight = 50;
@@ -261,7 +270,7 @@
     
     
     UIView *v6 = [UIView new];
-    v6.backgroundColor = [UIColor magentaColor];
+    v6.backgroundColor = [CFTool color:7];
     v6.weight = 1/1.0;  //最后一个占用剩余的所有空间。这里没有间距了，所以不需要再减。
     v6.myHeight = 50;
     [flowLayout addSubview:v6];

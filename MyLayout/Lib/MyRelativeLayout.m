@@ -592,7 +592,7 @@
             }
             
             CGFloat floatWidth = selfSize.width - self.leftPadding - self.rightPadding + totalAdd;
-            if (floatWidth <= 0)
+            if (/*floatWidth <= 0*/ _myCGFloatLessOrEqual(floatWidth, 0))
                 floatWidth = 0;
             
             if (totalMutil != 0)
@@ -647,7 +647,7 @@
             }
             
             CGFloat floatHeight = selfSize.height - self.topPadding - self.bottomPadding + totalAdd;
-            if (floatHeight <= 0)
+            if (/*floatHeight <= 0*/ _myCGFloatLessOrEqual(floatHeight, 0))
                 floatHeight = 0;
             
             if (totalMutil != 0)
@@ -909,7 +909,7 @@
     
     if (self.wrapContentWidth || self.wrapContentHeight)
     {
-        if (selfSize.height != maxSize.height || selfSize.width != maxSize.width)
+        if (/*selfSize.height != maxSize.height*/_myCGFloatNotEqual(selfSize.height, maxSize.height)  || /*selfSize.width != maxSize.width*/ _myCGFloatNotEqual(selfSize.width, maxSize.width))
         {
             
             if (self.wrapContentWidth)

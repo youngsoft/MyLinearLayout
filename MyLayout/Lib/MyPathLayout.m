@@ -478,9 +478,9 @@
             {
                 CGFloat oldDistance = distance;
                 distance +=  [self calcDistance:realXY with:lastXY];
-                if (distance >= viewSpace)
+                if (/*distance >= viewSpace*/ _myCGFloatGreatOrEqual(distance, viewSpace))
                 {
-                    if (distance - viewSpace <= self.distanceError)
+                    if (/*distance - viewSpace <= self.distanceError*/ _myCGFloatLessOrEqual(distance - viewSpace, self.distanceError))
                     {
                         *pLastValidArg = arg;
                         return realXY;
@@ -511,7 +511,7 @@
             startArg = arg;
             step /= 10;
         }
-        if (step <= 0.001)
+        if (/*step <= 0.001*/ _myCGFloatLessOrEqual(step, 0.001))
         {
             break;
         }
@@ -612,9 +612,9 @@
                 {
                     CGFloat oldDistance = distance;
                     distance += [self calcDistance:realXY with:lastXY];
-                    if (distance >= viewSpacing)
+                    if (/*distance >= viewSpacing*/ _myCGFloatGreatOrEqual(distance, viewSpacing) )
                     {
-                        if (distance - viewSpacing >= self.distanceError)
+                        if (/*distance - viewSpacing >= self.distanceError*/ _myCGFloatGreatOrEqual(distance - viewSpacing, self.distanceError) )
                         {
                             realXY = [self getNearestDistancePoint:arg lastXY:lastXY distance:oldDistance viewSpace:viewSpacing pLastValidArg:&lastValidArg func:func];
                         }

@@ -8,6 +8,7 @@
 
 #import "TLTest1ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface TLTest1ViewController ()
 
@@ -15,6 +16,16 @@
 
 @implementation TLTest1ViewController
 
+-(UILabel*)createLabel:(NSString*)title backgroundColor:(UIColor*)color
+{
+    UILabel *v = [UILabel new];
+    v.text = title;
+    v.font = [CFTool font:14];
+    v.textAlignment = NSTextAlignmentCenter;
+    v.backgroundColor = color;
+
+    return v;
+}
 
 -(void)loadView
 {
@@ -25,6 +36,9 @@
      这时候我们可以设置myHeight,myWidth来指定自身的高宽，我们也可以通过myLeftMargin = 0,myRightMargin = 0来让其跟父视图保持一样的宽度，但如果是这样的话还需要设置wrapContentWidth = NO. 设置高度同理。
      */
     MyTableLayout *tbll = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    tbll.backgroundColor = [CFTool color:0];
+    tbll.colSpacing = 2;
+    tbll.rowSpacing = 2;
     tbll.myLeftMargin = tbll.myRightMargin = 0;  //宽度和非布局父视图一样宽
     tbll.myTopMargin = tbll.myBottomMargin = 0;  //高度和非布局父视图一样高
     [self.view addSubview:tbll];
@@ -32,93 +46,55 @@
     
     //第一行固定高度固定宽度
     [tbll addRow:30 colSize:70];
-    [tbll viewAtRowIndex:0].backgroundColor = [UIColor colorWithWhite:0.1 alpha:1];
     
-    UILabel *colView = [UILabel new];
-    colView.text = @"Cell00";
-    colView.textAlignment = NSTextAlignmentCenter;
+    UILabel *colView = [self createLabel:@"Cell00" backgroundColor:[CFTool color:1]];
     colView.myLeftMargin = 10; //可以使用myLeftMargin,myTopMargin,myRightMargin,myBottomMargin来调整间隔
     colView.myTopMargin = 5;
     colView.myBottomMargin = 5;
     colView.myRightMargin = 40;
-    
-    colView.backgroundColor = [UIColor redColor];
     [tbll addCol:colView atRow:0];
     
-    colView = [UILabel new];
-    colView.text = @"Cell01";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
+    colView = [self createLabel:@"Cell01" backgroundColor:[CFTool color:2]];
     colView.myLeftMargin = 20;
     [tbll addCol:colView atRow:0];
     
-    colView = [UILabel new];
-    colView.text = @"Cell02";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor blueColor];
+    colView = [self createLabel:@"Cell02" backgroundColor:[CFTool color:3]];
     [tbll addCol:colView atRow:0];
     
     //第二行固定高度，均分宽度
     [tbll addRow:40 colSize:MTLSIZE_AVERAGE];
-    [tbll viewAtRowIndex:1].backgroundColor = [UIColor colorWithWhite:0.2 alpha:1];
 
     
-    colView = [UILabel new];
-    colView.text = @"Cell10";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
+    colView = [self createLabel:@"Cell10" backgroundColor:[CFTool color:1]];
     [tbll addCol:colView atRow:1];
     
-    colView = [UILabel new];
-    colView.text = @"Cell11";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
+    colView = [self createLabel:@"Cell11" backgroundColor:[CFTool color:2]];
     [tbll addCol:colView atRow:1];
     
     
-    colView = [UILabel new];
-    colView.text = @"Cell12";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor blueColor];
+    colView = [self createLabel:@"Cell12" backgroundColor:[CFTool color:3]];
     [tbll addCol:colView atRow:1];
     
-    colView = [UILabel new];
-    colView.text = @"Cell13";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor yellowColor];
+    colView = [self createLabel:@"Cell13" backgroundColor:[CFTool color:4]];
     [tbll addCol:colView atRow:1];
     
     //第三行固定高度，子视图自己决定宽度。
     [tbll addRow:30 colSize:MTLSIZE_WRAPCONTENT];
-    [tbll viewAtRowIndex:2].backgroundColor = [UIColor colorWithWhite:0.3 alpha:1];
-    colView = [UILabel new];
-    colView.text = @"Cell20";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
+    colView = [self createLabel:@"Cell20" backgroundColor:[CFTool color:1]];
     colView.myWidth = 100;
     [tbll addCol:colView atRow:2];
 
-    colView = [UILabel new];
-    colView.text = @"Cell21";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
+    colView = [self createLabel:@"Cell21" backgroundColor:[CFTool color:2]];
     colView.myWidth = 200;
     [tbll addCol:colView atRow:2];
     
     //第四行固定高度，子视图自己决定宽度。
     [tbll addRow:30 colSize:MTLSIZE_MATCHPARENT];
-    [tbll viewAtRowIndex:3].backgroundColor = [UIColor colorWithWhite:0.4 alpha:1];
-    colView = [UILabel new];
-    colView.text = @"Cell30";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
+    colView = [self createLabel:@"Cell30" backgroundColor:[CFTool color:1]];
     colView.myWidth = 80;
     [tbll addCol:colView atRow:3];
     
-    colView = [UILabel new];
-    colView.text = @"Cell31";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
+    colView = [self createLabel:@"Cell31" backgroundColor:[CFTool color:2]];
     colView.myWidth = 200;
     [tbll addCol:colView atRow:3];
     
@@ -129,42 +105,25 @@
     row4.padding = UIEdgeInsetsMake(3, 3, 3, 3);
     row4.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
     row4.topBorderLine.thick = 2;
-    row4.backgroundColor = [UIColor colorWithWhite:0.5 alpha:1];
 
-    colView = [UILabel new];
-    colView.text = @"Cell40";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
+    colView = [self createLabel:@"Cell40" backgroundColor:[CFTool color:1]];
     [tbll addCol:colView atRow:4];
     
-    colView = [UILabel new];
-    colView.text = @"Cell41";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
+    colView = [self createLabel:@"Cell41" backgroundColor:[CFTool color:2]];
     [tbll addCol:colView atRow:4];
     
     //第六行高度由子视图决定，均分宽度
     [tbll addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_AVERAGE];
-    [tbll viewAtRowIndex:5].backgroundColor = [UIColor colorWithWhite:0.6 alpha:1];
     
-    colView = [UILabel new];
-    colView.text = @"Cell50";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor redColor];
+    colView = [self createLabel:@"Cell50" backgroundColor:[CFTool color:1]];
     colView.myHeight = 80;
     [tbll addCol:colView atRow:5];
     
-    colView = [UILabel new];
-    colView.text = @"Cell51";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor greenColor];
+    colView = [self createLabel:@"Cell51" backgroundColor:[CFTool color:2]];
     colView.myHeight = 120;
     [tbll addCol:colView atRow:5];
     
-    colView = [UILabel new];
-    colView.text = @"Cell52";
-    colView.textAlignment = NSTextAlignmentCenter;
-    colView.backgroundColor = [UIColor blueColor];
+    colView = [self createLabel:@"Cell52" backgroundColor:[CFTool color:3]];
     colView.myHeight = 70;
     [tbll addCol:colView atRow:5];
 

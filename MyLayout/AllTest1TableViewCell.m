@@ -7,7 +7,7 @@
 //
 
 #import "AllTest1TableViewCell.h"
-
+#import "CFTool.h"
 
 
 @interface AllTest1TableViewCell()
@@ -113,13 +113,14 @@
     
     
     _nickNameLabel = [UILabel new];
-    _nickNameLabel.textColor = [UIColor blueColor];
-    _nickNameLabel.font = [UIFont systemFontOfSize:15];
+    _nickNameLabel.textColor = [CFTool color:3];
+    _nickNameLabel.font = [CFTool font:17];
     [messageLayout addSubview:_nickNameLabel];
     
     
     _textMessageLabel = [UILabel new];
-    _textMessageLabel.font = [UIFont systemFontOfSize:13];
+    _textMessageLabel.font = [CFTool font:15];
+    _textMessageLabel.textColor = [CFTool color:4];
     _textMessageLabel.myLeftMargin = 0;
     _textMessageLabel.myRightMargin = 0; //垂直线性布局里面如果同时设置了左右边距则能确定子视图的宽度，这里表示宽度和父视图相等。
     _textMessageLabel.numberOfLines = 0;
@@ -158,14 +159,15 @@
     
     
     _nickNameLabel = [UILabel new];
-    _nickNameLabel.textColor = [UIColor blueColor];
-    _nickNameLabel.font = [UIFont systemFontOfSize:15];
+    _nickNameLabel.textColor = [CFTool color:3];
+    _nickNameLabel.font = [CFTool font:17];
     _nickNameLabel.leftPos.equalTo(_headImageView.rightPos).offset(5);  //昵称文本的左边在头像视图的右边并偏移5个点。
     [_rootLayout addSubview:_nickNameLabel];
     
     
     _textMessageLabel = [UILabel new];
-    _textMessageLabel.font = [UIFont systemFontOfSize:13];
+    _textMessageLabel.font = [CFTool font:15];
+    _textMessageLabel.textColor = [CFTool color:4];
     _textMessageLabel.leftPos.equalTo(_headImageView.rightPos).offset(5); //文本消息的左边在头像视图的右边并偏移5个点。
     _textMessageLabel.rightPos.equalTo(_rootLayout.rightPos);    //文本消息的右边和父布局的右边对齐。上面2行代码也同时确定了文本消息的宽度。
     _textMessageLabel.topPos.equalTo(_nickNameLabel.bottomPos).offset(5); //文本消息的顶部在昵称文本的底部并偏移5个点。
@@ -208,14 +210,15 @@
     [_rootLayout addSubview:_headImageView];
     
     _nickNameLabel = [UILabel new];
-    _nickNameLabel.textColor = [UIColor lightGrayColor];
-    _nickNameLabel.font = [UIFont systemFontOfSize:13];
+    _nickNameLabel.textColor = [CFTool color:3];
+    _nickNameLabel.font = [CFTool font:17];
     _nickNameLabel.myBottomMargin = 5;  //下边保留出5个点的视图间距。
     _nickNameLabel.weight = 1;          //占用剩余宽度。
     [_rootLayout addSubview:_nickNameLabel];
     
     _textMessageLabel = [UILabel new];
-    _textMessageLabel.font = [UIFont systemFontOfSize:14];
+    _textMessageLabel.font = [CFTool font:15];
+    _textMessageLabel.textColor = [CFTool color:4];
     _textMessageLabel.weight = 1;  //占用剩余宽度
     _textMessageLabel.numberOfLines = 0;
     _textMessageLabel.flexedHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。

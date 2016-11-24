@@ -8,6 +8,7 @@
 
 #import "LLTest7ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface LLTest7ViewController ()
 
@@ -16,6 +17,17 @@
 @end
 
 @implementation LLTest7ViewController
+
+-(UIView*)createView:(UIColor*)color
+{
+    UIView *v = [UIView new];
+    v.backgroundColor = color;
+    v.layer.shadowOffset = CGSizeMake(3, 3);
+    v.layer.shadowColor = [CFTool color:4].CGColor;
+    v.layer.shadowRadius = 2;
+    v.layer.shadowOpacity = 0.3;
+    return v;
+}
 
 -(void)loadView
 {
@@ -36,9 +48,9 @@
     action1Layout.wrapContentHeight = YES;
     [rootLayout addSubview:action1Layout];
     
-    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&spacing no centered", @"") tag:100]];
-    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&spacing centered", @"") tag:200]];
-    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size,fixed spacing no centered",@"") tag:300]];
+    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&space no centered", @"") tag:100]];
+    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&space centered", @"") tag:200]];
+    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size no centered",@"") tag:300]];
     [action1Layout averageSubviews:NO withMargin:5];  //均分action1Layout中的所有子视图的宽度
 
     //创建动作布局
@@ -47,14 +59,14 @@
     action2Layout.myTopMargin = 5;
     [rootLayout addSubview:action2Layout];
     
-    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average size,fixed spacing centered",@"") tag:400]];
-    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average spacing no centered",@"") tag:500]];
-    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average spacing centered",@"") tag:600]];
+    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average size centered",@"") tag:400]];
+    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average space no centered",@"") tag:500]];
+    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average space centered",@"") tag:600]];
     [action2Layout averageSubviews:NO withMargin:5]; //均分action1Layout中的所有子视图的宽度
    
     //创建供动作测试的布局。
     self.testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    self.testLayout.backgroundColor = [UIColor grayColor];
+    self.testLayout.backgroundColor = [CFTool color:0];
     self.testLayout.gravity = MyMarginGravity_Horz_Fill;  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
     self.testLayout.wrapContentHeight = NO;
     self.testLayout.weight = 1.0;
@@ -63,18 +75,15 @@
     self.testLayout.myTopMargin = 5;
     [rootLayout addSubview:self.testLayout];
     
-    UIView *v1 = [UIView new];
-    v1.backgroundColor = [UIColor redColor];
+    UIView *v1 = [self createView:[CFTool color:5]];
     v1.myHeight = 100;
     [self.testLayout addSubview:v1];
    
-    UIView *v2 = [UIView new];
-    v2.backgroundColor = [UIColor greenColor];
+    UIView *v2 = [self createView:[CFTool color:6]];
     v2.myHeight = 50;
     [self.testLayout addSubview:v2];
 
-    UIView *v3 = [UIView new];
-    v3.backgroundColor = [UIColor blueColor];
+    UIView *v3 = [self createView:[CFTool color:7]];
     v3.myHeight = 70;
     [self.testLayout addSubview:v3];
     
@@ -104,10 +113,15 @@
     button.tag = tag;
     button.titleLabel.numberOfLines = 2;
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
+    button.titleLabel.textAlignment = NSTextAlignmentCenter;
+    button.titleLabel.font = [CFTool font:14];
     [button sizeToFit];
     button.heightDime.equalTo(button.heightDime).add(20);  //高度等于内容的高度再加20
-    button.layer.borderColor = [UIColor grayColor].CGColor;
-    button.layer.borderWidth = 1;
+    button.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    button.layer.borderWidth = 0.5;
+    button.layer.cornerRadius = 4;
+    
+    
     
     return button;
 }

@@ -8,6 +8,7 @@
 
 #import "LLTest2ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface LLTest2ViewController ()
 
@@ -119,6 +120,7 @@
     //numTitleLabel的sizeToFit确定了视图的尺寸；myLeftMargin确定了视图在x轴的位置；垂直线性布局下的子视图可以自动算出在y轴的位置。
     UILabel *numTitleLabel = [UILabel new];
     numTitleLabel.text = NSLocalizedString(@"No.:", @"");
+    numTitleLabel.font = [CFTool font:15];
     [numTitleLabel sizeToFit];
     numTitleLabel.myLeftMargin = 5;
     [contentLayout addSubview:numTitleLabel];
@@ -126,6 +128,7 @@
     //numField的myHeight确定了视图的高度；myLeftMargin,myRightMargin确定了视图的宽度和x轴的位置；myTopMargin确定了y轴上离兄弟视图偏移5.
     UITextField *numField = [UITextField new];
     numField.borderStyle = UITextBorderStyleRoundedRect;
+    numField.font = [CFTool font:15];
     numField.placeholder = NSLocalizedString(@"Input the No. here", @"");
     numField.myTopMargin = 5;
     numField.myLeftMargin = numField.myRightMargin = 0;
@@ -150,7 +153,6 @@
     
     //headImageView的sizeToFit确定了视图的尺寸；myCenterYOffset确定了在y轴垂直居中；水平线性布局下的子视图可以自动算出在x轴的位置。
     UIImageView *headImageView = [[UIImageView  alloc] initWithImage:[UIImage imageNamed:@"head1"]];
-    [headImageView sizeToFit];
     headImageView.myCenterYOffset = 0;
     [userInfoLayout addSubview:headImageView];
  
@@ -163,13 +165,15 @@
     //userNameLabel的sizeToFit确定视图的尺寸;x轴位置和父布局左对齐;y轴位置由添加到父布局中的顺序决定。
     UILabel *userNameLabel = [UILabel new];
     userNameLabel.text = NSLocalizedString(@"Name:欧阳大哥", @"");
+    userNameLabel.font = [CFTool font:15];
     [userNameLabel sizeToFit];
     [nameLayout addSubview:userNameLabel];
 
     //nickNameLabel的sizeToFit确定视图的尺寸;x轴位置和父布局左对齐;y轴位置由添加到父布局中的顺序决定。
     UILabel *nickNameLabel = [UILabel new];
     nickNameLabel.text  = NSLocalizedString(@"Nickname:醉里挑灯看键", @"");
-    nickNameLabel.textColor = [UIColor darkGrayColor];
+    nickNameLabel.textColor = [CFTool color:4];
+    nickNameLabel.font = [CFTool font:14];
     [nickNameLabel sizeToFit];
     [nameLayout addSubview:nickNameLabel];
 }
@@ -191,6 +195,7 @@
     
     UILabel *ageTitleLabel = [UILabel new];
     ageTitleLabel.text = NSLocalizedString(@"Age:", @"");
+    ageTitleLabel.font = [CFTool font:15];
     [ageTitleLabel sizeToFit];
     [ageLayout addSubview:ageTitleLabel];
     
@@ -201,12 +206,15 @@
     ageSelectLayout.subviewMargin = 10;   //里面所有子视图之间的水平间距。
     [ageLayout addSubview:ageSelectLayout];
     
-    for (NSInteger i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         UILabel *ageLabel = [UILabel new];
-        ageLabel.text = [NSString stringWithFormat:@"%ld", (i+2)*10];
+        ageLabel.text = [NSString stringWithFormat:@"%d", (i+2)*10];
         ageLabel.textAlignment  = NSTextAlignmentCenter;
-        ageLabel.backgroundColor = [UIColor redColor];
+        ageLabel.layer.cornerRadius = 15;
+        ageLabel.layer.borderColor = [CFTool color:3].CGColor;
+        ageLabel.layer.borderWidth = 0.5;
+        ageLabel.font = [CFTool font:13];
         ageLabel.myHeight = 30;
         ageLabel.weight = 1.0;   //这里面每个子视图的宽度都是比重为1，最终的宽度是均分父视图的宽度。
         [ageSelectLayout addSubview:ageLabel];
@@ -229,6 +237,7 @@
     
     UILabel *addressTitleLabel = [UILabel new];
     addressTitleLabel.text = NSLocalizedString(@"Address:", @"");
+    addressTitleLabel.font = [CFTool font:15];
     [addressTitleLabel sizeToFit];
     [addressLayout addSubview:addressTitleLabel];
     
@@ -236,6 +245,8 @@
     //addressLabel的y轴位置和父布局视图上边对齐;x轴的位置则根据添加到父布局的顺序确定；视图的宽度由weight=1表示占用父视图的剩余宽度决定；视图的高度由flexedHeight设置为YES表示高度由内容动态决定。
     UILabel *addressLabel = [UILabel new];
     addressLabel.text = NSLocalizedString(@"Winterless Building, West Dawang Road, Chaoyang district CBD, Beijing, People's Republic of China", @"");
+    addressLabel.textColor = [CFTool color:4];
+    addressLabel.font = [CFTool font:14];
     addressLabel.myLeftMargin = 10;
     addressLabel.weight = 1.0;
     addressLabel.numberOfLines = 0;
@@ -260,6 +271,7 @@
     //sexLabel, sexSwitch两个子视图在水平线性布局里面一个左一个右的原理是使用了相对间距的原因。假设某个水平线性布局的宽度是100，里面有两个子视图A，B。其中A的宽度是20，B的宽度是30。同时假设A的myRightMargin = 0.5。B的myLeftMarigin=0.5。则这时候A的右边距 = (100 - 20 - 30) * 0.5 / (0.5 + 0.5) = 25， B的左边距也是25。通过相对间距可以实现动态的视图之间的间距。
     UILabel *sexTitleLabel = [UILabel new];
     sexTitleLabel.text = NSLocalizedString(@"Sex:", @"");
+    sexTitleLabel.font = [CFTool font:15];
     [sexTitleLabel sizeToFit];
     sexTitleLabel.myCenterYOffset = 0;
     sexTitleLabel.myRightMargin = 0.5;  //线性布局中的子视图的边距如果设置为大于0小于1的值表示的是相对间距，0.5的右边距表示右边是父布局剩余空间的50%。
@@ -277,7 +289,8 @@
 {
     UILabel *shrinkLabel = [UILabel new];
     shrinkLabel.text = NSLocalizedString(@"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the flexedHeight to YES and set the numberOfLines to 0.You can try to switch different simulator or different orientation screen to see the effect.", @"");
-    shrinkLabel.backgroundColor = [UIColor redColor];
+    shrinkLabel.backgroundColor = [CFTool color:2];
+    shrinkLabel.font = [CFTool font:14];
     shrinkLabel.clipsToBounds = YES;  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
     shrinkLabel.myTopMargin = 20;
     shrinkLabel.myLeftMargin = shrinkLabel.myRightMargin = 0;
@@ -289,6 +302,7 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button addTarget:self action:@selector(handleLabelShrink:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:NSLocalizedString(@"Show&Hide the Text", @"") forState:UIControlStateNormal];
+    button.titleLabel.font = [CFTool font:16];
     button.myCenterXOffset = 0;
     button.myHeight = 60;
     [button sizeToFit];
@@ -301,6 +315,7 @@
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setTitle:NSLocalizedString(@"Show more》", @"") forState:UIControlStateNormal];
+    button.titleLabel.font = [CFTool font:16];
     [button addTarget:self action:@selector(handleHideAndShowMore:) forControlEvents:UIControlEventTouchUpInside];
     button.myTopMargin = 50;
     button.myRightMargin = 0;
@@ -308,7 +323,7 @@
     [contentLayout addSubview:button];
     
     UIView *hiddenView = [UIView new];
-    hiddenView.backgroundColor = [UIColor greenColor];
+    hiddenView.backgroundColor = [CFTool color:3];
     hiddenView.hidden = YES;
     hiddenView.myTopMargin = 20;
     hiddenView.myLeftMargin = hiddenView.myRightMargin = 0;

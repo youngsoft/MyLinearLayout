@@ -41,12 +41,16 @@
   version1.2.8
     1.修复了将布局视图加入到非布局父视图上时，而当又在布局视图上设置了transform进行坐标变换时的布局可能失效的问题。
     2.添加了在调试时使用po 视图对象.myFrame.sizeClass 或者expr -o -- 视图.myFrame.sizeClass 方法时可以输出布局设置的各种布局属性值。
+    3.修复了浮点数比较时可能会出现的精度误差而导致的布局不正确的问题。
+    4.修复了流式布局在设置了间距时且最后一行(一列)设置了比重时的尺寸计算错误的BUG。
+    5.修复了框架布局在iOS7上，如果子视图宽度等于高度，且居中对齐时的布局错误的BUG。
+ 
 
  */
 
 /*
  version1.2.7
- 1.为线性布局MyLinearLayout新增加了属性shrinkType。这个属性可以用来控制当子视图中有比重尺寸或者相对间距，而又有固定尺寸比布局视图的尺寸还大时，如果缩小这些固定尺寸视图的尺寸值的方法。(具体例子见AllTest7ViewController)
+ 1.为线性布局MyLinearLayout新增加了属性shrinkType。这个属性可以用来控制当子视图中有比重尺寸或者相对间距，而又有固定尺寸比布局视图的尺寸还大时，如何缩小这些固定尺寸视图的尺寸值的方法。(具体例子见AllTest7ViewController)
  2.为布局视图添加了rotationToDeviceOrientationBlock属性。这个block给予用户在布局视图第一次完成或者有屏幕旋转时进行界面布局处理的机会。我们可以通过这个block块来处理设备屏幕旋转而需要改动布局的场景。这个block块不像beginLayoutBlock以及endLayoutBlock那样只调用一次，而是第一次布局完成以及每次屏幕旋转并布局完成后都会调用，因此要注意循环引用的问题。(具体见例子见：LLTest6ViewController）
  3.线性布局MyLinearLayout中去掉了当子视图中有设置比重，或者子视图中设置相对间距时而又设置了布局视图的wrapContentWidth或者wrapContentHeight属性时,wrapContentWidth或者wrapContentHeight设置失效的限制。具体例子请看(AllTest7ViewController)
  4.线性布局MyLinearLayout中的水平线性布局中修复了一个当子视图中有比重尺寸或者相对间距，而又有固定尺寸比布局视图的尺寸还大时，缩小那些具有固定尺寸的子视图的宽度的一个BUG。见(AllTest3ViewController)中的左右文字拉升的情况。

@@ -24,7 +24,7 @@
     
     //this place add the ui template size dime
     [MyDimeScale setUITemplateSize:CGSizeMake(375, 667)];
-    
+        
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
@@ -34,7 +34,7 @@
     nav.navigationBar.translucent = NO;
     nav.toolbar.translucent = NO;
     self.window.rootViewController = nav;
-    
+        
     [self.window makeKeyAndVisible];
     
     return YES;

@@ -8,6 +8,7 @@
 
 #import "RLTest4ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 @interface RLTest4ViewController ()<UIScrollViewDelegate>
 
@@ -18,6 +19,18 @@
 @end
 
 @implementation RLTest4ViewController
+
+
+-(UILabel*)createLabel:(NSString*)title backgroundColor:(UIColor*)color
+{
+    UILabel *v = [UILabel new];
+    v.text = title;
+    v.backgroundColor = color;
+    v.textColor = [CFTool color:0];
+    v.font = [CFTool font:17];
+    v.numberOfLines = 0;
+    return v;
+}
 
 -(void)loadView
 {
@@ -39,41 +52,35 @@
     
     
     //添加色块。
-    UILabel *v1 = [UILabel new];
+    UILabel *v1 = [self createLabel:NSLocalizedString(@"Scroll the view please", @"") backgroundColor:[CFTool color:1]];
     v1.widthDime.equalTo(rootLayout.widthDime);
     v1.heightDime.equalTo(@80);
-    v1.text = NSLocalizedString(@"Scroll the view please", @"");
-    v1.backgroundColor = [UIColor redColor];
     [rootLayout addSubview:v1];
     
     
-    UIView *v2 = [UIView new];
+    UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:2]];
     v2.widthDime.equalTo(rootLayout.widthDime);
     v2.heightDime.equalTo(@200);
-    v2.backgroundColor = [UIColor blueColor];
     [rootLayout addSubview:v2];
     
     
-    UIView *v3 = [UIView new];
+    UIView *v3 = [self createLabel:@"" backgroundColor:[CFTool color:3]];
     v3.widthDime.equalTo(rootLayout.widthDime);
     v3.heightDime.equalTo(@800);
     v3.topPos.equalTo(v2.bottomPos);
-    v3.backgroundColor = [UIColor greenColor];
     [rootLayout addSubview:v3];
     
     
     //这里最后一个加入的子视图作为滚动时的停靠视图。。
-    UILabel *v4 = [UILabel new];
+    UILabel *v4 = [self createLabel:NSLocalizedString(@"This view will Dock to top when scroll", @"") backgroundColor:[CFTool color:4]];
     v4.widthDime.equalTo(rootLayout.widthDime);
     v4.heightDime.equalTo(@80);
     v4.topPos.equalTo(v1.bottomPos);
-    v4.backgroundColor = [UIColor orangeColor];
-    v4.numberOfLines = 0;
-    v4.text = NSLocalizedString(@"This view will Dock to top when scroll", @"");
     [rootLayout addSubview:v4];
     self.testTopDockView = v4;
     
     v2.topPos.equalTo(v4.bottomPos);
+    
     
     
 }

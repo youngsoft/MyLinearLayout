@@ -217,7 +217,8 @@
         CGRect rightCandidateRect = ((NSValue*)rightCandidateRects[i]).CGRectValue;
         
         //如果有比重则不能相等只能小于。
-        if ((hasWeight ? CGRectGetMaxX(leftCandidateRect) + width < CGRectGetMinX(rightCandidateRect) : CGRectGetMaxX(leftCandidateRect) + width <= CGRectGetMinX(rightCandidateRect)) &&
+        if ((hasWeight ? CGRectGetMaxX(leftCandidateRect) + width < CGRectGetMinX(rightCandidateRect) : _myCGFloatLessOrEqual(CGRectGetMaxX(leftCandidateRect) + width, CGRectGetMinX(rightCandidateRect))
+             ) &&
             CGRectGetMaxY(leftCandidateRect) > lastHeight)
         {
             retPoint.y = MAX(CGRectGetMinY(leftCandidateRect),lastHeight);
@@ -231,7 +232,7 @@
     
     if (retPoint.y == CGFLOAT_MAX)
     {
-        if ((hasWeight ? CGRectGetMaxX(leftCandidateRect) + width < rightBoundary : CGRectGetMaxX(leftCandidateRect) + width <= rightBoundary ) &&
+        if ((hasWeight ? CGRectGetMaxX(leftCandidateRect) + width < rightBoundary :_myCGFloatLessOrEqual(CGRectGetMaxX(leftCandidateRect) + width, rightBoundary) ) &&
             CGRectGetMaxY(leftCandidateRect) > lastHeight)
         {
             retPoint.y =  MAX(CGRectGetMinY(leftCandidateRect),lastHeight);
@@ -251,7 +252,8 @@
     {
         
         CGRect bottomCandidateRect = ((NSValue*)bottomCandidateRects[i]).CGRectValue;
-        if ((hasWeight ? CGRectGetMaxY(topCandidateRect) + height < CGRectGetMinY(bottomCandidateRect) : CGRectGetMaxY(topCandidateRect) + height <= CGRectGetMinY(bottomCandidateRect)) &&
+        if ((hasWeight ? CGRectGetMaxY(topCandidateRect) + height < CGRectGetMinY(bottomCandidateRect) :/* CGRectGetMaxY(topCandidateRect) + height <= CGRectGetMinY(bottomCandidateRect)*/
+             _myCGFloatLessOrEqual(CGRectGetMaxY(topCandidateRect) + height, CGRectGetMinY(bottomCandidateRect))) &&
             CGRectGetMaxX(topCandidateRect) > lastWidth)
         {
             retPoint.x = MAX(CGRectGetMinX(topCandidateRect),lastWidth);
@@ -265,7 +267,7 @@
     
     if (retPoint.x == CGFLOAT_MAX)
     {
-        if ((hasWeight ? CGRectGetMaxY(topCandidateRect) + height < bottomBoundary : CGRectGetMaxY(topCandidateRect) + height <= bottomBoundary ) &&
+        if ((hasWeight ? CGRectGetMaxY(topCandidateRect) + height < bottomBoundary : /*CGRectGetMaxY(topCandidateRect) + height <= bottomBoundary*/_myCGFloatLessOrEqual(CGRectGetMaxY(topCandidateRect) + height, bottomBoundary) ) &&
             CGRectGetMaxX(topCandidateRect) > lastWidth)
         {
             retPoint.x =  MAX(CGRectGetMinX(topCandidateRect),lastWidth);
@@ -286,7 +288,8 @@
     {
         
         CGRect leftCandidateRect = ((NSValue*)leftCandidateRects[i]).CGRectValue;
-        if ((hasWeight ? CGRectGetMinX(rightCandidateRect) - width > CGRectGetMaxX(leftCandidateRect) : CGRectGetMinX(rightCandidateRect) - width >= CGRectGetMaxX(leftCandidateRect)) &&
+        if ((hasWeight ? CGRectGetMinX(rightCandidateRect) - width > CGRectGetMaxX(leftCandidateRect) : /*CGRectGetMinX(rightCandidateRect) - width >= CGRectGetMaxX(leftCandidateRect)*/
+             _myCGFloatGreatOrEqual(CGRectGetMinX(rightCandidateRect) - width, CGRectGetMaxX(leftCandidateRect))) &&
             CGRectGetMaxY(rightCandidateRect) > lastHeight)
         {
             retPoint.y = MAX(CGRectGetMinY(rightCandidateRect),lastHeight);
@@ -300,7 +303,8 @@
     
     if (retPoint.y == CGFLOAT_MAX)
     {
-        if ((hasWeight ? CGRectGetMinX(rightCandidateRect) - width > leftBoundary : CGRectGetMinX(rightCandidateRect) - width >= leftBoundary) &&
+        if ((hasWeight ? CGRectGetMinX(rightCandidateRect) - width > leftBoundary : /*CGRectGetMinX(rightCandidateRect) - width >= leftBoundary*/
+             _myCGFloatGreatOrEqual(CGRectGetMinX(rightCandidateRect) - width, leftBoundary)) &&
             CGRectGetMaxY(rightCandidateRect) > lastHeight)
         {
             retPoint.y =  MAX(CGRectGetMinY(rightCandidateRect),lastHeight);
@@ -320,7 +324,8 @@
     {
         
         CGRect topCandidateRect = ((NSValue*)topCandidateRects[i]).CGRectValue;
-        if ((hasWeight ? CGRectGetMinY(bottomCandidateRect) - height > CGRectGetMaxY(topCandidateRect) : CGRectGetMinY(bottomCandidateRect) - height >= CGRectGetMaxY(topCandidateRect)) &&
+        if ((hasWeight ? CGRectGetMinY(bottomCandidateRect) - height > CGRectGetMaxY(topCandidateRect) : /*CGRectGetMinY(bottomCandidateRect) - height >= CGRectGetMaxY(topCandidateRect)*/
+             _myCGFloatGreatOrEqual(CGRectGetMinY(bottomCandidateRect) - height, CGRectGetMaxY(topCandidateRect))) &&
             CGRectGetMaxX(bottomCandidateRect) > lastWidth)
         {
             retPoint.x = MAX(CGRectGetMinX(bottomCandidateRect),lastWidth);
@@ -334,7 +339,8 @@
     
     if (retPoint.x == CGFLOAT_MAX)
     {
-        if ((hasWeight ? CGRectGetMinY(bottomCandidateRect) - height > topBoundary : CGRectGetMinY(bottomCandidateRect) - height >= topBoundary) &&
+        if ((hasWeight ? CGRectGetMinY(bottomCandidateRect) - height > topBoundary : /*CGRectGetMinY(bottomCandidateRect) - height >= topBoundary*/
+             _myCGFloatGreatOrEqual(CGRectGetMinY(bottomCandidateRect) - height, topBoundary)) &&
             CGRectGetMaxX(bottomCandidateRect) > lastWidth)
         {
             retPoint.x =  MAX(CGRectGetMinX(bottomCandidateRect),lastWidth);
@@ -357,6 +363,7 @@
     if (!hasBoundaryLimit)
         selfSize.width = CGFLOAT_MAX;
 
+    //CGFloat
     
     //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
     if (self.wrapContentWidth && hasBoundaryLimit)
@@ -609,7 +616,8 @@
             for (NSInteger i = leftCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)leftCandidateRects[i]).CGRectValue;
-                if (CGRectGetMaxY(candidateRect) <= CGRectGetMinY(cRect))
+                if (/*CGRectGetMaxY(candidateRect) <= CGRectGetMinY(cRect)*/
+                    _myCGFloatLessOrEqual(CGRectGetMaxY(candidateRect), CGRectGetMinY(cRect)))
                     [leftCandidateRects removeObjectAtIndex:i];
             }
 
@@ -718,7 +726,8 @@
             for (NSInteger i = leftCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)leftCandidateRects[i]).CGRectValue;
-                if (CGRectGetMaxY(candidateRect) <= CGRectGetMaxY(cRect))
+                if (/*CGRectGetMaxY(candidateRect) <= CGRectGetMaxY(cRect)*/
+                    _myCGFloatLessOrEqual(CGRectGetMaxY(candidateRect), CGRectGetMaxY(cRect)))
                     [leftCandidateRects removeObjectAtIndex:i];
             }
             
@@ -726,7 +735,8 @@
             for (NSInteger i = rightCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)rightCandidateRects[i]).CGRectValue;
-                if (CGRectGetMaxY(candidateRect) <= CGRectGetMinY(cRect))
+                if (/*CGRectGetMaxY(candidateRect) <= CGRectGetMinY(cRect)*/
+                    _myCGFloatLessOrEqual(CGRectGetMaxY(candidateRect), CGRectGetMinY(cRect)))
                     [rightCandidateRects removeObjectAtIndex:i];
             }
             
@@ -1037,7 +1047,8 @@
             for (NSInteger i = bottomCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)bottomCandidateRects[i]).CGRectValue;
-                if (CGRectGetMaxX(candidateRect) <= CGRectGetMaxX(cRect))
+                if (/*CGRectGetMaxX(candidateRect) <= CGRectGetMaxX(cRect)*/
+                    _myCGFloatLessOrEqual(CGRectGetMaxX(candidateRect), CGRectGetMaxX(cRect)))
                     [bottomCandidateRects removeObjectAtIndex:i];
             }
             
@@ -1045,7 +1056,8 @@
             for (NSInteger i = topCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)topCandidateRects[i]).CGRectValue;
-                if (CGRectGetMaxX(candidateRect) <= CGRectGetMinX(cRect))
+                if (/*CGRectGetMaxX(candidateRect) <= CGRectGetMinX(cRect)*/
+                    _myCGFloatLessOrEqual(CGRectGetMaxX(candidateRect), CGRectGetMinX(cRect)))
                     [topCandidateRects removeObjectAtIndex:i];
             }
             
@@ -1146,7 +1158,8 @@
             for (NSInteger i = topCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)topCandidateRects[i]).CGRectValue;
-                if (CGRectGetMaxX(candidateRect) <= CGRectGetMaxX(cRect))
+                if (/*CGRectGetMaxX(candidateRect) <= CGRectGetMaxX(cRect)*/
+                    _myCGFloatLessOrEqual(CGRectGetMaxX(candidateRect), CGRectGetMaxX(cRect)))
                     [topCandidateRects removeObjectAtIndex:i];
             }
             
@@ -1154,7 +1167,8 @@
             for (NSInteger i = bottomCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)bottomCandidateRects[i]).CGRectValue;
-                if (CGRectGetMaxX(candidateRect) <= CGRectGetMinX(cRect))
+                if (/*CGRectGetMaxX(candidateRect) <= CGRectGetMinX(cRect)*/
+                    _myCGFloatLessOrEqual(CGRectGetMaxX(candidateRect), CGRectGetMinX(cRect)))
                     [bottomCandidateRects removeObjectAtIndex:i];
             }
 

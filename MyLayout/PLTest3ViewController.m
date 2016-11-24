@@ -8,6 +8,7 @@
 
 #import "PLTest3ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 #pragma mark -- PLTest3View
 
@@ -39,11 +40,11 @@
         _circleView.widthDime.equalTo(@60);
         _circleView.heightDime.equalTo(@60);
         _circleView.layer.cornerRadius = 30;
-        _circleView.backgroundColor = [UIColor lightGrayColor];
+        _circleView.backgroundColor = [CFTool color:2];
         _circleView.coordinateSetting.origin = CGPointMake(0.5, 0.5);
         _circleView.polarEquation = ^(CGFloat angle)
         {
-            return 30.0;
+            return (CGFloat)30.0;
         };
         
         [self addSubview:_circleView];
@@ -54,8 +55,10 @@
         numLabel.heightDime.equalTo(@15);
         numLabel.layer.cornerRadius = 7.5;
         numLabel.backgroundColor = [UIColor whiteColor];
+        numLabel.font = [CFTool font:12];
+        numLabel.textColor = [CFTool color:4];
         numLabel.clipsToBounds = YES;
-        numLabel.text = [NSString stringWithFormat:@"%ld",index];
+        numLabel.text = [NSString stringWithFormat:@"%ld",(long)index];
         numLabel.textAlignment = NSTextAlignmentCenter;
         [_circleView addSubview:numLabel];
 
@@ -70,7 +73,8 @@
         
         UILabel *titleLabel = [UILabel new];
         titleLabel.text = title;
-        titleLabel.textColor = [UIColor darkTextColor];
+        titleLabel.textColor = [CFTool color:4];
+        titleLabel.font = [CFTool font:15];
         [titleLabel sizeToFit];
         titleLabel.centerXPos.equalTo(_circleView.centerXPos);
         titleLabel.topPos.equalTo(_circleView.bottomPos).offset(10);
@@ -119,6 +123,7 @@
     [centerButton setTitle:@"Click me" forState:UIControlStateNormal];
     [centerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     centerButton.backgroundColor = [UIColor colorWithRed:0xA3/255.0 green:0x88/255.0 blue:0xC1/255.0 alpha:1];
+    centerButton.titleLabel.font = [CFTool font:20];
     centerButton.layer.borderWidth = 5;
     centerButton.layer.borderColor = [UIColor whiteColor].CGColor;
     centerButton.widthDime.equalTo(_pathLayout.widthDime).multiply(0.5).add(-30);  //宽度是父视图宽度的一半再减去30

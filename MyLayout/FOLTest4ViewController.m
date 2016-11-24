@@ -8,7 +8,7 @@
 
 #import "FOLTest4ViewController.h"
 #import "MyLayout.h"
-
+#import "CFTool.h"
 
 static CGFloat sTagHeight = 40;
 static CGFloat sTagWidth = 70;
@@ -144,7 +144,7 @@ static CGFloat sTagWidth = 70;
     
     //添加数据内容布局
     self.contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    self.contentLayout.backgroundColor = [UIColor lightGrayColor];
+    self.contentLayout.backgroundColor = [CFTool color:0];
     self.contentLayout.gravity = MyMarginGravity_Horz_Fill;
     self.contentLayout.subviewMargin = 10;
     self.contentLayout.padding = UIEdgeInsetsMake(10, 0, 10, 0);
@@ -189,6 +189,8 @@ static CGFloat sTagWidth = 70;
         //添加标题文本。
         UILabel *titleLabel = [UILabel new];
         titleLabel.text = dict[@"title"];
+        titleLabel.textColor = [CFTool color:4];
+        titleLabel.font = [CFTool font:16];
         titleLabel.weight = 1;  //标题部分占据全部的宽度，独占一行。所以
         titleLabel.myBottomMargin = 5; //设置底部边距，这样下面的内容都和这个视图距离5个点。
         [titleLabel sizeToFit];
@@ -272,6 +274,8 @@ static CGFloat sTagWidth = 70;
         //添加标题文本。
         UILabel *titleLabel = [UILabel new];
         titleLabel.text = dict[@"title"];
+        titleLabel.textColor = [CFTool color:4];
+        titleLabel.font = [CFTool font:16];
         titleLabel.weight = 1;  //标题部分占据全部的宽度，独占一行。所以
         titleLabel.myBottomMargin = 5; //设置底部边距，这样下面的内容都和这个视图距离5个点。
         [titleLabel sizeToFit];
@@ -334,17 +338,19 @@ static CGFloat sTagWidth = 70;
     actionLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
     
     
-    NSArray *actions = @[NSLocalizedString(@"flexed width, fixed spacing", @""),
-                         NSLocalizedString(@"fixed width, flexed spacing", @"")
+    NSArray *actions = @[NSLocalizedString(@"flexed width, fixed space", @""),
+                         NSLocalizedString(@"fixed width, flexed space", @"")
                          ];
     for (NSInteger  i = 0; i < actions.count; i++)
     {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+        UIButton *button = [UIButton new];
         [button setTitle:actions[i] forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont systemFontOfSize:14];
+        [button setTitleColor:[CFTool color:7] forState:UIControlStateNormal];
+        [button setTitleColor:[CFTool color:2] forState:UIControlStateSelected];
+        button.titleLabel.font = [CFTool font:14];
         button.layer.cornerRadius = 5;
         button.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        button.layer.borderWidth = 1;
+        button.layer.borderWidth = 0.5;
         button.myHeight = 44;
         button.widthDime.equalTo(actionLayout.widthDime).multiply(1.0/actions.count).add(-2.5);  //宽度均分,这里减去2.5是因为有视图之间的间距为5
         button.tag = i + 100;
@@ -363,7 +369,7 @@ static CGFloat sTagWidth = 70;
     sectionLayout.wrapContentHeight = NO;
     sectionLayout.layer.cornerRadius = 5;
     sectionLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    sectionLayout.layer.borderWidth = 1;
+    sectionLayout.layer.borderWidth = 0.5;
     sectionLayout.gravity = MyMarginGravity_Center;
     [sectionLayout setTarget:self action:@selector(handleSectionViewTap:)];
 
@@ -388,11 +394,12 @@ static CGFloat sTagWidth = 70;
 {
     UIButton *tagButton = [UIButton new];
     [tagButton setTitle:title forState:UIControlStateNormal];
-    [tagButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [tagButton setTitleColor:[CFTool color:9] forState:UIControlStateNormal];
     tagButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+    tagButton.titleLabel.font = [CFTool font:14];
     tagButton.layer.cornerRadius = 20;
     tagButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    tagButton.layer.borderWidth = 1;
+    tagButton.layer.borderWidth = 0.5;
     [tagButton addTarget:self action:@selector(handleTagViewTap:) forControlEvents:UIControlEventTouchUpInside];
 
     return tagButton;
@@ -431,15 +438,15 @@ static CGFloat sTagWidth = 70;
     
     if (sender.tag == 100)
     {
-        sender.backgroundColor=[UIColor redColor];
-        [sender.superview viewWithTag:101].backgroundColor = [UIColor clearColor];
+        sender.selected = YES;
+        ((UIButton*)[sender.superview viewWithTag:101]).selected = NO;
         
         [self style1Layout:self.contentLayout];
     }
     else
     {
-        sender.backgroundColor=[UIColor redColor];
-        [sender.superview viewWithTag:100].backgroundColor = [UIColor clearColor];
+        sender.selected = YES;
+        ((UIButton*)[sender.superview viewWithTag:100]).selected = NO;
 
         [self style2Layout:self.contentLayout];
     }

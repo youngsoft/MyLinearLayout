@@ -105,6 +105,8 @@
     {
         
         pRect->size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:pRect->size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:pRect->size selfLayoutSize:selfSize];
+    
+        [self horzGravity:horz selfSize:selfSize sbv:sbv rect:pRect];
         
     }
     
@@ -119,6 +121,9 @@
         
         pRect->size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
         
+        [self vertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
+
+
     }
 
     

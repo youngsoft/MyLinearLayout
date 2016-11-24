@@ -8,21 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
-#if TARGET_OS_IPHONE
+//#if TARGET_OS_IPHONE
 
     #import <UIKit/UIKit.h>
- //   #define MY_View UIView
-  //  #define MY_EdgeInsets UIEdgeInsets
+
+//#elif TARGET_OS_MAC
+
+//#import <AppKit/AppKit.h>
 
 
-#elif TARGET_OS_MAC
+//   #define UIView NSView
+//   #define UIEdgeInsets NSEdgeInsets
+//   #define UIColor NSColor
+//   #define UIImage NSImage
 
-   #define UIView NSView
-   #define UIEdgeInsets NSEdgeInsets
-   #define UIColor NSColor
-   #define UIImage NSImage
-
-#endif
+//#endif
 
 
 
