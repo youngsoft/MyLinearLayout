@@ -19,7 +19,7 @@
 
 -(void)loadView
 {
-    
+
     /*
       一个视图可以通过对frame的设置来完成其在父视图中的布局。这种方法的缺点是要明确的指出视图所在的位置origin和视图所在的尺寸size，而且在代码中会出现大量的常数，以及需要进行大量的计算。MyLayout的出现就是为了解决布局时的大量常数的使用，以及大量的计算，以及自动适配的问题。需要明确的是用MyLayout进行布局时并不是不要指定视图的位置和尺寸，而是可以通过一些特定的上下文来省略或者隐式的指定视图的位置和尺寸。因此不管何种布局方式，视图布局时都必须要指定视图的位置和尺寸。
      */
@@ -42,9 +42,9 @@
     /*
      vertLayout是垂直布局下的垂直布局子视图，因此位置部分的y轴部分会根据添加的先后顺序确定；x轴部分则是根据myLeftMargin=0表示左边和父视图保持一致而确定；宽度则是根据同时设置了左右边距而确定(注意！垂直线性布局里面的子视图同时设置左右边距才能决定宽度，而同时设置上下边距是不能决定高度。同理水平线性布局里面的子视图同时设置上下边距才能决定高度，而同时设置左右边距是不能决定宽度的。)；高度则因为vertLayout是垂直线性布局默认wrapContentHeight=YES，也就是说高度由里面的子视图决定的，所以高度也就是确定的。
      */
- //   MyLinearLayout *vertLayout = [self createVertSubviewLayout];
- //   vertLayout.myLeftMargin = vertLayout.myRightMargin = 0;  //对于垂直线性布局的子视图来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
- //   [rootLayout addSubview:vertLayout];
+    MyLinearLayout *vertLayout = [self createVertSubviewLayout];
+    vertLayout.myLeftMargin = vertLayout.myRightMargin = 0;  //对于垂直线性布局的子视图来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
+    [rootLayout addSubview:vertLayout];
     
 
     
@@ -55,10 +55,10 @@
     /*
      horzLayout是垂直布局下的水平布局子视图，因此位置部分的y轴部分会根据添加的先后顺序确定；x轴部分则如果没有设置则默认是和父视图左对齐；宽度则因为水平线性布局在建立时默认wrapContentWidth=YES,也就是说宽度由里面的子视图决定的，所以宽度也就是确定的；高度则由weight设置为1确定的，表示其高度将占用整个垂直线性布局父视图的剩余高度，具体weight属性的意义参考类库中的属性介绍。
      */
- //   MyLinearLayout *horzLayout = [self createHorzSubviewLayout];
- //   horzLayout.myLeftMargin = horzLayout.myRightMargin = 0;  //对于垂直线性布局的子视图来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
- //   horzLayout.weight = 1.0;     //高度占用父视图的剩余高度
-  //  [rootLayout addSubview:horzLayout];
+    MyLinearLayout *horzLayout = [self createHorzSubviewLayout];
+    horzLayout.myLeftMargin = horzLayout.myRightMargin = 0;  //对于垂直线性布局的子视图来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
+    horzLayout.weight = 1.0;     //高度占用父视图的剩余高度
+    [rootLayout addSubview:horzLayout];
     
 }
 

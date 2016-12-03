@@ -94,6 +94,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 
 
 ### 线性布局MyLinearLayout
+> 等价于iOS的UIStackView和android的LinearLayout布局。
 
 线性布局是一种里面的子视图按添加的顺序从上到下或者从左到右依次排列的单列(单行)布局视图，因此里面的子视图是通过添加的顺序建立约束和依赖关系的。 子视图从上到下依次排列的线性布局视图称为垂直线性布局视图，而子视图从左到右依次排列的线性布局视图则称为水平线性布局。
 
@@ -102,35 +103,48 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 示例代码:
 
 ```objective-c
-MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-rootLayout.wrapContentWidth = YES;
-rootLayout.subviewMargin = 10;
-
-UIView *A = [UIView new];
-A.myLeftMargin = A.myRightMargin = 5;
-A.myHeight = 40;
-[rootLayout addSubview:A];
-
-UIView *B = [UIView new];
-B.myLeftMargin = 20;
-B.myWidth = B.myHeight = 40;
-[rootLayout addSubview:B];
-
-UIView *C = [UIView new];
-C.myRightMargin = 40;
-C.myWidth = 50;
-C.myHeight = 40;
-[rootLayout addSubview:C];
-
-UIView *D = [UIView new];
-D.myLeftMargin = D.myRightMargin = 10;
-D.myHeight = 40;
-[rootLayout addSubview:D];
+-(void)loadView
+{
+    [super loadView];
+    
+    MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    S.myWidth = 120;
+    S.subviewMargin = 10;
+    
+    UIView *A = [UIView new];
+    A.myLeftMargin = A.myRightMargin = 5;
+    A.myHeight = 40;
+    [S addSubview:A];
+    
+    UIView *B = [UIView new];
+    B.myLeftMargin = 20;
+    B.myWidth = B.myHeight = 40;
+    [S addSubview:B];
+    
+    UIView *C = [UIView new];
+    C.myRightMargin = 40;
+    C.myWidth = 50;
+    C.myHeight = 40;
+    [S addSubview:C];
+    
+    UIView *D = [UIView new];
+    D.myLeftMargin = D.myRightMargin = 10;
+    D.myHeight = 40;
+    [S addSubview:D];
+    
+    [self.view addSubview:S];
+    S.backgroundColor = [UIColor redColor];
+    A.backgroundColor = [UIColor greenColor];
+    B.backgroundColor = [UIColor blueColor];
+    C.backgroundColor = [UIColor orangeColor];
+    D.backgroundColor = [UIColor cyanColor];
+ }
 
 ```
 
 
 ### 相对布局MyRelativeLayout
+> 等价于iOS的AutoLayout 和 Android的RelativeLayout布局。
 
 相对布局是一种里面的子视图通过相互之间的约束和依赖来进行布局和定位的布局视图。相对布局里面的子视图的布局位置和添加的顺序无关，而是通过设置子视图的相对依赖关系来进行定位和布局的。
 
@@ -139,48 +153,65 @@ D.myHeight = 40;
 示例代码:
 
 ```objective-c
-MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-rootLayout.wrapContentWidth = YES;
-rootLayout.wrapContentHeight = YES;
-
-UIView *A = [UIView new];
-A.leftPos.equalTo(@20)
-A.topPos.equalTo(@20);
-A.widthDime.equalTo(@40);
-A.heightDime.equalTo(A.widthDime);
-[rootLayout addSubview:A];
-
-UIView *B = [UIView new];
-B.leftPos.equalTo(A.centerXPos);
-B.topPos.equalTo(A.bottomPos);
-B.widthDime.equalTo(@60);
-B.heightDime.equalTo(A.heightDime);
-[rootLayout addSubview:B];
-
-UIView *C = [UIView new];
-C.leftPos.equalTo(B.rightPos);
-C.widthDime.equalTo(@40);
-C.heightDime.equalTo(B.heightDime).multiply(0.5);
-[rootLayout addSubview:C];
-
-UIView *D = [UIView new];
-D.bottomPos.equalTo(C.topPos);
-D.rightPos.equalTo(@20);
-D.heightDime.equalTo(A.heightDime);
-D.widthDime.equalTo(D.heightDime);
-[rootLayout addSubview:D];
-
-UIView *E = [UIView new];
-E.centerYPos.equalTo(@0);
-E.heightDime.equalTo(@40);
-E.widthDime.equalTo(rootLayout.widthDime);
-[rootLayout addSubview:E];
-//...F,G
+-(void)loadView
+{
+    [super loadView];
+    
+    MyRelativeLayout *S = [MyRelativeLayout new];
+    S.widthDime.equalTo(@170);
+    S.heightDime.equalTo(@280);
+    
+    UIView *A = [UIView new];
+    A.leftPos.equalTo(@20);
+    A.topPos.equalTo(@20);
+    A.widthDime.equalTo(@40);
+    A.heightDime.equalTo(A.widthDime);
+    [S addSubview:A];
+    
+    UIView *B = [UIView new];
+    B.leftPos.equalTo(A.centerXPos);
+    B.topPos.equalTo(A.bottomPos).offset(10);
+    B.widthDime.equalTo(@60);
+    B.heightDime.equalTo(A.heightDime);
+    [S addSubview:B];
+    
+    UIView *C = [UIView new];
+    C.leftPos.equalTo(B.rightPos).offset(10);
+    C.bottomPos.equalTo(B.bottomPos);
+    C.widthDime.equalTo(@40);
+    C.heightDime.equalTo(B.heightDime).multiply(0.5);
+    [S addSubview:C];
+    
+    UIView *D = [UIView new];
+    D.bottomPos.equalTo(C.topPos).offset(10);
+    D.rightPos.equalTo(@15);
+    D.heightDime.equalTo(A.heightDime);
+    D.widthDime.equalTo(D.heightDime);
+    [S addSubview:D];
+    
+    UIView *E = [UIView new];
+    E.centerYPos.equalTo(@0);
+    E.centerXPos.equalTo(@0);
+    E.heightDime.equalTo(@40);
+    E.widthDime.equalTo(S.widthDime).add(-20);
+    [S addSubview:E];
+    //.. F, G
+    
+    [self.view addSubview:S];
+    S.backgroundColor = [UIColor redColor];
+    A.backgroundColor = [UIColor greenColor];
+    B.backgroundColor = [UIColor blueColor];
+    C.backgroundColor = [UIColor orangeColor];
+    D.backgroundColor = [UIColor cyanColor];
+    E.backgroundColor = [UIColor magentaColor];
+}
 
 ```
 
 
 ### 框架布局MyFrameLayout
+> 等价于Android的FrameLayout布局。
+
 
 框架布局是一种里面的子视图停靠在父视图特定方位并且可以重叠的布局视图。框架布局里面的子视图的布局位置和添加的顺序无关，只跟父视图建立布局约束依赖关系。框架布局将垂直方向上分为上、中、下三个方位，而水平方向上则分为左、中、右三个方位，任何一个子视图都只能定位在垂直方向和水平方向上的一个方位上。
 
@@ -189,35 +220,49 @@ E.widthDime.equalTo(rootLayout.widthDime);
 示例代码:
 
 ```objective-c
-  MyFrameLayout *rootLayout = [MyFrameLayout new];
-  rootLayout.mySize = CGSizeMake(500,500);
-  
-  UIView *A = [UIView new];
-  A.mySize = CGSizeMake(40,40);
-  A.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Top;
-  [rootLayout addSubview:A];
-  
-  UIView *B = [UIView new];
-  B.mySize = CGSizeMake(40,40);
-  B.marginGravity = MyMarginGravity_Horz_Right | MyMarginGravity_Vert_Top;
-  [rootLayout addSubview:B];
-  
-  UIView *C = [UIView new];
-  C.mySize = CGSizeMake(40,40);
-  C.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Center;
-  [rootLayout addSubview:C];
-
-  UIView *D = [UIView new];
-  D.mySize = CGSizeMake(40,40);
-  D.marginGravity = MyMarginGravity_Horz_Center | MyMarginGravity_Vert_Center;
-  [rootLayout addSubview:D];
-  
-  //..E，F,G
+ -(void)loadView
+{
+    [super loadView];
+    
+    MyFrameLayout *S = [MyFrameLayout new];
+    S.mySize = CGSizeMake(320,500);
+    
+    UIView *A = [UIView new];
+    A.mySize = CGSizeMake(40,40);
+    A.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Top;
+    [S addSubview:A];
+    
+    UIView *B = [UIView new];
+    B.mySize = CGSizeMake(40,40);
+    B.marginGravity = MyMarginGravity_Horz_Right | MyMarginGravity_Vert_Top;
+    [S addSubview:B];
+    
+    UIView *C = [UIView new];
+    C.mySize = CGSizeMake(40,40);
+    C.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Center;
+    [S addSubview:C];
+    
+    UIView *D = [UIView new];
+    D.mySize = CGSizeMake(40,40);
+    D.marginGravity = MyMarginGravity_Horz_Center | MyMarginGravity_Vert_Center;
+    [S addSubview:D];
+    
+    //..E，F,G
+    
+    [self.view addSubview:S];
+    S.backgroundColor = [UIColor redColor];
+    A.backgroundColor = [UIColor greenColor];
+    B.backgroundColor = [UIColor blueColor];
+    C.backgroundColor = [UIColor orangeColor];
+    D.backgroundColor = [UIColor cyanColor];  
+  }
   
 ```
 
 
 ### 表格布局MyTableLayout
+> 等价于Android的TableLayout布局和HTML的table元素。
+
 
 表格布局是一种里面的子视图可以像表格一样多行多列排列的布局视图。子视图添加到表格布局视图前必须先要建立并添加行视图，然后再将子视图添加到行视图里面。如果行视图在表格布局里面是从上到下排列的则表格布局为垂直表格布局，垂直表格布局里面的子视图在行视图里面是从左到右排列的；如果行视图在表格布局里面是从左到右排列的则表格布局为水平表格布局，水平表格布局里面的子视图在行视图里面是从上到下排列的。
 
@@ -226,36 +271,53 @@ E.widthDime.equalTo(rootLayout.widthDime);
 示例代码:
 
 ```objective-c
-  MyTableLayout *rootLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-  rootLayout.myWidth = 500;
-  
-  [rootLayout addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_MATCHPARENT];
-  
-  UIView *A = [UIView new];
-  A.mySize = CGSizeMake(50,40);
-  [rootLayout addSubview:A];
-  
-  UIView *B = [UIView new];
-  B.mySize = CGSizeMake(100,40);
-  [rootLayout addSubview:B];
-  
-  UIView *C = [UIView new];
-  C.mySize = CGSizeMake(30,40);
-  [rootLayout addSubview:C];
-  
-  [rootLayout addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_MATCHPARENT];
-  
-   UIView *D = [UIView new];
-  D.mySize = CGSizeMake(180,40);
-  [rootLayout addSubview:D];
-  
-  //...E,F  
+  -(void)loadView
+{
+    [super loadView];
+    
+    MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    S.wrapContentWidth = YES;
+    S.rowSpacing = 10;
+    S.colSpacing = 10;
+    
+    [S addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_WRAPCONTENT];
+    
+    UIView *A = [UIView new];
+    A.mySize = CGSizeMake(50,40);
+    [S addSubview:A];
+    
+    UIView *B = [UIView new];
+    B.mySize = CGSizeMake(100,40);
+    [S addSubview:B];
+    
+    UIView *C = [UIView new];
+    C.mySize = CGSizeMake(30,40);
+    [S addSubview:C];
+    
+    [S addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_WRAPCONTENT];
+    
+    UIView *D = [UIView new];
+    D.mySize = CGSizeMake(200,40);
+    [S addSubview:D];
+    
+    //...E,F  
+    
+    
+    [self.view addSubview:S];
+    S.backgroundColor = [UIColor redColor];
+    A.backgroundColor = [UIColor greenColor];
+    B.backgroundColor = [UIColor blueColor];
+    C.backgroundColor = [UIColor orangeColor];
+    D.backgroundColor = [UIColor cyanColor];
+}  
   
   
 ```
 
 
 ### 流式布局MyFlowLayout
+> 等价于CSS3的flex-box。
+
 
 流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一行再重新排列的多行展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，而换行的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些子视图有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
 
@@ -264,18 +326,33 @@ E.widthDime.equalTo(rootLayout.widthDime);
 示例代码:
 
 ```objective-c
-   MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:4];
-   rootLayout.wrapContentHeight = YES;
-   rootLayout.myWidth = 300;
-   rootLayout.averageArrange = YES;
-   rootLayout.subviewMargin = 10;
    
-   for (int i = 0; i < 10; i++)
-   {
-       UIView *A = [UIView new];
-       A.heightDime.equalTo(A.widhtDime);
-       [rootLayout addSubview:A];
-   }
+  -(void)loadView
+{
+    [super loadView];
+    
+    MyFlowLayout *S = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:4];
+    S.wrapContentHeight = YES;
+    S.myWidth = 300;
+    S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    S.gravity = MyMarginGravity_Horz_Fill;
+    S.subviewMargin = 10;
+    
+    for (int i = 0; i < 10; i++)
+    {
+        UIView *A = [UIView new];
+        A.heightDime.equalTo(A.widthDime);
+        [S addSubview:A];
+        
+        A.backgroundColor = [UIColor greenColor];
+
+    }
+    
+    
+    [self.view addSubview:S];
+    S.backgroundColor = [UIColor redColor];
+}
+
    
    
 
@@ -284,6 +361,7 @@ E.widthDime.equalTo(rootLayout.widthDime);
 
 	
 ### 浮动布局MyFloatLayout
+> 等价于css中的float定位。
 
 浮动布局是一种里面的子视图按照约定的方向浮动停靠，当尺寸不足以被容纳时会自动寻找最佳的位置进行浮动停靠的布局视图。浮动布局的理念源于HTML/CSS中的浮动定位技术,因此浮动布局可以专门用来实现那些不规则布局或者图文环绕的布局。根据浮动的方向不同，浮动布局可以分为左右浮动布局和上下浮动布局。
 
@@ -292,34 +370,51 @@ E.widthDime.equalTo(rootLayout.widthDime);
 示例代码:
 
 ```objective-c
-     MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-     rootLayout.wrapContentHeight = YES;
-     rootLayout.myWidth = 300;
-     
-     UIView *A = [UIView new];
-     A.mySize = CGSizeMake(80,70);
-     [rootLayout addSubview:A];
-     
-     UIView *B = [UIView new];
-     B.mySize = CGSizeMake(150,40);
-     [rootLayout addSubview:B];
-     
-     UIView *C = [UIView new];
-     C.mySize = CGSizeMake(70,40);
-     [rootLayout addSubview:C];
-     
-     UIView *D = [UIView new];
-     D.mySize = CGSizeMake(140,140);
-     [rootLayout addSubview:D];
-     
-     UIView *E = [UIView new];
-     E.mySize = CGSizeMake(150,40);
-     E.reverseFloat = YES;
-     [rootLayout addSubview:E];
-
-     UIView *F = [UIView new];
-     F.mySize = CGSizeMake(140,60);
-     [rootLayout addSubview:F];
+      -(void)loadView
+{
+    [super loadView];
+    
+    MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    S.wrapContentHeight = YES;
+    S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    S.subviewMargin = 10;
+    S.myWidth = 300;
+    
+    UIView *A = [UIView new];
+    A.mySize = CGSizeMake(80,70);
+    [S addSubview:A];
+    
+    UIView *B = [UIView new];
+    B.mySize = CGSizeMake(150,40);
+    [S addSubview:B];
+    
+    UIView *C = [UIView new];
+    C.mySize = CGSizeMake(70,40);
+    [S addSubview:C];
+    
+    UIView *D = [UIView new];
+    D.mySize = CGSizeMake(100,140);
+    [S addSubview:D];
+    
+    UIView *E = [UIView new];
+    E.mySize = CGSizeMake(150,40);
+    E.reverseFloat = YES;
+    [S addSubview:E];
+    
+    UIView *F = [UIView new];
+    F.mySize = CGSizeMake(120,60);
+    [S addSubview:F];
+    
+    
+    [self.view addSubview:S];
+    S.backgroundColor = [UIColor redColor];
+    A.backgroundColor = [UIColor greenColor];
+    B.backgroundColor = [UIColor blueColor];
+    C.backgroundColor = [UIColor orangeColor];
+    D.backgroundColor = [UIColor cyanColor];
+    E.backgroundColor = [UIColor blackColor];
+    F.backgroundColor = [UIColor whiteColor];
+}     
      
 
 ```
@@ -327,6 +422,8 @@ E.widthDime.equalTo(rootLayout.widthDime);
 
 
 ### 路径布局MyPathLayout
+> 布局库独有
+
 
 路径布局是一种里面的子视图根据您提供的一条特定的曲线函数形成的路径来进行布局的布局视图。您需要提供一个实现曲线路径的函数、一个特定的坐标体系、一种特定的子视图在曲线上的距离设置这三个要素来实现界面布局。当曲线路径形成后，子视图将按相等的距离依次环绕着曲线进行布局。路径布局主要应用于那些具有特定规律的不规则排列，而且效果很酷炫的的界面布局。
 
@@ -335,29 +432,67 @@ E.widthDime.equalTo(rootLayout.widthDime);
 示例代码:
  
  ```objective-c
-    MyPathLayout *rootLayout = [MyPathLayout new];
-    rootLayout.mySize = CGSizeMake(400,400);
-    rootLayout.coordinateSetting.origin = CGPointMake(0.5, 0.5);
-        
-    rootLayout.polarEquation = ^(CGFloat angle)
+   -(void)loadView
+{
+    [super loadView];
+    
+    MyPathLayout *S = [MyPathLayout new];
+    S.mySize = CGSizeMake(320,320);
+    S.coordinateSetting.isReverse = YES;
+    S.coordinateSetting.origin = CGPointMake(0.5, 0.2);
+    
+    S.polarEquation = ^(CGFloat angle)
     {
-       return 120 * (1 + cos(angle));
+        return 80 * (1 + cos(angle));
     };
     
     for (int i = 0; i < 4; i++)
-   {
-       UIView *A = [UIView new];
-       A.mySize = CGSizeMake(40,40);
-       [rootLayout addSubview:A];
-   }
+    {
+        UIView *A = [UIView new];
+        A.mySize = CGSizeMake(40,40);
+        [S addSubview:A];
+        
+        A.backgroundColor = [UIColor greenColor];
+    }
+
+    [self.view  addSubview:S];
+    S.backgroundColor = [UIColor redColor];
+ }
  
  ```
    
 
 ###  SizeClass的支持
+> 等价于iOS的Size Classes
 
-MyLayout布局体系为了实现对不同屏幕尺寸的设备进行适配，提供了对SIZECLASS的支持。您可以将SIZECLASS和上述的6种布局搭配使用，以便实现各种设备界面的完美适配。
-	
+MyLayout布局体系为了实现对不同屏幕尺寸的设备进行适配，提供了对SIZECLASS的支持。您可以将SIZECLASS和上述的6种布局搭配使用，以便实现各种设备界面的完美适配。系统提供2个UIView的扩展方法：
+
+```objective-c
+
+-(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass;
+-(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
+
+````
+来实现对Size Classes的支持。比如下面的例子：
+
+```objective-c
+
+//默认所有设备的设置。
+ MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    rootLayout.wrapContentHeight = NO;
+    rootLayout.gravity = MyMarginGravity_Horz_Fill;
+
+//MySizeClass_wAny | MySizeClass_hCompact 表明的是iPhone设备的横屏.
+ MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+ 
+    lsc.orientation = MyLayoutViewOrientation_Horz;
+    lsc.wrapContentWidth = NO;
+    lsc.gravity = MyMarginGravity_Vert_Fill;
+
+
+```
+
 
 
 ## 使用方法
