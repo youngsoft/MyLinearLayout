@@ -51,12 +51,12 @@
 "left margin" = "左边边距";
 "horz center" = "水平居中";
 "right margin" = "右边边距";
-"horz fill" = "左右边距";
+"left right" = "左右边距";
 "horizontal(from left to right)" = "水平布局(从左到右)";
 "top margin" = "上边边距";
 "vert center" = "垂直居中";
 "bottom margin" = "下边边距";
-"vert fill" = "上下边距";
+"top bottom" = "上下边距";
 
 //LLTest2ViewController
 "No.:"="编号：";
@@ -88,6 +88,7 @@
 "screen vert center" = "屏幕垂直居中";
 "screen horz center" ="屏幕水平居中";
 "space" = "间距调整";
+"between" = "间距拉伸";
 "test text1"="测试文本1";
 "test text2 test text2"="测试文本2测试文本2";
 "test text3 test text3 test text3"="测试文本3测试文本3测试文本3";

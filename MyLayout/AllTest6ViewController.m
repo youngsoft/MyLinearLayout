@@ -30,7 +30,7 @@
     
     //创建顶部的菜单布局部分。
     MyFlowLayout *menuLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
-    menuLayout.averageArrange = YES;
+    menuLayout.gravity = MyMarginGravity_Fill; //填充所有尺寸。
     menuLayout.wrapContentHeight = YES;
     menuLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     menuLayout.subviewMargin = 10;

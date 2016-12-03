@@ -44,6 +44,7 @@
     [super loadView];
     
     MyFrameLayout *frameLayout = [MyFrameLayout new];
+    frameLayout.backgroundColor = [UIColor whiteColor];
     frameLayout.myMargin = 0;              //这个表示框架布局的尺寸和self.view保持一致,四周离父视图的边距都是0
     frameLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     [self.view addSubview:frameLayout];

@@ -90,13 +90,24 @@
 @property(nonatomic,assign) BOOL noBoundaryLimit;
 
 /**
- *根据浮动视图的方向设置子视图的间距为浮动间距而不是上面确定的固定间距。在一些应用场景我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的。因此您可以通过如下方法来设置浮动间距。这个方法会根据您当前布局的orientation方向不同而意义不同：
- 1.如果您的布局方向是MyLayoutViewOrientation_Vert表示设置的是子视图的水平间距，其中的subviewSize指定的是子视图的宽度，minMargin指定的是最小的水平间距。
- 2.如果您的布局方向是MyLayoutViewOrientation_Horz表示设置的是子视图的垂直间距，其中的subviewSize指定的是子视图的高度，minMargin指定的是最小的垂直间距。
+ *根据浮动布局视图的方向设置子视图的固定尺寸和视图之间的最小间距。在一些应用场景我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的，这样就可以尽可能的容纳更多的子视图。比如每个子视图的宽度是固定80，那么在小屏幕下每行只能放3个，而我们希望大屏幕每行能放4个或者5个子视图。因此您可以通过如下方法来设置浮动间距。这个方法会根据您当前布局的orientation方向不同而意义不同：
+ 1.如果您的布局方向是MyLayoutViewOrientation_Vert表示设置的是子视图的水平间距，其中的subviewSize指定的是子视图的宽度，minSpace指定的是最小的水平间距，maxSpace指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的宽度。
+ 2.如果您的布局方向是MyLayoutViewOrientation_Horz表示设置的是子视图的垂直间距，其中的subviewSize指定的是子视图的高度，minSpace指定的是最小的垂直间距，maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的高度。
  3.如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
  */
--(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin;
--(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin inSizeClass:(MySizeClass)sizeClass;
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
+
 
 
 @end
+
+
+
+@interface MyFloatLayout(MyFloatLayoutDeprecated)
+
+-(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin  MYDEPRECATED("use method: setSubviews:minSpace:maxSpace to replace");
+-(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin inSizeClass:(MySizeClass)sizeClass  MYDEPRECATED("use method: setSubviews:minSpace:maxSpace:inSizeClass to replace");
+
+@end
+

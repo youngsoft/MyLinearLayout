@@ -23,6 +23,7 @@
      */
     
     UIScrollView *scrollView = [UIScrollView new];
+    scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
@@ -333,8 +334,7 @@
     button.tintColor = [CFTool color:0];
     button.backgroundColor = [CFTool color:2];
     [button addTarget:self action:@selector(handleDelButton:) forControlEvents:UIControlEventTouchDownRepeat];
-    button.myHeight = 30;
-    button.myWidth = sender.myWidth;
+    button.myHeight = 40;
     [sender.superview addSubview:button];
 
 }
@@ -359,12 +359,12 @@
     
     CGFloat subviewWidth = 60;  //您可以修改这个宽度值，可以看出不管宽度设置多大都能完美的填充整个屏幕，因为系统会自动调整子视图之间的间距。
     
-    MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:0];
     contentLayout.backgroundColor = [CFTool color:0];
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.wrapContentHeight = YES;
-    contentLayout.subviewVertMargin = 5; //设置浮动布局里面子视图之间的垂直间距。
-    [contentLayout setSubviewFloatMargin:subviewWidth minMargin:5];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为50，最小的间距为5。注意这里要求所有子视图的宽度都是50。
+    contentLayout.subviewVertMargin = 5; //设置流式布局里面子视图之间的垂直间距。
+    [contentLayout setSubviewsSize:subviewWidth minSpace:5 maxSpace:10];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为60，最小的间距为5,最大间距为10。注意这里要求所有子视图的宽度都是60。
     [rootLayout addSubview:contentLayout];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -375,8 +375,7 @@
     button.backgroundColor = [CFTool color:1];
     button.tintColor = [CFTool color:0];
     [button  addTarget:self action:@selector(handleAddButton:) forControlEvents:UIControlEventTouchUpInside];
-    button.myWidth = subviewWidth;
-    button.myHeight = 30;
+    button.myHeight = 30; //上面设置了宽度为60，所以这里不再需要设置宽度了。
     [contentLayout addSubview:button];
 
 
@@ -488,7 +487,7 @@
     [rootLayout addSubview:contentLayout];
     
     contentLayout.autoArrange = YES;  //自动排列，布局视图会根据里面子视图的尺寸进行智能的排列。
-    contentLayout.averageArrange = YES;  //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
+    contentLayout.gravity = MyMarginGravity_Horz_Fill;  //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
     
     
     //添加N个长短不一的子视图。

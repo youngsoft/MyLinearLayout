@@ -69,6 +69,7 @@ typedef enum : unsigned short {
     MyMarginGravity_Horz_Center = 2,
     MyMarginGravity_Horz_Right = 4,
     MyMarginGravity_Horz_Window_Center = 8,   //屏幕水平居中
+    MyMarginGravity_Horz_Between = 16,   //水平间距拉伸，用于线性布局和流式布局
     MyMarginGravity_Horz_Fill = MyMarginGravity_Horz_Left | MyMarginGravity_Horz_Center | MyMarginGravity_Horz_Right,
     MyMarginGravity_Horz_Mask = 0xFF00,
 
@@ -77,6 +78,7 @@ typedef enum : unsigned short {
     MyMarginGravity_Vert_Center = 2 << 8,
     MyMarginGravity_Vert_Bottom = 4 << 8,
     MyMarginGravity_Vert_Window_Center = 8 << 8,  //屏幕垂直居中
+    MyMarginGravity_Vert_Between = 16 << 8,       //垂直间距拉伸，用于线性布局和流式布局
     MyMarginGravity_Vert_Fill = MyMarginGravity_Vert_Top | MyMarginGravity_Vert_Center | MyMarginGravity_Vert_Bottom,
     MyMarginGravity_Vert_Mask = 0x00FF,
 

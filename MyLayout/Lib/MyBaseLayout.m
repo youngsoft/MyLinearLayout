@@ -1186,7 +1186,14 @@ BOOL _hasBegin;
         if ([keyPath isEqualToString:@"frame"] ||
             [keyPath isEqualToString:@"bounds"] )
         {
-            [self setLayoutRectInNoLayoutSuperview:object];
+         
+            //只监控父视图的尺寸变换
+            CGRect rcOld = [change[NSKeyValueChangeOldKey] CGRectValue];
+            CGRect rcNew = [change[NSKeyValueChangeNewKey] CGRectValue];
+            if (!CGSizeEqualToSize(rcOld.size, rcNew.size))
+            {
+                [self setLayoutRectInNoLayoutSuperview:object];
+            }
         }
         return;
     }
@@ -1197,7 +1204,7 @@ BOOL _hasBegin;
         [keyPath isEqualToString:@"hidden"] ||
         [keyPath isEqualToString:@"center"])
     {
-        if (!_isMyLayouting && [self.subviews containsObject:object])
+        if (!_isMyLayouting)
         {
             if (![object useFrame])
             {
@@ -1269,9 +1276,9 @@ BOOL _hasBegin;
     [super didAddSubview:subview];   //只要加入进来后就修改其默认的实现，而改用我们的实现，这里包括隐藏,调整大小，
     
     //添加hidden, frame,center的属性通知。
-    [subview addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:nil];
-    [subview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-    [subview addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:nil];
+    [subview addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
+    [subview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
+    [subview addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
 
 }
 
@@ -1399,8 +1406,8 @@ BOOL _hasBegin;
                 
             }
             
-            [newSuperview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-            [newSuperview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
+            [newSuperview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
+            [newSuperview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
             _isAddSuperviewKVO = YES;
         }
         
@@ -1474,6 +1481,7 @@ BOOL _hasBegin;
     
     if (!self.isMyLayouting)
     {
+
         _isMyLayouting = YES;
 
         if (self.priorAutoresizingMask)
@@ -1514,17 +1522,20 @@ BOOL _hasBegin;
         {
             CGPoint ptorigin = sbv.bounds.origin;
             
-            if (sbv.myFrame.leftPos != CGFLOAT_MAX && sbv.myFrame.topPos != CGFLOAT_MAX && !sbv.noLayout)
+            MyFrame *myFrame = sbv.myFrame;
+            if (myFrame.leftPos != CGFLOAT_MAX && myFrame.topPos != CGFLOAT_MAX && !sbv.noLayout)
             {
-                sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, sbv.myFrame.width, sbv.myFrame.height);
                 
-                sbv.center = CGPointMake(sbv.myFrame.leftPos + sbv.layer.anchorPoint.x * sbv.myFrame.width, sbv.myFrame.topPos + sbv.layer.anchorPoint.y * sbv.myFrame.height);
+                sbv.center = CGPointMake(myFrame.leftPos + sbv.layer.anchorPoint.x * myFrame.width, myFrame.topPos + sbv.layer.anchorPoint.y * myFrame.height);
                 
+                sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, myFrame.width, myFrame.height);
 
             }
             
-            if (sbv.myFrame.sizeClass.isHidden)
+            if (myFrame.sizeClass.isHidden)
+            {
                 sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, 0, 0);
+            }
             
             if (sbv.viewLayoutCompleteBlock != nil)
             {
@@ -1532,8 +1543,8 @@ BOOL _hasBegin;
                 sbv.viewLayoutCompleteBlock = nil;
             }
             
-            sbv.myFrame.sizeClass = [sbv myDefaultSizeClass];
-            [sbv.myFrame reset];
+            myFrame.sizeClass = [sbv myDefaultSizeClass];
+            [myFrame reset];
         }
         self.myFrame.sizeClass = [self myDefaultSizeClass];
         
@@ -1574,6 +1585,7 @@ BOOL _hasBegin;
             [self alterScrollViewContentSize:newSelfSize];
        
         _isMyLayouting = NO;
+        
     }
     
     if (self.endLayoutBlock != nil)
@@ -1599,6 +1611,7 @@ BOOL _hasBegin;
         
         _lastScreenOrientation = currentScreenOrientation;
     }
+    
     
 }
 

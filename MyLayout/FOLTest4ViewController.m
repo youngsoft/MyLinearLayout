@@ -263,13 +263,13 @@ static CGFloat sTagWidth = 70;
         floatLayout.padding = UIEdgeInsetsMake(20, 5, 20, 5);
         floatLayout.wrapContentHeight = YES;
         floatLayout.subviewVertMargin = 10; //设置浮动布局里面子视图之间的垂直间距。
-        [floatLayout setSubviewFloatMargin:sTagWidth minMargin:8];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为70，最小的间距为8.
+        [floatLayout setSubviewsSize:sTagWidth minSpace:8 maxSpace:CGFLOAT_MAX];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为70，最小的间距为8.
         [contentLayout addSubview:floatLayout];
         
         //在学习DEMO时您可以尝试着把下面两句代码解除注释！然后看看横竖屏的区别，这里面用到了SIZECLASS。表示横屏时的最小间距是不一样的。
         //当然如果您要改变子视图的尺寸的话，则要将下面的子视图也要实现对SIZECLASS的支持！！！
         //  [floatLayout fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-        //  [floatLayout setSubviewFloatMargin:sTagWidth minMargin:40 inSizeClass:MySizeClass_Landscape];
+        //  [floatLayout setSubviewFloatMargin:sTagWidth minMargin:40 maxSpace:CGFLOAT_MAX inSizeClass:MySizeClass_Landscape];
         
         //添加标题文本。
         UILabel *titleLabel = [UILabel new];

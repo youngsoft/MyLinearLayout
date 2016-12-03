@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+//#import "MyLayout.h"
 
 @interface MyLayoutTests : XCTestCase
 
@@ -28,6 +29,13 @@
 - (void)testExample {
     // This is an example of a functional test case.
     XCTAssert(YES, @"Pass");
+    
+//    MyLinearLayout *ll = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+//    ll.wrapContentWidth = YES;
+//    UILabel *label = [UILabel new];
+//    label.mySize = CGSizeMake(100, 100);
+//    [ll addSubview:label];
+    
 }
 
 - (void)testPerformanceExample {

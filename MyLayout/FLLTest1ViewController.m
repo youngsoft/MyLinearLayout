@@ -33,7 +33,7 @@
     //添加操作按钮。
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:2];
     actionLayout.wrapContentHeight = YES;
-    actionLayout.averageArrange = YES;
+    actionLayout.gravity = MyMarginGravity_Horz_Fill;  //所有子视图水平填充，也就是所有子视图的宽度相等。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewHorzMargin = 5;
     actionLayout.subviewVertMargin = 5;
@@ -43,10 +43,10 @@
                                                action:@selector(handleAdjustOrientation:)]];
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust arrangedCount", @"")
                                                action:@selector(handleAdjustArrangedCount:)]];
-    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"average size", @"")
-                                               action:@selector(handleAdjustAverageMeasure:)]];
-    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust gravity", @"")
-                                               action:@selector(handleAdjustGravity:)]];
+    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust vert gravity", @"")
+                                               action:@selector(handleAdjustVertGravity:)]];
+    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust horz gravity", @"")
+                                               action:@selector(handleAdjustHorzGravity:)]];
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust align", @"")
                                                action:@selector(handleAdjustArrangeGravity:)]];
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust spacing", @"")
@@ -71,7 +71,7 @@
     
     NSArray *imageArray = @[@"minions1",@"minions2",@"minions3",@"minions4",@"head1"];
     
-    for (int i = 0; i < 60; i++)
+    for (int i = 0; i < 30; i++)
     {
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageArray[random()%5]]];
         [imageView sizeToFit];
@@ -133,95 +133,133 @@
     
 }
 
--(void)handleAdjustAverageMeasure:(id)sender
+-(void)handleAdjustVertGravity:(id)sender
 {
     
-    [self.flowLayout layoutAnimationWithDuration:0.4];
+    MyMarginGravity vertGravity = self.flowLayout.gravity & MyMarginGravity_Horz_Mask;
+    MyMarginGravity horzGravity = self.flowLayout.gravity & MyMarginGravity_Vert_Mask;
     
-    self.flowLayout.averageArrange = !self.flowLayout.averageArrange;
-    
-    if (!self.flowLayout.averageArrange)
-    {
-        for (UIView *vv in self.flowLayout.subviews)
+    switch (vertGravity) {
+        case MyMarginGravity_None:
+        case MyMarginGravity_Vert_Top:
+            vertGravity = MyMarginGravity_Vert_Center;
+            break;
+        case MyMarginGravity_Vert_Center:
+            vertGravity = MyMarginGravity_Vert_Bottom;
+            break;
+        case MyMarginGravity_Vert_Bottom:
+            vertGravity = MyMarginGravity_Vert_Between;
+            break;
+        case MyMarginGravity_Vert_Between:
+            vertGravity = MyMarginGravity_Vert_Fill;
+            break;
+        case MyMarginGravity_Vert_Fill:
         {
-            [vv sizeToFit];
+            vertGravity = MyMarginGravity_Vert_Top;
+            [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
         }
-        
+        default:
+            break;
     }
     
+    self.flowLayout.gravity = horzGravity | vertGravity;
+    [self.flowLayout layoutAnimationWithDuration:0.4];
+
+ }
+
+-(void)handleAdjustHorzGravity:(id)sender
+{
+    MyMarginGravity vertGravity = self.flowLayout.gravity & MyMarginGravity_Horz_Mask;
+    MyMarginGravity horzGravity = self.flowLayout.gravity & MyMarginGravity_Vert_Mask;
+    
+    switch (horzGravity) {
+        case MyMarginGravity_None:
+        case MyMarginGravity_Horz_Left:
+            horzGravity = MyMarginGravity_Horz_Center;
+            break;
+        case MyMarginGravity_Horz_Center:
+            horzGravity = MyMarginGravity_Horz_Right;
+            break;
+        case MyMarginGravity_Horz_Right:
+            horzGravity = MyMarginGravity_Horz_Between;
+            break;
+        case MyMarginGravity_Horz_Between:
+            horzGravity = MyMarginGravity_Horz_Fill;
+            break;
+        case MyMarginGravity_Horz_Fill:
+        {
+            horzGravity = MyMarginGravity_Horz_Left;
+            [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
+        }
+        default:
+            break;
+    }
+    
+    self.flowLayout.gravity = horzGravity | vertGravity;
+    
+    [self.flowLayout layoutAnimationWithDuration:0.4];
 }
 
--(void)handleAdjustGravity:(id)sender
-{
-    [self.flowLayout layoutAnimationWithDuration:0.4];
-    
-    if (self.flowLayout.gravity == MyMarginGravity_None)
-        self.flowLayout.gravity = MyMarginGravity_Vert_Center;
-    else if (self.flowLayout.gravity == MyMarginGravity_Vert_Center)
-        self.flowLayout.gravity = MyMarginGravity_Vert_Bottom;
-    else if (self.flowLayout.gravity == MyMarginGravity_Vert_Bottom)
-        self.flowLayout.gravity = MyMarginGravity_Horz_Center;
-    else if (self.flowLayout.gravity == MyMarginGravity_Horz_Center)
-        self.flowLayout.gravity = MyMarginGravity_Horz_Right;
-    else if (self.flowLayout.gravity == MyMarginGravity_Horz_Right)
-        self.flowLayout.gravity = MyMarginGravity_Center;
-    else if (self.flowLayout.gravity == MyMarginGravity_Center)
-        self.flowLayout.gravity = MyMarginGravity_None;
-    
-    
-    
-}
 
 -(void)handleAdjustArrangeGravity:(id)sender
 {
     
-    [self.flowLayout layoutAnimationWithDuration:0.4];
     
-    
+    MyMarginGravity vertArrangeGravity = self.flowLayout.arrangedGravity & MyMarginGravity_Horz_Mask;
+    MyMarginGravity horzArrangeGravity = self.flowLayout.arrangedGravity & MyMarginGravity_Vert_Mask;
+
     if (self.flowLayout.orientation == MyLayoutViewOrientation_Vert)
     {
-        MyMarginGravity mg = self.flowLayout.arrangedGravity & MyMarginGravity_Horz_Mask;
         
-        if (mg == MyMarginGravity_None || mg == MyMarginGravity_Vert_Top)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Center;
-        else if (mg == MyMarginGravity_Vert_Center)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Bottom;
-        else if (mg  == MyMarginGravity_Vert_Bottom)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Fill;
-        else if (mg == MyMarginGravity_Vert_Fill)
-        {
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Top;
-            
-            for (UIView *vv in self.flowLayout.subviews)
+        switch (vertArrangeGravity) {
+            case MyMarginGravity_None:
+            case MyMarginGravity_Vert_Top:
+                vertArrangeGravity = MyMarginGravity_Vert_Center;
+                break;
+            case MyMarginGravity_Vert_Center:
+                vertArrangeGravity = MyMarginGravity_Vert_Bottom;
+                break;
+            case MyMarginGravity_Vert_Bottom:
+                vertArrangeGravity = MyMarginGravity_Vert_Fill;
+                break;
+            case MyMarginGravity_Vert_Fill:
             {
-                [vv sizeToFit];
+                vertArrangeGravity = MyMarginGravity_Vert_Top;
+                [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
             }
-            
+                break;
+            default:
+                break;
         }
     }
     else
     {
-        MyMarginGravity mg = self.flowLayout.arrangedGravity & MyMarginGravity_Vert_Mask;
-        
-        if (mg == MyMarginGravity_None || mg == MyMarginGravity_Horz_Left)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Center;
-        else if (mg == MyMarginGravity_Horz_Center)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Right;
-        else if (mg  == MyMarginGravity_Horz_Right)
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Fill;
-        else if (mg == MyMarginGravity_Horz_Fill)
-        {
-            self.flowLayout.arrangedGravity = (self.flowLayout.arrangedGravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Left;
-            
-            for (UIView *vv in self.flowLayout.subviews)
+        switch (horzArrangeGravity) {
+            case MyMarginGravity_None:
+            case MyMarginGravity_Horz_Left:
+                horzArrangeGravity = MyMarginGravity_Horz_Center;
+                break;
+            case MyMarginGravity_Horz_Center:
+                horzArrangeGravity = MyMarginGravity_Horz_Right;
+                break;
+            case MyMarginGravity_Horz_Right:
+                horzArrangeGravity = MyMarginGravity_Horz_Fill;
+                break;
+            case MyMarginGravity_Horz_Fill:
             {
-                [vv sizeToFit];
+                horzArrangeGravity = MyMarginGravity_Horz_Left;
+                [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
             }
-            
+                break;
+            default:
+                break;
         }
-        
-        
     }
+    
+    self.flowLayout.arrangedGravity = vertArrangeGravity | horzArrangeGravity;
+    [self.flowLayout layoutAnimationWithDuration:0.4];
+    
+
     
 }
 

@@ -25,6 +25,7 @@
      */
     
     UIScrollView *scrollView = [UIScrollView new];
+    scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
     
     self.rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];

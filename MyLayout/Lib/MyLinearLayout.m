@@ -704,6 +704,8 @@
 
 -(CGSize)layoutSubviewsForVertGravity:(CGSize)selfSize sbs:(NSArray*)sbs
 {
+    MyMarginGravity mgvert = self.gravity & MyMarginGravity_Horz_Mask;
+    MyMarginGravity mghorz = self.gravity & MyMarginGravity_Vert_Mask;
     
     CGFloat totalHeight = 0;
     if (sbs.count > 1)
@@ -716,64 +718,77 @@
         floatingHeight = 0;
     
     //调整子视图的宽度。并根据情况调整子视图的高度。并计算出固定高度和浮动高度。
+    NSMutableSet *noWrapsbsSet = [NSMutableSet new];
     for (UIView *sbv in sbs)
     {
-        
+        BOOL canAddToNoWrapSbs = YES;
         CGRect rect =  sbv.myFrame.frame;
         BOOL isFlexedHeight = sbv.isFlexedHeight && sbv.weight == 0;
         
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
+        
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.heightDime.isMatchParent && !self.wrapContentHeight)
-            rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        {
+            rect.size.height = [sbv.heightDime measureWith:selfSize.height - self.topPadding - self.bottomPadding];
+            canAddToNoWrapSbs = NO;
+        }
         
         //调整子视图的宽度，如果子视图为matchParent的话
         if (sbv.widthDime.isMatchParent)
         {
-            rect.size.width = (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:selfSize.width - self.leftPadding - self.rightPadding];            
         }
         
         if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
             rect.size.width = selfSize.width - self.leftPadding - self.rightPadding - sbv.leftPos.margin - sbv.rightPos.margin;
         
         //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
-        MyMarginGravity mg = MyMarginGravity_Horz_Left;
-        if ((self.gravity & MyMarginGravity_Vert_Mask)!= MyMarginGravity_None)
-            mg =self.gravity & MyMarginGravity_Vert_Mask;
+        MyMarginGravity sbvmghorz = MyMarginGravity_Horz_Left;
+        if ( mghorz != MyMarginGravity_None)
+            sbvmghorz = mghorz;
         else
         {
             if (sbv.centerXPos.posVal != nil)
-                mg = MyMarginGravity_Horz_Center;
+                sbvmghorz = MyMarginGravity_Horz_Center;
             else if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
-                mg = MyMarginGravity_Horz_Fill;
+                sbvmghorz = MyMarginGravity_Horz_Fill;
             else if (sbv.leftPos.posVal != nil)
-                mg = MyMarginGravity_Horz_Left;
+                sbvmghorz = MyMarginGravity_Horz_Left;
             else if (sbv.rightPos.posVal != nil)
-                mg = MyMarginGravity_Horz_Right;
+                sbvmghorz = MyMarginGravity_Horz_Right;
         }
         
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         
-        [self horzGravity:mg selfSize:selfSize sbv:sbv rect:&rect];
+        [self horzGravity:sbvmghorz selfSize:selfSize sbv:sbv rect:&rect];
         
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
         {
-            rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:rect.size.width];
         }
         
         //如果子视图需要调整高度则调整高度
         if (isFlexedHeight)
         {
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
+            canAddToNoWrapSbs = NO;
        }
         
         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
     
+        //如果子视图的最小高度就是自身则也不进行扩展。
+        if (sbv.heightDime.lBoundVal.dimeSelfVal != nil)
+        {
+            canAddToNoWrapSbs = NO;
+        }
+
+        
         
         totalHeight += [self validMargin:sbv.topPos sbv:sbv calcPos:[sbv.topPos realMarginInSize:floatingHeight] selfLayoutSize:selfSize];
         
@@ -782,21 +797,36 @@
         totalHeight += [self validMargin:sbv.bottomPos sbv:sbv calcPos:[sbv.bottomPos realMarginInSize:floatingHeight] selfLayoutSize:selfSize];
         
         sbv.myFrame.frame = rect;
+        
+        //如果子布局视图是wrap属性则不进行扩展。
+        if (mgvert == MyMarginGravity_Vert_Fill && [sbv isKindOfClass:[MyBaseLayout class]])
+        {
+            if (((MyBaseLayout*)sbv).wrapContentHeight)
+            {
+                canAddToNoWrapSbs = NO;
+            }
+        }
+        
+        if (canAddToNoWrapSbs)
+            [noWrapsbsSet addObject:sbv];
+        
     }
     
     
     //根据对齐的方位来定位子视图的布局对齐
-    CGFloat pos = 0;
-    if ((self.gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Top)
+    CGFloat pos = 0;  //位置偏移
+    CGFloat between = 0; //间距扩充
+    CGFloat fill = 0;    //尺寸扩充
+    if (mgvert == MyMarginGravity_Vert_Top)
     {
         pos = self.topPadding;
     }
-    else if ((self.gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Center)
+    else if (mgvert == MyMarginGravity_Vert_Center)
     {
         pos = (selfSize.height - totalHeight - self.bottomPadding - self.topPadding)/2.0;
         pos += self.topPadding;
     }
-    else if ((self.gravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Window_Center)
+    else if (mgvert == MyMarginGravity_Vert_Window_Center)
     {
         if (self.window != nil)
         {
@@ -808,10 +838,28 @@
             
         }
     }
-    else
+    else if (mgvert == MyMarginGravity_Vert_Bottom)
     {
         pos = selfSize.height - totalHeight - self.bottomPadding;
     }
+    else if (mgvert == MyMarginGravity_Vert_Between)
+    {
+        pos = self.topPadding;
+        
+        if (sbs.count > 1)
+            between = (selfSize.height - totalHeight - self.topPadding - self.bottomPadding) / (sbs.count - 1);
+    }
+    else if (mgvert == MyMarginGravity_Vert_Fill)
+    {
+        pos = self.topPadding;
+        if (noWrapsbsSet.count > 0)
+             fill = (selfSize.height - totalHeight - self.topPadding - self.bottomPadding) / noWrapsbsSet.count;
+    }
+    else
+    {
+        pos = self.topPadding;
+    }
+    
     
     
     for (UIView *sbv in sbs)
@@ -820,12 +868,18 @@
         
         sbv.myFrame.topPos = pos;
         
+        //加上扩充的宽度。
+        if (fill != 0 && [noWrapsbsSet containsObject:sbv])
+            sbv.myFrame.height += fill;
+        
         pos +=  sbv.myFrame.height;
     
         pos += [self validMargin:sbv.bottomPos sbv:sbv calcPos:[sbv.bottomPos realMarginInSize:floatingHeight] selfLayoutSize:selfSize];
         
         if (sbv != sbs.lastObject)
             pos += self.subviewMargin;
+        
+        pos += between;  //只有mgvert为between才加这个间距拉伸。
     }
     
     return selfSize;
@@ -834,6 +888,9 @@
 
 -(CGSize)layoutSubviewsForHorzGravity:(CGSize)selfSize sbs:(NSArray*)sbs
 {
+    
+    MyMarginGravity mgvert = self.gravity & MyMarginGravity_Horz_Mask;
+    MyMarginGravity mghorz = self.gravity & MyMarginGravity_Vert_Mask;
     
     CGFloat totalWidth = 0;
     if (sbs.count > 1)
@@ -849,9 +906,11 @@
         floatingWidth = 0;
     
     //计算出固定的高度
+    NSMutableSet *noWrapsbsSet = [NSMutableSet new];
     for (UIView *sbv in sbs)
     {
-        
+        BOOL canAddToNoWrapSbs = YES;
+
         CGRect rect = sbv.myFrame.frame;
         BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
         
@@ -862,13 +921,23 @@
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
-        if (sbv.widthDime.isMatchParent)
-            rect.size.width= (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+        if (sbv.widthDime.isMatchParent && !self.wrapContentWidth)
+        {
+            rect.size.width= [sbv.widthDime measureWith:selfSize.width - self.leftPadding - self.rightPadding];
+            canAddToNoWrapSbs = NO;
+        }
         
         if (sbv.heightDime.isMatchParent)
-            rect.size.height= (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
-                
+            rect.size.height= [sbv.heightDime measureWith:selfSize.height - self.topPadding - self.bottomPadding];
+        
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        //如果最小宽度不能被缩小则不加入。
+        if (sbv.widthDime.lBoundVal.dimeSelfVal != nil)
+        {
+            canAddToNoWrapSbs = NO;
+        }
+
         
         
         //如果高度是浮动的则需要调整高度。
@@ -894,6 +963,19 @@
         
         
         sbv.myFrame.frame = rect;
+        
+        //如果子视图是包裹属性则也不加入。
+        if (mghorz == MyMarginGravity_Horz_Fill && [sbv isKindOfClass:[MyBaseLayout class]])
+        {
+            if (((MyBaseLayout*)sbv).wrapContentWidth)
+            {
+                canAddToNoWrapSbs = NO;
+            }
+        }
+        
+        if (canAddToNoWrapSbs)
+            [noWrapsbsSet addObject:sbv];
+
     }
     
     
@@ -905,16 +987,19 @@
     
     //根据对齐的方位来定位子视图的布局对齐
     CGFloat pos = 0;
-    if ((self.gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Left)
+    CGFloat between = 0;
+    CGFloat fill = 0;
+
+    if (mghorz == MyMarginGravity_Horz_Left)
     {
         pos = self.leftPadding;
     }
-    else if ((self.gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Center)
+    else if (mghorz == MyMarginGravity_Horz_Center)
     {
         pos = (selfSize.width - totalWidth - self.leftPadding - self.rightPadding)/2.0;
         pos += self.leftPadding;
     }
-    else if ((self.gravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Window_Center)
+    else if (mghorz == MyMarginGravity_Horz_Window_Center)
     {
         if (self.window != nil)
         {
@@ -924,10 +1009,29 @@
             pos = [self.window convertPoint:pt toView:self].x;
         }
     }
-    else
+    else if (mghorz == MyMarginGravity_Horz_Right)
     {
         pos = selfSize.width - totalWidth - self.rightPadding;
     }
+    else if (mghorz == MyMarginGravity_Horz_Between)
+    {
+        pos = self.leftPadding;
+        
+        if (sbs.count > 1)
+            between = (selfSize.width - totalWidth - self.leftPadding - self.rightPadding) / (sbs.count - 1);
+    }
+    else if (mghorz == MyMarginGravity_Horz_Fill)
+    {
+        pos = self.leftPadding;
+        if (noWrapsbsSet.count > 0)
+            fill = (selfSize.width - totalWidth - self.leftPadding - self.rightPadding) / noWrapsbsSet.count;
+    }
+    else
+    {
+        pos = self.leftPadding;
+    }
+
+    
     
     
     for (UIView *sbv in sbs)
@@ -948,25 +1052,28 @@
         if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
             rect.size.height = selfSize.height - self.topPadding - self.bottomPadding - sbv.topPos.margin - sbv.bottomPos.margin;
         
-        MyMarginGravity mg = MyMarginGravity_Vert_Top;
-        if ((self.gravity & MyMarginGravity_Horz_Mask)!= MyMarginGravity_None)
-            mg =self.gravity & MyMarginGravity_Horz_Mask;
+        MyMarginGravity sbvmgvert = MyMarginGravity_Vert_Top;
+        if (mgvert != MyMarginGravity_None)
+            sbvmgvert = mgvert;
         else
         {
             if (sbv.centerYPos.posVal != nil)
-                mg = MyMarginGravity_Vert_Center;
+                sbvmgvert = MyMarginGravity_Vert_Center;
             else if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
-                mg = MyMarginGravity_Vert_Fill;
+                sbvmgvert = MyMarginGravity_Vert_Fill;
             else if (sbv.topPos.posVal != nil)
-                mg = MyMarginGravity_Vert_Top;
+                sbvmgvert = MyMarginGravity_Vert_Top;
             else if (sbv.bottomPos.posVal != nil)
-                mg = MyMarginGravity_Vert_Bottom;
+                sbvmgvert = MyMarginGravity_Vert_Bottom;
         }
         
          rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
-        [self vertGravity:mg selfSize:selfSize sbv:sbv rect:&rect];
+        [self vertGravity:sbvmgvert selfSize:selfSize sbv:sbv rect:&rect];
         
+        if (fill != 0 &&  [noWrapsbsSet containsObject:sbv])
+            rect.size.width += fill;
+
         sbv.myFrame.frame = rect;
         
         pos += rect.size.width;
@@ -976,6 +1083,9 @@
         
         if (sbv != sbs.lastObject)
             pos += self.subviewMargin;
+        
+        pos += between;  //只有mghorz为between才加这个间距拉伸。
+
     }
     
     return selfSize;
@@ -1037,10 +1147,6 @@
             
         }
         
-#ifdef DEBUG
-        //"布局约束冲突:垂直线性布局不能将gravity的垂直停靠值设置为MyMarginGravity_Vert_Fill。"
-        NSCAssert((self.gravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_Vert_Fill , @"Constraint exception！！, vertical linear layout:%@ can not set gravity to MyMarginGravity_Vert_Fill.",self);
-#endif
         if ((self.gravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_None)
         {
             selfSize = [self layoutSubviewsForVertGravity:selfSize sbs:sbs];
@@ -1151,10 +1257,6 @@
             
         }
         
-#ifdef DEBUG
-        //布局约束冲突：水平线性布局:%@不能将gravity的水平停靠值设置为MyMarginGravity_Horz_Fill。"
-        NSCAssert((self.gravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_Horz_Fill , @"Constraint exception!! horizontal linear layout:%@ can not set gravity to MyMarginGravity_Horz_Fill",self);
-#endif
         
         if ((self.gravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_None)
             selfSize = [self layoutSubviewsForHorzGravity:selfSize sbs:sbs];

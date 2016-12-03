@@ -510,7 +510,8 @@
     MyFloatLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     
     lsc.subviewSize = self.subviewSize;
-    lsc.minMargin = self.minMargin;
+    lsc.minSpace = self.minSpace;
+    lsc.maxSpace = self.maxSpace;
     lsc.noBoundaryLimit = self.noBoundaryLimit;
     
     return lsc;
@@ -543,6 +544,9 @@
     lsc.averageArrange = self.averageArrange;
     lsc.autoArrange = self.autoArrange;
     lsc.arrangedGravity = self.arrangedGravity;
+    lsc.subviewSize = self.subviewSize;
+    lsc.minSpace = self.minSpace;
+    lsc.maxSpace = self.maxSpace;
     
     return lsc;
 }

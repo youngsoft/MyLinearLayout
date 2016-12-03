@@ -36,6 +36,7 @@
      */
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.gravity = MyMarginGravity_Horz_Fill;  //垂直线性布局里面的子视图的宽度和布局视图一致。
     rootLayout.wrapContentWidth = NO;
     rootLayout.wrapContentHeight = NO;
@@ -63,7 +64,7 @@
     self.flowLayout.backgroundColor = [CFTool color:0];
     self.flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     self.flowLayout.subviewMargin = 10;   //流式布局里面的子视图的水平和垂直间距都设置为10
-    self.flowLayout.averageArrange = YES;  //流式布局里面的子视图的宽度将平均分配。
+    self.flowLayout.gravity = MyMarginGravity_Horz_Fill;  //流式布局里面的子视图的宽度将平均分配。
     self.flowLayout.weight = 1;   //流式布局占用线性布局里面的剩余高度。
     self.flowLayout.myTopMargin = 10;
     [rootLayout addSubview:self.flowLayout];
@@ -101,7 +102,7 @@
     [tagButton setTitle:text forState:UIControlStateNormal];
     tagButton.titleLabel.font = [CFTool font:14];
     tagButton.layer.cornerRadius = 20;
-    tagButton.backgroundColor = [CFTool color:random()%15];
+    tagButton.backgroundColor = [CFTool color:(random()%14 + 1)];
     tagButton.heightDime.equalTo(@44);
     
     [tagButton addTarget:self action:@selector(handleTouchDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside]; //注册拖动事件。

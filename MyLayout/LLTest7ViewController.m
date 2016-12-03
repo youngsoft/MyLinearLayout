@@ -37,6 +37,7 @@
      */
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.gravity = MyMarginGravity_Horz_Fill;  //设置里面所有子视图的宽度填充布局视图的宽度。
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     rootLayout.wrapContentHeight = NO;

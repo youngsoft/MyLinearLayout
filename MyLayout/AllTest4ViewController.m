@@ -135,7 +135,7 @@ static NSInteger sBaseTag = 100000;
 {
     MyFlowLayout *containerLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:arrangedCount];
     containerLayout.wrapContentHeight = YES;
-    containerLayout.averageArrange = YES; //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
+    containerLayout.gravity = MyMarginGravity_Horz_Fill; //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
     containerLayout.subviewHorzMargin = 5;
     containerLayout.subviewVertMargin = 5;
     containerLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);

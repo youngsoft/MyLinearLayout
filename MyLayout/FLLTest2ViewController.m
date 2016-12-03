@@ -73,7 +73,7 @@
     
     //间距拉伸
     if (sender.isOn)
-        self.flowLayout.gravity = MyMarginGravity_Horz_Fill;  //流式布局的gravity如果设置为MyMarginGravity_Horz_Fill表示子视图的间距会被拉伸，以便填充满整个布局。
+        self.flowLayout.gravity = MyMarginGravity_Horz_Between;  //流式布局的gravity如果设置为MyMarginGravity_Horz_Fill表示子视图的间距会被拉伸，以便填充满整个布局。
     else
         self.flowLayout.gravity = MyMarginGravity_None;
     
@@ -84,9 +84,9 @@
     
     //内容拉伸
     if (sender.isOn)
-        self.flowLayout.averageArrange = YES;  //对于内容填充的流时布局来说，averageArrange属性如果设置为YES表示里面的子视图的内容会自动的拉伸以便填充整个布局。
+        self.flowLayout.gravity = MyMarginGravity_Horz_Fill;  //对于内容填充的流时布局来说，averageArrange属性如果设置为YES表示里面的子视图的内容会自动的拉伸以便填充整个布局。
     else
-        self.flowLayout.averageArrange = NO;
+        self.flowLayout.gravity = MyMarginGravity_None;
     
     [self.flowLayout layoutAnimationWithDuration:0.2];
 

@@ -34,8 +34,7 @@
        
     1.当使用gravity属性时意味着布局视图必须要有明确的尺寸才有意义，因为有确定的尺寸才能决定里面的子视图的停靠的方位。
     2.布局视图的wrapContentHeight设置为YES时是和gravity上设置垂直停靠方向以及垂直填充是互斥的；而布局视图的wrapContentWidth设置为YES时是和gravity上设置水平停靠方向和水平填充是互斥的。
-    3.对于垂直线性布局来说不能设置gravity的值为MyMarginGravity_Vert_Fill；对于水平线性布局来说不能设置gravity的值为MyMarginGravity_Horz_Fill。
-    4.布局视图的gravity的属性的优先级要高于子视图的停靠和尺寸设置。
+    3.布局视图的gravity的属性的优先级要高于子视图的停靠和尺寸设置。
      
      */
     
@@ -83,13 +82,10 @@
 {
     UILabel *v = [UILabel new];
     v.text = title;
+    v.clipsToBounds = YES;   //这里必须要设置为YES，因为UILabel做高度调整动画时，如果不设置为YES则不会固定顶部。。。
     v.backgroundColor = color;
     v.adjustsFontSizeToFitWidth = YES;
     v.font = [CFTool font:15];
-    v.layer.shadowOffset = CGSizeMake(3, 3);
-    v.layer.shadowColor = [CFTool color:4].CGColor;
-    v.layer.shadowRadius = 2;
-    v.layer.shadowOpacity = 0.3;
     [v sizeToFit];
     
     return v;
@@ -114,7 +110,7 @@
     //用流式布局来创建动作菜单布局。流式布局请参考后面关于流式布局的DEMO。
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
     actionLayout.wrapContentHeight = YES;
-    actionLayout.averageArrange = YES;  //平均分配里面所有子视图的宽度
+    actionLayout.gravity = MyMarginGravity_Horz_Fill; //平均分配里面所有子视图的宽度
     actionLayout.subviewHorzMargin = 5;
     actionLayout.subviewVertMargin = 5;  //设置里面子视图的水平和垂直间距。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -127,14 +123,15 @@
                          NSLocalizedString(@"left",@""),
                          NSLocalizedString(@"horz center",@""),
                          NSLocalizedString(@"right",@""),
-                         NSLocalizedString(@"horz fill",@""),
                          NSLocalizedString(@"screen vert center",@""),
                          NSLocalizedString(@"screen horz center",@""),
-                         NSLocalizedString(@"space",@"")];
+                         NSLocalizedString(@"between",@""),
+                         NSLocalizedString(@"horz fill",@""),
+                         NSLocalizedString(@"vert fill", @"")];
     
     for (NSInteger i = 0; i < actions.count; i++)
     {
-        [actionLayout addSubview:[self createActionButton:actions[i] tag:(i + 1)* 100]];
+        [actionLayout addSubview:[self createActionButton:actions[i] tag:(i + 1) action:@selector(handleVertLayoutGravity:)]];
     }
 }
 
@@ -152,15 +149,19 @@
 
     
     UILabel *v1 = [self createLabel:NSLocalizedString(@"test text1", @"") backgroundColor:[CFTool color:5]];
+    v1.myHeight = 20;
     [self.vertGravityLayout addSubview:v1];
     
     UILabel *v2 = [self createLabel:NSLocalizedString(@"test text2 test text2", @"") backgroundColor:[CFTool color:6]];
+    v2.myHeight = 20;
     [self.vertGravityLayout addSubview:v2];
     
     UILabel *v3 = [self createLabel:NSLocalizedString(@"test text3 test text3 test text3", @"") backgroundColor:[CFTool color:7]];
+    v3.myHeight = 30;
     [self.vertGravityLayout addSubview:v3];
     
     UILabel *v4 = [self createLabel:NSLocalizedString(@"set left and right margin to determine width", @"") backgroundColor:[CFTool color:8]];
+    v4.myHeight = 25;
     v4.myLeftMargin = 20;
     v4.myRightMargin = 30;
     [self.vertGravityLayout addSubview:v4];
@@ -186,26 +187,27 @@
     //用流式布局来创建动作菜单布局。流式布局请参考后面关于流式布局的DEMO。
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
     actionLayout.wrapContentHeight = YES;
-    actionLayout.averageArrange = YES;  //平均分配里面所有子视图的宽度
+    actionLayout.gravity = MyMarginGravity_Horz_Fill;  //平均分配里面所有子视图的宽度
     actionLayout.subviewHorzMargin = 5;
     actionLayout.subviewVertMargin = 5;  //设置里面子视图的水平和垂直间距。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [contentLayout addSubview:actionLayout];
     
-    NSArray *actions = @[NSLocalizedString(@"left",@""),
-                         NSLocalizedString(@"horz center",@""),
-                         NSLocalizedString(@"right",@""),
-                         NSLocalizedString(@"top",@""),
+    NSArray *actions = @[NSLocalizedString(@"top",@""),
                          NSLocalizedString(@"vert center",@""),
                          NSLocalizedString(@"bottom",@""),
-                         NSLocalizedString(@"vert fill",@""),
+                         NSLocalizedString(@"left",@""),
+                         NSLocalizedString(@"horz center",@""),
+                         NSLocalizedString(@"right",@""),
                          NSLocalizedString(@"screen vert center",@""),
                          NSLocalizedString(@"screen horz center",@""),
-                         NSLocalizedString(@"space",@"")];
+                         NSLocalizedString(@"between",@""),
+                         NSLocalizedString(@"horz fill",@""),
+                         NSLocalizedString(@"vert fill", @"")];
     
     for (NSInteger i = 0; i < actions.count; i++)
     {
-        [actionLayout addSubview:[self createActionButton:actions[i] tag:(i + 1)* 100 + 1]];
+        [actionLayout addSubview:[self createActionButton:actions[i] tag:(i + 1) action:@selector(handleHorzLayoutGravity:)]];
     }
 
 }
@@ -247,18 +249,19 @@
     v4.myBottomMargin = 10;
     v4.myWidth = 60;
     [self.horzGravityLayout addSubview:v4];
-}
+
+  }
 
 
 //创建动作按钮
--(UIButton*)createActionButton:(NSString*)title tag:(NSInteger)tag
+-(UIButton*)createActionButton:(NSString*)title tag:(NSInteger)tag action:(SEL)action
 {
     UIButton *actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [actionButton setTitle:title forState:UIControlStateNormal];
     actionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     actionButton.titleLabel.font = [CFTool font:14];
     actionButton.tag = tag;
-    [actionButton addTarget:self action:@selector(handleGravity:) forControlEvents:UIControlEventTouchUpInside];
+    [actionButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     actionButton.layer.borderColor = [UIColor grayColor].CGColor;
     actionButton.layer.cornerRadius = 4;
     actionButton.layer.borderWidth = 0.5;
@@ -269,82 +272,103 @@
 
 #pragma mark -- Handle Method
 
--(void)handleGravity:(UIButton*)button
+-(void)handleVertLayoutGravity:(UIButton*)button
 {
+    //分别取出垂直和水平方向的停靠设置。
+    MyMarginGravity vertGravity = self.vertGravityLayout.gravity & MyMarginGravity_Horz_Mask;
+    MyMarginGravity horzGravity = self.vertGravityLayout.gravity & MyMarginGravity_Vert_Mask;
     
     switch (button.tag) {
-        case 100:  //上
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Top;
+        case 1:  //上
+            vertGravity = MyMarginGravity_Vert_Top;
             break;
-        case 200:  //垂直
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Center;
+        case 2:  //垂直
+            vertGravity = MyMarginGravity_Vert_Center;
             break;
-        case 300:   //下
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Bottom;
+        case 3:   //下
+            vertGravity = MyMarginGravity_Vert_Bottom;
             break;
-        case 400:  //左
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Left;
+        case 4:  //左
+            horzGravity = MyMarginGravity_Horz_Left;
             break;
-        case 500:  //水平
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Center;
+        case 5:  //水平
+            horzGravity = MyMarginGravity_Horz_Center;
             break;
-        case 600:   //右
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Right;
+        case 6:   //右
+            horzGravity =  MyMarginGravity_Horz_Right;
             break;
-        case 700:   //填充
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Fill;
+         case 7:   //窗口垂直居中
+            vertGravity = MyMarginGravity_Vert_Window_Center;
             break;
-        case 800:   //窗口垂直居中
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Window_Center;
+        case 8:   //窗口水平居中
+            horzGravity = MyMarginGravity_Horz_Window_Center;
             break;
-        case 900:   //窗口水平居中
-            self.vertGravityLayout.gravity = (self.vertGravityLayout.gravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Window_Center;
+        case 9:  //垂直间距拉伸
+            vertGravity = MyMarginGravity_Vert_Between;
             break;
-        case 1000:
-        {
-            self.vertGravityLayout.subviewMargin = self.vertGravityLayout.subviewMargin == 10 ? -10 : 10;
-            [self.vertGravityLayout layoutAnimationWithDuration:0.3];
-        }
+        case 10:   //水平填充
+            horzGravity  = MyMarginGravity_Horz_Fill;
             break;
-            
-        case 101:  //左
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Left;
+        case 11:  //垂直填充
+            vertGravity = MyMarginGravity_Vert_Fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
             break;
-        case 201:  //水平
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Center;
-            break;
-        case 301:   //右
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Right;
-            break;
-        case 401:  //上
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Top;
-            break;
-        case 501:  //垂直
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Center;
-            break;
-        case 601:   //下
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Bottom;
-            break;
-        case 701:   //填充
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Fill;
-            break;
-        case 801:   //窗口垂直居中
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & MyMarginGravity_Vert_Mask) | MyMarginGravity_Vert_Window_Center;
-            break;
-        case 901:   //窗口水平居中
-            self.horzGravityLayout.gravity = (self.horzGravityLayout.gravity & MyMarginGravity_Horz_Mask) | MyMarginGravity_Horz_Window_Center;
-            break;
-        case 1001:
-        {
-            self.horzGravityLayout.subviewMargin = self.horzGravityLayout.subviewMargin == 5 ? -5 : 5;
-            [self.horzGravityLayout layoutAnimationWithDuration:0.3];
-
-        }
-            break;
- 
         default:
             break;
     }
+    
+    self.vertGravityLayout.gravity = vertGravity | horzGravity;
+    
+    [self.vertGravityLayout layoutAnimationWithDuration:0.2];
+    
+}
+
+-(void)handleHorzLayoutGravity:(UIButton*)button
+{
+    //分别取出垂直和水平方向的停靠设置。
+    MyMarginGravity vertGravity = self.horzGravityLayout.gravity & MyMarginGravity_Horz_Mask;
+    MyMarginGravity horzGravity = self.horzGravityLayout.gravity & MyMarginGravity_Vert_Mask;
+    
+    switch (button.tag) {
+        case 1:  //上
+            vertGravity = MyMarginGravity_Vert_Top;
+            break;
+        case 2:  //垂直
+            vertGravity = MyMarginGravity_Vert_Center;
+            break;
+        case 3:   //下
+            vertGravity = MyMarginGravity_Vert_Bottom;
+            break;
+        case 4:  //左
+            horzGravity = MyMarginGravity_Horz_Left;
+            break;
+        case 5:  //水平
+            horzGravity = MyMarginGravity_Horz_Center;
+            break;
+        case 6:   //右
+            horzGravity =  MyMarginGravity_Horz_Right;
+            break;
+        case 7:   //窗口垂直居中
+            vertGravity = MyMarginGravity_Vert_Window_Center;
+            break;
+        case 8:   //窗口水平居中
+            horzGravity = MyMarginGravity_Horz_Window_Center;
+            break;
+        case 9:  //水平间距拉伸
+            horzGravity = MyMarginGravity_Horz_Between;
+            break;
+        case 10:   //水平填充
+            horzGravity  = MyMarginGravity_Horz_Fill;
+            break;
+        case 11:
+            vertGravity = MyMarginGravity_Vert_Fill;
+            break;
+        default:
+            break;
+    }
+    
+    self.horzGravityLayout.gravity = vertGravity | horzGravity;
+    
+    [self.horzGravityLayout layoutAnimationWithDuration:0.2];
 }
 
 

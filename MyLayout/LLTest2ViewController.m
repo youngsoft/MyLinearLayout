@@ -291,10 +291,13 @@
     shrinkLabel.text = NSLocalizedString(@"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the flexedHeight to YES and set the numberOfLines to 0.You can try to switch different simulator or different orientation screen to see the effect.", @"");
     shrinkLabel.backgroundColor = [CFTool color:2];
     shrinkLabel.font = [CFTool font:14];
-    shrinkLabel.clipsToBounds = YES;  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
     shrinkLabel.myTopMargin = 20;
     shrinkLabel.myLeftMargin = shrinkLabel.myRightMargin = 0;
+    
+    //下面四个属性配合一起简单的实现文本的收起和展开。
     shrinkLabel.numberOfLines = 0;
+    shrinkLabel.clipsToBounds = YES;  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
+    shrinkLabel.myHeight = 0;  //这里设置高度为0，而下面设置flexedHeight为YES的优先级比较高。所以当flexedHeight = NO时这个高度才起作用。这两个属性搭配使用非常容易实现UILabel的收起和展开
     shrinkLabel.flexedHeight = YES;  //这个属性会控制在固定宽度下自动调整视图的高度。
     [contentLayout addSubview:shrinkLabel];
     self.shrinkLabel = shrinkLabel;
@@ -343,13 +346,11 @@
     //因为self.shrinkLabel设置了flexedHeight来实现动态的文本高度。因此这里可以通过这个标志来实现文本伸缩功能。
     if (self.shrinkLabel.isFlexedHeight)
     {
-        self.shrinkLabel.flexedHeight = NO;
-        self.shrinkLabel.heightDime.equalTo(@0);  //如果当前是动态高度则将动态高度属性设置为NO，并且把高度设置为0来实现文本框的高度缩小。
+        self.shrinkLabel.flexedHeight = NO;  //当设置为NO时，视图的myHeight将起作用，这边高度就变为了0
     }
     else
     {
-        self.shrinkLabel.flexedHeight = YES;
-        self.shrinkLabel.heightDime.equalTo(nil);  //如果当前的动态高度属性为NO，则将动态高度属性设置为YES，并且把高度设置清除。
+        self.shrinkLabel.flexedHeight = YES; //当设置为YES时，视图的myHeight将不起作用，这样高度就由内容包裹。
     }
     
     [self.contentLayout layoutAnimationWithDuration:0.3];

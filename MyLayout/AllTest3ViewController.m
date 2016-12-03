@@ -311,7 +311,7 @@
     
     MyFlowLayout *testLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
     testLayout.backgroundColor = [UIColor whiteColor];
-    testLayout.averageArrange = YES;
+    testLayout.gravity = MyMarginGravity_Horz_Fill;  //尺寸相等
     testLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     testLayout.subviewHorzMargin = 10;
     testLayout.subviewVertMargin = 10;
@@ -619,7 +619,7 @@
     
     MyFlowLayout *itemLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
     itemLayout.myLeftMargin = itemLayout.myRightMargin = 0;
-    itemLayout.averageArrange = YES;
+    itemLayout.gravity = MyMarginGravity_Horz_Fill;
     itemLayout.subviewHorzMargin = 10;
     itemLayout.subviewVertMargin = 10;
     itemLayout.wrapContentHeight = YES;

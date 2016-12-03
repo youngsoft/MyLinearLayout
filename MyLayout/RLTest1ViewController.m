@@ -21,6 +21,7 @@
      */
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     self.view = rootLayout;
 

@@ -29,6 +29,7 @@
 		189692731CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189692721CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m */; };
 		189692761CF74EC5000A5B91 /* AllTestDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 189692751CF74EC5000A5B91 /* AllTestDataModel.m */; };
 		18A9A4D41D63049F004974CE /* RLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A9A4D31D63049F004974CE /* RLTest4ViewController.m */; };
+		18B152341DEDDE5500AD7A1C /* MyLayoutUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B152331DEDDE5500AD7A1C /* MyLayoutUITests.m */; };
 		18BCC51A1D2D4885005081FF /* FLLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BCC5191D2D4885005081FF /* FLLTest4ViewController.m */; };
 		18C8F1641D4DA6B800DC1FD3 /* PLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C8F1631D4DA6B800DC1FD3 /* PLTest3ViewController.m */; };
 		18C8F1671D4E3E4E00DC1FD3 /* PLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C8F1661D4E3E4E00DC1FD3 /* PLTest4ViewController.m */; };
@@ -85,6 +86,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 1840828C1B2C46E8003F378B;
 			remoteInfo = MyLinearLayoutDemo;
+		};
+		18B152361DEDDE5500AD7A1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 184082851B2C46E8003F378B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1840828C1B2C46E8003F378B;
+			remoteInfo = MyLayout;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -144,6 +152,9 @@
 		189692751CF74EC5000A5B91 /* AllTestDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTestDataModel.m; sourceTree = "<group>"; };
 		18A9A4D31D63049F004974CE /* RLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLTest4ViewController.m; sourceTree = "<group>"; };
 		18A9A4D51D6304AD004974CE /* RLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLTest4ViewController.h; sourceTree = "<group>"; };
+		18B152311DEDDE5500AD7A1C /* MyLayoutUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyLayoutUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		18B152331DEDDE5500AD7A1C /* MyLayoutUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyLayoutUITests.m; sourceTree = "<group>"; };
+		18B152351DEDDE5500AD7A1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18BCC5181D2D4879005081FF /* FLLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest4ViewController.h; sourceTree = "<group>"; };
 		18BCC5191D2D4885005081FF /* FLLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest4ViewController.m; sourceTree = "<group>"; };
 		18BF0BE41D5109C300395960 /* layoutdemo7.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo7.gif; sourceTree = "<group>"; };
@@ -260,6 +271,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		18B1522E1DEDDE5500AD7A1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -268,6 +286,7 @@
 			children = (
 				18D683E61C4F421400A48BB4 /* MyLayout */,
 				18D684531C4F423400A48BB4 /* MyLayoutTests */,
+				18B152321DEDDE5500AD7A1C /* MyLayoutUITests */,
 				18E8084C1B3A5D170059C410 /* QuartzCore.framework */,
 				1840828E1B2C46E8003F378B /* Products */,
 			);
@@ -278,6 +297,7 @@
 			children = (
 				1840828D1B2C46E8003F378B /* MyLayout.app */,
 				184082A61B2C46E8003F378B /* MyLayout.xctest */,
+				18B152311DEDDE5500AD7A1C /* MyLayoutUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -333,15 +353,129 @@
 			name = "AllTestModel&View";
 			sourceTree = "<group>";
 		};
-		18D683E61C4F421400A48BB4 /* MyLayout */ = {
+		18B152321DEDDE5500AD7A1C /* MyLayoutUITests */ = {
 			isa = PBXGroup;
 			children = (
-				18F83FBD1C4F6EB7003EF090 /* Supporting Files */,
-				18D683FB1C4F421400A48BB4 /* Lib */,
-				18D6842E1C4F421400A48BB4 /* ViewController.h */,
-				18D6842F1C4F421400A48BB4 /* ViewController.m */,
-				18D683EF1C4F421400A48BB4 /* AppDelegate.h */,
-				18D683F01C4F421400A48BB4 /* AppDelegate.m */,
+				18B152331DEDDE5500AD7A1C /* MyLayoutUITests.m */,
+				18B152351DEDDE5500AD7A1C /* Info.plist */,
+			);
+			path = MyLayoutUITests;
+			sourceTree = "<group>";
+		};
+		18B1523B1DEDE26900AD7A1C /* LinearLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18D684151C4F421400A48BB4 /* LLTest1ViewController.h */,
+				18D684161C4F421400A48BB4 /* LLTest1ViewController.m */,
+				18D684171C4F421400A48BB4 /* LLTest2ViewController.h */,
+				18D684181C4F421400A48BB4 /* LLTest2ViewController.m */,
+				18D684191C4F421400A48BB4 /* LLTest3ViewController.h */,
+				18D6841A1C4F421400A48BB4 /* LLTest3ViewController.m */,
+				18D6841B1C4F421400A48BB4 /* LLTest4ViewController.h */,
+				18D6841C1C4F421400A48BB4 /* LLTest4ViewController.m */,
+				18D6841D1C4F421400A48BB4 /* LLTest5ViewController.h */,
+				18D6841E1C4F421400A48BB4 /* LLTest5ViewController.m */,
+				18D6841F1C4F421400A48BB4 /* LLTest6ViewController.h */,
+				18D684201C4F421400A48BB4 /* LLTest6ViewController.m */,
+				18D684211C4F421400A48BB4 /* LLTest7ViewController.h */,
+				18D684221C4F421400A48BB4 /* LLTest7ViewController.m */,
+			);
+			name = LinearLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B1523C1DEDE27D00AD7A1C /* FrameLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18D683F51C4F421400A48BB4 /* FLTest1ViewController.h */,
+				18D683F61C4F421400A48BB4 /* FLTest1ViewController.m */,
+				18D683F71C4F421400A48BB4 /* FLTest2ViewController.h */,
+				18D683F81C4F421400A48BB4 /* FLTest2ViewController.m */,
+			);
+			name = FrameLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B1523D1DEDE28700AD7A1C /* TableLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18D6842A1C4F421400A48BB4 /* TLTest1ViewController.h */,
+				18D6842B1C4F421400A48BB4 /* TLTest1ViewController.m */,
+				18D6842C1C4F421400A48BB4 /* TLTest2ViewController.h */,
+				18D6842D1C4F421400A48BB4 /* TLTest2ViewController.m */,
+				18CFFA2C1D0723870032A789 /* TLTest3ViewController.h */,
+				18CFFA2D1D0723970032A789 /* TLTest3ViewController.m */,
+			);
+			name = TableLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B1523E1DEDE29000AD7A1C /* FloatLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18296B6D1C76D55B00273C3E /* FOLTest1ViewController.h */,
+				18296B6E1C76D55B00273C3E /* FOLTest1ViewController.m */,
+				186B83E61D095A49001CA155 /* FOLTest1ViewController.xib */,
+				18296B701C76D66C00273C3E /* FOLTest2ViewController.h */,
+				18296B711C76D66C00273C3E /* FOLTest2ViewController.m */,
+				18296B731C76D67F00273C3E /* FOLTest3ViewController.h */,
+				18296B741C76D67F00273C3E /* FOLTest3ViewController.m */,
+				18DBC5681CFB450900BD73D2 /* FOLTest4ViewController.h */,
+				18DBC5691CFB451800BD73D2 /* FOLTest4ViewController.m */,
+				18EA81431CFFD3DD0006530A /* FOLTest5ViewController.h */,
+				18EA81441CFFD3E90006530A /* FOLTest5ViewController.m */,
+				18EDEC821D64B71900F8B1CD /* FOLTest6ViewController.h */,
+				18EDEC801D64B70D00F8B1CD /* FOLTest6ViewController.m */,
+			);
+			name = FloatLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B1523F1DEDE29800AD7A1C /* FlowLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18D683F31C4F421400A48BB4 /* FLLTest1ViewController.h */,
+				18D683F41C4F421400A48BB4 /* FLLTest1ViewController.m */,
+				1890A22C1C6DD71600373B8B /* FLLTest2ViewController.h */,
+				1890A22D1C6DD71600373B8B /* FLLTest2ViewController.m */,
+				186B83E21D094F11001CA155 /* FLLTest2ViewController.xib */,
+				1830A6071CD6EC2F00FF6B57 /* FLLTest3ViewController.h */,
+				1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */,
+				18BCC5181D2D4879005081FF /* FLLTest4ViewController.h */,
+				18BCC5191D2D4885005081FF /* FLLTest4ViewController.m */,
+			);
+			name = FlowLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B152401DEDE2A100AD7A1C /* PathLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18E7C5161D47A1CA00F61A3E /* PLTest1ViewController.h */,
+				18E7C5171D47A1CA00F61A3E /* PLTest1ViewController.m */,
+				18E7C5191D47BA9400F61A3E /* PLTest2ViewController.h */,
+				18E7C51A1D47BA9400F61A3E /* PLTest2ViewController.m */,
+				18C8F1621D4DA6B800DC1FD3 /* PLTest3ViewController.h */,
+				18C8F1631D4DA6B800DC1FD3 /* PLTest3ViewController.m */,
+				18C8F1651D4E3E4E00DC1FD3 /* PLTest4ViewController.h */,
+				18C8F1661D4E3E4E00DC1FD3 /* PLTest4ViewController.m */,
+			);
+			name = PathLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B152411DEDE2AB00AD7A1C /* RelativeLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18D684241C4F421400A48BB4 /* RLTest1ViewController.h */,
+				18D684251C4F421400A48BB4 /* RLTest1ViewController.m */,
+				18D684261C4F421400A48BB4 /* RLTest2ViewController.h */,
+				18D684271C4F421400A48BB4 /* RLTest2ViewController.m */,
+				18D684281C4F421400A48BB4 /* RLTest3ViewController.h */,
+				18D684291C4F421400A48BB4 /* RLTest3ViewController.m */,
+				18A9A4D51D6304AD004974CE /* RLTest4ViewController.h */,
+				18A9A4D31D63049F004974CE /* RLTest4ViewController.m */,
+			);
+			name = RelativeLayoutDemo;
+			sourceTree = "<group>";
+		};
+		18B152431DEDE2C800AD7A1C /* IntegratedDemo */ = {
+			isa = PBXGroup;
+			children = (
 				1896926D1CF74E03000A5B91 /* AllTestModel&View */,
 				18D683E71C4F421400A48BB4 /* AllTest1ViewController.h */,
 				18D683E81C4F421400A48BB4 /* AllTest1ViewController.m */,
@@ -357,68 +491,27 @@
 				188261CE1C647CB300996C2C /* AllTest6ViewController.m */,
 				183C14611DB9DD1A00C38448 /* AllTest7ViewController.h */,
 				183C14621DB9DD1A00C38448 /* AllTest7ViewController.m */,
-				18D683F31C4F421400A48BB4 /* FLLTest1ViewController.h */,
-				18D683F41C4F421400A48BB4 /* FLLTest1ViewController.m */,
-				1890A22C1C6DD71600373B8B /* FLLTest2ViewController.h */,
-				1890A22D1C6DD71600373B8B /* FLLTest2ViewController.m */,
-				186B83E21D094F11001CA155 /* FLLTest2ViewController.xib */,
-				1830A6071CD6EC2F00FF6B57 /* FLLTest3ViewController.h */,
-				1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */,
-				18BCC5181D2D4879005081FF /* FLLTest4ViewController.h */,
-				18BCC5191D2D4885005081FF /* FLLTest4ViewController.m */,
-				18D683F51C4F421400A48BB4 /* FLTest1ViewController.h */,
-				18D683F61C4F421400A48BB4 /* FLTest1ViewController.m */,
-				18D683F71C4F421400A48BB4 /* FLTest2ViewController.h */,
-				18D683F81C4F421400A48BB4 /* FLTest2ViewController.m */,
-				18D684151C4F421400A48BB4 /* LLTest1ViewController.h */,
-				18D684161C4F421400A48BB4 /* LLTest1ViewController.m */,
-				18D684171C4F421400A48BB4 /* LLTest2ViewController.h */,
-				18D684181C4F421400A48BB4 /* LLTest2ViewController.m */,
-				18D684191C4F421400A48BB4 /* LLTest3ViewController.h */,
-				18D6841A1C4F421400A48BB4 /* LLTest3ViewController.m */,
-				18D6841B1C4F421400A48BB4 /* LLTest4ViewController.h */,
-				18D6841C1C4F421400A48BB4 /* LLTest4ViewController.m */,
-				18D6841D1C4F421400A48BB4 /* LLTest5ViewController.h */,
-				18D6841E1C4F421400A48BB4 /* LLTest5ViewController.m */,
-				18D6841F1C4F421400A48BB4 /* LLTest6ViewController.h */,
-				18D684201C4F421400A48BB4 /* LLTest6ViewController.m */,
-				18D684211C4F421400A48BB4 /* LLTest7ViewController.h */,
-				18D684221C4F421400A48BB4 /* LLTest7ViewController.m */,
-				18D684241C4F421400A48BB4 /* RLTest1ViewController.h */,
-				18D684251C4F421400A48BB4 /* RLTest1ViewController.m */,
-				18D684261C4F421400A48BB4 /* RLTest2ViewController.h */,
-				18D684271C4F421400A48BB4 /* RLTest2ViewController.m */,
-				18D684281C4F421400A48BB4 /* RLTest3ViewController.h */,
-				18D684291C4F421400A48BB4 /* RLTest3ViewController.m */,
-				18A9A4D51D6304AD004974CE /* RLTest4ViewController.h */,
-				18A9A4D31D63049F004974CE /* RLTest4ViewController.m */,
-				18D6842A1C4F421400A48BB4 /* TLTest1ViewController.h */,
-				18D6842B1C4F421400A48BB4 /* TLTest1ViewController.m */,
-				18D6842C1C4F421400A48BB4 /* TLTest2ViewController.h */,
-				18D6842D1C4F421400A48BB4 /* TLTest2ViewController.m */,
-				18CFFA2C1D0723870032A789 /* TLTest3ViewController.h */,
-				18CFFA2D1D0723970032A789 /* TLTest3ViewController.m */,
-				18296B6D1C76D55B00273C3E /* FOLTest1ViewController.h */,
-				18296B6E1C76D55B00273C3E /* FOLTest1ViewController.m */,
-				186B83E61D095A49001CA155 /* FOLTest1ViewController.xib */,
-				18296B701C76D66C00273C3E /* FOLTest2ViewController.h */,
-				18296B711C76D66C00273C3E /* FOLTest2ViewController.m */,
-				18296B731C76D67F00273C3E /* FOLTest3ViewController.h */,
-				18296B741C76D67F00273C3E /* FOLTest3ViewController.m */,
-				18DBC5681CFB450900BD73D2 /* FOLTest4ViewController.h */,
-				18DBC5691CFB451800BD73D2 /* FOLTest4ViewController.m */,
-				18EA81431CFFD3DD0006530A /* FOLTest5ViewController.h */,
-				18EA81441CFFD3E90006530A /* FOLTest5ViewController.m */,
-				18EDEC821D64B71900F8B1CD /* FOLTest6ViewController.h */,
-				18EDEC801D64B70D00F8B1CD /* FOLTest6ViewController.m */,
-				18E7C5161D47A1CA00F61A3E /* PLTest1ViewController.h */,
-				18E7C5171D47A1CA00F61A3E /* PLTest1ViewController.m */,
-				18E7C5191D47BA9400F61A3E /* PLTest2ViewController.h */,
-				18E7C51A1D47BA9400F61A3E /* PLTest2ViewController.m */,
-				18C8F1621D4DA6B800DC1FD3 /* PLTest3ViewController.h */,
-				18C8F1631D4DA6B800DC1FD3 /* PLTest3ViewController.m */,
-				18C8F1651D4E3E4E00DC1FD3 /* PLTest4ViewController.h */,
-				18C8F1661D4E3E4E00DC1FD3 /* PLTest4ViewController.m */,
+			);
+			name = IntegratedDemo;
+			sourceTree = "<group>";
+		};
+		18D683E61C4F421400A48BB4 /* MyLayout */ = {
+			isa = PBXGroup;
+			children = (
+				18D683FB1C4F421400A48BB4 /* Lib */,
+				18B1523B1DEDE26900AD7A1C /* LinearLayoutDemo */,
+				18B1523C1DEDE27D00AD7A1C /* FrameLayoutDemo */,
+				18B152411DEDE2AB00AD7A1C /* RelativeLayoutDemo */,
+				18B1523D1DEDE28700AD7A1C /* TableLayoutDemo */,
+				18B1523F1DEDE29800AD7A1C /* FlowLayoutDemo */,
+				18B1523E1DEDE29000AD7A1C /* FloatLayoutDemo */,
+				18B152401DEDE2A100AD7A1C /* PathLayoutDemo */,
+				18B152431DEDE2C800AD7A1C /* IntegratedDemo */,
+				18F83FBD1C4F6EB7003EF090 /* Supporting Files */,
+				18D6842E1C4F421400A48BB4 /* ViewController.h */,
+				18D6842F1C4F421400A48BB4 /* ViewController.m */,
+				18D683EF1C4F421400A48BB4 /* AppDelegate.h */,
+				18D683F01C4F421400A48BB4 /* AppDelegate.m */,
 				18DF8AE71DDCBF34009FD703 /* CFTool.h */,
 				18DF8AE81DDCBF34009FD703 /* CFTool.m */,
 			);
@@ -530,6 +623,24 @@
 			productReference = 184082A61B2C46E8003F378B /* MyLayout.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		18B152301DEDDE5500AD7A1C /* MyLayoutUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18B1523A1DEDDE5500AD7A1C /* Build configuration list for PBXNativeTarget "MyLayoutUITests" */;
+			buildPhases = (
+				18B1522D1DEDDE5500AD7A1C /* Sources */,
+				18B1522E1DEDDE5500AD7A1C /* Frameworks */,
+				18B1522F1DEDDE5500AD7A1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				18B152371DEDDE5500AD7A1C /* PBXTargetDependency */,
+			);
+			name = MyLayoutUITests;
+			productName = MyLayoutUITests;
+			productReference = 18B152311DEDDE5500AD7A1C /* MyLayoutUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -545,6 +656,11 @@
 					};
 					184082A51B2C46E8003F378B = {
 						CreatedOnToolsVersion = 6.3.2;
+						TestTargetID = 1840828C1B2C46E8003F378B;
+					};
+					18B152301DEDDE5500AD7A1C = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 1840828C1B2C46E8003F378B;
 					};
 				};
@@ -564,6 +680,7 @@
 			targets = (
 				1840828C1B2C46E8003F378B /* MyLayout */,
 				184082A51B2C46E8003F378B /* MyLayoutTests */,
+				18B152301DEDDE5500AD7A1C /* MyLayoutUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -584,6 +701,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		184082A41B2C46E8003F378B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18B1522F1DEDDE5500AD7A1C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -668,6 +792,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		18B1522D1DEDDE5500AD7A1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18B152341DEDDE5500AD7A1C /* MyLayoutUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -675,6 +807,11 @@
 			isa = PBXTargetDependency;
 			target = 1840828C1B2C46E8003F378B /* MyLayout */;
 			targetProxy = 184082A71B2C46E8003F378B /* PBXContainerItemProxy */;
+		};
+		18B152371DEDDE5500AD7A1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1840828C1B2C46E8003F378B /* MyLayout */;
+			targetProxy = 18B152361DEDDE5500AD7A1C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -810,7 +947,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayout/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -827,7 +964,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayout/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -875,6 +1012,41 @@
 			};
 			name = Release;
 		};
+		18B152381DEDDE5500AD7A1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = MyLayoutUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.MyLayoutUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4bac08b2-6788-4e38-8e3e-241ebd7fba1e";
+				TEST_TARGET_NAME = MyLayout;
+			};
+			name = Debug;
+		};
+		18B152391DEDDE5500AD7A1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				INFOPLIST_FILE = MyLayoutUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.MyLayoutUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4bac08b2-6788-4e38-8e3e-241ebd7fba1e";
+				TEST_TARGET_NAME = MyLayout;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -901,6 +1073,15 @@
 			buildConfigurations = (
 				184082B41B2C46E8003F378B /* Debug */,
 				184082B51B2C46E8003F378B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		18B1523A1DEDDE5500AD7A1C /* Build configuration list for PBXNativeTarget "MyLayoutUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18B152381DEDDE5500AD7A1C /* Debug */,
+				18B152391DEDDE5500AD7A1C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

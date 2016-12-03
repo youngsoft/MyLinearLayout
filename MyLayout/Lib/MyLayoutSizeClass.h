@@ -221,6 +221,10 @@ typedef enum : unsigned char{
 @property(nonatomic,assign) BOOL autoArrange;
 @property(nonatomic,assign) MyMarginGravity arrangedGravity;
 
+@property(nonatomic, assign) CGFloat subviewSize;
+@property(nonatomic, assign) CGFloat minSpace;
+@property(nonatomic, assign) CGFloat maxSpace;
+
 
 @end
 
@@ -228,7 +232,8 @@ typedef enum : unsigned char{
 @interface MyFloatLayoutViewSizeClass : MySequentLayoutViewSizeClass
 
 @property(nonatomic, assign) CGFloat subviewSize;
-@property(nonatomic, assign) CGFloat minMargin;
+@property(nonatomic, assign) CGFloat minSpace;
+@property(nonatomic, assign) CGFloat maxSpace;
 @property(nonatomic,assign) BOOL noBoundaryLimit;
 
 @end

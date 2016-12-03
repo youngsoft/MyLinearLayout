@@ -59,13 +59,14 @@
 @property(nonatomic,assign)  MyLayoutViewOrientation orientation;
 
 
-
-
 /**
  *流式布局内所有子视图的整体停靠对齐位置设定。
- *如果视图方向为MyLayoutViewOrientation_Vert时且averageArrange为YES时则水平方向的停靠失效。
- *如果视图方向为MyLayoutViewOrientation_Horz时且averageArrange为YES时则垂直方向的停靠失效。
- *对于内容填充布局来说如果设置为MyMarginGravity_Horz_Fill或者MyMarginGravity_Vert_Fill则表示间距的拉伸
+ *MyMarginGravity_Vert_Top,MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom 表示整体垂直居上，居中，居下
+ *MyMarginGravity_Horz_Left,MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right 表示整体水平居左，居中，居右
+ *MyMarginGravity_Vert_Between 表示在流式布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。
+ *MyMarginGravity_Horz_Between 表示在流式布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。
+ *MyMarginGravity_Vert_Fill 在垂直流式布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平数量流式布局里面表示每列的高度都相等并且填充满整个布局视图的高度；在水平内容约束布局里面表示布局会自动拉升每列的高度，以便垂直方向填充满布局视图的高度(这种设置方法代替过期的方法：averageArrange)。
+ *MyMarginGravity_Horz_Fill 在水平流式布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直数量流式布局里面表示每行的宽度都相等并且填充满整个布局视图的宽度；在垂直内容约束布局里面表示布局会自动拉升每行的宽度，以便水平方向填充满布局视图的宽度(这种设置方法代替过期的方法：averageArrange)。
  */
 @property(nonatomic,assign)  MyMarginGravity gravity;
 
@@ -77,13 +78,7 @@
  */
 @property(nonatomic, assign)  NSInteger arrangedCount;
 
-/**
- *指定是否均分布局方向上的子视图的宽度或者高度，或者拉伸子视图的尺寸，默认是NO。
- 如果是MyLayoutViewOrientation_Vert则表示每行的子视图的宽度会被均分，这样子视图不需要指定宽度，但是布局视图必须要指定一个明确的宽度值，如果设置为YES则wrapContentWidth会失效。
- 如果是MyLayoutViewOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
-内容填充约束流式布局下averageArrange设置为YES时表示拉伸子视图的宽度或者高度以便填充满整个布局视图。
- */
-@property(nonatomic,assign)  BOOL averageArrange;
+
 
 /**
  *子视图自动排列,这个属性只有在内容填充约束流式布局下才有用,默认为NO.当设置为YES时则根据子视图的内容自动填充，而不是根据加入的顺序来填充，以便保证不会出现多余空隙的情况。
@@ -107,6 +102,32 @@
 @property(nonatomic, assign)  CGFloat subviewHorzMargin;
 @property(nonatomic, assign)  CGFloat subviewMargin;  //同时设置水平和垂直间距。
 
+
+
+/**
+ *在内容约束流式布局的一些应用场景中我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的，这样就可以尽可能的容纳更多的子视图。比如每个子视图的宽度是固定80，那么在小屏幕下每行只能放3个，而我们希望大屏幕每行能放4个或者5个子视图。 因此您可以通过如下方法来设置浮动间距，这个方法会根据您当前布局的orientation方向不同而意义不同：
+ 1.如果您的布局方向是.vert表示设置的是子视图的水平间距，其中的size指定的是子视图的宽度，minSpace指定的是最小的水平间距,maxSpace指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的宽度。
+ 2.如果您的布局方向是.horz表示设置的是子视图的垂直间距，其中的size指定的是子视图的高度，minSpace指定的是最小的垂直间距,maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的高度。
+ 3.如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
+ 4.这个方法只在内容约束流式布局里面设置才有意义。
+ */
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
+
+
+
+@end
+
+
+@interface MyFlowLayout(MyFlowLayoutDeprecated)
+
+/**
+ *指定是否均分布局方向上的子视图的宽度或者高度，或者拉伸子视图的尺寸，默认是NO。
+ 如果是MyLayoutViewOrientation_Vert则表示每行的子视图的宽度会被均分，这样子视图不需要指定宽度，但是布局视图必须要指定一个明确的宽度值，如果设置为YES则wrapContentWidth会失效。
+ 如果是MyLayoutViewOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
+ 内容填充约束流式布局下averageArrange设置为YES时表示拉伸子视图的宽度或者高度以便填充满整个布局视图。
+ */
+@property(nonatomic,assign)  BOOL averageArrange MYDEPRECATED("use gravity = MyMarginGravity_Horz_Fill or gravity = MyMarginGravity_Vert_Fill to replace");
 
 
 @end

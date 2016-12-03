@@ -181,17 +181,28 @@
 }
 
 
--(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin;
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace
 {
-    [self setSubviewFloatMargin:subviewSize minMargin:minMargin inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+    [self setSubviewsSize:subviewSize minSpace:minSpace maxSpace:maxSpace inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+}
+
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass
+{
+    MyFloatLayoutViewSizeClass *lsc = (MyFloatLayoutViewSizeClass*)[self fetchLayoutSizeClass:sizeClass];
+    lsc.subviewSize = subviewSize;
+    lsc.minSpace = minSpace;
+    lsc.maxSpace = maxSpace;
+    [self setNeedsLayout];
+}
+
+-(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin
+{
+    [self setSubviewsSize:subviewSize minSpace:minMargin maxSpace:CGFLOAT_MAX];
 }
 
 -(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin inSizeClass:(MySizeClass)sizeClass
 {
-    MyFloatLayoutViewSizeClass *lsc = (MyFloatLayoutViewSizeClass*)[self fetchLayoutSizeClass:sizeClass];
-    lsc.subviewSize = subviewSize;
-    lsc.minMargin = minMargin;
-    [self setNeedsLayout];
+    [self setSubviewsSize:subviewSize minSpace:minMargin maxSpace:CGFLOAT_MAX inSizeClass:sizeClass];
 }
 
 
@@ -417,16 +428,27 @@
         
 #ifdef DEBUG
         //异常崩溃：当布局视图设置了noBoundaryLimit为YES时，不能设置最小垂直间距。
-        NSCAssert(hasBoundaryLimit, @"Constraint exception！！, vertical float layout:%@ can not set noBoundaryLimit to YES when call  setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin  method",self);
+        NSCAssert(hasBoundaryLimit, @"Constraint exception！！, vertical float layout:%@ can not set noBoundaryLimit to YES when call setSubviewsSize:minSpace:maxSpace  method",self);
 #endif
 
         
-        CGFloat minMargin = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).minMargin;
+        CGFloat minSpace = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
+        CGFloat maxSpace = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
         
-        NSInteger rowCount =  floor((selfSize.width - padding.left - padding.right  + minMargin) / (subviewSize + minMargin));
+        NSInteger rowCount =  floor((selfSize.width - padding.left - padding.right  + minSpace) / (subviewSize + minSpace));
         if (rowCount > 1)
         {
             horzMargin = (selfSize.width - padding.left - padding.right - subviewSize * rowCount)/(rowCount - 1);
+            
+            //如果超过最大间距则调整子视图的宽度。
+            if (horzMargin > maxSpace)
+            {
+                horzMargin = maxSpace;
+                
+                subviewSize =  (selfSize.width - padding.left - padding.right -  horzMargin * (rowCount - 1)) / rowCount;
+                
+            }
+
         }
     }
 
@@ -458,6 +480,10 @@
         CGFloat bottomMargin = sbv.bottomPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
         CGRect rect = sbv.myFrame.frame;
+        
+        
+        if (subviewSize != 0)
+            rect.size.width = subviewSize;
         
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
@@ -867,15 +893,25 @@
     {
 #ifdef DEBUG
         //异常崩溃：当布局视图设置了noBoundaryLimit为YES时，不能设置最小垂直间距。
-        NSCAssert(hasBoundaryLimit, @"Constraint exception！！, horizontal float layout:%@ can not set noBoundaryLimit to YES when call  setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin  method",self);
+        NSCAssert(hasBoundaryLimit, @"Constraint exception！！, horizontal float layout:%@ can not set noBoundaryLimit to YES when call setSubviewsSize:minSpace:maxSpace  method",self);
 #endif
         
-        CGFloat minMargin = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).minMargin;
+        CGFloat minSpace = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
+        CGFloat maxSpace = ((MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
 
-        NSInteger rowCount =  floor((selfSize.height - padding.top - padding.bottom  + minMargin) / (subviewSize + minMargin));
+        NSInteger rowCount =  floor((selfSize.height - padding.top - padding.bottom  + minSpace) / (subviewSize + minSpace));
         if (rowCount > 1)
         {
             vertMargin = (selfSize.height - padding.top - padding.bottom - subviewSize * rowCount)/(rowCount - 1);
+            
+            if (vertMargin > maxSpace)
+            {
+                vertMargin = maxSpace;
+                
+                subviewSize =  (selfSize.height - padding.top - padding.bottom -  vertMargin * (rowCount - 1)) / rowCount;
+                
+            }
+
         }
     }
 
@@ -910,6 +946,9 @@
         
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
+        
+        if (subviewSize != 0)
+            rect.size.height = subviewSize;
         
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
