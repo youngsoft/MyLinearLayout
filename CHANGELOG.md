@@ -3,6 +3,21 @@
 
 ---
 
+## [V1.3.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.0)(2016/12/21)
+
+#### Added
+1. 添加对布局位置类`MyLayoutPos`的方法:`lBound,uBound`用来设置视图的位置最小最大的依赖，`lBound，uBound`方法只有在相对布局中的子视图设置才有效。
+2. 添加了Demo:RLTest5ViewController这个例子专门用来演示相对布局中的子视图设置lBound,uBound方法的例子。
+
+#### Fixed
+1. 修复路径布局`MyPathLayout`中设置`wrapContentWidth`和`wrapContentHeight`为YES时的计算错误的情况。
+2. 修复线性布局`MyLinearLayout`里面均分间距和均分视图两个方法可能导致均分不正确的BUG。
+3. 修复了相对布局`MyRelativeLayout`中如果设置了`topPadding`而子视图的`topPos`设置为数值时`topPadding`不起作用的BUG。
+4. 修复了相对布局`MyRelativeLayout`中子视图的高度设置为`flexedHeight`时计算可能不正常的问题。
+
+#### Changed
+1. 优化了相对布局和框架布局时的性能。
+
 ## [V1.2.9](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.2.9)(2016/12/5)
 
 #### Added

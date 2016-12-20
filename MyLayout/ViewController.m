@@ -23,6 +23,7 @@
 #import "RLTest2ViewController.h"
 #import "RLTest3ViewController.h"
 #import "RLTest4ViewController.h"
+#import "RLTest5ViewController.h"
 
 
 #import "TLTest1ViewController.h"
@@ -108,6 +109,9 @@
                            },
                          @{@"title":NSLocalizedString(@"4.RelativeLayout - Scroll&Dock", @""),
                            @"class":[RLTest4ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"5.RelativeLayout - Boundary limit", @""),
+                           @"class":[RLTest5ViewController class]
                            },
                          @{@"title":NSLocalizedString(@"1.TableLayout - Vert", @""),
                            @"class":[TLTest1ViewController class]

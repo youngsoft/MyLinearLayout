@@ -24,6 +24,7 @@
      */
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
     
     MyRelativeLayout *layout1 = [self createLayout1];  //子视图整体水平居中的布局

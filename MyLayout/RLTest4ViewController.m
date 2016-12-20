@@ -82,8 +82,24 @@
     v2.topPos.equalTo(v4.bottomPos);
     
     
+    //当v4设置为noLayout时，出现了屏幕的旋转这时候是无法更新v4的frame值的，所以这里需要实现布局视图的这个block来再屏幕旋转是更新v4的frame值。
+    __weak UIView *weakV4 = v4;
+    __weak UIScrollView *weakScrollView = scrollView;
+    rootLayout.rotationToDeviceOrientationBlock = ^(MyBaseLayout *layout, BOOL isFirst, BOOL isPortrait){
+    
+        if (weakV4.noLayout && !isFirst)
+        {
+          //如果V4不实际布局且不是第一次布局完成则这里要调整V4的frame。
+          CGRect rect = weakV4.frame;
+          weakV4.frame = CGRectMake(rect.origin.x, weakScrollView.contentOffset.y, layout.frame.size.width - 20, rect.size.height);
+        }
+        
+    };
+    
+    
     
 }
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];

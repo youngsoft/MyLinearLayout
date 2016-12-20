@@ -37,7 +37,7 @@
  */
 
 
-//当前版本为1.2.9 请到: https://github.com/youngsoft/MyLinearLayout/blob/master/CHANGELOG.md 中查看变更和历史版本。
+//Current version is 1.3.0, please open: https://github.com/youngsoft/MyLinearLayout/blob/master/CHANGELOG.md to show the changes.
 
 
 #ifndef MyLayout_MyLayout_h

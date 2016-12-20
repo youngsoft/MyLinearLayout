@@ -69,7 +69,9 @@
 -(MyLayoutPos* (^)(id val))myEqualTo;
 -(MyLayoutPos* (^)(CGFloat val))myOffset;
 -(MyLayoutPos* (^)(CGFloat val))myMin;
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myLBound;
 -(MyLayoutPos* (^)(CGFloat val))myMax;
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myUBound;
 -(void)myClear;
 
 #else
@@ -93,13 +95,21 @@
 
 /**
  *设置布局位置的最小值。这个方法一般和相对位置值配合使用，不设置默认是-CGFLOAT_MAX
+ *lBound方法是max方法的扩展方法，posVal除了能设置NSNumber类型外，还可以设置MyLayoutPos对象。目前如果设置为MyLayoutPos对象只有在相对布局里面的子视图才有意义,
+ *表示视图的最小位置不能小于指定的位置，否则将会缩小视图的尺寸。
  */
 -(MyLayoutPos* (^)(CGFloat val))min;
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))lBound;
+
 
 /**
  *设置布局位置的最大值。这个方法一般和相对位置值配合使用，不设置默认是CGFLOAT_MAX
+ *uBound方法是max方法的扩展方法，posVal除了能设置NSNumber类型外，还可以设置MyLayoutPos对象。目前如果设置为MyLayoutPos对象只有在相对布局里面的子视图才有意义，
+ *表示视图的最大位置不能大于指定的位置，否则将会缩小视图的尺寸。
+ *如果相对布局中的某个子视图同时指定了MyLayoutPos类型值的最小和最大值，那么子视图的位置将会居中于这个指定的区间，并且一旦尺寸超出指定的区间尺寸则会缩小视图的尺寸。
  */
 -(MyLayoutPos* (^)(CGFloat val))max;
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))uBound;
 
 
 /**

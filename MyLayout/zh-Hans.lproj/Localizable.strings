@@ -21,6 +21,7 @@
 "2.RelativeLayout - Prorate size" = "2.相对布局-子视图的尺寸按比例分配";
 "3.RelativeLayout - Centered" = "3.相对布局-子视图整体居中";
 "4.RelativeLayout - Scroll&Dock" = "4.相对布局-滚动和停靠";
+"5.RelativeLayout - Boundary limit" = "5.相对布局-边界约束";
 "1.TableLayout - Vert" = "1.表格布局-垂直表格";
 "2.TableLayout - Waterfall(Horz)" = "2.表格布局-水平表格实现瀑布流";
 "3.TableLayout - Intelligent Borderline" = "3.表格布局-表格和智能边界线";
@@ -154,8 +155,8 @@
 //FLLTest1ViewController
 "adjust orientation"="调整方向";
 "adjust arrangedCount"="调整数量";
-"average size"="平均尺寸";
-"adjust gravity"="调整停靠";
+"adjust horz gravity"="填充水平停靠";
+"adjust vert gravity"="调整垂直停靠";
 "adjust align"="调整对齐方式";
 "adjust spacing"="调整间隔";
 

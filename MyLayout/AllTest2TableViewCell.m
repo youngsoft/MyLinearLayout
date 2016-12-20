@@ -32,8 +32,8 @@
          * 您可以尝试用不同的布局来实现相同的功能。
          */
         [self createLinearRootLayout];
-       //  [self createRelativeRootLayout];
-       // [self createFloatRootLayout];
+        //[self createRelativeRootLayout];
+        // [self createFloatRootLayout];
     }
     
     return self;
@@ -189,9 +189,10 @@
     _nameLabel = [UILabel new];
     _nameLabel.font = [CFTool font:17];
     _nameLabel.textColor = [CFTool color:3];
-    //相对布局在后续的版本中会增加对边界的限制方法来实现更加灵活的尺寸限制，这里暂时先设置为140经过测试效果最好。
-    _nameLabel.widthDime.equalTo(_nameLabel.widthDime).uBound(rootLayout.widthDime, -1 * MYDIMESCALEW(140), 1);  //视图的最大宽度和父视图宽度-140。
+    _nameLabel.widthDime.equalTo(_nameLabel.widthDime);
     _nameLabel.leftPos.equalTo(_headImageView.rightPos);
+    //1.3.0版本最新支持。设置_nameLabel的右边距最大是_priceLabel的左边距，再偏移两个小图标和间距的距离。这样当_nameLabel的尺寸超过这个最大的右边距时就会自动的缩小视图的宽度。
+    _nameLabel.rightPos.uBound(_priceLabel.leftPos, (5 + 14 + 5 + 14));
     [rootLayout addSubview:_nameLabel];
     
     UIImageView *editImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit"]];

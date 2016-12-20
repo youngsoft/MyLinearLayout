@@ -57,7 +57,6 @@
 
 //流式布局独有
 -(MyMaker*)arrangedCount;
--(MyMaker*)averageArrange;
 -(MyMaker*)autoArrange;
 -(MyMaker*)arrangedGravity;
 -(MyMaker*)subviewVertMargin;

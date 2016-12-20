@@ -79,8 +79,14 @@
     
     //左右和宽度设置完毕。
     
+    MyFrame *sbvmyFrame = sbv.myFrame;
+    MyLayoutPos *sbvLeftPos = sbv.leftPos;
+    MyLayoutPos *sbvRightPos = sbv.rightPos;
+    MyLayoutPos *sbvCenterXPos = sbv.centerXPos;
     
-    if (sbv.myFrame.leftPos != CGFLOAT_MAX && sbv.myFrame.rightPos != CGFLOAT_MAX && sbv.myFrame.width != CGFLOAT_MAX)
+    
+    
+    if (sbvmyFrame.leftPos != CGFLOAT_MAX && sbvmyFrame.rightPos != CGFLOAT_MAX && sbvmyFrame.width != CGFLOAT_MAX)
         return;
     
     
@@ -89,82 +95,134 @@
         return;
     
     
-    if (sbv.centerXPos.posRelaVal != nil)
+    if (sbvCenterXPos.posRelaVal != nil)
     {
-        UIView *relaView = sbv.centerXPos.posRelaVal.view;
+        UIView *relaView = sbvCenterXPos.posRelaVal.view;
 
-        sbv.myFrame.leftPos = [self calcSubView:relaView gravity:sbv.centerXPos.posRelaVal.pos selfSize:selfSize] - sbv.myFrame.width / 2 + sbv.centerXPos.margin;
+        sbvmyFrame.leftPos = [self calcSubView:relaView gravity:sbvCenterXPos.posRelaVal.pos selfSize:selfSize] - sbvmyFrame.width / 2 + sbvCenterXPos.margin;
         
         if (relaView != nil && relaView != self && [self isNoLayoutSubview:relaView])
         {
-            sbv.myFrame.leftPos -= sbv.centerXPos.margin;
+            sbvmyFrame.leftPos -= sbvCenterXPos.margin;
         }
 
-        sbv.myFrame.rightPos = sbv.myFrame.leftPos + sbv.myFrame.width;
-        return;
+        sbvmyFrame.rightPos = sbvmyFrame.leftPos + sbvmyFrame.width;
     }
-    else if (sbv.centerXPos.posNumVal != nil)
+    else if (sbvCenterXPos.posNumVal != nil)
     {
-        sbv.myFrame.leftPos = (selfSize.width - self.rightPadding - self.leftPadding - sbv.myFrame.width) / 2 + self.leftPadding + sbv.centerXPos.margin;
-        sbv.myFrame.rightPos = sbv.myFrame.leftPos + sbv.myFrame.width;
-        return;
+        sbvmyFrame.leftPos = (selfSize.width - self.rightPadding - self.leftPadding - sbvmyFrame.width) / 2 + self.leftPadding + sbvCenterXPos.margin;
+        sbvmyFrame.rightPos = sbvmyFrame.leftPos + sbvmyFrame.width;
     }
     else
     {
-        if (sbv.leftPos.posRelaVal != nil)
+        //如果左右都设置了则上上面的calcWidth会直接返回不会进入这个流程。
+        if (sbvLeftPos.posRelaVal != nil)
         {
-            UIView *relaView = sbv.leftPos.posRelaVal.view;
+            UIView *relaView = sbvLeftPos.posRelaVal.view;
             
-            sbv.myFrame.leftPos = [self calcSubView:relaView gravity:sbv.leftPos.posRelaVal.pos selfSize:selfSize] + sbv.leftPos.margin;
+            sbvmyFrame.leftPos = [self calcSubView:relaView gravity:sbvLeftPos.posRelaVal.pos selfSize:selfSize] + sbvLeftPos.margin;
             
             if (relaView != nil && relaView != self && [self isNoLayoutSubview:relaView])
             {
-                sbv.myFrame.leftPos -= sbv.leftPos.margin;
+                sbvmyFrame.leftPos -= sbvLeftPos.margin;
             }
 
-            sbv.myFrame.rightPos = sbv.myFrame.leftPos + sbv.myFrame.width;
-            return;
+            sbvmyFrame.rightPos = sbvmyFrame.leftPos + sbvmyFrame.width;
         }
-        else if (sbv.leftPos.posNumVal != nil)
+        else if (sbvLeftPos.posNumVal != nil)
         {
-            sbv.myFrame.leftPos = sbv.leftPos.margin + self.leftPadding;
-            sbv.myFrame.rightPos = sbv.myFrame.leftPos + sbv.myFrame.width;
-            return;
+            sbvmyFrame.leftPos = sbvLeftPos.margin + self.leftPadding;
+            sbvmyFrame.rightPos = sbvmyFrame.leftPos + sbvmyFrame.width;
         }
-        
-        if (sbv.rightPos.posRelaVal != nil)
+        else if (sbvRightPos.posRelaVal != nil)
         {
-            UIView *relaView = sbv.rightPos.posRelaVal.view;
+            UIView *relaView = sbvRightPos.posRelaVal.view;
             
             
-            sbv.myFrame.rightPos = [self calcSubView:relaView gravity:sbv.rightPos.posRelaVal.pos selfSize:selfSize] - sbv.rightPos.margin + sbv.leftPos.margin;
+            sbvmyFrame.rightPos = [self calcSubView:relaView gravity:sbvRightPos.posRelaVal.pos selfSize:selfSize] - sbvRightPos.margin + sbvLeftPos.margin;
             
             if (relaView != nil && relaView != self && [self isNoLayoutSubview:relaView])
             {
-                sbv.myFrame.rightPos += sbv.rightPos.margin;
+                sbvmyFrame.rightPos += sbvRightPos.margin;
             }
             
-            sbv.myFrame.leftPos = sbv.myFrame.rightPos - sbv.myFrame.width;
+            sbvmyFrame.leftPos = sbvmyFrame.rightPos - sbvmyFrame.width;
             
-            return;
         }
-        else if (sbv.rightPos.posNumVal != nil)
+        else if (sbvRightPos.posNumVal != nil)
         {
-            sbv.myFrame.rightPos = selfSize.width -  self.rightPadding -  sbv.rightPos.margin + sbv.leftPos.margin;
-            sbv.myFrame.leftPos = sbv.myFrame.rightPos - sbv.myFrame.width;
-            return;
+            sbvmyFrame.rightPos = selfSize.width -  self.rightPadding -  sbvRightPos.margin + sbvLeftPos.margin;
+            sbvmyFrame.leftPos = sbvmyFrame.rightPos - sbvmyFrame.width;
         }
-        
-        sbv.myFrame.leftPos = sbv.leftPos.margin + self.leftPadding;
-        sbv.myFrame.rightPos = sbv.myFrame.leftPos + sbv.myFrame.width;
+        else
+        {
+            sbvmyFrame.leftPos = sbvLeftPos.margin + self.leftPadding;
+            sbvmyFrame.rightPos = sbvmyFrame.leftPos + sbvmyFrame.width;
+        }
         
     }
+    
+    //这里要更新左边最小和右边最大约束的情况。
+    
+    if (sbvLeftPos.lBoundVal.posRelaVal != nil && sbvRightPos.uBoundVal.posRelaVal != nil)
+    {
+        //让宽度缩小并在最小和最大的中间排列。
+         CGFloat   minLeft = [self calcSubView:sbvLeftPos.lBoundVal.posRelaVal.view gravity:sbvLeftPos.lBoundVal.posRelaVal.pos selfSize:selfSize] + sbvLeftPos.lBoundVal.offsetVal;
+        
+         CGFloat   maxRight = [self calcSubView:sbvRightPos.uBoundVal.posRelaVal.view gravity:sbvRightPos.uBoundVal.posRelaVal.pos selfSize:selfSize] - sbvRightPos.uBoundVal.offsetVal;
+        
+        //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
+        if (maxRight - minLeft < sbvmyFrame.width)
+        {
+            sbvmyFrame.width = maxRight - minLeft;
+            sbvmyFrame.leftPos = minLeft;
+        }
+        else
+        {
+            sbvmyFrame.leftPos = (maxRight - minLeft - sbvmyFrame.width) / 2 + minLeft;
+        }
+        
+        sbvmyFrame.rightPos = sbvmyFrame.leftPos + sbvmyFrame.width;
+
+        
+    }
+    else if (sbvLeftPos.lBoundVal.posRelaVal != nil)
+    {
+         //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
+        CGFloat   minLeft = [self calcSubView:sbvLeftPos.lBoundVal.posRelaVal.view gravity:sbvLeftPos.lBoundVal.posRelaVal.pos selfSize:selfSize] + sbvLeftPos.lBoundVal.offsetVal;
+        
+        if (sbvmyFrame.leftPos < minLeft)
+        {
+            sbvmyFrame.leftPos = minLeft;
+            sbvmyFrame.width = sbvmyFrame.rightPos - sbvmyFrame.leftPos;
+        }
+
+    }
+    else if (sbvRightPos.uBoundVal.posRelaVal != nil)
+    {
+        //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
+        CGFloat   maxRight = [self calcSubView:sbvRightPos.uBoundVal.posRelaVal.view gravity:sbvRightPos.uBoundVal.posRelaVal.pos selfSize:selfSize] - sbvRightPos.uBoundVal.offsetVal;
+        if (sbvmyFrame.rightPos > maxRight)
+        {
+            sbvmyFrame.rightPos = maxRight;
+            sbvmyFrame.width = sbvmyFrame.rightPos - sbvmyFrame.leftPos;
+        }
+
+    }
+    
     
 }
 
 -(void)calcSubViewTopBottom:(UIView*)sbv selfSize:(CGSize)selfSize
 {
-    if (sbv.myFrame.topPos != CGFLOAT_MAX && sbv.myFrame.bottomPos != CGFLOAT_MAX && sbv.myFrame.height != CGFLOAT_MAX)
+    
+    MyFrame *sbvmyFrame = sbv.myFrame;
+    MyLayoutPos *sbvTopPos = sbv.topPos;
+    MyLayoutPos *sbvBottomPos = sbv.bottomPos;
+    MyLayoutPos *sbvCenterYPos = sbv.centerYPos;
+
+    
+    if (sbvmyFrame.topPos != CGFLOAT_MAX && sbvmyFrame.bottomPos != CGFLOAT_MAX && sbvmyFrame.height != CGFLOAT_MAX)
         return;
     
     
@@ -172,78 +230,120 @@
     if ([self calcHeight:sbv selfSize:selfSize])
         return;
     
-    if (sbv.centerYPos.posRelaVal != nil)
+    if (sbvCenterYPos.posRelaVal != nil)
     {
-        UIView *relaView = sbv.centerYPos.posRelaVal.view;
+        UIView *relaView = sbvCenterYPos.posRelaVal.view;
         
-        sbv.myFrame.topPos = [self calcSubView:relaView gravity:sbv.centerYPos.posRelaVal.pos selfSize:selfSize] - sbv.myFrame.height / 2 + sbv.centerYPos.margin;
+        sbvmyFrame.topPos = [self calcSubView:relaView gravity:sbvCenterYPos.posRelaVal.pos selfSize:selfSize] - sbvmyFrame.height / 2 + sbvCenterYPos.margin;
         
         
         if (relaView != nil && relaView != self && [self isNoLayoutSubview:relaView])
         {
-            sbv.myFrame.topPos -= sbv.centerYPos.margin;
+            sbvmyFrame.topPos -= sbvCenterYPos.margin;
         }
 
         
         
-        sbv.myFrame.bottomPos = sbv.myFrame.topPos + sbv.myFrame.height;
-        return;
+        sbvmyFrame.bottomPos = sbvmyFrame.topPos + sbvmyFrame.height;
     }
-    else if (sbv.centerYPos.posNumVal != nil)
+    else if (sbvCenterYPos.posNumVal != nil)
     {
-        sbv.myFrame.topPos = (selfSize.height - self.topPadding - self.bottomPadding -  sbv.myFrame.height) / 2 + self.topPadding + sbv.centerYPos.margin;
-        sbv.myFrame.bottomPos = sbv.myFrame.topPos + sbv.myFrame.height;
-        return;
+        sbvmyFrame.topPos = (selfSize.height - self.topPadding - self.bottomPadding -  sbvmyFrame.height) / 2 + self.topPadding + sbvCenterYPos.margin;
+        sbvmyFrame.bottomPos = sbvmyFrame.topPos + sbvmyFrame.height;
     }
     else
     {
-        if (sbv.topPos.posRelaVal != nil)
+        if (sbvTopPos.posRelaVal != nil)
         {
-            UIView *relaView = sbv.topPos.posRelaVal.view;
+            UIView *relaView = sbvTopPos.posRelaVal.view;
 
-            sbv.myFrame.topPos = [self calcSubView:relaView gravity:sbv.topPos.posRelaVal.pos selfSize:selfSize] + sbv.topPos.margin;
+            sbvmyFrame.topPos = [self calcSubView:relaView gravity:sbvTopPos.posRelaVal.pos selfSize:selfSize] + sbvTopPos.margin;
             
             if (relaView != nil && relaView != self && [self isNoLayoutSubview:relaView])
             {
-                sbv.myFrame.topPos -= sbv.topPos.margin;
+                sbvmyFrame.topPos -= sbvTopPos.margin;
             }
             
-            sbv.myFrame.bottomPos = sbv.myFrame.topPos + sbv.myFrame.height;
-            return;
+            sbvmyFrame.bottomPos = sbvmyFrame.topPos + sbvmyFrame.height;
         }
-        else if (sbv.topPos.posNumVal != nil)
+        else if (sbvTopPos.posNumVal != nil)
         {
-            sbv.myFrame.topPos = sbv.topPos.margin;
-            sbv.myFrame.bottomPos = sbv.myFrame.topPos + sbv.myFrame.height;
-            return;
+            sbvmyFrame.topPos = sbvTopPos.margin + self.topPadding;
+            sbvmyFrame.bottomPos = sbvmyFrame.topPos + sbvmyFrame.height;
         }
-        
-        if (sbv.bottomPos.posRelaVal != nil)
+        else if (sbvBottomPos.posRelaVal != nil)
         {
-            UIView *relaView = sbv.bottomPos.posRelaVal.view;
+            UIView *relaView = sbvBottomPos.posRelaVal.view;
             
-            sbv.myFrame.bottomPos = [self calcSubView:relaView gravity:sbv.bottomPos.posRelaVal.pos selfSize:selfSize] - sbv.bottomPos.margin + sbv.topPos.margin;
+            sbvmyFrame.bottomPos = [self calcSubView:relaView gravity:sbvBottomPos.posRelaVal.pos selfSize:selfSize] - sbvBottomPos.margin + sbvTopPos.margin;
             
             if (relaView != nil && relaView != self && [self isNoLayoutSubview:relaView])
             {
-                sbv.myFrame.bottomPos += sbv.bottomPos.margin;
+                sbvmyFrame.bottomPos += sbvBottomPos.margin;
             }
             
-            sbv.myFrame.topPos = sbv.myFrame.bottomPos - sbv.myFrame.height;
+            sbvmyFrame.topPos = sbvmyFrame.bottomPos - sbvmyFrame.height;
             
-            return;
         }
-        else if (sbv.bottomPos.posNumVal != nil)
+        else if (sbvBottomPos.posNumVal != nil)
         {
-            sbv.myFrame.bottomPos = selfSize.height -  sbv.bottomPos.margin - self.bottomPadding + sbv.topPos.margin;
-            sbv.myFrame.topPos = sbv.myFrame.bottomPos - sbv.myFrame.height;
-            return;
+            sbvmyFrame.bottomPos = selfSize.height -  sbvBottomPos.margin - self.bottomPadding + sbvTopPos.margin;
+            sbvmyFrame.topPos = sbvmyFrame.bottomPos - sbvmyFrame.height;
+        }
+        else
+        {
+            sbvmyFrame.topPos = sbvTopPos.margin + self.topPadding;
+            sbvmyFrame.bottomPos = sbvmyFrame.topPos + sbvmyFrame.height;
+        }
+    }
+    
+    //这里要更新上边最小和下边最大约束的情况。
+    if (sbvTopPos.lBoundVal.posRelaVal != nil && sbvBottomPos.uBoundVal.posRelaVal != nil)
+    {
+        //让宽度缩小并在最小和最大的中间排列。
+        CGFloat   minTop = [self calcSubView:sbvTopPos.lBoundVal.posRelaVal.view gravity:sbvTopPos.lBoundVal.posRelaVal.pos selfSize:selfSize] + sbvTopPos.lBoundVal.offsetVal;
+        
+        CGFloat   maxBottom = [self calcSubView:sbvBottomPos.uBoundVal.posRelaVal.view gravity:sbvBottomPos.uBoundVal.posRelaVal.pos selfSize:selfSize] - sbvBottomPos.uBoundVal.offsetVal;
+        
+        //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
+        if (maxBottom - minTop < sbvmyFrame.height)
+        {
+            sbvmyFrame.height = maxBottom - minTop;
+            sbvmyFrame.topPos = minTop;
+        }
+        else
+        {
+            sbvmyFrame.topPos = (maxBottom - minTop - sbvmyFrame.height) / 2 + minTop;
         }
         
-        sbv.myFrame.topPos = sbv.topPos.margin + self.topPadding;
-        sbv.myFrame.bottomPos = sbv.myFrame.topPos + sbv.myFrame.height;
+        sbvmyFrame.bottomPos = sbvmyFrame.topPos + sbvmyFrame.height;
+        
         
     }
+    else if (sbvTopPos.lBoundVal.posRelaVal != nil)
+    {
+        //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
+        CGFloat   minTop = [self calcSubView:sbvTopPos.lBoundVal.posRelaVal.view gravity:sbvTopPos.lBoundVal.posRelaVal.pos selfSize:selfSize] + sbvTopPos.lBoundVal.offsetVal;
+        
+        if (sbvmyFrame.topPos < minTop)
+        {
+            sbvmyFrame.topPos = minTop;
+            sbvmyFrame.height = sbvmyFrame.bottomPos - sbvmyFrame.topPos;
+        }
+        
+    }
+    else if (sbvBottomPos.uBoundVal.posRelaVal != nil)
+    {
+        //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
+        CGFloat   maxBottom = [self calcSubView:sbvBottomPos.uBoundVal.posRelaVal.view gravity:sbvBottomPos.uBoundVal.posRelaVal.pos selfSize:selfSize] - sbvBottomPos.uBoundVal.offsetVal;
+        if (sbvmyFrame.bottomPos > maxBottom)
+        {
+            sbvmyFrame.bottomPos = maxBottom;
+            sbvmyFrame.height = sbvmyFrame.bottomPos - sbvmyFrame.topPos;
+        }
+        
+    }
+
     
 }
 
@@ -377,49 +477,54 @@
 
 -(BOOL)calcWidth:(UIView*)sbv selfSize:(CGSize)selfSize
 {
-    if (sbv.myFrame.width == CGFLOAT_MAX)
+    MyFrame *sbvmyFrame = sbv.myFrame;
+    MyLayoutSize *sbvWidthDime = sbv.widthDime;
+    MyLayoutPos *sbvLeftPos = sbv.leftPos;
+    MyLayoutPos *sbvRightPos = sbv.rightPos;
+    
+    if (sbvmyFrame.width == CGFLOAT_MAX)
     {
         
-        if (sbv.widthDime.dimeRelaVal != nil)
+        if (sbvWidthDime.dimeRelaVal != nil)
         {
             
-            sbv.myFrame.width = [self calcSubView:sbv.widthDime.dimeRelaVal.view gravity:sbv.widthDime.dimeRelaVal.dime selfSize:selfSize] * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            sbvmyFrame.width = [self calcSubView:sbvWidthDime.dimeRelaVal.view gravity:sbvWidthDime.dimeRelaVal.dime selfSize:selfSize] * sbvWidthDime.mutilVal + sbvWidthDime.addVal;
             
-            sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:sbv.myFrame.width sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbvmyFrame.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
         }
-        else if (sbv.widthDime.dimeNumVal != nil)
+        else if (sbvWidthDime.dimeNumVal != nil)
         {
-            sbv.myFrame.width = sbv.widthDime.dimeNumVal.doubleValue * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
-            sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:sbv.myFrame.width sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbvmyFrame.width = sbvWidthDime.measure;
+            sbvmyFrame.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
         }
         else;
         
         if ([self isNoLayoutSubview:sbv])
         {
-            sbv.myFrame.width = 0;
+            sbvmyFrame.width = 0;
         }
         
-        if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
+        if (sbvLeftPos.posVal != nil && sbvRightPos.posVal != nil)
         {
-            if (sbv.leftPos.posRelaVal != nil)
-                sbv.myFrame.leftPos = [self calcSubView:sbv.leftPos.posRelaVal.view gravity:sbv.leftPos.posRelaVal.pos selfSize:selfSize] + sbv.leftPos.margin;
+            if (sbvLeftPos.posRelaVal != nil)
+                sbvmyFrame.leftPos = [self calcSubView:sbvLeftPos.posRelaVal.view gravity:sbvLeftPos.posRelaVal.pos selfSize:selfSize] + sbvLeftPos.margin;
             else
-                sbv.myFrame.leftPos = sbv.leftPos.margin + self.leftPadding;
+                sbvmyFrame.leftPos = sbvLeftPos.margin + self.leftPadding;
             
-            if (sbv.rightPos.posRelaVal != nil)
-                sbv.myFrame.rightPos = [self calcSubView:sbv.rightPos.posRelaVal.view gravity:sbv.rightPos.posRelaVal.pos selfSize:selfSize] - sbv.rightPos.margin;
+            if (sbvRightPos.posRelaVal != nil)
+                sbvmyFrame.rightPos = [self calcSubView:sbvRightPos.posRelaVal.view gravity:sbvRightPos.posRelaVal.pos selfSize:selfSize] - sbvRightPos.margin;
             else
-                sbv.myFrame.rightPos = selfSize.width - sbv.rightPos.margin - self.rightPadding;
+                sbvmyFrame.rightPos = selfSize.width - sbvRightPos.margin - self.rightPadding;
             
-            sbv.myFrame.width = sbv.myFrame.rightPos - sbv.myFrame.leftPos;
-            sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:sbv.myFrame.width sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbvmyFrame.width = sbvmyFrame.rightPos - sbvmyFrame.leftPos;
+            sbvmyFrame.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
             if ([self isNoLayoutSubview:sbv])
             {
-                sbv.myFrame.width = 0;
-                sbv.myFrame.rightPos = sbv.myFrame.leftPos + sbv.myFrame.width;
+                sbvmyFrame.width = 0;
+                sbvmyFrame.rightPos = sbvmyFrame.leftPos + sbvmyFrame.width;
             }
 
             
@@ -428,16 +533,16 @@
         }
         
         
-        if (sbv.myFrame.width == CGFLOAT_MAX)
+        if (sbvmyFrame.width == CGFLOAT_MAX)
         {
-            sbv.myFrame.width = CGRectGetWidth(sbv.bounds);
-            sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:sbv.myFrame.width sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbvmyFrame.width = CGRectGetWidth(sbv.bounds);
+            sbvmyFrame.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
         }
     }
     
-    if (sbv.widthDime.lBoundVal.dimeNumVal.doubleValue != -CGFLOAT_MAX || sbv.widthDime.uBoundVal.dimeNumVal.doubleValue != CGFLOAT_MAX)
+    if (sbvWidthDime.lBoundVal.dimeNumVal.doubleValue != -CGFLOAT_MAX || sbvWidthDime.uBoundVal.dimeNumVal.doubleValue != CGFLOAT_MAX)
     {
-        sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:sbv.myFrame.width sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+        sbvmyFrame.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
     }
 
     
@@ -447,49 +552,55 @@
 
 -(BOOL)calcHeight:(UIView*)sbv selfSize:(CGSize)selfSize
 {
-    if (sbv.myFrame.height == CGFLOAT_MAX)
+    MyFrame *sbvmyFrame = sbv.myFrame;
+    MyLayoutSize *sbvHeightDime = sbv.heightDime;
+    MyLayoutPos *sbvTopPos = sbv.topPos;
+    MyLayoutPos *sbvBottomPos = sbv.bottomPos;
+
+
+    if (sbvmyFrame.height == CGFLOAT_MAX)
     {
-        if (sbv.heightDime.dimeRelaVal != nil)
+        if (sbvHeightDime.dimeRelaVal != nil)
         {
             
-            sbv.myFrame.height = [self calcSubView:sbv.heightDime.dimeRelaVal.view gravity:sbv.heightDime.dimeRelaVal.dime selfSize:selfSize] * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            sbvmyFrame.height = [self calcSubView:sbvHeightDime.dimeRelaVal.view gravity:sbvHeightDime.dimeRelaVal.dime selfSize:selfSize] * sbvHeightDime.mutilVal + sbvHeightDime.addVal;
             
-            sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:sbv.myFrame.height sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbvmyFrame.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
         }
-        else if (sbv.heightDime.dimeNumVal != nil)
+        else if (sbvHeightDime.dimeNumVal != nil)
         {
-            sbv.myFrame.height = sbv.heightDime.dimeNumVal.doubleValue * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
-            sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:sbv.myFrame.height sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbvmyFrame.height = sbvHeightDime.measure;
+            sbvmyFrame.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
         }
         else;
         
         if ([self isNoLayoutSubview:sbv])
         {
-            sbv.myFrame.height = 0;
+            sbvmyFrame.height = 0;
         }
 
         
-        if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
+        if (sbvTopPos.posVal != nil && sbvBottomPos.posVal != nil)
         {
-            if (sbv.topPos.posRelaVal != nil)
-                sbv.myFrame.topPos = [self calcSubView:sbv.topPos.posRelaVal.view gravity:sbv.topPos.posRelaVal.pos selfSize:selfSize] + sbv.topPos.margin;
+            if (sbvTopPos.posRelaVal != nil)
+                sbvmyFrame.topPos = [self calcSubView:sbvTopPos.posRelaVal.view gravity:sbvTopPos.posRelaVal.pos selfSize:selfSize] + sbvTopPos.margin;
             else
-                sbv.myFrame.topPos = sbv.topPos.margin + self.topPadding;
+                sbvmyFrame.topPos = sbvTopPos.margin + self.topPadding;
             
-            if (sbv.bottomPos.posRelaVal != nil)
-                sbv.myFrame.bottomPos = [self calcSubView:sbv.bottomPos.posRelaVal.view gravity:sbv.bottomPos.posRelaVal.pos selfSize:selfSize] - sbv.bottomPos.margin;
+            if (sbvBottomPos.posRelaVal != nil)
+                sbvmyFrame.bottomPos = [self calcSubView:sbvBottomPos.posRelaVal.view gravity:sbvBottomPos.posRelaVal.pos selfSize:selfSize] - sbvBottomPos.margin;
             else
-                sbv.myFrame.bottomPos = selfSize.height - sbv.bottomPos.margin - self.bottomPadding;
+                sbvmyFrame.bottomPos = selfSize.height - sbvBottomPos.margin - self.bottomPadding;
             
-            sbv.myFrame.height = sbv.myFrame.bottomPos - sbv.myFrame.topPos;
-            sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:sbv.myFrame.height sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbvmyFrame.height = sbvmyFrame.bottomPos - sbvmyFrame.topPos;
+            sbvmyFrame.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
             if ([self isNoLayoutSubview:sbv])
             {
-                sbv.myFrame.height = 0;
-                sbv.myFrame.bottomPos = sbv.myFrame.topPos + sbv.myFrame.height;
+                sbvmyFrame.height = 0;
+                sbvmyFrame.bottomPos = sbvmyFrame.topPos + sbvmyFrame.height;
             }
             
 
@@ -498,16 +609,27 @@
         }
         
         
-        if (sbv.myFrame.height == CGFLOAT_MAX)
+        if (sbvmyFrame.height == CGFLOAT_MAX)
         {
-           sbv.myFrame.height = CGRectGetHeight(sbv.bounds);
-            sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:sbv.myFrame.height sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+           sbvmyFrame.height = CGRectGetHeight(sbv.bounds);
+            
+            if (sbv.isFlexedHeight && ![self isNoLayoutSubview:sbv])
+            {
+                if (sbvmyFrame.width == CGFLOAT_MAX)
+                    [self calcWidth:sbv selfSize:selfSize];
+                
+                sbvmyFrame.height = [self heightFromFlexedHeightView:sbv inWidth:sbvmyFrame.width];
+            }
+            
+            sbvmyFrame.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
+
+
         }
     }
     
-    if (sbv.heightDime.lBoundVal.dimeNumVal.doubleValue != -CGFLOAT_MAX || sbv.heightDime.uBoundVal.dimeNumVal.doubleValue != CGFLOAT_MAX)
+    if (sbvHeightDime.lBoundVal.dimeNumVal.doubleValue != -CGFLOAT_MAX || sbvHeightDime.uBoundVal.dimeNumVal.doubleValue != CGFLOAT_MAX)
     {
-        sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:sbv.myFrame.height sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+        sbvmyFrame.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
     }
     
     return NO;
@@ -821,6 +943,7 @@
         if (sbv.isFlexedHeight)
         {
             sbv.myFrame.height = [self heightFromFlexedHeightView:sbv inWidth:sbv.myFrame.width];
+            sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:sbv.myFrame.height sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
         }
         
         [self calcSubViewTopBottom:sbv selfSize:selfSize];

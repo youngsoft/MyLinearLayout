@@ -228,11 +228,6 @@
     return [self addMethod:@"arrangedCount"];
 }
 
--(MyMaker*)averageArrange
-{
-    return [self addMethod:@"averageArrange"];
-}
-
 -(MyMaker*)autoArrange
 {
     return [self addMethod:@"autoArrange"];

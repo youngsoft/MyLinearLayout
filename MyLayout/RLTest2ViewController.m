@@ -43,6 +43,7 @@
      */
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.padding = UIEdgeInsetsMake(0, 0, 0, 10);
     self.view = rootLayout;
     

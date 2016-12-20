@@ -1446,6 +1446,7 @@
     
     for (UIView *sbv in sbs)
     {
+        [sbv.rightPos __equalTo:@0];
         [sbv.leftPos __equalTo:@(scale2)];
         sbv.weight = scale;
         
@@ -1477,8 +1478,8 @@
         if (sbv == sbs.firstObject && !centered)
             [sbv.topPos __equalTo:@0];
         
-        if (sbv == sbs.lastObject && centered)
-            [sbv.bottomPos __equalTo:@(scale)];
+        if (sbv == sbs.lastObject)
+            [sbv.bottomPos __equalTo: centered? @(scale) : @0];
     }
     
     
@@ -1499,8 +1500,8 @@
         if (sbv == sbs.firstObject && !centered)
             [sbv.leftPos __equalTo:@0];
         
-        if (sbv == sbs.lastObject && centered)
-            [sbv.rightPos __equalTo:@(scale)];
+        if (sbv == sbs.lastObject)
+            [sbv.rightPos __equalTo:centered? @(scale) : @0];
     }
 }
 

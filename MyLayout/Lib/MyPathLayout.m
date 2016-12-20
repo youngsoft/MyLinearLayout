@@ -983,7 +983,13 @@
         }
     }
     
-    CGSize maxSize = CGSizeMake(self.leftPadding, self.topPadding);
+   // CGSize maxSize = CGSizeMake(self.leftPadding, self.topPadding);
+    
+    CGFloat minXPos = CGFLOAT_MAX;
+    CGFloat maxXPos = -CGFLOAT_MAX;
+    CGFloat minYPos = CGFLOAT_MAX;
+    CGFloat maxYPos = -CGFLOAT_MAX;
+    
     
     //算路径子视图的。
     sbs = [self getLayoutSubviewsFrom:self.pathSubviews];
@@ -1062,11 +1068,26 @@
         rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x + sbv.leftPos.margin;
         rect.origin.y = pt.y - rect.size.height *sbv.layer.anchorPoint.y + sbv.topPos.margin;
         
-        if (CGRectGetMaxX(rect) > maxSize.width)
-            maxSize.width = CGRectGetMaxX(rect);
+        if (CGRectGetMinY(rect) < minYPos)
+        {
+            minYPos = CGRectGetMinY(rect);
+        }
         
-        if (CGRectGetMaxY(rect) > maxSize.height)
-            maxSize.height = CGRectGetMaxY(rect);
+        if (CGRectGetMaxY(rect) > maxYPos)
+        {
+            maxYPos = CGRectGetMaxY(rect);
+        }
+        
+        if (CGRectGetMinX(rect) < minXPos)
+        {
+            minXPos = CGRectGetMinX(rect);
+        }
+        
+        if (CGRectGetMaxX(rect) > maxXPos)
+        {
+            maxXPos = CGRectGetMaxX(rect);
+        }
+
         
         sbv.myFrame.frame = rect;
         
@@ -1085,11 +1106,11 @@
         {
             if (sbv.widthDime.dimeRelaVal == self.widthDime)
             {
-                rect.size.width = (selfSize.width - self.leftPadding - self.rightPadding) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                rect.size.width =  [sbv.widthDime measureWith:(selfSize.width - self.leftPadding - self.rightPadding)];
             }
             else
             {
-                rect.size.width = sbv.widthDime.dimeRelaVal.view.estimatedRect.size.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                rect.size.width = [sbv.widthDime measureWith:sbv.widthDime.dimeRelaVal.view.estimatedRect.size.width];
             }
         }
         
@@ -1103,11 +1124,15 @@
         {
             if (sbv.heightDime.dimeRelaVal == self.heightDime)
             {
-                rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                rect.size.height =  [sbv.heightDime measureWith:selfSize.height - self.topPadding - self.bottomPadding];
+            }
+            else if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
+            {
+                rect.size.height = [sbv.heightDime measureWith:rect.size.width];
             }
             else
             {
-                rect.size.height = sbv.heightDime.dimeRelaVal.view.estimatedRect.size.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                rect.size.height = [sbv.heightDime measureWith:sbv.heightDime.dimeRelaVal.view.estimatedRect.size.height];
             }
         }
         
@@ -1118,28 +1143,69 @@
         
         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
+        //计算宽度等于高度的情况。
+        if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
+        {
+            rect.size.width = [sbv.widthDime measureWith:rect.size.height];
+        }
+        
         //位置在原点位置。。
         rect.origin.x = (selfSize.width - self.leftPadding - self.rightPadding)*self.coordinateSetting.origin.x - rect.size.width / 2 + sbv.leftPos.margin + self.leftPadding;
         rect.origin.y = (selfSize.height - self.topPadding - self.bottomPadding)*self.coordinateSetting.origin.y - rect.size.height / 2 + sbv.topPos.margin + self.topPadding;
         
-        if (CGRectGetMaxX(rect) > maxSize.width)
-            maxSize.width = CGRectGetMaxX(rect);
+        if (CGRectGetMinY(rect) < minYPos)
+        {
+            minYPos = CGRectGetMinY(rect);
+        }
         
-        if (CGRectGetMaxY(rect) > maxSize.height)
-            maxSize.height = CGRectGetMaxY(rect);
+        if (CGRectGetMaxY(rect) > maxYPos)
+        {
+            maxYPos = CGRectGetMaxY(rect);
+        }
+        
+        if (CGRectGetMinX(rect) < minXPos)
+        {
+            minXPos = CGRectGetMinX(rect);
+        }
+        
+        if (CGRectGetMaxX(rect) > maxXPos)
+        {
+            maxXPos = CGRectGetMaxX(rect);
+        }
         
         sbv.myFrame.frame = rect;
         
     }
     
+    if (minYPos == CGFLOAT_MAX)
+    {
+        minYPos = 0;
+    }
+    
+    if (maxYPos == -CGFLOAT_MAX)
+    {
+        maxYPos = self.topPadding + self.bottomPadding;
+    }
+    
+    if (minXPos == CGFLOAT_MAX)
+    {
+        minXPos = 0;
+    }
+    
+    if (maxXPos == -CGFLOAT_MAX)
+    {
+        maxXPos = self.leftPadding + self.rightPadding;
+    }
+
+    
     if (self.wrapContentWidth)
     {
-        selfSize.width = maxSize.width + self.rightPadding;
+        selfSize.width = maxXPos - minXPos;
     }
     
     if (self.wrapContentHeight)
     {
-        selfSize.height = maxSize.height + self.bottomPadding;
+        selfSize.height = maxYPos - minYPos;
     }
     
     

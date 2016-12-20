@@ -51,32 +51,34 @@
     MyMarginGravity vert = gravity & MyMarginGravity_Horz_Mask;
     MyMarginGravity horz = gravity & MyMarginGravity_Vert_Mask;
     
+    MyLayoutSize *sbvWidthDime = sbv.widthDime;
+    MyLayoutSize *sbvHeightDime = sbv.heightDime;
      
     //优先用设定的宽度尺寸。
-    if (sbv.widthDime.dimeNumVal != nil)
-        pRect->size.width = sbv.widthDime.measure;
+    if (sbvWidthDime.dimeNumVal != nil)
+        pRect->size.width = sbvWidthDime.measure;
     
-    if (sbv.heightDime.dimeNumVal != nil)
-        pRect->size.height = sbv.heightDime.measure;
+    if (sbvHeightDime.dimeNumVal != nil)
+        pRect->size.height = sbvHeightDime.measure;
     
-    if (sbv.widthDime.dimeRelaVal != nil && sbv.widthDime.dimeRelaVal.view != sbv)
+    if (sbvWidthDime.dimeRelaVal != nil && sbvWidthDime.dimeRelaVal.view != sbv)
     {
-        if (sbv.widthDime.dimeRelaVal.view == self)
-            pRect->size.width = (selfSize.width - self.leftPadding - self.rightPadding) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+        if (sbvWidthDime.dimeRelaVal.view == self)
+            pRect->size.width = [sbvWidthDime measureWith:(selfSize.width - self.leftPadding - self.rightPadding)];
         else
-            pRect->size.width = sbv.widthDime.dimeRelaVal.view.estimatedRect.size.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            pRect->size.width = [sbvWidthDime measureWith:sbvWidthDime.dimeRelaVal.view.estimatedRect.size.width];
     }
     
-    if (sbv.heightDime.dimeRelaVal != nil && sbv.heightDime.dimeRelaVal.view != sbv)
+    if (sbvHeightDime.dimeRelaVal != nil && sbvHeightDime.dimeRelaVal.view != sbv)
     {
-        if (sbv.heightDime.dimeRelaVal.view == self)
-            pRect->size.height = (selfSize.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        if (sbvHeightDime.dimeRelaVal.view == self)
+            pRect->size.height = [sbvHeightDime measureWith:(selfSize.height - self.topPadding - self.bottomPadding)];
         else
-            pRect->size.height = sbv.heightDime.dimeRelaVal.view.estimatedRect.size.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            pRect->size.height = [sbvHeightDime measureWith:sbvHeightDime.dimeRelaVal.view.estimatedRect.size.height];
         
     }
     
-    pRect->size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
+    pRect->size.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
     
       
     //特殊处理如果设置了左右边距则确定了视图的宽度
@@ -93,7 +95,7 @@
 
     }
     
-     pRect->size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
+     pRect->size.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
     
     if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
         vert = MyMarginGravity_Vert_Fill;
@@ -101,25 +103,25 @@
     [self vertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
     
     
-    if (sbv.widthDime.dimeRelaVal != nil && sbv.widthDime.dimeRelaVal.view == sbv && sbv.widthDime.dimeRelaVal.dime == MyMarginGravity_Vert_Fill)
+    if (sbvWidthDime.dimeRelaVal != nil && sbvWidthDime.dimeRelaVal.view == sbv && sbvWidthDime.dimeRelaVal.dime == MyMarginGravity_Vert_Fill)
     {
-        
-        pRect->size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:pRect->size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:pRect->size selfLayoutSize:selfSize];
+        pRect->size.width = [sbvWidthDime measureWith:pRect->size.height];
+        pRect->size.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
     
         [self horzGravity:horz selfSize:selfSize sbv:sbv rect:pRect];
         
     }
     
-    if (sbv.heightDime.dimeRelaVal != nil && sbv.heightDime.dimeRelaVal.view == sbv && sbv.heightDime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
+    if (sbvHeightDime.dimeRelaVal != nil && sbvHeightDime.dimeRelaVal.view == sbv && sbvHeightDime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
     {
-        pRect->size.height = pRect->size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        pRect->size.height = [sbvHeightDime measureWith:pRect->size.width];
         
         if (sbv.isFlexedHeight)
         {
             pRect->size.height = [self heightFromFlexedHeightView:sbv inWidth:pRect->size.width];
         }
         
-        pRect->size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
+        pRect->size.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
         
         [self vertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
 
@@ -133,7 +135,6 @@
 
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
 {
-    
     CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     CGFloat maxWidth = self.leftPadding;
     CGFloat maxHeight = self.topPadding;
@@ -222,7 +223,7 @@
             
         }
     }
-    
+        
     return selfSize;
 
 }

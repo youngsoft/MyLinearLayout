@@ -183,6 +183,24 @@
     };
 }
 
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myLBound
+{
+    return ^id(id posVal, CGFloat offset){
+        
+        return [self __lBound:posVal offsetVal:offset];
+    };
+}
+
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myUBound
+{
+    return ^id(id posVal, CGFloat offset){
+        
+        return [self __uBound:posVal offsetVal:offset];
+    };
+}
+
+
+
 
 
 -(void)myClear
@@ -217,6 +235,14 @@
     };
 }
 
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))lBound
+{
+    return ^id(id posVal, CGFloat offset){
+        
+        return [self __lBound:posVal offsetVal:offset];
+    };
+}
+
 
 -(MyLayoutPos* (^)(CGFloat val))max
 {
@@ -225,6 +251,15 @@
         return [self __max:val];
     };
 }
+
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))uBound
+{
+    return ^id(id posVal, CGFloat offset){
+        
+        return [self __uBound:posVal offsetVal:offset];
+    };
+}
+
 
 
 
