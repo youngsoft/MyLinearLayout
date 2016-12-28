@@ -46,6 +46,7 @@
 "1.SizeClass - Demo1" = "1.SizeClass-不同屏幕下的布局样式1";
 "2.SizeClass - Demo2" = "2.SizeClass-不同屏幕下的布局样式2";
 "❁1.Screen perfect fit - Demo1" = "❁1.界面的完美适配DEMO";
+"❁2.Screen perfect fit - Demo2" = "❁2.界面的完美适配DEMO2";
 
 //LLTest1ViewController
 "vertical(from top to bottom)" = "垂直布局(从上到下)";
@@ -251,3 +252,7 @@
 "Content1"="内容1";
 "Content2"="内容2";
 "Content3:please run in different iPhone&iPad device and change different screen orientation"="内容3:请分别尝试运行在iPhone设备的横竖屏以及iPad设备的横竖屏的情况";
+
+//AllTest8ViewController
+"Pop layoutview at center"="居中弹出布局视图";
+"Title"="标题";

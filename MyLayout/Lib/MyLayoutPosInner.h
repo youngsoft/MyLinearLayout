@@ -41,5 +41,7 @@
 //获取真实的位置值
 -(CGFloat)realMarginInSize:(CGFloat)size;
 
+-(BOOL)isRelativeMargin;
+
 
 @end

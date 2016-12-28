@@ -1030,11 +1030,11 @@
         {
             if (sbv.widthDime.dimeRelaVal == self.widthDime)
             {
-                rect.size.width = (selfSize.width - self.leftPadding - self.rightPadding) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                rect.size.width = [sbv.widthDime measureWith:(selfSize.width - self.leftPadding - self.rightPadding) ];
             }
             else
             {
-                rect.size.width = sbv.widthDime.dimeRelaVal.view.estimatedRect.size.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                rect.size.width = [sbv.widthDime measureWith: sbv.widthDime.dimeRelaVal.view.estimatedRect.size.width ];
             }
         }
         
@@ -1048,11 +1048,11 @@
         {
             if (sbv.heightDime.dimeRelaVal == self.heightDime)
             {
-                rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                rect.size.height = [sbv.heightDime measureWith:(selfSize.height - self.topPadding - self.bottomPadding) ];
             }
             else
             {
-                rect.size.height = sbv.heightDime.dimeRelaVal.view.estimatedRect.size.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                rect.size.height = [sbv.heightDime measureWith:sbv.heightDime.dimeRelaVal.view.estimatedRect.size.height ];
             }
         }
         

@@ -43,6 +43,7 @@
 #import "AllTest5ViewController.h"
 #import "AllTest6ViewController.h"
 #import "AllTest7ViewController.h"
+#import "AllTest8ViewController.h"
 
 
 #import "FOLTest1ViewController.h"
@@ -184,6 +185,9 @@
                            },
                          @{@"title":NSLocalizedString(@"❁1.Screen perfect fit - Demo1", @""),
                            @"class":[AllTest7ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"❁2.Screen perfect fit - Demo2", @""),
+                           @"class":[AllTest8ViewController class]
                            }
                          ];
         

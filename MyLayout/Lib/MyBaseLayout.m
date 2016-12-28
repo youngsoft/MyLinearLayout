@@ -917,11 +917,11 @@ BOOL _hasBegin;
     BOOL hasSubLayout = NO;
     CGSize selfSize= [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
     
-    self.myFrame.width = selfSize.width;
-    self.myFrame.height = selfSize.height;
-    
     if (hasSubLayout)
     {
+        self.myFrame.width = selfSize.width;
+        self.myFrame.height = selfSize.height;
+        
         selfSize = [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
     }
     
@@ -1546,14 +1546,13 @@ BOOL _hasBegin;
             myFrame.sizeClass = [sbv myDefaultSizeClass];
             [myFrame reset];
         }
-        self.myFrame.sizeClass = [self myDefaultSizeClass];
         
         //调整自身
         if (!CGSizeEqualToSize(oldSelfSize,newSelfSize) && newSelfSize.width != CGFLOAT_MAX)
         {
             //如果父视图也是布局视图，并且自己隐藏则不调整自身的尺寸和位置。
             BOOL isAdjustSelf = YES;
-            if ([self.superview isKindOfClass:[MyBaseLayout class]])
+            if (self.superview != nil && [self.superview isKindOfClass:[MyBaseLayout class]])
             {
                 MyBaseLayout *supl = (MyBaseLayout*)self.superview;
                 if ([supl isNoLayoutSubview:self])
@@ -1582,8 +1581,52 @@ BOOL _hasBegin;
         
         //这里只用width判断的原因是如果newSelfSize被计算成功则size中的所有值都不是CGFLOAT_MAX，所以这里选width只是其中一个代表。
         if (newSelfSize.width != CGFLOAT_MAX)
+        {
             [self alterScrollViewContentSize:newSelfSize];
+            
+            //如果自己的父视图是非UIScrollView以及非布局视图。以及自己是wrapContentWidth或者wrapContentHeight时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
+            UIView *supv = self.superview;
+            if (supv != nil && ![supv isKindOfClass:[MyBaseLayout class]] && ![supv isKindOfClass:[UIScrollView class]])
+            {
+                CGRect rectSuper = supv.bounds;
+                CGRect rectSelf = self.bounds;
+                CGPoint centerPonintSelf = self.center;
+                
+                if (self.wrapContentWidth)
+                {
+                    //如果只设置了右边，或者只设置了居中则更新位置。。
+                    if (self.centerXPos.posVal != nil)
+                    {
+                        centerPonintSelf.x = (rectSuper.size.width - rectSelf.size.width)/2 + [self.centerXPos realMarginInSize:rectSuper.size.width] + self.layer.anchorPoint.x * rectSelf.size.width;
+                    }
+                    else if (self.rightPos.posVal != nil && self.leftPos.posVal == nil)
+                    {
+                        centerPonintSelf.x  = rectSuper.size.width - rectSelf.size.width - [self.rightPos realMarginInSize:rectSuper.size.width] + self.layer.anchorPoint.x * rectSelf.size.width;
+                    }
+                    
+                }
+                
+                if (self.wrapContentHeight)
+                {
+                    if (self.centerYPos.posVal != nil)
+                    {
+                        centerPonintSelf.y = (rectSuper.size.height - rectSelf.size.height)/2 + [self.centerYPos realMarginInSize:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
+                    }
+                    else if (self.bottomPos.posVal != nil && self.topPos.posVal == nil)
+                    {
+                        centerPonintSelf.y  = rectSuper.size.height - rectSelf.size.height - [self.bottomPos realMarginInSize:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
+                    }
+                }
+                
+                //如果有变化则只调整自己的center。而不变化
+                if (!CGPointEqualToPoint(self.center, centerPonintSelf))
+                {
+                    self.center = centerPonintSelf;
+                }
+            }
+        }
        
+        self.myFrame.sizeClass = [self myDefaultSizeClass];
         _isMyLayouting = NO;
         
     }
@@ -1763,13 +1806,13 @@ BOOL _hasBegin;
         CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
         if (sbv.widthDime.dimeSelfVal != nil)
         {
-            sbv.myFrame.width = fitSize.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            sbv.myFrame.width =  [sbv.widthDime measureWith:fitSize.width];
             
         }
         
         if (sbv.heightDime.dimeSelfVal != nil)
         {
-            sbv.myFrame.height = fitSize.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            sbv.myFrame.height = [sbv.heightDime measureWith:fitSize.height];
         }
     }    
 }
@@ -1914,18 +1957,18 @@ BOOL _hasBegin;
         UIImage *img = ((UIImageView*)sbv).image;
         if (img != nil && img.size.width != 0)
         {
-            return (img.size.height * (width / img.size.width)) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            return [sbv.heightDime measureWith:img.size.height * (width / img.size.width)];
         }
         else
         {
             CGSize sz = [sbv sizeThatFits:CGSizeMake(width, 0)];
-            return sz.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            return  [sbv.heightDime measureWith:sz.height];
         }
     }
     else
     {
         CGSize sz = [sbv sizeThatFits:CGSizeMake(width, 0)];
-        return sz.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+        return [sbv.heightDime measureWith:sz.height];
     }
 }
 
@@ -1992,7 +2035,7 @@ BOOL _hasBegin;
     if (value == CGFLOAT_MAX || value == -CGFLOAT_MAX)
         return value;
     
-    return value * boundDime.mutilVal + boundDime.addVal;
+    return  [boundDime measureWith:value];
 
 }
 
@@ -2001,8 +2044,8 @@ BOOL _hasBegin;
 -(CGFloat)validMeasure:(MyLayoutSize*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize
 {    
     //算出最大最小值。
-    CGFloat min = [self getBoundLimitMeasure:dime.lBoundVal sbv:sbv dimeType:dime.dime sbvSize:sbvSize selfLayoutSize:selfLayoutSize isUBound:NO];
-    CGFloat max = [self getBoundLimitMeasure:dime.uBoundVal sbv:sbv dimeType:dime.dime sbvSize:sbvSize selfLayoutSize:selfLayoutSize isUBound:YES];
+    CGFloat min = dime.isActive? [self getBoundLimitMeasure:dime.lBoundVal sbv:sbv dimeType:dime.dime sbvSize:sbvSize selfLayoutSize:selfLayoutSize isUBound:NO] : -CGFLOAT_MAX;
+    CGFloat max = dime.isActive ?  [self getBoundLimitMeasure:dime.uBoundVal sbv:sbv dimeType:dime.dime sbvSize:sbvSize selfLayoutSize:selfLayoutSize isUBound:YES] : CGFLOAT_MAX;
     
     calcSize = MAX(min, calcSize);
     calcSize = MIN(max, calcSize);
@@ -2067,8 +2110,8 @@ BOOL _hasBegin;
 -(CGFloat)validMargin:(MyLayoutPos*)pos sbv:(UIView*)sbv calcPos:(CGFloat)calcPos selfLayoutSize:(CGSize)selfLayoutSize
 {
     //算出最大最小值
-    CGFloat min = [self getBoundLimitMargin:pos.lBoundVal sbv:sbv selfLayoutSize:selfLayoutSize];
-    CGFloat max = [self getBoundLimitMargin:pos.uBoundVal sbv:sbv selfLayoutSize:selfLayoutSize];
+    CGFloat min = pos.isActive? [self getBoundLimitMargin:pos.lBoundVal sbv:sbv selfLayoutSize:selfLayoutSize] : -CGFLOAT_MAX;
+    CGFloat max = pos.isActive? [self getBoundLimitMargin:pos.uBoundVal sbv:sbv selfLayoutSize:selfLayoutSize] : CGFLOAT_MAX;
     
     calcPos = MAX(min, calcPos);
     calcPos = MIN(max, calcPos);
@@ -2113,11 +2156,18 @@ BOOL _hasBegin;
     {
         UIScrollView *scrolv = (UIScrollView*)self.superview;
         CGSize contsize = scrolv.contentSize;
+        CGRect rectSuper = scrolv.bounds;
         
-        if (contsize.height != newSize.height)
-            contsize.height = newSize.height;
-        if (contsize.width != newSize.width)
-            contsize.width = newSize.width;
+        //这里把自己在父视图中的上下左右边距也算在contentSize的包容范围内。
+        CGFloat leftMargin = [self.leftPos realMarginInSize:rectSuper.size.width];
+        CGFloat rightMargin = [self.rightPos realMarginInSize:rectSuper.size.width];
+        CGFloat topMargin = [self.topPos realMarginInSize:rectSuper.size.height];
+        CGFloat bottomMargin = [self.bottomPos realMarginInSize:rectSuper.size.height];
+        
+        if (contsize.height != newSize.height + topMargin + bottomMargin)
+            contsize.height = newSize.height + topMargin + bottomMargin;
+        if (contsize.width != newSize.width + leftMargin + rightMargin)
+            contsize.width = newSize.width + leftMargin + rightMargin;
         
         scrolv.contentSize = contsize;
         

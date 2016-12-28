@@ -226,7 +226,7 @@
         UIView *sbv = sbs[j];
         if (sbv.weight != 0)
         {
-            sbv.myFrame.width =  [self validMeasure:sbv.widthDime sbv:sbv calcSize:(totalFloatWidth * sbv.weight / totalWeight) * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbv.myFrame.width =  [self validMeasure:sbv.widthDime sbv:sbv calcSize:[sbv.widthDime measureWith: (totalFloatWidth * sbv.weight / totalWeight) ] sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
             sbv.myFrame.rightPos = sbv.myFrame.leftPos + sbv.myFrame.width;
         }
     }
@@ -239,11 +239,11 @@
         UIView *sbv = sbs[j];
         if (sbv.weight != 0)
         {
-            sbv.myFrame.height =  [self validMeasure:sbv.heightDime sbv:sbv calcSize:(totalFloatHeight * sbv.weight / totalWeight) * sbv.heightDime.mutilVal + sbv.heightDime.addVal sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            sbv.myFrame.height =  [self validMeasure:sbv.heightDime sbv:sbv calcSize:[sbv.heightDime measureWith:(totalFloatHeight * sbv.weight / totalWeight) ] sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
             sbv.myFrame.bottomPos = sbv.myFrame.topPos + sbv.myFrame.height;
             
             if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-                sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:sbv.myFrame.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+                sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:[sbv.widthDime measureWith: sbv.myFrame.height ] sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
             
         }
     }
@@ -699,7 +699,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             
             
             if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-                rect.size.width = (selfSize.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
             
             rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
@@ -738,10 +738,10 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-            rect.size.width = (selfSize.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
         
         if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-            rect.size.height = (selfSize.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
 
         
         if (sbv.weight != 0)
@@ -765,7 +765,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-            rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:rect.size.width ];
         
         
         //如果高度是浮动的则需要调整高度。
@@ -961,7 +961,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             
             
             if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-                rect.size.width = (selfSize.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
             
             
             rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
@@ -1031,10 +1031,10 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         }
         
         if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-            rect.size.height = (selfSize.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-            rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:rect.size.width ];
         
         //如果高度是浮动的则需要调整高度。
         if (isFlexedHeight)
@@ -1191,15 +1191,15 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
                 rect.size.height = sbv.heightDime.measure;
             
             if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-                rect.size.width = (selfSize.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
             
             if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-                rect.size.height = (selfSize.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
             
             rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
             
             if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-                rect.size.width = rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                rect.size.width = [sbv.widthDime measureWith:rect.size.height];
             
             rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
@@ -1248,10 +1248,10 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-            rect.size.width = (selfSize.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
         
         if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-            rect.size.height = (selfSize.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
         
         
         if (sbv.weight != 0)
@@ -1275,7 +1275,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
          rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
        
         if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-            rect.size.width = rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:rect.size.height ];
         
         
         
@@ -1461,7 +1461,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         
         
         if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-            rect.size.width = (selfSize.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
         
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
 
@@ -1481,7 +1481,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
                 rect.size.height = sbv.heightDime.measure;
             
             if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-                rect.size.height = (selfSize.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
             
             
             //如果高度是浮动的则需要调整高度。
@@ -1491,7 +1491,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
              rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
             
             if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-                rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:rect.size selfLayoutSize:selfSize];
+                rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:[sbv.widthDime measureWith: rect.size.height ] sbvSize:rect.size selfLayoutSize:selfSize];
             
             rowTotalFixedHeight += rect.size.height;
         }
@@ -1554,7 +1554,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:averageHeight - topMargin - bottomMargin sbvSize:rect.size selfLayoutSize:selfSize];
             
            if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-              rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:rect.size selfLayoutSize:selfSize];
+              rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:[sbv.widthDime measureWith: rect.size.height ] sbvSize:rect.size selfLayoutSize:selfSize];
         }
 
         

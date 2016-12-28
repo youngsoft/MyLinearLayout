@@ -101,12 +101,13 @@
     //添加，隐藏重新布局的布局。
     [self addHideSubviewReLayoutLayout:contentLayout];
    
-    
-    
     //添加，自动伸缩布局
     [self addShrinkLayout:contentLayout];
     
 
+    //测试布局位置和布局尺寸的active属性。
+    [self addActiveLayout:contentLayout];
+    
     
 }
 
@@ -315,7 +316,6 @@
     testLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     testLayout.subviewHorzMargin = 10;
     testLayout.subviewVertMargin = 10;
-    testLayout.myBottomMargin = 50;   //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。
     testLayout.heightDime.equalTo(@50);
     testLayout.clipsToBounds = YES;
     [contentLayout addSubview:testLayout];
@@ -332,6 +332,33 @@
         [testLayout addSubview:label];
     }
 
+    
+}
+
+//这个例子用来描述布局位置和布局尺寸对象的active属性的使用。
+-(void)addActiveLayout:(MyLinearLayout*)contentLayout
+{
+    /*
+       这个例子提供了1.3.1版本中MyLayoutSize和MyLayoutPos类新加入的属性active属性的使用方法。默认情况下这个属性的值都是YES表示指定的位置或者尺寸的设置是有效的，如果设置为NO则这个位置或者这个尺寸的设置将无效，不会对布局产生影响。因此你可以通过为位置对象或者尺寸对象设置是否为active来在运行中进行界面布局的动态调整。
+     */
+    MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    testLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    testLayout.backgroundColor = [UIColor whiteColor];
+    testLayout.myTopMargin = 10;
+    testLayout.myBottomMargin = 50;   //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。你也可以设置contentLayout的bottomPadding = 50来解决这个问题。
+    [contentLayout addSubview:testLayout];
+    
+    UIButton *testButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [testButton setTitle:@"Click me" forState:UIControlStateNormal];
+    testButton.backgroundColor = [CFTool color:0];
+    testButton.heightDime.equalTo(@50);
+    testButton.widthDime.equalTo(testButton.widthDime).add(20);
+    testButton.leftPos.equalTo(@10).active = YES;  //左边边距是10，设置active为YES表示左边位置对象的设置是生效的。
+    testButton.rightPos.equalTo(@10).active = NO;  //右边边距是10，设置active为NO表示右边位置对象的设置是不生效的。
+    
+    [testButton addTarget:self action:@selector(handleActiveTest:) forControlEvents:UIControlEventTouchUpInside];
+
+    [testLayout addSubview:testButton];
     
 }
 
@@ -737,6 +764,30 @@
     }];
    
 
+}
+
+-(void)handleActiveTest:(UIButton*)sender
+{
+    //下面代码中布局位置的active属性设置的变化所产生的效果。
+    if (sender.leftPos.isActive && sender.rightPos.isActive)
+    {
+        sender.leftPos.active = YES;
+        sender.rightPos.active = NO;  //按钮将停靠在父布局的左边。
+    }
+    else if (sender.leftPos.isActive)
+    {
+        sender.leftPos.active = NO;
+        sender.rightPos.active = YES;  //按钮将停靠在父布局的右边
+    }
+    else if (sender.rightPos.isActive)
+    {
+        sender.leftPos.active = YES;
+        sender.rightPos.active = YES;  //按钮的左右边距都生效，并且会拉伸按钮的宽度。
+    }
+    
+    MyLinearLayout *superLayout = (MyLinearLayout*)sender.superview;
+    [superLayout layoutAnimationWithDuration:0.3];
+    
 }
 
 /*

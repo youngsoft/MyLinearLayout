@@ -25,6 +25,7 @@
     self = [super init];
     if (self != nil)
     {
+        _active = YES;
         _view = nil;
         _pos = MyMarginGravity_None;
         _posVal = nil;
@@ -44,6 +45,7 @@
     self = [super init];
     if (self !=nil)
     {
+        _active = YES;
         _view = nil;
         _pos = MyMarginGravity_None;
         _posVal = nil;
@@ -139,11 +141,14 @@
 
 -(void)__clear
 {
+    _active = YES;
     _posVal = nil;
     _posValType = MyLayoutValueType_Nil;
     _offsetVal = 0;
     [[_lBoundVal __equalTo:@(-CGFLOAT_MAX)] __offset:0];
     [[_uBoundVal __equalTo:@(CGFLOAT_MAX)] __offset:0];
+    _lBoundVal.active = YES;
+    _uBoundVal.active = YES;
     [self setNeedLayout];
 }
 
@@ -269,12 +274,21 @@
 }
 
 
-
+-(void)setActive:(BOOL)active
+{
+    if (_active != active)
+    {
+       _active = active;
+        _lBoundVal.active = active;
+        _uBoundVal.active = active;
+      [self setNeedLayout];
+    }
+}
 
 
 -(NSNumber*)posNumVal
 {
-    if (_posVal == nil)
+    if (_posVal == nil || !self.isActive)
         return nil;
     
     if (_posValType == MyLayoutValueType_NSNumber)
@@ -288,7 +302,7 @@
 
 -(MyLayoutPos*)posRelaVal
 {
-    if (_posVal == nil)
+    if (_posVal == nil || !self.isActive)
         return nil;
     
     if (_posValType == MyLayoutValueType_LayoutPos)
@@ -301,7 +315,7 @@
 
 -(NSArray*)posArrVal
 {
-    if (_posVal == nil)
+    if (_posVal == nil || !self.isActive)
         return nil;
     
     if (_posValType == MyLayoutValueType_Array)
@@ -321,14 +335,24 @@
     return _uBoundVal;
 }
 
+-(id)posVal
+{
+    return self.isActive ? _posVal : nil;
+}
+
+-(CGFloat)offsetVal
+{
+    return self.isActive? _offsetVal : 0;
+}
+
 -(CGFloat)minVal
 {
-    return _lBoundVal.posNumVal.doubleValue;
+    return self.isActive ? _lBoundVal.posNumVal.doubleValue : -CGFLOAT_MAX;
 }
 
 -(CGFloat)maxVal
 {
-    return _uBoundVal.posNumVal.doubleValue;
+    return self.isActive ?  _uBoundVal.posNumVal.doubleValue : CGFLOAT_MAX;
 }
 
 
@@ -336,32 +360,49 @@
 
 -(CGFloat)margin
 {
-    CGFloat retVal = _offsetVal;
-    
-    if (self.posNumVal != nil)
-        retVal +=self.posNumVal.doubleValue;
-    
-    retVal = MIN(_uBoundVal.posNumVal.doubleValue, retVal);
-    retVal = MAX(_lBoundVal.posNumVal.doubleValue, retVal);
-    return retVal;
+    if (self.isActive)
+    {
+        CGFloat retVal = _offsetVal;
+        
+        if (self.posNumVal != nil)
+            retVal +=self.posNumVal.doubleValue;
+        
+        retVal = MIN(_uBoundVal.posNumVal.doubleValue, retVal);
+        retVal = MAX(_lBoundVal.posNumVal.doubleValue, retVal);
+        return retVal;
+    }
+    else
+        return 0;
 }
 
--(BOOL)isRelativeMargin:(CGFloat)margin
+-(BOOL)isRelativeMargin
 {
-    return margin > 0 && margin < 1;
+    if (self.isActive)
+    {
+        CGFloat realMargin = self.posNumVal.doubleValue;
+        return realMargin > 0 && realMargin < 1;
+        
+    }
+    else
+        return NO;
 }
 
 -(CGFloat)realMarginInSize:(CGFloat)size
 {
-    CGFloat realMargin = self.posNumVal.doubleValue;
-    if ([self isRelativeMargin:realMargin])
-        realMargin *= size;
-    
-    CGFloat retVal =  realMargin + _offsetVal;
+    if (self.isActive)
+    {
+        CGFloat realMargin = self.posNumVal.doubleValue;
+        if (realMargin > 0 && realMargin < 1)
+            realMargin *= size;
         
-    retVal = MIN(_uBoundVal.posNumVal.doubleValue, retVal);
-    retVal = MAX(_lBoundVal.posNumVal.doubleValue, retVal);
-    return retVal;
+        CGFloat retVal =  realMargin + _offsetVal;
+        
+        retVal = MIN(_uBoundVal.posNumVal.doubleValue, retVal);
+        retVal = MAX(_lBoundVal.posNumVal.doubleValue, retVal);
+        return retVal;
+    }
+    else
+        return 0;
 
 }
 
@@ -371,12 +412,15 @@
 -(id)copyWithZone:(NSZone *)zone
 {
     MyLayoutPos *lp = [[[self class] allocWithZone:zone] init];
+    lp->_active = self.isActive;
     lp.view = self.view;
     lp.pos = self.pos;
     lp.posValType = self.posValType;
     lp->_offsetVal = self.offsetVal;
     [[lp->_lBoundVal __equalTo:_lBoundVal.posVal] __offset:_lBoundVal.offsetVal];
     [[lp->_uBoundVal __equalTo:_uBoundVal.posVal] __offset:_uBoundVal.offsetVal];
+    lp->_lBoundVal->_active = self.isActive;
+    lp->_uBoundVal->_active = self.isActive;
     lp->_posVal = self->_posVal;
     
     return lp;

@@ -119,6 +119,10 @@
 
 #endif
 
+//设置布局位置是否是活动的,默认是YES表示活动的，如果设置为NO则表示这个布局位置设置的约束将不会起作用。
+@property(nonatomic, assign, getter=isActive) BOOL active;
+
+
 //通过如下属性获取上面方法设置的值。
 @property(nonatomic, strong, readonly) id posVal;
 @property(nonatomic, assign, readonly) CGFloat offsetVal;

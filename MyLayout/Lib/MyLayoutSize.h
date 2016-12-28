@@ -99,10 +99,14 @@
 
 #endif
 
+//设置布局尺寸是否是活动的,默认是YES表示活动的，如果设置为NO则表示这个布局尺寸设置的约束将不会起作用。
+@property(nonatomic, assign, getter=isActive) BOOL active;
+
+
 //上面方法设置的属性的获取。
 @property(nonatomic, strong, readonly) id dimeVal;
 @property(nonatomic, assign, readonly) CGFloat addVal;
-@property(nonatomic, assign, readonly) CGFloat mutilVal;
+@property(nonatomic, assign, readonly) CGFloat multiVal;
 @property(nonatomic, assign, readonly) CGFloat minVal;
 @property(nonatomic, assign, readonly) CGFloat maxVal;
 

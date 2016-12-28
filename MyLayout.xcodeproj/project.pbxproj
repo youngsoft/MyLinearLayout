@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		18014BA51C9079DA0088133B /* MyDimeScale.m in Sources */ = {isa = PBXBuildFile; fileRef = 18014BA41C9079DA0088133B /* MyDimeScale.m */; };
+		181068371E0B4EA9000B9B86 /* AllTest8ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181068361E0B4EA9000B9B86 /* AllTest8ViewController.m */; };
 		181ECE631D570CA1007803BE /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 181ECE5F1D570CA1007803BE /* YYFPSLabel.m */; };
 		181ECE641D570CA1007803BE /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 181ECE601D570CA1007803BE /* YYWeakProxy.m */; };
 		181F97F51E079462004A9AE6 /* RLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181F97F41E079462004A9AE6 /* RLTest5ViewController.m */; };
@@ -100,6 +101,8 @@
 /* Begin PBXFileReference section */
 		18014BA31C9079DA0088133B /* MyDimeScale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDimeScale.h; sourceTree = "<group>"; };
 		18014BA41C9079DA0088133B /* MyDimeScale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDimeScale.m; sourceTree = "<group>"; };
+		181068351E0B4EA9000B9B86 /* AllTest8ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest8ViewController.h; sourceTree = "<group>"; };
+		181068361E0B4EA9000B9B86 /* AllTest8ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest8ViewController.m; sourceTree = "<group>"; };
 		181ECE5F1D570CA1007803BE /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYFPSLabel.m; sourceTree = "<group>"; };
 		181ECE601D570CA1007803BE /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
 		181ECE611D570CA1007803BE /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
@@ -496,6 +499,8 @@
 				188261CE1C647CB300996C2C /* AllTest6ViewController.m */,
 				183C14611DB9DD1A00C38448 /* AllTest7ViewController.h */,
 				183C14621DB9DD1A00C38448 /* AllTest7ViewController.m */,
+				181068351E0B4EA9000B9B86 /* AllTest8ViewController.h */,
+				181068361E0B4EA9000B9B86 /* AllTest8ViewController.m */,
 			);
 			name = IntegratedDemo;
 			sourceTree = "<group>";
@@ -735,6 +740,7 @@
 				188261CF1C647CB300996C2C /* AllTest6ViewController.m in Sources */,
 				18D684401C4F421400A48BB4 /* MyLayoutPos.m in Sources */,
 				18D684321C4F421400A48BB4 /* AllTest3ViewController.m in Sources */,
+				181068371E0B4EA9000B9B86 /* AllTest8ViewController.m in Sources */,
 				18D6844F1C4F421400A48BB4 /* RLTest3ViewController.m in Sources */,
 				189692701CF74E7E000A5B91 /* AllTest2TableViewCell.m in Sources */,
 				18D6843D1C4F421400A48BB4 /* MyBaseLayout.m in Sources */,

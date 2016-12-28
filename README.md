@@ -6,7 +6,7 @@
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/MyLinearLayout.svg)](https://github.com/youngsoft/MyLinearLayout/stargazers)
 
-##MyLayout(2016.12.21)
+##MyLayout(2016.12.28)
 
 MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayout provides some simple functions to build a variety of complex interface. It integrates the functions including: Autolayout and SizeClass of iOS, five layout classes of Android, float and flex-box and bootstrap of HTML/CSS. The MyLayout's Swift version are named: **[TangramKit](https://github.com/youngsoft/TangramKit)**
 
@@ -22,7 +22,7 @@ MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayou
 *  Subview C's width is filled in to S, height is 40.
 *  Subview D's right margin is 20, width is 50% width of S, height is 40 
 
-![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/usagedemo.png)
+![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKitDemo/Support Files/usagedemo.png)
 
 
 ```objective-c
@@ -531,7 +531,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.3.0'
+pod 'MyLayout', '~> 1.3.1'
 ```
    
 Then, run the following command:

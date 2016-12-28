@@ -6,7 +6,7 @@
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/MyLinearLayout.svg)](https://github.com/youngsoft/MyLinearLayout/stargazers)
 
-##MyLayout(2016.12.21)
+##MyLayout(2016.12.28)
 
 MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIView的layoutSubviews方法的重载以及对子视图的bounds和center属性的设置而实现的。MyLayout功能强大而且简单易用，它集成了:iOS Autolayout和SizeClass、android的5大布局体系、HTML/CSS的浮动定位技术以及flex-box和bootstrap框架等市面上主流的平台的界面布局功能，同时提供了一套非常简单和完备的多屏幕尺寸适配的解决方案。MyLayout的Swift版本的名字叫做：**[TangramKit](https://github.com/youngsoft/TangramKit)**   
 
@@ -45,7 +45,8 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 
 最终的效果图如下：
 
-![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKit/usagedemo.png)
+![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKitDemo/Support Files/usagedemo.png)
+
 
 ```objective-c
 
@@ -514,7 +515,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.3.0'
+pod 'MyLayout', '~> 1.3.1'
 ```
    
 然后运行如下命令:

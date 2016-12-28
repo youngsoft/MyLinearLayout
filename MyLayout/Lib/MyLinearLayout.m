@@ -257,8 +257,6 @@
         
         CGRect rect = sbv.myFrame.frame;
         
-        CGFloat tm = sbv.topPos.posNumVal.doubleValue;
-        CGFloat bm = sbv.bottomPos.posNumVal.doubleValue;
         BOOL isFlexedHeight = sbv.isFlexedHeight && sbv.weight == 0;
         
         
@@ -269,11 +267,11 @@
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.heightDime.isMatchParent && !self.wrapContentHeight)
-             rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+             rect.size.height = [sbv.heightDime measureWith:(selfSize.height - self.topPadding - self.bottomPadding) ];
         
         //调整子视图的宽度，如果子视图为matchParent的话
         if (sbv.widthDime.isMatchParent)
-            rect.size.width = (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:(selfSize.width - self.leftPadding - self.rightPadding) ];
         
         if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
             rect.size.width = selfSize.width - self.leftPadding - self.rightPadding - sbv.leftPos.margin - sbv.rightPos.margin;
@@ -300,7 +298,7 @@
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
         {
-            rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:rect.size.width ];
         }
         
         //如果子视图需要调整高度则调整高度
@@ -310,10 +308,11 @@
         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         
+        
         //计算固定高度和浮动高度。
-        if ([self isRelativeMargin:tm])
+        if (sbv.topPos.isRelativeMargin)
         {
-            totalWeight += tm;
+            totalWeight += sbv.topPos.posNumVal.doubleValue;
             
             fixedHeight += sbv.topPos.offsetVal;
         }
@@ -324,9 +323,9 @@
         
         
         
-        if ([self isRelativeMargin:bm])
+        if (sbv.bottomPos.isRelativeMargin)
         {
-            totalWeight += bm;
+            totalWeight += sbv.bottomPos.posNumVal.doubleValue;
             fixedHeight += sbv.bottomPos.offsetVal;
         }
         else
@@ -418,7 +417,7 @@
         if ([self isRelativeMargin:topMargin])
         {
             topMargin = (topMargin / totalWeight) * floatingHeight;
-            if (/*topMargin <= 0 || topMargin == -0.0*/ _myCGFloatLessOrEqual(topMargin, 0))
+            if (_myCGFloatLessOrEqual(topMargin, 0))
                 topMargin = 0;
             
         }
@@ -429,7 +428,7 @@
         if (weight > 0)
         {
             CGFloat h = (weight / totalWeight) * floatingHeight;
-            if (/*h <= 0 || h == -0.0*/ _myCGFloatLessOrEqual(h, 0))
+            if (_myCGFloatLessOrEqual(h, 0))
                 h = 0;
             
             rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:h sbvSize:rect.size selfLayoutSize:selfSize];
@@ -441,7 +440,7 @@
         if ([self isRelativeMargin:bottomMargin])
         {
             bottomMargin = (bottomMargin / totalWeight) * floatingHeight;
-            if (/*bottomMargin <= 0 || bottomMargin == -0.0*/ _myCGFloatLessOrEqual(bottomMargin, 0))
+            if ( _myCGFloatLessOrEqual(bottomMargin, 0))
                 bottomMargin = 0;
             
         }
@@ -481,7 +480,7 @@
     for (UIView *sbv in sbs)
     {
         
-        if ([self isRelativeMargin:sbv.leftPos.posNumVal.doubleValue])
+        if (sbv.leftPos.isRelativeMargin)
         {
             totalWeight += sbv.leftPos.posNumVal.doubleValue;
             fixedWidth += sbv.leftPos.offsetVal;
@@ -489,7 +488,7 @@
         else
             fixedWidth += sbv.leftPos.margin;
         
-        if ([self isRelativeMargin:sbv.rightPos.posNumVal.doubleValue])
+        if (sbv.rightPos.isRelativeMargin)
         {
             totalWeight += sbv.rightPos.posNumVal.doubleValue;
             fixedWidth += sbv.rightPos.offsetVal;
@@ -508,7 +507,7 @@
                 vWidth = sbv.widthDime.measure;
 
             if (sbv.widthDime.isMatchParent && !self.wrapContentWidth)
-                  vWidth = (selfSize.width - self.leftPadding - self.rightPadding)*sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                  vWidth = [sbv.widthDime measureWith:(selfSize.width - self.leftPadding - self.rightPadding) ];
             
             vWidth = [self validMeasure:sbv.widthDime sbv:sbv calcSize:vWidth sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
             sbv.myFrame.width = vWidth;
@@ -588,7 +587,7 @@
         
         
         if (sbv.heightDime.isMatchParent)
-            rect.size.height= (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height= [sbv.heightDime measureWith:(selfSize.height - self.topPadding - self.bottomPadding) ];
         
         
         //计算出先对左边边距和绝对左边边距
@@ -663,7 +662,7 @@
         //计算高度
         if (sbv.heightDime.isMatchParent)
         {
-            rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - self.topPadding - self.bottomPadding) ];
         }
         
         if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
@@ -1046,7 +1045,7 @@
         //计算高度
         if (sbv.heightDime.isMatchParent)
         {
-            rect.size.height = (selfSize.height - self.topPadding - self.bottomPadding)*sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - self.topPadding - self.bottomPadding) ];
         }
         
         if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)

@@ -399,11 +399,11 @@
                     rect.size.height = sbv.heightDime.measure;
                 
                 if (sbv.heightDime.dimeRelaVal == self.heightDime)
-                    rect.size.height = (selfSize.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                    rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
                 
                 rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
                 
-                rect.size.width = rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                rect.size.width = [sbv.widthDime measureWith:rect.size.height];
             }
             
             rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
@@ -492,29 +492,29 @@
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-            rect.size.height = (selfSize.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
         
         if (sbv.widthDime.dimeRelaVal == self.widthDime)
-            rect.size.width = (selfSize.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
         
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-            rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:rect.size.width];
         
         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-            rect.size.width = rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:rect.size.height ];
         
         if (sbv.widthDime.dimeRelaVal != nil &&  sbv.widthDime.dimeRelaVal.view != nil &&  sbv.widthDime.dimeRelaVal.view != self && sbv.widthDime.dimeRelaVal.view != sbv)
         {
-            rect.size.width = sbv.widthDime.dimeRelaVal.view.myFrame.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:sbv.widthDime.dimeRelaVal.view.myFrame.width];
         }
         
         if (sbv.heightDime.dimeRelaVal != nil &&  sbv.heightDime.dimeRelaVal.view != nil &&  sbv.heightDime.dimeRelaVal.view != self && sbv.heightDime.dimeRelaVal.view != sbv)
         {
-            rect.size.height = sbv.heightDime.dimeRelaVal.view.myFrame.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:sbv.heightDime.dimeRelaVal.view.myFrame.height ];
         }
         
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
@@ -572,7 +572,7 @@
                 
                 
                 if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-                    rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                    rect.size.height = [sbv.heightDime measureWith:rect.size.width];
                 
                 if (sbv.isFlexedHeight)
                     rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
@@ -702,7 +702,7 @@
                 rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:(rightCandidateXBoundary - nextPoint.x + sbv.widthDime.addVal) * sbv.weight - leftMargin - rightMargin sbvSize:rect.size selfLayoutSize:selfSize];
                 
                 if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-                    rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                    rect.size.height = [sbv.heightDime measureWith:rect.size.width];
                 
                 if (sbv.isFlexedHeight)
                     rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
@@ -861,12 +861,12 @@
                     rect.size.width = sbv.widthDime.measure;
                 
                 if (sbv.widthDime.dimeRelaVal == self.widthDime)
-                    rect.size.width = (selfSize.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+                    rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
                 
                 rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
                 
                 
-                rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+                rect.size.height = [sbv.heightDime measureWith:rect.size.width];
             }
             
             if (sbv.isFlexedHeight)
@@ -954,30 +954,30 @@
             rect.size.height = sbv.heightDime.measure;
         
         if (sbv.heightDime.dimeRelaVal == self.heightDime)
-            rect.size.height = (selfSize.height - padding.top - padding.bottom) * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
         
         if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-            rect.size.width = (selfSize.width - padding.left - padding.right) * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
         
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-            rect.size.height = rect.size.width * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:rect.size.width];
         
         
         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-            rect.size.width = rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:rect.size.height];
         
         if (sbv.widthDime.dimeRelaVal != nil &&  sbv.widthDime.dimeRelaVal.view != nil &&  sbv.widthDime.dimeRelaVal.view != self && sbv.widthDime.dimeRelaVal.view != sbv)
         {
-            rect.size.width = sbv.widthDime.dimeRelaVal.view.myFrame.width * sbv.widthDime.mutilVal + sbv.widthDime.addVal;
+            rect.size.width = [sbv.widthDime measureWith:sbv.widthDime.dimeRelaVal.view.myFrame.width ];
         }
         
         if (sbv.heightDime.dimeRelaVal != nil &&  sbv.heightDime.dimeRelaVal.view != nil &&  sbv.heightDime.dimeRelaVal.view != self && sbv.heightDime.dimeRelaVal.view != sbv)
         {
-            rect.size.height = sbv.heightDime.dimeRelaVal.view.myFrame.height * sbv.heightDime.mutilVal + sbv.heightDime.addVal;
+            rect.size.height = [sbv.heightDime measureWith:sbv.heightDime.dimeRelaVal.view.myFrame.height ];
         }
 
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
@@ -1034,7 +1034,7 @@
                 rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(nextPoint.y - topCandidateYBoundary + sbv.heightDime.addVal) * sbv.weight - topMargin - bottomMargin sbvSize:rect.size selfLayoutSize:selfSize];
                 
                 if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-                    rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:rect.size selfLayoutSize:selfSize];
+                    rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:[sbv.widthDime measureWith: rect.size.height] sbvSize:rect.size selfLayoutSize:selfSize];
                 
             }
             
@@ -1153,7 +1153,7 @@
                 rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:(bottomCandidateYBoundary - nextPoint.y + sbv.heightDime.addVal) * sbv.weight - topMargin - bottomMargin sbvSize:rect.size selfLayoutSize:selfSize];
                 
                 if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-                    rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.height * sbv.widthDime.mutilVal + sbv.widthDime.addVal sbvSize:rect.size selfLayoutSize:selfSize];
+                    rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:[sbv.widthDime measureWith: rect.size.height] sbvSize:rect.size selfLayoutSize:selfSize];
                 
             }
             

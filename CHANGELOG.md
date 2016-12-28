@@ -3,6 +3,19 @@
 
 ---
 
+## [V1.3.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.1)(2016/12/28)
+
+#### Added
+1. 布局位置类`MyLayoutPos`和布局尺寸类`MyLayoutSize`类中添加了新属性：`active`.用来描述指定的位置或者尺寸所设置的约束是否有效。
+2. 添加了Demo:ALLTest8ViewController这个例子专门用来演示把一个布局视图加入到非布局父视图时的使用方法。
+
+#### Fixed
+1. 修正了将一个具有`wrapContentWidth`或者`wrapContentHeight`属性设置的布局视图加入到非布局父视图时，且又设置centerXPos，centerYPos,rightPos,bottomPos来定位布局视图时无法正确定位布局视图位置的BUG。
+
+#### Changed
+1. 修改了将布局视图加入`UIScrollView`时会自动调整`UIScrollView`的`contentSize`的机制，新的机制中布局视图设置的`MyLayoutPos`边距值也会算到contentSize里面去。比如某个布局的高度是100，其中的myTopMargin = 10, 那么当将布局视图加入到UIScrollView时他的contentSize的高度则是110.
+
+
 ## [V1.3.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.0)(2016/12/21)
 
 #### Added
@@ -12,7 +25,7 @@
 #### Fixed
 1. 修复路径布局`MyPathLayout`中设置`wrapContentWidth`和`wrapContentHeight`为YES时的计算错误的情况。
 2. 修复线性布局`MyLinearLayout`里面均分间距和均分视图两个方法可能导致均分不正确的BUG。
-3. 修复了相对布局`MyRelativeLayout`中如果设置了`topPadding`而子视图的`topPos`设置为数值时`topPadding`不起作用的BUG。
+3. 修复了相对布局`MyRelativeLayout`中如果设置了`topPadding`而子视图的`topPos`设置为数值时`topPadding`不起作用的[BUG#29](https://github.com/youngsoft/MyLinearLayout/issues/29)。
 4. 修复了相对布局`MyRelativeLayout`中子视图的高度设置为`flexedHeight`时计算可能不正常的问题。
 
 #### Changed

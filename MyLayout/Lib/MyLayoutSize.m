@@ -14,7 +14,7 @@
 {
     id _dimeVal;
     CGFloat _addVal;
-    CGFloat _mutilVal;
+    CGFloat _multiVal;
     MyLayoutSize *_lBoundVal;
     MyLayoutSize *_uBoundVal;
 }
@@ -24,12 +24,13 @@
     self= [super init];
     if (self !=nil)
     {
+        _active = YES;
         _view = nil;
         _dime = MyMarginGravity_None;
         _dimeVal = nil;
         _dimeValType = MyLayoutValueType_Nil;
         _addVal = 0;
-        _mutilVal = 1;
+        _multiVal = 1;
         _lBoundVal = [[MyLayoutSize alloc] initWithNoBound];
         [_lBoundVal __equalTo:@(-CGFLOAT_MAX)];
         _uBoundVal = [[MyLayoutSize alloc] initWithNoBound];
@@ -46,12 +47,13 @@
     self = [super init];
     if (self !=nil)
     {
+        _active = YES;
         _view = nil;
         _dime = MyMarginGravity_None;
         _dimeVal = nil;
         _dimeValType = MyLayoutValueType_Nil;
         _addVal = 0;
-        _mutilVal = 1;
+        _multiVal = 1;
         _lBoundVal = nil;
         _uBoundVal = nil;
     }
@@ -123,9 +125,9 @@
 -(MyLayoutSize*)__multiply:(CGFloat)val
 {
     
-    if (_mutilVal != val)
+    if (_multiVal != val)
     {
-        _mutilVal = val;
+        _multiVal = val;
         [self setNeedLayout];
     }
     
@@ -184,10 +186,13 @@
 
 -(void)__clear
 {
+    _active = YES;
     _addVal = 0;
-    _mutilVal = 1;
+    _multiVal = 1;
     [[[_lBoundVal __equalTo:@(-CGFLOAT_MAX)] __add:0] __multiply:1];
     [[[_uBoundVal __equalTo:@(CGFLOAT_MAX)] __add:0] __multiply:1];
+    _lBoundVal->_active = YES;
+    _uBoundVal->_active = YES;
     _dimeVal = nil;
     _dimeValType = MyLayoutValueType_Nil;
     
@@ -328,20 +333,38 @@
     [self __clear];
 }
 
+-(void)setActive:(BOOL)active
+{
+    if (_active != active)
+    {
+        _active = active;
+        _lBoundVal.active = active;
+        _uBoundVal.active = active;
+        [self setNeedLayout];
+    }
+}
+
 
 
 -(id)dimeVal
 {
-    if (_dimeValType == MyLayoutValueType_LayoutDime && _dimeVal == nil)
-        return self;
+    if (self.isActive)
+    {
+        if (_dimeValType == MyLayoutValueType_LayoutDime && _dimeVal == nil)
+            return self;
+        
+        return _dimeVal;
+    }
+    else
+        return nil;
     
-    return _dimeVal;
 }
 
 -(NSNumber*)dimeNumVal
 {
-    if (_dimeVal == nil)
+    if (_dimeVal == nil || !self.isActive)
         return nil;
+    
     if (_dimeValType == MyLayoutValueType_NSNumber)
         return _dimeVal;
     return nil;
@@ -349,7 +372,7 @@
 
 -(MyLayoutSize*)dimeRelaVal
 {
-    if (_dimeVal == nil)
+    if (_dimeVal == nil || !self.isActive)
         return nil;
     if (_dimeValType == MyLayoutValueType_LayoutDime)
         return _dimeVal;
@@ -360,7 +383,7 @@
 
 -(NSArray*)dimeArrVal
 {
-    if (_dimeVal == nil)
+    if (_dimeVal == nil || !self.isActive)
         return nil;
     if (_dimeValType == MyLayoutValueType_Array)
         return _dimeVal;
@@ -371,7 +394,7 @@
 
 -(MyLayoutSize*)dimeSelfVal
 {
-    if (_dimeValType == MyLayoutValueType_LayoutDime && _dimeVal == nil)
+    if (_dimeValType == MyLayoutValueType_LayoutDime && _dimeVal == nil && self.isActive)
         return self;
     
     return nil;
@@ -390,34 +413,34 @@
 
 -(CGFloat)minVal
 {
-    return _lBoundVal.dimeNumVal.doubleValue;
+    return self.isActive ?  _lBoundVal.dimeNumVal.doubleValue : -CGFLOAT_MAX;
 }
 
 -(CGFloat)maxVal
 {
-    return _uBoundVal.dimeNumVal.doubleValue;
+    return self.isActive ?  _uBoundVal.dimeNumVal.doubleValue : CGFLOAT_MAX;
 }
 
 -(BOOL)isMatchParent
 {
-    return self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview;
+    return self.isActive && self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview;
 }
 
 
 -(BOOL)isMatchView:(UIView*)v
 {
-    return self.dimeRelaVal != nil && self.dimeRelaVal.view == v;
+    return self.isActive && self.dimeRelaVal != nil && self.dimeRelaVal.view == v;
 }
 
 
 -(CGFloat) measure
 {
-    return self.dimeNumVal.doubleValue * _mutilVal + _addVal;
+    return self.isActive ? self.dimeNumVal.doubleValue * _multiVal + _addVal : 0;
 }
 
 -(CGFloat)measureWith:(CGFloat)size
 {
-    return size * _mutilVal + _addVal;
+    return self.isActive ?  size * _multiVal + _addVal : size;
 }
 
 
@@ -427,12 +450,15 @@
 -(id)copyWithZone:(NSZone *)zone
 {
     MyLayoutSize *ld = [[[self class] allocWithZone:zone] init];
+    ld->_active = self.isActive;
     ld.view = self.view;
     ld.dime = self.dime;
     ld->_addVal = self.addVal;
-    [[[ld->_lBoundVal __equalTo:_lBoundVal.dimeVal] __add:_lBoundVal.addVal] __multiply:_lBoundVal.mutilVal];
-    [[[ld->_uBoundVal __equalTo:_uBoundVal.dimeVal] __add:_uBoundVal.addVal] __multiply:_uBoundVal.mutilVal];
-    ld->_mutilVal = self.mutilVal;
+    [[[ld->_lBoundVal __equalTo:_lBoundVal.dimeVal] __add:_lBoundVal.addVal] __multiply:_lBoundVal.multiVal];
+    [[[ld->_uBoundVal __equalTo:_uBoundVal.dimeVal] __add:_uBoundVal.addVal] __multiply:_uBoundVal.multiVal];
+    ld->_lBoundVal->_active = self.isActive;
+    ld->_uBoundVal->_active = self.isActive;
+    ld->_multiVal = self.multiVal;
     ld->_dimeVal = self->_dimeVal;
     ld.dimeValType = self.dimeValType;
     
@@ -519,7 +545,7 @@
             break;
     }
     
-    return [NSString stringWithFormat:@"%@=%@, Multiply=%g, Add=%g, Max=%g, Min=%g",[MyLayoutSize dimestrFromDime:self showView:NO], dimeValStr, _mutilVal, _addVal, _uBoundVal.dimeNumVal.doubleValue == CGFLOAT_MAX ? NAN : _uBoundVal.dimeNumVal.doubleValue , _lBoundVal.dimeNumVal.doubleValue == -CGFLOAT_MAX ? NAN : _lBoundVal.dimeNumVal.doubleValue];
+    return [NSString stringWithFormat:@"%@=%@, Multiply=%g, Add=%g, Max=%g, Min=%g",[MyLayoutSize dimestrFromDime:self showView:NO], dimeValStr, _multiVal, _addVal, _uBoundVal.dimeNumVal.doubleValue == CGFLOAT_MAX ? NAN : _uBoundVal.dimeNumVal.doubleValue , _lBoundVal.dimeNumVal.doubleValue == -CGFLOAT_MAX ? NAN : _lBoundVal.dimeNumVal.doubleValue];
     
 }
 

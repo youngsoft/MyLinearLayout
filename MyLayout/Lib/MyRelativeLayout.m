@@ -488,7 +488,7 @@
         if (sbvWidthDime.dimeRelaVal != nil)
         {
             
-            sbvmyFrame.width = [self calcSubView:sbvWidthDime.dimeRelaVal.view gravity:sbvWidthDime.dimeRelaVal.dime selfSize:selfSize] * sbvWidthDime.mutilVal + sbvWidthDime.addVal;
+            sbvmyFrame.width = [sbvWidthDime measureWith:[self calcSubView:sbvWidthDime.dimeRelaVal.view gravity:sbvWidthDime.dimeRelaVal.dime selfSize:selfSize] ];
             
             sbvmyFrame.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
@@ -563,7 +563,7 @@
         if (sbvHeightDime.dimeRelaVal != nil)
         {
             
-            sbvmyFrame.height = [self calcSubView:sbvHeightDime.dimeRelaVal.view gravity:sbvHeightDime.dimeRelaVal.dime selfSize:selfSize] * sbvHeightDime.mutilVal + sbvHeightDime.addVal;
+            sbvmyFrame.height = [sbvHeightDime measureWith:[self calcSubView:sbvHeightDime.dimeRelaVal.view gravity:sbvHeightDime.dimeRelaVal.dime selfSize:selfSize] ];
             
             sbvmyFrame.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
@@ -690,26 +690,29 @@
             NSArray *dimeArray = sbv.widthDime.dimeArrVal;
             
             BOOL isViewHidden = [self isNoLayoutSubview:sbv] && self.flexOtherViewWidthWhenSubviewHidden;
-            CGFloat totalMutil = isViewHidden ? 0 : sbv.widthDime.mutilVal;
+            CGFloat totalMulti = isViewHidden ? 0 : sbv.widthDime.multiVal;
             CGFloat totalAdd =  isViewHidden ? 0 : sbv.widthDime.addVal;
             for (MyLayoutSize *dime in dimeArray)
             {
-                isViewHidden = [self isNoLayoutSubview:dime.view] && self.flexOtherViewWidthWhenSubviewHidden;
-                if (!isViewHidden)
+             
+                if (dime.isActive)
                 {
-                    if (dime.dimeNumVal != nil)
-                        totalAdd += -1 * dime.dimeNumVal.doubleValue;
-                    else if (dime.dimeSelfVal != nil)
+                    isViewHidden = [self isNoLayoutSubview:dime.view] && self.flexOtherViewWidthWhenSubviewHidden;
+                    if (!isViewHidden)
                     {
-                        totalAdd += -1 * dime.view.myFrame.width;
+                        if (dime.dimeNumVal != nil)
+                            totalAdd += -1 * dime.dimeNumVal.doubleValue;
+                        else if (dime.dimeSelfVal != nil)
+                        {
+                            totalAdd += -1 * dime.view.myFrame.width;
+                        }
+                        else
+                            totalMulti += dime.multiVal;
+                        
+                        totalAdd += dime.addVal;
+                        
                     }
-                    else
-                        totalMutil += dime.mutilVal;
-                    
-                    totalAdd += dime.addVal;
-                    
                 }
-                
                 
             }
             
@@ -717,24 +720,27 @@
             if (/*floatWidth <= 0*/ _myCGFloatLessOrEqual(floatWidth, 0))
                 floatWidth = 0;
             
-            if (totalMutil != 0)
+            if (totalMulti != 0)
             {
-                sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:floatWidth * (sbv.widthDime.mutilVal / totalMutil) sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+                sbv.myFrame.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:floatWidth * (sbv.widthDime.multiVal / totalMulti) sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
                 
                 if ([self isNoLayoutSubview:sbv])
                     sbv.myFrame.width = 0;
                 
-                for (MyLayoutSize *dime in dimeArray) {
-                    
-                    if (dime.dimeNumVal == nil)
-                        dime.view.myFrame.width = floatWidth * (dime.mutilVal / totalMutil);
-                    else
-                        dime.view.myFrame.width = dime.dimeNumVal.doubleValue;
-                    
-                    dime.view.myFrame.width = [self validMeasure:dime.view.widthDime sbv:dime.view calcSize:dime.view.myFrame.width sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
-                    
-                    if ([self isNoLayoutSubview:dime.view])
-                        dime.view.myFrame.width = 0;
+                for (MyLayoutSize *dime in dimeArray)
+                {
+                    if (dime.isActive)
+                    {
+                        if (dime.dimeNumVal == nil)
+                            dime.view.myFrame.width = floatWidth * (dime.multiVal / totalMulti);
+                        else
+                            dime.view.myFrame.width = dime.dimeNumVal.doubleValue;
+                        
+                        dime.view.myFrame.width = [self validMeasure:dime.view.widthDime sbv:dime.view calcSize:dime.view.myFrame.width sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
+                        
+                        if ([self isNoLayoutSubview:dime.view])
+                            dime.view.myFrame.width = 0;
+                    }
                 }
             }
         }
@@ -747,49 +753,54 @@
             
             BOOL isViewHidden = [self isNoLayoutSubview:sbv] && self.flexOtherViewHeightWhenSubviewHidden;
             
-            CGFloat totalMutil = isViewHidden ? 0 : sbv.heightDime.mutilVal;
+            CGFloat totalMulti = isViewHidden ? 0 : sbv.heightDime.multiVal;
             CGFloat totalAdd = isViewHidden ? 0 : sbv.heightDime.addVal;
             for (MyLayoutSize *dime in dimeArray)
             {
-                 isViewHidden = [self isNoLayoutSubview:dime.view] && self.flexOtherViewHeightWhenSubviewHidden;
-                if (!isViewHidden)
+                if (dime.isActive)
                 {
-                    if (dime.dimeNumVal != nil)
-                        totalAdd += -1 * dime.dimeNumVal.doubleValue;
-                    else if (dime.dimeSelfVal != nil)
+                    isViewHidden = [self isNoLayoutSubview:dime.view] && self.flexOtherViewHeightWhenSubviewHidden;
+                    if (!isViewHidden)
                     {
-                        totalAdd += -1 *dime.view.myFrame.height;
+                        if (dime.dimeNumVal != nil)
+                            totalAdd += -1 * dime.dimeNumVal.doubleValue;
+                        else if (dime.dimeSelfVal != nil)
+                        {
+                            totalAdd += -1 *dime.view.myFrame.height;
+                        }
+                        else
+                            totalMulti += dime.multiVal;
+                        
+                        totalAdd += dime.addVal;
                     }
-                    else
-                        totalMutil += dime.mutilVal;
-                    
-                    totalAdd += dime.addVal;
                 }
-                
             }
             
             CGFloat floatHeight = selfSize.height - self.topPadding - self.bottomPadding + totalAdd;
             if (/*floatHeight <= 0*/ _myCGFloatLessOrEqual(floatHeight, 0))
                 floatHeight = 0;
             
-            if (totalMutil != 0)
+            if (totalMulti != 0)
             {
-                sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:floatHeight * (sbv.heightDime.mutilVal / totalMutil) sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+                sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:floatHeight * (sbv.heightDime.multiVal / totalMulti) sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
                 
                 if ([self isNoLayoutSubview:sbv])
                     sbv.myFrame.height = 0;
                 
-                for (MyLayoutSize *dime in dimeArray) {
-                    
-                    if (dime.dimeNumVal == nil)
-                        dime.view.myFrame.height = floatHeight * (dime.mutilVal / totalMutil);
-                    else
-                        dime.view.myFrame.height = dime.dimeNumVal.doubleValue;
-                    
-                    dime.view.myFrame.height = [self validMeasure:dime.view.heightDime sbv:dime.view calcSize:dime.view.myFrame.height sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
-                    
-                    if ([self isNoLayoutSubview:dime.view])
-                        dime.view.myFrame.height = 0;
+                for (MyLayoutSize *dime in dimeArray)
+                {
+                    if (dime.isActive)
+                    {
+                        if (dime.dimeNumVal == nil)
+                            dime.view.myFrame.height = floatHeight * (dime.multiVal / totalMulti);
+                        else
+                            dime.view.myFrame.height = dime.dimeNumVal.doubleValue;
+                        
+                        dime.view.myFrame.height = [self validMeasure:dime.view.heightDime sbv:dime.view calcSize:dime.view.myFrame.height sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
+                        
+                        if ([self isNoLayoutSubview:dime.view])
+                            dime.view.myFrame.height = 0;
+                    }
                 }
             }
         }
