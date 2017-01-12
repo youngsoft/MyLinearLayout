@@ -61,7 +61,10 @@
 
     [self createDemo9:rootLayout];
     
+    [self createDemo10:rootLayout];
 
+
+    
 }
 
 
@@ -623,6 +626,87 @@
     
 }
 
+-(UILabel*)createLabel:(NSString*)title color:(NSInteger)idx
+{
+    UILabel *label = [UILabel new];
+    label.text = title;
+    label.font = [CFTool font:15];
+    label.backgroundColor = [CFTool color:idx];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.adjustsFontSizeToFitWidth = YES;
+    [label sizeToFit];
+    
+    return label;
+}
+
+
+-(void)createDemo10:(MyLinearLayout*)rootLayout
+{
+    //一行内所有的子视图的宽度都按屏幕的尺寸来进行按比例的拉伸和缩放。
+    UILabel *tipLabel = [UILabel new];
+    tipLabel.text = @"10.下面的例子中展示了一行中各个子视图的宽度和间距都将根据屏幕的尺寸来进行拉伸和收缩，这样不管在任何尺寸的屏幕下都能达到完美的适配。在实践中UI人员往往会按某个设备的尺寸给出一张效果图，那么我们只需要按这个效果图中的子视图的宽度来计算好所占用的宽度和间距的比例，然后我们通过对视图的宽度和间距按比例值进行设置，这样就会使得子视图的真实宽度和间距将根据屏幕的尺寸进行拉升和收缩。您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:";
+    tipLabel.font = [CFTool font:14];
+    tipLabel.adjustsFontSizeToFitWidth = YES;
+    tipLabel.numberOfLines = 0;
+    tipLabel.flexedHeight = YES;
+    tipLabel.myTopMargin = 10;
+    [tipLabel sizeToFit];
+    [rootLayout addSubview:tipLabel];
+    
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    contentLayout.wrapContentWidth = NO;
+    contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    contentLayout.myHeight = 60;  //高度为60.
+    contentLayout.gravity = MyMarginGravity_Vert_Center;  //内容垂直居中。
+    contentLayout.backgroundColor = [CFTool color:0];
+    [rootLayout addSubview:contentLayout];
+
+    
+    //假设我们以iPhone6的尺寸作为UI的原型。并且假设:
+    /*
+     1.A的宽度不管任何设备下总是固定为30；
+     2.B的宽度在iphone6下是60，与A的间距是10；
+     3.C的宽度在iphone6下是80，与B的间距是16；
+     4.D的宽度在iPhone6下是100，与C的间距在任何设备下总是16；
+     5.E的宽度不管任何设备下总是固定为40，与D的间距就是iPhone6宽度的剩余空间13(375-左右padding只和10-30-60-10-80-16-100-16)了。
+     
+     这种动态比例的展示非常适合用线性布局来完成，iPhone6的总宽度为375。而上面列出的总的浮动宽度部分的和：
+     
+     总的浮动部分的和 = B的宽度60 + 与A的间距10 + C的宽度80 + 与B的间距16 + D的宽度100 + 与D的间距13 = 279.
+     因此我们对B的宽度，与A的间距，C的宽度，与B的间距，D的宽度，与D的间距这部分的值设置为比例值。而不是绝对值！
+     
+     这样我们设置比例值时，只要将视图在iPhone6下的尺寸值除以这个总的浮动宽度就可以得到每个子视图的相对的比例值了。
+     
+     */
+    
+    CGFloat totalFloatWidth = 60 + 10 + 80 + 16 + 100 + 13;
+    
+    UILabel *A = [self createLabel:@"A" color:5];
+    A.myWidth = 60;   //不管任何设备固定宽度为60,高度根据内容确定。
+    [contentLayout addSubview:A];
+    
+    UILabel *B = [self createLabel:@"B" color:6];
+    B.myLeftMargin = 10 / totalFloatWidth;  //B与A的间距，也就是左间距用浮动间距。对于线性布局来说如果间距值大于0小于1则表示是浮动间距。
+    B.weight = 60 / totalFloatWidth;   //对象水平线性布局来说weight值设置的是视图的比重宽度.
+    [contentLayout addSubview:B];
+    
+    UILabel *C  = [self createLabel:@"C" color:7];
+    C.myLeftMargin = 16 / totalFloatWidth;
+    C.weight = 80 / totalFloatWidth;
+    [contentLayout addSubview:C];
+    
+    UILabel *D = [self createLabel:@"D" color:8];
+    D.myLeftMargin = 16;  //D与C的间距是固定的16
+    D.weight = 100 / totalFloatWidth;
+    [contentLayout addSubview:D];
+    
+    UILabel *E = [self createLabel:@"E" color:9];
+    E.myLeftMargin = 13 / totalFloatWidth;
+    E.myWidth = 40; //固定的宽度。
+    [contentLayout addSubview:E];
+    
+    
+}
 
 
 - (void)viewDidLoad {

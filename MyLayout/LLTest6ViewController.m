@@ -14,6 +14,8 @@
 
 @property(nonatomic, weak) UIButton *editButton;
 
+@property(nonatomic, weak) UIImageView *headImageView;
+
 
 @end
 
@@ -75,6 +77,7 @@
     headImageView.myTopMargin = 0.25;
     headImageView.myCenterXOffset = 0;     //距离顶部间隙剩余空间的25%，水平居中对齐。
     [rootLayout addSubview:headImageView];
+    self.headImageView = headImageView;
     
     
     UITextField *nameField = [UITextField new];
@@ -136,7 +139,6 @@
     //因为在垂直线性布局里面每一列只能有一个子视图，但在实际中我们希望某个子视图边缘有一个子视图并列，为了不破坏线性布局的能力，而又能实现这种功能
     //我们可以用如下的方法。
     __weak LLTest6ViewController *weakVC = self;
-    __weak UIImageView *weakHeadImageView = headImageView;
     rootLayout.rotationToDeviceOrientationBlock = ^(MyBaseLayout *ll, BOOL isFirst, BOOL isPortrait)
     {//rotationToDeviceOrientationBlock方法会在第一次完成布局或者因为屏幕旋转而完成布局时调用这个block。而且布局不会在调用完成后释放这个block。
       //因此需要注意循环引用的问题。
@@ -150,7 +152,7 @@
             weakVC.editButton = editButton;
         }
         //下面是直接用frame设置editButton的位置和尺寸。这里设置在头像图片的右边。。
-        weakVC.editButton.frame = CGRectMake(CGRectGetMaxX(weakHeadImageView.frame) + 5, CGRectGetMaxY(weakHeadImageView.frame) - 30, 50, 30);
+        weakVC.editButton.frame = CGRectMake(CGRectGetMaxX(weakVC.headImageView.frame) + 5, CGRectGetMaxY(weakVC.headImageView.frame) - 30, 50, 30);
         
     };
 
@@ -179,13 +181,21 @@
     MyBaseLayout *layout = (MyBaseLayout*)textView.superview;
     [layout setNeedsLayout];
     
+    
     //这里设置在布局结束后将textView滚动到光标所在的位置了。在布局执行布局完毕后如果设置了endLayoutBlock的话可以在这个block里面读取布局里面子视图的真实布局位置和尺寸，也就是可以在block内部读取每个子视图的真实的frame的值。
     layout.endLayoutBlock = ^{
     
         NSRange rg =  textView.selectedRange;
         [textView scrollRangeToVisible:rg];
         
+        
+        //因为这里面的editButton已经被设置为了useFrame.所以每次布局的变化都要手动的调整editButton的frame值！！！
+        //而且endLayout只会被执行一次，所以这里面不会产生相互引用的问题。
+        self.editButton.frame = CGRectMake(CGRectGetMaxX(self.headImageView.frame) + 5, CGRectGetMaxY(self.headImageView.frame) - 30, 50, 30);
+
+        
     };
+    
     
 }
 

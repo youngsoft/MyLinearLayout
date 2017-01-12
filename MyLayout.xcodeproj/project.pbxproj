@@ -30,6 +30,8 @@
 		189692701CF74E7E000A5B91 /* AllTest2TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1896926F1CF74E7E000A5B91 /* AllTest2TableViewCell.m */; };
 		189692731CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189692721CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m */; };
 		189692761CF74EC5000A5B91 /* AllTestDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 189692751CF74EC5000A5B91 /* AllTestDataModel.m */; };
+		1897384F1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 1897384E1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m */; };
+		189738511E16330B004F80D6 /* MyLayoutTestCaseBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 189738501E16330B004F80D6 /* MyLayoutTestCaseBase.m */; };
 		18A9A4D41D63049F004974CE /* RLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A9A4D31D63049F004974CE /* RLTest4ViewController.m */; };
 		18B152341DEDDE5500AD7A1C /* MyLayoutUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B152331DEDDE5500AD7A1C /* MyLayoutUITests.m */; };
 		18BCC51A1D2D4885005081FF /* FLLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BCC5191D2D4885005081FF /* FLLTest4ViewController.m */; };
@@ -156,6 +158,9 @@
 		189692721CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewHeaderFooterView.m; sourceTree = "<group>"; };
 		189692741CF74EBB000A5B91 /* AllTestDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTestDataModel.h; sourceTree = "<group>"; };
 		189692751CF74EC5000A5B91 /* AllTestDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTestDataModel.m; sourceTree = "<group>"; };
+		1897384E1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRelativeLayoutTestCase.m; sourceTree = "<group>"; };
+		189738501E16330B004F80D6 /* MyLayoutTestCaseBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutTestCaseBase.m; sourceTree = "<group>"; };
+		189738521E16340D004F80D6 /* MyLayoutTestCaseBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutTestCaseBase.h; sourceTree = "<group>"; };
 		18A9A4D31D63049F004974CE /* RLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLTest4ViewController.m; sourceTree = "<group>"; };
 		18A9A4D51D6304AD004974CE /* RLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLTest4ViewController.h; sourceTree = "<group>"; };
 		18B152311DEDDE5500AD7A1C /* MyLayoutUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyLayoutUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -571,6 +576,9 @@
 			children = (
 				18D684541C4F423400A48BB4 /* Info.plist */,
 				18D684551C4F423400A48BB4 /* MyLayoutTests.m */,
+				1897384E1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m */,
+				189738501E16330B004F80D6 /* MyLayoutTestCaseBase.m */,
+				189738521E16340D004F80D6 /* MyLayoutTestCaseBase.h */,
 			);
 			path = MyLayoutTests;
 			sourceTree = "<group>";
@@ -801,6 +809,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */,
+				1897384F1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m in Sources */,
+				189738511E16330B004F80D6 /* MyLayoutTestCaseBase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
