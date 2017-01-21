@@ -85,6 +85,23 @@
 }
 
 
+-(NSInteger)pagedCount
+{
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
+    return lsc.pagedCount;
+}
+
+-(void)setPagedCount:(NSInteger)pagedCount
+{
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.pagedCount != pagedCount)
+    {
+        lsc.pagedCount = pagedCount;
+        [self setNeedsLayout];
+    }
+}
+
+
 -(void)setAverageArrange:(BOOL)averageArrange
 {
     if (self.orientation == MyLayoutViewOrientation_Vert)
@@ -698,8 +715,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
                 rect.size.width = sbv.widthDime.measure;
             
             
-            if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-                rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
+            [self setSubviewRelativeDimeSize:sbv.widthDime selfSize:selfSize pRect:&rect];
             
             rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
@@ -737,11 +753,10 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
-        if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-            rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
         
-        if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
+        [self setSubviewRelativeDimeSize:sbv.widthDime selfSize:selfSize pRect:&rect];
+        
+        [self setSubviewRelativeDimeSize:sbv.heightDime selfSize:selfSize pRect:&rect];
 
         
         if (sbv.weight != 0)
@@ -919,6 +934,44 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     CGFloat vertMargin = self.subviewVertMargin;
     CGFloat horzMargin = self.subviewHorzMargin;
     
+    //判断父滚动视图是否分页滚动
+    BOOL isPagingScroll = (self.superview != nil &&
+                     [self.superview isKindOfClass:[UIScrollView class]] &&
+                     ((UIScrollView*)self.superview).isPagingEnabled);
+    CGFloat pagingItemHeight = 0;
+    CGFloat pagingItemWidth = 0;
+    BOOL isVertPaging = NO;
+    BOOL isHorzPaging = NO;
+    if (self.pagedCount > 0 && self.superview != nil)
+    {
+        NSInteger rows = self.pagedCount / arrangedCount;  //每页的行数。
+
+        //对于垂直流式布局来说，要求要有明确的宽度。因此如果我们启用了分页又设置了宽度包裹时则我们的分页是从左到右的排列。否则分页是从上到下的排列。
+        if (self.wrapContentWidth)
+        {
+            isHorzPaging = YES;
+            if (isPagingScroll)
+                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - padding.left - padding.right - (arrangedCount - 1) * horzMargin ) / arrangedCount;
+            else
+                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - padding.left - arrangedCount * horzMargin ) / arrangedCount;
+            
+            pagingItemHeight = (selfSize.height - padding.top - padding.bottom - (rows - 1) * vertMargin) / rows;
+        }
+        else
+        {
+            isVertPaging = YES;
+            pagingItemWidth = (selfSize.width - padding.left - padding.right - (arrangedCount - 1) * horzMargin) / arrangedCount;
+            //分页滚动时和非分页滚动时的高度计算是不一样的。
+            if (isPagingScroll)
+                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - padding.top - padding.bottom - (rows - 1) * vertMargin) / rows;
+            else
+                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - padding.top - rows * vertMargin) / rows;
+            
+        }
+        
+    }
+
+    
     BOOL averageArrange = (mghorz == MyMarginGravity_Horz_Fill);
     
     NSInteger arrangedIndex = 0;
@@ -955,13 +1008,14 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         }
         else
         {
+            if (pagingItemWidth != 0)
+                rect.size.width = pagingItemWidth;
             
             if (sbv.widthDime.dimeNumVal != nil && !averageArrange)
                 rect.size.width = sbv.widthDime.measure;
             
             
-            if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-                rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
+            [self setSubviewRelativeDimeSize:sbv.widthDime selfSize:selfSize pRect:&rect];
             
             
             rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
@@ -991,6 +1045,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     }
     
     
+    CGFloat pageWidth  = 0; //页宽。
     CGFloat averageWidth = (selfSize.width - padding.left - padding.right - (arrangedCount - 1) * horzMargin) / arrangedCount;
     arrangedIndex = 0;
     i = 0;
@@ -1002,9 +1057,42 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         if (arrangedIndex >=  arrangedCount)
         {
             arrangedIndex = 0;
-            xPos = padding.left;
             yPos += rowMaxHeight;
             yPos += vertMargin;
+            
+            //分别处理水平分页和垂直分页。
+            if (isHorzPaging)
+            {
+                if (i % self.pagedCount == 0)
+                {
+                    pageWidth += CGRectGetWidth(self.superview.bounds);
+                    
+                    if (!isPagingScroll)
+                        pageWidth -= padding.left;
+                    
+                    yPos = padding.top;
+                }
+                
+            }
+            
+            if (isVertPaging)
+            {
+                //如果是分页滚动则要多添加垂直间距。
+                if (i % self.pagedCount == 0)
+                {
+                    
+                    if (isPagingScroll)
+                    {
+                        yPos -= vertMargin;
+                        yPos += padding.bottom;
+                        yPos += padding.top;
+                    }
+                }
+            }
+            
+            
+            xPos = padding.left + pageWidth;
+
             
             //计算每行的gravity情况。
             [self calcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedCount vertMargin:vertMargin horzMargin:horzMargin];
@@ -1019,9 +1107,12 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         CGFloat bottomMargin = sbv.bottomPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
         CGRect rect = sbv.myFrame.frame;
-        
-        
         BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
+        
+        if (pagingItemHeight != 0)
+            rect.size.height = pagingItemHeight;
+        
+        
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
@@ -1030,15 +1121,13 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:averageWidth - leftMargin - rightMargin sbvSize:rect.size selfLayoutSize:selfSize];
         }
         
-        if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
         
-        if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-            rect.size.height = [sbv.heightDime measureWith:rect.size.width ];
+        [self setSubviewRelativeDimeSize:sbv.heightDime selfSize:selfSize pRect:&rect];
         
         //如果高度是浮动的则需要调整高度。
         if (isFlexedHeight)
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
+        
         
         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
     
@@ -1071,7 +1160,19 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     [self calcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex vertMargin:vertMargin horzMargin:horzMargin];
 
     if (self.wrapContentHeight)
+    {
         selfSize.height = yPos + padding.bottom + rowMaxHeight;
+        
+        //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
+        if (isVertPaging && isPagingScroll)
+        {
+            //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
+            NSInteger totalPages = floor((sbs.count + self.pagedCount - 1.0 ) / self.pagedCount);
+            if (selfSize.height < totalPages * CGRectGetHeight(self.superview.bounds))
+                selfSize.height = totalPages * CGRectGetHeight(self.superview.bounds);
+        }
+
+    }
     else
     {
         CGFloat addYPos = 0;
@@ -1120,7 +1221,19 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     }
     
     if (self.wrapContentWidth && !averageArrange)
+    {
         selfSize.width = maxWidth + padding.right;
+        
+        //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
+        if (isHorzPaging && isPagingScroll)
+        {
+            //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
+            NSInteger totalPages = floor((sbs.count + self.pagedCount - 1.0 ) / self.pagedCount);
+            if (selfSize.width < totalPages * CGRectGetWidth(self.superview.bounds))
+                selfSize.width = totalPages * CGRectGetWidth(self.superview.bounds);
+        }
+
+    }
     
     
     return selfSize;
@@ -1190,16 +1303,11 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             if (sbv.heightDime.dimeNumVal != nil)
                 rect.size.height = sbv.heightDime.measure;
             
-            if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-                rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
-            
-            if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-                rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
+            [self setSubviewRelativeDimeSize:sbv.heightDime selfSize:selfSize pRect:&rect];
             
             rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
             
-            if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-                rect.size.width = [sbv.widthDime measureWith:rect.size.height];
+            [self setSubviewRelativeDimeSize:sbv.widthDime selfSize:selfSize pRect:&rect];
             
             rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
@@ -1241,18 +1349,17 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
         
-        if (subviewSize != 0)
-            rect.size.height = subviewSize;
-        
         if (sbv.heightDime.dimeNumVal != nil)
             rect.size.height = sbv.heightDime.measure;
         
-        if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-            rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
+        [self setSubviewRelativeDimeSize:sbv.heightDime selfSize:selfSize pRect:&rect];
+
+        if (subviewSize != 0)
+            rect.size.height = subviewSize;
         
-        if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-            rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
         
+        [self setSubviewRelativeDimeSize:sbv.widthDime selfSize:selfSize pRect:&rect];
+
         
         if (sbv.weight != 0)
         {
@@ -1427,6 +1534,44 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     CGFloat vertMargin = self.subviewVertMargin;
     CGFloat horzMargin = self.subviewHorzMargin;
     
+    //父滚动视图是否分页滚动。
+    BOOL isPagingScroll = (self.superview != nil &&
+                      [self.superview isKindOfClass:[UIScrollView class]] &&
+                      ((UIScrollView*)self.superview).isPagingEnabled);
+    
+    CGFloat pagingItemHeight = 0;
+    CGFloat pagingItemWidth = 0;
+    BOOL isVertPaging = NO;
+    BOOL isHorzPaging = NO;
+    if (self.pagedCount > 0 && self.superview != nil)
+    {
+        NSInteger cols = self.pagedCount / arrangedCount;  //每页的列数。
+        
+        //对于水平流式布局来说，要求要有明确的高度。因此如果我们启用了分页又设置了高度包裹时则我们的分页是从上到下的排列。否则分页是从左到右的排列。
+        if (self.wrapContentHeight)
+        {
+            isVertPaging = YES;
+            if (isPagingScroll)
+                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - padding.top - padding.bottom - (arrangedCount - 1) * vertMargin ) / arrangedCount;
+            else
+                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - padding.top - arrangedCount * vertMargin ) / arrangedCount;
+            
+            pagingItemWidth = (selfSize.width - padding.left - padding.right - (cols - 1) * horzMargin) / cols;
+        }
+        else
+        {
+            isHorzPaging = YES;
+            pagingItemHeight = (selfSize.height - padding.top - padding.bottom - (arrangedCount - 1) * vertMargin) / arrangedCount;
+            //分页滚动时和非分页滚动时的宽度计算是不一样的。
+            if (isPagingScroll)
+                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - padding.left - padding.right - (cols - 1) * horzMargin) / cols;
+            else
+                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - padding.left - cols * horzMargin) / cols;
+            
+        }
+        
+    }
+    
     BOOL averageArrange = (mgvert == MyMarginGravity_Vert_Fill);
     
     NSInteger arrangedIndex = 0;
@@ -1456,12 +1601,15 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         CGRect rect = sbv.myFrame.frame;
         
         
+        if (pagingItemWidth != 0)
+            rect.size.width = pagingItemWidth;
+        
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
         
+        //当子视图的尺寸是相对依赖于其他尺寸的值。
+        [self setSubviewRelativeDimeSize:sbv.widthDime selfSize:selfSize pRect:&rect];
         
-        if (sbv.widthDime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
-            rect.size.width = [sbv.widthDime measureWith:(selfSize.width - padding.left - padding.right) ];
         
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
 
@@ -1476,13 +1624,15 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
            
             BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
             
+            if (pagingItemHeight != 0)
+                rect.size.height = pagingItemHeight;
             
             if (sbv.heightDime.dimeNumVal != nil && !averageArrange)
                 rect.size.height = sbv.heightDime.measure;
             
-            if (sbv.heightDime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
-                rect.size.height = [sbv.heightDime measureWith:(selfSize.height - padding.top - padding.bottom) ];
-            
+            //当子视图的尺寸是相对依赖于其他尺寸的值。
+            [self setSubviewRelativeDimeSize:sbv.heightDime selfSize:selfSize pRect:&rect];
+
             
             //如果高度是浮动的则需要调整高度。
             if (isFlexedHeight)
@@ -1519,7 +1669,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     }
 
 
-    
+    CGFloat pageHeight = 0; //页高
     CGFloat averageHeight = (selfSize.height - padding.top - padding.bottom - (arrangedCount - 1) * vertMargin) / arrangedCount;
     arrangedIndex = 0;
     i = 0;
@@ -1532,7 +1682,40 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             arrangedIndex = 0;
             xPos += colMaxWidth;
             xPos += horzMargin;
-            yPos = padding.top;
+           
+            //分别处理水平分页和垂直分页。
+            if (isVertPaging)
+            {
+                if (i % self.pagedCount == 0)
+                {
+                    pageHeight += CGRectGetHeight(self.superview.bounds);
+                    
+                    if (!isPagingScroll)
+                        pageHeight -= padding.top;
+                    
+                    xPos = padding.left;
+                }
+                
+            }
+            
+            if (isHorzPaging)
+            {
+                //如果是分页滚动则要多添加垂直间距。
+                if (i % self.pagedCount == 0)
+                {
+                    
+                    if (isPagingScroll)
+                    {
+                        xPos -= horzMargin;
+                        xPos += padding.right;
+                        xPos += padding.left;
+                    }
+                }
+            }
+            
+
+            yPos = padding.top + pageHeight;
+
             
             //计算每行的gravity情况。
             [self calcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedCount vertMargin:vertMargin horzMargin:horzMargin];
@@ -1587,10 +1770,35 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     [self calcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex vertMargin:vertMargin horzMargin:horzMargin];
 
     if (self.wrapContentHeight && !averageArrange)
+    {
         selfSize.height = maxHeight + padding.bottom;
+        
+        //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
+        if (isVertPaging && isPagingScroll)
+        {
+            //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
+            NSInteger totalPages = floor((sbs.count + self.pagedCount - 1.0 ) / self.pagedCount);
+            if (selfSize.height < totalPages * CGRectGetHeight(self.superview.bounds))
+                selfSize.height = totalPages * CGRectGetHeight(self.superview.bounds);
+        }
+
+        
+    }
     
     if (self.wrapContentWidth)
+    {
         selfSize.width = xPos + padding.right + colMaxWidth;
+        
+        //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
+        if (isHorzPaging && isPagingScroll)
+        {
+            //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
+            NSInteger totalPages = floor((sbs.count + self.pagedCount - 1.0 ) / self.pagedCount);
+            if (selfSize.width < totalPages * CGRectGetWidth(self.superview.bounds))
+                selfSize.width = totalPages * CGRectGetWidth(self.superview.bounds);
+        }
+        
+    }
     else
     {
      

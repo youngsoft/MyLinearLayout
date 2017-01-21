@@ -541,12 +541,12 @@
     MyFlowLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     
     lsc.arrangedCount = self.arrangedCount;
-    lsc.averageArrange = self.averageArrange;
     lsc.autoArrange = self.autoArrange;
     lsc.arrangedGravity = self.arrangedGravity;
     lsc.subviewSize = self.subviewSize;
     lsc.minSpace = self.minSpace;
     lsc.maxSpace = self.maxSpace;
+    lsc.pagedCount = self.pagedCount;
     
     return lsc;
 }
@@ -556,12 +556,12 @@
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\naverageArrange=%@\nautoArrange=%@\narrangedGravity=%hu",
+    dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\nautoArrange=%@\narrangedGravity=%hu\npagedCount=%ld",
                                           dbgDesc,
                                           (long)self.arrangedCount,
-                                          self.averageArrange ? @"YES":@"NO",
                                           self.autoArrange ? @"YES":@"NO",
-                                          self.arrangedGravity
+                                          self.arrangedGravity,
+                                          self.pagedCount
                                           ];
     
     return dbgDesc;

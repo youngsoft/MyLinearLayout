@@ -628,6 +628,11 @@
         if (sbv != sbs.lastObject)
             pos += self.subviewMargin;
         
+        
+        if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
+                rect.size.height = [sbv.heightDime measureWith:rect.size.width ];
+        
+        
         //如果高度是浮动的则需要调整高度。
         if (isFlexedHeight)
         {
@@ -929,6 +934,9 @@
         if (sbv.heightDime.isMatchParent)
             rect.size.height= [sbv.heightDime measureWith:selfSize.height - self.topPadding - self.bottomPadding];
         
+        if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
+            rect.size.width = [sbv.widthDime measureWith:rect.size.height];
+        
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         //如果最小宽度不能被缩小则不加入。
@@ -937,7 +945,8 @@
             canAddToNoWrapSbs = NO;
         }
 
-        
+        if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
+            rect.size.height = [sbv.heightDime measureWith:rect.size.width];
         
         //如果高度是浮动的则需要调整高度。
         if (isFlexedHeight)
@@ -1047,6 +1056,7 @@
         {
             rect.size.height = [sbv.heightDime measureWith:(selfSize.height - self.topPadding - self.bottomPadding) ];
         }
+        
         
         if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
             rect.size.height = selfSize.height - self.topPadding - self.bottomPadding - sbv.topPos.margin - sbv.bottomPos.margin;

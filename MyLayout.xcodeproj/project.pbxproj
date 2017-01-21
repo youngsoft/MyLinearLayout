@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		18014BA51C9079DA0088133B /* MyDimeScale.m in Sources */ = {isa = PBXBuildFile; fileRef = 18014BA41C9079DA0088133B /* MyDimeScale.m */; };
 		181068371E0B4EA9000B9B86 /* AllTest8ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181068361E0B4EA9000B9B86 /* AllTest8ViewController.m */; };
+		181550681E2F75EA00329BFF /* FLLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181550671E2F75EA00329BFF /* FLLTest5ViewController.m */; };
 		181ECE631D570CA1007803BE /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 181ECE5F1D570CA1007803BE /* YYFPSLabel.m */; };
 		181ECE641D570CA1007803BE /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 181ECE601D570CA1007803BE /* YYWeakProxy.m */; };
 		181F97F51E079462004A9AE6 /* RLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181F97F41E079462004A9AE6 /* RLTest5ViewController.m */; };
@@ -105,6 +106,8 @@
 		18014BA41C9079DA0088133B /* MyDimeScale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDimeScale.m; sourceTree = "<group>"; };
 		181068351E0B4EA9000B9B86 /* AllTest8ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest8ViewController.h; sourceTree = "<group>"; };
 		181068361E0B4EA9000B9B86 /* AllTest8ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest8ViewController.m; sourceTree = "<group>"; };
+		181550661E2F75DF00329BFF /* FLLTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest5ViewController.h; sourceTree = "<group>"; };
+		181550671E2F75EA00329BFF /* FLLTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest5ViewController.m; sourceTree = "<group>"; };
 		181ECE5F1D570CA1007803BE /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYFPSLabel.m; sourceTree = "<group>"; };
 		181ECE601D570CA1007803BE /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
 		181ECE611D570CA1007803BE /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
@@ -450,6 +453,8 @@
 				1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */,
 				18BCC5181D2D4879005081FF /* FLLTest4ViewController.h */,
 				18BCC5191D2D4885005081FF /* FLLTest4ViewController.m */,
+				181550661E2F75DF00329BFF /* FLLTest5ViewController.h */,
+				181550671E2F75EA00329BFF /* FLLTest5ViewController.m */,
 			);
 			name = FlowLayoutDemo;
 			sourceTree = "<group>";
@@ -774,6 +779,7 @@
 				18BCC51A1D2D4885005081FF /* FLLTest4ViewController.m in Sources */,
 				181F97F51E079462004A9AE6 /* RLTest5ViewController.m in Sources */,
 				18D6843B1C4F421400A48BB4 /* MyFlowLayout.m in Sources */,
+				181550681E2F75EA00329BFF /* FLLTest5ViewController.m in Sources */,
 				18296B751C76D67F00273C3E /* FOLTest3ViewController.m in Sources */,
 				18D684461C4F421400A48BB4 /* LLTest2ViewController.m in Sources */,
 				18D684411C4F421400A48BB4 /* MyLinearLayout.m in Sources */,

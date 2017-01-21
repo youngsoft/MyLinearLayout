@@ -61,7 +61,7 @@
 -(MyMaker*)arrangedGravity;
 -(MyMaker*)subviewVertMargin;
 -(MyMaker*)subviewHorzMargin;
-
+-(MyMaker*)pagedCount;
 
 
 //线性布局和浮动布局和流式布局子视图独有

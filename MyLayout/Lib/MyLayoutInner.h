@@ -80,6 +80,9 @@
 -(NSMutableArray*)getLayoutSubviews;
 -(NSMutableArray*)getLayoutSubviewsFrom:(NSArray*)sbsFrom;
 
+//设置子视图的相对依赖的尺寸
+-(void)setSubviewRelativeDimeSize:(MyLayoutSize*)dime selfSize:(CGSize)selfSize pRect:(CGRect*)pRect;
+
 @end
 
 

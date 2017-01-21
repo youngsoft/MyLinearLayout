@@ -391,61 +391,68 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
     }
     
     
-    //first search the most exact SizeClass
-    MySizeClass searchSizeClass = wsc | hsc | ori;
-    MyViewSizeClass *myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
-    if (myClass != nil)
-        return (UIView*)myClass;
-    
-    
-    searchSizeClass = wsc | hsc;
-    if (searchSizeClass != sizeClass)
+    MySizeClass searchSizeClass;
+    MyViewSizeClass *myClass = nil;
+    if (dict.count > 1)
     {
-        MyViewSizeClass *myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
-        if (myClass != nil)
-            return (UIView*)myClass;
-    }
-    
-    
-    searchSizeClass = MySizeClass_wAny | hsc | ori;
-    if (ori != 0 && searchSizeClass != sizeClass)
-    {
+        
+        //first search the most exact SizeClass
+        searchSizeClass = wsc | hsc | ori;
         myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
         if (myClass != nil)
             return (UIView*)myClass;
         
-    }
-    
-    searchSizeClass = MySizeClass_wAny | hsc;
-    if (searchSizeClass != sizeClass)
-    {
-        myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
-        if (myClass != nil)
-            return (UIView*)myClass;
-    }
-    
-    searchSizeClass = wsc | MySizeClass_hAny | ori;
-    if (ori != 0 && searchSizeClass != sizeClass)
-    {
-        myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
-        if (myClass != nil)
-            return (UIView*)myClass;
-    }
-    
-    searchSizeClass = wsc | MySizeClass_hAny;
-    if (searchSizeClass != sizeClass)
-    {
-        myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
-        if (myClass != nil)
-            return (UIView*)myClass;
-    }
-    
-    searchSizeClass = MySizeClass_wAny | MySizeClass_hAny | ori;
-    if (ori != 0 && searchSizeClass != sizeClass)
-    {
-        myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
-        if (myClass != nil)
-            return (UIView*)myClass;
+        
+        searchSizeClass = wsc | hsc;
+        if (searchSizeClass != sizeClass)
+        {
+            MyViewSizeClass *myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
+            if (myClass != nil)
+                return (UIView*)myClass;
+        }
+        
+        
+        searchSizeClass = MySizeClass_wAny | hsc | ori;
+        if (ori != 0 && searchSizeClass != sizeClass)
+        {
+            myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
+            if (myClass != nil)
+                return (UIView*)myClass;
+            
+        }
+        
+        searchSizeClass = MySizeClass_wAny | hsc;
+        if (searchSizeClass != sizeClass)
+        {
+            myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
+            if (myClass != nil)
+                return (UIView*)myClass;
+        }
+        
+        searchSizeClass = wsc | MySizeClass_hAny | ori;
+        if (ori != 0 && searchSizeClass != sizeClass)
+        {
+            myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
+            if (myClass != nil)
+                return (UIView*)myClass;
+        }
+        
+        searchSizeClass = wsc | MySizeClass_hAny;
+        if (searchSizeClass != sizeClass)
+        {
+            myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
+            if (myClass != nil)
+                return (UIView*)myClass;
+        }
+        
+        searchSizeClass = MySizeClass_wAny | MySizeClass_hAny | ori;
+        if (ori != 0 && searchSizeClass != sizeClass)
+        {
+            myClass = (MyViewSizeClass*)[dict objectForKey:@(searchSizeClass)];
+            if (myClass != nil)
+                return (UIView*)myClass;
+        }
+        
     }
     
     searchSizeClass = MySizeClass_wAny | MySizeClass_hAny;
@@ -1200,12 +1207,13 @@ BOOL _hasBegin;
     
     
     //监控子视图的frame的变化以便重新进行布局
-    if ([keyPath isEqualToString:@"frame"] ||
-        [keyPath isEqualToString:@"hidden"] ||
-        [keyPath isEqualToString:@"center"])
+    if (!_isMyLayouting)
     {
-        if (!_isMyLayouting)
+        if ([keyPath isEqualToString:@"frame"] ||
+            [keyPath isEqualToString:@"hidden"] ||
+            [keyPath isEqualToString:@"center"])
         {
+            
             if (![object useFrame])
             {
                 [self setNeedsLayout];
@@ -1525,10 +1533,20 @@ BOOL _hasBegin;
             MyFrame *myFrame = sbv.myFrame;
             if (myFrame.leftPos != CGFLOAT_MAX && myFrame.topPos != CGFLOAT_MAX && !sbv.noLayout)
             {
+                if (myFrame.width < 0)
+                {
+                    myFrame.width = 0;
+                }
+                if (myFrame.height < 0)
+                {
+                    myFrame.height = 0;
+                }
                 
+            
                 sbv.center = CGPointMake(myFrame.leftPos + sbv.layer.anchorPoint.x * myFrame.width, myFrame.topPos + sbv.layer.anchorPoint.y * myFrame.height);
                 
                 sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, myFrame.width, myFrame.height);
+            
 
             }
             
@@ -1560,6 +1578,17 @@ BOOL _hasBegin;
             }
             if (isAdjustSelf)
             {
+                
+                if (newSelfSize.width < 0)
+                {
+                    newSelfSize.width = 0;
+                }
+                
+                if (newSelfSize.height < 0)
+                {
+                    newSelfSize.height = 0;
+                }
+                
                 self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, newSelfSize.width, newSelfSize.height);
                 self.center = CGPointMake(self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x, self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y);
             }
@@ -1934,6 +1963,15 @@ BOOL _hasBegin;
     
     if (!CGRectEqualToRect(rectSelf, oldRectSelf))
     {
+        if (rectSelf.size.width < 0)
+        {
+            rectSelf.size.width = 0;
+        }
+        if (rectSelf.size.height < 0)
+        {
+            rectSelf.size.height = 0;
+        }
+        
         self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y,rectSelf.size.width, rectSelf.size.height);
         self.center = CGPointMake(rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.size.width, rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.size.height);
         
@@ -2148,6 +2186,39 @@ BOOL _hasBegin;
 
 }
 
+-(void)setSubviewRelativeDimeSize:(MyLayoutSize*)dime selfSize:(CGSize)selfSize pRect:(CGRect*)pRect
+{
+    if (dime.dimeRelaVal == nil)
+        return;
+    
+    if (dime.dime == MyMarginGravity_Horz_Fill)
+    {
+        
+        if (dime.dimeRelaVal == self.widthDime && !self.wrapContentWidth)
+            pRect->size.width = [dime measureWith:(selfSize.width - self.leftPadding - self.rightPadding)];
+        else if (dime.dimeRelaVal == self.heightDime)
+            pRect->size.width = [dime measureWith:(selfSize.height - self.topPadding - self.bottomPadding)];
+        else if (dime.dimeRelaVal == dime.view.heightDime)
+            pRect->size.width = [dime measureWith:pRect->size.height];
+        else if (dime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
+            pRect->size.width = [dime measureWith:dime.dimeRelaVal.view.estimatedRect.size.width];
+        else
+            pRect->size.width = [dime measureWith:dime.dimeRelaVal.view.estimatedRect.size.height];
+    }
+    else
+    {
+        if (dime.dimeRelaVal == self.heightDime && !self.wrapContentHeight)
+            pRect->size.height = [dime measureWith:(selfSize.height - self.topPadding - self.bottomPadding)];
+        else if (dime.dimeRelaVal == self.widthDime)
+            pRect->size.height = [dime measureWith:(selfSize.width - self.leftPadding - self.rightPadding)];
+        else if (dime.dimeRelaVal == dime.view.widthDime)
+            pRect->size.height = [dime measureWith:pRect->size.width];
+        else if (dime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
+            pRect->size.height = [dime measureWith:dime.dimeRelaVal.view.estimatedRect.size.width];
+        else
+            pRect->size.height = [dime measureWith:dime.dimeRelaVal.view.estimatedRect.size.height];
+    }
+}
 
 
 - (void)alterScrollViewContentSize:(CGSize)newSize

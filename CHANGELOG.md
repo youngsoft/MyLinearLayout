@@ -3,6 +3,21 @@
 
 ---
 
+## [V1.3.2](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.2)(2017/1/20)
+
+#### Added
+1. 流式布局`MyFlowLayout`添加了对分页滚动的支持，通过新增加的属性`pagedCount`来实现，这个属性只支持数量约束流式布局。`pagedCount`和`wrapContentHeight以及wrapContentWidth`配合使用能够实现各种方向上的分页滚动效果(具体见DEMO：FLLTest5ViewController)
+2. 线性布局`MyLinearLayout`中完全支持了所有子视图的高度等于宽度的设置的功能，以及在水平线性布局中添加了子宽度等于高度的功能。
+
+#### Changed
+1. 流式布局`MyFlowLayout`中的子视图的widthDime,heightDime中可设置的相对类型尺寸的值的维多扩宽，不仅可以依赖兄弟视图，父视图，甚至还可以依赖别的任意的视图。
+
+#### Fixed
+1. 修复了[#BUG30](https://github.com/youngsoft/MyLinearLayout/issues/30)，主要原因是当计算出视图的尺寸为小于0时，而又将这个尺寸用来设置视图的bounds属性的尺寸时会调整bounds的origin部分而产生的BUG。具体展示是视图的位置产生了不正确的错误。
+
+
+
+
 ## [V1.3.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.1)(2016/12/28)
 
 #### Added

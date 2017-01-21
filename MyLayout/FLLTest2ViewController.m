@@ -84,7 +84,7 @@
     
     //内容拉伸
     if (sender.isOn)
-        self.flowLayout.gravity = MyMarginGravity_Horz_Fill;  //对于内容填充的流时布局来说，averageArrange属性如果设置为YES表示里面的子视图的内容会自动的拉伸以便填充整个布局。
+        self.flowLayout.gravity = MyMarginGravity_Horz_Fill;  //对于内容填充的流时布局来说，gravity属性如果设置为MyMarginGravity_Horz_Fill表示里面的子视图的内容会自动的拉伸以便填充整个布局。
     else
         self.flowLayout.gravity = MyMarginGravity_None;
     

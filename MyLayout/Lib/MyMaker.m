@@ -251,6 +251,12 @@
 
 }
 
+-(MyMaker*)pagedCount
+{
+    return [self addMethod:@"pagedCount"];
+    
+}
+
 
 
 

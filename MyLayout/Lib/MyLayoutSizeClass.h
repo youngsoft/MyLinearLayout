@@ -217,13 +217,14 @@ typedef enum : unsigned char{
 @interface MyFlowLayoutViewSizeClass : MySequentLayoutViewSizeClass
 
 @property(nonatomic,assign) NSInteger arrangedCount;
-@property(nonatomic,assign) BOOL averageArrange;
+@property(nonatomic, assign) NSInteger pagedCount;
 @property(nonatomic,assign) BOOL autoArrange;
 @property(nonatomic,assign) MyMarginGravity arrangedGravity;
 
 @property(nonatomic, assign) CGFloat subviewSize;
 @property(nonatomic, assign) CGFloat minSpace;
 @property(nonatomic, assign) CGFloat maxSpace;
+
 
 
 @end
