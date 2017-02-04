@@ -11,7 +11,7 @@
 #if TARGET_OS_IPHONE
 
 /**
- *专门为布局设置的简化操作类，以便在统一的地方进行布局设置
+ *专门为布局设置的简化操作类，以便在统一的地方进行布局设置,MyLayout提供了类似masonry的布局设置语法。
  */
 @interface MyMaker : NSObject
 
@@ -29,6 +29,7 @@
 
 -(MyMaker*)centerX;
 -(MyMaker*)centerY;
+-(MyMaker*)center;
 
 -(MyMaker*)sizeToFit;
 
@@ -38,6 +39,7 @@
 -(MyMaker*)leftPadding;
 -(MyMaker*)bottomPadding;
 -(MyMaker*)rightPadding;
+-(MyMaker*)padding;
 -(MyMaker*)wrapContentHeight;
 -(MyMaker*)wrapContentWidth;
 -(MyMaker*)reverseLayout;
@@ -50,7 +52,7 @@
 //线性布局和流式布局独有
 -(MyMaker*)orientation;
 -(MyMaker*)gravity;
--(MyMaker*)subviewMargin;
+-(MyMaker*)space;
 
 //线性布局独有
 -(MyMaker*)shrinkType;
@@ -59,8 +61,8 @@
 -(MyMaker*)arrangedCount;
 -(MyMaker*)autoArrange;
 -(MyMaker*)arrangedGravity;
--(MyMaker*)subviewVertMargin;
--(MyMaker*)subviewHorzMargin;
+-(MyMaker*)vertSpace;
+-(MyMaker*)horzSpace;
 -(MyMaker*)pagedCount;
 
 
@@ -77,12 +79,13 @@
 
 //赋值操支持NSNumber,UIView,MyLayoutPos,MyLayoutSize, NSArray[MyLayoutSize]
 -(MyMaker* (^)(id val))equalTo;
+-(MyMaker* (^)(id val))min;
+-(MyMaker* (^)(id val))max;
 
 -(MyMaker* (^)(CGFloat val))offset;
 -(MyMaker* (^)(CGFloat val))multiply;
 -(MyMaker* (^)(CGFloat val))add;
--(MyMaker* (^)(CGFloat val))min;
--(MyMaker* (^)(CGFloat val))max;
+
 
 
 
