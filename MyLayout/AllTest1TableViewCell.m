@@ -123,8 +123,7 @@
     _textMessageLabel.textColor = [CFTool color:4];
     _textMessageLabel.myLeftMargin = 0;
     _textMessageLabel.myRightMargin = 0; //垂直线性布局里面如果同时设置了左右边距则能确定子视图的宽度，这里表示宽度和父视图相等。
-    _textMessageLabel.numberOfLines = 0;
-    _textMessageLabel.flexedHeight = YES; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。
+    _textMessageLabel.wrapContentHeight = YES; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [messageLayout addSubview:_textMessageLabel];
     
     
@@ -171,8 +170,7 @@
     _textMessageLabel.leftPos.equalTo(_headImageView.rightPos).offset(5); //文本消息的左边在头像视图的右边并偏移5个点。
     _textMessageLabel.rightPos.equalTo(_rootLayout.rightPos);    //文本消息的右边和父布局的右边对齐。上面2行代码也同时确定了文本消息的宽度。
     _textMessageLabel.topPos.equalTo(_nickNameLabel.bottomPos).offset(5); //文本消息的顶部在昵称文本的底部并偏移5个点。
-    _textMessageLabel.numberOfLines = 0;
-    _textMessageLabel.flexedHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。
+    _textMessageLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [_rootLayout addSubview:_textMessageLabel];
     
     
@@ -220,8 +218,7 @@
     _textMessageLabel.font = [CFTool font:15];
     _textMessageLabel.textColor = [CFTool color:4];
     _textMessageLabel.weight = 1;  //占用剩余宽度
-    _textMessageLabel.numberOfLines = 0;
-    _textMessageLabel.flexedHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。
+    _textMessageLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [_rootLayout addSubview:_textMessageLabel];
     
     _imageMessageImageView = [UIImageView new];

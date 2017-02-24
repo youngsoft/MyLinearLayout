@@ -140,8 +140,7 @@
     titleLabel.text = dataModel.title;
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.weight = 1;         //向左浮动，宽度和父视图保持一致。
-    titleLabel.numberOfLines = 0;
-    titleLabel.flexedHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。
+    titleLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [itemLayout addSubview:titleLabel];
     
     itemLayout.gravity = MyMarginGravity_Vert_Bottom; //将整个布局中的所有子视图垂直居底部。
@@ -166,8 +165,7 @@
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:17];
     titleLabel.weight =1;   //向左浮动，宽度和父视图保持一致。
-    titleLabel.numberOfLines = 0;
-    titleLabel.flexedHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。
+    titleLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [itemLayout addSubview:titleLabel];
     
     //来源部分
@@ -202,8 +200,7 @@
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.weight =1;   //向左浮动，宽度和父视图保持一致。
-    titleLabel.numberOfLines = 0;
-    titleLabel.flexedHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将numberOfLines设置为0并且将flexedHeight设置为YES。
+    titleLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [itemLayout addSubview:titleLabel];
     
     //来源部分

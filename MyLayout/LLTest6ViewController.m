@@ -117,12 +117,12 @@
     textView.delegate = self;
 
     //左右间距为布局的10%，距离底部间距为65%,浮动高度，但高度最高为300，最低为30
-    //flexedHeight和max,min的结合能做到一些完美的自动伸缩功能。
+    //wrapContentHeight和max,min的结合能做到一些完美的自动伸缩功能。
     textView.myLeftMargin = 0.05;
     textView.myRightMargin = 0.05;
     textView.myBottomMargin = 0.65;
-    textView.flexedHeight = YES;
-    textView.heightDime.max(300).min(60);  //虽然flexedHeight属性设置了视图的高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
+    textView.wrapContentHeight = YES;
+    textView.heightDime.max(300).min(60);  //虽然wrapContentHeight属性设置了视图的高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
     [rootLayout addSubview:textView];
     
     

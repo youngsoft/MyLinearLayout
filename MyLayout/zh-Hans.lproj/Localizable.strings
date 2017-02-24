@@ -30,6 +30,7 @@
 "3.FlowLayout - Drag" = "3.流式布局-子视图的拖拽调整功能";
 "4.FlowLayout - Weight" = "4.流式布局-对线性布局的替代方案";
 "5.FlowLayout - Paging" = "5.流式布局-对分页滚动的支持";
+"6.FlowLayout - Scroll" = "6.流式布局-不同方向的滚动";
 "1.FloatLayout - Float" = "1.浮动布局-浮动效果的演示";
 "2.FloatLayout - Jagged" = "2.浮动布局-仿天猫淘宝首页实现" ;
 "3.FloatLayout - Card news" = "3.浮动布局-仿ZAKER今日头条实现";
@@ -73,7 +74,7 @@
 "Show&Hide the Text"="点击按钮显示隐藏文本";
 "Show more》"="点击查看更多》";
 "Close up《" ="点击收起《";
-"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the flexedHeight to YES and set the numberOfLines to 0.You can try to switch different simulator or different orientation screen to see the effect."="这是一段可以自动换行的文本。为了实现这个功能，您需要设置明确的宽度，并且把属性flexedHeight设置为YES和numberOfLines设置为0。您可以尝试着切换不同尺寸的模拟器或者横竖屏来看看效果。";
+"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the wrapContentHeight to YES.You can try to switch different simulator or different orientation screen to see the effect."="这是一段可以自动换行的文本。为了实现这个功能，您需要设置明确的宽度，并且把属性wrapContentHeight设置为YES。您可以尝试着切换不同尺寸的模拟器或者横竖屏来看看效果。";
 
 //LLTest3ViewController
 "centered title" = "标题居中";

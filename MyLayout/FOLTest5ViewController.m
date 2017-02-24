@@ -67,10 +67,9 @@
     label2.text = NSLocalizedString(@"MyLayout is a powerful view layout library, it support 6 kinds of layout views and SIZECLASS.",@"");
     label2.textColor = [CFTool color:3];
     label2.font = [CFTool font:15];
-    label2.numberOfLines = 0;
     label2.weight = 1;   //宽度占据全部
     label2.clearFloat = YES;
-    label2.flexedHeight = YES;
+    label2.wrapContentHeight = YES;
     [rootLayout addSubview:label2];
     
     //添加4个子图片。
@@ -101,8 +100,7 @@
         descLabel.textColor = [CFTool color:4];
         descLabel.font = [CFTool font:13];
         descLabel.weight = 1;      //占用剩余的宽度
-        descLabel.numberOfLines = 0;
-        descLabel.flexedHeight = YES; //多行自动换行。
+        descLabel.wrapContentHeight = YES; //多行自动换行。
         [descLabel sizeToFit];
         [rootLayout addSubview:descLabel];
         

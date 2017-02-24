@@ -63,7 +63,7 @@
     self.frameLayout = frameLayout;
     
     UIScrollView *scrollView = [UIScrollView new];
-    scrollView.marginGravity = MyMarginGravity_Fill;  //scrollView的尺寸和frameLayout的尺寸一致，因为这里用了填充属性。
+    scrollView.myMargin = 0;  //scrollView的尺寸和frameLayout的尺寸一致。
     scrollView.alwaysBounceVertical = YES;
     [self.view addSubview:scrollView];
     
@@ -73,7 +73,8 @@
     button.titleLabel.font = [CFTool font:16];
     button.tintColor = [CFTool color:0];
     button.myHeight = 50;
-    button.marginGravity = MyMarginGravity_Vert_Bottom | MyMarginGravity_Horz_Fill;  //按钮定位在框架布局的底部并且宽度填充。
+    button.myLeftMargin = button.myRightMargin = 0;
+    button.myBottomMargin = 0;
     [self.view addSubview:button];
 
     //整体一个线性布局，实现各种片段。
@@ -253,12 +254,12 @@
 //添加，一个浮动宽度的布局，里面的子视图的宽度是浮动的，会进行宽度的合适的分配。您可以尝试着点击加减按钮测试结果。
 -(void)addFlexedWidthLayout:(MyLinearLayout*)contentLayout
 {
-    MyBaseLayout *flexedLayout = [self createSegmentedLayout:@selector(handleLeftFlexed:) rightAction:@selector(handleRightFlexed:)];
-    flexedLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
-    flexedLayout.bottomBorderLine.headIndent = 10;
-    flexedLayout.bottomBorderLine.tailIndent = 10;
-    flexedLayout.myTopMargin = 10;
-    [contentLayout addSubview:flexedLayout];
+    MyBaseLayout *operatorLayout = [self createSegmentedLayout:@selector(handleLeftFlexed:) rightAction:@selector(handleRightFlexed:)];
+    operatorLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
+    operatorLayout.bottomBorderLine.headIndent = 10;
+    operatorLayout.bottomBorderLine.tailIndent = 10;
+    operatorLayout.myTopMargin = 10;
+    [contentLayout addSubview:operatorLayout];
     
     MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     testLayout.backgroundColor = [UIColor whiteColor];
@@ -266,33 +267,31 @@
     testLayout.rightPadding = 10;
     testLayout.myHeight = 50;
     testLayout.gravity = MyMarginGravity_Vert_Fill;
+    testLayout.shrinkType = MySubviewsShrink_Auto;  //左右2个子视图会根据自身的宽度自动调整。不会产生覆盖和重叠。
+    testLayout.subviewMargin = 10;
     [contentLayout addSubview:testLayout];
     self.flexedLayout = testLayout;
     
     
     UILabel *leftLabel = [UILabel new];
     leftLabel.text = @"abc";
-    leftLabel.textAlignment = NSTextAlignmentRight;
     leftLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     leftLabel.textColor = [UIColor whiteColor];
     leftLabel.backgroundColor = [CFTool color:5];
     leftLabel.font = [CFTool font:14];
-    [leftLabel sizeToFit];
     leftLabel.rightPos.equalTo(@0.5).min(0); //右边浮动间距为0.5,最小为0
-    leftLabel.widthDime.lBound(@(10),0,1).uBound(testLayout.widthDime, -10, 1); //宽度最小为10，最大为布局视图的宽度减10
+    leftLabel.widthDime.equalTo(leftLabel.widthDime);
     [testLayout addSubview:leftLabel];
     self.leftFlexedLabel = leftLabel;
     
     UILabel *rightLabel = [UILabel new];
     rightLabel.text = @"123";
-    rightLabel.textAlignment = NSTextAlignmentRight;
     rightLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     rightLabel.textColor = [UIColor whiteColor];
     rightLabel.backgroundColor = [CFTool color:6];
     rightLabel.font = [CFTool font:14];
-    [rightLabel sizeToFit];
     rightLabel.leftPos.equalTo(@0.5).min(0);   //左边浮动间距为0.5，最小为0
-    rightLabel.widthDime.lBound(@(10),0,1).uBound(testLayout.widthDime, -10, 1); //宽度最小为10，最大为布局视图的宽度减10
+    rightLabel.widthDime.equalTo(rightLabel.widthDime);
     [testLayout addSubview:rightLabel];
     self.rightFlexedLabel = rightLabel;
     
@@ -521,33 +520,6 @@
    
     [self.leftFlexedLabel sizeToFit];
     
-    
-    //我们可以在布局视图布局结束后，计算如果包裹文字的真实宽度都超过布局视图的一半时，我们将二者的宽度都设置为布局视图的宽度一半。
-    //而一旦不满足条件时我们将宽度的设置清除，而保持子视图的真实尺寸。
-    //如果我们想要获得某个布局视图下所有子视图在布局完成后的真实frame，则可以为布局的endLayoutBlock进行设置。
-    __weak AllTest3ViewController* weakSelf = self;
-    self.flexedLayout.endLayoutBlock = ^{
-    
-        //算出左右的实际宽度。如果二者的宽度都超过一半，则将二者的宽度都设置为一半。
-        CGSize leftRealSize = [weakSelf.leftFlexedLabel sizeThatFits:CGSizeZero];
-        CGSize rightRealSize = [weakSelf.rightFlexedLabel sizeThatFits:CGSizeZero];
-        
-        CGFloat halfWidth = (weakSelf.flexedLayout.frame.size.width - 20)/2;  //这里的20是布局有左右10的内边距。
-        if (leftRealSize.width > halfWidth && rightRealSize.width > halfWidth)
-        {
-            weakSelf.leftFlexedLabel.widthDime.equalTo(@(halfWidth));
-            weakSelf.rightFlexedLabel.widthDime.equalTo(@(halfWidth));
-        }
-        else
-        {
-            weakSelf.leftFlexedLabel.widthDime.equalTo(nil);
-            weakSelf.rightFlexedLabel.widthDime.equalTo(nil);  //这里面清除宽度的固定设置。
-            [weakSelf.rightFlexedLabel sizeToFit];
-        }
-        
-    };
-    
-    
 }
 
 -(void)handleRightFlexed:(UISegmentedControl*)segmented
@@ -568,29 +540,6 @@
     
     [self.rightFlexedLabel sizeToFit];
     
-    
-    __weak AllTest3ViewController* weakSelf = self;
-    self.flexedLayout.endLayoutBlock = ^{
-        
-        //算出左右的实际宽度。如果二者的宽度都超过一半，则将二者的宽度都设置为一半。
-        CGSize leftRealSize = [weakSelf.leftFlexedLabel sizeThatFits:CGSizeZero];
-        CGSize rightRealSize = [weakSelf.rightFlexedLabel sizeThatFits:CGSizeZero];
-        
-        CGFloat halfWidth = (weakSelf.flexedLayout.frame.size.width - 20)/2;
-        if (leftRealSize.width > halfWidth && rightRealSize.width > halfWidth)
-        {
-            weakSelf.leftFlexedLabel.widthDime.equalTo(@(halfWidth));
-            weakSelf.rightFlexedLabel.widthDime.equalTo(@(halfWidth));
-        }
-        else
-        {
-            weakSelf.leftFlexedLabel.widthDime.equalTo(nil);
-            weakSelf.rightFlexedLabel.widthDime.equalTo(nil);
-            [weakSelf.leftFlexedLabel sizeToFit];
-        }
-        
-    };
-
 }
 
 -(void)handleShrinkSwitch:(UISwitch *)sender
@@ -618,7 +567,7 @@
     
     MyLinearLayout *menuLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     menuLayout.myWidth = CGRectGetWidth(rc) - 20;  //宽度是sender的宽度减20
-    menuLayout.marginGravity = MyMarginGravity_Horz_Center;  //因为我们是把弹出菜单展示在self.view下，这时候self.view是一个框架布局。所以这里这是水平居中。
+    menuLayout.myCenterXOffset = 0;  //因为我们是把弹出菜单展示在self.view下，这时候self.view是一个框架布局。所以这里这是水平居中。
     menuLayout.myTopMargin = CGRectGetMaxY(rc) + 5;  //弹出菜单的顶部位置。
 
     

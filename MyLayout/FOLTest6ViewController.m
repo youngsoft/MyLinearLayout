@@ -112,8 +112,7 @@
     addressLabel.text = @"联系地址：中华人民共和国北京市朝阳区盈科中心B座2楼,其他的我就不会再告诉你了。";
     addressLabel.font = [CFTool font:15];
     addressLabel.textColor = [CFTool color:4];
-    addressLabel.numberOfLines = 0;
-    addressLabel.flexedHeight = YES;
+    addressLabel.wrapContentHeight = YES;
     addressLabel.widthDime.equalTo(contentLayout.widthDime).add(-45); //40的头像宽度外加5的左右间距。
     [addressLabel sizeToFit];
     [contentLayout addSubview:addressLabel];

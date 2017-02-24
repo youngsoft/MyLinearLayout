@@ -242,15 +242,14 @@
     [addressLayout addSubview:addressTitleLabel];
     
     
-    //addressLabel的y轴位置和父布局视图上边对齐;x轴的位置则根据添加到父布局的顺序确定；视图的宽度由weight=1表示占用父视图的剩余宽度决定；视图的高度由flexedHeight设置为YES表示高度由内容动态决定。
+    //addressLabel的y轴位置和父布局视图上边对齐;x轴的位置则根据添加到父布局的顺序确定；视图的宽度由weight=1表示占用父视图的剩余宽度决定；视图的高度由wrapContentHeight设置为YES表示高度由内容动态决定。
     UILabel *addressLabel = [UILabel new];
     addressLabel.text = NSLocalizedString(@"Winterless Building, West Dawang Road, Chaoyang district CBD, Beijing, People's Republic of China", @"");
     addressLabel.textColor = [CFTool color:4];
     addressLabel.font = [CFTool font:14];
     addressLabel.myLeftMargin = 10;
     addressLabel.weight = 1.0;
-    addressLabel.numberOfLines = 0;
-    addressLabel.flexedHeight = YES;     //这个属性设置为YES表示视图的高度动态确定。设置这个属性的前提是必须有指定视图的宽度，对于UILabel来说必须同时设置numberOfLines=0
+    addressLabel.wrapContentHeight = YES;     //这个属性设置为YES表示视图的高度动态确定。设置这个属性的前提是必须有指定视图的宽度.
     [addressLayout addSubview:addressLabel];
 }
 
@@ -288,17 +287,16 @@
 -(void)createSection6:(MyLinearLayout*)contentLayout
 {
     UILabel *shrinkLabel = [UILabel new];
-    shrinkLabel.text = NSLocalizedString(@"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the flexedHeight to YES and set the numberOfLines to 0.You can try to switch different simulator or different orientation screen to see the effect.", @"");
+    shrinkLabel.text = NSLocalizedString(@"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the wrapContentHeight to YES.You can try to switch different simulator or different orientation screen to see the effect.", @"");
     shrinkLabel.backgroundColor = [CFTool color:2];
     shrinkLabel.font = [CFTool font:14];
     shrinkLabel.myTopMargin = 20;
     shrinkLabel.myLeftMargin = shrinkLabel.myRightMargin = 0;
     
     //下面四个属性配合一起简单的实现文本的收起和展开。
-    shrinkLabel.numberOfLines = 0;
     shrinkLabel.clipsToBounds = YES;  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
-    shrinkLabel.myHeight = 0;  //这里设置高度为0，而下面设置flexedHeight为YES的优先级比较高。所以当flexedHeight = NO时这个高度才起作用。这两个属性搭配使用非常容易实现UILabel的收起和展开
-    shrinkLabel.flexedHeight = YES;  //这个属性会控制在固定宽度下自动调整视图的高度。
+    shrinkLabel.myHeight = 0;  //这里设置高度为0，而下面设置wrapContentHeight为YES的优先级比较高。所以当wrapContentHeight = NO时这个高度才起作用。这两个属性搭配使用非常容易实现UILabel的收起和展开
+    shrinkLabel.wrapContentHeight = YES;  //这个属性会控制在固定宽度下自动调整视图的高度。
     [contentLayout addSubview:shrinkLabel];
     self.shrinkLabel = shrinkLabel;
     
@@ -343,14 +341,14 @@
 
 -(void)handleLabelShrink:(UIButton*)sender
 {
-    //因为self.shrinkLabel设置了flexedHeight来实现动态的文本高度。因此这里可以通过这个标志来实现文本伸缩功能。
-    if (self.shrinkLabel.isFlexedHeight)
+    //因为self.shrinkLabel设置了wrapContentHeight来实现动态的文本高度。因此这里可以通过这个标志来实现文本伸缩功能。
+    if (self.shrinkLabel.wrapContentHeight)
     {
-        self.shrinkLabel.flexedHeight = NO;  //当设置为NO时，视图的myHeight将起作用，这边高度就变为了0
+        self.shrinkLabel.wrapContentHeight = NO;  //当设置为NO时，视图的myHeight将起作用，这边高度就变为了0
     }
     else
     {
-        self.shrinkLabel.flexedHeight = YES; //当设置为YES时，视图的myHeight将不起作用，这样高度就由内容包裹。
+        self.shrinkLabel.wrapContentHeight = YES; //当设置为YES时，视图的myHeight将不起作用，这样高度就由内容包裹。
     }
     
     [self.contentLayout layoutAnimationWithDuration:0.3];

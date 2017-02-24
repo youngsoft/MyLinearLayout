@@ -86,13 +86,6 @@
     return [self addMethod:@"widthDime"];
 }
 
-
-
--(MyMaker*)flexedHeight
-{
-    return [self addMethod:@"flexedHeight"];
-}
-
 -(MyMaker*)useFrame
 {
     return [self addMethod:@"useFrame"];
@@ -177,6 +170,11 @@
     return [self addMethod:@"rightPadding"];
 }
 
+-(MyMaker*)zeroPadding
+{
+    return [self addMethod:@"zeroPadding"];
+}
+
 -(MyMaker*)orientation
 {
     return [self addMethod:@"orientation"];
@@ -217,11 +215,6 @@
 }
 
 
--(MyMaker*)marginGravity
-{
-    return [self addMethod:@"marginGravity"];
-
-}
 
 -(MyMaker*)space
 {

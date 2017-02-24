@@ -160,10 +160,37 @@ typedef enum :NSUInteger
  7. MySubviewsShrink_None:
  这种情况下即使是固定的视图的尺寸超出也不会进行任何压缩！！！！这个属性设置后，MySubviewsShrink_Size，MySubviewsShrink_Space，MySubviewsShrink_SizeAndSpace的设置无意义。
  
+ 8.MySubviewsShrink_Auto:
+    假如某个水平线性布局里面里面有左右2个UILabel A和B。A和B的宽度都不确定，但是二者不能覆盖重叠，而且当间距小于一个值后要求自动换行。因为宽度都不确定所以不能指定具体的宽度值，但是又要利用好剩余的空间，这时候就可以用这个属性。比如下面的例子：
+ 
+    MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    horzLayout.myLeftMargin = horzLayout.myRightMargin = 0;
+    horzLayout.wrapContentHeight = YES;
+    horzLayout.subviewMargin = 10;  //二者的最小间距不能小于20
+    horzLayout.shrinkType = MySubviewsShrink_Auto;
+ 
+    UILabel *A = [UILabel new];
+    A.text = @"xxxxxxx";
+    A.widthDime.equalTo(A.widthDime); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
+    A.wrapContentHeight = YES;        //自动换行
+    A.rightPos.equalTo(@0.5);         //右边间距是剩余的50%
+    [horzLayout addSubview:A];
+ 
+ 
+    UILabel *B = [UILabel new];
+    B.text = @"XXXXXXXX";
+    B.widthDime.equalTo(B.widthDime); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
+    B.wrapContentHeight = YES;        //自动换行
+    B.leftPos.equalTo(@0.5);         //左边间距是剩余的50%
+    [horzLayout addSubview:B];
+ 
+ 
+ 
  */
 typedef enum : NSUInteger {
     MySubviewsShrink_Average = 0,  //平均压缩。
     MySubviewsShrink_Weight = 1,   //比例压缩。
+    MySubviewsShrink_Auto = 2,     //自动压缩。这个属性只有在水平线性布局里面并且只有2个子视图的宽度等于自身时才有用。这个属性主要用来实现左右两个子视图根据自身内容来进行缩放，以便实现最佳的宽度空间利用。
     MySubviewsShrink_None = 8,     //不压缩。
     
     MySubviewsShrink_Size =   0 << 4,    //只压缩尺寸，因为这里是0所以这部分可以不设置。

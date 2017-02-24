@@ -613,7 +613,7 @@
         {
            sbvmyFrame.height = CGRectGetHeight(sbv.bounds);
             
-            if (sbv.isFlexedHeight && ![self isNoLayoutSubview:sbv])
+            if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && ![self isNoLayoutSubview:sbv])
             {
                 if (sbvmyFrame.width == CGFLOAT_MAX)
                     [self calcWidth:sbv selfSize:selfSize];
@@ -951,7 +951,7 @@
         }
         
         
-        if (sbv.isFlexedHeight)
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
         {
             sbv.myFrame.height = [self heightFromFlexedHeightView:sbv inWidth:sbv.myFrame.width];
             sbv.myFrame.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:sbv.myFrame.height sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
@@ -1080,7 +1080,7 @@
     
     selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
-    return selfSize;
+    return [self adjustSizeWhenNoSubviews:selfSize sbs:[self getLayoutSubviews]];
     
 }
 

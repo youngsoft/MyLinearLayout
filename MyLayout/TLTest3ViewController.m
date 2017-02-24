@@ -135,7 +135,7 @@
     label.font = [CFTool font:15];
     label.adjustsFontSizeToFitWidth = YES;
     label.textAlignment = NSTextAlignmentCenter;
-    label.marginGravity = MyMarginGravity_Fill;
+    label.myMargin = 0;
     [cellLayout addSubview:label];
     
     return cellLayout;

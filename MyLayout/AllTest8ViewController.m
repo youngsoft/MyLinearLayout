@@ -172,8 +172,7 @@
     
     //文本
     UILabel *label = [UILabel new];
-    label.numberOfLines = 0;
-    label.flexedHeight = YES;
+    label.wrapContentHeight = YES;
     label.font = [CFTool font:14];
     label.text = @"这是一段具有动态高度的文本，同时他也会影响着布局视图的高度。您可以单击下面的按钮来添加文本来查看效果：";
     [layout addSubview:label];

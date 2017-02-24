@@ -35,6 +35,7 @@
 #import "FLLTest3ViewController.h"
 #import "FLLTest4ViewController.h"
 #import "FLLTest5ViewController.h"
+#import "FLLTest6ViewController.h"
 
 
 #import "AllTest1ViewController.h"
@@ -138,6 +139,9 @@
                            },
                          @{@"title":NSLocalizedString(@"5.FlowLayout - Paging", @""),
                            @"class":[FLLTest5ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"6.FlowLayout - Scroll", @""),
+                           @"class":[FLLTest6ViewController class]
                            },
                          @{@"title":NSLocalizedString(@"1.FloatLayout - Float", @""),
                            @"class":[FOLTest1ViewController class]

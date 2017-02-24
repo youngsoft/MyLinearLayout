@@ -11,27 +11,6 @@
 #import <objc/runtime.h>
 
 
-@implementation UIView(MyFrameLayoutExt)
-
-
--(MyMarginGravity)marginGravity
-{
-    return self.myCurrentSizeClass.marginGravity;
-}
-
-
--(void)setMarginGravity:(MyMarginGravity)marginGravity
-{
-    if (self.myCurrentSizeClass.marginGravity != marginGravity)
-    {
-        self.myCurrentSizeClass.marginGravity = marginGravity;
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
-    }
-}
-
-@end
-
 
 @implementation MyFrameLayout
 
@@ -47,9 +26,27 @@
 -(void)calcSubView:(UIView*)sbv pRect:(CGRect*)pRect inSize:(CGSize)selfSize
 {
     
-    MyMarginGravity gravity = sbv.marginGravity;
-    MyMarginGravity vert = gravity & MyMarginGravity_Horz_Mask;
-    MyMarginGravity horz = gravity & MyMarginGravity_Vert_Mask;
+    MyMarginGravity horz = MyMarginGravity_Horz_Left;
+    MyMarginGravity vert = MyMarginGravity_Vert_Top;
+    
+    if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
+        horz = MyMarginGravity_Horz_Fill;
+    else if (sbv.centerXPos.posVal != nil)
+        horz = MyMarginGravity_Horz_Center;
+    else if (sbv.rightPos.posVal != nil)
+        horz = MyMarginGravity_Horz_Right;
+    else
+        ;
+    
+    if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
+        vert = MyMarginGravity_Vert_Fill;
+    else if (sbv.centerYPos.posVal != nil)
+        vert = MyMarginGravity_Vert_Center;
+    else if (sbv.bottomPos.posVal != nil)
+        vert = MyMarginGravity_Vert_Bottom;
+    else
+        ;
+    
     
     MyLayoutSize *sbvWidthDime = sbv.widthDime;
     MyLayoutSize *sbvHeightDime = sbv.heightDime;
@@ -80,16 +77,12 @@
     
     pRect->size.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
     
-      
-    //特殊处理如果设置了左右边距则确定了视图的宽度
-    if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
-        horz = MyMarginGravity_Horz_Fill;
     
     [self horzGravity:horz selfSize:selfSize sbv:sbv rect:pRect];
    
     
     
-    if (sbv.isFlexedHeight)
+    if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
     {
         pRect->size.height = [self heightFromFlexedHeightView:sbv inWidth:pRect->size.width];
 
@@ -97,8 +90,6 @@
     
      pRect->size.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
     
-    if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
-        vert = MyMarginGravity_Vert_Fill;
     
     [self vertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
     
@@ -116,7 +107,7 @@
     {
         pRect->size.height = [sbvHeightDime measureWith:pRect->size.width];
         
-        if (sbv.isFlexedHeight)
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
         {
             pRect->size.height = [self heightFromFlexedHeightView:sbv inWidth:pRect->size.width];
         }
@@ -154,12 +145,12 @@
             
             MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
             
-            if (sbvl.wrapContentHeight && ((sbvl.marginGravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Fill || sbvl.heightDime.dimeVal != nil || (sbvl.topPos.posVal != nil && sbvl.bottomPos.posVal != nil)))
+            if (sbvl.wrapContentHeight && (sbvl.heightDime.dimeVal != nil || (sbvl.topPos.posVal != nil && sbvl.bottomPos.posVal != nil)))
             {
                 [sbvl setWrapContentHeightNoLayout:NO];
             }
             
-            if (sbvl.wrapContentWidth && ((sbvl.marginGravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Fill || sbvl.widthDime.dimeVal != nil || (sbvl.leftPos.posVal != nil && sbvl.rightPos.posVal != nil)))
+            if (sbvl.wrapContentWidth && (sbvl.widthDime.dimeVal != nil || (sbvl.leftPos.posVal != nil && sbvl.rightPos.posVal != nil)))
             {
                 [sbvl setWrapContentWidthNoLayout:NO];
             }
@@ -181,13 +172,13 @@
         [self calcSubView:sbv pRect:&rect inSize:selfSize];
         sbv.myFrame.frame = rect;
         
-        if ((sbv.marginGravity & MyMarginGravity_Vert_Mask) != MyMarginGravity_Horz_Fill && sbv.widthDime.dimeRelaVal != self.widthDime)
+        if (sbv.widthDime.dimeRelaVal != self.widthDime)
         {
             if (maxWidth < CGRectGetMaxX(rect))
                 maxWidth = CGRectGetMaxX(rect);
         }
         
-        if ((sbv.marginGravity & MyMarginGravity_Horz_Mask) != MyMarginGravity_Vert_Fill && sbv.heightDime.dimeRelaVal != self.heightDime)
+        if (sbv.heightDime.dimeRelaVal != self.heightDime)
         {
             if (maxHeight < CGRectGetMaxY(rect))
                 maxHeight = CGRectGetMaxY(rect);
@@ -214,7 +205,10 @@
     {
         for (UIView *sbv in sbs)
         {
-            if ((sbv.marginGravity & MyMarginGravity_Horz_Mask) == MyMarginGravity_Vert_Fill || (sbv.marginGravity & MyMarginGravity_Vert_Mask) == MyMarginGravity_Horz_Fill)
+            if (sbv.widthDime.dimeRelaVal == self.widthDime ||
+                (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil) ||
+                sbv.heightDime.dimeRelaVal == self.heightDime ||
+                (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil))
             {
                 CGRect rect = sbv.myFrame.frame;
                 [self calcSubView:sbv pRect:&rect inSize:selfSize];
@@ -223,8 +217,9 @@
             
         }
     }
-        
-    return selfSize;
+    
+       
+    return [self adjustSizeWhenNoSubviews:selfSize sbs:sbs];
 
 }
 

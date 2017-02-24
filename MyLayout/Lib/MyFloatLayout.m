@@ -68,9 +68,9 @@
 
 @implementation MyFloatLayout
 
--(id)initWithOrientation:(MyLayoutViewOrientation)orientation
+-(instancetype)initWithFrame:(CGRect)frame orientation:(MyLayoutViewOrientation)orientation
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     if (self != nil)
     {
         self.myCurrentSizeClass.orientation = orientation;
@@ -79,8 +79,13 @@
     return self;
 }
 
+-(instancetype)initWithOrientation:(MyLayoutViewOrientation)orientation
+{
+    return [self initWithFrame:CGRectZero orientation:orientation];
+}
 
-+(id)floatLayoutWithOrientation:(MyLayoutViewOrientation)orientation
+
++(instancetype)floatLayoutWithOrientation:(MyLayoutViewOrientation)orientation
 {
     MyFloatLayout *layout = [[[self class] alloc] initWithOrientation:orientation];
     return layout;
@@ -520,7 +525,7 @@
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         //如果高度是浮动的则需要调整高度。
-        if (sbv.isFlexedHeight)
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
         
         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -574,7 +579,7 @@
                 if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
                     rect.size.height = [sbv.heightDime measureWith:rect.size.width];
                 
-                if (sbv.isFlexedHeight)
+                if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
                     rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
                 
                 rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -704,7 +709,7 @@
                 if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
                     rect.size.height = [sbv.heightDime measureWith:rect.size.width];
                 
-                if (sbv.isFlexedHeight)
+                if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
                     rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
                 
                 rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -869,7 +874,7 @@
                 rect.size.height = [sbv.heightDime measureWith:rect.size.width];
             }
             
-            if (sbv.isFlexedHeight)
+            if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
                 rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
             
             rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -984,7 +989,7 @@
         
         
         //如果高度是浮动的则需要调整高度。
-        if (sbv.isFlexedHeight)
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
         
         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -1331,7 +1336,7 @@
     
     selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
-    return selfSize;
+    return [self adjustSizeWhenNoSubviews:selfSize sbs:sbs];
 }
 
 -(id)createSizeClassInstance

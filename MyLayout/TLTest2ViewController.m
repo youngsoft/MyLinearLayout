@@ -80,7 +80,7 @@
     
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:image]];
-    imageView.flexedHeight = YES;   //这个属性重点注意！！ 对于UIImageView来说，如果我们设置了这个属性为YES的话，表示视图的高度会根据视图的宽度进行等比例的缩放来确定，从而防止图片显示时出现变形的情况。
+    imageView.wrapContentHeight = YES;   //这个属性重点注意！！ 对于UIImageView来说，如果我们设置了这个属性为YES的话，表示视图的高度会根据视图的宽度进行等比例的缩放来确定，从而防止图片显示时出现变形的情况。
     [colLayout addSubview:imageView];
     
     UILabel *titleLabel = [UILabel new];

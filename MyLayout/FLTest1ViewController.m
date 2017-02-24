@@ -37,7 +37,6 @@
 {
     /*
        这个例子主要介绍了框架布局的功能。框架布局里面的所有子视图的布局位置都只跟框架布局相关。
-       框架布局中的子视图通过设置marginGravity扩展属性来实现位置和尺寸的设置。
        框架布局中的子视图可以层叠显示，因此框架布局常用来作为视图控制器里面的跟视图。
      */
     
@@ -55,76 +54,85 @@
     
     //显示全屏
     UILabel *fill = [self createLabel:@"" backgroundColor:[CFTool color:0]];
-    fill.marginGravity = MyMarginGravity_Fill;
+    fill.myMargin = 0;
     [frameLayout addSubview:fill];
     
     
     //左右填充。
     UILabel *horzFill = [self createLabel:@"horz fill" backgroundColor:[CFTool color:8]];
-    horzFill.marginGravity = MyMarginGravity_Horz_Fill | MyMarginGravity_Vert_Top;
+    horzFill.myLeftMargin = horzFill.myRightMargin = 0;
     horzFill.myTopMargin = 40;
     [frameLayout addSubview:horzFill];
     
     //上下填充
     UILabel *vertFill = [self createLabel:@"vert fill" backgroundColor:[CFTool color:9]];
     vertFill.numberOfLines = 0;
-    vertFill.marginGravity = MyMarginGravity_Vert_Fill | MyMarginGravity_Horz_Left;
+    vertFill.myTopMargin = vertFill.myBottomMargin = 0;
     vertFill.myLeftMargin = 90;
     vertFill.myWidth = 10;
     [frameLayout addSubview:vertFill];
 
     
     
-    //左上
+    //左上(默认)
     UILabel *topLeft = [self createLabel:@"top left" backgroundColor:[CFTool color:5]];
-    topLeft.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Top;
+    topLeft.myLeftMargin = 0;
+    topLeft.myTopMargin = 0;
     [frameLayout addSubview:topLeft];
     
     //左中
     UILabel *centerLeft = [self createLabel:@"center left" backgroundColor:[CFTool color:5]];
-    centerLeft.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Center;
+    centerLeft.myLeftMargin = 0;
+    centerLeft.myCenterYOffset = 0;
     [frameLayout addSubview:centerLeft];
     
     
     //左下
     UILabel *bottomLeft = [self createLabel:@"bottom left" backgroundColor:[CFTool color:5]];
-    bottomLeft.marginGravity = MyMarginGravity_Horz_Left | MyMarginGravity_Vert_Bottom;
+    bottomLeft.myLeftMargin = 0;
+    bottomLeft.myBottomMargin = 0;
     [frameLayout addSubview:bottomLeft];
     
     
     //中上
     UILabel *topCenter = [self createLabel:@"top center" backgroundColor:[CFTool color:6]];
-    topCenter.marginGravity = MyMarginGravity_Horz_Center | MyMarginGravity_Vert_Top;
+    topCenter.myCenterXOffset = 0;
+    topCenter.myTopMargin = 0;
     [frameLayout addSubview:topCenter];
     
     
     //中中。
     UILabel *centerCenter = [self createLabel:@"center center" backgroundColor:[CFTool color:6]];
-    centerCenter.marginGravity = MyMarginGravity_Horz_Center | MyMarginGravity_Vert_Center;
+    centerCenter.myCenterXOffset = 0;
+    centerCenter.myCenterYOffset = 0;
     [frameLayout addSubview:centerCenter];
     
     
     //中下
     UILabel *bottomCenter = [self createLabel:@"bottom center" backgroundColor:[CFTool color:6]];
-    bottomCenter.marginGravity = MyMarginGravity_Horz_Center | MyMarginGravity_Vert_Bottom;
+    bottomCenter.myCenterXOffset = 0;
+    bottomCenter.myBottomMargin = 0;
     [frameLayout addSubview:bottomCenter];
     
     
     //右上
     UILabel *topRight = [self createLabel:@"top right" backgroundColor:[CFTool color:7]];
-    topRight.marginGravity = MyMarginGravity_Horz_Right | MyMarginGravity_Vert_Top;
+    topRight.myRightMargin = 0;
+    topRight.myTopMargin = 0;
     [frameLayout addSubview:topRight];
     
     
     //右中
     UILabel *centerRight = [self createLabel:@"center right" backgroundColor:[CFTool color:7]];
-    centerRight.marginGravity = MyMarginGravity_Horz_Right | MyMarginGravity_Vert_Center;
+    centerRight.myRightMargin = 0;
+    centerRight.myCenterYOffset = 0;
     [frameLayout addSubview:centerRight];
     
     
     //右下
     UILabel *bottomRight = [self createLabel:@"bottom right" backgroundColor:[CFTool color:7]];
-    bottomRight.marginGravity = MyMarginGravity_Horz_Right | MyMarginGravity_Vert_Bottom;
+    bottomRight.myRightMargin = 0;
+    bottomRight.myBottomMargin = 0;
     [frameLayout addSubview:bottomRight];
     
     

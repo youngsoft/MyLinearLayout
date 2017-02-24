@@ -263,9 +263,21 @@
 
 
 /**
- *视图的高度根据内容自适应。当设置为YES时视图会在固定宽度的情况下自动调整高度来自适应视图的内容,默认设置为NO。这个属性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图，当设置这个属性为YES时，视图的宽度必须要明确的被指定。UILabel在使用这个属性时请同时设置numberOfLines不等于1。UITextView可以用这个属性以及heightDime中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果。UIImageView可以用这个属性来在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放。
+ *视图的宽度包裹属性，表示视图的宽度由所有子视图的整体宽度或者视图内部内容的宽度来决定，默认值是NO。当设置为NO时必须要明确指定视图的宽度，而当设置为YES时则不需要明确的指定视图的宽度了，否则可能会产生约束冲突而导致死循环的出现。对于布局视图来说，wrapContentWidth的优先级最低，一旦视图明确的指定了宽度则属性设置无效。对于非布局视图来说这个属性设置无意义。
  */
-@property(nonatomic, assign, getter=isFlexedHeight)  BOOL flexedHeight;
+@property(nonatomic,assign)  BOOL wrapContentWidth;
+
+/**
+ *视图的高度包裹属性，表示视图的高度由所有子视图的整体高度或者视图内部内容的高度来决定，默认值是NO。当设置为NO时必须要明确指定布局的高度，而当设置为YES时则不需要明确的指定视图的高度了，否则可能会产生约束冲突而导致死循环的出现。对于布局视图来说，wrapContentHeight的优先级最低，一旦视图明确的指定了高度则属性设置无效。对于非布局视图来说，这个属性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图，UILabel在使用这个属性时会自动设置numberOfLines为0，UITextView可以用这个属性以及heightDime中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果。UIImageView可以用这个属性来在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放
+ */
+@property(nonatomic,assign)  BOOL wrapContentHeight;
+
+
+
+/**
+ *视图的高度根据内容自适应。当设置为YES时视图会在固定宽度的情况下自动调整高度来自适应视图的内容,默认设置为NO。这个属性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图，当设置这个属性为YES时，视图的宽度必须要明确的被指定。UILabel在使用这个属性时会自动设置numberOfLines为0。UITextView可以用这个属性以及heightDime中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果。UIImageView可以用这个属性来在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放。
+ */
+@property(nonatomic, assign, getter=isFlexedHeight)  BOOL flexedHeight MYDEPRECATED("use wrapContentHeight to instead");
 
 
 /**
@@ -383,13 +395,10 @@
 
 
 /**
- *布局视图的宽度包裹属性，表示布局视图的宽度等于所有子视图的整体宽度。默认值是NO。当设置为NO是必须要明确指定布局的宽度，而当设置为YES时则不需要明确的指定布局视图的宽度了，否则可能会产生约束冲突而导致死循环的出现。wrapContentWidth的优先级最低，一旦布局视图明确的指定了宽度则属性设置无效。
+ * 设置当布局的尺寸由子视图决定并且在没有子视图的情况下padding的设置值是否会加入到布局的尺寸值里面。默认是YES，表示当布局视图没有子视图时padding值也会加入到尺寸里面。
+ * 举例来说假设某个布局视图的高度是wrapContentHeight,并且设置了topPadding为10，bottomPadding为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为NO时，那么在没有任何子视图时布局视图的高度就是0，也就是说padding不会参与高度的计算了。
  */
-@property(nonatomic,assign)  BOOL wrapContentWidth;
-/**
- *布局视图的高度包裹属性，表示布局视图的高度等于所有子视图的整体高度。默认值是NO。当设置为NO是必须要明确指定布局的高度，而当设置为YES时则不需要明确的指定布局视图的高度了，否则可能会产生约束冲突而导致死循环的出现。wrapContentHeight的优先级最低，一旦布局视图明确的指定了高度则属性设置无效。
- */
-@property(nonatomic,assign)  BOOL wrapContentHeight;
+@property(nonatomic, assign)  BOOL zeroPadding;
 
 
 /**

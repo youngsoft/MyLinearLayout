@@ -134,7 +134,10 @@ typedef enum : unsigned char{
 @property(nonatomic,assign) CGSize  mySize;
 
 
-@property(nonatomic, assign,getter=isFlexedHeight)  BOOL flexedHeight;
+@property(nonatomic,assign) BOOL wrapContentWidth;
+@property(nonatomic,assign) BOOL wrapContentHeight;
+
+
 
 @property(nonatomic, assign) BOOL useFrame;
 @property(nonatomic, assign) BOOL noLayout;
@@ -153,9 +156,6 @@ typedef enum : unsigned char{
 //线性布局和浮动布局子视图专用
 @property(nonatomic, assign) CGFloat weight;
 
-//框架布局子视图专用
-@property(nonatomic, assign) MyMarginGravity marginGravity;
-
 //浮动布局子视图专用
 @property(nonatomic,assign,getter=isReverseFloat) BOOL reverseFloat;
 @property(nonatomic,assign) BOOL clearFloat;
@@ -171,8 +171,7 @@ typedef enum : unsigned char{
 @property(nonatomic, assign) CGFloat bottomPadding;
 @property(nonatomic, assign) CGFloat rightPadding;
 
-@property(nonatomic,assign) BOOL wrapContentWidth;
-@property(nonatomic,assign) BOOL wrapContentHeight;
+@property(nonatomic, assign) BOOL zeroPadding;
 
 @property(nonatomic, assign) BOOL hideSubviewReLayout;
 

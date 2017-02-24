@@ -248,7 +248,7 @@
 -(NSString*)debugDescription
 {
     
-    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nflexedHeight=%@\nmarginGravity=%hu\nreverseFloat=%@\nclearFloat=%@",
+    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nwrapContentWidth=%@\nwrapContentHeight=%@\nreverseFloat=%@\nclearFloat=%@",
                     self.leftPos,
                     self.topPos,
                     self.bottomPos,
@@ -260,8 +260,8 @@
                     self.weight,
                     self.useFrame ? @"YES":@"NO",
                     self.noLayout? @"YES":@"NO",
-                    self.flexedHeight? @"YES":@"NO",
-                    self.marginGravity,
+                    self.wrapContentWidth ? @"YES":@"NO",
+                    self.wrapContentHeight ? @"YES":@"NO",
                     self.reverseFloat ? @"YES":@"NO",
                     self.clearFloat ? @"YES":@"NO"];
     
@@ -286,12 +286,12 @@
     lsc->_centerYPos = [self.centerYPos copy];
     lsc->_widthDime = [self.widthDime copy];
     lsc->_heightDime = [self.heightDime copy];
-    lsc.flexedHeight = self.isFlexedHeight;
+    lsc->_wrapContentWidth = self.wrapContentWidth;
+    lsc->_wrapContentHeight = self.wrapContentHeight;
     lsc.useFrame = self.useFrame;
     lsc.noLayout = self.noLayout;
     lsc.hidden = self.hidden;
     lsc.weight = self.weight;
-    lsc.marginGravity = self.marginGravity;
     lsc.reverseFloat = self.isReverseFloat;
     lsc.clearFloat = self.clearFloat;
 
@@ -309,7 +309,9 @@
     self = [super init];
     if (self != nil)
     {
-        self.hideSubviewReLayout = YES;
+        _hideSubviewReLayout = YES;
+        _zeroPadding = YES;
+        
     }
     
     return self;
@@ -359,8 +361,7 @@
 {
     MyLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     lsc.padding = self.padding;
-    lsc.wrapContentWidth = self.wrapContentWidth;
-    lsc.wrapContentHeight = self.wrapContentHeight;
+    lsc.zeroPadding = self.zeroPadding;
     lsc.hideSubviewReLayout = self.hideSubviewReLayout;
     lsc.reverseLayout = self.reverseLayout;
     
@@ -371,11 +372,10 @@
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nwrapContentWidth=%@\nwrapContentHeight=%@\nhideSubviewRelayout=%@\nreverseLayout=%@",
+    dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nzeroPadding=%@\nhideSubviewRelayout=%@\nreverseLayout=%@",
                         dbgDesc,
                         NSStringFromUIEdgeInsets(self.padding),
-                        self.wrapContentWidth ? @"YES":@"NO",
-                        self.wrapContentHeight ? @"YES":@"NO",
+                        self.zeroPadding?@"YES":@"NO",
                         self.hideSubviewReLayout?@"YES":@"NO",
                         self.reverseLayout ? @"YES":@"NO"
                ];

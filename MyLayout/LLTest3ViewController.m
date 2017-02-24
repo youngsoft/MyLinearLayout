@@ -100,9 +100,8 @@
     actionTitleLabel.font = [CFTool font:15];
     actionTitleLabel.text = NSLocalizedString(@"Vertical layout gravity control, you can click the following different button to show the effect:", @"");
     actionTitleLabel.textColor = [CFTool color:4];
-    actionTitleLabel.numberOfLines = 0;
     actionTitleLabel.adjustsFontSizeToFitWidth = YES;
-    actionTitleLabel.flexedHeight = YES;
+    actionTitleLabel.wrapContentHeight = YES;
     actionTitleLabel.myTopMargin = 10;
     [contentLayout addSubview:actionTitleLabel];
     
@@ -178,8 +177,7 @@
     actionTitleLabel.textColor = [CFTool color:4];
     actionTitleLabel.text =  NSLocalizedString(@"Horizontal layout gravity control, you can click the following different button to show the effect:", @"");
     actionTitleLabel.adjustsFontSizeToFitWidth = YES;
-    actionTitleLabel.numberOfLines = 0;
-    actionTitleLabel.flexedHeight = YES;
+    actionTitleLabel.wrapContentHeight = YES;
     actionTitleLabel.myTopMargin = 10;
     [contentLayout addSubview:actionTitleLabel];
 
@@ -224,27 +222,23 @@
     [contentLayout addSubview:self.horzGravityLayout];
     
     UILabel *v1 = [self createLabel:NSLocalizedString(@"test text1", @"") backgroundColor:[CFTool color:5]];
-    v1.numberOfLines = 0;
-    v1.flexedHeight = YES;
+    v1.wrapContentHeight = YES;
     v1.myWidth = 60;
     [self.horzGravityLayout addSubview:v1];
     
     UILabel *v2 = [self createLabel:NSLocalizedString(@"test text2 test text2", @"") backgroundColor:[CFTool color:6]];
-    v2.numberOfLines = 0;
-    v2.flexedHeight = YES;
+    v2.wrapContentHeight = YES;
     v2.myWidth = 60;
     [self.horzGravityLayout addSubview:v2];
     
     
     UILabel *v3 = [self createLabel:NSLocalizedString(@"test text3 test text3 test text3", @"") backgroundColor:[CFTool color:7]];
-    v3.numberOfLines = 0;
-    v3.flexedHeight = YES;
+    v3.wrapContentHeight = YES;
     v3.myWidth = 60;
     [self.horzGravityLayout addSubview:v3];
     
     UILabel *v4 = [self createLabel:NSLocalizedString(@"set top and bottom margin to determine height", @"") backgroundColor:[CFTool color:8]];
-    v4.numberOfLines = 0;
-    v4.flexedHeight = YES;
+    v4.wrapContentHeight = YES;
     v4.myTopMargin = 20;
     v4.myBottomMargin = 10;
     v4.myWidth = 60;

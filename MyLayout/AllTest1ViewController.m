@@ -144,8 +144,7 @@
     label2.textColor = [CFTool color:4];
     label2.font = [CFTool font:15];
     label2.myLeftMargin = label2.myRightMargin = 5;
-    label2.numberOfLines = 0;
-    label2.flexedHeight = YES;
+    label2.wrapContentHeight = YES;
     label2.myTopMargin = 10;
     [label2 sizeToFit];
     [tableHeaderViewLayout addSubview:label2];

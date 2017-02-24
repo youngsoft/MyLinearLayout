@@ -33,20 +33,26 @@
 
 @implementation MyFlowLayout
 
--(id)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
+
+-(instancetype)initWithFrame:(CGRect)frame orientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     if (self != nil)
     {
         self.myCurrentSizeClass.orientation = orientation;
         self.myCurrentSizeClass.arrangedCount = arrangedCount;
     }
     
-    return self;
+    return  self;
+}
+
+-(instancetype)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
+{
+    return [self initWithFrame:CGRectZero orientation:orientation arrangedCount:arrangedCount];
 }
 
 
-+(id)flowLayoutWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
++(instancetype)flowLayoutWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
 {
     MyFlowLayout *layout = [[[self class] alloc] initWithOrientation:orientation arrangedCount:arrangedCount];
     return layout;
@@ -784,7 +790,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         
         
         //如果高度是浮动的则需要调整高度。
-        if (sbv.isFlexedHeight)
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
         
         rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -813,7 +819,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
                 
                 rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:selfSize.width - padding.left - padding.right - leftMargin - rightMargin sbvSize:rect.size selfLayoutSize:selfSize];
                 
-                if (sbv.isFlexedHeight)
+                if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
                 {
                     rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
                     rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -1107,7 +1113,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         CGFloat bottomMargin = sbv.bottomPos.margin;
         CGFloat rightMargin = sbv.rightPos.margin;
         CGRect rect = sbv.myFrame.frame;
-        BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
+        BOOL isFlexedHeight = sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && !sbv.heightDime.isMatchParent;
         
         if (pagingItemHeight != 0)
             rect.size.height = pagingItemHeight;
@@ -1313,7 +1319,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
             
             
             //如果高度是浮动的则需要调整高度。
-            if (sbv.isFlexedHeight)
+            if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
             {
                 rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
                 
@@ -1389,7 +1395,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         //如果高度是浮动的则需要调整高度。
-        if (sbv.isFlexedHeight)
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
         {
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
             
@@ -1622,7 +1628,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
         else
         {
            
-            BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
+            BOOL isFlexedHeight = sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && !sbv.heightDime.isMatchParent;
             
             if (pagingItemHeight != 0)
                 rect.size.height = pagingItemHeight;
@@ -1925,7 +1931,7 @@ bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
     
     selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
-    return selfSize;
+    return [self adjustSizeWhenNoSubviews:selfSize sbs:sbs];
 }
 
 -(id)createSizeClassInstance

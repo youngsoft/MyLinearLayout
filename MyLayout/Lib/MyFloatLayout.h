@@ -51,8 +51,9 @@
 /**
  *初始化一个浮动布局并指定布局的方向。当方向设置为MyLayoutViewOrientation_Vert时表示为左右浮动布局视图，而设置为MyLayoutViewOrientation_Horz则表示为上下浮动布局视图。
  */
--(id)initWithOrientation:(MyLayoutViewOrientation)orientation;
-+(id)floatLayoutWithOrientation:(MyLayoutViewOrientation)orientation;
+-(instancetype)initWithOrientation:(MyLayoutViewOrientation)orientation;
+-(instancetype)initWithFrame:(CGRect)frame orientation:(MyLayoutViewOrientation)orientation;
++(instancetype)floatLayoutWithOrientation:(MyLayoutViewOrientation)orientation;
 
 /**
  *浮动布局的方向。

@@ -3,6 +3,23 @@
 
 ---
 
+
+## [V1.3.3](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.3)(2017/2/24)
+
+#### Added
+1. 线性布局`MyLinearLayout`中的`shrinkType`中添加了一个可设置的值`MySubviewsShrink_Auto` 这个值的目的是为了解决水平线性布局里面当有左右2个子视图的宽度都不确定，但又不希望2个子视图不能重叠展示的问题。具体例子参见（DEMO:AllTest7ViewController 中的第4个例子）。
+2. 布局视图添加了属性`zeroPadding`用来描述当布局视图的尺寸由子视图决定，并且当布局视图中没有任何子视图时设置的padding值是否会参与布局视图尺寸的计算。默认是YES，当设置为NO时则当布局视图没有子视图时padding是不会参与布局视图尺寸的计算的。具体例子参见 （DEMO: LLTest4ViewController）
+3. 添加了线性布局、流式布局、浮动布局的initWithFrame的方法，这样你就可以用这个方法来指定frame值了。
+4. 添加了对普通视图的`wrapContentHeight`和`wrapContentWidth`的支持，这两个属性由原来的布局视图属性移植到了所有视图的扩展属性中。这样对于一个非布局父视图也可以通过设置`wrapContentHeight`和`wrapContentWidth`来实现其高度和宽度由里面的子布局视图来决定。具体例子参见（DEMO: LLTest4ViewController）。 
+5. 添加了对UIButton的宽度固定情况下高度自自适应的支持。
+
+#### Changed
+1. 删除框架布局的子视图要通过`marginGravity`的扩展属性来设置位置和尺寸的支持，具体变化参见MyFrameLayout.h中的代替方法。
+2. 取消了对自适应高度视图扩展属性`flexedHeight`的支持，将高度自适应设置改为了通过`wrapContentHeight`扩展属性的设置来完成。
+3. 优化了通过`makeLayout`来进行布局约束设置的一些方法。
+4. 修正了将一个布局视图添加到非布局视图里面后，如果后续调整了布局视图的边界设置后无法更新布局视图尺寸的问题。
+
+
 ## [V1.3.2](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.2)(2017/1/20)
 
 #### Added

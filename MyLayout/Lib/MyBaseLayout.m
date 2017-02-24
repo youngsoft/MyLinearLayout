@@ -213,20 +213,74 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_ABSPOS = "ASSOCIATEDOBJECT_KEY_
 }
 
 
--(void)setFlexedHeight:(BOOL)flexedHeight
+-(void)setWrapContentHeight:(BOOL)wrapContentHeight
 {
     UIView *lsc = self.myCurrentSizeClass;
-    if (lsc.flexedHeight != flexedHeight)
+    
+    if (lsc.wrapContentHeight != wrapContentHeight)
     {
-        lsc.flexedHeight = flexedHeight;
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
+        lsc.wrapContentHeight = wrapContentHeight;
+        
+        if (wrapContentHeight && [self isKindOfClass:[UILabel class]])
+        {
+            ((UILabel*)self).numberOfLines = 0;
+        }
+        
+        if ([self isKindOfClass:[MyBaseLayout class]])
+        {
+            [self setNeedsLayout];
+        }
+        else
+        {
+            if (self.superview != nil)
+                [self.superview setNeedsLayout];
+        }
+
     }
+}
+
+-(BOOL)wrapContentHeight
+{
+    return self.myCurrentSizeClass.wrapContentHeight;
+}
+
+-(void)setWrapContentWidth:(BOOL)wrapContentWidth
+{
+    UIView *lsc = self.myCurrentSizeClass;
+    
+    if (lsc.wrapContentWidth != wrapContentWidth)
+    {
+        lsc.wrapContentWidth = wrapContentWidth;
+        
+        if ([self isKindOfClass:[MyBaseLayout class]])
+        {
+            [self setNeedsLayout];
+        }
+        else
+        {
+            if (self.superview != nil)
+                [self.superview setNeedsLayout];
+        }
+    }
+}
+
+-(BOOL)wrapContentWidth
+{
+    return self.myCurrentSizeClass.wrapContentWidth;
+}
+
+
+
+
+-(void)setFlexedHeight:(BOOL)flexedHeight
+{
+    
+    self.wrapContentHeight = flexedHeight;
 }
 
 -(BOOL)isFlexedHeight
 {
-    return self.myCurrentSizeClass.isFlexedHeight;
+    return self.wrapContentHeight;
 }
 
 
@@ -744,38 +798,19 @@ BOOL _hasBegin;
     return self.myCurrentSizeClass.padding.bottom;
 }
 
+-(BOOL)zeroPadding
+{
+    return self.myCurrentSizeClass.zeroPadding;
+}
 
-
--(void)setWrapContentHeight:(BOOL)wrapContentHeight
+-(void)setZeroPadding:(BOOL)zeroPadding
 {
     MyBaseLayout *lsc = self.myCurrentSizeClass;
-
-    if (lsc.wrapContentHeight != wrapContentHeight)
+    if (lsc.zeroPadding != zeroPadding)
     {
-        lsc.wrapContentHeight = wrapContentHeight;
+        lsc.zeroPadding = zeroPadding;
         [self setNeedsLayout];
     }
-}
-
--(BOOL)wrapContentHeight
-{
-    return self.myCurrentSizeClass.wrapContentHeight;
-}
-
--(void)setWrapContentWidth:(BOOL)wrapContentWidth
-{
-    MyBaseLayout *lsc = self.myCurrentSizeClass;
-
-    if (lsc.wrapContentWidth != wrapContentWidth)
-    {
-        lsc.wrapContentWidth = wrapContentWidth;
-        [self setNeedsLayout];
-    }
-}
-
--(BOOL)wrapContentWidth
-{
-    return self.myCurrentSizeClass.wrapContentWidth;
 }
 
 
@@ -1523,7 +1558,7 @@ BOOL _hasBegin;
 
         //计算布局
         CGSize oldSelfSize = self.bounds.size;
-        CGSize newSelfSize = [self calcLayoutRect:CGSizeZero isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass];
+        CGSize newSelfSize = [self calcLayoutRect:[self calcSizeInNoLayoutSuperview:self.superview currentSize:oldSelfSize] isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass];
         
         //设置子视图的frame并还原
         for (UIView *sbv in self.subviews)
@@ -1611,48 +1646,86 @@ BOOL _hasBegin;
         //这里只用width判断的原因是如果newSelfSize被计算成功则size中的所有值都不是CGFLOAT_MAX，所以这里选width只是其中一个代表。
         if (newSelfSize.width != CGFLOAT_MAX)
         {
-            [self alterScrollViewContentSize:newSelfSize];
-            
-            //如果自己的父视图是非UIScrollView以及非布局视图。以及自己是wrapContentWidth或者wrapContentHeight时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
             UIView *supv = self.superview;
+
+            //如果自己的父视图是非UIScrollView以及非布局视图。以及自己是wrapContentWidth或者wrapContentHeight时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
             if (supv != nil && ![supv isKindOfClass:[MyBaseLayout class]] && ![supv isKindOfClass:[UIScrollView class]])
             {
-                CGRect rectSuper = supv.bounds;
-                CGRect rectSelf = self.bounds;
-                CGPoint centerPonintSelf = self.center;
-                
-                if (self.wrapContentWidth)
+                if (self.wrapContentWidth || self.wrapContentHeight)
                 {
-                    //如果只设置了右边，或者只设置了居中则更新位置。。
-                    if (self.centerXPos.posVal != nil)
+                    CGRect rectSuper = supv.bounds;
+                    CGRect rectSelf = self.bounds;
+                    CGPoint centerPonintSelf = self.center;
+                    
+                    if (self.wrapContentWidth)
                     {
-                        centerPonintSelf.x = (rectSuper.size.width - rectSelf.size.width)/2 + [self.centerXPos realMarginInSize:rectSuper.size.width] + self.layer.anchorPoint.x * rectSelf.size.width;
+                        //如果只设置了右边，或者只设置了居中则更新位置。。
+                        if (self.centerXPos.posVal != nil)
+                        {
+                            centerPonintSelf.x = (rectSuper.size.width - rectSelf.size.width)/2 + [self.centerXPos realMarginInSize:rectSuper.size.width] + self.layer.anchorPoint.x * rectSelf.size.width;
+                        }
+                        else if (self.rightPos.posVal != nil && self.leftPos.posVal == nil)
+                        {
+                            centerPonintSelf.x  = rectSuper.size.width - rectSelf.size.width - [self.rightPos realMarginInSize:rectSuper.size.width] + self.layer.anchorPoint.x * rectSelf.size.width;
+                        }
+                        
                     }
-                    else if (self.rightPos.posVal != nil && self.leftPos.posVal == nil)
+                    
+                    if (self.wrapContentHeight)
                     {
-                        centerPonintSelf.x  = rectSuper.size.width - rectSelf.size.width - [self.rightPos realMarginInSize:rectSuper.size.width] + self.layer.anchorPoint.x * rectSelf.size.width;
+                        if (self.centerYPos.posVal != nil)
+                        {
+                            centerPonintSelf.y = (rectSuper.size.height - rectSelf.size.height)/2 + [self.centerYPos realMarginInSize:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
+                        }
+                        else if (self.bottomPos.posVal != nil && self.topPos.posVal == nil)
+                        {
+                            centerPonintSelf.y  = rectSuper.size.height - rectSelf.size.height - [self.bottomPos realMarginInSize:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
+                        }
+                    }
+                    
+                    //如果有变化则只调整自己的center。而不变化
+                    if (!CGPointEqualToPoint(self.center, centerPonintSelf))
+                    {
+                        self.center = centerPonintSelf;
+                    }
+                }
+                
+            }
+            
+            
+            //这里处理当布局视图的父视图是非布局父视图，且父视图具有wrap属性时需要调整父视图的尺寸。
+            if (supv != nil && ![supv isKindOfClass:[MyBaseLayout class]])
+            {
+                if (supv.wrapContentHeight || supv.wrapContentWidth)
+                {
+                    //调整父视图的高度和宽度。frame值。
+                    CGRect superBounds = supv.bounds;
+                    CGPoint superCenter = supv.center;
+                    
+                    if (supv.wrapContentHeight)
+                    {
+                        superBounds.size.height = self.myTopMargin + newSelfSize.height + self.myBottomMargin;
+                        superCenter.y += (superBounds.size.height - supv.bounds.size.height) * supv.layer.anchorPoint.y;
+                    }
+                    
+                    if (supv.wrapContentWidth)
+                    {
+                        superBounds.size.width = self.myLeftMargin + newSelfSize.width + self.myRightMargin;
+                        superCenter.x += (superBounds.size.width - supv.bounds.size.width) * supv.layer.anchorPoint.x;
+                    }
+                    
+                    if (!CGRectEqualToRect(supv.bounds, superBounds))
+                    {
+                        supv.center = superCenter;
+                        supv.bounds = superBounds;
+                        
                     }
                     
                 }
-                
-                if (self.wrapContentHeight)
-                {
-                    if (self.centerYPos.posVal != nil)
-                    {
-                        centerPonintSelf.y = (rectSuper.size.height - rectSelf.size.height)/2 + [self.centerYPos realMarginInSize:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
-                    }
-                    else if (self.bottomPos.posVal != nil && self.topPos.posVal == nil)
-                    {
-                        centerPonintSelf.y  = rectSuper.size.height - rectSelf.size.height - [self.bottomPos realMarginInSize:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
-                    }
-                }
-                
-                //如果有变化则只调整自己的center。而不变化
-                if (!CGPointEqualToPoint(self.center, centerPonintSelf))
-                {
-                    self.center = centerPonintSelf;
-                }
             }
+            
+            //处理父视图是滚动视图时动态调整滚动视图的contentSize
+            [self alterScrollViewContentSize:newSelfSize];
         }
        
         self.myFrame.sizeClass = [self myDefaultSizeClass];
@@ -1847,6 +1920,65 @@ BOOL _hasBegin;
 }
 
 
+-(CGSize)calcSizeInNoLayoutSuperview:(UIView*)newSuperview currentSize:(CGSize)size
+{
+    if (newSuperview == nil || [newSuperview isKindOfClass:[MyBaseLayout class]])
+        return size;
+    
+    CGRect rectSuper = newSuperview.bounds;
+    
+    if (!newSuperview.wrapContentWidth)
+    {
+        if (self.widthDime.dimeRelaVal.view == newSuperview)
+        {
+            size.width = [self.widthDime measureWith:rectSuper.size.width];
+            size.width = [self validMeasure:self.widthDime sbv:self calcSize:size.width sbvSize:size selfLayoutSize:rectSuper.size];
+        }
+        
+        if (self.leftPos.posVal != nil && self.rightPos.posVal != nil)
+        {
+            CGFloat leftMargin = [self.leftPos realMarginInSize:rectSuper.size.width];
+            CGFloat rightMargin = [self.rightPos realMarginInSize:rectSuper.size.width];
+            size.width = rectSuper.size.width - leftMargin - rightMargin;
+            size.width = [self validMeasure:self.widthDime sbv:self calcSize:size.width sbvSize:size selfLayoutSize:rectSuper.size];
+            
+        }
+        
+        if (size.width < 0)
+        {
+            size.width = 0;
+        }
+    }
+
+    if (!newSuperview.wrapContentHeight)
+    {
+        if (self.heightDime.dimeRelaVal.view == newSuperview)
+        {
+            size.height = [self.heightDime measureWith:rectSuper.size.height];
+            size.height = [self validMeasure:self.heightDime sbv:self calcSize:size.height sbvSize:size selfLayoutSize:rectSuper.size];
+            
+        }
+        
+        if (self.topPos.posVal != nil && self.bottomPos.posVal != nil)
+        {
+            CGFloat topMargin = [self.topPos realMarginInSize:rectSuper.size.height];
+            CGFloat bottomMargin = [self.bottomPos realMarginInSize:rectSuper.size.height];
+            size.height = rectSuper.size.height - topMargin - bottomMargin;
+            size.height = [self validMeasure:self.heightDime sbv:self calcSize:size.height sbvSize:size selfLayoutSize:rectSuper.size];
+            
+        }
+        
+        if (size.height < 0)
+        {
+            size.height = 0;
+        }
+
+    }
+    
+    
+    return size;
+}
+
 -(BOOL)setLayoutRectInNoLayoutSuperview:(UIView*)newSuperview
 {
     BOOL isAdjust = NO;
@@ -2002,6 +2134,26 @@ BOOL _hasBegin;
             CGSize sz = [sbv sizeThatFits:CGSizeMake(width, 0)];
             return  [sbv.heightDime measureWith:sz.height];
         }
+    }
+    else if ([sbv isKindOfClass:[UIButton class]])
+    {
+        //按钮特殊处理多行的。。
+        UIButton *button = (UIButton*)sbv;
+        
+        if (button.titleLabel != nil)
+        {
+            //得到按钮本身的高度，以及单行文本的高度，这样就能算出按钮和文本的间距
+            CGSize buttonSize = [button sizeThatFits:CGSizeMake(0, 0)];
+            CGSize buttonTitleSize = [button.titleLabel sizeThatFits:CGSizeMake(0, 0)];
+            CGSize sz = [button.titleLabel sizeThatFits:CGSizeMake(width, 0)];
+            return [sbv.heightDime measureWith:sz.height + buttonSize.height - buttonTitleSize.height]; //这个sz只是纯文本的高度，所以要加上原先按钮和文本的高度差。。
+        }
+        else
+        {
+            CGSize sz = [sbv sizeThatFits:CGSizeMake(width, 0)];
+            return [sbv.heightDime measureWith:sz.height];
+        }
+        
     }
     else
     {
@@ -2220,6 +2372,19 @@ BOOL _hasBegin;
     }
 }
 
+-(CGSize)adjustSizeWhenNoSubviews:(CGSize)size sbs:(NSArray *)sbs
+{
+    //如果没有子视图，并且padding不参与空子视图尺寸计算则尺寸应该扣除padding的值。
+    if (sbs.count == 0 && !self.zeroPadding)
+    {
+        if (self.wrapContentWidth)
+            size.width -= (self.leftPadding + self.rightPadding);
+        if (self.wrapContentHeight)
+            size.height -= (self.topPadding + self.bottomPadding);
+    }
+    
+    return size;
+}
 
 - (void)alterScrollViewContentSize:(CGSize)newSize
 {

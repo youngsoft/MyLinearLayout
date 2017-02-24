@@ -33,7 +33,8 @@
  */
 @interface MyTableLayout : MyLinearLayout
 
-+(id)tableLayoutWithOrientation:(MyLayoutViewOrientation)orientation;
+
++(instancetype)tableLayoutWithOrientation:(MyLayoutViewOrientation)orientation;
 
 
 /**

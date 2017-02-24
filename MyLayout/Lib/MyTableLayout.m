@@ -114,7 +114,7 @@
 
 @implementation MyTableLayout
 
-+(id)tableLayoutWithOrientation:(MyLayoutViewOrientation)orientation
++(instancetype)tableLayoutWithOrientation:(MyLayoutViewOrientation)orientation
 {
     return [self linearLayoutWithOrientation:orientation];
 }

@@ -35,10 +35,9 @@
 
 @implementation MyLinearLayout
 
-
--(id)initWithOrientation:(MyLayoutViewOrientation)orientation
+-(instancetype)initWithFrame:(CGRect)frame orientation:(MyLayoutViewOrientation)orientation
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     if (self)
     {
         if (orientation == MyLayoutViewOrientation_Vert)
@@ -46,13 +45,19 @@
         else
             self.myCurrentSizeClass.wrapContentWidth = YES;
         self.myCurrentSizeClass.orientation = orientation;
-        
+
     }
-    
+ 
     return self;
 }
 
-+(id)linearLayoutWithOrientation:(MyLayoutViewOrientation)orientation
+
+-(instancetype)initWithOrientation:(MyLayoutViewOrientation)orientation
+{
+    return [self initWithFrame:CGRectZero orientation:orientation];
+}
+
++(instancetype)linearLayoutWithOrientation:(MyLayoutViewOrientation)orientation
 {
     return [[[self class] alloc] initWithOrientation:orientation];
 }
@@ -257,7 +262,7 @@
         
         CGRect rect = sbv.myFrame.frame;
         
-        BOOL isFlexedHeight = sbv.isFlexedHeight && sbv.weight == 0;
+        BOOL isFlexedHeight = sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && sbv.weight == 0;
         
         
         if (sbv.widthDime.dimeNumVal != nil)
@@ -476,6 +481,7 @@
     //计算出固定的子视图宽度的总和以及宽度比例总和
     
     NSMutableArray *fixedSizeSbs = [NSMutableArray new];
+    NSMutableArray *flexedSizeSbs = [NSMutableArray new];
     CGFloat fixedSizeWidth = 0;
     for (UIView *sbv in sbs)
     {
@@ -519,6 +525,11 @@
                fixedSizeWidth += vWidth;
                [fixedSizeSbs addObject:sbv];
             }
+            
+            if (sbv.widthDime.dimeSelfVal != nil)
+            {
+                [flexedSizeSbs addObject:sbv];
+            }
         }
         
         if (sbv != sbs.lastObject)
@@ -542,6 +553,10 @@
     {
         //取出shrinkType中的方式和压缩的类型：
         MySubviewsShrinkType smd = self.shrinkType & 0x0F; //压缩的模式
+        //如果压缩方式为自动，但是浮动宽度子视图数量不为2则压缩类型无效。
+        if (smd == MySubviewsShrink_Auto && flexedSizeSbs.count != 2)
+            smd = MySubviewsShrink_Average;
+        
         if (smd != MySubviewsShrink_None)
         {
             if (fixedSizeSbs.count > 0 && totalWeight != 0 && floatingWidth < 0 && selfSize.width > 0)
@@ -556,6 +571,45 @@
                        fsbv.myFrame.width += averageWidth;
                         
                     }
+                }
+                else if (smd == MySubviewsShrink_Auto)
+                {
+                    
+                    UIView *leftView = flexedSizeSbs[0];
+                    UIView *rightView = flexedSizeSbs[1];
+                    
+                    CGFloat leftWidth = leftView.myFrame.width;
+                    CGFloat righWidth = rightView.myFrame.width;
+                    
+                    //如果2个都超过一半则总是一半显示。
+                    //如果1个超过了一半则 如果两个没有超过总宽度则正常显示，如果超过了总宽度则超过一半的视图的宽度等于总宽度减去未超过一半的视图的宽度。
+                    //如果没有一个超过一半。则正常显示
+                    CGFloat layoutWidth = floatingWidth + leftWidth + righWidth;
+                    CGFloat halfLayoutWidth = layoutWidth / 2;
+                    
+                    if (leftWidth > halfLayoutWidth && righWidth > halfLayoutWidth)
+                    {
+                        leftView.myFrame.width = halfLayoutWidth;
+                        rightView.myFrame.width = halfLayoutWidth;
+                    }
+                    else if ((leftWidth > halfLayoutWidth || righWidth > halfLayoutWidth) && (leftWidth + righWidth > layoutWidth))
+                    {
+                        
+                        if (leftWidth > halfLayoutWidth)
+                        {
+                            rightView.myFrame.width = righWidth;
+                            leftView.myFrame.width = layoutWidth - righWidth;
+                        }
+                        else
+                        {
+                            leftView.myFrame.width = leftWidth;
+                            rightView.myFrame.width = layoutWidth - leftWidth;
+                        }
+                        
+                    }
+                    else ;
+                    
+                    
                 }
                 else if (/*fixedSizeWidth != 0*/_myCGFloatNotEqual(fixedSizeWidth, 0))
                 {//按比例分配。
@@ -579,7 +633,7 @@
         CGFloat leftMargin = sbv.leftPos.posNumVal.doubleValue;
         CGFloat rightMargin = sbv.rightPos.posNumVal.doubleValue;
         CGFloat weight = sbv.weight;
-        BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
+        BOOL isFlexedHeight = sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && !sbv.heightDime.isMatchParent;
         CGRect rect =  sbv.myFrame.frame;
         
         if (sbv.heightDime.dimeNumVal != nil)
@@ -727,7 +781,7 @@
     {
         BOOL canAddToNoWrapSbs = YES;
         CGRect rect =  sbv.myFrame.frame;
-        BOOL isFlexedHeight = sbv.isFlexedHeight && sbv.weight == 0;
+        BOOL isFlexedHeight = sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && sbv.weight == 0;
         
         if (sbv.widthDime.dimeNumVal != nil)
             rect.size.width = sbv.widthDime.measure;
@@ -916,7 +970,7 @@
         BOOL canAddToNoWrapSbs = YES;
 
         CGRect rect = sbv.myFrame.frame;
-        BOOL isFlexedHeight = sbv.isFlexedHeight && !sbv.heightDime.isMatchParent;
+        BOOL isFlexedHeight = sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && !sbv.heightDime.isMatchParent;
         
         
         if (sbv.widthDime.dimeNumVal != nil)
@@ -1332,7 +1386,8 @@
     selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     
-    return selfSize;
+    
+    return [self adjustSizeWhenNoSubviews:selfSize sbs:sbs];
     
 }
 

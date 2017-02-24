@@ -24,9 +24,14 @@
        这个例子详细说明wrapContentHeight和wrapContentWidth的包裹属性的设置、以及边界线性的设定、以及布局中可局部缩放背景图片的设定方法。
      */
     
-    UIScrollView *scrollView = [UIScrollView new];
-    scrollView.backgroundColor = [UIColor whiteColor];
-    self.view = scrollView;
+    [super loadView];
+    
+    UIView *contentView = [UIView new];
+    contentView.backgroundColor = [CFTool color:5];
+    [self.view addSubview:contentView];
+    contentView.wrapContentWidth = YES;
+    contentView.wrapContentHeight = YES;   //如果一个非布局父视图里面有布局子视图，那么这个非布局父视图也是可以设置wrapContentHeight和wrapContentWidth的，他表示的意义是这个非布局父视图的尺寸由里面的布局子视图的尺寸来决定的。这个功能是在1.3.3版本支持的。 还有一个场景是非布局父视图是一个UIScrollView。他是左右滚动的，但是滚动视图的高度是由里面的布局子视图确定的，而宽度则是和窗口保持一致。这样只需要将滚动视图的宽度设置为和屏幕保持一致，高度设置为wrapContentHeight，并且把一个水平线性布局添加到滚动视图即可。
+    
     
     self.rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     self.rootLayout.layer.borderWidth = 1;
@@ -34,8 +39,9 @@
     self.rootLayout.wrapContentHeight = YES;
     self.rootLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
     self.rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    self.rootLayout.zeroPadding = NO;  //这个属性设置为NO时表示当布局视图的尺寸是wrap也就是由子视图决定时并且在没有任何子视图是不会参与布局视图高度的计算的。您可以在这个DEMO的测试中将所有子视图都删除掉，看看效果，然后注释掉这句代码看看效果。
     self.rootLayout.subviewMargin = 5;
-    [self.view addSubview:self.rootLayout];
+    [contentView addSubview:self.rootLayout];
     
     [self.rootLayout addSubview:[self addWrapContentLayout]];
     
@@ -115,13 +121,14 @@
     [button addTarget:self action:@selector(handleAction:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:title forState:UIControlStateNormal];
     button.titleLabel.font = [CFTool font:14];
+    button.titleLabel.adjustsFontSizeToFitWidth = YES;
     button.backgroundColor = [CFTool color:14];
     button.layer.cornerRadius = 10;
     button.layer.borderColor = [UIColor lightGrayColor].CGColor;
     button.layer.borderWidth  = 0.5;
     button.tag = tag;
     button.myHeight = 50;
-    button.myWidth = 110;
+    button.myWidth = 80;
     
     return button;
 }

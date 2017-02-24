@@ -34,8 +34,9 @@
 /**
  *初始化一个线性布局，并指定子视图布局的方向。如果不明确指定方向则默认是建立一个垂直线性布局。建立一个垂直线性布局时默认的wrapContentHeight设置为YES，而建立一个水平线性布局时默认的wrapContentWidth设置为YES。
  */
--(id)initWithOrientation:(MyLayoutViewOrientation)orientation;
-+(id)linearLayoutWithOrientation:(MyLayoutViewOrientation)orientation;
+-(instancetype)initWithOrientation:(MyLayoutViewOrientation)orientation;
+-(instancetype)initWithFrame:(CGRect)frame orientation:(MyLayoutViewOrientation)orientation;
++(instancetype)linearLayoutWithOrientation:(MyLayoutViewOrientation)orientation;
 
 /**
  *线性布局的布局方向。

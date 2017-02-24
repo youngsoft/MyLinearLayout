@@ -24,6 +24,7 @@
 		186B83E01D094F11001CA155 /* FLLTest2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186B83E21D094F11001CA155 /* FLLTest2ViewController.xib */; };
 		186B83E41D095A49001CA155 /* FOLTest1ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186B83E61D095A49001CA155 /* FOLTest1ViewController.xib */; };
 		186C530C1C75A5BB0031B2A2 /* MyFloatLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 186C530B1C75A5BB0031B2A2 /* MyFloatLayout.m */; };
+		187075FF1E5A9B44004FA21B /* FLLTest6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187075FE1E5A9B44004FA21B /* FLLTest6ViewController.m */; };
 		1871D25F1D2F5ABA00D37F55 /* MyPathLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1871D25E1D2F5ABA00D37F55 /* MyPathLayout.m */; };
 		188261CF1C647CB300996C2C /* AllTest6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188261CE1C647CB300996C2C /* AllTest6ViewController.m */; };
 		188D90E01DE736BB0034F76E /* MyLayoutClass.png in Resources */ = {isa = PBXBuildFile; fileRef = 188D90DF1DE736BB0034F76E /* MyLayoutClass.png */; };
@@ -142,6 +143,8 @@
 		186DF3701D523EDB00039E44 /* fl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fl.png; sourceTree = "<group>"; };
 		186DF3711D523EDB00039E44 /* fll.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fll.png; sourceTree = "<group>"; };
 		186DF3721D523EDB00039E44 /* flo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flo.png; sourceTree = "<group>"; };
+		187075FD1E5A9B44004FA21B /* FLLTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest6ViewController.h; sourceTree = "<group>"; };
+		187075FE1E5A9B44004FA21B /* FLLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest6ViewController.m; sourceTree = "<group>"; };
 		1871D25D1D2F5ABA00D37F55 /* MyPathLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPathLayout.h; sourceTree = "<group>"; };
 		1871D25E1D2F5ABA00D37F55 /* MyPathLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPathLayout.m; sourceTree = "<group>"; };
 		188261CD1C647CB300996C2C /* AllTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest6ViewController.h; sourceTree = "<group>"; };
@@ -455,6 +458,8 @@
 				18BCC5191D2D4885005081FF /* FLLTest4ViewController.m */,
 				181550661E2F75DF00329BFF /* FLLTest5ViewController.h */,
 				181550671E2F75EA00329BFF /* FLLTest5ViewController.m */,
+				187075FD1E5A9B44004FA21B /* FLLTest6ViewController.h */,
+				187075FE1E5A9B44004FA21B /* FLLTest6ViewController.m */,
 			);
 			name = FlowLayoutDemo;
 			sourceTree = "<group>";
@@ -782,6 +787,7 @@
 				181550681E2F75EA00329BFF /* FLLTest5ViewController.m in Sources */,
 				18296B751C76D67F00273C3E /* FOLTest3ViewController.m in Sources */,
 				18D684461C4F421400A48BB4 /* LLTest2ViewController.m in Sources */,
+				187075FF1E5A9B44004FA21B /* FLLTest6ViewController.m in Sources */,
 				18D684411C4F421400A48BB4 /* MyLinearLayout.m in Sources */,
 				18D6844A1C4F421400A48BB4 /* LLTest6ViewController.m in Sources */,
 				18D684341C4F421400A48BB4 /* AppDelegate.m in Sources */,

@@ -568,8 +568,7 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.myLeftMargin = 5;
     subTitleLabel.clearFloat = YES; //清除浮动，另起一行。
     subTitleLabel.weight = 1;
-    subTitleLabel.numberOfLines = 0;
-    subTitleLabel.flexedHeight = YES;
+    subTitleLabel.wrapContentHeight = YES;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];
     

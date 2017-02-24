@@ -957,6 +957,7 @@
     CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
     
     NSArray *sbs = [self getLayoutSubviews];
+    NSArray *sbs2 = sbs;
     
     for (UIView *sbv in sbs)
     {
@@ -1056,7 +1057,7 @@
             }
         }
         
-        if (sbv.isFlexedHeight)
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
         {
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
         }
@@ -1136,7 +1137,7 @@
             }
         }
         
-        if (sbv.isFlexedHeight)
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
         {
             rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
         }
@@ -1213,7 +1214,7 @@
     
     selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
-    return selfSize;
+    return [self adjustSizeWhenNoSubviews:selfSize sbs:sbs2];
 }
 
 -(id)createSizeClassInstance

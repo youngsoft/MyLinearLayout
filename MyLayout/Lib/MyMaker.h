@@ -21,9 +21,11 @@
 -(MyMaker*)right;
 -(MyMaker*)margin;
 
+-(MyMaker*)wrapContentHeight;
+-(MyMaker*)wrapContentWidth;
+
 -(MyMaker*)height;
 -(MyMaker*)width;
--(MyMaker*)flexedHeight;
 -(MyMaker*)useFrame;
 -(MyMaker*)noLayout;
 
@@ -40,14 +42,10 @@
 -(MyMaker*)bottomPadding;
 -(MyMaker*)rightPadding;
 -(MyMaker*)padding;
--(MyMaker*)wrapContentHeight;
--(MyMaker*)wrapContentWidth;
+-(MyMaker*)zeroPadding;
 -(MyMaker*)reverseLayout;
 
 
-
-//框架布局子视图独有
--(MyMaker*)marginGravity;
 
 //线性布局和流式布局独有
 -(MyMaker*)orientation;

@@ -38,8 +38,7 @@
     tipLabel.font = [CFTool font:16];
     tipLabel.textColor = [CFTool color:3];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
@@ -56,14 +55,12 @@
     [self createDemo6:rootLayout];
     
     [self createDemo7:rootLayout];
-
+    
     [self createDemo8:rootLayout];
 
     [self createDemo9:rootLayout];
-    
+
     [self createDemo10:rootLayout];
-
-
     
 }
 
@@ -77,8 +74,7 @@
     tipLabel.text = @"1.下面的例子实现一行内多个子视图从左往右排列。如果在小屏幕下显示则会压缩所有子视图的空间，如果能够被容纳的话则正常显示。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -98,10 +94,9 @@
     label1.text = @"不压缩子视图";
     label1.font = [CFTool font:16];
     label1.backgroundColor = [CFTool color:5];
-    label1.numberOfLines = 0;
     label1.adjustsFontSizeToFitWidth = YES;
     [label1 sizeToFit];
-    label1.flexedHeight = YES; //自动换行。
+    label1.wrapContentHeight = YES; //自动换行。
     label1.widthDime.equalTo(label1.widthDime); //宽度等于自己的内容，
     label1.widthDime.lBound(label1.widthDime,0,1); //并且最小宽度也等于自己，这样设置的话可以保证这个视图永远不会被压缩。您可以注释掉这句看看效果。
     [contentLayout addSubview:label1];
@@ -122,9 +117,8 @@
     label3.font = [CFTool font:15];
     label3.backgroundColor = [CFTool color:7];
     label3.adjustsFontSizeToFitWidth = YES;
-    label3.numberOfLines = 0;
     [label3 sizeToFit];
-    label3.flexedHeight = YES;
+    label3.wrapContentHeight = YES;
     label3.widthDime.equalTo(label3.widthDime); //宽度等于自己的内容宽度
     [contentLayout addSubview:label3];
     label3.myRightMargin = 0.5;  //这句设置非常重要，设置为右间距为相对间距，从而达到如果屏幕小则会缩小固定尺寸，如果大则不会的效果。
@@ -139,8 +133,7 @@
     tipLabel.text = @"2.下面的例子里面最右边的两个子视图的宽度是固定的，而第一个子视图则占用剩余的空间。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -158,10 +151,9 @@
     label1.text = @"第一个子视图的宽度是占用整个屏幕的剩余空间，您可以切换屏幕和设备查看效果";
     label1.font = [CFTool font:15];
     label1.backgroundColor = [CFTool color:5];
-    label1.numberOfLines = 0;
     label1.adjustsFontSizeToFitWidth = YES;
     [label1 sizeToFit];
-    label1.flexedHeight = YES; //自动换行。
+    label1.wrapContentHeight = YES; //自动换行。
     label1.weight = 1;  //占用剩余的空间。
     [contentLayout addSubview:label1];
     
@@ -209,8 +201,7 @@
     tipLabel.text = @"3.下面的例子里面最右边的两个子视图的宽度是固定的，而第一个子视图的尺寸动态变化，但是最宽不能超过布局剩余的宽度。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上分别测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -229,10 +220,9 @@
     label1.text = @"点击右边的按钮：";
     label1.font = [CFTool font:14];
     label1.backgroundColor = [CFTool color:5];
-    label1.numberOfLines = 0;
     label1.adjustsFontSizeToFitWidth = YES;
     label1.tag = 1000; //为了测试用。。
-    label1.flexedHeight = YES; //自动换行。
+    label1.wrapContentHeight = YES; //自动换行。
     label1.widthDime.equalTo(label1.widthDime); //宽度等于自己的内容。
     label1.myRightMargin = 0.5;  //设置相对间距
     [contentLayout addSubview:label1];
@@ -262,66 +252,90 @@
 }
 
 
--(void)handleStretch:(UIButton*)sender
-{
-    if (sender.currentTitle.length > 50)
-        [sender setTitle:@"Click" forState:UIControlStateNormal];
-    
-    if (sender.tag == 1000)
-        [sender setTitle:[sender.currentTitle stringByAppendingString:@"-->"] forState:UIControlStateNormal];
-    else
-        [sender setTitle: [@"<--" stringByAppendingString:sender.currentTitle] forState:UIControlStateNormal];
 
-    [sender sizeToFit];
+-(void)handleChangeText:(UIButton*)sender
+{
+    
+    NSArray *texts = @[@"这是一段很长的文本，目的是为了实现最大限度的利用整个空间而不出现多余的缝隙",@"您好",@"北京市朝阳区三里屯SOHO城",@"我是醉里挑灯看键",@"欧阳大哥",@"MyLayout是一套功能强大的综合界面布局库"];
+    
+    
+    MyLinearLayout *layout = [sender.superview viewWithTag:4000];
+    UILabel *leftLabel = [layout viewWithTag:1000];
+    UILabel *rightLabel = [layout viewWithTag:2000];
+    
+    
+    leftLabel.text = texts[arc4random_uniform((uint32_t)texts.count)];
+    rightLabel.text = texts[arc4random_uniform((uint32_t)texts.count)];
+    [layout setNeedsLayout];  //设置文本后激活布局重新布局
+    
 }
 
 
 -(void)createDemo4:(MyLinearLayout*)rootLayout
 {
-    //一个行内的两个子视图的内容彼此约束，左边的往右边延伸，右边的往左边延伸，但不会相互覆盖。
-    
+    //一行多列，然后压缩每个子视图的宽度，压缩到某个阈值后再换行。。
     UILabel *tipLabel = [UILabel new];
     tipLabel.text = @"4.下面的例子展示左右2个子视图的内容分别向两边延伸，但是不会重叠。这样做的好处就是不会产生空间的浪费。一个具体例子就是UITableviewCell中展示内容时，一部分在左边而一部分在右边，两边的内容长度都不确定，但是不能重叠以及浪费空间。 您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
+    
+    UIButton *changeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [changeButton setTitle:@"Change Text" forState:UIControlStateNormal];
+    [changeButton sizeToFit];
+    [rootLayout addSubview:changeButton];
+    [changeButton addTarget:self action:@selector(handleChangeText:) forControlEvents:UIControlEventTouchUpInside];
     
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     contentLayout.wrapContentWidth = NO;
     contentLayout.wrapContentHeight = YES;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewMargin = 5;
-    contentLayout.shrinkType = MySubviewsShrink_Weight; //这里当固定子视图的宽度超过布局时，所有子视图按比例缩小，您也可以设置平均缩小或者不缩小。您可以设置为：MySubviewsShrink_Average和MySubviewsShrink_None的区别。
+    contentLayout.subviewMargin = 20;
+    contentLayout.shrinkType = MySubviewsShrink_Auto;  //为了实现左右两边文本的自动缩放调整，必须要将线性布局的属性设置MySubviewsShrink_Auto。当设置为Auto属性时，必要要满足当前子视图中只有2个子视图的宽度设置为等于自身内容，否则无效。这个属性用来实现左右2个子视图根据内容来占用最佳的空间的例子。
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
+    contentLayout.tag = 4000;  //为了方便查找。
+    
+    //您可以解开如下注释再看看运行的效果。
+    /*
+    UILabel *fixedLabel = [UILabel new];
+    fixedLabel.myWidth = 40;
+    fixedLabel.myHeight = 30;
+    fixedLabel.backgroundColor = [UIColor orangeColor];
+    [contentLayout addSubview:fixedLabel];
+     */
+     
+    //左边子视图。
+    UILabel *leftLabel = [UILabel new];
+    leftLabel.font = [UIFont systemFontOfSize:14];
+    leftLabel.textColor = [UIColor redColor];
+    leftLabel.widthDime.equalTo(leftLabel.widthDime); //设置宽度等于自身内容的宽度
+    leftLabel.wrapContentHeight = YES;
+    leftLabel.rightPos.equalTo(@0.5); //设置右边的相对间距.
+    [contentLayout addSubview:leftLabel];
+    leftLabel.tag = 1000;
+
+    
+    //右边子视图。
+    UILabel *rightLabel = [UILabel new];
+    rightLabel.font = [UIFont systemFontOfSize:14];
+    rightLabel.textColor = [UIColor blueColor];
+    rightLabel.widthDime.equalTo(rightLabel.widthDime);  //设置宽度等于自身内容的宽度
+    rightLabel.wrapContentHeight = YES;
+    rightLabel.leftPos.equalTo(@0.5); //设置右边的相对间距.
+    [contentLayout addSubview:rightLabel];
+    rightLabel.tag = 2000;
+
     
     
-    //第一个子视图。
-    UIButton *buttonLeft = [UIButton buttonWithType:UIButtonTypeSystem];
-    [buttonLeft setTitle:@"Click->" forState:UIControlStateNormal];
-    buttonLeft.tintColor = [UIColor blueColor];
-    buttonLeft.titleLabel.font = [UIFont systemFontOfSize:14];
-    [buttonLeft sizeToFit];
-    buttonLeft.tag = 1000;
-    buttonLeft.rightPos.equalTo(@0.5); //设置右边的相对间距.
-    [contentLayout addSubview:buttonLeft];
-    [buttonLeft addTarget:self action:@selector(handleStretch:) forControlEvents:UIControlEventTouchUpInside];
+    [self handleChangeText:changeButton];
     
-    //第二个子视图。
-    UIButton *buttonRight = [UIButton buttonWithType:UIButtonTypeSystem];
-    [buttonRight setTitle:@"<-Click" forState:UIControlStateNormal];
-    buttonRight.tintColor = [UIColor redColor];
-    buttonRight.titleLabel.font = [UIFont systemFontOfSize:14];
-    [buttonRight sizeToFit];
-    buttonRight.tag = 2000;
-    buttonRight.leftPos.equalTo(@0.5); //设置右边的相对间距.
-    [contentLayout addSubview:buttonRight];
-    [buttonRight addTarget:self action:@selector(handleStretch:) forControlEvents:UIControlEventTouchUpInside];
 }
+
+
 
 /*
  * 下面这个DEMO实现子视图之间的间距压缩，来达到最完美的适配。
@@ -354,8 +368,7 @@
     tipLabel.text = @"5.下面的例子中(响应式布局！！)，您可以添加按钮来添加多个按钮形成多行多列的布局。在不同的屏幕尺寸下，子视图之间的间距会自动调整以便满足最佳的布局状态。比如多个子视图有规律排列，每个子视图的宽度是固定的，在iPhone4下以及iPhone6下都能放置4个子视图，但是iPhone4中子视图之间的间距要比iPhone6上的小，而在iPhone6+上则因为空间足够可以放置5个子视图。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -390,8 +403,8 @@
 
 -(void)handleAddCell:(UIButton*)sender
 {
-    //在创建时指定了3000.所以这里为了方便使用。
-    MyTableLayout *tableLayout = (MyTableLayout*)[sender.superview viewWithTag:3000];
+    //在创建时指定了6000.所以这里为了方便使用。
+    MyTableLayout *tableLayout = (MyTableLayout*)[sender.superview viewWithTag:6000];
     
     UILabel *cellLabel = [UILabel new];
     cellLabel.text =@"测试文本";
@@ -444,8 +457,7 @@
     tipLabel.text = @"6.下面的例子用来实现子视图依次从左往右添加，并且当空间不够时会自动压缩前面的所有子视图的宽度。而当所有子视图的宽度都到达了最小的阈值时就会自动换行，并继续添加上去。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上分别测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -463,7 +475,7 @@
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
     
-    contentLayout.tag = 3000; //为了方便查找。
+    contentLayout.tag = 6000; //为了方便查找。
     
 }
 
@@ -475,8 +487,7 @@
     tipLabel.text = @"7.下面的例子里面有多个宽度不一致的子视图，但是布局会根据屏幕的大小而智能的排列这些子视图，从而充分的利用好布局视图的空间。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上分别测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -517,8 +528,7 @@
     tipLabel.text = @"8.下面的例子中如果屏幕足够宽则左边视图居左，中间视图居中，右边视图居右。这时候不会产生滚动，而当屏幕宽度不足时则会压缩中间视图和两边视图之间的间距并且产生滚动效果。这样的例子也可以同样应用在纵向屏幕中：通常在大屏幕设备上中间的部分要居中显示，而在小屏幕上则依次排列产生滚动效果。 您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -577,8 +587,7 @@
     tipLabel.text = @"9.下面的例子中最右边的视图如果能够被屏幕容纳则放在最右边，否则就会产生滚动效果。这个例子同样也可以应用在纵向屏幕中:很多页面里面最下边需要放一个按钮，如果屏幕尺寸够高则总是放在最底部，如果屏幕尺寸不够则会产生滚动效果。 您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -647,8 +656,7 @@
     tipLabel.text = @"10.下面的例子中展示了一行中各个子视图的宽度和间距都将根据屏幕的尺寸来进行拉伸和收缩，这样不管在任何尺寸的屏幕下都能达到完美的适配。在实践中UI人员往往会按某个设备的尺寸给出一张效果图，那么我们只需要按这个效果图中的子视图的宽度来计算好所占用的宽度和间距的比例，然后我们通过对视图的宽度和间距按比例值进行设置，这样就会使得子视图的真实宽度和间距将根据屏幕的尺寸进行拉升和收缩。您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.numberOfLines = 0;
-    tipLabel.flexedHeight = YES;
+    tipLabel.wrapContentHeight = YES;
     tipLabel.myTopMargin = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
