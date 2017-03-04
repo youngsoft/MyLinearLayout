@@ -1,5 +1,5 @@
 //
-//  Test18ViewController.m
+//  TLTest2ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/8/26.
@@ -12,7 +12,7 @@
 
 @interface TLTest2ViewController ()
 
-@property(nonatomic, strong) MyTableLayout *rootLayout;
+@property(nonatomic, weak) MyTableLayout *rootLayout;
 
 @end
 
@@ -30,20 +30,21 @@
        创建一个水平的表格布局，水平表格布局主要用于建立瀑布流视图。需要注意的是水平表格中row也就是行是从左到右排列的，而每行中的col也就是列是从上到下排列的。
      */
     
-    _rootLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Horz];
-    _rootLayout.wrapContentWidth = NO;
-    _rootLayout.rowSpacing = 5;
-    _rootLayout.colSpacing = 10;
-    _rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //分别设置表格布局里面的行间距、列间距、内部padding边距。
+    MyTableLayout *rootLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    rootLayout.rowSpacing = 5;
+    rootLayout.colSpacing = 10;
+    rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //分别设置表格布局里面的行间距、列间距、内部padding边距。
     
-    _rootLayout.widthDime.equalTo(scrollView.widthDime);
-    _rootLayout.wrapContentHeight = YES; //布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
-    [scrollView addSubview:_rootLayout];
+    rootLayout.widthDime.equalTo(scrollView.widthDime);
+    rootLayout.wrapContentHeight = YES; //布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
+    rootLayout.wrapContentWidth = NO;
+    [scrollView addSubview:rootLayout];
+    self.rootLayout = rootLayout;
     
     //为瀑布流建立3个平均分配的行，每行的列的尺寸由内容决定。
-    [_rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
-    [_rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
-    [_rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
+    [rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
+    [rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
+    [rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
     
 }
 
@@ -75,8 +76,8 @@
     colLayout.wrapContentHeight = YES;
     colLayout.subviewMargin = 5;  //设置布局视图里面子视图之间的间距为5个点。
     colLayout.backgroundColor = [CFTool color:0];
-    [colLayout setTarget:self action:@selector(handleColLayoutTap:)];
     colLayout.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
+    [colLayout setTarget:self action:@selector(handleColLayoutTap:)];
     
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:image]];

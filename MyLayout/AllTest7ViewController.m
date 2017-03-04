@@ -84,7 +84,7 @@
     contentLayout.wrapContentHeight = YES;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewMargin = 5;
-    contentLayout.shrinkType = MySubviewsShrink_Weight; //这个属性用来设置当子视图的总尺寸大于布局视图的尺寸时如何压缩这些具有固定尺寸的方法为按比例缩小。您可以分别试试设置为：MySubviewsShrink_Weight，MySubviewsShrink_Average,MySubviewsShrink_None三种值的效果。
+    contentLayout.shrinkType = MySubviewsShrink_Weight; //这个属性用来设置当子视图的总尺寸大于布局视图的尺寸时如何压缩这些具有固定尺寸的方法为按比例缩小。您可以分别试试设置为：MySubviewsShrink_Weight，MySubviewsShrink_Average,MySubviewsShrink_None，MySubviewsShrink_Auto四种值的效果。
 
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
@@ -211,7 +211,6 @@
     contentLayout.wrapContentHeight = YES;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewMargin = 5;
-    contentLayout.shrinkType = MySubviewsShrink_None;
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
     
@@ -273,7 +272,7 @@
 
 -(void)createDemo4:(MyLinearLayout*)rootLayout
 {
-    //一行多列，然后压缩每个子视图的宽度，压缩到某个阈值后再换行。。
+    //左右两个子视图宽度不确定，但是不会覆盖和重叠。
     UILabel *tipLabel = [UILabel new];
     tipLabel.text = @"4.下面的例子展示左右2个子视图的内容分别向两边延伸，但是不会重叠。这样做的好处就是不会产生空间的浪费。一个具体例子就是UITableviewCell中展示内容时，一部分在左边而一部分在右边，两边的内容长度都不确定，但是不能重叠以及浪费空间。 您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:";
     tipLabel.font = [CFTool font:14];
@@ -545,7 +544,6 @@
     contentLayout.gravity = MyMarginGravity_Vert_Fill;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewMargin = 5;
-    contentLayout.shrinkType = MySubviewsShrink_None;  //如果具有固定尺寸的视图的总宽度超过布局视图的总宽度时，不产生固定视图的尺寸的压缩。
     contentLayout.widthDime.lBound(scrollView.widthDime,0,1); //默认水平线性布局的宽度是wrapContentWidth的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
     [scrollView addSubview:contentLayout];
     
@@ -603,7 +601,6 @@
     contentLayout.gravity = MyMarginGravity_Vert_Fill;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewMargin = 5;
-    contentLayout.shrinkType = MySubviewsShrink_None;  //如果具有固定尺寸的视图的总宽度超过布局视图的总宽度时，不产生固定视图的尺寸的压缩。
     contentLayout.widthDime.lBound(scrollView.widthDime,0,1); //默认水平线性布局的宽度是wrapContentWidth的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
     [scrollView addSubview:contentLayout];
     

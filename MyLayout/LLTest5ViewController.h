@@ -1,5 +1,5 @@
 //
-//  Test5ViewController.h
+//  LLTest5ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *5.LinearLayout - Weight & Relative margin
+ */
 @interface LLTest5ViewController : UIViewController
 
 @end

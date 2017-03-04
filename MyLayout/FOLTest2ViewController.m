@@ -13,7 +13,7 @@ static CGFloat sItemLayoutHeight = 90;
 static NSInteger sBaseTag = 100000;
 
 
-//布局模型
+//布局模型类
 @interface FOLTest2LayoutTemplate : NSObject
 
 @property(nonatomic, assign) SEL layoutSelector;  //布局实现的方法
@@ -51,7 +51,7 @@ static NSInteger sBaseTag = 100000;
 @interface FOLTest2SectionModel : NSObject
 
 @property(nonatomic, strong) NSString *title;      //片段标题
-@property(nonatomic, strong) NSMutableArray *datas;  //数据
+@property(nonatomic, strong) NSMutableArray<FOLTest2DataModel*> *datas;  //数据
 
 @end
 
@@ -65,11 +65,11 @@ static NSInteger sBaseTag = 100000;
 
 @interface FOLTest2ViewController ()
 
-@property(nonatomic, strong) MyLinearLayout *rootLayout;
+@property(nonatomic, weak) MyLinearLayout *rootLayout;
 
-@property(nonatomic, strong) NSMutableArray *layoutTemplates;  //所有的布局模板数组
+@property(nonatomic, strong) NSMutableArray<FOLTest2LayoutTemplate*> *layoutTemplates;  //所有的布局模板数组
 
-@property(nonatomic, strong) NSMutableArray *sectionDatas;    //片段数据数组，FOLTest2SectionModel类型的元素。
+@property(nonatomic, strong) NSMutableArray<FOLTest2SectionModel*> *sectionDatas;    //片段数据数组，FOLTest2SectionModel类型的元素。
 
 @end
 
@@ -377,12 +377,13 @@ static NSInteger sBaseTag = 100000;
     UIScrollView *scrollView = [UIScrollView new];
     self.view = scrollView;
     
-    self.rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    self.rootLayout.myLeftMargin = self.rootLayout.myRightMargin = 0;
-    self.rootLayout.gravity = MyMarginGravity_Horz_Fill;
-    self.rootLayout.backgroundColor = [UIColor colorWithWhite:0xe7/255.0 alpha:1];
-    self.rootLayout.IntelligentBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]]; //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
-    [scrollView addSubview:self.rootLayout];
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
+    rootLayout.gravity = MyMarginGravity_Horz_Fill;
+    rootLayout.backgroundColor = [UIColor colorWithWhite:0xe7/255.0 alpha:1];
+    rootLayout.IntelligentBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]]; //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
+    [scrollView addSubview:rootLayout];
+    self.rootLayout = rootLayout;
 }
 
 

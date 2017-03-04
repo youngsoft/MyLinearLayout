@@ -1,5 +1,5 @@
 //
-//  Test7ViewController.m
+//  FLTest1ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -36,6 +36,39 @@
 -(void)loadView
 {
     /*
+     使用MyLayout时必读的知识点：
+     
+     
+     1.布局视图：    就是从MyBaseLayout派生而出的不同的类型的视图，目前MyLayout中一共有：线性布局、框架布局、相对布局、表格布局、流式布局、浮动布局、路径布局7种布局。 布局视图也是一个视图，因为MyBaseLayout也是从UIView派生的。
+     2.非布局视图：  除上面说的7种布局视图外的所有视图和控件。
+     3.布局父视图：  如果某个视图的父视图是一个布局视图，那么这个父视图就是布局父视图。
+     4.非布局父视图：如果某个视图的父视图不是一个布局视图，那么这个父视图就是非布局父视图。
+     5.布局子视图：  如果某个视图的子视图是一个布局视图，那么这个子视图就是布局子视图。
+     6.非布局子视图：如果某个视图的子视图不是一个布局视图，那么这个子视图就是非布局子视图。
+     
+     
+     这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。myLeftMargin,myRightMargin,myTopMargin,myBottomMargin这几个子视图的扩展属性即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
+     
+     1.垂直线性布局MyLinearLayout中的子视图： myLeftMargin,myRightMargin表示边距，而myTopMargin,myBottomMargin则表示间距。
+     2.水平线性布局MyLinearLayout中的子视图： myLeftMargin,myRightMargin表示间距，而myTopMargin,myBottomMargin则表示边距。
+     3.表格布局中的子视图：                  myLeftMargin,myRightMargin,myTopMargin,myBottomMargin的定义和线性布局是一致的。
+     4.框架布局MyFrameLayout中的子视图：     myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
+     5.相对布局MyRelativeLayout中的子视图：  myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
+     6.流式布局MyFlowLayout中的子视图：      myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示间距。
+     7.浮动布局MyFloatLayout中的子视图：     myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示间距。
+     8.路径布局MyPathLayout中的子视图：      myLeftMargin,myRightMargin,myTopMargin,myBottomMargin即不表示间距也不表示边距，它表示自己中心位置的偏移量。
+     9.非布局父视图中的布局子视图：           myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
+     10.非布局父视图中的非布局子视图：         myLeftMargin,myRightMargin,myTopMargin,myBottomMargin的设置不会起任何作用，因为MyLayout已经无法控制了。
+     
+     再次强调的是：
+     1. 如果同时设置了左右边距就能决定自己的宽度，同时设置左右间距不能决定自己的宽度！
+     2. 如果同时设置了上下边距就能决定自己的高度，同时设置上下间距不能决定自己的高度！
+     
+     */
+
+    
+    
+    /*
        这个例子主要介绍了框架布局的功能。框架布局里面的所有子视图的布局位置都只跟框架布局相关。
        框架布局中的子视图可以层叠显示，因此框架布局常用来作为视图控制器里面的跟视图。
      */
@@ -49,7 +82,7 @@
     [self.view addSubview:frameLayout];
 
     /*
-     建立13个子视图，并进行布局。这13个子视图表示可以在框架布局中定位和填充的13个位置和尺寸。
+     建立12个子视图，并进行布局。这12个子视图表示可以在框架布局中定位和填充的12个位置和尺寸。
      */
     
     //显示全屏

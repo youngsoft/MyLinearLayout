@@ -240,11 +240,11 @@
     };
 }
 
--(MyLayoutPos* (^)(id posVal, CGFloat offset))lBound
+-(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))lBound
 {
-    return ^id(id posVal, CGFloat offset){
+    return ^id(id posVal, CGFloat offsetVal){
         
-        return [self __lBound:posVal offsetVal:offset];
+        return [self __lBound:posVal offsetVal:offsetVal];
     };
 }
 
@@ -257,11 +257,11 @@
     };
 }
 
--(MyLayoutPos* (^)(id posVal, CGFloat offset))uBound
+-(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))uBound
 {
-    return ^id(id posVal, CGFloat offset){
+    return ^id(id posVal, CGFloat offsetVal){
         
-        return [self __uBound:posVal offsetVal:offset];
+        return [self __uBound:posVal offsetVal:offsetVal];
     };
 }
 

@@ -1,5 +1,5 @@
 //
-//  Test6ViewController.h
+//  LLTest6ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ * 6.LinearLayout - Size limit & Flexed margin
+ */
 @interface LLTest6ViewController : UIViewController
 
 @end

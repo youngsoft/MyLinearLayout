@@ -3,6 +3,17 @@
 
 ---
 
+## [V1.3.4](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.4)(2017/3/04)
+
+#### Added
+1. 布局视图添加了新方法`-(CGRect)subview:(UIView*)subview estimatedRectInLayoutSize:(CGSize)size`用来评估一个将要加入布局视图的子视图的frame值。这个方法通常用来实现一些子视图在布局视图之间移动的动画效果的能力。具体例子参见（DEMO:AllTest4ViewController）
+
+####Changed
+1. 优化了当将一个布局视图作为视图控制器的根视图时(self.view)的一些属性设置可能导致约束冲突，和可能导致将控制器中的视图加入到一个滚动视图时无法滚动的问题。
+2. 将线性布局`MyLinearLayout`中的shrinkType属性的默认值由原来的`MySubviewsShrink_Average`改为了`MySubviewsShrink_None`，也就是默认是不压缩的。
+3. 修正了相对布局中的子视图设置`useFrame`为YES时，子视图无法自由控制自己的frame的问题。
+4. 优化了所有类以及方法和属性以及各种类型的注释，注释更加清晰明了。同时优化了所有DEMO中的注释信息。
+5. 在布局视图以及一些扩展视图中增加了IBInspectable标识，以便更好的和XIB以及SB编程结合。
 
 ## [V1.3.3](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.3)(2017/2/24)
 

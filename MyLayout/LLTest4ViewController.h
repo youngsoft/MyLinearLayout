@@ -1,5 +1,5 @@
 //
-//  Test4ViewController.h
+//  LLTest4ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *4.LinearLayout - Wrap content
+ */
 @interface LLTest4ViewController : UIViewController
 
 @end

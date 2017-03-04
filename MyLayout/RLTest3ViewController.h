@@ -1,5 +1,5 @@
 //
-//  Test16ViewController.h
+//  RLTest3ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/7/9.
@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ * 3.RelativeLayout - Centered
+ */
 @interface RLTest3ViewController : UIViewController
 
 @end

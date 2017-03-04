@@ -56,10 +56,17 @@
  */
 
 
-/*
+/**
  视图的布局位置类是用来描述视图与其他视图之间的位置关系的类。视图在进行定位时需要明确的指出其在父视图坐标轴上的水平位置(x轴上的位置）和垂直位置(y轴上的位置）。
  视图的水平位置可以用左、水平中、右三个方位的值来描述，垂直位置则可以用上、垂直中、下三个方位的值来描述。
  也就是说一个视图的位置需要用水平的某个方位的值以及垂直的某个方位的值来确定。一个位置的值可以是一个具体的数值，也可以依赖于另外一个视图的位置来确定。
+ 
+ 一个布局位置对象的最终位置值 = min(max(posVal + offsetVal, lBound.posVal+lBound.offsetVal), uBound.posVal+uBound.offsetVal)
+ 其中:
+    posVal是通过equalTo方法设置。
+    offsetVal是通过offset方法设置。
+    lBound.posVal,lBound.offsetVal是通过lBound方法设置。
+    uBound.posVal,uBound.offsetVal是通过uBound方法设置。
  */
 @interface MyLayoutPos : NSObject<NSCopying>
 
@@ -79,6 +86,8 @@
 /**
  *设置布局位置的值。参数val可以接收下面四种类型的值：
  *1.NSNumber表示位置是一个具体的数值。
+    对于框架布局和线性布局中的子视图来说，如果数值是一个大于0而小于1的数值时表示的是相对的间距或者边距。如果是相对边距那么真实的位置 = 布局视图尺寸*相对边距值；如果是相对间距那么真实的位置 = 布局视图剩余尺寸 * 相对间距值 /(所有相对间距值的总和)。
+ 
  *2.MyLayoutPos表示位置依赖于另外一个位置。
  *3.NSArray<MyLayoutPos*>表示位置和数组里面的其他位置整体居中。
  *4.nil表示位置的值被清除。
@@ -88,38 +97,70 @@
 
 /**
  *设置布局位置值的偏移量。 所谓偏移量是指布局位置在设置了某种值后增加或减少的偏移值。
- *比如：A.leftPos.equalTo(@10).offset(5)表示A视图的左边位置等于10再往右偏移5,也就是最终的左边位置是15。
- *比如：A.leftPos.equalTo(B.rightPos).offset(5)表示A视图的左边位置等于B视图的右边位置再往右偏移5.
+ *这里偏移值的正负值所表示的意义是根据位置的不同而不同的：
+   1.如果是leftPos和centerXPos那么正数表示往右偏移，负数表示往左偏移。
+   2.如果是topPos和centerYPos那么正数表示往下偏移，负数表示往上偏移。
+   3.如果是rightPos那么正数表示往左偏移，负数表示往右偏移。
+   4.如果是bottomPos那么正数表示往上偏移，负数表示往下偏移。
+ 
+ 示例代码：
+ 1.比如：A.leftPos.equalTo(@10).offset(5)表示A视图的左边边距等于10再往右偏移5,也就是最终的左边边距是15。
+ 2.比如：A.rightPos.equalTo(B.rightPos).offset(5)表示A视图的右边位置等于B视图的右边位置再往左偏移5。
  */
 -(MyLayoutPos* (^)(CGFloat val))offset;
 
+
 /**
- *设置布局位置的最小值。这个方法一般和相对位置值配合使用，不设置默认是-CGFLOAT_MAX
- *lBound方法是max方法的扩展方法，posVal除了能设置NSNumber类型外，还可以设置MyLayoutPos对象。目前如果设置为MyLayoutPos对象只有在相对布局里面的子视图才有意义,
- *表示视图的最小位置不能小于指定的位置，否则将会缩小视图的尺寸。
+ *设置位置的最小边界数值，min方法是lBound方法的简化版本。比如：A.min(10) <==>  A.lBound(@10, 0)
  */
 -(MyLayoutPos* (^)(CGFloat val))min;
--(MyLayoutPos* (^)(id posVal, CGFloat offset))lBound;
+
+/**
+ *设置布局位置的最小边界值。 如果位置对象没有设置最小边界值，那么最小边界默认就是无穷小-CGFLOAT_MAX。lBound方法除了能设置为NSNumber外，还可以设置为MyLayoutPos值，并且还可以指定最小位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最小边界值为MyLayoutPos类型的值，其他类型布局中的子视图只支持NSNumber类型的最小边界值。
+ @posVal指定位置边界值。可设置的类型有NSNumber和MyLayoutPos类型，前者表示最小位置不能小于某个常量值，而后者表示最小位置不能小于另外一个位置对象所表示的位置值。
+ @offsetVal指定位置边界值的偏移量。
+ 
+ 1.比如某个视图A的左边位置最小不能小于30则设置为：
+   A.leftPos.lBound(30,0); 或者A.leftPos.lBound(20,10);
+ 2.对于相对布局中的子视图来说可以通过lBound值来实现那些尺寸不确定但是最小边界不能低于某个关联的视图的位置的场景，比如说视图B的位置和宽度固定，而A视图的右边位置固定，但是A视图的宽度不确定，且A的最左边不能小于B视图的右边边界加20，那么A就可以设置为：
+   A.leftPos.lBound(B.rightPos, 20); //这时A是不必要指定明确的宽度的。
+ 
+ */
+-(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))lBound;
 
 
 /**
- *设置布局位置的最大值。这个方法一般和相对位置值配合使用，不设置默认是CGFLOAT_MAX
- *uBound方法是max方法的扩展方法，posVal除了能设置NSNumber类型外，还可以设置MyLayoutPos对象。目前如果设置为MyLayoutPos对象只有在相对布局里面的子视图才有意义，
- *表示视图的最大位置不能大于指定的位置，否则将会缩小视图的尺寸。
- *如果相对布局中的某个子视图同时指定了MyLayoutPos类型值的最小和最大值，那么子视图的位置将会居中于这个指定的区间，并且一旦尺寸超出指定的区间尺寸则会缩小视图的尺寸。
+ *设置位置的最大边界数值，max方法是uBound方法的简化版本。比如：A.max(10) <==>  A.uBound(@10, 0)
  */
 -(MyLayoutPos* (^)(CGFloat val))max;
--(MyLayoutPos* (^)(id posVal, CGFloat offset))uBound;
+
+/**
+ *设置布局位置的最大边界值。 如果位置对象没有设置最大边界值，那么最大边界默认就是无穷大CGFLOAT_MAX。uBound方法除了能设置为NSNumber外，还可以设置为MyLayoutPos值，并且还可以指定最大位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最大边界值为MyLayoutPos类型的值，其他类型布局中的子视图只支持NSNumber类型的最大边界值。
+ @posVal指定位置边界值。可设置的类型有NSNumber和MyLayoutPos类型，前者表示最大位置不能大于某个常量值，而后者表示最大位置不能大于另外一个位置对象所表示的位置值。
+ @offsetVal指定位置边界值的偏移量。
+ 
+ 1.比如某个视图A的左边位置最大不能超过30则设置为：
+   A.leftPos.uBound(30,0); 或者A.leftPos.uBound(30,10);
+ 2.对于相对布局中的子视图来说可以通过uBound值来实现那些尺寸不确定但是最大边界不能超过某个关联的视图的位置的场景，比如说视图B的位置和宽度固定，而A视图的左边位置固定，但是A视图的宽度不确定，且A的最右边不能超过B视图的左边边界减20，那么A就可以设置为：
+   A.reftPos.uBound(B.leftPos, -20); //这时A是不必要指定明确的宽度的。
+ 3.对于相对布局中的子视图来说可以同时通过lBound,uBound方法的设置来实现某个子视图总是在对应的两个其他的子视图中央显示且尺寸不能超过其他两个子视图边界的场景。比如说视图B要放置在A和C之间水平居中显示且不能超过A和C的边界。那么就可以设置为：
+   B.leftPos.lBound(A.rightPos,0); B.rightPos.uBound(C.leftPos,0); //这时B不用指定宽度，而且总是在A和C的水平中间显示。
+ 
+ */
+-(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))uBound;
 
 
 /**
- *清除上面方法设置的值
+ *清除所有设置的约束值，这样位置对象将不会再生效了。
  */
 -(void)clear;
 
 #endif
 
-//设置布局位置是否是活动的,默认是YES表示活动的，如果设置为NO则表示这个布局位置设置的约束将不会起作用。
+/**
+ *设置布局位置是否是活动的,默认是YES表示活动的，如果设置为NO则表示这个布局位置对象设置的约束值将不会起作用。
+ *active设置为YES和clear的相同点是位置对象设置的约束值都不会生效了，区别是前者不会清除所有设置的约束，而后者则会清除所有设置的约束。
+ */
 @property(nonatomic, assign, getter=isActive) BOOL active;
 
 

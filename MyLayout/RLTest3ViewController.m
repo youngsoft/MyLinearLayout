@@ -1,5 +1,5 @@
 //
-//  Test16ViewController.m
+//  RLTest3ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/7/9.
@@ -89,7 +89,7 @@
     titleLabel.font = [CFTool font:16];
     titleLabel.textColor = [CFTool color:4];
     [titleLabel sizeToFit];
-    titleLabel.myLeftMargin = 5;
+    titleLabel.leftPos.equalTo(@5);
     [layout addSubview:titleLabel];
     
     
@@ -106,7 +106,7 @@
     v2.centerYPos.equalTo(@0);
     [layout addSubview:v2];
     
-    //通过为centerXPos等于一个数组值，表示他们之间整体居中,还可以设置其他视图的偏移量。
+    //通过为centerXPos等于一个数组值，表示v1和v2在父布局视图之内整体水平居中,这里的20表示v1和v2之间还有20的间隔。
     v1.centerXPos.equalTo(@[v2.centerXPos.offset(20)]);
     
     
@@ -124,7 +124,7 @@
     titleLabel.font = [CFTool font:16];
     titleLabel.textColor = [CFTool color:4];
     [titleLabel sizeToFit];
-    titleLabel.myLeftMargin = 5;
+    titleLabel.leftPos.equalTo(@5);
     [layout addSubview:titleLabel];
     
     
@@ -141,7 +141,7 @@
     v2.centerXPos.equalTo(@0);
     [layout addSubview:v2];
     
-    //通过为centerYPos等于一个数组值，表示他们之间整体居中,还可以设置其他视图的偏移量。
+    //通过为centerYPos等于一个数组值，表示v1和v2在父布局视图之内整体垂直居中,这里的20表示v1和v2之间还有20的间隔。
     v1.centerYPos.equalTo(@[v2.centerYPos.offset(10)]);
     
     return layout;
@@ -157,7 +157,7 @@
     titleLabel.font = [CFTool font:16];
     titleLabel.textColor = [CFTool color:4];
     [titleLabel sizeToFit];
-    titleLabel.myLeftMargin = 5;
+    titleLabel.leftPos.equalTo(@5);
     [layout addSubview:titleLabel];
     
     UILabel *lb1up = [self createLabel:@"top left" backgroundColor:[CFTool color:5]];
@@ -180,12 +180,12 @@
     UILabel *lb3down = [self createLabel:@"bottom right" backgroundColor:[CFTool color:10]];
     [layout addSubview:lb3down];
     
-    //左，中，右三组视图分别垂直居中显示，并且下面和上面间隔10
+    //左，中，右三组视图分别整体垂直居中显示，并且下面和上面间隔10
     lb1up.centerYPos.equalTo(@[lb1down.centerYPos.offset(10)]);
     lb2up.centerYPos.equalTo(@[lb2down.centerYPos.offset(10)]);
     lb3up.centerYPos.equalTo(@[lb3down.centerYPos.offset(10)]);
     
-    //上面的三个视图水平居中显示并且间隔60
+    //上面的三个视图整体水平居中显示并且间隔60
     lb1up.centerXPos.equalTo(@[lb2up.centerXPos.offset(60),lb3up.centerXPos.offset(60)]);
     
     //下面的三个视图的水平中心点和上面三个视图的水平中心点对齐

@@ -12,36 +12,103 @@
 @interface UIView(MyFlowLayoutExt)
 
 /**
- *流式布局子视图的尺寸的比重，默认值是0。这个属性的意义根据浮动布局视图的方向而不同。
- *当流式布局是垂直流式布局，这个属性用来设置子视图宽度占用当前行的剩余宽度的比重，这样子视图就不需要明确的设定宽度值。
- *当流式布局是水平流式布局，这个属性用来设置子视图高度占用当前列的剩余高度的比重，这样子视图就不需要明确的设定高度值。
- *需要注意的是数量约束和内容约束两种布局中的weight的概念有一定的差异：
-    前者的真实尺寸值 = 剩余尺寸 * 当前子视图的比重/(子视图所在行的所有比重之和)。
-    后者的真实尺寸值 = 剩余尺寸 *当前子视图的比重。
- 举例来说，假设垂直布局视图的宽度是100，而当前视图的前面一个视图已经占据了20的宽度，那么当设置当前视图的weight为1时则当前视图的宽度就会被设定为80。
- 到一个新的行的。而如果设定为0.8则当前视图的宽度则为(100-20)*0.8 = 64了。
+ *设置视图在流式布局父视图中的尺寸的比重。默认值是0,表示默认不使用比重。这个属性的意义根据流式布局的方向和类型的不同而不同：
+  1.当流式布局是垂直流式布局时这个属性用来设置视图宽度占用父流式布局当前行的剩余宽度的比重，这样视图就不需要明确的设定宽度值。
+  2.当流式布局是水平流式布局时这个属性用来设置视图高度占用父流式布局当前列的剩余高度的比重，这样视图就不需要明确的设定高度值。
+ 
+同时在数量约束和内容约束两种布局中视图设置的比重值在最终计算出真实尺寸时也是有差异的：
+  1.数量约束流式布局内的视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重/(视图所在行的所有设置了weight比重值的视图比重之和)。
+  2.内容约束流式布局内的视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重。
 
+ 
+ 对一个垂直数量约束流式布局举例来说：假设布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么:
+       A子视图的宽度 = 20
+       B子视图的宽度 = (100-20)*0.4/(0.4+0.6) = 32
+       C子视图的宽度 = (100-20)*0.6/(0.4+0.6) = 48
+
+ 对一个垂直内容约束流式布局举例来说：假设布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么：
+       A子视图的宽度 = 20
+       B子视图的宽度 = (100-20)*0.4 = 32
+       C子视图的宽度 = (100-20-32)*0.6 = 28.8
+ 
+注意上面子视图的weight属性设置在数量约束流式布局里面和内容约束流式布局中的意义的差异。
+ 
  */
-@property(nonatomic, assign)  CGFloat weight;
+@property(nonatomic, assign) IBInspectable CGFloat weight;
 
 @end
 
 /**
- *流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一行再重新排列的多行多列展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，而换行的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
+ *流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一排再重新排列的多行多列展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，排列的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
  1.垂直数量约束流式布局
  orientation为MyLayoutViewOrientation_Vert,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,不支持autoArrange。
+ 
+ 
+每排数量为3的垂直数量约束流式布局
+            =>
+   +------+---+-----+
+   |  A   | B |  C  |
+   +---+--+-+-+-----+
+   | D |  E |   F   |  |
+   +---+-+--+--+----+  v
+   |  G  |  H  | I  |
+   +-----+-----+----+
 
  2.垂直内容约束流式布局.
     orientation为MyLayoutViewOrientation_Vert,arrangedCount为0,支持wrapContentHeight,不支持wrapContentWidth,支持autoArrange。
+ 
+     垂直内容约束流式布局
+           =>
+   +-----+-----------+
+   |  A  |     B     |
+   +-----+-----+-----+
+   |  C  |  D  |  E  |  |
+   +-----+-----+-----+  v
+   |        F        |
+   +-----------------+
+ 
  
  
  3.水平数量约束流式布局。
  orientation为MyLayoutViewOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,不支持autoArrange。
  
+ 每排数量为3的水平数量约束流式布局
+            =>
+    +-----+----+-----+
+    |  A  | D  |     |
+    |     |----|  G  |
+    |-----|    |     |
+ |  |  B  | E  |-----|
+ V  |-----|    |     |
+    |     |----|  H  |
+    |  C  |    |-----|
+    |     | F  |  I  |
+    +-----+----+-----+
+
+ 
+ 
  4.水平内容约束流式布局
     orientation为MyLayoutViewOrientation_Horz,arrangedCount为0,不支持wrapContentHeight,支持wrapContentWidth,支持autoArrange。
  
- 流式布局支持子视图的宽度依赖于高度或者高度依赖于宽度,以及高度或者宽度依赖于流式布局本身的高度或者宽度
+ 
+     水平内容约束流式布局
+            =>
+    +-----+----+-----+
+    |  A  | C  |     |
+    |     |----|     |
+    |-----|    |     |
+ |  |     | D  |     |
+ V  |     |    |  F  |
+    |  B  |----|     |
+    |     |    |     |
+    |     | E  |     |
+    +-----+----+-----+
+ 
+
+ 
+ 
+ 流式布局中排的概念是一个通用的称呼，对于垂直方向的流式布局来说一排就是一行，垂直流式布局每排依次从上到下排列，每排内的子视图则是由左往右依次排列；对于水平方向的流式布局来说一排就是一列，水平流式布局每排依次从左到右排列，每排内的子视图则是由上往下依次排列
+ 
  */
 @interface MyFlowLayout : MyBaseLayout
 
@@ -52,12 +119,13 @@
 -(instancetype)initWithFrame:(CGRect)frame orientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
 +(instancetype)flowLayoutWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
 
+
 /**
- *流式布局的方向：
- *如果是MyLayoutViewOrientation_Vert则表示从左到右，从上到下的垂直布局方式，这个方式是默认方式。
- *如果是MyLayoutViewOrientation_Horz则表示从上到下，从左到右的水平布局方式
+ *流式布局的布局方向
+ *如果是MyLayoutViewOrientation_Vert则表示每排先从左到右，再从上到下的垂直布局方式，这个方式是默认方式。
+ *如果是MyLayoutViewOrientation_Horz则表示每排先从上到下，在从左到右的水平布局方式。
  */
-@property(nonatomic,assign)  MyLayoutViewOrientation orientation;
+@property(nonatomic,assign) IBInspectable MyLayoutViewOrientation orientation;
 
 
 /**
@@ -73,11 +141,9 @@
 
 
 /**
- *指定方向上的子视图的数量，默认是0表示为内容约束流式布局，当数量不为0时则是数量约束流式布局。当值为0时则表示当子视图在方向上的尺寸超过布局视图时则会新起一行或者一列。而如果数量不为0时则：
- 如果方向为MyLayoutViewOrientation_Vert，则表示从左到右的数量，当子视图从左往右满足这个数量后新的子视图将会换行再排列
- 如果方向为MyLayoutViewOrientation_Horz，则表示从上到下的数量，当子视图从上往下满足这个数量后新的子视图将会换列再排列
+ *指定方向上每排的子视图数量，默认是0表示为内容约束流式布局，当数量不为0时则是数量约束流式布局。当值为0时则表示当子视图在指定方向上的尺寸超过布局视图的尺寸时则会新起一排。而如果数量不为0时则每排内子视图数量超过这个值时就会新起一排。
  */
-@property(nonatomic, assign)  NSInteger arrangedCount;
+@property(nonatomic, assign) IBInspectable  NSInteger arrangedCount;
 
 
 
@@ -109,7 +175,7 @@
      8  10 12
  
  */
-@property(nonatomic, assign) NSInteger pagedCount;
+@property(nonatomic, assign) IBInspectable NSInteger pagedCount;
 
 
 
@@ -117,23 +183,30 @@
  *子视图自动排列,这个属性只有在内容填充约束流式布局下才有用,默认为NO.当设置为YES时则根据子视图的内容自动填充，而不是根据加入的顺序来填充，以便保证不会出现多余空隙的情况。
  *请在将所有子视图添加完毕并且初始布局完成后再设置这个属性，否则如果预先设置这个属性则在后续添加子视图时非常耗性能。
  */
-@property(nonatomic,assign)  BOOL autoArrange;
+@property(nonatomic,assign) IBInspectable BOOL autoArrange;
 
 
 /**
- *流式布局中每排子视图的停靠对齐位置设定。
- 如果是MyLayoutViewOrientation_Vert则只用于表示每行子视图的上中下停靠对齐位置，这个属性只支持MyMarginGravity_Vert_Top，MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom,MyMarginGravity_Vert_Fill这里的对齐基础是以每行中的最高的子视图为基准。
- 如果是MyLayoutViewOrientation_Horz则只用于表示每列子视图的左中右停靠对齐位置，这个属性只支持MyMarginGravity_Horz_Left，MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right,MyMarginGravity_Horz_Fill这里的对齐基础是以每列中的最宽的子视图为基准。
+ *设置流式布局中每排子视图的对齐方式。
+ 如果布局的方向是MyLayoutViewOrientation_Vert则表示每排子视图的上中下对齐方式，这里的对齐基础是以每排中的最高的子视图为基准。这个属性只支持：
+    MyMarginGravity_Vert_Top     顶部对齐
+    MyMarginGravity_Vert_Center  垂直居中对齐
+    MyMarginGravity_Vert_Bottom  底部对齐
+    MyMarginGravity_Vert_Fill    两端对齐
+ 如果布局的方向是MyLayoutViewOrientation_Horz则表示每排子视图的左中右对齐方式，这里的对齐基础是以每排中的最宽的子视图为基准。这个属性只支持：MyMarginGravity_Horz_Left    左边对齐
+     MyMarginGravity_Horz_Center  水平居中对齐
+     MyMarginGravity_Horz_Right   右边对齐
+     MyMarginGravity_Horz_Fill    两端对齐
  */
 @property(nonatomic,assign)  MyMarginGravity arrangedGravity;
 
 
 /**
- *子视图之间的垂直和水平的间距，默认为0。当子视图之间的间距是固定时可以通过直接设置这两个属性值来指定间距而不需要为每个子视图来设置margin值。
+ *布局内所有子视图之间的垂直和水平的间距，默认为0。当每个子视图之间的间距都是一样时可以通过直接设置这三个属性值来指定间距而不需要为每个子视图来单独设置。
  */
-@property(nonatomic ,assign)  CGFloat subviewVertMargin;
-@property(nonatomic, assign)  CGFloat subviewHorzMargin;
-@property(nonatomic, assign)  CGFloat subviewMargin;  //同时设置水平和垂直间距。
+@property(nonatomic ,assign) IBInspectable CGFloat subviewVertMargin;
+@property(nonatomic, assign) IBInspectable CGFloat subviewHorzMargin;
+@property(nonatomic, assign) IBInspectable CGFloat subviewMargin;  //同时设置水平和垂直间距。
 
 
 
@@ -161,7 +234,7 @@
  如果是MyLayoutViewOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
  内容填充约束流式布局下averageArrange设置为YES时表示拉伸子视图的宽度或者高度以便填充满整个布局视图。
  */
-@property(nonatomic,assign)  BOOL averageArrange MYDEPRECATED("use gravity = MyMarginGravity_Horz_Fill or gravity = MyMarginGravity_Vert_Fill to replace");
+@property(nonatomic,assign)  BOOL averageArrange MYDEPRECATED("use gravity = MyMarginGravity_Horz_Fill or gravity = MyMarginGravity_Vert_Fill to instead");
 
 
 @end

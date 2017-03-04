@@ -18,6 +18,10 @@
 
 -(void)loadView
 {
+    /*
+        这个例子用来介绍MyLayout对sizeClasses的支持的能力
+     */
+    
     //默认设置为垂直布局
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);

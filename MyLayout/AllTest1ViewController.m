@@ -1,5 +1,5 @@
 //
-//  Test9ViewController.m
+//  AllTest1ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -198,6 +198,7 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //如果使用了布局来评估cell高度的话，那么请不要使用- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath 这个方法，否则可能造成系统崩溃！！！
     AllTest1TableViewCell *cell = (AllTest1TableViewCell*)[tableView dequeueReusableCellWithIdentifier:@"alltest1_cell"];
     if (cell == nil)
         cell = [[AllTest1TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"alltest1_cell"];

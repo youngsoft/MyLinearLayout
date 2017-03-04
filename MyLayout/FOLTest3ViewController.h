@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *3.FloatLayout - Card news
+ */
 @interface FOLTest3ViewController : UIViewController
 
 @end

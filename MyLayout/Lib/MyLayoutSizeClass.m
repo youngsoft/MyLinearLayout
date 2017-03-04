@@ -561,7 +561,7 @@
                                           (long)self.arrangedCount,
                                           self.autoArrange ? @"YES":@"NO",
                                           self.arrangedGravity,
-                                          self.pagedCount
+                                          (long)self.pagedCount
                                           ];
     
     return dbgDesc;

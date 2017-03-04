@@ -1,5 +1,5 @@
 //
-//  Test10ViewController.h
+//  LLTest7ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ * 7.LinearLayout - Average size&space
+ */
 @interface LLTest7ViewController : UIViewController
 
 @end

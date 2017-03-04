@@ -1,5 +1,5 @@
 //
-//  Test14ViewController.m
+//  RLTest2ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/7/6.
@@ -39,7 +39,7 @@
 -(void)loadView
 {
     /*
-       这个例子展示的是相对布局里面 多个子视图按比例分配宽度或者高度的实现机制，通过对子视图扩展的MyLayoutSize尺寸对象的equalTo方法的值设置为一个数组对象，即可实现尺寸的按比例分配能力。而这个方法要比AutoLayout实现起来要简单的多。
+       这个例子展示的是相对布局里面 多个子视图按比例分配宽度或者高度的实现机制，通过对子视图扩展的MyLayoutSize尺寸对象的equalTo方法的值设置为一个数组对象，即可实现尺寸的按比例分配能力。
      */
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
@@ -115,7 +115,7 @@
     [rootLayout addSubview:v6];
     
     
-    //v4固定,v5,v6按一定的比例来平分父视图的宽度，这里同样也是因为每个子视图之间有间距，因此都要减10
+    //v4宽度固定,v5,v6按一定的比例来平分父视图的宽度，这里同样也是因为每个子视图之间有间距，因此都要减10
     v5.widthDime.equalTo(@[v4.widthDime.add(-10), v6.widthDime.add(-10)]).add(-10);
     
     

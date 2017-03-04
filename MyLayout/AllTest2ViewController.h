@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-
+/**
+ *2.UITableView - Static height
+ */
 @interface AllTest2ViewController : UITableViewController
 
 @end

@@ -1,5 +1,5 @@
 //
-//  Test12ViewController.h
+//  AllTest3ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/6/24.
@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+/**
+ *3.Replacement of UITableView
+ */
 @interface AllTest3ViewController : UIViewController
 
 @end

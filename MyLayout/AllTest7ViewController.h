@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *❁1.Screen perfect fit - Demo1
+ */
 @interface AllTest7ViewController : UIViewController
 
 @end

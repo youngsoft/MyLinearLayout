@@ -27,9 +27,9 @@
 
 @interface FOLTest3ViewController ()
 
-@property(nonatomic, strong) MyFloatLayout *floatLayout;
+@property(nonatomic, weak) MyFloatLayout *floatLayout;
 
-@property(nonatomic, strong) NSMutableArray *datas;
+@property(nonatomic, strong) NSMutableArray<FOLTest3DataModel*> *datas;
 
 
 @end
@@ -89,12 +89,13 @@
     
     [super viewDidLoad];
     
-    _floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    _floatLayout.myMargin = 0;  //浮动布局和父视图四周的边界是0，也就是说浮动布局的宽度和高度和父视图相等。
-     [self.view addSubview:_floatLayout];
+    MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    floatLayout.myMargin = 0;  //浮动布局和父视图四周的边界是0，也就是说浮动布局的宽度和高度和父视图相等。
+    [self.view addSubview:floatLayout];
+    self.floatLayout = floatLayout;
     
     //通过智能分界线的使用，浮动布局里面的所有子布局视图的分割线都会进行智能的设置，从而解决了我们需求中需要提供边界线的问题。
-    _floatLayout.IntelligentBorderLine = [[MyBorderLineDraw alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+    floatLayout.IntelligentBorderLine = [[MyBorderLineDraw alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
 
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"change style", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleStyleChange:)];

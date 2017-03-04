@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *6.FloatLayout - User Profiles
+ */
 @interface FOLTest6ViewController : UIViewController
 
 @end

@@ -12,21 +12,51 @@
 @interface UIView(MyLinearLayoutExt)
 
 /**
- *设置子视图在垂直线性布局中的高度尺寸比重值和在水平线性布局下的宽度尺寸比重值。设置的范围是 0<=weight<=1。所谓比重指的是一个相对的尺寸值，视图的真实尺寸会根据布局视图的剩余尺寸乘以这个比重值所占的比例来得到真实的尺寸。假如一个垂直线性布局的高度为100，里面有A,B,C三个子视图。其中A视图的高度为20，B视图的高度比重值为0.4，C视图的高度比重值为0.6。那么最终视图A的高度是20，而视图B的高度就是(100 - 20)*(0.4/(0.4+0.6))=32，而视图C的高度就是(100 - 20)*(0.6/(0.4+0.6))=48。可以看到通过比重值的设置我们不需要明确的指定具体的尺寸，而是根据布局视图的尺寸大小来动态的决定自己的尺寸。使用比重时需要注意的几个点：
-     1.垂直线性布局必须指定明确的高度，而不能使用wrapContentHeight属性；水平线性布局必须指定明确的宽度，而不能使用wrapContentWidth属性；
-     2.如果比重属性如果设置为0的话则表示视图的尺寸必须要明确的被指定，这也是默认值。
-     3.线性布局里面的子视图的比重值的和不一定要求是1，比如线性布局里面两个视图的比重都设置为1和都设置为0.5以及都设置为0.1的意义是一样的，都是占用50%。
+ *设置视图在线性布局父视图中的尺寸的比重。默认值是0,表示默认不使用比重。这个属性的意义根据线性布局的方向的不同而不同：
+  1.当线性布局是垂直线性布局时这个属性用来设置视图高度占用父线性布局剩余高度的比重，这样视图就不需要明确的设定高度值。
+  2.当线性布局是水平线性布局时这个属性用来设置视图宽度占用父线性布局剩余宽度的比重，这样视图就不需要明确的设定宽度值。
+ 
+     视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重/(布局视图内所有设置了weight比重值的子视图比重之和)。
+ 
+ 对一个垂直线性布局举例来说：假设布局视图的高度是100，A子视图占据了20的固定高度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么:
+    A子视图的高度 = 20
+    B子视图的高度 = (100-20)*0.4/(0.4+0.6) = 32
+    C子视图的高度 = (100-20)*0.6/(0.4+0.6) = 48
+ 
+
+ 视图使用weight属性时要注意如下几点：
+  1.垂直线性布局必须指定明确的高度，而不能使用wrapContentHeight属性；水平线性布局必须指定明确的宽度，而不能使用wrapContentWidth属性、
+  2.如果比重属性设置为0的话则表示视图的尺寸必须要明确的被指定，这也是默认值。
+  3.线性布局里面的所有子视图的比重值的和不一定要求是1，比如线性布局里面两个视图的比重都设置为1和都设置为0.5以及都设置为0.1的意义是一样的，都是占用50%。
  *
  */
-@property(nonatomic, assign)  CGFloat weight;
+@property(nonatomic, assign) IBInspectable CGFloat weight;
 
 @end
 
 
 
+
+
 /**
- *线性布局是一种里面的子视图按添加的顺序从上到下或者从左到右依次排列的单列(单行)布局视图，因此里面的子视图是通过添加的顺序建立约束和依赖关系的。 
- *子视图从上到下依次排列的线性布局视图称为垂直线性布局视图，而子视图从左到右依次排列的线性布局视图则称为水平线性布局。
+ *线性布局是一种里面的子视图按添加的顺序从上到下或者从左到右依次排列的单行(单列)布局视图。线性布局里面的子视图是通过添加的顺序建立约束和依赖关系的。
+ *根据排列的方向我们把子视图从上到下依次排列的线性布局视图称为垂直线性布局视图，而把子视图从左到右依次排列的线性布局视图则称为水平线性布局。
+    垂直线性布局
+    +-------+
+    |   A   |
+    +-------+
+    |   B   |
+    +-------+  ⥥
+    |   C   |
+    +-------+
+    |  ...  |
+    +-------+
+ 
+           水平线性布局
+    +-----+-----+-----+-----+
+    |  A  |  B  |  C  | ... |
+    +-----+-----+-----+-----+
+                ⥤
  */
 @interface MyLinearLayout : MyBaseLayout
 
@@ -41,7 +71,7 @@
 /**
  *线性布局的布局方向。
  */
-@property(nonatomic,assign)  MyLayoutViewOrientation orientation;
+@property(nonatomic,assign) IBInspectable MyLayoutViewOrientation orientation;
 
 
 /**
@@ -53,16 +83,73 @@
  *MyMarginGravity_Vert_Fill 在垂直线性布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平线性布局里面表示每个个子视图的高度都将和父视图保持一致，这样就不再需要设置子视图的高度了。
  *MyMarginGravity_Horz_Fill 在水平线性布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直线性布局里面表示每个子视图的宽度都将和父视图保持一致，这样就不再需要设置子视图的宽度了。
  */
-@property(nonatomic, assign)  MyMarginGravity gravity;
+@property(nonatomic, assign) IBInspectable MyMarginGravity gravity;
 
 
 /**
  *设置布局视图里面子视图之间的间距。如果是垂直线性布局则设置的是垂直间距，如果是水平线性布局则设置的是水平间距。两个视图之间的最终间距等于MyLayoutPos设置的间距加上subviewMargin设置的间距的和。
  */
-@property(nonatomic, assign)  CGFloat subviewMargin;
+@property(nonatomic, assign) IBInspectable CGFloat subviewMargin;
+
 
 /**
- *设置当子视图里面有设置weight或者相对尺寸时，并且有固定尺寸和间距的子视图的总和大于布局视图的高度时，如何压缩那些固定尺寸和间距的视图的方式。默认的值是：MySubviewsShrink_Average|MySubviewsShrink_Size， 也就是0。表明会平均的缩小固定的视图的尺寸。在设置时可以进行压缩类型和压缩方式的或运算方法。具体的方法见MySubviewsShrinkType中的各种值的定义。
+ * 用来设置当线性布局中的子视图的尺寸大于线性布局的尺寸时的子视图压缩策略。默认值是MySubviewsShrink_None。
+ 这个枚举类型定义了在线性布局里面当某个子视图的尺寸设置为weight比重值或者间距为相对间距时，并且其他剩余的子视图的尺寸和间距的总和要大于
+ 布局视图本身的尺寸时，对那些具有固定尺寸的子视图的处理方式。需要强调的是只有当子视图的尺寸和间距总和大于布局视图的尺寸时才有意义，否则无意义。
+ 比如某个垂直线性布局的高度是100。 里面分别有A,B,C,D四个子视图。其中:
+ A.topPos = 10
+ A.height = 50
+ B.topPos = 0.1
+ B.weight = 0.2
+ C.height = 60
+ D.topPos = 20
+ D.weight = 0.7
+ 
+ 那么这时候所有具有固定尺寸和间距的子视图高度总和 = A.topPos + A.height + C.height +D.topPos = 140 > 100。
+ 这里面多出了40的高度值，并且B和D设置了尺寸和间距的相对值，因此满足压缩条件。那么这时候我们可以用如下压缩策略来处理所有具有固定尺寸的子视图：
+ 
+ 
+ 1. MySubviewsShrink_None(这是布局的默认设置属性):
+ 这种情况下即使是固定的视图的尺寸超出也不会进行任何压缩！！！！
+ 
+ 2. MySubviewsShrink_Average (平均压缩)
+ 这种情况下，我们只会压缩那些具有固定尺寸的子视图A和C的高度，每个子视图被压缩的值是：剩余的尺寸40 / 固定尺寸的子视图数量2 = 20。 这样:
+ A的最终高度 = 50 - 20 = 30
+ C的最终高度 = 60 - 20 = 40
+ 
+ 3.MySubviewsShrink_Weight (按比例压缩)
+ 这种情况下，我们只会压缩那些具有固定尺寸的子视图A和C的高度，这些固定尺寸的子视图高度总和为50 + 60 = 110. 这样：
+ A的最终高度 = 50 - 40 *(50/110) = 32
+ C的最终高度 = 60 - 40 *（60/110) = 38
+ 
+ 
+ 
+ 4.MySubviewsShrink_Auto (自动压缩，只对水平线性布局有效）
+ 假如某个水平线性布局里面里面有左右2个UILabel A和B。A和B的宽度都不确定，但是二者不能覆盖重叠，而且当间距小于一个值后要求自动换行。因为宽度都不确定所以不能为子视图指定具体的宽度值和最大最小的宽度值，但是又要利用好剩余的空间，这时候就可以用这个属性。比如下面的例子：
+ 
+ MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+ horzLayout.myLeftMargin = horzLayout.myRightMargin = 0;
+ horzLayout.wrapContentHeight = YES;
+ horzLayout.subviewMargin = 10;  //二者的最小间距不能小于20
+ horzLayout.shrinkType = MySubviewsShrink_Auto;
+ 
+ UILabel *A = [UILabel new];
+ A.text = @"xxxxxxx";
+ A.widthDime.equalTo(A.widthDime); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
+ A.wrapContentHeight = YES;        //自动换行
+ A.rightPos.equalTo(@0.5);         //右边间距是剩余的50%
+ [horzLayout addSubview:A];
+ 
+ 
+ UILabel *B = [UILabel new];
+ B.text = @"XXXXXXXX";
+ B.widthDime.equalTo(B.widthDime); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
+ B.wrapContentHeight = YES;        //自动换行
+ B.leftPos.equalTo(@0.5);         //左边间距是剩余的50%
+ [horzLayout addSubview:B];
+ 
+ 
+ 
  */
 @property(nonatomic, assign) MySubviewsShrinkType shrinkType;
 
@@ -77,7 +164,7 @@
 -(void)averageSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 /**
- *均分子视图，并指定固定的边距。上面的函数会导致子视图的高度或者宽度和他们之间的间距相等，而这个函数则表示间距是一个指定的值而子视图的高度或者宽度则会被均分。
+ *均分子视图，并指定固定的间距。上面的函数会导致子视图的高度或者宽度和他们之间的间距相等，而这个函数则表示间距是一个指定的值而子视图的高度或者宽度则会被均分。
  *这个函数只对已经加入布局的视图有效，函数调用后加入的子视图无效。
  *@centered参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
  *@sizeClass参数表示设置在指定sizeClass下进行子视图高度或者宽度的均分以及间距的指定

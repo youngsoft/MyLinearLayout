@@ -12,7 +12,7 @@
 
 @interface TLTest3ViewController ()
 
-@property(nonatomic, strong) MyTableLayout *tableLayout;
+@property(nonatomic, weak) MyTableLayout *tableLayout;
 
 @end
 
@@ -32,10 +32,10 @@
     [self.view addSubview:scrollView];
     
     //建立一个垂直表格
-    self.tableLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    self.tableLayout.myLeftMargin = self.tableLayout.myRightMargin = 0;  //宽度和非布局父视图一样宽
-    [scrollView addSubview:self.tableLayout];
-    
+    MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    tableLayout.myLeftMargin = tableLayout.myRightMargin = 0;  //宽度和非布局父视图一样宽
+    [scrollView addSubview:tableLayout];
+    self.tableLayout = tableLayout;
     
     //建立一个表格外边界的边界线。颜色为黑色，粗细为3.
     MyBorderLineDraw *outerBorderLine = [[MyBorderLineDraw alloc] initWithColor:[CFTool color:4]];

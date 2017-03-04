@@ -16,7 +16,7 @@ static CGFloat sTagWidth = 70;
 
 @interface FOLTest4ViewController ()
 
-@property(nonatomic, strong) MyLinearLayout *contentLayout;
+@property(nonatomic, weak) MyLinearLayout *contentLayout;
 
 @property(nonatomic, strong) NSArray *datas;
 
@@ -143,15 +143,16 @@ static CGFloat sTagWidth = 70;
     
     
     //添加数据内容布局
-    self.contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    self.contentLayout.backgroundColor = [CFTool color:0];
-    self.contentLayout.gravity = MyMarginGravity_Horz_Fill;
-    self.contentLayout.subviewMargin = 10;
-    self.contentLayout.padding = UIEdgeInsetsMake(10, 0, 10, 0);
-    [rootLayout addSubview:self.contentLayout];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    contentLayout.backgroundColor = [CFTool color:0];
+    contentLayout.gravity = MyMarginGravity_Horz_Fill;
+    contentLayout.subviewMargin = 10;
+    contentLayout.padding = UIEdgeInsetsMake(10, 0, 10, 0);
+    [rootLayout addSubview:contentLayout];
+    self.contentLayout = contentLayout;
     
     //默认第一个风格。
-    [self style1Layout:self.contentLayout];
+    [self style1Layout:contentLayout];
  
 }
 

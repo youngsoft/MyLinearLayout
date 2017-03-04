@@ -1,5 +1,5 @@
 //
-//  Test14ViewController.h
+//  RLTest2ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/7/6.
@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ * 2.RelativeLayout - Prorate size
+ */
 @interface RLTest2ViewController : UIViewController
 
 @end

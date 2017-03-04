@@ -941,15 +941,8 @@ BOOL _hasBegin;
 
 
 
-//只获取计算得到尺寸，不进行真正的布局。
--(CGRect)estimateLayoutRect:(CGSize)size
+-(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
-    return [self estimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny];
-}
-
--(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass
-{
-    
     self.myFrame.sizeClass = [self myBestSizeClass:sizeClass];
     for (UIView *sbv in self.subviews)
     {
@@ -957,20 +950,20 @@ BOOL _hasBegin;
     }
     
     BOOL hasSubLayout = NO;
-    CGSize selfSize= [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
+    CGSize selfSize= [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass sbs:sbs];
     
     if (hasSubLayout)
     {
         self.myFrame.width = selfSize.width;
         self.myFrame.height = selfSize.height;
         
-        selfSize = [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass];
+        selfSize = [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass sbs:sbs];
     }
     
     self.myFrame.width = selfSize.width;
     self.myFrame.height = selfSize.height;
-
-
+    
+    
     
     //计算后还原为默认sizeClass
     for (UIView *sbv in self.subviews)
@@ -982,8 +975,33 @@ BOOL _hasBegin;
     
     
     return CGRectMake(0, 0, selfSize.width, selfSize.height);
-    
 }
+
+//只获取计算得到尺寸，不进行真正的布局。
+-(CGRect)estimateLayoutRect:(CGSize)size
+{
+    return [self estimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny];
+}
+
+-(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass
+{
+    return [self estimateLayoutRect:size inSizeClass:sizeClass sbs:nil];
+}
+
+
+-(CGRect)subview:(UIView*)subview estimatedRectInLayoutSize:(CGSize)size
+{
+    if (subview.superview == self)
+        return subview.frame;
+    
+    NSMutableArray *sbs = [self getLayoutSubviews];
+    [sbs addObject:subview];
+    
+    [self estimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny sbs:sbs];
+    
+    return [subview estimatedRect];
+}
+
 
 
 
@@ -1340,6 +1358,26 @@ BOOL _hasBegin;
 {
     [super willMoveToSuperview:newSuperview];
     
+    
+    //特殊处理如果视图是控制器根视图则取消wrapContentWidth, wrapContentHeight,以及adjustScrollViewContentSizeMode的设置。
+    @try {
+        
+        if (newSuperview != nil)
+        {
+            id vc = [self valueForKey:@"viewDelegate"];
+            if (vc != nil)
+            {
+                [self setWrapContentWidthNoLayout:NO];
+                [self setWrapContentHeightNoLayout:NO];
+                self.adjustScrollViewContentSizeMode = MyLayoutAdjustScrollViewContentSizeModeNo;
+            }
+        }
+        
+    } @catch (NSException *exception) {
+        
+    }
+    
+    
 #ifdef DEBUG
     
     if (self.wrapContentHeight && self.heightDime.dimeVal != nil)
@@ -1355,6 +1393,7 @@ BOOL _hasBegin;
     }
     
 #endif
+    
     
     
     
@@ -1558,7 +1597,7 @@ BOOL _hasBegin;
 
         //计算布局
         CGSize oldSelfSize = self.bounds.size;
-        CGSize newSelfSize = [self calcLayoutRect:[self calcSizeInNoLayoutSuperview:self.superview currentSize:oldSelfSize] isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass];
+        CGSize newSelfSize = [self calcLayoutRect:[self calcSizeInNoLayoutSuperview:self.superview currentSize:oldSelfSize] isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass sbs:nil];
         
         //设置子视图的frame并还原
         for (UIView *sbv in self.subviews)
@@ -1566,7 +1605,7 @@ BOOL _hasBegin;
             CGPoint ptorigin = sbv.bounds.origin;
             
             MyFrame *myFrame = sbv.myFrame;
-            if (myFrame.leftPos != CGFLOAT_MAX && myFrame.topPos != CGFLOAT_MAX && !sbv.noLayout)
+            if (myFrame.leftPos != CGFLOAT_MAX && myFrame.topPos != CGFLOAT_MAX && !sbv.noLayout && !sbv.useFrame)
             {
                 if (myFrame.width < 0)
                 {
@@ -1763,7 +1802,7 @@ BOOL _hasBegin;
 
 #pragma mark -- Private Method
 
--(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
+-(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
     CGSize selfSize;
     if (isEstimate)

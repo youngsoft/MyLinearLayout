@@ -1,5 +1,5 @@
 //
-//  Test6ViewController.m
+//  LLTest6ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -33,9 +33,8 @@
      */
     
     /*
-       1.如果把一个布局视图作为视图控制器根视图请务必将wrapContentHeight和wrapContentWidth设置为NO。
-       2.如果想让一个布局视图的宽度和非布局视图的宽度相等则请将布局视图的myLeftMargin = myRightMargin = 0或者widthDime.equalTo(superview.widthDime)
-       3.如果想让一个布局视图的高度和非布局视图的高度相等则请将布局视图的myTopMargin = myBottomMargin = 0或者heightDime.equalTo(superview.heightDime)
+       1.如果想让一个布局视图的宽度和非布局父视图的宽度相等则请将布局视图的myLeftMargin = myRightMargin = 0或者widthDime.equalTo(superview.widthDime)
+       2.如果想让一个布局视图的高度和非布局父视图的高度相等则请将布局视图的myTopMargin = myBottomMargin = 0或者heightDime.equalTo(superview.heightDime)
      */
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
@@ -64,7 +63,7 @@
     [userInfoLabel sizeToFit];
     userInfoLabel.myTopMargin = 10;
     userInfoLabel.myCenterXOffset = 0;
-    userInfoLabel.widthDime.uBound(rootLayout.widthDime, 0, 1);  //最大的宽度和父视图相等。
+    userInfoLabel.widthDime.uBound(rootLayout.widthDime, 0, 1);  //最大的宽度和父视图相等，这里第二个参数是第一个值的增量，第三个参数是第一个值的倍数
     [rootLayout addSubview:userInfoLabel];
     
     
@@ -88,7 +87,7 @@
     nameField.myHeight = 40;
     nameField.myLeftMargin = 0.1;
     nameField.myRightMargin = 0.1;
-    nameField.myTopMargin = 0.1;     //高度为40，左右间距为布局的10%, 顶部间距为剩余空间的10%
+    nameField.myTopMargin = 0.1;     //高度为40，左右边距为布局的10%, 顶部间距为剩余空间的10%
     [rootLayout addSubview:nameField];
     
     
@@ -116,7 +115,7 @@
     textView.layer.cornerRadius = 5;
     textView.delegate = self;
 
-    //左右间距为布局的10%，距离底部间距为65%,浮动高度，但高度最高为300，最低为30
+    //左右边距为布局的10%，距离底部间距为65%,高度自适应，但高度最高为300，最低为30
     //wrapContentHeight和max,min的结合能做到一些完美的自动伸缩功能。
     textView.myLeftMargin = 0.05;
     textView.myRightMargin = 0.05;
@@ -130,7 +129,7 @@
     copyRightLabel.text = NSLocalizedString(@"copy rights reserved by Youngsoft", @"");
     copyRightLabel.textColor = [CFTool color:4];
     copyRightLabel.font = [CFTool font:15];
-    copyRightLabel.myBottomMargin = 20;   //总是固定在底部20的边距,因为上面的textView用了底部相对间距。
+    copyRightLabel.myBottomMargin = 20;   //总是固定在底部20的间距,因为上面的textView用了底部相对间距。
     copyRightLabel.myCenterXOffset = 0;
     [copyRightLabel sizeToFit];
     [rootLayout addSubview:copyRightLabel];

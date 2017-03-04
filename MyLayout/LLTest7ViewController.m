@@ -1,5 +1,5 @@
 //
-//  Test10ViewController.m
+//  LLTest7ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -151,22 +151,22 @@
     
     switch (sender.tag) {
         case 100:
-            [self.testLayout averageSubviews:NO];  //均分所有子视图尺寸和间距不留最外面边距
+            [self.testLayout averageSubviews:NO];  //均分所有子视图尺寸和间距不留最外面间距
             break;
         case 200:
-            [self.testLayout averageSubviews:YES];  //均分所有子视图的尺寸和间距保留最外边距
+            [self.testLayout averageSubviews:YES];  //均分所有子视图的尺寸和间距保留最外间距
             break;
         case 300:
-            [self.testLayout averageSubviews:NO withMargin:40]; //均分所有子视图尺寸，固定边距，不保留最外边距
+            [self.testLayout averageSubviews:NO withMargin:40]; //均分所有子视图尺寸，固定间距，不保留最外间距
             break;
         case 400:
-            [self.testLayout averageSubviews:YES withMargin:40];  //均分所有子视图尺寸，固定边距，保留最外边距
+            [self.testLayout averageSubviews:YES withMargin:40];  //均分所有子视图尺寸，固定间距，保留最外间距
             break;
         case 500:
-            [self.testLayout averageMargin:NO];   //均分所有边距，子视图尺寸不变，不保留最外边距
+            [self.testLayout averageMargin:NO];   //均分所有间距，子视图尺寸不变，不保留最外间距
             break;
         case 600:
-            [self.testLayout averageMargin:YES];  //均分所有边距，子视图尺寸不变，保留最外边距。
+            [self.testLayout averageMargin:YES];  //均分所有间距，子视图尺寸不变，保留最外间距。
             break;
         default:
             break;

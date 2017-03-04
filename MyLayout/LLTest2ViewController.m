@@ -1,5 +1,5 @@
 //
-//  Test2ViewController.m
+//  LLTest2ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -25,8 +25,7 @@
 {
     /*
        本例子用来实现将一个布局视图嵌入到一个UIScrollView里面的功能。
-       我们可以把一个布局视图作为一个子视图加入到UIScrollView中，布局库内部会根据布局视图的尺寸自动调整UIScrollView的contentSize。如果您不想调整contentSize则请在加入到UIScrollView后将布局视图的adjustScrollViewContentSize属性设置为NO。
-       而布局视图里面的wrapContentHeight和wrapContentWidth属性则可以确定动态确定一个布局视图的尺寸。
+       我们可以把一个布局视图作为一个子视图加入到UIScrollView中，布局库内部会根据布局视图的尺寸自动调整UIScrollView的contentSize。如果您不想调整contentSize则请将布局视图的adjustScrollViewContentSizeMode属性设置为MyLayoutAdjustScrollViewContentSizeModeNo。
      */
     
     UIScrollView *scrollView = [UIScrollView new];
@@ -34,7 +33,7 @@
     self.view = scrollView;
     
     /*
-     这里的contentLayout是非布局视图UIScrollView的子视图。因为同时设置了myLeftMargin和myRightMargin为0表示宽度和UIScrollView是保持一致；而高度则因为垂直线性布局的wrapContentHeight属性设置来确定；而其中的x,y轴的位置则因为没有设置默认是0。
+     这里的contentLayout是非布局视图UIScrollView的子视图。因为同时设置了myLeftMargin和myRightMargin为0表示宽度和UIScrollView是保持一致；而高度则因为垂直线性布局的wrapContentHeight属性设置来确定,表示垂直线性布局的高度等于里面的所有子视图高度；而其中的x,y轴的位置则因为没有设置默认是0。
      */
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     contentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10); //设置布局内的子视图离自己的边距.
@@ -78,25 +77,25 @@
      */
     
 
-    /*垂直线性布局直接添加子视图*/
+    //垂直线性布局直接添加子视图
     [self createSection1:contentLayout];
     
-    /*垂直线性布局套水平线性布局*/
+    //垂直线性布局套水平线性布局
     [self createSection2:contentLayout];
 
-    /*垂直线性布局套垂直线性布局*/
+    //垂直线性布局套垂直线性布局
     [self createSection3:contentLayout];
 
-    /*垂直线性布局套水平线性布局*/
+    //垂直线性布局套水平线性布局
     [self createSection4:contentLayout];
 
-    /*垂直线性布局套水平线性布局，水平线性布局利用相对边距实现左右布局*/
+    //垂直线性布局套水平线性布局，水平线性布局利用相对边距实现左右布局
     [self createSection5:contentLayout];
 
-    /*对子视图的高度的缩放调整*/
+    //对子视图的高度的缩放调整
     [self createSection6:contentLayout];
     
-    /*子视图的显示和隐藏*/
+    //子视图的显示和隐藏
     [self createSection7:contentLayout];
     
 }
@@ -125,7 +124,7 @@
     numTitleLabel.myLeftMargin = 5;
     [contentLayout addSubview:numTitleLabel];
     
-    //numField的myHeight确定了视图的高度；myLeftMargin,myRightMargin确定了视图的宽度和x轴的位置；myTopMargin确定了y轴上离兄弟视图偏移5.
+    //numField的myHeight确定了视图的高度；myLeftMargin,myRightMargin确定了视图的宽度和x轴的位置；myTopMargin确定了y轴上离兄弟视图间距5.
     UITextField *numField = [UITextField new];
     numField.borderStyle = UITextBorderStyleRoundedRect;
     numField.font = [CFTool font:15];
@@ -140,7 +139,8 @@
 //线性布局片段2：垂直线性布局套水平线性布局
 -(void)createSection2:(MyLinearLayout*)contentLayout
 {
-    //userInfoLayout的myLeftMargin,myRightMargin确定了视图的x轴的位置和宽度；wrapContentHeight为YES确定了视图的高度；myTopMargin确定了y轴上离兄弟视图偏移20
+    
+    //userInfoLayout的myLeftMargin,myRightMargin确定了视图的x轴的位置和宽度；wrapContentHeight为YES确定了视图的高度；myTopMargin确定了y轴上离兄弟视图间距20
     MyLinearLayout *userInfoLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     userInfoLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
     userInfoLayout.layer.borderWidth = 0.5;
@@ -176,11 +176,53 @@
     nickNameLabel.font = [CFTool font:14];
     [nickNameLabel sizeToFit];
     [nameLayout addSubview:nickNameLabel];
+    
+    
+    
+    //使用线性布局实现这个功能的一个缺点就是必须使用线性布局嵌套线性布局来完成，这样嵌套层次就可能会比较多，因此您可以尝试改用流式布局局来实现这个功能,从而减少嵌套的问题
+    /*
+    MyFlowLayout *userInfoLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Horz arrangedCount:2];
+    userInfoLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    userInfoLayout.layer.borderWidth = 0.5;
+    userInfoLayout.layer.cornerRadius = 4;
+    userInfoLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    userInfoLayout.myTopMargin = 20;
+    userInfoLayout.myLeftMargin = userInfoLayout.myRightMargin = 0;
+    userInfoLayout.subviewHorzMargin = 10;  //子视图的水平间距为10
+    userInfoLayout.wrapContentHeight = YES;
+    userInfoLayout.gravity = MyMarginGravity_Vert_Center; //里面的子视图整体垂直居中。
+    [contentLayout addSubview:userInfoLayout];
+    
+    //第一列： 一个头像视图，一个占位视图。
+    UIImageView *headImageView = [[UIImageView  alloc] initWithImage:[UIImage imageNamed:@"head1"]];
+    [userInfoLayout addSubview:headImageView];
+    
+    //因为数量约束水平流式布局每列必须要2个所以这里建立一个占位视图填满第一列。
+    UIView *placeHolderView = [UIView new];
+    [userInfoLayout addSubview:placeHolderView];
+    
+    
+    //第二列： 姓名视图，昵称视图。
+    UILabel *userNameLabel = [UILabel new];
+    userNameLabel.text = NSLocalizedString(@"Name:欧阳大哥", @"");
+    userNameLabel.font = [CFTool font:15];
+    [userNameLabel sizeToFit];
+    [userInfoLayout addSubview:userNameLabel];
+    
+    UILabel *nickNameLabel = [UILabel new];
+    nickNameLabel.text  = NSLocalizedString(@"Nickname:醉里挑灯看键", @"");
+    nickNameLabel.textColor = [CFTool color:4];
+    nickNameLabel.font = [CFTool font:14];
+    [nickNameLabel sizeToFit];
+    [userInfoLayout addSubview:nickNameLabel];
+    */
+    
 }
 
 //线性布局片段3：垂直线性布局套垂直线性布局
 -(void)createSection3:(MyLinearLayout*)contentLayout
 {
+    
     //ageLayout是垂直线性布局默认的wrapContentHeight决定了视图的高度；myLeftMargin,myRightMargin决定了视图的x轴的位置和宽度；添加到垂直布局父视图的顺序决定了y轴的位置。
     MyLinearLayout *ageLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     ageLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -199,7 +241,7 @@
     [ageTitleLabel sizeToFit];
     [ageLayout addSubview:ageTitleLabel];
     
-    /*垂直线性布局套水平线性布局*/
+    //垂直线性布局套水平线性布局
     MyLinearLayout *ageSelectLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     ageSelectLayout.myTopMargin = 5;
     ageSelectLayout.wrapContentHeight = YES;
@@ -219,6 +261,50 @@
         ageLabel.weight = 1.0;   //这里面每个子视图的宽度都是比重为1，最终的宽度是均分父视图的宽度。
         [ageSelectLayout addSubview:ageLabel];
     }
+    
+    
+    
+    //为实现这个功能，线性布局需要2层嵌套来完成，这无疑增加了代码量，因此您可以改为用一个垂直浮动布局来实现相同的能力。
+    
+   /* MyFloatLayout *ageLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    ageLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    ageLayout.layer.borderWidth = 0.5;
+    ageLayout.layer.cornerRadius = 4;
+    ageLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    ageLayout.myTopMargin = 20;
+    ageLayout.myLeftMargin = ageLayout.myRightMargin = 0;  // 宽度和父布局相等
+    ageLayout.wrapContentHeight = YES;  //高度由子视图包裹。
+    ageLayout.subviewVertMargin = 5; //所有子视图垂直间距为5
+    ageLayout.subviewHorzMargin = 10; //所有子视图水平间距为10
+    [contentLayout addSubview:ageLayout];
+    
+    UILabel *ageTitleLabel = [UILabel new];
+    ageTitleLabel.text = NSLocalizedString(@"Age:", @"");
+    ageTitleLabel.font = [CFTool font:15];
+    [ageTitleLabel sizeToFit];
+    ageTitleLabel.widthDime.equalTo(ageLayout.widthDime);
+    [ageLayout addSubview:ageTitleLabel];
+    
+
+    for (int i = 0; i < 3; i++)
+    {
+        UILabel *ageLabel = [UILabel new];
+        ageLabel.text = [NSString stringWithFormat:@"%d", (i+2)*10];
+        ageLabel.textAlignment  = NSTextAlignmentCenter;
+        ageLabel.layer.cornerRadius = 15;
+        ageLabel.layer.borderColor = [CFTool color:3].CGColor;
+        ageLabel.layer.borderWidth = 0.5;
+        ageLabel.font = [CFTool font:13];
+        ageLabel.heightDime.equalTo(@30);
+        //宽度这样设置的原因是：3个子视图要平分布局视图的宽度，这里每个子视图的间距是10。
+        //因此每个子视图的宽度 = (布局视图宽度 - 2 * 子视图间距)/3 = 布局视图宽度 * 1/3 - 2*子视图间距/3
+        //MyLayoutSize中的equalTo方法设置布局宽度，multiply方法用来设置1/3，add方法用来设置2*子视图间距/3. 因此可以进行如下设置：
+        ageLabel.widthDime.equalTo(ageLayout.widthDime).multiply(1.0/3).add(-1 * 2 * ageLayout.subviewHorzMargin / 3);
+        [ageLayout addSubview:ageLabel];
+    }
+    */
+    
+    
 }
 
 //线性布局片段4：垂直线性布局套水平线性布局，里面有动态高度的文本。

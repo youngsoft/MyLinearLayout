@@ -45,7 +45,7 @@
     self.view = scrollView;
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-    rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
+    rootLayout.widthDime.equalTo(scrollView.widthDime);
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = YES;
     [scrollView addSubview:rootLayout];
@@ -119,14 +119,25 @@
     if (scrollView.contentOffset.y > 90)
     {
         
-        //当偏移的位置大于某个值后，我们将特定的子视图的noLayout设置为YES，表示特定的子视图会参与布局，但是不会设置frame值
-        //所以当特定的子视图的noLayout设置为YES后，我们就可以手动的设置其frame值来达到悬停的能力。
-        //需要注意的是这个特定的子视图一定要最后加入到布局视图中去。
-        //代码就是这么简单，这么任性。。。
-        self.testTopDockView.noLayout = YES;
+        /*
+         当滚动条偏移的位置大于某个值后，我们将特定的子视图的noLayout设置为YES，表示特定的子视图虽然会参与布局，但是在布局完成后不会更新frame值。
+         因为参与了布局，所以不会影响到依赖这个视图的其他视图，所以整体布局结构是保持不变，这时候虽然设置为了noLayout的视图留出了一个空挡，但是却可以通过frame值来进行任意的定位而不受到布局的控制。
         
+         上面的代码中我们可以看到v4视图的位置和尺寸设置如下：
+         v4.widthDime.equalTo(rootLayout.widthDime);  //宽度和父视图相等。
+         v4.heightDime.equalTo(@80);              //高度等于80。
+         v4.topPos.equalTo(v1.bottomPos);         //总是位于v1的下面。
+         。。。。
+         v2.topPos.equalTo(v4.bottomPos);         //v2则总是位于v4的下面。
+         
+         而当我们将v4的noLayout设置为了YES后，这时候v4仍然会参与布局，也就是说v4的那块区域和位置是保持不变的，v2还是会在v4的下面。但是v4却可以通过frame值进行任意位置和尺寸的改变。 这样就实现了当滚动时我们调整v4的真实frame值来达到悬停的功能，但是v2却保持了不变，还是向往常一样保持在那个v4假位置的下面，而随着滚动条滚动而滚动。
+         
+         ***需要注意的是这个特定的子视图一定要最后加入到布局视图中去。***
+         */
+        
+        self.testTopDockView.noLayout = YES;
         CGRect rect = self.testTopDockView.frame;
-        self.testTopDockView.frame = CGRectMake(rect.origin.x, scrollView.contentOffset.y, rect.size.width, rect.size.height);
+        self.testTopDockView.frame = CGRectMake(rect.origin.x, scrollView.contentOffset.y, rect.size.width, rect.size.height); //这里可以自由设置位置和尺寸了。
         
         
         
@@ -134,6 +145,7 @@
     else
     {
         
+        //当滚动的偏移小于90后，我们将testTopDocView的noLayout设置回NO,这样这个视图就又会根据所设置的约束而受到布局视图的约束和控制了，这时候frame的设置将不再起作用了。
         self.testTopDockView.noLayout = NO;
     }
 }

@@ -1,5 +1,5 @@
 //
-//  Test15ViewController.m
+//  AllTest4ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/7/6.
@@ -178,9 +178,10 @@ static NSInteger sBaseTag = 100000;
 
 #pragma mark -- HandleMethod
 
--(void)handleCellLayoutTap:(UIView*)sender
+
+//显示点击提示框
+-(void)showClikAlert:(UIView*)sender inFlowLayout:(MyFlowLayout*)flowLayout
 {
-   
     NSInteger supplementaryIndex = sender.tag / sBaseTag;
     NSInteger cellIndex = sender.tag % sBaseTag;
     
@@ -189,7 +190,75 @@ static NSInteger sBaseTag = 100000;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     
     [alertView show];
-   
+}
+
+
+-(void)exchangeSubview:(UIView*)sender from:(MyBaseLayout*)fromLayout to:(MyBaseLayout*)toLayout
+{
+    //往下移动时，有可能会上面缩小而下面整体往上移动,结束位置不正确。 也就是移动的视图开始位置正确，结束位置不正确。
+    //往上移动时，有可能会上面撑大而下面整体往下移动,开始位置不正确。 也就是移动的视图开始位置不正确，结束位置正确。
+    //因此为了解决这个问题，我们在删除子视图时不让布局视图进行布局，这可以通过设置布局视图的autoresizesSubviews为NO。
+    
+    
+    //得到当前的sender在self.view中的frame，这里进行坐标的转换。
+    CGRect rectOld =  [fromLayout convertRect:sender.frame toView:self.view];
+    
+    //得到将sender加入到toLayout后的评估的frame值，注意这时候sender还没有加入到toLayout。因为是加入到最后面，因此只能用这个方法来评估加入后的值，如果不是添加到最后则是可以很简单的得到应该插入的位置的。
+    CGRect rectNew = [toLayout subview:sender estimatedRectInLayoutSize:CGSizeZero];
+    rectNew = [toLayout convertRect:rectNew toView:self.view]; //将新位置的评估的frame值，进行坐标转换。
+    
+    //在动画的过程中，我们将sender作为self.view的子视图来实现移动的效果。
+    fromLayout.autoresizesSubviews = NO;
+    [sender removeFromSuperview];
+    sender.frame = rectOld;
+    sender.useFrame = YES;  //设置为YES表示sender不再受到布局视图的约束，而是可以自由设置frame值。
+    [self.view addSubview:sender];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        
+        sender.frame = rectNew;
+        
+    } completion:^(BOOL finished) {
+        
+        //恢复重新布局。
+        fromLayout.autoresizesSubviews = YES;
+        [fromLayout setNeedsLayout];
+
+        //动画结束后再将sender移植到toLayout中。
+        [sender removeFromSuperview];
+        sender.useFrame = NO;  //还原useFrame，因为加入到toLayout后将受到布局视图的约束。
+        [toLayout addSubview:sender];
+
+    }];
+    
+
+}
+
+-(void)handleCellLayoutTap:(UIView*)sender
+{
+    //这里是为了节省，所以将两个不同的功能放在一起。。。
+    
+    MyFlowLayout *superFlowLayout = (MyFlowLayout*)sender.superview;
+    
+    //第一个和第二个里面的子视图点击后弹出当前点击的cell的提示信息。
+    if (superFlowLayout == self.containerLayouts[0] || superFlowLayout == self.containerLayouts[1])
+    {
+        [self showClikAlert:sender inFlowLayout:superFlowLayout];
+    }
+    else
+    {
+       //第三个第四个里面的子视图点击后进行互相移动的场景。
+        MyFlowLayout *flowLayout2 = self.containerLayouts[2];
+        MyFlowLayout *flowLayout3 = self.containerLayouts[3];
+        if (superFlowLayout == flowLayout2)
+        {
+            [self exchangeSubview:sender from:flowLayout2 to:flowLayout3];
+        }
+        else
+        {
+            [self exchangeSubview:sender from:flowLayout3 to:flowLayout2];
+        }
+    }
 }
 
 -(void)handleReverse:(id)sender

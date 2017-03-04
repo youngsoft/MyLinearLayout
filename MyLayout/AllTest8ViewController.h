@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- * 布局视图放入非布局父视图
+ * ❁2.Screen perfect fit - Demo2
  */
 @interface AllTest8ViewController : UIViewController
 

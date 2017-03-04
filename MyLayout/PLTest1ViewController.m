@@ -10,7 +10,7 @@
 
 @interface PLTest1ViewController ()
 
-@property(nonatomic, strong) MyPathLayout *pathLayout;
+@property(nonatomic, weak) MyPathLayout *pathLayout;
 
 @end
 
@@ -22,16 +22,17 @@
      *本例子是介绍MyPathLayout布局视图的。用来建立曲线布局。
      */
     
-    _pathLayout = [MyPathLayout new];
+    MyPathLayout *pathLayout = [MyPathLayout new];
     
-     self.view  = _pathLayout;
-    _pathLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);  //因为路径布局里面的点算的都是子视图的中心点，所以为了避免子视图被遮盖这里设置了4个内边距。
-    _pathLayout.backgroundColor = [UIColor whiteColor];
+     self.view  = pathLayout;
+    pathLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);  //因为路径布局里面的点算的都是子视图的中心点，所以为了避免子视图被遮盖这里设置了4个内边距。
+    pathLayout.backgroundColor = [UIColor whiteColor];
+    self.pathLayout = pathLayout;
     
     //添加原点视图，原点视图是可选的视图。
     UIButton *button = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [button addTarget:self action:@selector(handleAdd:) forControlEvents:UIControlEventTouchUpInside];
-    _pathLayout.originView = button; //设置原点视图，路径布局会把原点视图作为布局视图的第一个子视图。
+    pathLayout.originView = button; //设置原点视图，路径布局会把原点视图作为布局视图的第一个子视图。
     
 }
 
@@ -316,10 +317,7 @@
                              [self.pathLayout layoutIfNeeded];
                              
                          } completion:^(BOOL finished) {
-                             // 动画完成后执行
-                             // code...
-                             //  [_imageView setAlpha:1];
-                         }];
+                        }];
 
     }
 

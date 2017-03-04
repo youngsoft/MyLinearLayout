@@ -1,5 +1,5 @@
 //
-//  Test18ViewController.h
+//  TLTest2ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/8/26.
@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-
+/**
+ *2.TableLayout - Waterfall(Horz)
+ */
 @interface TLTest2ViewController : UIViewController
 
 @end

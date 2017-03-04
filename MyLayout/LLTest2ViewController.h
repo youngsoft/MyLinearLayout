@@ -1,5 +1,5 @@
 //
-//  Test2ViewController.h
+//  LLTest2ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *2.LinearLayout - Combine with UIScrollView
+ */
 @interface LLTest2ViewController : UIViewController
 
 @end

@@ -13,14 +13,15 @@
  *定义子视图在路径布局中的距离的类型。
  */
 typedef enum : NSUInteger {
-    MyPathSpace_Flexed,    //浮动距离
-    MyPathSpace_Fixed,     //固定距离
-    MyPathSpace_Count,     //固定数量距离
+    MyPathSpace_Flexed,    //浮动距离，子视图之间的距离根据路径布局的尺寸和子视图的数量而确定。
+    MyPathSpace_Fixed,     //固定距离，就是子视图之间的距离是固定的某个数值。
+    MyPathSpace_Count,     //固定数量距离，就是子视图之间的距离根据路径布局的尺寸和某个具体的数量而确定。
 } MyPathSpaceType;
 
 
+
 /**
- *路径距离类，描述子视图在路径上的距离的类型。
+ *子视图之间的路径距离类，描述子视图在路径上的间隔距离的类型。
  */
 @interface MyPathSpace : NSObject
 
@@ -43,7 +44,7 @@ typedef enum : NSUInteger {
 
 
 /**
- * 坐标轴设置类，用来描述坐标轴的信息。
+ * 坐标轴设置类，用来描述坐标轴的信息。一个坐标轴具有原点、坐标系类型、开始和结束点、坐标轴对应的值这四个方面的内容。
  */
 @interface MyCoordinateSetting : NSObject
 
@@ -75,7 +76,7 @@ typedef enum : NSUInteger {
 
 
 /**
- *路径布局类。路径布局通过坐标轴的设置，曲线路径函数方程，子视图中心点之间的距离三个要素来确定其中子视图的位置。因此通过路径布局可以实现一些非常酷炫的布局效果。
+ *路径布局类。路径布局通过坐标轴的设置，曲线路径函数方程，子视图之间的距离三个要素来确定其中子视图的位置。因此通过路径布局可以实现一些非常酷炫的布局效果。
  */
 @interface MyPathLayout : MyBaseLayout
 

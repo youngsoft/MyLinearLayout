@@ -555,7 +555,7 @@
         MySubviewsShrinkType smd = self.shrinkType & 0x0F; //压缩的模式
         //如果压缩方式为自动，但是浮动宽度子视图数量不为2则压缩类型无效。
         if (smd == MySubviewsShrink_Auto && flexedSizeSbs.count != 2)
-            smd = MySubviewsShrink_Average;
+            smd = MySubviewsShrink_None;
         
         if (smd != MySubviewsShrink_None)
         {
@@ -1155,11 +1155,12 @@
 }
 
 
--(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass
+-(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray *)sbs
 {
-    CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass];
+    CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
     
-    NSArray *sbs = [self getLayoutSubviews];
+    if (sbs == nil)
+        sbs = [self getLayoutSubviews];
     
     if (self.orientation == MyLayoutViewOrientation_Vert)
     {

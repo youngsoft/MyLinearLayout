@@ -1,5 +1,5 @@
 //
-//  FLLTest1ViewController.m
+//  FLLTest3ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/10/31.
@@ -143,6 +143,7 @@
 
 - (IBAction)handleTouchDown:(UIButton*)sender withEvent:(UIEvent*)event {
     
+    //在按下时记录当前要拖动的控件的索引。
     self.oldIndex = [self.flowLayout.subviews indexOfObject:sender];
     self.currentIndex = self.oldIndex;
     self.hasDrag = NO;
@@ -154,14 +155,17 @@
     if (!self.hasDrag)
         return;
     
-    sender.useFrame = NO;
-    self.flowLayout.autoresizesSubviews = YES;
+    //当抬起时，需要让拖动的子视图调整到正确的顺序，并重新参与布局，因此这里要把拖动的子视图的useFrame设置为NO，同时把布局视图的autoresizesSubviews还原为YES。
     
-     //调整索引。
+    //调整索引。
     for (NSInteger i = self.flowLayout.subviews.count - 1; i > self.currentIndex; i--)
     {
         [self.flowLayout exchangeSubviewAtIndex:i withSubviewAtIndex:i - 1];
     }
+    
+    sender.useFrame = NO;  //让拖动的子视图重新参与布局，将useFrame设置为NO
+    self.flowLayout.autoresizesSubviews = YES; //让布局视图可以重新激发布局，这里还原为YES。
+    
     
 }
 
@@ -170,10 +174,11 @@
     
     self.hasDrag = YES;
     
+    //取出拖动时当前的位置点。
     CGPoint pt = [[event touchesForView:sender].anyObject locationInView:self.flowLayout];
     
-    UIView *sbv2 = nil;
-    //判断当前手指在具体视图的位置。这里要排除self.addButton的位置。
+    UIView *sbv2 = nil;  //sbv2保存拖动时手指所在的视图。
+    //判断当前手指在具体视图的位置。这里要排除self.addButton的位置(因为这个按钮将固定不调整)。
     for (UIView *sbv in self.flowLayout.subviews)
     {
         if (sbv != sender && sender.useFrame && sbv != self.addButton)
@@ -187,6 +192,7 @@
         }
     }
     
+    //如果拖动的控件sender和手指下当前其他的兄弟控件有重合时则意味着需要将当前控件插入到手指下的sbv2所在的位置，并且调整sbv2的位置。
     if (sbv2 != nil)
     {
         
@@ -212,6 +218,7 @@
             [self.flowLayout exchangeSubviewAtIndex:i withSubviewAtIndex:i - 1];
         }
         
+        //经过上面的sbv2的位置调整完成后，需要重新激发布局视图的布局，因此这里要设置autoresizesSubviews为YES。
         self.flowLayout.autoresizesSubviews = YES;
         sender.useFrame = NO;
         sender.noLayout = YES;  //这里设置为YES表示布局时不会改变sender的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
@@ -219,14 +226,13 @@
         
     }
     
-    //在进行sender的位置调整时，要把sender移动到最顶端，也就子视图数组的的最后，这时候布局视图不能布局，因此要把autoresizesSubviews设置为NO，同时因为要自定义
-    //sender的位置，因此要把useFrame设置为YES，并且恢复noLayout为NO。
-    [self.flowLayout bringSubviewToFront:sender];
-    self.flowLayout.autoresizesSubviews = NO;
-    sender.useFrame = YES;
-    sender.noLayout = NO;
+    //在进行sender的位置调整时，要把sender移动到最顶端，也就子视图数组的的最后。同时布局视图不能激发子视图布局，因此要把autoresizesSubviews设置为NO，同时因为要自定义sender的位置，因此要把useFrame设置为YES，并且恢复noLayout为NO。
+    [self.flowLayout bringSubviewToFront:sender]; //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
+    self.flowLayout.autoresizesSubviews = NO;  //在拖动时不要让布局视图激发布局
+    sender.useFrame = YES;  //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
     sender.center = pt;  //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
-    
+    sender.noLayout = NO; //恢复noLayout为NO。
+
 }
 
 - (IBAction)handleTouchDownRepeat:(UIButton*)sender withEvent:(UIEvent*)event {

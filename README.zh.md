@@ -6,7 +6,10 @@
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/MyLinearLayout.svg)](https://github.com/youngsoft/MyLinearLayout/stargazers)
 
-##MyLayout(2017.2.24)
+
+![Logo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayout.png)
+
+##MyLayout(2017.03.04)
 
 MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIView的layoutSubviews方法的重载以及对子视图的bounds和center属性的设置而实现的。MyLayout功能强大而且简单易用，它集成了:iOS Autolayout和SizeClass、android的5大布局体系、HTML/CSS的浮动定位技术以及flex-box和bootstrap框架等市面上主流的平台的界面布局功能，同时提供了一套非常简单和完备的多屏幕尺寸适配的解决方案。MyLayout的Swift版本的名字叫做：**[TangramKit](https://github.com/youngsoft/TangramKit)**   
 
@@ -15,7 +18,8 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 > 您可以加入到QQ群：*178573773* 或者添加个人QQ：*156355113* 来跟我讨论或者邮件：*obq0387_cn@sina.com* 联系我。
 
 您也可以到我的主页中了解各布局的详细介绍：
-   
+ 
+ [http://www.jianshu.com/p/4c1eb0dd676f](http://www.jianshu.com/p/4c1eb0dd676f)   布局框架和原理介绍    
 [http://blog.csdn.net/yangtiang/article/details/46483999](http://blog.csdn.net/yangtiang/article/details/46483999)   线性布局  
 [http://blog.csdn.net/yangtiang/article/details/46795231](http://blog.csdn.net/yangtiang/article/details/46795231)   相对布局  
 [http://blog.csdn.net/yangtiang/article/details/46492083](http://blog.csdn.net/yangtiang/article/details/46492083)   框架布局  
@@ -514,7 +518,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.3.3'
+pod 'MyLayout', '~> 1.3.4'
 ```
    
 然后运行如下命令:

@@ -81,6 +81,7 @@
 		18E8084D1B3A5D170059C410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E8084C1B3A5D170059C410 /* QuartzCore.framework */; };
 		18EA81451CFFD3E90006530A /* FOLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EA81441CFFD3E90006530A /* FOLTest5ViewController.m */; };
 		18EDEC811D64B70D00F8B1CD /* FOLTest6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EDEC801D64B70D00F8B1CD /* FOLTest6ViewController.m */; };
+		18FE40B01E6AA709001E8007 /* MyLayout.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FE40AF1E6AA709001E8007 /* MyLayout.png */; };
 		46D45B161C525FC400A8362C /* MyLayoutSizeClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */; };
 		46DB7E6B1C54B4BC001B409D /* AllTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */; };
 /* End PBXBuildFile section */
@@ -266,6 +267,7 @@
 		18EA81441CFFD3E90006530A /* FOLTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest5ViewController.m; sourceTree = "<group>"; };
 		18EDEC801D64B70D00F8B1CD /* FOLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest6ViewController.m; sourceTree = "<group>"; };
 		18EDEC821D64B71900F8B1CD /* FOLTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest6ViewController.h; sourceTree = "<group>"; };
+		18FE40AF1E6AA709001E8007 /* MyLayout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyLayout.png; sourceTree = "<group>"; };
 		46D45B141C525FC400A8362C /* MyLayoutSizeClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutSizeClass.h; sourceTree = "<group>"; };
 		46D45B151C525FC400A8362C /* MyLayoutSizeClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutSizeClass.m; sourceTree = "<group>"; };
 		46DB7E691C54B4BC001B409D /* AllTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest5ViewController.h; sourceTree = "<group>"; };
@@ -604,6 +606,7 @@
 				1888CE7F1D0BE44300968C0C /* layoutdemo3.gif */,
 				1888CE801D0BE44300968C0C /* layoutdemo2.gif */,
 				1888CE811D0BE44300968C0C /* layoutdemo1.gif */,
+				18FE40AF1E6AA709001E8007 /* MyLayout.png */,
 				186B83D91D090DE6001CA155 /* zh-Hans.lproj */,
 				186B83CE1D08F7B9001CA155 /* Base.lproj */,
 				18D683F91C4F421400A48BB4 /* Images.xcassets */,
@@ -722,6 +725,7 @@
 				188D90E01DE736BB0034F76E /* MyLayoutClass.png in Resources */,
 				186B83DE1D090DE6001CA155 /* LaunchScreen.strings in Resources */,
 				186B83E01D094F11001CA155 /* FLLTest2ViewController.xib in Resources */,
+				18FE40B01E6AA709001E8007 /* MyLayout.png in Resources */,
 				186B83DF1D090DE6001CA155 /* Localizable.strings in Resources */,
 				186B83D41D08F7B9001CA155 /* LaunchScreen.xib in Resources */,
 				18D684391C4F421400A48BB4 /* Images.xcassets in Resources */,

@@ -10,7 +10,7 @@
 
 
 /**
- *  行列描述扩展对象。
+ *  表格布局行列索引描述扩展对象。
  */
 @interface NSIndexPath(MyTableLayoutEx)
 
@@ -20,16 +20,17 @@
 
 @end
 
-//定义特殊的尺寸
+//定义特殊的表格行列尺寸,参考下面addRow方法中的描述。
 #define MTLSIZE_AVERAGE 0
 #define MTLSIZE_WRAPCONTENT -1
 #define MTLSIZE_MATCHPARENT -2
 
 
 /**
- *表格布局是一种里面的子视图可以像表格一样多行多列排列的布局视图。子视图添加到表格布局视图前必须先要建立并添加行视图，然后再将子视图添加到行视图里面。
- *如果行视图在表格布局里面是从上到下排列的则表格布局为垂直表格布局，垂直表格布局里面的子视图在行视图里面是从左到右排列的；
- *如果行视图在表格布局里面是从左到右排列的则表格布局为水平表格布局，水平表格布局里面的子视图在行视图里面是从上到下排列的。
+ *表格布局是一种里面的子视图可以像表格一样进行多行多列排列的布局视图。子视图添加到表格布局视图前必须先要建立并添加行子视图，然后再将列子视图添加到行子视图里面。
+ *表格里面的行子视图和列子视图的排列方向的概念是相对的，他根据表格布局方向的不同而不同。表格布局根据方向可分为垂直表格布局和水平表格布局。
+ *对于垂直表格布局来说，行子视图是从上到下依次排列的，而列子视图则是在行子视图里面从左到右依次排列。
+ *对于水平表格布局来说，行子视图是从左到右依次排列的，而列子视图则是在行子视图里面从上到下依次排列。
  */
 @interface MyTableLayout : MyLinearLayout
 
@@ -40,16 +41,24 @@
 /**
  *  设置表格的行间距和列间距
  */
-@property(nonatomic ,assign)  CGFloat rowSpacing;
-@property(nonatomic, assign)  CGFloat colSpacing;
+@property(nonatomic ,assign) IBInspectable CGFloat rowSpacing;
+@property(nonatomic, assign) IBInspectable CGFloat colSpacing;
 
 
 
 /**
  *  添加一个新行。对于垂直表格来说每一行是从上往下排列的，而水平表格则每一行是从左往右排列的。
  *
- *  @param rowSize 为MTLSIZE_WRAPCONTENT表示由子视图决定本行尺寸，子视图需要自己设置尺寸；为MTLSIZE_AVERAGE表示均分尺寸，子视图不需要设置尺寸；大于0表示固定尺寸，子视图不需要设置尺寸;不能设置为MTLSIZE_MATCHPARENT。
- *  @param colSize  为MTLSIZE_MATCHPARENT表示子视图需要自己指定尺寸，整体列尺寸和父视图一样的尺寸；为MTLSIZE_WRAPCONTENT表示由子视图需要自己设置尺寸，列尺寸包裹所有子视图；为MTLSIZE_AVERAGE表示均分尺寸，这时候子视图不必设置尺寸；大于0表示子视图固定尺寸，这时候子视图可以不必设置尺寸。
+ *  @param rowSize行的尺寸值，可以设置如下：
+      1.MTLSIZE_WRAPCONTENT表示由列子视图决定本行尺寸(垂直表格为行高，水平表格为行宽)，每个列子视图都需要自己设置尺寸(垂直表格为高度，水平表格为宽度)
+      2.MTLSIZE_AVERAGE表示均分尺寸(垂直表格为行高 = 总行高/行数，水平表格为行宽 = 总行宽/行数)，列子视图不需要设置尺寸(垂直表格为高度，水平表格为宽度)
+      3.大于0表示固定尺寸，表示这行的尺寸为这个固定的数值(垂直表格为行高，水平表格为行宽)，列子视图不需要设置尺寸(垂直表格为高度，水平表格为宽度)。
+      4.不能设置为MTLSIZE_MATCHPARENT。
+ *  @param colSize列的尺寸值，可以设置如下：
+      1.MTLSIZE_MATCHPARENT表示整列尺寸和父视图一样的尺寸(垂直表格为列宽，水平表格为列高)，每个子视图需要设置自己的尺寸(垂直表格为宽度，水平表格为高度)
+      2.MTLSIZE_WRAPCONTENT表示整列的尺寸由列内所有子视图包裹(垂直表格为列宽，水平表格为列高).每个子视图需要设置自己的尺寸(垂直表格为宽度，水平表格为高度)
+      3.MTLSIZE_AVERAGE表示整列的尺寸和父视图一样的尺寸(垂直表格为列宽，水平表格为列高)，每列内子视图的尺寸均分(垂直表格 = 列宽/行内子视图数，水平表格 = 行高/列内子视图数)
+      4.大于0表示列内每个子视图都具有固定尺寸(垂直表格为宽度，水平表格为高度)，这时候子视图可以不必设置尺寸。
  */
 -(MyLinearLayout*)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize;
 

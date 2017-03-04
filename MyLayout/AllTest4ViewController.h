@@ -1,5 +1,5 @@
 //
-//  Test15ViewController.h
+//  AllTest4ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/7/6.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- *  用MyLayout来实现UICollectionView的方法。
+ *  4.Replacement of UICollectionView
  */
 @interface AllTest4ViewController : UIViewController
 

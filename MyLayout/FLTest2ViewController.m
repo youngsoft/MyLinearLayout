@@ -1,5 +1,5 @@
 //
-//  Test8ViewController.m
+//  FLTest2ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -40,7 +40,7 @@
     rightImageView.backgroundColor = [UIColor whiteColor];
     rightImageView.layer.cornerRadius = 16;
     rightImageView.myTopMargin = 10;
-    rightImageView.myRightMargin = 10;  //顶部和右边偏移10
+    rightImageView.myRightMargin = 10;  //顶部和右边边距10
     [rootLayout addSubview:rightImageView];
   
     
@@ -58,7 +58,7 @@
     [rootLayout addSubview:headImage];
     
     
-    //这里昵称在头像的下面。而头像是居中，昵称也是居中的,但是因为头像的高度是1/4。而高度的一半就是1/8，因此
+    //这里昵称在头像的下面。而头像是居中，昵称也是居中的,但是因为头像的高度是1/3。而高度的一半就是1/6，因此
     //昵称的偏移可以设置为居中的相对偏移量， 再加上文本本身的高度的一半就是昵称在头像的下面。
     UILabel *nickName = [UILabel new];
     nickName.text = @"欧阳大哥";
@@ -73,7 +73,7 @@
     //左中右三张图片,设定宽度和限制高度。
     UIImageView *leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image2"]];
     leftView.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0); // 宽度是父布局宽度的1/3
-    leftView.heightDime.equalTo(leftView.widthDime).max(100);  //高度和宽度相等，当最大只能是80
+    leftView.heightDime.equalTo(leftView.widthDime).max(100);  //高度和宽度相等，当最大只能是100
     leftView.leftPos.equalTo(@0);
     leftView.bottomPos.equalTo(@0);
     [rootLayout addSubview:leftView];

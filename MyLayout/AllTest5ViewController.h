@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *1.SizeClass - Demo1
+ */
 @interface AllTest5ViewController : UIViewController
 
 @end

@@ -1,5 +1,5 @@
 //
-//  Test13ViewController.m
+//  RLTest1ViewController.m
 //  MyLayout
 //
 //  Created by oybq on 15/6/26.
@@ -18,6 +18,16 @@
     /*
        这个DEMO，主要介绍相对布局里面的子视图如果通过扩展属性MyLayoutPos对象属性来设置各视图之间的依赖关系。
        苹果系统原生的AutoLayout其本质就是一套相对布局体系。但是MyRelativeLayout所具有的功能比AutoLayout还要强大。
+     */
+    
+    /*
+       对于相对视图中子视图的位置对象MyLayoutPos中的equalTo方法和offset方法设置为数值时的意义有部分同学不是很明白，这里面统一解释清楚
+      1.如果leftPos、rightPos、topPos、bottomPos中的equalTo方法中设置为一个数值的话，这个数表示的是位置离父视图的边距值。当设置为正数是就是内缩而设置为负数时就是外延。比如A.leftPos.equalTo(@10)表示A的左边距离父视图的左边10的位置，A.rightPos.equalTo(@10)表示A的右边距离父视图的右边10的位置。A.topPos.equalTo(@-10)表示A的上边在父视图的上边-10的位置。从例子可以看出这里的数值的正负是和位置本身相关的。
+     2.MyLayoutPos中的offset方法表示位置值的偏移量，而这个偏移量的正负数的意义则是根据位置的不同而不同的。
+        2.1.如果是leftPos和centerXPos那么正数表示往右偏移，负数表示往左偏移。
+        2.2.如果是topPos和centerYPos那么正数表示往下偏移，负数表示往上偏移。
+        2.3.如果是rightPos那么正数表示往左偏移，负数表示往右偏移。
+        2.4.如果是bottomPos那么正数表示往上偏移，负数表示往下偏移。
      */
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];

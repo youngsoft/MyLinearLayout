@@ -1,5 +1,5 @@
 //
-//  Test3ViewController.h
+//  LLTest3ViewController.h
 //  MyLayout
 //
 //  Created by oybq on 15/6/21.
@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *3.LinearLayout - Gravity&Fill
+ */
 @interface LLTest3ViewController : UIViewController
 
 @end

@@ -95,6 +95,7 @@
     self.rootLayout.wrapContentWidth = !self.rootLayout.wrapContentWidth;
     
     
+    
     BOOL isHorzScroll = self.rootLayout.wrapContentWidth;
     [UIView animateWithDuration:0.3 animations:^{
         
