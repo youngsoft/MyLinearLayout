@@ -9,7 +9,7 @@
 
 ![Logo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayout.png)
 
-##MyLayout(2017.3.04)
+## MyLayout(2017.3.04)
 
 MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayout provides some simple functions to build a variety of complex interface. It integrates the functions including: Autolayout and SizeClass of iOS, five layout classes of Android, float and flex-box and bootstrap of HTML/CSS. The MyLayout's Swift version are named: **[TangramKit](https://github.com/youngsoft/TangramKit)**
 
@@ -61,15 +61,15 @@ MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayou
 ```
 
 
-##Architecture
+## Architecture
 
 ![demo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayoutClass.png)
 
-###MyLayoutPos
+### MyLayoutPos
 `MyLayoutPos` is represent to the position of a view. UIView provides six extension variables:leftPos, topPos, bottomPos, rightPos, centerXPos, centerYPos to set view's margin or space distance between self and others. You can use `equalTo` method to set NSNumber or MyLayoutPos or NSArray<MyLayoutPos*> value. there are six simple variables:myLeftMargin,myTopMargin,myBottomMargin,myRightMargin,myCenterXOffset,myCenterYOffset use to set NSNumber value. eg. `A.leftPos.equalTo(@10); <==> A.myLeftMargin = 10;`
 
 
-###MyLayoutSize
+### MyLayoutSize
 `MyLayoutSize` is represent to the size of a view. UIView provides two extension variables:widthDime,heightDime to set view's width and height dimension. You can use `equalTo` method to set NSNumber or MyLayoutSize or NSArray<MyLayoutSize*> value. there are two simple variables: myWidth, myHeight use to set NSNumber value. eg. `A.widthDime.equalTo(@10); <==> A.myWidth = 10;`
 
 
@@ -506,7 +506,7 @@ Read FAQ, or articles below:
 Because my english is poor so I just only can support chinese articles，and I wish somebody can help me translate to english.
 
 
-##Communication
+## Communication
 
 
 - If you need help, use Stack Overflow or Baidu. (Tag 'mylayout')
@@ -545,7 +545,7 @@ Then, run the following command:
 
 
 
-##FAQ
+## FAQ
 
 * If you use MyLayout runtime cause 100% CPU usage said appeared constraint conflict, please check the subview's constraint set.
 * If you use MyLayout exception crashed in MyBaseLayout *willMoveToSuperview* method. it does not matter, just remove the exception break setting in CMD+7.
