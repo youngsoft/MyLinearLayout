@@ -9,7 +9,7 @@
 
 ![Logo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayout.png)
 
-##MyLayout(2017.03.04)
+## MyLayout(2017.03.04)
 
 MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIView的layoutSubviews方法的重载以及对子视图的bounds和center属性的设置而实现的。MyLayout功能强大而且简单易用，它集成了:iOS Autolayout和SizeClass、android的5大布局体系、HTML/CSS的浮动定位技术以及flex-box和bootstrap框架等市面上主流的平台的界面布局功能，同时提供了一套非常简单和完备的多屏幕尺寸适配的解决方案。MyLayout的Swift版本的名字叫做：**[TangramKit](https://github.com/youngsoft/TangramKit)**   
 
@@ -529,5 +529,5 @@ $ pod install
 
 
 
-##版本历史
+## 版本历史
 具体请查看 **[CHANGELOG.md](CHANGELOG.md)**
