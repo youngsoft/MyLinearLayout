@@ -28,6 +28,22 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 [http://www.jianshu.com/p/0c075f2fdab2](http://www.jianshu.com/p/0c075f2fdab2) 浮动布局
 
 
+### MyLayout的优势
+* MyLayout的实现内核是基于frame的设置，而不是对AutoLayout的封装。因此在使用上不会受到任何操作系统版本的限制。
+* 有文章表明用frame进行布局的性能要高于用AutoLayout进行布局的性能，尤其是当界面内视图数量增加时效果更加明显。
+* AutoLayout的思想是通过视图之间的约束依赖来完成布局，但是约束依赖的结果是造成视图之间的耦合性高而增大了界面更新的成本。而MyLayout则除了提供约束依赖外，还提供了根据视图添加顺序自动建立约束的功能，从而减少了这种显示依赖关系建立的问题，最终的结果是简化了布局的代码量，以及减少了布局更新时的代码修改量。
+* AutoLayout只是一种相对约束的布局，而MyLayout除了同时提供具有和AutoLayout相同能力的相对布局外、还提供了线性布局、框架布局、表格布局、流式布局、浮动布局、路径布局7大布局体系，你完全可以根据你的界面需求来选择一种最简易的布局容器来实现你的功能，同时MyLayout还支持Size classes的机制，以及提供了一些实现屏幕尺寸完美适配的方法。
+* MyLayout主要是一种通过代码进行布局的解决方案，但是框架一样可以支持和XIB以及SB结合布局的方式。并提供了视图隐藏和显示时会自动激发布局、布局视图的高度自适应(UITableviewCell动态高度)、标签云实现、左右内容宽度自适应、按比例分配尺寸和间距、整体停靠控制等等各种强大的功能。
+
+
+### AutoLayout和frame布局的性能比较
+![](http://upload-images.jianshu.io/upload_images/1432482-e7e8c36e1b790d92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/1432482-69bddc21e9c9df5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+参考的文章地址:[ http://floriankugler.com/2013/04/22/auto-layout-performance-on-ios/]( http://floriankugler.com/2013/04/22/auto-layout-performance-on-ios/)
+
+
+
 ## 演示效果图
 
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo1.gif)
@@ -49,37 +65,39 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 
 最终的效果图如下：
 
-![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKitDemo/Support Files/usagedemo.png)
+![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKitDemo/Support%20Files/usagedemo.png)
 
 
 ```objective-c
 
-    MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     S.subviewMargin = 10;
-    S.myWidth = 100;
-    
+    S.widthDime.equalTo(@100);
+    
     UIView *A = UIView.new;
-    A.myLeftMargin = 0.2;
-    A.myRightMargin = 0.3;
+    A.leftPos.equalTo(@0.2);
+    A.rightPos.equalTo(@0.3);
     A.heightDime.equalTo(A.widthDime);
     [S addSubview:A];
     
     UIView *B = UIView.new;
-    B.myLeftMargin = 40;
-    B.myWidth = 60;
-    B.myHeight = 40;
+    B.leftPos.equalTo(@40);
+    B.widthDime.equalTo(@60);
+    B.heightDime.equalTo(@40);
     [S addSubview:B];
     
     UIView *C = UIView.new;
-    C.myLeftMargin = C.myRightMargin = 0;
-    C.myHeight = 40;
+    C.leftPos.equalTo(@0);
+    C.rightPos.equalTo(@0);
+    C.heightDime.equalTo(@40);
     [S addSubview:C];
     
     UIView *D = UIView.new;
-    D.myRightMargin = 20;
+    D.rightPos.equalTo(@20);
     D.widthDime.equalTo(S.widthDime).multiply(0.5);
-    D.myHeight = 40;
+    D.heightDime.equalTo(@40);
     [S addSubview:D];
+    
     
 
 ```
