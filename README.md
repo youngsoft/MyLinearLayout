@@ -489,7 +489,7 @@ to set Size Classes Characteristics like below:
 ![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/layoutdemo7.gif)
 
 
-##How To Get Started
+## How To Get Started
 
  [Download MyLayout](https://github.com/youngsoft/MyLinearLayout/archive/master.zip) and try out the included iPad and iPhone example apps
 Read FAQ, or articles below:
