@@ -25,36 +25,37 @@ MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayou
 *  Subview C's width is filled in to S, height is 40.
 *  Subview D's right margin is 20, width is 50% width of S, height is 40 
 
-![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKitDemo/Support Files/usagedemo.png)
+![demo](https://raw.githubusercontent.com/youngsoft/TangramKit/master/TangramKitDemo/Support%20Files/usagedemo.png)
 
 
 ```objective-c
 
     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     S.subviewMargin = 10;
-    S.myWidth = 100;
-    
+    S.widthDime.equalTo(@100);
+    
     UIView *A = UIView.new;
-    A.myLeftMargin = 0.2;
-    A.myRightMargin = 0.3;
+    A.leftPos.equalTo(@0.2);
+    A.rightPos.equalTo(@0.3);
     A.heightDime.equalTo(A.widthDime);
     [S addSubview:A];
     
     UIView *B = UIView.new;
-    B.myLeftMargin = 40;
-    B.myWidth = 60;
-    B.myHeight = 40;
+    B.leftPos.equalTo(@40);
+    B.widthDime.equalTo(@60);
+    B.heightDime.equalTo(@40);
     [S addSubview:B];
     
     UIView *C = UIView.new;
-    C.myLeftMargin = C.myRightMargin = 0;
-    C.myHeight = 40;
+    C.leftPos.equalTo(@0);
+    C.rightPos.equalTo(@0);
+    C.heightDime.equalTo(@40);
     [S addSubview:C];
     
     UIView *D = UIView.new;
-    D.myRightMargin = 20;
+    D.rightPos.equalTo(@20);
     D.widthDime.equalTo(S.widthDime).multiply(0.5);
-    D.myHeight = 40;
+    D.heightDime.equalTo(@40);
     [S addSubview:D];
     
 
