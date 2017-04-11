@@ -54,7 +54,7 @@ MyTableLayout|rowSpacing|subviewVSpace
 MyTableLayout|colSpacing|subviewHSpace
 
 非常抱歉进行了这么多名称的变更。现在是将所有老的属性和方法名都设置为了过期属性和方法，并且依然能够使用，但是会报告警。
-> 为了保持对老版本的兼容性，您可以在**PCH文件，或者MyLayout.h的头文件引用前，或者工程设置中** 加入宏定义：** \#define MY_USEOLDMETHODNOWARNING = 1 ** 样就不会产代码中使用老方法名而报警了。
+> 为了保持对老版本的兼容性，您可以在**PCH文件，或者MyLayout.h的头文件引用前，或者工程设置中** 加入宏定义： \#define MY_USEOLDMETHODNOWARNING = 1  样就不会产代码中使用老方法名而报警了。
 
  如果您要替换掉所有老方法和属性(建议替换)，则您可以按照如下步骤来完成代码的替换工作：
  
