@@ -24,7 +24,7 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 [http://blog.csdn.net/yangtiang/article/details/46795231](http://blog.csdn.net/yangtiang/article/details/46795231)   相对布局  
 [http://blog.csdn.net/yangtiang/article/details/46492083](http://blog.csdn.net/yangtiang/article/details/46492083)   框架布局  
 [http://blog.csdn.net/yangtiang/article/details/48011431](http://blog.csdn.net/yangtiang/article/details/48011431) 表格布局  
-[http://blog.csdn.net/yangtiang/article/details/50652946](http://blog.csdn.net/yangtiang/article/details/50652946) 流式布局  
+[http://www.jianshu.com/p/fbeb376584ed](http://www.jianshu.com/p/fbeb376584ed) 流式布局  
 [http://www.jianshu.com/p/0c075f2fdab2](http://www.jianshu.com/p/0c075f2fdab2) 浮动布局
 
 
