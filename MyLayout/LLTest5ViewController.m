@@ -45,22 +45,22 @@
      
         下面的例子说明了相对尺寸和相对间距的概念：
           假如某个垂直线性布局的高度是200，其中里面有A,B,C,D四个子视图。其中：
-           A的myTopMargin = 10,  myHeight=20,   myBottomMargin = 0.1
-           B的myTopMargin = 0.2, myHeight = 30, myBottomMargin = 0
-           C的myTopMargin = 5,   weight = 0.3,  myBottomMargin = 10
-           D的myTopMargin = 0.3, weight = 0.2,  myBottomMargin = 0.4
+           A的myTop = 10,  myHeight=20,   myBottom = 0.1
+           B的myTop = 0.2, myHeight = 30, myBottom = 0
+           C的myTop = 5,   weight = 0.3,  myBottom = 10
+           D的myTop = 0.3, weight = 0.2,  myBottom = 0.4
          
       上面例子中：
-      绝对部分的高度总和=A.myTopMargin + A.myHeight + B.myHeight + B.myBottomMargin + C.myTopMargin + C.myBottomMargin = 75
-      相对部分的比重和为 = A.myBottomMargin + B.myTopMargin + C.weight + D.myTopMargin + D.weight + D.myBottomMargin = 1.5
+      绝对部分的高度总和=A.myTop + A.myHeight + B.myHeight + B.myBottom + C.myTop + C.myBottom = 75
+      相对部分的比重和为 = A.myBottom + B.myTop + C.weight + D.myTop + D.weight + D.myBottom = 1.5
       布局视图的剩余空间 = 总高度 - 绝对高度 = 200 - 75 = 125
       因此最终的上图中的各相对比重的转化为绝对值后的结果如下：
-        A.myBottomMargin = 125 * 0.1/1.5 ≈ 8 
-        B.myTopMargin = 125 * 0.2/1.5  ≈ 17
+        A.myBottom = 125 * 0.1/1.5 ≈ 8 
+        B.myTop = 125 * 0.2/1.5  ≈ 17
         C.myHeight  125 * 0.3/1.5 ≈  25
-        D.myTopMargin  125 *0.3/1.5 ≈ 25
+        D.myTop  125 *0.3/1.5 ≈ 25
         D.myHeight  125 *0.2/1.5 ≈ 17
-        D.myBottomMargin  ≈ 33
+        D.myBottom  ≈ 33
      
      
      如果布局视图里面的子视图使用了相对尺寸和相对间距我们必须要满足如下的条件：
@@ -79,33 +79,33 @@
     
     UILabel *v1 = [self createLabel:NSLocalizedString(@"width equal to superview, height equal to 20% of free height of superview", @"") backgroundColor:[CFTool color:5]];
     v1.numberOfLines = 3;
-    v1.myTopMargin = 10;
-    v1.myLeftMargin = v1.myRightMargin = 0; //宽度和父视图相等,等价于v1.widthDime.equalTo(rootLayout.widthDime);
+    v1.myTop = 10;
+    v1.myLeft = v1.myRight = 0; //宽度和父视图相等,等价于v1.widthSize.equalTo(rootLayout.widthSize);
     v1.weight = 0.2;     //高度的比重是剩余空间的20%
     [rootLayout addSubview:v1];
     
     
     UILabel *v2 = [self createLabel:NSLocalizedString(@"width equal to 80% of superview, height equal to 30% of free height of superview", @"") backgroundColor:[CFTool color:6]];
     v2.numberOfLines = 2;
-    v2.myTopMargin = 10;
-    v2.widthDime.equalTo(rootLayout.widthDime).multiply(0.8);  //子视图的宽度是父视图宽度的0.8
-    v2.myCenterXOffset = 0;
+    v2.myTop = 10;
+    v2.widthSize.equalTo(rootLayout.widthSize).multiply(0.8);  //子视图的宽度是父视图宽度的0.8
+    v2.myCenterX = 0;
     v2.weight = 0.3;    //高度的比重是剩余空间的30%
     [rootLayout addSubview:v2];
     
     
     UILabel *v3 = [self createLabel:NSLocalizedString(@"width equal to superview - 20, height equal to 50% of free height of superview", @"") backgroundColor:[CFTool color:7]];
     v3.numberOfLines = 0;
-    v3.myTopMargin = 10;
-    v3.widthDime.equalTo(rootLayout.widthDime).add(-20);  //父视图的宽度-20 或者v3.myLeftMargin = 20; v3.myRightMargin = 0;
-    v3.myRightMargin = 0;
+    v3.myTop = 10;
+    v3.widthSize.equalTo(rootLayout.widthSize).add(-20);  //父视图的宽度-20 或者v3.myLeft = 20; v3.myRight = 0;
+    v3.myRight = 0;
     v3.weight = 0.5;  //高度的比重是剩余空间的50%
     [rootLayout addSubview:v3];
     
     
     UILabel *v4 = [self createLabel:NSLocalizedString(@"width equal to 200, height equal to 50", @"") backgroundColor:[CFTool color:8]];
     v4.numberOfLines = 2;
-    v4.myTopMargin = 10;
+    v4.myTop = 10;
     v4.myWidth = 200;
     v4.myHeight = 50;
     [rootLayout addSubview:v4];
@@ -114,11 +114,11 @@
     UILabel *v5 = [self createLabel:NSLocalizedString(@"left margin equal to 20% of superview, right margin equal to 30% of superview, width equal to 50% of superview, top spacing equal to 5% of free height of superview, bottom spacing equal to 10% of free height of superview", @"") backgroundColor:[CFTool color:9]];
     v5.numberOfLines = 0;
     //下面设置的值都是0和1之间的值。表示都是相对。
-    v5.myLeftMargin = 0.2;   //左边的边距是父视图的20%
-    v5.myRightMargin = 0.3;  //左右的边距是父视图的30%， 这样也就是说视图的宽度是父视图的50%
+    v5.myLeft = 0.2;   //左边的边距是父视图的20%
+    v5.myRight = 0.3;  //左右的边距是父视图的30%， 这样也就是说视图的宽度是父视图的50%
     v5.weight = 0.1;
-    v5.myTopMargin = 0.05;
-    v5.myBottomMargin = 0.1;
+    v5.myTop = 0.05;
+    v5.myBottom = 0.1;
     [rootLayout addSubview:v5];
 
 }

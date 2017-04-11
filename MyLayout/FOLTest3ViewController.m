@@ -95,7 +95,7 @@
     self.floatLayout = floatLayout;
     
     //通过智能分界线的使用，浮动布局里面的所有子布局视图的分割线都会进行智能的设置，从而解决了我们需求中需要提供边界线的问题。
-    floatLayout.IntelligentBorderLine = [[MyBorderLineDraw alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+    floatLayout.intelligentBorderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
 
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"change style", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleStyleChange:)];
@@ -144,9 +144,9 @@
     titleLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [itemLayout addSubview:titleLabel];
     
-    itemLayout.gravity = MyMarginGravity_Vert_Bottom; //将整个布局中的所有子视图垂直居底部。
-    itemLayout.heightDime.equalTo(_floatLayout.heightDime).multiply(2.0/5);  //布局的高度是父布局的2/5。
-    itemLayout.widthDime.equalTo(_floatLayout.widthDime);   //布局的宽度和父布局相等。
+    itemLayout.gravity = MyGravity_Vert_Bottom; //将整个布局中的所有子视图垂直居底部。
+    itemLayout.heightSize.equalTo(_floatLayout.heightSize).multiply(2.0/5);  //布局的高度是父布局的2/5。
+    itemLayout.widthSize.equalTo(_floatLayout.widthSize);   //布局的宽度和父布局相等。
    
     return itemLayout;
 }
@@ -175,13 +175,13 @@
     sourceLabel.font = [UIFont systemFontOfSize:11];
     sourceLabel.textColor = [UIColor lightGrayColor];
     sourceLabel.clearFloat = YES;     //换行向左浮动。
-    sourceLabel.myTopMargin = 5;
+    sourceLabel.myTop = 5;
     [sourceLabel sizeToFit];
     [itemLayout addSubview:sourceLabel];
     
-    itemLayout.gravity = MyMarginGravity_Vert_Center;  //将整个布局中的所有子视图整体垂直居中。
-    itemLayout.heightDime.equalTo(_floatLayout.heightDime).multiply(1.0/5);  //布局高度是父布局的1/5
-    itemLayout.widthDime.equalTo(_floatLayout.widthDime);   //布局宽度和父布局相等。
+    itemLayout.gravity = MyGravity_Vert_Center;  //将整个布局中的所有子视图整体垂直居中。
+    itemLayout.heightSize.equalTo(_floatLayout.heightSize).multiply(1.0/5);  //布局高度是父布局的1/5
+    itemLayout.widthSize.equalTo(_floatLayout.widthSize);   //布局宽度和父布局相等。
     
     return itemLayout;
     
@@ -210,13 +210,13 @@
     sourceLabel.font = [UIFont systemFontOfSize:11];
     sourceLabel.textColor = [UIColor lightGrayColor];
     sourceLabel.clearFloat = YES;  //换行向左浮动。
-    sourceLabel.myTopMargin = 5;
+    sourceLabel.myTop = 5;
     [sourceLabel sizeToFit];
     [itemLayout addSubview:sourceLabel];
     
-    itemLayout.gravity = MyMarginGravity_Vert_Center;   //将整个布局中的所有子视图整体垂直居中。
-    itemLayout.heightDime.equalTo(_floatLayout.heightDime).multiply(1.0/5);  //布局高度是父布局的1/5
-    itemLayout.widthDime.equalTo(_floatLayout.widthDime).multiply(0.5);      //布局宽度是父布局的一半。
+    itemLayout.gravity = MyGravity_Vert_Center;   //将整个布局中的所有子视图整体垂直居中。
+    itemLayout.heightSize.equalTo(_floatLayout.heightSize).multiply(1.0/5);  //布局高度是父布局的1/5
+    itemLayout.widthSize.equalTo(_floatLayout.widthSize).multiply(0.5);      //布局宽度是父布局的一半。
     
     return itemLayout;
 

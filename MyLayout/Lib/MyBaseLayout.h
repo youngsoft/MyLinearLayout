@@ -119,25 +119,25 @@
 /*
  下面定义的八个属性是上面定义的leftPos,topPos,rightPos,bottomPos,centerXPos,centerYPos的equalTo设置NSNumber类型的值时的简化版本。
  比如：
- v.myLeftMargin = 10    <==>   v.leftPos.equalTo(@10)
- v.myRightMargin = 20   <==>   v.rightPos.equalTo(@20)
- v.myCenterXOffset = 0  <==>   v.centerXPos.equalTo(@0)
+ v.myLeft = 10    <==>   v.leftPos.equalTo(@10)
+ v.myRight = 20   <==>   v.rightPos.equalTo(@20)
+ v.myCenterX = 0  <==>   v.centerXPos.equalTo(@0)
 
 
  这八个属性的值最好别用于读取，而只是单纯用于设置
  
- 这要再次区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。myLeftMargin,myRightMargin,myTopMargin,myBottomMargin这几个子视图的扩展属性即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
+ 这要再次区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。myLeft,myRight,myTop,myBottom这几个子视图的扩展属性即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
  
- 1.垂直线性布局MyLinearLayout中的子视图： myLeftMargin,myRightMargin表示边距，而myTopMargin,myBottomMargin则表示间距。
- 2.水平线性布局MyLinearLayout中的子视图： myLeftMargin,myRightMargin表示间距，而myTopMargin,myBottomMargin则表示边距。
- 3.表格布局中的子视图：                  myLeftMargin,myRightMargin,myTopMargin,myBottomMargin的定义和线性布局是一致的。
- 4.框架布局MyFrameLayout中的子视图：     myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
- 5.相对布局MyRelativeLayout中的子视图：  myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
- 6.流式布局MyFlowLayout中的子视图：      myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示间距。
- 7.浮动布局MyFloatLayout中的子视图：     myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示间距。
- 8.路径布局MyPathLayout中的子视图：      myLeftMargin,myRightMargin,myTopMargin,myBottomMargin即不表示间距也不表示边距，它表示自己中心位置的偏移量。
- 9.非布局父视图中的布局子视图：           myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
- 10.非布局父视图中的非布局子视图：         myLeftMargin,myRightMargin,myTopMargin,myBottomMargin的设置不会起任何作用，因为MyLayout已经无法控制了。
+ 1.垂直线性布局MyLinearLayout中的子视图： myLeft,myRight表示边距，而myTop,myBottom则表示间距。
+ 2.水平线性布局MyLinearLayout中的子视图： myLeft,myRight表示间距，而myTop,myBottom则表示边距。
+ 3.表格布局中的子视图：                  myLeft,myRight,myTop,myBottom的定义和线性布局是一致的。
+ 4.框架布局MyFrameLayout中的子视图：     myLeft,myRight,myTop,myBottom都表示边距。
+ 5.相对布局MyRelativeLayout中的子视图：  myLeft,myRight,myTop,myBottom都表示边距。
+ 6.流式布局MyFlowLayout中的子视图：      myLeft,myRight,myTop,myBottom都表示间距。
+ 7.浮动布局MyFloatLayout中的子视图：     myLeft,myRight,myTop,myBottom都表示间距。
+ 8.路径布局MyPathLayout中的子视图：      myLeft,myRight,myTop,myBottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
+ 9.非布局父视图中的布局子视图：           myLeft,myRight,myTop,myBottom都表示边距。
+ 10.非布局父视图中的非布局子视图：         myLeft,myRight,myTop,myBottom的设置不会起任何作用，因为MyLayout已经无法控制了。
  
  再次强调的是：
  1. 如果同时设置了左右边距就能决定自己的宽度，同时设置左右间距不能决定自己的宽度！
@@ -151,7 +151,7 @@
 /**
  *Left layout position of the view. Equivalent to leftPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myLeftMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myLeft;
 
 /**
  *视图上边的布局位置, 是topPos.equalTo方法的简化版本
@@ -159,7 +159,8 @@
 /**
  *Top layout position of the view. Equivalent to topPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myTopMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myTop;
+
 
 /**
  *视图右边的布局位置, 是rightPos.equalTo方法的简化版本
@@ -167,7 +168,7 @@
 /**
  *Right layout position of the view. Equivalent to rightPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myRightMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myRight;
 
 /**
  *视图下边的布局位置, 是bottomPos.equalTo方法的简化版本
@@ -175,15 +176,27 @@
 /**
  *Bottom layout position of the view. Equivalent to bottomPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myBottomMargin;
+@property(nonatomic, assign) IBInspectable CGFloat myBottom;
 
 /**
- *视图四边的布局位置, 是myLeftMargin,myTopMargin,myRightMargin,myBottomMargin的简化版本
+ *视图四边的布局位置, 是myLeft,myTop,myRight,myBottom的简化版本
  */
 /**
- *Boundary layout position of the view. Equivalent to myLeftMargin,myTopMargin,myRightMargin,myBottomMargin set to the same number.
+ *Boundary layout position of the view. Equivalent to myLeft,myTop,myRight,myBottom set to the same number.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myMargin;
+
+/**
+ *left and right margin of the view to the superview. Equivalent to myLeft,myRight set to the same number
+ */
+@property(nonatomic, assign) IBInspectable CGFloat myHorzMargin;
+
+/**
+ *top and bottom margin of the view to the superview. Equivalent to myTop,myBottom set to the same number
+ */
+@property(nonatomic, assign) IBInspectable CGFloat myVertMargin;
+
+
 
 /**
  *视图水平中心布局位置, 是centerXPos.equalTo方法的简化版本
@@ -191,7 +204,7 @@
 /**
  *Horizontal center layout position of the view. Equivalent to centerXPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myCenterXOffset;
+@property(nonatomic, assign) IBInspectable CGFloat myCenterX;
 
 /**
  *视图垂直中心布局位置, 是centerYPos.equalTo方法的简化版本
@@ -199,32 +212,32 @@
 /**
  *Vertical center layout position of the view. Equivalent to centerYPos.equalTo(NSNumber).
  */
-@property(nonatomic, assign) IBInspectable CGFloat myCenterYOffset;
+@property(nonatomic, assign) IBInspectable CGFloat myCenterY;
 
 /**
- *视图中心布局位置, 是myCenterXOffset,myCenterYOffset方法的简化版本
+ *视图中心布局位置, 是myCenterX,myCenterY方法的简化版本
  */
 /**
- *Center layout position of the view. Equivalent to set myCenterXOffset and myCenterYOffset .
+ *Center layout position of the view. Equivalent to set myCenterX and myCenterY .
  */
-@property(nonatomic, assign) IBInspectable CGPoint myCenterOffset;
+@property(nonatomic, assign) IBInspectable CGPoint myCenter;
 
 
 /*
- 视图的布局尺寸对象MyLayoutSize,用于设置视图的宽度和高度尺寸。视图可以通过设置frame值来设置自身的尺寸，也可以通过设置widthDime和heightDime来
- 设置布局尺寸，通过frame设置的结果会立即生效，而通过widthDime和heightDime设置则会在布局后才生效，如果同时设置了frame值和MyLayoutSize值则MyLayoutSize的设置值优先。
+ 视图的布局尺寸对象MyLayoutSize,用于设置视图的宽度和高度尺寸。视图可以通过设置frame值来设置自身的尺寸，也可以通过设置widthSize和heightSize来
+ 设置布局尺寸，通过frame设置的结果会立即生效，而通过widthSize和heightSize设置则会在布局后才生效，如果同时设置了frame值和MyLayoutSize值则MyLayoutSize的设置值优先。
  
  其中的equalTo方法可用于设置布局尺寸的具体值：
- 1.如果设置为NSNumber则表示布局尺寸是一个具体的数值。比如widthDime.equalTo(@20)表示视图的宽度设置为20个点。
- 2.如果设置为MyLayoutSize则表示布局尺寸依赖于另外一个视图的布局尺寸。比如A.widthDime.equalTo(B.widthDime)表示A的宽度和B的宽度相等
- 3.如果设置为NSArray<MyLayoutSize*>则表示视图和数组里面的视图均分布局视图的宽度或者高度。比如A.widthDime.equalTo(@[B.widthDime,C.widthDime])表示视图A,B,C三个视图均分父视图的宽度。
+ 1.如果设置为NSNumber则表示布局尺寸是一个具体的数值。比如widthSize.equalTo(@20)表示视图的宽度设置为20个点。
+ 2.如果设置为MyLayoutSize则表示布局尺寸依赖于另外一个视图的布局尺寸。比如A.widthSize.equalTo(B.widthSize)表示A的宽度和B的宽度相等
+ 3.如果设置为NSArray<MyLayoutSize*>则表示视图和数组里面的视图均分布局视图的宽度或者高度。比如A.widthSize.equalTo(@[B.widthSize,C.widthSize])表示视图A,B,C三个视图均分父视图的宽度。
  4.如果设置为nil则表示取消布局尺寸的值的设置。
  
- 其中的add方法可以用于设置布局尺寸的增加值，一般只和equalTo设置为MyLayoutSize和NSArray时配合使用。比如A.widthDime.equalTo(B.widthDime).add(20)表示视图A的宽度等于视图B的宽度再加上20个点。
+ 其中的add方法可以用于设置布局尺寸的增加值，一般只和equalTo设置为MyLayoutSize和NSArray时配合使用。比如A.widthSize.equalTo(B.widthSize).add(20)表示视图A的宽度等于视图B的宽度再加上20个点。
  
- 其中的multiply方法可用于设置布局尺寸放大的倍数值。比如A.widthDime.equalTo(B.widthDime).multiply(2)表示视图A的宽度是视图B的宽度的2倍。
+ 其中的multiply方法可用于设置布局尺寸放大的倍数值。比如A.widthSize.equalTo(B.widthSize).multiply(2)表示视图A的宽度是视图B的宽度的2倍。
  
- 其中的min,max表示用来设置布局尺寸的最大最小值。比如A.widthDime.min(10).max(40)表示宽度的最小是10最大是40。
+ 其中的min,max表示用来设置布局尺寸的最大最小值。比如A.widthSize.min(10).max(40)表示宽度的最小是10最大是40。
  
  下面的表格描述了在各种布局下的子视图的布局尺寸对象的equalTo方法可以设置的值。
  为了表示方便我们把：
@@ -234,16 +247,16 @@
  
  定义A为操作的视图本身，B为A的兄弟视图，P为A的父视图。
  +-------------+----------+--------------+---------------+------------+--------------+---------------+--------------+----------------------+
- | 对象 \ 值    | NSNumber |A.widthDime   |A.heightDime   |B.widthDime | B.heightDime |	P.widthDime  |P.heightDime  |NSArray<MyLayoutSize*>|
+ | 对象 \ 值    | NSNumber |A.widthSize   |A.heightSize   |B.widthSize | B.heightSize |	P.widthSize  |P.heightSize  |NSArray<MyLayoutSize*>|
  +-------------+----------+--------------+---------------+------------+--------------+---------------+--------------+----------------------+
- |A.widthDime  | ALL	  |ALL	         |FR/R/FL-H/FO/LH|FR/R/FO/P	  | R	         |L/FR/R/FL/FO/P | R	        |R                     |
+ |A.widthSize  | ALL	  |ALL	         |FR/R/FL-H/FO/LH|FR/R/FO/P	  | R	         |L/FR/R/FL/FO/P | R	        |R                     |
  +-------------+----------+--------------+---------------+------------+--------------+---------------+--------------+----------------------+
- |A.heightDime | ALL	  |FR/R/FL-V/FO/L|ALL            |R	          |FR/R/FO/P     |R              |L/FR/R/FL/FO/P|R                     |
+ |A.heightSize | ALL	  |FR/R/FL-V/FO/L|ALL            |R	          |FR/R/FO/P     |R              |L/FR/R/FL/FO/P|R                     |
  +-------------+----------+--------------+---------------+------------+--------------+---------------+--------------+----------------------+
 
   上表中所有的布局尺寸的值都支持设置为数值，而且所有布局下的子视图的宽度和高度尺寸都可以设置为等于自身的宽度和高度尺寸，布局库这里做了特殊处理，是不会造成循环引用的。比如：
-    A.widthDime.equalTo(A.widthDime)，支持这种设置的原因是有时候比如希望某个UILabel的宽度是在其本身内容宽度的基础上再添加一个增加值，这时候就可以设置如下：
-    A.widthDime.equalTo(A.widthDime).add(30);
+    A.widthSize.equalTo(A.widthSize)，支持这种设置的原因是有时候比如希望某个UILabel的宽度是在其本身内容宽度的基础上再添加一个增加值，这时候就可以设置如下：
+    A.widthSize.equalTo(A.widthSize).add(30);
     表示视图A的宽度总是视图内容的宽度+30，这样即使视图调用了sizeToFit方法来计算出包裹内容的宽度，但是最终的布局宽度还是会再增加30个点。
  
  */
@@ -256,32 +269,32 @@
 /**
  *视图的宽度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,nil这四种值
  */
-@property(nonatomic, readonly)  MyLayoutSize *widthDime;
+@property(nonatomic, readonly)  MyLayoutSize *widthSize;
 
 /**
  *视图的高度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,nil这四种值
  */
-@property(nonatomic, readonly)  MyLayoutSize *heightDime;
+@property(nonatomic, readonly)  MyLayoutSize *heightSize;
 
 
 
 /*
- 下面三个属性是上面widthDime,heightDime的equalTo设置NSNumber类型值的简化版本,表示设置视图的高度和宽度的布局尺寸。
+ 下面三个属性是上面widthSize,heightSize的equalTo设置NSNumber类型值的简化版本,表示设置视图的高度和宽度的布局尺寸。
  需要注意的是设置这三个值并不是直接设置frame里面的size的宽度和高度，而是设置的是布局尺寸的数值
  
- v.myWidth = 10    <=>   v.widthDime.equalTo(@10)
- v.myHeight = 20   <=>   v.heightDime.equalTo(@10)
+ v.myWidth = 10    <=>   v.widthSize.equalTo(@10)
+ v.myHeight = 20   <=>   v.heightSize.equalTo(@10)
  
  这三个属性的值最好别用于读取，而只是单纯用于设置
  */
 
 /**
- *视图的宽度布局尺寸,是widthDime.equalTo方法的简化版本
+ *视图的宽度布局尺寸,是widthSize.equalTo方法的简化版本
  */
 @property(nonatomic,assign) IBInspectable CGFloat myWidth;
 
 /**
- *视图的高度布局尺寸,是heightDime.equalTo方法的简化版本
+ *视图的高度布局尺寸,是heightSize.equalTo方法的简化版本
  */
 @property(nonatomic,assign) IBInspectable CGFloat myHeight;
 
@@ -293,21 +306,15 @@
 
 
 /**
- *视图的宽度包裹属性，表示视图的宽度由所有子视图的整体宽度来确定或者根据视图内容来宽度自适应。默认值是NO(水平线性布局默认这个属性是YES)，表示必须要明确指定视图的宽度，而当设置为YES时则不需要明确的指定视图的宽度了。这个属性不能和widthDime(或者设置了左右边距)同时设置否则可能会产生约束冲突，因为前者表明宽度由子视图或者内容来决定而后者则表示宽度是一个明确的值。如果同时设置了宽度包裹属性又同时设置了明确的宽度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的宽度和宽度包裹则会在布局前将宽度包裹属性置为NO。
+ *视图的宽度包裹属性，表示视图的宽度由所有子视图的整体宽度来确定或者根据视图内容来宽度自适应。默认值是NO(水平线性布局默认这个属性是YES)，表示必须要明确指定视图的宽度，而当设置为YES时则不需要明确的指定视图的宽度了。这个属性不能和widthSize(或者设置了左右边距)同时设置否则可能会产生约束冲突，因为前者表明宽度由子视图或者内容来决定而后者则表示宽度是一个明确的值。如果同时设置了宽度包裹属性又同时设置了明确的宽度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的宽度和宽度包裹则会在布局前将宽度包裹属性置为NO。
  */
 @property(nonatomic,assign) IBInspectable BOOL wrapContentWidth;
 
 /**
- *视图的高度包裹属性，表示视图的高度由所有子视图的整体高度来确定或者根据视图内容来高度自适应。默认值是NO(垂直线性布局默认这个属性是YES)，表示必须要明确指定布局的高度，而当设置为YES时则不需要明确的指定视图的高度了。这个属性不能和heightDime(或者设置了上下边距)同时设置否则可能会产生约束冲突，因为前者表明高度由子视图或者内容来决定而后者则表示高度是一个明确的值。如果同时设置了高度包裹属性又同时设置了明确的高度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的高度和高度包裹则会在布局前将高度包裹属性置为NO。如果某个非布局视图指定了明确的宽度，而又将这个属性设置为了YES的话就能实现在固定宽度的情况下视图的高度根据内容自适应的效果，这个特性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图来实现高度根据内容自适应的场景。UILabel在使用这个属性时会自动设置numberOfLines为0，因此如果您要修改numberOfLines则需要在设置这个属性后进行；UITextView可以用这个属性以及heightDime中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果；UIImageView可以用这个属性来在实现在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放。
+ *视图的高度包裹属性，表示视图的高度由所有子视图的整体高度来确定或者根据视图内容来高度自适应。默认值是NO(垂直线性布局默认这个属性是YES)，表示必须要明确指定布局的高度，而当设置为YES时则不需要明确的指定视图的高度了。这个属性不能和heightSize(或者设置了上下边距)同时设置否则可能会产生约束冲突，因为前者表明高度由子视图或者内容来决定而后者则表示高度是一个明确的值。如果同时设置了高度包裹属性又同时设置了明确的高度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的高度和高度包裹则会在布局前将高度包裹属性置为NO。如果某个非布局视图指定了明确的宽度，而又将这个属性设置为了YES的话就能实现在固定宽度的情况下视图的高度根据内容自适应的效果，这个特性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图来实现高度根据内容自适应的场景。UILabel在使用这个属性时会自动设置numberOfLines为0，因此如果您要修改numberOfLines则需要在设置这个属性后进行；UITextView可以用这个属性以及heightSize中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果；UIImageView可以用这个属性来在实现在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放。
  */
 @property(nonatomic,assign) IBInspectable BOOL wrapContentHeight;
 
-
-
-/**
- * 请参考wrapContentHeight的定义描述
-*/
-@property(nonatomic, assign, getter=isFlexedHeight)  BOOL flexedHeight MYDEPRECATED("use wrapContentHeight to instead");
 
 
 /**
@@ -411,10 +418,74 @@
 @end
 
 
+@interface UIView(MyLayoutExtDeprecated)
+
+/**
+ * 过期的位置和尺寸设置方法，老版本中带Margin后缀就明确为了边距的概念，但是这个和属性定义的概念是不一致的，位置即可表示边距也可以表示间距。所以这些方法将设置为过期。
+ */
+
+
+/**
+ *过期属性,请用myLeft
+ */
+@property(nonatomic, assign)  CGFloat myLeftMargin MYMETHODDEPRECATED("use myLeft to instead");
+
+/**
+ *过期属性,请用myTop
+ */
+@property(nonatomic, assign)  CGFloat myTopMargin MYMETHODDEPRECATED("use myTop to instead");
+
+/**
+ *过期属性,请用myRight
+ */
+@property(nonatomic, assign)  CGFloat myRightMargin MYMETHODDEPRECATED("use myRight to instead");
+
+/**
+ *过期属性,请用myBottom
+ */
+@property(nonatomic, assign)  CGFloat myBottomMargin MYMETHODDEPRECATED("use myBottom to instead");
+
+/**
+ *过期属性,请用myCenterX
+ */
+@property(nonatomic, assign)  CGFloat myCenterXOffset MYMETHODDEPRECATED("use myCenterX to instead");
+
+/**
+ *过期属性,请用myCenterY
+ */
+@property(nonatomic, assign)  CGFloat myCenterYOffset MYMETHODDEPRECATED("use myCenterY to instead");
+
+/**
+ *过期属性,请用myCenter
+ */
+@property(nonatomic, assign)  CGPoint myCenterOffset MYMETHODDEPRECATED("use myCenter to instead");
+
+/**
+ *过期属性,请用widthSize
+ */
+@property(nonatomic, readonly) MyLayoutSize *widthDime MYMETHODDEPRECATED("use widthSize to instead");
+
+/**
+ *过期属性,请用heightSize
+ */
+@property(nonatomic, readonly) MyLayoutSize *heightDime MYMETHODDEPRECATED("use heightSize to instead");
+
+
+/**
+ *过期属性,请用wrapContentHeight
+ */
+@property(nonatomic, assign, getter=isFlexedHeight)  BOOL flexedHeight MYMETHODDEPRECATED("use wrapContentHeight to instead");
+
+
+
+@end
+
+
+
 /**
  *布局的边界画线类，用于实现绘制布局的四周的边界线的功能。一个布局视图中提供了上下左右4个方向的边界画线类对象。
  */
-@interface MyBorderLineDraw : NSObject
+@interface MyBorderline : NSObject
 
 
 /**
@@ -445,8 +516,11 @@
 
 -(id)initWithColor:(UIColor*)color;
 
+
 @end
 
+//兼容老版本的类名命名不规则的问题，这样老版本仍然可以用MyBorderLineDraw这个类名。
+typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to instead");
 
 
 /**
@@ -507,6 +581,14 @@
  * 举例来说假设某个布局视图的高度是wrapContentHeight,并且设置了topPadding为10，bottomPadding为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为NO时，那么在没有任何子视图时布局视图的高度就是0，也就是说topPadding和bottomPadding不会参与高度的计算了。
  */
 @property(nonatomic, assign) BOOL zeroPadding;
+
+
+/**
+ *设置布局视图里面子视图之间的间距。如果是垂直线性布局则设置的是垂直间距，如果是水平线性布局则设置的是水平间距。两个视图之间的最终间距等于MyLayoutPos设置的间距加上subviewSpace设置的间距的和。
+ */
+@property(nonatomic ,assign) IBInspectable CGFloat subviewVSpace;
+@property(nonatomic, assign) IBInspectable CGFloat subviewHSpace;
+@property(nonatomic, assign) IBInspectable CGFloat subviewSpace;
 
 
 /**
@@ -577,25 +659,26 @@
 
 
 /**
- *设置布局视图的四周的边界线对象。boundBorderLine是同时设置四周的边界线。您也可以单独设置布局视图某些边的边界线。边界线对象默认是nil，您必须通过建立边界线类MyBorderLineDraw的对象实例并赋值给下面的属性来实现边界线的指定。
+ *设置布局视图的四周的边界线对象。boundBorderLine是同时设置四周的边界线。您也可以单独设置布局视图某些边的边界线。边界线对象默认是nil，您必须通过建立边界线类MyBorderline的对象实例并赋值给下面的属性来实现边界线的指定。
  */
-@property(nonatomic, strong) MyBorderLineDraw *leftBorderLine;
-@property(nonatomic, strong) MyBorderLineDraw *rightBorderLine;
-@property(nonatomic, strong) MyBorderLineDraw *topBorderLine;
-@property(nonatomic, strong) MyBorderLineDraw *bottomBorderLine;
-@property(nonatomic, strong) MyBorderLineDraw *boundBorderLine;
+@property(nonatomic, strong) MyBorderline *leftBorderline;
+@property(nonatomic, strong) MyBorderline *rightBorderline;
+@property(nonatomic, strong) MyBorderline *topBorderline;
+@property(nonatomic, strong) MyBorderline *bottomBorderline;
+@property(nonatomic, strong) MyBorderline *boundBorderline;
 
 
 /**
  *智能边界线，智能边界线不是设置布局自身的边界线而是对添加到布局视图里面的子布局视图根据子视图之间的关系智能的生成边界线，对于布局视图里面的非布局子视图则不会生成边界线。目前的版本只支持线性布局，表格布局，流式布局和浮动布局这四种布局。
  *举例来说如果为某个垂直线性布局设置了智能边界线，那么当这垂直线性布局里面添加了A和B两个子布局视图时，系统会智能的在A和B之间绘制一条边界线。
  */
-@property(nonatomic, strong) MyBorderLineDraw *IntelligentBorderLine;
+@property(nonatomic, strong) MyBorderline *intelligentBorderline;
 
 /**
- *不使用父布局视图提供的智能边界线功能。当某个布局视图的父布局视图设置了IntelligentBorderLine时但是这个布局视图又想自己定义边界线或者不想要边界线时则将这个属性设置为YES即可。
+ *不使用父布局视图提供的智能边界线功能。当某个布局视图的父布局视图设置了intelligentBorderline时但是这个布局视图又想自己定义边界线或者不想要边界线时则将这个属性设置为YES即可。
  */
-@property(nonatomic, assign) BOOL notUseIntelligentBorderLine;
+@property(nonatomic, assign) BOOL notUseIntelligentBorderline;
+
 
 
 /**
@@ -679,3 +762,70 @@
 
 
 @end
+
+
+@interface MyBaseLayout(MyBaseLayoutDeprecated)
+
+/**
+ *过期方法，对于间距统一用space来描述，而边距用margin来描述。
+ *原先子视图之间的间距属性的命名规范不合理，所以这里将原先的设置间距的属性设置为过期。这里也和TangramKit中的命名统一。
+ */
+
+/**
+*过期属性,请用subviewVSpace
+*/
+@property(nonatomic ,assign, getter=subviewVSpace, setter=setSubviewVSpace:) CGFloat subviewVertMargin MYMETHODDEPRECATED("use subviewVSpace to instead");
+
+/**
+ *过期属性,请用subviewHSpace
+ */
+@property(nonatomic, assign, getter=subviewHSpace, setter=setSubviewHSpace:) CGFloat subviewHorzMargin MYMETHODDEPRECATED("use subviewHSpace to instead");
+
+/**
+ *过期属性,请用subviewSpace
+ */
+@property(nonatomic, assign, getter=subviewSpace, setter=setSubviewSpace:) CGFloat subviewMargin MYMETHODDEPRECATED("use subviewSpace to instead");
+
+/**
+ *过期方法, 原先对边界线命名BorderLine不符合规则，Borderline是一个单词不是一个词组。这里也和TangramKit中的命名统一。
+ */
+
+/**
+ *过期属性,请用leftBorderline
+ */
+@property(nonatomic, strong, getter=leftBorderline, setter=setLeftBorderline:) MyBorderline *leftBorderLine MYMETHODDEPRECATED("use leftBorderline to instead");
+
+/**
+ *过期属性,请用rightBorderline
+ */
+@property(nonatomic, strong, getter=rightBorderline, setter=setRightBorderline:) MyBorderline *rightBorderLine MYMETHODDEPRECATED("use rightBorderline to instead");
+
+/**
+ *过期属性,请用topBorderline
+ */
+@property(nonatomic, strong, getter=topBorderline, setter=setTopBorderline:) MyBorderline *topBorderLine MYMETHODDEPRECATED("use topBorderline to instead");
+
+/**
+ *过期属性,请用bottomBorderline
+ */
+@property(nonatomic, strong, getter=bottomBorderline, setter=setBottomBorderline:) MyBorderline *bottomBorderLine MYMETHODDEPRECATED("use bottomBorderline to instead");
+
+/**
+ *过期属性,请用boundBorderline
+ */
+@property(nonatomic, strong, getter=boundBorderline, setter=setBoundBorderline:) MyBorderline *boundBorderLine MYMETHODDEPRECATED("use boundBorderline to instead");
+
+/**
+ *过期属性,请用intelligentBorderline
+ */
+@property(nonatomic, strong, getter=intelligentBorderline, setter=setIntelligentBorderline:) MyBorderline *IntelligentBorderLine MYMETHODDEPRECATED("use intelligentBorderline to instead");
+
+/**
+ *过期属性,请用notUseIntelligentBorderline
+ */
+@property(nonatomic, assign, getter=notUseIntelligentBorderline, setter=setNotUseIntelligentBorderline:) BOOL notUseIntelligentBorderLine MYMETHODDEPRECATED("use notUseIntelligentBorderline to instead");
+
+
+@end
+
+

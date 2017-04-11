@@ -134,8 +134,8 @@ static CGFloat sTagWidth = 70;
     [self.view addSubview:scrollView];
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;  //宽度和滚动条视图保持一致。
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;
+    rootLayout.myLeft = rootLayout.myRight = 0;  //宽度和滚动条视图保持一致。
+    rootLayout.gravity = MyGravity_Horz_Fill;
     [scrollView addSubview:rootLayout];
     
     //添加操作提示布局
@@ -145,8 +145,8 @@ static CGFloat sTagWidth = 70;
     //添加数据内容布局
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     contentLayout.backgroundColor = [CFTool color:0];
-    contentLayout.gravity = MyMarginGravity_Horz_Fill;
-    contentLayout.subviewMargin = 10;
+    contentLayout.gravity = MyGravity_Horz_Fill;
+    contentLayout.subviewVSpace = 10;
     contentLayout.padding = UIEdgeInsetsMake(10, 0, 10, 0);
     [rootLayout addSubview:contentLayout];
     self.contentLayout = contentLayout;
@@ -183,8 +183,8 @@ static CGFloat sTagWidth = 70;
         floatLayout.backgroundColor = [UIColor whiteColor];
         floatLayout.padding = UIEdgeInsetsMake(20, 10, 20, 10);
         floatLayout.wrapContentHeight = YES;
-        floatLayout.subviewHorzMargin = 30; //设置浮动布局里面子视图之间的水平间距。
-        floatLayout.subviewVertMargin = 10; //设置浮动布局里面子视图之间的垂直间距。
+        floatLayout.subviewHSpace = 30; //设置浮动布局里面子视图之间的水平间距。
+        floatLayout.subviewVSpace = 10; //设置浮动布局里面子视图之间的垂直间距。
         [contentLayout addSubview:floatLayout];
         
         //添加标题文本。
@@ -193,7 +193,7 @@ static CGFloat sTagWidth = 70;
         titleLabel.textColor = [CFTool color:4];
         titleLabel.font = [CFTool font:16];
         titleLabel.weight = 1;  //标题部分占据全部的宽度，独占一行。所以
-        titleLabel.myBottomMargin = 5; //设置底部边距，这样下面的内容都和这个视图距离5个点。
+        titleLabel.myBottom = 5; //设置底部边距，这样下面的内容都和这个视图距离5个点。
         [titleLabel sizeToFit];
         [floatLayout addSubview:titleLabel];
         
@@ -207,15 +207,15 @@ static CGFloat sTagWidth = 70;
             {
                 UIView *sectionView = [self createSectionView:sectionTitle image:sectionDict[@"sectionImage"]];
                 //宽度是布局视图宽度的1/4，因为视图之间是有间距的，所以这里每个视图的宽度都要再减去3/4的间距值。
-                sectionView.widthDime.equalTo(floatLayout.widthDime).multiply(1.0 / 4.0).add(-3.0 / 4.0 *floatLayout.subviewHorzMargin);
+                sectionView.widthSize.equalTo(floatLayout.widthSize).multiply(1.0 / 4.0).add(-3.0 / 4.0 *floatLayout.subviewHSpace);
                 //高度是标签的2倍，但因为中间还包括了一个垂直间距的高度，所以这里要加上垂直间距的值。
-                sectionView.heightDime.equalTo(@(sTagHeight * 2)).add(floatLayout.subviewVertMargin);
+                sectionView.heightSize.equalTo(@(sTagHeight * 2)).add(floatLayout.subviewVSpace);
                 sectionView.clearFloat = YES;  //因为每个section总是新的一行开始。所以这里要把clearFloat设置为YES。
                 [floatLayout addSubview:sectionView];
                 
                 if (lastTagView != nil)
                 {
-                    lastTagView.myBottomMargin = 20;  //最后一个tag视图的底部间距是20,这样下一个section的位置就会有一定的偏移。。
+                    lastTagView.myBottom = 20;  //最后一个tag视图的底部间距是20,这样下一个section的位置就会有一定的偏移。。
                 }
                 
                 
@@ -230,9 +230,9 @@ static CGFloat sTagWidth = 70;
             {
                 UIView *tagView = [self createTagView:tagstr];
                 //宽度是布局视图宽度的1/4，因为视图之间是有间距的，所以这里每个视图的宽度都要再减去3/4的间距值。
-                tagView.widthDime.equalTo(floatLayout.widthDime).multiply(1.0 / 4.0).add(-3.0 / 4.0 * floatLayout.subviewHorzMargin);
+                tagView.widthSize.equalTo(floatLayout.widthSize).multiply(1.0 / 4.0).add(-3.0 / 4.0 * floatLayout.subviewHSpace);
                 //高度是固定的40
-                tagView.heightDime.equalTo(@(sTagHeight));
+                tagView.heightSize.equalTo(@(sTagHeight));
                 [floatLayout addSubview:tagView];
                 lastTagView = tagView;
 
@@ -263,7 +263,7 @@ static CGFloat sTagWidth = 70;
         floatLayout.backgroundColor = [UIColor whiteColor];
         floatLayout.padding = UIEdgeInsetsMake(20, 5, 20, 5);
         floatLayout.wrapContentHeight = YES;
-        floatLayout.subviewVertMargin = 10; //设置浮动布局里面子视图之间的垂直间距。
+        floatLayout.subviewVSpace = 10; //设置浮动布局里面子视图之间的垂直间距。
         [floatLayout setSubviewsSize:sTagWidth minSpace:8 maxSpace:CGFLOAT_MAX];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为70，最小的间距为8.
         [contentLayout addSubview:floatLayout];
         
@@ -278,7 +278,7 @@ static CGFloat sTagWidth = 70;
         titleLabel.textColor = [CFTool color:4];
         titleLabel.font = [CFTool font:16];
         titleLabel.weight = 1;  //标题部分占据全部的宽度，独占一行。所以
-        titleLabel.myBottomMargin = 5; //设置底部边距，这样下面的内容都和这个视图距离5个点。
+        titleLabel.myBottom = 5; //设置底部边距，这样下面的内容都和这个视图距离5个点。
         [titleLabel sizeToFit];
         [floatLayout addSubview:titleLabel];
         
@@ -291,8 +291,8 @@ static CGFloat sTagWidth = 70;
             if (sectionTitle.length > 0)
             {
                 UIView *sectionView = [self createSectionView:sectionTitle image:sectionDict[@"sectionImage"]];
-                sectionView.widthDime.equalTo(@(sTagWidth)); //固定宽度
-                sectionView.heightDime.equalTo(@(sTagHeight * 2)).add(floatLayout.subviewVertMargin); //高度是标签的2倍，但因为中间还包括了一个垂直间距的高度，所以这里要加上垂直间距的值。
+                sectionView.widthSize.equalTo(@(sTagWidth)); //固定宽度
+                sectionView.heightSize.equalTo(@(sTagHeight * 2)).add(floatLayout.subviewVSpace); //高度是标签的2倍，但因为中间还包括了一个垂直间距的高度，所以这里要加上垂直间距的值。
 
                 sectionView.clearFloat = YES;  //因为每个section总是新的一行开始。所以这里要把clearFloat设置为YES。
                 [floatLayout addSubview:sectionView];
@@ -300,7 +300,7 @@ static CGFloat sTagWidth = 70;
                 
                 if (lastTagView != nil)
                 {
-                    lastTagView.myBottomMargin = 20;  //最后一个tag视图的底部间距是20,这样下一个section的位置就会有一定的偏移。。
+                    lastTagView.myBottom = 20;  //最后一个tag视图的底部间距是20,这样下一个section的位置就会有一定的偏移。。
                 }
                 
             }
@@ -311,8 +311,8 @@ static CGFloat sTagWidth = 70;
             for (NSString *tagstr in sectionDict[@"tags"])
             {
                 UIView *tagView = [self createTagView:tagstr];
-                tagView.widthDime.equalTo(@(sTagWidth)); //宽度固定
-                tagView.heightDime.equalTo(@(sTagHeight)); //             高度是固定的40
+                tagView.widthSize.equalTo(@(sTagWidth)); //宽度固定
+                tagView.heightSize.equalTo(@(sTagHeight)); //             高度是固定的40
                 [floatLayout addSubview:tagView];
                 tagView.tag = (partIndex * 1000 + sectionIndex) * 1000 + tagIndex;
                 
@@ -334,9 +334,9 @@ static CGFloat sTagWidth = 70;
 {
     MyFloatLayout *actionLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    actionLayout.subviewHorzMargin = 5;
+    actionLayout.subviewHSpace = 5;
     actionLayout.wrapContentHeight = YES;
-    actionLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
+    actionLayout.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor]];
     
     
     NSArray *actions = @[NSLocalizedString(@"flexed width, fixed space", @""),
@@ -353,7 +353,7 @@ static CGFloat sTagWidth = 70;
         button.layer.borderColor = [UIColor lightGrayColor].CGColor;
         button.layer.borderWidth = 0.5;
         button.myHeight = 44;
-        button.widthDime.equalTo(actionLayout.widthDime).multiply(1.0/actions.count).add(-2.5);  //宽度均分,这里减去2.5是因为有视图之间的间距为5
+        button.widthSize.equalTo(actionLayout.widthSize).multiply(1.0/actions.count).add(-2.5);  //宽度均分,这里减去2.5是因为有视图之间的间距为5
         button.tag = i + 100;
         [button addTarget:self action:@selector(handleStyleChange:) forControlEvents:UIControlEventTouchUpInside];
         [actionLayout addSubview:button];
@@ -371,7 +371,7 @@ static CGFloat sTagWidth = 70;
     sectionLayout.layer.cornerRadius = 5;
     sectionLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
     sectionLayout.layer.borderWidth = 0.5;
-    sectionLayout.gravity = MyMarginGravity_Center;
+    sectionLayout.gravity = MyGravity_Center;
     [sectionLayout setTarget:self action:@selector(handleSectionViewTap:)];
 
     
@@ -383,7 +383,7 @@ static CGFloat sTagWidth = 70;
     sectionLabel.textColor = [UIColor lightGrayColor];
     sectionLabel.adjustsFontSizeToFitWidth = YES;
     sectionLabel.textAlignment = NSTextAlignmentCenter;
-    sectionLabel.myLeftMargin = sectionLabel.myRightMargin = 0;
+    sectionLabel.myLeft = sectionLabel.myRight = 0;
     [sectionLabel sizeToFit];
     [sectionLayout addSubview:sectionLabel];
  

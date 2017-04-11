@@ -9,7 +9,7 @@
 
 ![Logo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayout.png)
 
-## MyLayout(2017.03.04)
+## MyLayout(2017.04.11)
 
 MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIView的layoutSubviews方法的重载以及对子视图的bounds和center属性的设置而实现的。MyLayout功能强大而且简单易用，它集成了:iOS Autolayout和SizeClass、android的5大布局体系、HTML/CSS的浮动定位技术以及flex-box和bootstrap框架等市面上主流的平台的界面布局功能，同时提供了一套非常简单和完备的多屏幕尺寸适配的解决方案。MyLayout的Swift版本的名字叫做：**[TangramKit](https://github.com/youngsoft/TangramKit)**   
 
@@ -71,31 +71,31 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 ```objective-c
 
      MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    S.subviewMargin = 10;
-    S.widthDime.equalTo(@100);
+    S.subviewSpace = 10;
+    S.widthSize.equalTo(@100);
     
     UIView *A = UIView.new;
     A.leftPos.equalTo(@0.2);
     A.rightPos.equalTo(@0.3);
-    A.heightDime.equalTo(A.widthDime);
+    A.heightSize.equalTo(A.widthSize);
     [S addSubview:A];
     
     UIView *B = UIView.new;
     B.leftPos.equalTo(@40);
-    B.widthDime.equalTo(@60);
-    B.heightDime.equalTo(@40);
+    B.widthSize.equalTo(@60);
+    B.heightSize.equalTo(@40);
     [S addSubview:B];
     
     UIView *C = UIView.new;
     C.leftPos.equalTo(@0);
     C.rightPos.equalTo(@0);
-    C.heightDime.equalTo(@40);
+    C.heightSize.equalTo(@40);
     [S addSubview:C];
     
     UIView *D = UIView.new;
     D.rightPos.equalTo(@20);
-    D.widthDime.equalTo(S.widthDime).multiply(0.5);
-    D.heightDime.equalTo(@40);
+    D.widthSize.equalTo(S.widthSize).multiply(0.5);
+    D.heightSize.equalTo(@40);
     [S addSubview:D];
     
     
@@ -109,11 +109,11 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
  
 
 ### 布局位置类MyLayoutPos
-MyLayoutPos类是用来描述一个视图所在的位置的类。UIView中扩展出了leftPos,topPos,bottomPos,rightPos,centerXPos,centerYPos这六个变量来实现视图的定位操作。您可以用这些变量的`equalTo`方法来设置视图之间的边距和间距。 `equalTo` 方法可以设置NSNumber, MyLayoutPos, NSArray<MyLayoutPos*>这几种值，分别用于不同的场景。同时系统提供了6个简单的变量myLeftMargin, myTopMargin, myBottomMargin, myRightMargin, myCenterXOffset, mYCenterYOffset来设置NSNumber类型的值，比如 `A.leftPos.equalTo(@10); 等价于 A.myLeftMargin = 10;`.
+MyLayoutPos类是用来描述一个视图所在的位置的类。UIView中扩展出了leftPos,topPos,bottomPos,rightPos,centerXPos,centerYPos这六个变量来实现视图的定位操作。您可以用这些变量的`equalTo`方法来设置视图之间的边距和间距。 `equalTo` 方法可以设置NSNumber, MyLayoutPos, NSArray<MyLayoutPos*>这几种值，分别用于不同的场景。同时系统提供了6个简单的变量myLeft, myTop, myBottom, myRight, myCenterX, mYCenterY来设置NSNumber类型的值，比如 `A.leftPos.equalTo(@10); 等价于 A.myLeft = 10;`.
 
 
 ### 布局尺寸类MyLayoutSize
-MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出了widthDime,heightDime这两个变量来实现视图的宽度和高度尺寸的设置。您可以用其中的`equalTo`方法来设置视图的宽度和高度。`equalTo`方法可以设置NSNumber, MyLayoutSize, NSArray<MyLayoutSize*>这几种值，分别用于不同的场景。同时系统提供了2个简单的变量myWidth,myHeight来设置NSNumber类型的值，比如`A.widthDime.equalTo(@10); 等价于A.myWidth = 10;`.
+MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出了widthSize,heightSize这两个变量来实现视图的宽度和高度尺寸的设置。您可以用其中的`equalTo`方法来设置视图的宽度和高度。`equalTo`方法可以设置NSNumber, MyLayoutSize, NSArray<MyLayoutSize*>这几种值，分别用于不同的场景。同时系统提供了2个简单的变量myWidth,myHeight来设置NSNumber类型的值，比如`A.widthSize.equalTo(@10); 等价于A.myWidth = 10;`.
 
 
 ### 线性布局MyLinearLayout
@@ -132,26 +132,26 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     
     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     S.myWidth = 120;
-    S.subviewMargin = 10;
+    S.subviewSpace = 10;
     
     UIView *A = [UIView new];
-    A.myLeftMargin = A.myRightMargin = 5;
+    A.myLeft = A.myRight = 5;
     A.myHeight = 40;
     [S addSubview:A];
     
     UIView *B = [UIView new];
-    B.myLeftMargin = 20;
+    B.myLeft = 20;
     B.myWidth = B.myHeight = 40;
     [S addSubview:B];
     
     UIView *C = [UIView new];
-    C.myRightMargin = 40;
+    C.myRight = 40;
     C.myWidth = 50;
     C.myHeight = 40;
     [S addSubview:C];
     
     UIView *D = [UIView new];
-    D.myLeftMargin = D.myRightMargin = 10;
+    D.myLeft = D.myRight = 10;
     D.myHeight = 40;
     [S addSubview:D];
     
@@ -181,42 +181,42 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     [super loadView];
     
     MyRelativeLayout *S = [MyRelativeLayout new];
-    S.widthDime.equalTo(@170);
-    S.heightDime.equalTo(@280);
+    S.widthSize.equalTo(@170);
+    S.heightSize.equalTo(@280);
     
     UIView *A = [UIView new];
     A.leftPos.equalTo(@20);
     A.topPos.equalTo(@20);
-    A.widthDime.equalTo(@40);
-    A.heightDime.equalTo(A.widthDime);
+    A.widthSize.equalTo(@40);
+    A.heightSize.equalTo(A.widthSize);
     [S addSubview:A];
     
     UIView *B = [UIView new];
     B.leftPos.equalTo(A.centerXPos);
     B.topPos.equalTo(A.bottomPos).offset(10);
-    B.widthDime.equalTo(@60);
-    B.heightDime.equalTo(A.heightDime);
+    B.widthSize.equalTo(@60);
+    B.heightSize.equalTo(A.heightSize);
     [S addSubview:B];
     
     UIView *C = [UIView new];
     C.leftPos.equalTo(B.rightPos).offset(10);
     C.bottomPos.equalTo(B.bottomPos);
-    C.widthDime.equalTo(@40);
-    C.heightDime.equalTo(B.heightDime).multiply(0.5);
+    C.widthSize.equalTo(@40);
+    C.heightSize.equalTo(B.heightSize).multiply(0.5);
     [S addSubview:C];
     
     UIView *D = [UIView new];
     D.bottomPos.equalTo(C.topPos).offset(10);
     D.rightPos.equalTo(@15);
-    D.heightDime.equalTo(A.heightDime);
-    D.widthDime.equalTo(D.heightDime);
+    D.heightSize.equalTo(A.heightSize);
+    D.widthSize.equalTo(D.heightSize);
     [S addSubview:D];
     
     UIView *E = [UIView new];
     E.centerYPos.equalTo(@0);
     E.centerXPos.equalTo(@0);
-    E.heightDime.equalTo(@40);
-    E.widthDime.equalTo(S.widthDime).add(-20);
+    E.heightSize.equalTo(@40);
+    E.widthSize.equalTo(S.widthSize).add(-20);
     [S addSubview:E];
     //.. F, G
     
@@ -256,17 +256,17 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     
     UIView *B = [UIView new];
     B.mySize = CGSizeMake(40,40);
-    B.myRightMargin = 0;
+    B.myRight = 0;
     [S addSubview:B];
     
     UIView *C = [UIView new];
     C.mySize = CGSizeMake(40,40);
-    C.myCenterYOffset = 0;
+    C.myCenterY = 0;
     [S addSubview:C];
     
     UIView *D = [UIView new];
     D.mySize = CGSizeMake(40,40);
-    D.myCenterOffset = CGPointZero;
+    D.myCenter = CGPointZero;
     [S addSubview:D];
     
     //..E，F,G
@@ -299,8 +299,8 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     
     MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     S.wrapContentWidth = YES;
-    S.rowSpacing = 10;
-    S.colSpacing = 10;
+    S.subviewHSpace = 10;
+    S.subviewVSpace = 10;
     
     [S addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_WRAPCONTENT];
     
@@ -357,13 +357,13 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     S.wrapContentHeight = YES;
     S.myWidth = 300;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    S.gravity = MyMarginGravity_Horz_Fill;
-    S.subviewMargin = 10;
+    S.gravity = MyGravity_Horz_Fill;
+    S.subviewSpace = 10;
     
     for (int i = 0; i < 10; i++)
     {
         UIView *A = [UIView new];
-        A.heightDime.equalTo(A.widthDime);
+        A.heightSize.equalTo(A.widthSize);
         [S addSubview:A];
         
         A.backgroundColor = [UIColor greenColor];
@@ -399,7 +399,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     S.wrapContentHeight = YES;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    S.subviewMargin = 10;
+    S.subviewSpace = 10;
     S.myWidth = 300;
     
     UIView *A = [UIView new];
@@ -503,14 +503,14 @@ MyLayout布局体系为了实现对不同屏幕尺寸的设备进行适配，提
  MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = NO;
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;
+    rootLayout.gravity = MyGravity_Horz_Fill;
 
 //MySizeClass_wAny | MySizeClass_hCompact 表明的是iPhone设备的横屏.
  MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
  
     lsc.orientation = MyLayoutViewOrientation_Horz;
     lsc.wrapContentWidth = NO;
-    lsc.gravity = MyMarginGravity_Vert_Fill;
+    lsc.gravity = MyGravity_Vert_Fill;
 
 
 ```
@@ -536,7 +536,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.3.4'
+pod 'MyLayout', '~> 1.3.5'
 ```
    
 然后运行如下命令:

@@ -78,12 +78,12 @@
 
 -(MyMaker*)height
 {
-    return [self addMethod:@"heightDime"];
+    return [self addMethod:@"heightSize"];
 }
 
 -(MyMaker*)width
 {
-    return [self addMethod:@"widthDime"];
+    return [self addMethod:@"widthSize"];
 }
 
 -(MyMaker*)useFrame
@@ -218,7 +218,7 @@
 
 -(MyMaker*)space
 {
-    return [self addMethod:@"subviewMargin"];
+    return [self addMethod:@"subviewSpace"];
     
 }
 
@@ -247,13 +247,13 @@
 
 -(MyMaker*)vertSpace
 {
-    return [self addMethod:@"subviewVertMargin"];
+    return [self addMethod:@"subviewVSpace"];
 
 }
 
 -(MyMaker*)horzSpace
 {
-    return [self addMethod:@"subviewHorzMargin"];
+    return [self addMethod:@"subviewHSpace"];
 
 }
 

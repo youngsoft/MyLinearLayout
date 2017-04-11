@@ -42,7 +42,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" title="添加标签"/>
                                     <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="myLeftMargin">
+                                        <userDefinedRuntimeAttribute type="number" keyPath="myLeft">
                                             <integer key="value" value="10"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
@@ -57,7 +57,7 @@
                                     <integer key="value" value="1"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="wrapContentHeight" value="YES"/>
-                                <userDefinedRuntimeAttribute type="number" keyPath="myBottomMargin">
+                                <userDefinedRuntimeAttribute type="number" keyPath="myBottom">
                                     <real key="value" value="5"/>
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
@@ -149,7 +149,7 @@
                         <userDefinedRuntimeAttribute type="number" keyPath="weight">
                             <integer key="value" value="1"/>
                         </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="subviewMargin">
+                        <userDefinedRuntimeAttribute type="number" keyPath="subviewSpace">
                             <integer key="value" value="10"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">

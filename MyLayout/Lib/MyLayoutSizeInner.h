@@ -13,7 +13,7 @@
 @interface MyLayoutSize()
 
 @property(nonatomic, weak) UIView *view;
-@property(nonatomic, assign) MyMarginGravity dime;
+@property(nonatomic, assign) MyGravity dime;
 @property(nonatomic, assign) MyLayoutValueType dimeValType;
 
 @property(nonatomic, readonly, strong) NSNumber *dimeNumVal;
@@ -23,6 +23,10 @@
 
 @property(nonatomic, readonly, strong) MyLayoutSize *lBoundVal;
 @property(nonatomic, readonly, strong) MyLayoutSize *uBoundVal;
+
+@property(nonatomic, readonly, strong) MyLayoutSize *lBoundValInner;
+@property(nonatomic, readonly, strong) MyLayoutSize *uBoundValInner;
+
 
 
 -(MyLayoutSize*)__equalTo:(id)val;

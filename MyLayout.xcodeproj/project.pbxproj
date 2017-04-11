@@ -105,9 +105,9 @@
 
 /* Begin PBXFileReference section */
 		181068351E0B4EA9000B9B86 /* AllTest8ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest8ViewController.h; sourceTree = "<group>"; };
-		181068361E0B4EA9000B9B86 /* AllTest8ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest8ViewController.m; sourceTree = "<group>"; };
+		181068361E0B4EA9000B9B86 /* AllTest8ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest8ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		181550661E2F75DF00329BFF /* FLLTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest5ViewController.h; sourceTree = "<group>"; };
-		181550671E2F75EA00329BFF /* FLLTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest5ViewController.m; sourceTree = "<group>"; };
+		181550671E2F75EA00329BFF /* FLLTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FLLTest5ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		181ECE5F1D570CA1007803BE /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYFPSLabel.m; sourceTree = "<group>"; };
 		181ECE601D570CA1007803BE /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
 		181ECE611D570CA1007803BE /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
@@ -118,17 +118,17 @@
 		182225AC1E77E5930081AA4B /* MyLinearLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLinearLayout.h; sourceTree = "<group>"; };
 		182225AD1E77E5930081AA4B /* MyFloatLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFloatLayout.h; sourceTree = "<group>"; };
 		182225AE1E77E5930081AA4B /* MyTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableLayout.h; sourceTree = "<group>"; };
-		182225AF1E77E5930081AA4B /* MyBaseLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyBaseLayout.h; sourceTree = "<group>"; };
+		182225AF1E77E5930081AA4B /* MyBaseLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyBaseLayout.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182225B01E77E5930081AA4B /* MyLayoutPos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutPos.h; sourceTree = "<group>"; };
 		182225B11E77E5930081AA4B /* MyBaseLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBaseLayout.m; sourceTree = "<group>"; };
-		182225B21E77E5930081AA4B /* MyLinearLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLinearLayout.m; sourceTree = "<group>"; };
+		182225B21E77E5930081AA4B /* MyLinearLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLinearLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225B31E77E5930081AA4B /* MyLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDef.h; sourceTree = "<group>"; };
-		182225B41E77E5930081AA4B /* MyFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFlowLayout.m; sourceTree = "<group>"; };
+		182225B41E77E5930081AA4B /* MyFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyFlowLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225B51E77E5930081AA4B /* MyRelativeLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRelativeLayout.m; sourceTree = "<group>"; };
 		182225B61E77E5930081AA4B /* MyPathLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPathLayout.m; sourceTree = "<group>"; };
 		182225B71E77E5930081AA4B /* MyFrameLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFrameLayout.m; sourceTree = "<group>"; };
 		182225B81E77E5930081AA4B /* MyLayoutInner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutInner.h; sourceTree = "<group>"; };
-		182225B91E77E5930081AA4B /* MyFloatLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFloatLayout.m; sourceTree = "<group>"; };
+		182225B91E77E5930081AA4B /* MyFloatLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyFloatLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225BA1E77E5930081AA4B /* MyFrameLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFrameLayout.h; sourceTree = "<group>"; };
 		182225BB1E77E5930081AA4B /* MyLayoutPos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutPos.m; sourceTree = "<group>"; };
 		182225BC1E77E5930081AA4B /* MyLayoutSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutSize.h; sourceTree = "<group>"; };
@@ -147,13 +147,13 @@
 		18296B6D1C76D55B00273C3E /* FOLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest1ViewController.h; sourceTree = "<group>"; };
 		18296B6E1C76D55B00273C3E /* FOLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest1ViewController.m; sourceTree = "<group>"; };
 		18296B701C76D66C00273C3E /* FOLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest2ViewController.h; sourceTree = "<group>"; };
-		18296B711C76D66C00273C3E /* FOLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest2ViewController.m; sourceTree = "<group>"; };
+		18296B711C76D66C00273C3E /* FOLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FOLTest2ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18296B731C76D67F00273C3E /* FOLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest3ViewController.h; sourceTree = "<group>"; };
-		18296B741C76D67F00273C3E /* FOLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest3ViewController.m; sourceTree = "<group>"; };
+		18296B741C76D67F00273C3E /* FOLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FOLTest3ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		1830A6071CD6EC2F00FF6B57 /* FLLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest3ViewController.h; sourceTree = "<group>"; };
-		1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest3ViewController.m; sourceTree = "<group>"; };
+		1830A6081CD6EC4500FF6B57 /* FLLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FLLTest3ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		183C14611DB9DD1A00C38448 /* AllTest7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest7ViewController.h; sourceTree = "<group>"; };
-		183C14621DB9DD1A00C38448 /* AllTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest7ViewController.m; sourceTree = "<group>"; };
+		183C14621DB9DD1A00C38448 /* AllTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest7ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		1840828D1B2C46E8003F378B /* MyLayout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLayout.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		184082A61B2C46E8003F378B /* MyLayout.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyLayout.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		186B83D01D08F7B9001CA155 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = LaunchScreen.xib; sourceTree = "<group>"; };
@@ -171,9 +171,9 @@
 		186DF3711D523EDB00039E44 /* fll.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fll.png; sourceTree = "<group>"; };
 		186DF3721D523EDB00039E44 /* flo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flo.png; sourceTree = "<group>"; };
 		187075FD1E5A9B44004FA21B /* FLLTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest6ViewController.h; sourceTree = "<group>"; };
-		187075FE1E5A9B44004FA21B /* FLLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest6ViewController.m; sourceTree = "<group>"; };
+		187075FE1E5A9B44004FA21B /* FLLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FLLTest6ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		188261CD1C647CB300996C2C /* AllTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest6ViewController.h; sourceTree = "<group>"; };
-		188261CE1C647CB300996C2C /* AllTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest6ViewController.m; sourceTree = "<group>"; };
+		188261CE1C647CB300996C2C /* AllTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest6ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		1888CE7C1D0BE44300968C0C /* layoutdemo6.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo6.gif; sourceTree = "<group>"; };
 		1888CE7D1D0BE44300968C0C /* layoutdemo5.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo5.gif; sourceTree = "<group>"; };
 		1888CE7E1D0BE44300968C0C /* layoutdemo4.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo4.gif; sourceTree = "<group>"; };
@@ -184,7 +184,7 @@
 		1890A22C1C6DD71600373B8B /* FLLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest2ViewController.h; sourceTree = "<group>"; };
 		1890A22D1C6DD71600373B8B /* FLLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest2ViewController.m; sourceTree = "<group>"; };
 		1896926E1CF74E6A000A5B91 /* AllTest2TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest2TableViewCell.h; sourceTree = "<group>"; };
-		1896926F1CF74E7E000A5B91 /* AllTest2TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest2TableViewCell.m; sourceTree = "<group>"; };
+		1896926F1CF74E7E000A5B91 /* AllTest2TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest2TableViewCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		189692711CF74E9B000A5B91 /* AllTest1TableViewHeaderFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewHeaderFooterView.h; sourceTree = "<group>"; };
 		189692721CF74EA7000A5B91 /* AllTest1TableViewHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewHeaderFooterView.m; sourceTree = "<group>"; };
 		189692741CF74EBB000A5B91 /* AllTestDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTestDataModel.h; sourceTree = "<group>"; };
@@ -198,7 +198,7 @@
 		18B152331DEDDE5500AD7A1C /* MyLayoutUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyLayoutUITests.m; sourceTree = "<group>"; };
 		18B152351DEDDE5500AD7A1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18BCC5181D2D4879005081FF /* FLLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest4ViewController.h; sourceTree = "<group>"; };
-		18BCC5191D2D4885005081FF /* FLLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest4ViewController.m; sourceTree = "<group>"; };
+		18BCC5191D2D4885005081FF /* FLLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FLLTest4ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18BF0BE41D5109C300395960 /* layoutdemo7.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo7.gif; sourceTree = "<group>"; };
 		18C8F1621D4DA6B800DC1FD3 /* PLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTest3ViewController.h; sourceTree = "<group>"; };
 		18C8F1631D4DA6B800DC1FD3 /* PLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTest3ViewController.m; sourceTree = "<group>"; };
@@ -255,9 +255,9 @@
 		18D684541C4F423400A48BB4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D684551C4F423400A48BB4 /* MyLayoutTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutTests.m; sourceTree = "<group>"; };
 		18DBC5681CFB450900BD73D2 /* FOLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest4ViewController.h; sourceTree = "<group>"; };
-		18DBC5691CFB451800BD73D2 /* FOLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest4ViewController.m; sourceTree = "<group>"; };
+		18DBC5691CFB451800BD73D2 /* FOLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FOLTest4ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18DC7F531CF5510F008E5FCB /* AllTest1TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewCell.h; sourceTree = "<group>"; };
-		18DC7F541CF5510F008E5FCB /* AllTest1TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewCell.m; sourceTree = "<group>"; };
+		18DC7F541CF5510F008E5FCB /* AllTest1TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest1TableViewCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18DF8AE71DDCBF34009FD703 /* CFTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFTool.h; sourceTree = "<group>"; };
 		18DF8AE81DDCBF34009FD703 /* CFTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFTool.m; sourceTree = "<group>"; };
 		18E7C5161D47A1CA00F61A3E /* PLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTest1ViewController.h; sourceTree = "<group>"; };
@@ -266,12 +266,12 @@
 		18E7C51A1D47BA9400F61A3E /* PLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTest2ViewController.m; sourceTree = "<group>"; };
 		18E8084C1B3A5D170059C410 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		18EA81431CFFD3DD0006530A /* FOLTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest5ViewController.h; sourceTree = "<group>"; };
-		18EA81441CFFD3E90006530A /* FOLTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest5ViewController.m; sourceTree = "<group>"; };
-		18EDEC801D64B70D00F8B1CD /* FOLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest6ViewController.m; sourceTree = "<group>"; };
+		18EA81441CFFD3E90006530A /* FOLTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FOLTest5ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		18EDEC801D64B70D00F8B1CD /* FOLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FOLTest6ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18EDEC821D64B71900F8B1CD /* FOLTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest6ViewController.h; sourceTree = "<group>"; };
 		18FE40AF1E6AA709001E8007 /* MyLayout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyLayout.png; sourceTree = "<group>"; };
 		46DB7E691C54B4BC001B409D /* AllTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest5ViewController.h; sourceTree = "<group>"; };
-		46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest5ViewController.m; sourceTree = "<group>"; };
+		46DB7E6A1C54B4BC001B409D /* AllTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest5ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -548,37 +548,37 @@
 		18D683FB1C4F421400A48BB4 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				18D684001C4F421400A48BB4 /* MyLayout.h */,
 				182225AB1E77E5930081AA4B /* MyFlowLayout.h */,
-				182225AC1E77E5930081AA4B /* MyLinearLayout.h */,
-				182225AD1E77E5930081AA4B /* MyFloatLayout.h */,
-				182225AE1E77E5930081AA4B /* MyTableLayout.h */,
-				182225AF1E77E5930081AA4B /* MyBaseLayout.h */,
-				182225B01E77E5930081AA4B /* MyLayoutPos.h */,
-				182225B11E77E5930081AA4B /* MyBaseLayout.m */,
-				182225B21E77E5930081AA4B /* MyLinearLayout.m */,
-				182225B31E77E5930081AA4B /* MyLayoutDef.h */,
 				182225B41E77E5930081AA4B /* MyFlowLayout.m */,
-				182225B51E77E5930081AA4B /* MyRelativeLayout.m */,
-				182225B61E77E5930081AA4B /* MyPathLayout.m */,
-				182225B71E77E5930081AA4B /* MyFrameLayout.m */,
-				182225B81E77E5930081AA4B /* MyLayoutInner.h */,
+				182225AC1E77E5930081AA4B /* MyLinearLayout.h */,
+				182225B21E77E5930081AA4B /* MyLinearLayout.m */,
+				182225AD1E77E5930081AA4B /* MyFloatLayout.h */,
 				182225B91E77E5930081AA4B /* MyFloatLayout.m */,
+				182225AE1E77E5930081AA4B /* MyTableLayout.h */,
+				182225C31E77E5930081AA4B /* MyTableLayout.m */,
+				182225BE1E77E5930081AA4B /* MyRelativeLayout.h */,
+				182225B51E77E5930081AA4B /* MyRelativeLayout.m */,
+				182225BD1E77E5930081AA4B /* MyPathLayout.h */,
+				182225B61E77E5930081AA4B /* MyPathLayout.m */,
 				182225BA1E77E5930081AA4B /* MyFrameLayout.h */,
+				182225B71E77E5930081AA4B /* MyFrameLayout.m */,
+				182225AF1E77E5930081AA4B /* MyBaseLayout.h */,
+				182225B11E77E5930081AA4B /* MyBaseLayout.m */,
+				182225B01E77E5930081AA4B /* MyLayoutPos.h */,
+				182225C61E77E5930081AA4B /* MyLayoutPosInner.h */,
 				182225BB1E77E5930081AA4B /* MyLayoutPos.m */,
 				182225BC1E77E5930081AA4B /* MyLayoutSize.h */,
-				182225BD1E77E5930081AA4B /* MyPathLayout.h */,
-				182225BE1E77E5930081AA4B /* MyRelativeLayout.h */,
-				182225BF1E77E5930081AA4B /* MyLayoutSizeClass.m */,
-				182225C01E77E5930081AA4B /* MyLayoutSizeClass.h */,
-				182225C11E77E5930081AA4B /* MyMaker.m */,
-				182225C21E77E5930081AA4B /* MyMaker.h */,
-				182225C31E77E5930081AA4B /* MyTableLayout.m */,
-				182225C41E77E5930081AA4B /* MyDimeScale.m */,
-				182225C51E77E5930081AA4B /* MyLayoutSize.m */,
-				182225C61E77E5930081AA4B /* MyLayoutPosInner.h */,
-				182225C71E77E5930081AA4B /* MyDimeScale.h */,
 				182225C81E77E5930081AA4B /* MyLayoutSizeInner.h */,
-				18D684001C4F421400A48BB4 /* MyLayout.h */,
+				182225C51E77E5930081AA4B /* MyLayoutSize.m */,
+				182225C01E77E5930081AA4B /* MyLayoutSizeClass.h */,
+				182225BF1E77E5930081AA4B /* MyLayoutSizeClass.m */,
+				182225C21E77E5930081AA4B /* MyMaker.h */,
+				182225C11E77E5930081AA4B /* MyMaker.m */,
+				182225C71E77E5930081AA4B /* MyDimeScale.h */,
+				182225C41E77E5930081AA4B /* MyDimeScale.m */,
+				182225B81E77E5930081AA4B /* MyLayoutInner.h */,
+				182225B31E77E5930081AA4B /* MyLayoutDef.h */,
 			);
 			path = Lib;
 			sourceTree = "<group>";

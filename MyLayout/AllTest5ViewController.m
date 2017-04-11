@@ -26,8 +26,8 @@
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = NO;
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;
-    rootLayout.subviewMargin = 10;
+    rootLayout.gravity = MyGravity_Horz_Fill;
+    rootLayout.subviewSpace = 10;
     self.view = rootLayout;
 
     
@@ -63,7 +63,7 @@
     MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     lsc.orientation = MyLayoutViewOrientation_Horz;
     lsc.wrapContentWidth = NO;
-    lsc.gravity = MyMarginGravity_Vert_Fill;
+    lsc.gravity = MyGravity_Vert_Fill;
     
     
     

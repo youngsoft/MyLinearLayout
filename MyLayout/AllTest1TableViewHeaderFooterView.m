@@ -24,50 +24,50 @@
     if (self != nil)
     {
         MyFrameLayout *rootLayout = [MyFrameLayout new];
-        rootLayout.widthDime.equalTo(self.contentView.widthDime);
-        rootLayout.heightDime.equalTo(self.contentView.heightDime);
+        rootLayout.widthSize.equalTo(self.contentView.widthSize);
+        rootLayout.heightSize.equalTo(self.contentView.heightSize);
         [self.contentView addSubview:rootLayout];
         
         MyFrameLayout *leftItemLayout = [self createItemLayout:NSLocalizedString(@"Show", @"") withTag:0];
-        leftItemLayout.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
-        leftItemLayout.heightDime.equalTo(rootLayout.heightDime);
+        leftItemLayout.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0);
+        leftItemLayout.heightSize.equalTo(rootLayout.heightSize);
         leftItemLayout.highlightedOpacity = 0.5;
         [rootLayout addSubview:leftItemLayout];
         
-        MyBorderLineDraw *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];
+        MyBorderline *bld = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
         bld.tailIndent = bld.headIndent = 5;
         
         MyFrameLayout *centerItemLayout = [self createItemLayout:NSLocalizedString(@"Topic", @"") withTag:1];
-        centerItemLayout.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
-        centerItemLayout.heightDime.equalTo(rootLayout.heightDime);
+        centerItemLayout.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0);
+        centerItemLayout.heightSize.equalTo(rootLayout.heightSize);
         centerItemLayout.centerXPos.equalTo(@0);
-        centerItemLayout.leftBorderLine = bld;
+        centerItemLayout.leftBorderline = bld;
         centerItemLayout.highlightedOpacity = 0.5;
         [rootLayout addSubview:centerItemLayout];
         
         
         MyFrameLayout *rightItemLayout = [self createItemLayout:NSLocalizedString(@"Follow", @"") withTag:2];
-        rightItemLayout.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
-        rightItemLayout.heightDime.equalTo(rootLayout.heightDime);
+        rightItemLayout.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0);
+        rightItemLayout.heightSize.equalTo(rootLayout.heightSize);
         rightItemLayout.rightPos.equalTo(@0);
-        rightItemLayout.leftBorderLine = bld;
+        rightItemLayout.leftBorderline = bld;
         rightItemLayout.highlightedOpacity = 0.5;
         [rootLayout addSubview:rightItemLayout];
         
         //底部的横线
         _underLineView = [UIView new];
         _underLineView.backgroundColor = [UIColor redColor];
-        _underLineView.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
-        _underLineView.heightDime.equalTo(@2);
+        _underLineView.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0);
+        _underLineView.heightSize.equalTo(@2);
         _underLineView.bottomPos.equalTo(@0);
         _underLineView.leftPos.equalTo(@0).active = YES;   //设置左边位置有效
         _underLineView.centerXPos.equalTo(@0).active = NO;  //设置水平中间位置无效
         _underLineView.rightPos.equalTo(@0).active = NO;    //设置右边位置无效
         [rootLayout addSubview:_underLineView];
         
-        MyBorderLineDraw *rootLayoutBld = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];
-        rootLayout.bottomBorderLine = rootLayoutBld;
-        rootLayout.topBorderLine = rootLayoutBld;
+        MyBorderline *rootLayoutBld = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
+        rootLayout.bottomBorderline = rootLayoutBld;
+        rootLayout.topBorderline = rootLayoutBld;
         
     }
     

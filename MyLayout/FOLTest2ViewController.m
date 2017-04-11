@@ -378,10 +378,10 @@ static NSInteger sBaseTag = 100000;
     self.view = scrollView;
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;
+    rootLayout.myLeft = rootLayout.myRight = 0;
+    rootLayout.gravity = MyGravity_Horz_Fill;
     rootLayout.backgroundColor = [UIColor colorWithWhite:0xe7/255.0 alpha:1];
-    rootLayout.IntelligentBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]]; //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
+    rootLayout.intelligentBorderline = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]]; //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
     [scrollView addSubview:rootLayout];
     self.rootLayout = rootLayout;
 }
@@ -420,7 +420,7 @@ static NSInteger sBaseTag = 100000;
         sectionTitleLabel.font = [UIFont boldSystemFontOfSize:15];
         sectionTitleLabel.backgroundColor = [UIColor whiteColor];
         sectionTitleLabel.myHeight = 30;
-        sectionTitleLabel.myTopMargin = 10;
+        sectionTitleLabel.myTop = 10;
         [self.rootLayout addSubview:sectionTitleLabel];
     }
     
@@ -428,7 +428,7 @@ static NSInteger sBaseTag = 100000;
     MyFloatLayout *itemContainerLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     itemContainerLayout.backgroundColor = [UIColor whiteColor];
     itemContainerLayout.wrapContentHeight = YES;
-    itemContainerLayout.IntelligentBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];
+    itemContainerLayout.intelligentBorderline = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
     [self.rootLayout addSubview:itemContainerLayout];
     
     //创建条目布局，并加入到容器布局中去。
@@ -451,14 +451,14 @@ static NSInteger sBaseTag = 100000;
         
         //根据上面布局模型对高度和宽度的定义指定条目布局的尺寸。如果小于等于1则用相对尺寸，否则用绝对尺寸。
         if (layoutTemplate.width <= 1)
-            itemLayout.widthDime.equalTo(itemContainerLayout.widthDime).multiply(layoutTemplate.width);
+            itemLayout.widthSize.equalTo(itemContainerLayout.widthSize).multiply(layoutTemplate.width);
         else
-            itemLayout.widthDime.equalTo(@(layoutTemplate.width));
+            itemLayout.widthSize.equalTo(@(layoutTemplate.width));
         
         if (layoutTemplate.height <= 1)
-            itemLayout.heightDime.equalTo(itemContainerLayout.heightDime).multiply(layoutTemplate.height);
+            itemLayout.heightSize.equalTo(itemContainerLayout.heightSize).multiply(layoutTemplate.height);
         else
-            itemLayout.heightDime.equalTo(@(layoutTemplate.height));
+            itemLayout.heightSize.equalTo(@(layoutTemplate.height));
         
         [itemContainerLayout addSubview:itemLayout];
     }
@@ -481,15 +481,15 @@ static NSInteger sBaseTag = 100000;
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeftMargin = 5;
-    titleLabel.myTopMargin = 5;
+    titleLabel.myLeft = 5;
+    titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
     //向上浮动，左边顶部边距为5，高度为20
     UIImageView *subImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.subImage]];
-    subImageView.myLeftMargin = 5;
-    subImageView.myTopMargin = 5;
+    subImageView.myLeft = 5;
+    subImageView.myTop = 5;
     subImageView.myHeight = 20;
     [subImageView sizeToFit];
     [itemLayout addSubview:subImageView];
@@ -498,7 +498,7 @@ static NSInteger sBaseTag = 100000;
     //向上浮动，高度占用剩余的高度，宽度和父布局保持一致。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
     imageView.weight = 1;
-    imageView.widthDime.equalTo(itemLayout.widthDime);
+    imageView.widthSize.equalTo(itemLayout.widthSize);
     [itemLayout addSubview:imageView];
     
     return itemLayout;
@@ -514,9 +514,9 @@ static NSInteger sBaseTag = 100000;
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.widthDime.equalTo(itemLayout.widthDime);
-    titleLabel.myLeftMargin = 5;
-    titleLabel.myTopMargin = 5;
+    titleLabel.widthSize.equalTo(itemLayout.widthSize);
+    titleLabel.myLeft = 5;
+    titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
@@ -525,15 +525,15 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:12];
     subTitleLabel.textColor = [UIColor lightGrayColor];
-    subTitleLabel.widthDime.equalTo(itemLayout.widthDime);
-    subTitleLabel.myLeftMargin = 5;
+    subTitleLabel.widthSize.equalTo(itemLayout.widthSize);
+    subTitleLabel.myLeft = 5;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];
     
     //图片向右浮动，并且右边距为5，上面因为占据了全宽，因此这里会另起一行向右浮动。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
     imageView.reverseFloat = YES;
-    imageView.myRightMargin = 5;
+    imageView.myRight = 5;
     [itemLayout addSubview:imageView];
     
     return itemLayout;
@@ -547,7 +547,7 @@ static NSInteger sBaseTag = 100000;
 
     //因为图片要占据全高，所以必须优先向右浮动。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
-    imageView.heightDime.equalTo(itemLayout.heightDime);
+    imageView.heightSize.equalTo(itemLayout.heightSize);
     imageView.reverseFloat = YES;
     [itemLayout addSubview:imageView];
     
@@ -555,8 +555,8 @@ static NSInteger sBaseTag = 100000;
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeftMargin = 5;
-    titleLabel.myTopMargin = 5;
+    titleLabel.myLeft = 5;
+    titleLabel.myTop = 5;
     titleLabel.weight = 1;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
@@ -566,7 +566,7 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:12];
     subTitleLabel.textColor = [UIColor lightGrayColor];
-    subTitleLabel.myLeftMargin = 5;
+    subTitleLabel.myLeft = 5;
     subTitleLabel.clearFloat = YES; //清除浮动，另起一行。
     subTitleLabel.weight = 1;
     subTitleLabel.wrapContentHeight = YES;
@@ -579,7 +579,7 @@ static NSInteger sBaseTag = 100000;
     {
         UIImageView *subImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.subImage]];
         subImageView.clearFloat = YES;
-        subImageView.myLeftMargin = 5;
+        subImageView.myLeft = 5;
         [itemLayout addSubview:subImageView];
     }
     
@@ -607,8 +607,8 @@ static NSInteger sBaseTag = 100000;
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeftMargin = 5;
-    titleLabel.myTopMargin = 5;
+    titleLabel.myLeft = 5;
+    titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
@@ -616,8 +616,8 @@ static NSInteger sBaseTag = 100000;
     UILabel *subTitleLabel = [UILabel new];
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
-    subTitleLabel.myLeftMargin = 5;
-    subTitleLabel.myTopMargin = 5;
+    subTitleLabel.myLeft = 5;
+    subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];
     
@@ -626,8 +626,8 @@ static NSInteger sBaseTag = 100000;
     priceLabel.text = dataModel.price;
     priceLabel.font = [UIFont systemFontOfSize:11];
     priceLabel.textColor = [UIColor redColor];
-    priceLabel.myLeftMargin = 5;
-    priceLabel.myBottomMargin = 5;
+    priceLabel.myLeft = 5;
+    priceLabel.myBottom = 5;
     [priceLabel sizeToFit];
     priceLabel.reverseFloat = YES;
     [itemLayout addSubview:priceLabel];
@@ -637,14 +637,14 @@ static NSInteger sBaseTag = 100000;
     descLabel.text = dataModel.desc;
     descLabel.font = [UIFont systemFontOfSize:11];
     descLabel.textColor = [UIColor lightGrayColor];
-    descLabel.myLeftMargin = 5;
+    descLabel.myLeft = 5;
     [descLabel sizeToFit];
     descLabel.reverseFloat = YES;
     [itemLayout addSubview:descLabel];
     
     //向上浮动，并占用剩余的空间高度。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
-    imageView.widthDime.equalTo(itemLayout.widthDime);
+    imageView.widthSize.equalTo(itemLayout.widthSize);
     imageView.weight = 1;
     [itemLayout addSubview:imageView];
     
@@ -660,9 +660,9 @@ static NSInteger sBaseTag = 100000;
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeftMargin = 5;
-    titleLabel.myTopMargin = 5;
-    titleLabel.widthDime.equalTo(itemLayout.widthDime).multiply(0.5);
+    titleLabel.myLeft = 5;
+    titleLabel.myTop = 5;
+    titleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
@@ -670,10 +670,10 @@ static NSInteger sBaseTag = 100000;
     UILabel *subTitleLabel = [UILabel new];
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
-    subTitleLabel.myLeftMargin = 5;
-    subTitleLabel.myTopMargin = 5;
+    subTitleLabel.myLeft = 5;
+    subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
-    subTitleLabel.widthDime.equalTo(itemLayout.widthDime).multiply(0.5);
+    subTitleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
     [itemLayout addSubview:subTitleLabel];
     
     //价格向下浮动
@@ -681,11 +681,11 @@ static NSInteger sBaseTag = 100000;
     priceLabel.text = dataModel.price;
     priceLabel.font = [UIFont systemFontOfSize:11];
     priceLabel.textColor = [UIColor redColor];
-    priceLabel.myLeftMargin = 5;
-    priceLabel.myBottomMargin = 5;
+    priceLabel.myLeft = 5;
+    priceLabel.myBottom = 5;
     [priceLabel sizeToFit];
     priceLabel.reverseFloat = YES;
-    priceLabel.widthDime.equalTo(itemLayout.widthDime).multiply(0.5);
+    priceLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
     [itemLayout addSubview:priceLabel];
     
     //描述向下浮动
@@ -693,16 +693,16 @@ static NSInteger sBaseTag = 100000;
     descLabel.text = dataModel.desc;
     descLabel.font = [UIFont systemFontOfSize:11];
     descLabel.textColor = [UIColor lightGrayColor];
-    descLabel.myLeftMargin = 5;
+    descLabel.myLeft = 5;
     [descLabel sizeToFit];
     descLabel.reverseFloat = YES;
-    descLabel.widthDime.equalTo(itemLayout.widthDime).multiply(0.5);
+    descLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
     [itemLayout addSubview:descLabel];
     
     //向上浮动，因为宽度无法再容纳，所以这里会换列继续向上浮动。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
-    imageView.widthDime.equalTo(itemLayout.widthDime).multiply(0.5);
-    imageView.heightDime.equalTo(itemLayout.heightDime);
+    imageView.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    imageView.heightSize.equalTo(itemLayout.heightSize);
     [itemLayout addSubview:imageView];
     
     
@@ -719,9 +719,9 @@ static NSInteger sBaseTag = 100000;
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeftMargin = 5;
-    titleLabel.myTopMargin = 5;
-    titleLabel.widthDime.equalTo(itemLayout.widthDime).multiply(0.5);
+    titleLabel.myLeft = 5;
+    titleLabel.myTop = 5;
+    titleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
@@ -729,16 +729,16 @@ static NSInteger sBaseTag = 100000;
     UILabel *subTitleLabel = [UILabel new];
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
-    subTitleLabel.myLeftMargin = 5;
-    subTitleLabel.myTopMargin = 5;
+    subTitleLabel.myLeft = 5;
+    subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
-    subTitleLabel.widthDime.equalTo(itemLayout.widthDime).multiply(0.5);
+    subTitleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
     [itemLayout addSubview:subTitleLabel];
     
     //继续向上浮动，这里因为高度和父布局高度一致，因此会换列浮动。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
-    imageView.widthDime.equalTo(itemLayout.widthDime).multiply(0.5);
-    imageView.heightDime.equalTo(itemLayout.heightDime);
+    imageView.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    imageView.heightSize.equalTo(itemLayout.heightSize);
     [itemLayout addSubview:imageView];
     
     return itemLayout;
@@ -753,8 +753,8 @@ static NSInteger sBaseTag = 100000;
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeftMargin = 5;
-    titleLabel.myTopMargin = 5;
+    titleLabel.myLeft = 5;
+    titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
@@ -762,14 +762,14 @@ static NSInteger sBaseTag = 100000;
     UILabel *subTitleLabel = [UILabel new];
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
-    subTitleLabel.myLeftMargin = 5;
-    subTitleLabel.myTopMargin = 5;
+    subTitleLabel.myLeft = 5;
+    subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];
     
     //继续向上浮动，占据剩余高度。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
-    imageView.widthDime.equalTo(itemLayout.widthDime);
+    imageView.widthSize.equalTo(itemLayout.widthSize);
     imageView.weight = 1;
     [itemLayout addSubview:imageView];
     
@@ -784,8 +784,8 @@ static NSInteger sBaseTag = 100000;
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeftMargin = 5;
-    titleLabel.myTopMargin = 5;
+    titleLabel.myLeft = 5;
+    titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
@@ -793,13 +793,13 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
     subTitleLabel.textColor = [UIColor redColor];
-    subTitleLabel.myLeftMargin = 5;
-    subTitleLabel.myTopMargin = 5;
+    subTitleLabel.myLeft = 5;
+    subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
-    imageView.widthDime.equalTo(itemLayout.widthDime);
+    imageView.widthSize.equalTo(itemLayout.widthSize);
     imageView.weight = 1;   //图片占用剩余的全部高度
     [itemLayout addSubview:imageView];
     

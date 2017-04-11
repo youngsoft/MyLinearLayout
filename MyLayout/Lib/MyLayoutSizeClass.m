@@ -12,13 +12,65 @@
 
 @implementation MyViewSizeClass
 
+-(id)init
+{
+    return [super init];
+}
+
+
+-(MyLayoutPos*)leftPosInner
+{
+    return _leftPos;
+}
+
+-(MyLayoutPos*)topPosInner
+{
+    return _topPos;
+}
+
+-(MyLayoutPos*)rightPosInner
+{
+    return _rightPos;
+}
+
+-(MyLayoutPos*)bottomPosInner
+{
+    return _bottomPos;
+}
+
+
+-(MyLayoutPos*)centerXPosInner
+{
+    return _centerXPos;
+}
+
+-(MyLayoutPos*)centerYPosInner
+{
+    return _centerYPos;
+}
+
+
+
+-(MyLayoutSize*)widthSizeInner
+{
+    return _widthSize;
+}
+
+
+-(MyLayoutSize*)heightSizeInner
+{
+    return _heightSize;
+}
+
+
+//..
 
 -(MyLayoutPos*)leftPos
 {
     if (_leftPos == nil)
     {
         _leftPos = [MyLayoutPos new];
-        _leftPos.pos = MyMarginGravity_Horz_Left;
+        _leftPos.pos = MyGravity_Horz_Left;
         
     }
     
@@ -31,7 +83,7 @@
     if (_topPos == nil)
     {
         _topPos = [MyLayoutPos new];
-        _topPos.pos = MyMarginGravity_Vert_Top;
+        _topPos.pos = MyGravity_Vert_Top;
         
     }
     
@@ -43,7 +95,7 @@
     if (_rightPos == nil)
     {
         _rightPos = [MyLayoutPos new];
-        _rightPos.pos = MyMarginGravity_Horz_Right;
+        _rightPos.pos = MyGravity_Horz_Right;
         
     }
     
@@ -55,7 +107,7 @@
     if (_bottomPos == nil)
     {
         _bottomPos = [MyLayoutPos new];
-        _bottomPos.pos = MyMarginGravity_Vert_Bottom;
+        _bottomPos.pos = MyGravity_Vert_Bottom;
         
     }
     
@@ -68,7 +120,7 @@
     if (_centerXPos == nil)
     {
         _centerXPos = [MyLayoutPos new];
-        _centerXPos.pos = MyMarginGravity_Horz_Center;
+        _centerXPos.pos = MyGravity_Horz_Center;
         
     }
     
@@ -80,7 +132,7 @@
     if (_centerYPos == nil)
     {
         _centerYPos = [MyLayoutPos new];
-        _centerYPos.pos = MyMarginGravity_Vert_Center;
+        _centerYPos.pos = MyGravity_Vert_Center;
         
     }
     
@@ -88,50 +140,50 @@
 }
 
 
--(CGFloat)myLeftMargin
+-(CGFloat)myLeft
 {
-    return self.leftPos.margin;
+    return self.leftPosInner.margin;
 }
 
--(void)setMyLeftMargin:(CGFloat)leftMargin
+-(void)setMyLeft:(CGFloat)myLeft
 {
-    [self.leftPos __equalTo:@(leftMargin)];
+    [self.leftPos __equalTo:@(myLeft)];
     
 }
 
--(CGFloat)myTopMargin
+-(CGFloat)myTop
 {
-    return self.topPos.margin;
+    return self.topPosInner.margin;
 }
 
--(void)setMyTopMargin:(CGFloat)topMargin
+-(void)setMyTop:(CGFloat)myTop
 {
-    [self.topPos __equalTo:@(topMargin)];
+    [self.topPos __equalTo:@(myTop)];
 }
 
--(CGFloat)myRightMargin
+-(CGFloat)myRight
 {
-    return self.rightPos.margin;
+    return self.rightPosInner.margin;
 }
 
--(void)setMyRightMargin:(CGFloat)rightMargin
+-(void)setMyRight:(CGFloat)myRight
 {
-    [self.rightPos __equalTo:@(rightMargin)];
+    [self.rightPos __equalTo:@(myRight)];
 }
 
--(CGFloat)myBottomMargin
+-(CGFloat)myBottom
 {
-    return self.bottomPos.margin;
+    return self.bottomPosInner.margin;
 }
 
--(void)setMyBottomMargin:(CGFloat)bottomMargin
+-(void)setMyBottom:(CGFloat)myBottom
 {
-    [self.bottomPos __equalTo:@(bottomMargin)];
+    [self.bottomPos __equalTo:@(myBottom)];
 }
 
 -(CGFloat)myMargin
 {
-    return self.leftPos.margin;
+    return self.leftPosInner.margin;
 }
 
 -(void)setMyMargin:(CGFloat)myMargin
@@ -143,83 +195,108 @@
 }
 
 
--(CGFloat)myCenterXOffset
+-(CGFloat)myHorzMargin
 {
-    return self.centerXPos.margin;
+    return self.leftPosInner.margin;
 }
 
--(void)setMyCenterXOffset:(CGFloat)centerXOffset
+-(void)setMyHorzMargin:(CGFloat)myHorzMargin
 {
-    [self.centerXPos __equalTo:@(centerXOffset)];
+    [self.leftPos __equalTo:@(myHorzMargin)];
+    [self.rightPos __equalTo:@(myHorzMargin)];
 }
 
--(CGFloat)myCenterYOffset
+-(CGFloat)myVertMargin
 {
-    return self.centerYPos.margin;
+    return self.topPosInner.margin;
 }
 
--(void)setMyCenterYOffset:(CGFloat)centerYOffset
+-(void)setMyVertMargin:(CGFloat)myVertMargin
 {
-    [self.centerYPos __equalTo:@(centerYOffset)];
-}
-
-
--(CGPoint)myCenterOffset
-{
-    return CGPointMake(self.myCenterXOffset, self.myCenterYOffset);
-}
-
--(void)setMyCenterOffset:(CGPoint)centerOffset
-{
-    self.myCenterXOffset = centerOffset.x;
-    self.myCenterYOffset = centerOffset.y;
+    [self.topPos __equalTo:@(myVertMargin)];
+    [self.bottomPos __equalTo:@(myVertMargin)];
 }
 
 
--(MyLayoutSize*)widthDime
+
+
+-(CGFloat)myCenterX
 {
-    if (_widthDime == nil)
+    return self.centerXPosInner.margin;
+}
+
+-(void)setMyCenterX:(CGFloat)myCenterX
+{
+    [self.centerXPos __equalTo:@(myCenterX)];
+}
+
+-(CGFloat)myCenterY
+{
+    return self.centerYPosInner.margin;
+}
+
+-(void)setMyCenterY:(CGFloat)myCenterY
+{
+    [self.centerYPos __equalTo:@(myCenterY)];
+}
+
+
+-(CGPoint)myCenter
+{
+    return CGPointMake(self.myCenterX, self.myCenterY);
+}
+
+-(void)setMyCenter:(CGPoint)myCenter
+{
+    self.myCenterX = myCenter.x;
+    self.myCenterY = myCenter.y;
+}
+
+
+-(MyLayoutSize*)widthSize
+{
+    if (_widthSize == nil)
     {
-        _widthDime = [MyLayoutSize new];
-        _widthDime.dime = MyMarginGravity_Horz_Fill;
+        _widthSize = [MyLayoutSize new];
+        _widthSize.dime = MyGravity_Horz_Fill;
         
     }
     
-    return _widthDime;
+    return _widthSize;
 }
 
 
--(MyLayoutSize*)heightDime
+-(MyLayoutSize*)heightSize
 {
-    if (_heightDime == nil)
+    if (_heightSize == nil)
     {
-        _heightDime = [MyLayoutSize new];
-        _heightDime.dime = MyMarginGravity_Vert_Fill;
+        _heightSize = [MyLayoutSize new];
+        _heightSize.dime = MyGravity_Vert_Fill;
         
     }
     
-    return _heightDime;
+    return _heightSize;
 }
 
 
 -(CGFloat)myWidth
 {
-    return self.widthDime.measure;
+    return self.widthSizeInner.measure;
 }
 
 -(void)setMyWidth:(CGFloat)width
 {
-    [self.widthDime __equalTo:@(width)];
+    [self.widthSize __equalTo:@(width)];
 }
 
 -(CGFloat)myHeight
 {
-    return self.heightDime.measure;
+    return self.heightSizeInner.measure;
 }
 
 -(void)setMyHeight:(CGFloat)height
 {
-    [self.heightDime __equalTo:@(height)];
+    [self.heightSize __equalTo:@(height)];
 }
 
 -(CGSize)mySize
@@ -249,14 +326,14 @@
 {
     
     NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nwrapContentWidth=%@\nwrapContentHeight=%@\nreverseFloat=%@\nclearFloat=%@",
-                    self.leftPos,
-                    self.topPos,
-                    self.bottomPos,
-                    self.rightPos,
-                    self.centerXPos,
-                    self.centerYPos,
-                    self.widthDime,
-                    self.heightDime,
+                    self.leftPosInner,
+                    self.topPosInner,
+                    self.bottomPosInner,
+                    self.rightPosInner,
+                    self.centerXPosInner,
+                    self.centerYPosInner,
+                    self.widthSizeInner,
+                    self.heightSizeInner,
                     self.weight,
                     self.useFrame ? @"YES":@"NO",
                     self.noLayout? @"YES":@"NO",
@@ -278,14 +355,14 @@
     
   
     //这里不会复制hidden属性
-    lsc->_leftPos = [self.leftPos copy];
-    lsc->_topPos = [self.topPos copy];
-    lsc->_rightPos = [self.rightPos copy];
-    lsc->_bottomPos = [self.bottomPos copy];
-    lsc->_centerXPos = [self.centerXPos copy];
-    lsc->_centerYPos = [self.centerYPos copy];
-    lsc->_widthDime = [self.widthDime copy];
-    lsc->_heightDime = [self.heightDime copy];
+    lsc->_leftPos = [self.leftPosInner copy];
+    lsc->_topPos = [self.topPosInner copy];
+    lsc->_rightPos = [self.rightPosInner copy];
+    lsc->_bottomPos = [self.bottomPosInner copy];
+    lsc->_centerXPos = [self.centerXPosInner copy];
+    lsc->_centerYPos = [self.centerYPosInner copy];
+    lsc->_widthSize = [self.widthSizeInner copy];
+    lsc->_heightSize = [self.heightSizeInner copy];
     lsc->_wrapContentWidth = self.wrapContentWidth;
     lsc->_wrapContentHeight = self.wrapContentHeight;
     lsc.useFrame = self.useFrame;
@@ -357,6 +434,18 @@
     self->_padding.right = rightPadding;
 }
 
+-(CGFloat)subviewSpace
+{
+    return self.subviewVSpace;
+}
+
+-(void)setSubviewSpace:(CGFloat)subviewSpace
+{
+    self.subviewVSpace = subviewSpace;
+    self.subviewHSpace = subviewSpace;
+}
+
+
 - (id)copyWithZone:(NSZone *)zone
 {
     MyLayoutViewSizeClass *lsc = [super copyWithZone:zone];
@@ -364,6 +453,8 @@
     lsc.zeroPadding = self.zeroPadding;
     lsc.hideSubviewReLayout = self.hideSubviewReLayout;
     lsc.reverseLayout = self.reverseLayout;
+    lsc.subviewVSpace = self.subviewVSpace;
+    lsc.subviewHSpace = self.subviewHSpace;
     
     return lsc;
 }
@@ -372,12 +463,14 @@
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nzeroPadding=%@\nhideSubviewRelayout=%@\nreverseLayout=%@",
-                        dbgDesc,
-                        NSStringFromUIEdgeInsets(self.padding),
-                        self.zeroPadding?@"YES":@"NO",
-                        self.hideSubviewReLayout?@"YES":@"NO",
-                        self.reverseLayout ? @"YES":@"NO"
+    dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nzeroPadding=%@\nhideSubviewRelayout=%@\nreverseLayout=%@\nsubviewVertSpace=%f\nsubviewHorzSpace=%f",
+               dbgDesc,
+               NSStringFromUIEdgeInsets(self.padding),
+               self.zeroPadding?@"YES":@"NO",
+               self.hideSubviewReLayout?@"YES":@"NO",
+               self.reverseLayout ? @"YES":@"NO",
+               self.subviewVSpace,
+               self.subviewHSpace
                ];
     
     
@@ -390,26 +483,14 @@
 
 @implementation MySequentLayoutViewSizeClass
 
--(CGFloat)subviewMargin
-{
-    return self.subviewVertMargin;
-}
-
--(void)setSubviewMargin:(CGFloat)subviewMargin
-{
-    self.subviewVertMargin = subviewMargin;
-    self.subviewHorzMargin = subviewMargin;
-}
 
 
 - (id)copyWithZone:(NSZone *)zone
 {
     MySequentLayoutViewSizeClass *lsc = [super copyWithZone:zone];
-    
     lsc.orientation = self.orientation;
     lsc.gravity = self.gravity;
-    lsc.subviewVertMargin = self.subviewVertMargin;
-    lsc.subviewHorzMargin = self.subviewHorzMargin;
+   
     
      return lsc;
 }
@@ -418,12 +499,10 @@
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nSequentLayout: \norientation=%lu\ngravity=%hu\nsubviewVertMargin=%f\nsubviewHorzMargin=%f",
+    dbgDesc = [NSString stringWithFormat:@"%@\nSequentLayout: \norientation=%lu\ngravity=%hu",
                dbgDesc,
               (unsigned long)self.orientation,
-               self.gravity,
-               self.subviewVertMargin,
-               self.subviewHorzMargin
+               self.gravity
                ];
     
     
@@ -465,41 +544,6 @@
 
 
 @implementation MyTableLayoutViewSizeClass
-
-
--(CGFloat)rowSpacing
-{
-    return self.subviewMargin;
-}
-
--(void)setRowSpacing:(CGFloat)rowSpacing
-{
-    self.subviewMargin = rowSpacing;
-}
-
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    MyTableLayoutViewSizeClass *lsc = [super copyWithZone:zone];
-    
-    lsc.rowSpacing = self.rowSpacing;
-    lsc.colSpacing = self.colSpacing;
-    
-    return lsc;
-}
-
--(NSString*)debugDescription
-{
-    NSString *dbgDesc = [super debugDescription];
-    
-    dbgDesc = [NSString stringWithFormat:@"%@\nTableLayout: \nrowSpacing=%f\ncolSpacing=%f",
-               dbgDesc,
-               self.rowSpacing,
-               self.colSpacing];
-    
-    return dbgDesc;
-}
-
 
 @end
 

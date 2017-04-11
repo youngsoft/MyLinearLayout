@@ -316,12 +316,12 @@
     if (full)
     {
         NSMutableArray *pointIndexs = [NSMutableArray new];
-        self.subviewPoints = [self calcPoints:self.pathSubviews path:nil pointIndexArray:pointIndexs];
+        self.subviewPoints = [self myCalcPoints:self.pathSubviews path:nil pointIndexArray:pointIndexs];
         self.pointIndexs = pointIndexs;
     }
     else
     {
-        self.subviewPoints = [self calcPoints:self.pathSubviews path:nil pointIndexArray:nil];
+        self.subviewPoints = [self myCalcPoints:self.pathSubviews path:nil pointIndexArray:nil];
         self.pointIndexs = nil;
     }
     
@@ -388,14 +388,14 @@
     
     if (self.spaceType.type != MyPathSpace_Fixed)
     {
-        [self calcPathPoints:retPath pTotalLen:NULL subviewCount:-1 pointIndexArray:nil viewSpacing:0];
+        [self myCalcPathPoints:retPath pTotalLen:NULL subviewCount:-1 pointIndexArray:nil viewSpacing:0];
     }
     else
     {
         if (subviewCount == -1)
             subviewCount = self.pathSubviews.count;
         
-        [self calcPathPoints:retPath pTotalLen:NULL subviewCount:subviewCount pointIndexArray:nil viewSpacing:self.spaceType.value];
+        [self myCalcPathPoints:retPath pTotalLen:NULL subviewCount:subviewCount pointIndexArray:nil viewSpacing:self.spaceType.value];
     }
     
     return retPath;
@@ -449,16 +449,359 @@
 }
 
 
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+
+/*
+ 
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ 
+ 
+ CGContextRef ctx =  UIGraphicsGetCurrentContext();
+ 
+ CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
+ 
+ 
+ NSArray *sbs = self.pathSubviews;
+ 
+ CGMutablePathRef path = CGPathCreateMutable();
+ 
+ 
+ NSArray *pts = nil;
+ if (sbs.count > 0)
+ {
+ if (self.spaceType.type != MyPathSpace_Fixed)
+ {
+ CGFloat totalLen = 0;
+ NSArray *tempArray = [self calcPathPoints:path pTotalLen:&totalLen subviewCount:-1 pointIndexArray:nil viewSpacing:0];
+ BOOL bClose = NO;
+ if (tempArray.count > 1)
+ {
+ CGPoint p1 = [tempArray.firstObject CGPointValue];
+ CGPoint p2 = [tempArray.lastObject CGPointValue];
+ bClose = [self calcDistance:p1 with:p2] <=1;
+ }
+ 
+ CGFloat viewSpacing = 0;
+ NSInteger sbvcount = sbs.count;
+ if (self.spaceType.type == MyPathSpace_Count)
+ sbvcount = (NSInteger)self.spaceType.value;
+ 
+ if (sbvcount > 1)
+ {
+ viewSpacing = totalLen / (sbvcount - (bClose ? 0 : 1));
+ }
+ 
+ pts = [self calcPathPoints:nil pTotalLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpacing:viewSpacing];
+ 
+ }
+ else
+ {
+ pts = [self calcPathPoints:path pTotalLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpacing:self.spaceType.value];
+ }
+ }
+ 
+ 
+ CGContextAddPath(ctx, path);
+ CGContextStrokePath(ctx);
+ 
+ 
+ for (NSValue *val in pts)
+ {
+ CGPoint pt2 = val.CGPointValue;
+ CGContextStrokeEllipseInRect(ctx, CGRectMake(pt2.x - 4, pt2.y - 4, 8, 8));
+ }
+ 
+ }
+ 
+ */
+
+
+
+-(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+{
+    CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
+    
+    if (sbs == nil)
+        sbs = [self myGetLayoutSubviews];
+    NSArray *sbs2 = sbs;
+    
+    for (UIView *sbv in sbs)
+    {
+        
+        if (!isEstimate)
+        {
+            sbv.myFrame.frame = sbv.bounds;
+            [self myCalcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
+        }
+        
+        if ([sbv isKindOfClass:[MyBaseLayout class]])
+        {
+            
+            MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
+            
+            if (pHasSubLayout != nil && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
+                *pHasSubLayout = YES;
+            
+            if (isEstimate && (sbvl.wrapContentWidth || sbvl.wrapContentHeight))
+            {
+                [sbvl estimateLayoutRect:sbvl.myFrame.frame.size inSizeClass:sizeClass];
+                sbvl.myFrame.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+            }
+        }
+    }
+    
+   // CGSize maxSize = CGSizeMake(self.leftPadding, self.topPadding);
+    
+    CGFloat minXPos = CGFLOAT_MAX;
+    CGFloat maxXPos = -CGFLOAT_MAX;
+    CGFloat minYPos = CGFLOAT_MAX;
+    CGFloat maxYPos = -CGFLOAT_MAX;
+    
+    
+    //算路径子视图的。
+    sbs = [self myGetLayoutSubviewsFrom:self.pathSubviews];
+    
+    CGMutablePathRef path = nil;
+    if ([self.layer isKindOfClass:[CAShapeLayer class]] && !isEstimate)
+    {
+        path = CGPathCreateMutable();
+    }
+    
+    NSArray *pts = [self myCalcPoints:sbs path:path pointIndexArray:nil];
+    
+    if (path != nil)
+    {
+        CAShapeLayer *slayer = (CAShapeLayer*)self.layer;
+        slayer.path = path;
+        CGPathRelease(path);
+    }
+    
+    for (int i = 0; i < sbs.count; i++)
+    {
+        UIView *sbv = sbs[i];
+        
+        CGPoint pt = CGPointZero;
+        if (pts.count > i)
+        {
+            pt = [pts[i] CGPointValue];
+        }
+        
+        //计算得到最大的高度和最大的宽度。
+        
+        CGRect rect = sbv.myFrame.frame;
+        
+        if (sbv.widthSizeInner.dimeNumVal != nil)
+            rect.size.width = sbv.widthSizeInner.measure;
+        
+        if (sbv.widthSizeInner.dimeRelaVal != nil)
+        {
+            if (sbv.widthSizeInner.dimeRelaVal == self.widthSizeInner)
+            {
+                rect.size.width = [sbv.widthSizeInner measureWith:(selfSize.width - self.leftPadding - self.rightPadding) ];
+            }
+            else
+            {
+                rect.size.width = [sbv.widthSizeInner measureWith: sbv.widthSizeInner.dimeRelaVal.view.estimatedRect.size.width ];
+            }
+        }
+        
+        rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        if (sbv.heightSizeInner.dimeNumVal != nil)
+            rect.size.height = sbv.heightSizeInner.measure;
+        
+        
+        if (sbv.heightSizeInner.dimeRelaVal != nil)
+        {
+            if (sbv.heightSizeInner.dimeRelaVal == self.heightSizeInner)
+            {
+                rect.size.height = [sbv.heightSizeInner measureWith:(selfSize.height - self.topPadding - self.bottomPadding) ];
+            }
+            else
+            {
+                rect.size.height = [sbv.heightSizeInner measureWith:sbv.heightSizeInner.dimeRelaVal.view.estimatedRect.size.height ];
+            }
+        }
+        
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+        {
+            rect.size.height = [self myHeightFromFlexedHeightView:sbv inWidth:rect.size.width];
+        }
+        
+        rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        
+        //中心点的位置。。
+        rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x + sbv.leftPosInner.margin;
+        rect.origin.y = pt.y - rect.size.height *sbv.layer.anchorPoint.y + sbv.topPosInner.margin;
+        
+        if (CGRectGetMinY(rect) < minYPos)
+        {
+            minYPos = CGRectGetMinY(rect);
+        }
+        
+        if (CGRectGetMaxY(rect) > maxYPos)
+        {
+            maxYPos = CGRectGetMaxY(rect);
+        }
+        
+        if (CGRectGetMinX(rect) < minXPos)
+        {
+            minXPos = CGRectGetMinX(rect);
+        }
+        
+        if (CGRectGetMaxX(rect) > maxXPos)
+        {
+            maxXPos = CGRectGetMaxX(rect);
+        }
+
+        
+        sbv.myFrame.frame = rect;
+        
+    }
+    
+    //特殊填充中心视图。
+    UIView *sbv = [self originView];
+    if (sbv != nil)
+    {
+        CGRect rect = sbv.myFrame.frame;
+        
+        if (sbv.widthSizeInner.dimeNumVal != nil)
+            rect.size.width = sbv.widthSizeInner.measure;
+        
+        if (sbv.widthSizeInner.dimeRelaVal != nil)
+        {
+            if (sbv.widthSizeInner.dimeRelaVal == self.widthSizeInner)
+            {
+                rect.size.width =  [sbv.widthSizeInner measureWith:(selfSize.width - self.leftPadding - self.rightPadding)];
+            }
+            else
+            {
+                rect.size.width = [sbv.widthSizeInner measureWith:sbv.widthSizeInner.dimeRelaVal.view.estimatedRect.size.width];
+            }
+        }
+        
+        rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        if (sbv.heightSizeInner.dimeNumVal != nil)
+            rect.size.height = sbv.heightSizeInner.measure;
+        
+        
+        if (sbv.heightSizeInner.dimeRelaVal != nil)
+        {
+            if (sbv.heightSizeInner.dimeRelaVal == self.heightSizeInner)
+            {
+                rect.size.height =  [sbv.heightSizeInner measureWith:selfSize.height - self.topPadding - self.bottomPadding];
+            }
+            else if (sbv.heightSizeInner.dimeRelaVal == sbv.widthSizeInner)
+            {
+                rect.size.height = [sbv.heightSizeInner measureWith:rect.size.width];
+            }
+            else
+            {
+                rect.size.height = [sbv.heightSizeInner measureWith:sbv.heightSizeInner.dimeRelaVal.view.estimatedRect.size.height];
+            }
+        }
+        
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+        {
+            rect.size.height = [self myHeightFromFlexedHeightView:sbv inWidth:rect.size.width];
+        }
+        
+        rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        //计算宽度等于高度的情况。
+        if (sbv.widthSizeInner.dimeRelaVal != nil && sbv.widthSizeInner.dimeRelaVal == sbv.heightSizeInner)
+        {
+            rect.size.width = [sbv.widthSizeInner measureWith:rect.size.height];
+        }
+        
+        //位置在原点位置。。
+        rect.origin.x = (selfSize.width - self.leftPadding - self.rightPadding)*self.coordinateSetting.origin.x - rect.size.width / 2 + sbv.leftPosInner.margin + self.leftPadding;
+        rect.origin.y = (selfSize.height - self.topPadding - self.bottomPadding)*self.coordinateSetting.origin.y - rect.size.height / 2 + sbv.topPosInner.margin + self.topPadding;
+        
+        if (CGRectGetMinY(rect) < minYPos)
+        {
+            minYPos = CGRectGetMinY(rect);
+        }
+        
+        if (CGRectGetMaxY(rect) > maxYPos)
+        {
+            maxYPos = CGRectGetMaxY(rect);
+        }
+        
+        if (CGRectGetMinX(rect) < minXPos)
+        {
+            minXPos = CGRectGetMinX(rect);
+        }
+        
+        if (CGRectGetMaxX(rect) > maxXPos)
+        {
+            maxXPos = CGRectGetMaxX(rect);
+        }
+        
+        sbv.myFrame.frame = rect;
+        
+    }
+    
+    if (minYPos == CGFLOAT_MAX)
+    {
+        minYPos = 0;
+    }
+    
+    if (maxYPos == -CGFLOAT_MAX)
+    {
+        maxYPos = self.topPadding + self.bottomPadding;
+    }
+    
+    if (minXPos == CGFLOAT_MAX)
+    {
+        minXPos = 0;
+    }
+    
+    if (maxXPos == -CGFLOAT_MAX)
+    {
+        maxXPos = self.leftPadding + self.rightPadding;
+    }
+
+    
+    if (self.wrapContentWidth)
+    {
+        selfSize.width = maxXPos - minXPos;
+    }
+    
+    if (self.wrapContentHeight)
+    {
+        selfSize.height = maxYPos - minYPos;
+    }
+    
+    
+    selfSize.height = [self myValidMeasure:self.heightSizeInner sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    
+    selfSize.width = [self myValidMeasure:self.widthSizeInner sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    
+    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs2];
+}
+
+-(id)createSizeClassInstance
+{
+    return [MyPathLayoutViewSizeClass new];
+}
+
+
+
 #pragma mark -- Private Method
 
 
--(CGFloat)calcDistance:(CGPoint)pt1 with:(CGPoint)pt2
+-(CGFloat)myCalcDistance:(CGPoint)pt1 with:(CGPoint)pt2
 {
     return sqrt(pow(pt1.x - pt2.x, 2) + pow(pt1.y - pt2.y, 2));
 }
 
 
--(CGPoint)getNearestDistancePoint:(CGFloat)startArg lastXY:(CGPoint)lastXY distance:(CGFloat)distance viewSpace:(CGFloat)viewSpace pLastValidArg:(CGFloat*)pLastValidArg func:(CGPoint (^)(CGFloat))func
+-(CGPoint)myGetNearestDistancePoint:(CGFloat)startArg lastXY:(CGPoint)lastXY distance:(CGFloat)distance viewSpace:(CGFloat)viewSpace pLastValidArg:(CGFloat*)pLastValidArg func:(CGPoint (^)(CGFloat))func
 {
     
     //判断pLastValidArg和Arg的差距如果超过1则按pLastValidArg + 1作为开始计算的变量。
@@ -477,7 +820,7 @@
             if (!isnan(realXY.x) && !isnan(realXY.y))
             {
                 CGFloat oldDistance = distance;
-                distance +=  [self calcDistance:realXY with:lastXY];
+                distance +=  [self myCalcDistance:realXY with:lastXY];
                 if (/*distance >= viewSpace*/ _myCGFloatGreatOrEqual(distance, viewSpace))
                 {
                     if (/*distance - viewSpace <= self.distanceError*/ _myCGFloatLessOrEqual(distance - viewSpace, self.distanceError))
@@ -521,7 +864,7 @@
     
 }
 
--(void)calcPathPointsHelper:(NSMutableArray*)pointArray
+-(void)myCalcPathPointsHelper:(NSMutableArray*)pointArray
                    showPath:(CGMutablePathRef)showPath
                   pTotalLen:(CGFloat*)pTotalLen
                subviewCount:(NSInteger)subviewCount
@@ -611,12 +954,12 @@
                 if (subviewCount >= 0)
                 {
                     CGFloat oldDistance = distance;
-                    distance += [self calcDistance:realXY with:lastXY];
+                    distance += [self myCalcDistance:realXY with:lastXY];
                     if (/*distance >= viewSpacing*/ _myCGFloatGreatOrEqual(distance, viewSpacing) )
                     {
                         if (/*distance - viewSpacing >= self.distanceError*/ _myCGFloatGreatOrEqual(distance - viewSpacing, self.distanceError) )
                         {
-                            realXY = [self getNearestDistancePoint:arg lastXY:lastXY distance:oldDistance viewSpace:viewSpacing pLastValidArg:&lastValidArg func:func];
+                            realXY = [self myGetNearestDistancePoint:arg lastXY:lastXY distance:oldDistance viewSpace:viewSpacing pLastValidArg:&lastValidArg func:func];
                         }
                         else
                         {
@@ -631,7 +974,7 @@
                         distance = 0;
                         subviewCount -=1;
                         [self.argumentArray addObject:@(lastValidArg)];
-
+                        
                     }
                     else if (distance - viewSpacing > -1 * self.distanceError)
                     {
@@ -667,7 +1010,7 @@
                 
                 if (pTotalLen != NULL)
                 {
-                    *pTotalLen +=  [self calcDistance:realXY with:lastXY];
+                    *pTotalLen +=  [self myCalcDistance:realXY with:lastXY];
                 }
             }
             
@@ -684,7 +1027,7 @@
 }
 
 
--(NSArray*)calcPathPoints:(CGMutablePathRef)showPath
+-(NSArray*)myCalcPathPoints:(CGMutablePathRef)showPath
                 pTotalLen:(CGFloat*)pTotalLen
              subviewCount:(NSInteger)subviewCount
           pointIndexArray:(NSMutableArray*)pointIndexArray
@@ -723,7 +1066,7 @@
         if (self.coordinateSetting.end != CGFLOAT_MAX)
             endArg = self.coordinateSetting.end;
         
-        [self calcPathPointsHelper:pointArray showPath:showPath pTotalLen:pTotalLen subviewCount:subviewCount pointIndexArray:pointIndexArray viewSpacing:viewSpacing startArg:startArg endArg:endArg func:^(CGFloat arg){
+        [self myCalcPathPointsHelper:pointArray showPath:showPath pTotalLen:pTotalLen subviewCount:subviewCount pointIndexArray:pointIndexArray viewSpacing:viewSpacing startArg:startArg endArg:endArg func:^(CGFloat arg){
             
             CGFloat val = self.rectangularEquation(arg);
             if (!isnan(val))
@@ -770,7 +1113,7 @@
         if (self.coordinateSetting.end != CGFLOAT_MAX)
             endArg = self.coordinateSetting.end;
         
-        [self calcPathPointsHelper:pointArray showPath:showPath pTotalLen:pTotalLen subviewCount:subviewCount pointIndexArray:pointIndexArray  viewSpacing:viewSpacing startArg:startArg endArg:endArg func:^(CGFloat arg){
+        [self myCalcPathPointsHelper:pointArray showPath:showPath pTotalLen:pTotalLen subviewCount:subviewCount pointIndexArray:pointIndexArray  viewSpacing:viewSpacing startArg:startArg endArg:endArg func:^(CGFloat arg){
             
             CGPoint val = self.parametricEquation(arg);
             if (!isnan(val.x) && !isnan(val.y))
@@ -805,7 +1148,7 @@
             endArg = self.coordinateSetting.end * 180.0 / M_PI;
         
         
-        [self calcPathPointsHelper:pointArray showPath:showPath pTotalLen:pTotalLen subviewCount:subviewCount pointIndexArray:pointIndexArray  viewSpacing:viewSpacing startArg:startArg endArg:endArg func:^(CGFloat arg){
+        [self myCalcPathPointsHelper:pointArray showPath:showPath pTotalLen:pTotalLen subviewCount:subviewCount pointIndexArray:pointIndexArray  viewSpacing:viewSpacing startArg:startArg endArg:endArg func:^(CGFloat arg){
             
             //计算用弧度
             CGFloat r = self.polarEquation(arg * M_PI / 180.0);
@@ -838,14 +1181,14 @@
     return pointArray;
 }
 
--(NSArray*)calcPoints:(NSArray*)sbs path:(CGMutablePathRef)path pointIndexArray:(NSMutableArray*)pointIndexArray
+-(NSArray*)myCalcPoints:(NSArray*)sbs path:(CGMutablePathRef)path pointIndexArray:(NSMutableArray*)pointIndexArray
 {
     if (sbs.count > 0)
     {
         if (self.spaceType.type != MyPathSpace_Fixed)
         {
             CGFloat totalLen = 0;
-            NSArray *tempArray = [self calcPathPoints:path pTotalLen:&totalLen subviewCount:-1 pointIndexArray:nil viewSpacing:0];
+            NSArray *tempArray = [self myCalcPathPoints:path pTotalLen:&totalLen subviewCount:-1 pointIndexArray:nil viewSpacing:0];
             
             
             BOOL bClose = NO;
@@ -853,7 +1196,7 @@
             {
                 CGPoint p1 = [tempArray.firstObject CGPointValue];
                 CGPoint p2 = [tempArray.lastObject CGPointValue];
-                bClose = [self calcDistance:p1 with:p2] <= 1;
+                bClose = [self myCalcDistance:p1 with:p2] <= 1;
                 
             }
             
@@ -868,12 +1211,12 @@
                 viewSpacing = totalLen / (sbvcount - (bClose ? 0 : 1));
             }
             
-            return [self calcPathPoints:nil pTotalLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpacing:viewSpacing];
+            return [self myCalcPathPoints:nil pTotalLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpacing:viewSpacing];
             
         }
         else
         {
-            return [self calcPathPoints:path pTotalLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpacing:self.spaceType.value];
+            return [self myCalcPathPoints:path pTotalLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpacing:self.spaceType.value];
         }
     }
     
@@ -883,345 +1226,6 @@
 
 
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-
-/*
-
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-    
-    
-    CGContextRef ctx =  UIGraphicsGetCurrentContext();
-    
-    CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
-    
-    
-    NSArray *sbs = self.pathSubviews;
-    
-    CGMutablePathRef path = CGPathCreateMutable();
-    
-    
-    NSArray *pts = nil;
-    if (sbs.count > 0)
-    {
-        if (self.spaceType.type != MyPathSpace_Fixed)
-        {
-            CGFloat totalLen = 0;
-            NSArray *tempArray = [self calcPathPoints:path pTotalLen:&totalLen subviewCount:-1 pointIndexArray:nil viewSpacing:0];
-            BOOL bClose = NO;
-            if (tempArray.count > 1)
-            {
-                CGPoint p1 = [tempArray.firstObject CGPointValue];
-                CGPoint p2 = [tempArray.lastObject CGPointValue];
-                bClose = [self calcDistance:p1 with:p2] <=1;
-            }
-            
-            CGFloat viewSpacing = 0;
-            NSInteger sbvcount = sbs.count;
-            if (self.spaceType.type == MyPathSpace_Count)
-                sbvcount = (NSInteger)self.spaceType.value;
-            
-            if (sbvcount > 1)
-            {
-                viewSpacing = totalLen / (sbvcount - (bClose ? 0 : 1));
-            }
-            
-            pts = [self calcPathPoints:nil pTotalLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpacing:viewSpacing];
-            
-        }
-        else
-        {
-            pts = [self calcPathPoints:path pTotalLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpacing:self.spaceType.value];
-        }
-    }
-    
-    
-    CGContextAddPath(ctx, path);
-    CGContextStrokePath(ctx);
-    
-    
-    for (NSValue *val in pts)
-    {
-        CGPoint pt2 = val.CGPointValue;
-        CGContextStrokeEllipseInRect(ctx, CGRectMake(pt2.x - 4, pt2.y - 4, 8, 8));
-    }
-    
-}
- 
-*/
-
-
--(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
-{
-    CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
-    
-    if (sbs == nil)
-        sbs = [self getLayoutSubviews];
-    NSArray *sbs2 = sbs;
-    
-    for (UIView *sbv in sbs)
-    {
-        
-        if (!isEstimate)
-        {
-            sbv.myFrame.frame = sbv.bounds;
-            [self calcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
-        }
-        
-        if ([sbv isKindOfClass:[MyBaseLayout class]])
-        {
-            
-            MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
-            
-            if (pHasSubLayout != nil && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
-                *pHasSubLayout = YES;
-            
-            if (isEstimate && (sbvl.wrapContentWidth || sbvl.wrapContentHeight))
-            {
-                [sbvl estimateLayoutRect:sbvl.myFrame.frame.size inSizeClass:sizeClass];
-                sbvl.myFrame.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
-            }
-        }
-    }
-    
-   // CGSize maxSize = CGSizeMake(self.leftPadding, self.topPadding);
-    
-    CGFloat minXPos = CGFLOAT_MAX;
-    CGFloat maxXPos = -CGFLOAT_MAX;
-    CGFloat minYPos = CGFLOAT_MAX;
-    CGFloat maxYPos = -CGFLOAT_MAX;
-    
-    
-    //算路径子视图的。
-    sbs = [self getLayoutSubviewsFrom:self.pathSubviews];
-    
-    CGMutablePathRef path = nil;
-    if ([self.layer isKindOfClass:[CAShapeLayer class]] && !isEstimate)
-    {
-        path = CGPathCreateMutable();
-    }
-    
-    NSArray *pts = [self calcPoints:sbs path:path pointIndexArray:nil];
-    
-    if (path != nil)
-    {
-        CAShapeLayer *slayer = (CAShapeLayer*)self.layer;
-        slayer.path = path;
-        CGPathRelease(path);
-    }
-    
-    for (int i = 0; i < sbs.count; i++)
-    {
-        UIView *sbv = sbs[i];
-        
-        CGPoint pt = CGPointZero;
-        if (pts.count > i)
-        {
-            pt = [pts[i] CGPointValue];
-        }
-        
-        //计算得到最大的高度和最大的宽度。
-        
-        CGRect rect = sbv.myFrame.frame;
-        
-        if (sbv.widthDime.dimeNumVal != nil)
-            rect.size.width = sbv.widthDime.measure;
-        
-        if (sbv.widthDime.dimeRelaVal != nil)
-        {
-            if (sbv.widthDime.dimeRelaVal == self.widthDime)
-            {
-                rect.size.width = [sbv.widthDime measureWith:(selfSize.width - self.leftPadding - self.rightPadding) ];
-            }
-            else
-            {
-                rect.size.width = [sbv.widthDime measureWith: sbv.widthDime.dimeRelaVal.view.estimatedRect.size.width ];
-            }
-        }
-        
-        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
-        
-        if (sbv.heightDime.dimeNumVal != nil)
-            rect.size.height = sbv.heightDime.measure;
-        
-        
-        if (sbv.heightDime.dimeRelaVal != nil)
-        {
-            if (sbv.heightDime.dimeRelaVal == self.heightDime)
-            {
-                rect.size.height = [sbv.heightDime measureWith:(selfSize.height - self.topPadding - self.bottomPadding) ];
-            }
-            else
-            {
-                rect.size.height = [sbv.heightDime measureWith:sbv.heightDime.dimeRelaVal.view.estimatedRect.size.height ];
-            }
-        }
-        
-        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
-        {
-            rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
-        }
-        
-        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
-        
-        
-        //中心点的位置。。
-        rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x + sbv.leftPos.margin;
-        rect.origin.y = pt.y - rect.size.height *sbv.layer.anchorPoint.y + sbv.topPos.margin;
-        
-        if (CGRectGetMinY(rect) < minYPos)
-        {
-            minYPos = CGRectGetMinY(rect);
-        }
-        
-        if (CGRectGetMaxY(rect) > maxYPos)
-        {
-            maxYPos = CGRectGetMaxY(rect);
-        }
-        
-        if (CGRectGetMinX(rect) < minXPos)
-        {
-            minXPos = CGRectGetMinX(rect);
-        }
-        
-        if (CGRectGetMaxX(rect) > maxXPos)
-        {
-            maxXPos = CGRectGetMaxX(rect);
-        }
-
-        
-        sbv.myFrame.frame = rect;
-        
-    }
-    
-    //特殊填充中心视图。
-    UIView *sbv = [self originView];
-    if (sbv != nil)
-    {
-        CGRect rect = sbv.myFrame.frame;
-        
-        if (sbv.widthDime.dimeNumVal != nil)
-            rect.size.width = sbv.widthDime.measure;
-        
-        if (sbv.widthDime.dimeRelaVal != nil)
-        {
-            if (sbv.widthDime.dimeRelaVal == self.widthDime)
-            {
-                rect.size.width =  [sbv.widthDime measureWith:(selfSize.width - self.leftPadding - self.rightPadding)];
-            }
-            else
-            {
-                rect.size.width = [sbv.widthDime measureWith:sbv.widthDime.dimeRelaVal.view.estimatedRect.size.width];
-            }
-        }
-        
-        rect.size.width = [self validMeasure:sbv.widthDime sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
-        
-        if (sbv.heightDime.dimeNumVal != nil)
-            rect.size.height = sbv.heightDime.measure;
-        
-        
-        if (sbv.heightDime.dimeRelaVal != nil)
-        {
-            if (sbv.heightDime.dimeRelaVal == self.heightDime)
-            {
-                rect.size.height =  [sbv.heightDime measureWith:selfSize.height - self.topPadding - self.bottomPadding];
-            }
-            else if (sbv.heightDime.dimeRelaVal == sbv.widthDime)
-            {
-                rect.size.height = [sbv.heightDime measureWith:rect.size.width];
-            }
-            else
-            {
-                rect.size.height = [sbv.heightDime measureWith:sbv.heightDime.dimeRelaVal.view.estimatedRect.size.height];
-            }
-        }
-        
-        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
-        {
-            rect.size.height = [self heightFromFlexedHeightView:sbv inWidth:rect.size.width];
-        }
-        
-        rect.size.height = [self validMeasure:sbv.heightDime sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
-        
-        //计算宽度等于高度的情况。
-        if (sbv.widthDime.dimeRelaVal == sbv.heightDime)
-        {
-            rect.size.width = [sbv.widthDime measureWith:rect.size.height];
-        }
-        
-        //位置在原点位置。。
-        rect.origin.x = (selfSize.width - self.leftPadding - self.rightPadding)*self.coordinateSetting.origin.x - rect.size.width / 2 + sbv.leftPos.margin + self.leftPadding;
-        rect.origin.y = (selfSize.height - self.topPadding - self.bottomPadding)*self.coordinateSetting.origin.y - rect.size.height / 2 + sbv.topPos.margin + self.topPadding;
-        
-        if (CGRectGetMinY(rect) < minYPos)
-        {
-            minYPos = CGRectGetMinY(rect);
-        }
-        
-        if (CGRectGetMaxY(rect) > maxYPos)
-        {
-            maxYPos = CGRectGetMaxY(rect);
-        }
-        
-        if (CGRectGetMinX(rect) < minXPos)
-        {
-            minXPos = CGRectGetMinX(rect);
-        }
-        
-        if (CGRectGetMaxX(rect) > maxXPos)
-        {
-            maxXPos = CGRectGetMaxX(rect);
-        }
-        
-        sbv.myFrame.frame = rect;
-        
-    }
-    
-    if (minYPos == CGFLOAT_MAX)
-    {
-        minYPos = 0;
-    }
-    
-    if (maxYPos == -CGFLOAT_MAX)
-    {
-        maxYPos = self.topPadding + self.bottomPadding;
-    }
-    
-    if (minXPos == CGFLOAT_MAX)
-    {
-        minXPos = 0;
-    }
-    
-    if (maxXPos == -CGFLOAT_MAX)
-    {
-        maxXPos = self.leftPadding + self.rightPadding;
-    }
-
-    
-    if (self.wrapContentWidth)
-    {
-        selfSize.width = maxXPos - minXPos;
-    }
-    
-    if (self.wrapContentHeight)
-    {
-        selfSize.height = maxYPos - minYPos;
-    }
-    
-    
-    selfSize.height = [self validMeasure:self.heightDime sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
-    
-    selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
-    
-    return [self adjustSizeWhenNoSubviews:selfSize sbs:sbs2];
-}
-
--(id)createSizeClassInstance
-{
-    return [MyPathLayoutViewSizeClass new];
-}
 
 @end
 

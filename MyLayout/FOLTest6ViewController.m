@@ -28,9 +28,9 @@
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [CFTool color:0];
-    rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
-    rootLayout.heightDime.lBound(scrollView.heightDime,0,1); //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
-    rootLayout.subviewMargin = 10;
+    rootLayout.myLeft = rootLayout.myRight = 0;
+    rootLayout.heightSize.lBound(scrollView.heightSize,0,1); //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
+    rootLayout.subviewVSpace = 10;
     [scrollView addSubview:rootLayout];
     
     //Create First User Profile type。
@@ -80,10 +80,10 @@
     contentLayout.backgroundColor = [UIColor whiteColor];
     contentLayout.noBoundaryLimit = YES;
     contentLayout.wrapContentHeight = YES;  //对于上下浮动布局来说，如果只想向上浮动，而高度又希望是由子视图决定，则必须要设置noBoundaryLimit的值为YES。
-    contentLayout.myLeftMargin = contentLayout.myRightMargin = 0;
+    contentLayout.myLeft = contentLayout.myRight = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewHorzMargin = 5;
-    contentLayout.subviewVertMargin = 5;
+    contentLayout.subviewHSpace = 5;
+    contentLayout.subviewVSpace = 5;
     [rootLayout addSubview:contentLayout];
     
     
@@ -96,7 +96,7 @@
     nameLabel.font = [CFTool font:17];
     nameLabel.textColor = [CFTool color:4];
     nameLabel.clearFloat = YES; //注意这里要另外起一行。
-    nameLabel.widthDime.equalTo(contentLayout.widthDime).add(-45); //40的头像宽度外加5的左右间距。
+    nameLabel.widthSize.equalTo(contentLayout.widthSize).add(-45); //40的头像宽度外加5的左右间距。
     [nameLabel sizeToFit];
     [contentLayout addSubview:nameLabel];
     
@@ -113,7 +113,7 @@
     addressLabel.font = [CFTool font:15];
     addressLabel.textColor = [CFTool color:4];
     addressLabel.wrapContentHeight = YES;
-    addressLabel.widthDime.equalTo(contentLayout.widthDime).add(-45); //40的头像宽度外加5的左右间距。
+    addressLabel.widthSize.equalTo(contentLayout.widthSize).add(-45); //40的头像宽度外加5的左右间距。
     [addressLabel sizeToFit];
     [contentLayout addSubview:addressLabel];
     
@@ -128,7 +128,7 @@
     githublabel.text = @"github: https://github.com/youngsoft";
     githublabel.font = [CFTool font:15];
     githublabel.textColor = [CFTool color:9];
-    githublabel.widthDime.equalTo(contentLayout.widthDime).add(-45); //40的头像宽度外加5的左右间距。
+    githublabel.widthSize.equalTo(contentLayout.widthSize).add(-45); //40的头像宽度外加5的左右间距。
     githublabel.adjustsFontSizeToFitWidth = YES;
     [githublabel sizeToFit];
     [contentLayout addSubview:githublabel];
@@ -137,7 +137,7 @@
     detailLabel.text = @"坚持原创，以造轮子为乐!";
     detailLabel.textColor = [CFTool color:2];
     detailLabel.font = [CFTool font:20];
-    detailLabel.widthDime.equalTo(contentLayout.widthDime).add(-45); //40的头像宽度外加5的左右间距。
+    detailLabel.widthSize.equalTo(contentLayout.widthSize).add(-45); //40的头像宽度外加5的左右间距。
     detailLabel.adjustsFontSizeToFitWidth = YES;
     [detailLabel sizeToFit];
     [contentLayout addSubview:detailLabel];
@@ -152,7 +152,7 @@
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     contentLayout.backgroundColor = [UIColor whiteColor];
     contentLayout.wrapContentHeight = YES;
-    contentLayout.myLeftMargin = contentLayout.myRightMargin = 0;
+    contentLayout.myLeft = contentLayout.myRight = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
 
@@ -160,7 +160,7 @@
     UIImageView *headImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions4"]];
     headImageView.contentMode = UIViewContentModeCenter;
     headImageView.weight = 1; //占据全部宽度。
-    headImageView.heightDime.equalTo(@80);
+    headImageView.heightSize.equalTo(@80);
     [contentLayout addSubview:headImageView];
 
     UILabel *nameLabel = [UILabel new];
@@ -169,7 +169,7 @@
     nameLabel.textColor = [CFTool color:4];
     nameLabel.textAlignment = NSTextAlignmentCenter;
     nameLabel.weight = 1;
-    nameLabel.myTopMargin = 10;
+    nameLabel.myTop = 10;
     [nameLabel sizeToFit];
     [contentLayout addSubview:nameLabel];
     
@@ -180,8 +180,8 @@
     nickNameLabel.textColor =  [CFTool color:3];
     nickNameLabel.textAlignment = NSTextAlignmentCenter;
     nickNameLabel.weight = 1;
-    nickNameLabel.myTopMargin = 5;
-    nickNameLabel.myBottomMargin = 15;
+    nickNameLabel.myTop = 5;
+    nickNameLabel.myBottom = 15;
     [nickNameLabel sizeToFit];
     [contentLayout addSubview:nickNameLabel];
     
@@ -194,7 +194,7 @@
     {
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:images[i]]];
         imageView.contentMode = UIViewContentModeCenter;
-        imageView.heightDime.equalTo(@20);
+        imageView.heightSize.equalTo(@20);
         imageView.weight = 1.0/ (3 - i);  //这里三个，第一个占用全部的1/3，第二个占用剩余的1/2，第三个占用剩余的1/1。这样就实现了均分宽度的效果。
         [contentLayout addSubview:imageView];
     }
@@ -209,7 +209,7 @@
         menuLabel.textAlignment = NSTextAlignmentCenter;
         menuLabel.adjustsFontSizeToFitWidth = YES;
         menuLabel.weight = 1.0/ (3 - i);
-        menuLabel.myTopMargin = 10;
+        menuLabel.myTop = 10;
         [menuLabel sizeToFit];
         [contentLayout addSubview:menuLabel];
     }
@@ -224,7 +224,7 @@
         valueLabel.textAlignment = NSTextAlignmentCenter;
         valueLabel.adjustsFontSizeToFitWidth = YES;
         valueLabel.weight = 1.0/ (3 - i);
-        valueLabel.myTopMargin = 5;
+        valueLabel.myTop = 5;
         [valueLabel sizeToFit];
         [contentLayout addSubview:valueLabel];
     }
@@ -240,14 +240,14 @@
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     contentLayout.backgroundColor = [UIColor whiteColor];
     contentLayout.wrapContentHeight = YES;   //虽然说上下浮动布局一般要明确有高度，但是我们依然可以用wrapContentHeight属性，这时候布局视图的高度就是子视图里面高度最高的子视图了。
-    contentLayout.myLeftMargin = contentLayout.myRightMargin = 0;
+    contentLayout.myLeft = contentLayout.myRight = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
     
     
     UIImageView *headImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions4"]];
     headImageView.mySize = CGSizeMake(80, 80);
-    headImageView.myRightMargin = 10;
+    headImageView.myRight = 10;
     headImageView.layer.cornerRadius = 5;
     headImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     headImageView.layer.borderWidth = 0.5;
@@ -307,13 +307,13 @@
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     contentLayout.backgroundColor = [UIColor whiteColor];
     contentLayout.wrapContentHeight = YES;
-    contentLayout.myLeftMargin = contentLayout.myRightMargin = 0;
+    contentLayout.myLeft = contentLayout.myRight = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
     
     UIImageView *headImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions4"]];
     headImageView.mySize = CGSizeMake(80, 80);
-    headImageView.myRightMargin = 10;
+    headImageView.myRight = 10;
     headImageView.layer.cornerRadius = 5;
     headImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     headImageView.layer.borderWidth = 0.5;
@@ -327,8 +327,8 @@
     editButton.textColor = [CFTool color:4];
     editButton.layer.cornerRadius = 5;
     editButton.layer.masksToBounds = YES;
-    editButton.widthDime.equalTo(editButton.widthDime).add(20);
-    editButton.heightDime.equalTo(editButton.heightDime).add(4);
+    editButton.widthSize.equalTo(editButton.widthSize).add(20);
+    editButton.heightSize.equalTo(editButton.heightSize).add(4);
     editButton.reverseFloat = YES;
     [contentLayout addSubview:editButton];
     
@@ -342,7 +342,7 @@
     
     UIImageView *nickNameImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit"]];
     [nickNameImageView sizeToFit];
-    nickNameImageView.myTopMargin = 5;
+    nickNameImageView.myTop = 5;
     [contentLayout addSubview:nickNameImageView];
     
     UILabel *nickNameLabel = [UILabel new];
@@ -350,7 +350,7 @@
     nickNameLabel.font = [CFTool font:15];
     nickNameLabel.textColor =  [CFTool color:3];
     [nickNameLabel sizeToFit];
-    nickNameLabel.myTopMargin = 5;
+    nickNameLabel.myTop = 5;
     [contentLayout addSubview:nickNameLabel];
     
     
@@ -362,7 +362,7 @@
     [detailLabel sizeToFit];
     detailLabel.weight = 1;
     detailLabel.clearFloat = YES;
-    detailLabel.myTopMargin = 5;
+    detailLabel.myTop = 5;
     [contentLayout addSubview:detailLabel];
 
 }

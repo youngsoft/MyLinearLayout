@@ -25,15 +25,15 @@
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.wrapContentHeight = NO;
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;
+    rootLayout.gravity = MyGravity_Horz_Fill;
     self.view = rootLayout;
     
     //创建顶部的菜单布局部分。
     MyFlowLayout *menuLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
-    menuLayout.gravity = MyMarginGravity_Fill; //填充所有尺寸。
+    menuLayout.gravity = MyGravity_Fill; //填充所有尺寸。
     menuLayout.wrapContentHeight = YES;
     menuLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    menuLayout.subviewMargin = 10;
+    menuLayout.subviewSpace = 10;
     [rootLayout addSubview:menuLayout];
     
     UILabel *menu1Label = [UILabel new];
@@ -41,8 +41,8 @@
     menu1Label.textAlignment = NSTextAlignmentCenter;
     menu1Label.backgroundColor = [CFTool color:5];
     menu1Label.font = [CFTool font:16];
-    menu1Label.heightDime.equalTo(menu1Label.widthDime);
-    menu1Label.widthDime.equalTo(menu1Label.heightDime);
+    menu1Label.heightSize.equalTo(menu1Label.widthSize);
+    menu1Label.widthSize.equalTo(menu1Label.heightSize);
     [menuLayout addSubview:menu1Label];
     
     UILabel *menu2Label = [UILabel new];
@@ -50,8 +50,8 @@
     menu2Label.textAlignment = NSTextAlignmentCenter;
     menu2Label.backgroundColor = [CFTool color:6];
     menu2Label.font = [CFTool font:16];
-    menu2Label.heightDime.equalTo(menu2Label.widthDime);
-    menu2Label.widthDime.equalTo(menu2Label.heightDime);
+    menu2Label.heightSize.equalTo(menu2Label.widthSize);
+    menu2Label.widthSize.equalTo(menu2Label.heightSize);
     [menuLayout addSubview:menu2Label];
     
     UILabel *menu3Label = [UILabel new];
@@ -59,8 +59,8 @@
     menu3Label.textAlignment = NSTextAlignmentCenter;
     menu3Label.backgroundColor = [CFTool color:7];
     menu3Label.font = [CFTool font:16];
-    menu3Label.heightDime.equalTo(menu3Label.widthDime);
-    menu3Label.widthDime.equalTo(menu3Label.heightDime);
+    menu3Label.heightSize.equalTo(menu3Label.widthSize);
+    menu3Label.widthSize.equalTo(menu3Label.heightSize);
     [menuLayout addSubview:menu3Label];
     
     MyRelativeLayout *contentLayout = [MyRelativeLayout new];
@@ -75,7 +75,7 @@
     func1Label.textAlignment = NSTextAlignmentCenter;
     func1Label.backgroundColor = [CFTool color:5];
     func1Label.font = [CFTool font:16];
-    func1Label.heightDime.equalTo(contentLayout.heightDime).multiply(0.5).add(-5);
+    func1Label.heightSize.equalTo(contentLayout.heightSize).multiply(0.5).add(-5);
     [contentLayout addSubview:func1Label];
     
     UILabel *func2Label = [UILabel new];
@@ -83,10 +83,10 @@
     func2Label.textAlignment = NSTextAlignmentCenter;
     func2Label.backgroundColor = [CFTool color:6];
     func2Label.font = [CFTool font:16];
-    func2Label.heightDime.equalTo(contentLayout.heightDime).multiply(0.5).add(-5);
+    func2Label.heightSize.equalTo(contentLayout.heightSize).multiply(0.5).add(-5);
     [contentLayout addSubview:func2Label];
     
-    func1Label.widthDime.equalTo(@[func2Label.widthDime]);
+    func1Label.widthSize.equalTo(@[func2Label.widthSize]);
     func2Label.leftPos.equalTo(func1Label.rightPos);
     
     UILabel *func3Label = [UILabel new];
@@ -95,8 +95,8 @@
     func3Label.textAlignment = NSTextAlignmentCenter;
     func3Label.backgroundColor = [CFTool color:7];
     func3Label.font = [CFTool font:16];
-    func3Label.heightDime.equalTo(contentLayout.heightDime).multiply(0.5).add(-5);
-    func3Label.widthDime.equalTo(contentLayout.widthDime);
+    func3Label.heightSize.equalTo(contentLayout.heightSize).multiply(0.5).add(-5);
+    func3Label.widthSize.equalTo(contentLayout.widthSize);
     func3Label.topPos.equalTo(func1Label.bottomPos).offset(10);
     [contentLayout addSubview:func3Label];
     
@@ -104,7 +104,7 @@
     //下面定义iPhone设备横屏时的界面布局。
     MyLinearLayout *rootLayoutSC = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
     rootLayoutSC.orientation = MyLayoutViewOrientation_Horz;
-    rootLayoutSC.gravity = MyMarginGravity_Vert_Fill;
+    rootLayoutSC.gravity = MyGravity_Vert_Fill;
     
     
     MyFlowLayout *menuLayoutSC = [menuLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_hAny | MySizeClass_wAny];
@@ -116,20 +116,20 @@
     UILabel *func2LabelSC = [func2Label fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
     UILabel *func3LabelSC = [func3Label fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
 
-    func1LabelSC.widthDime.equalTo(@[func2LabelSC.widthDime, func3LabelSC.widthDime]);
+    func1LabelSC.widthSize.equalTo(@[func2LabelSC.widthSize, func3LabelSC.widthSize]);
     func2LabelSC.leftPos.equalTo(func1LabelSC.rightPos);
     func3LabelSC.leftPos.equalTo(func2LabelSC.rightPos);
-    func1LabelSC.heightDime.equalTo(contentLayout.heightDime);
-    func2LabelSC.heightDime.equalTo(contentLayout.heightDime);
-    func3LabelSC.heightDime.equalTo(contentLayout.heightDime);
+    func1LabelSC.heightSize.equalTo(contentLayout.heightSize);
+    func2LabelSC.heightSize.equalTo(contentLayout.heightSize);
+    func3LabelSC.heightSize.equalTo(contentLayout.heightSize);
     
     //下面是定义在iPad上设备的横屏的界面布局，因为iPad上的SizeClass都是regular，所以这里要区分横竖屏的方法是使用MySizeClass_Portrait和MySizeClass_Landscape
     UILabel *menu1LabelSC = [menu1Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-    menu1LabelSC.heightDime.max(200);
+    menu1LabelSC.heightSize.max(200);
     UILabel *menu2LabelSC = [menu2Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-    menu2LabelSC.heightDime.max(200);
+    menu2LabelSC.heightSize.max(200);
     UILabel *menu3LabelSC = [menu3Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-    menu3LabelSC.heightDime.max(200);
+    menu3LabelSC.heightSize.max(200);
 
 
 }

@@ -31,11 +31,11 @@
      */
     
     MyTableLayout *rootLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Horz];
-    rootLayout.rowSpacing = 5;
-    rootLayout.colSpacing = 10;
+    rootLayout.subviewHSpace = 5;
+    rootLayout.subviewVSpace = 10;
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //分别设置表格布局里面的行间距、列间距、内部padding边距。
     
-    rootLayout.widthDime.equalTo(scrollView.widthDime);
+    rootLayout.widthSize.equalTo(scrollView.widthSize);
     rootLayout.wrapContentHeight = YES; //布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
     rootLayout.wrapContentWidth = NO;
     [scrollView addSubview:rootLayout];
@@ -72,9 +72,9 @@
 -(UIView*)createColLayout:(NSString*)image title:(NSString*)title
 {
     MyLinearLayout *colLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    colLayout.gravity = MyMarginGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
+    colLayout.gravity = MyGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
     colLayout.wrapContentHeight = YES;
-    colLayout.subviewMargin = 5;  //设置布局视图里面子视图之间的间距为5个点。
+    colLayout.subviewVSpace = 5;  //设置布局视图里面子视图之间的间距为5个点。
     colLayout.backgroundColor = [CFTool color:0];
     colLayout.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
     [colLayout setTarget:self action:@selector(handleColLayoutTap:)];
@@ -90,7 +90,7 @@
     titleLabel.textColor = [CFTool color:4];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.adjustsFontSizeToFitWidth = YES;
-    titleLabel.myBottomMargin = 2;
+    titleLabel.myBottom = 2;
     [titleLabel sizeToFit];
     [colLayout addSubview:titleLabel];
     

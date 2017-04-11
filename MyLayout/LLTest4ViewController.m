@@ -40,7 +40,7 @@
     self.rootLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
     self.rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.rootLayout.zeroPadding = NO;  //这个属性设置为NO时表示当布局视图的尺寸是wrap也就是由子视图决定时并且在没有任何子视图是不会参与布局视图高度的计算的。您可以在这个DEMO的测试中将所有子视图都删除掉，看看效果，然后注释掉这句代码看看效果。
-    self.rootLayout.subviewMargin = 5;
+    self.rootLayout.subviewVSpace = 5;
     [contentView addSubview:self.rootLayout];
     
     [self.rootLayout addSubview:[self addWrapContentLayout]];
@@ -68,7 +68,7 @@
     wrapContentLayout.wrapContentHeight = YES;
     wrapContentLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
     wrapContentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    wrapContentLayout.subviewMargin = 5;
+    wrapContentLayout.subviewHSpace = 5;
 
     
     /*
@@ -81,16 +81,16 @@
     
     /*
      MyLayout中的布局视图可以设置四周的边界线，这可以通过布局视图的leftBorderLine、topBorderLine、bottomBorderLine、rightBorderLine四个属性来实现。
-     属性的值是一个MyBorderLineDraw对象，这个对象可以设置边界线的颜色、粗细、点划线、缩进功能。在使用布局视图的边界线功能时，请先设置好MyBorderLineDraw对象的各属性后再赋值给布局视图的四个属性上。
+     属性的值是一个MyBorderline对象，这个对象可以设置边界线的颜色、粗细、点划线、缩进功能。在使用布局视图的边界线功能时，请先设置好MyBorderline对象的各属性后再赋值给布局视图的四个属性上。
      */
-    MyBorderLineDraw *bl = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]]; //边界线
+    MyBorderline *bl = [[MyBorderline alloc] initWithColor:[UIColor redColor]]; //边界线
     bl.headIndent = 10;  //头部缩进10个点
     bl.tailIndent = 30;  //尾部缩进30个点。
     bl.thick = 1;        //粗细为1
-    wrapContentLayout.bottomBorderLine = bl;
-    wrapContentLayout.topBorderLine = bl;
-    wrapContentLayout.leftBorderLine = bl;
-    wrapContentLayout.rightBorderLine = bl;
+    wrapContentLayout.bottomBorderline = bl;
+    wrapContentLayout.topBorderline = bl;
+    wrapContentLayout.leftBorderline = bl;
+    wrapContentLayout.rightBorderline = bl;
     
     
     
@@ -98,7 +98,7 @@
     actionLayout.layer.borderWidth = 1;
     actionLayout.layer.borderColor = [CFTool color:9].CGColor;
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    actionLayout.subviewMargin = 5;
+    actionLayout.subviewVSpace = 5;
     actionLayout.wrapContentWidth = YES;
     actionLayout.wrapContentHeight = YES;  //布局的高度和宽度由子视图决定
     [wrapContentLayout addSubview:actionLayout];

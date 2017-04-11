@@ -45,7 +45,7 @@
     self.view = scrollView;
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-    rootLayout.widthDime.equalTo(scrollView.widthDime);
+    rootLayout.widthSize.equalTo(scrollView.widthSize);
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = YES;
     [scrollView addSubview:rootLayout];
@@ -53,28 +53,28 @@
     
     //添加色块。
     UILabel *v1 = [self createLabel:NSLocalizedString(@"Scroll the view please", @"") backgroundColor:[CFTool color:1]];
-    v1.widthDime.equalTo(rootLayout.widthDime);
-    v1.heightDime.equalTo(@80);
+    v1.widthSize.equalTo(rootLayout.widthSize);
+    v1.heightSize.equalTo(@80);
     [rootLayout addSubview:v1];
     
     
     UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:2]];
-    v2.widthDime.equalTo(rootLayout.widthDime);
-    v2.heightDime.equalTo(@200);
+    v2.widthSize.equalTo(rootLayout.widthSize);
+    v2.heightSize.equalTo(@200);
     [rootLayout addSubview:v2];
     
     
     UIView *v3 = [self createLabel:@"" backgroundColor:[CFTool color:3]];
-    v3.widthDime.equalTo(rootLayout.widthDime);
-    v3.heightDime.equalTo(@800);
+    v3.widthSize.equalTo(rootLayout.widthSize);
+    v3.heightSize.equalTo(@800);
     v3.topPos.equalTo(v2.bottomPos);
     [rootLayout addSubview:v3];
     
     
     //这里最后一个加入的子视图作为滚动时的停靠视图。。
     UILabel *v4 = [self createLabel:NSLocalizedString(@"This view will Dock to top when scroll", @"") backgroundColor:[CFTool color:4]];
-    v4.widthDime.equalTo(rootLayout.widthDime);
-    v4.heightDime.equalTo(@80);
+    v4.widthSize.equalTo(rootLayout.widthSize);
+    v4.heightSize.equalTo(@80);
     v4.topPos.equalTo(v1.bottomPos);
     [rootLayout addSubview:v4];
     self.testTopDockView = v4;
@@ -124,8 +124,8 @@
          因为参与了布局，所以不会影响到依赖这个视图的其他视图，所以整体布局结构是保持不变，这时候虽然设置为了noLayout的视图留出了一个空挡，但是却可以通过frame值来进行任意的定位而不受到布局的控制。
         
          上面的代码中我们可以看到v4视图的位置和尺寸设置如下：
-         v4.widthDime.equalTo(rootLayout.widthDime);  //宽度和父视图相等。
-         v4.heightDime.equalTo(@80);              //高度等于80。
+         v4.widthSize.equalTo(rootLayout.widthSize);  //宽度和父视图相等。
+         v4.heightSize.equalTo(@80);              //高度等于80。
          v4.topPos.equalTo(v1.bottomPos);         //总是位于v1的下面。
          。。。。
          v2.topPos.equalTo(v4.bottomPos);         //v2则总是位于v4的下面。

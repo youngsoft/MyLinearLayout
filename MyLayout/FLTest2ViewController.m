@@ -20,7 +20,7 @@
 -(void)loadView
 {
     /*
-       这个例子里面我们可以用框架布局来实现一些复杂的界面布局。框架布局中的子视图还可以利用widthDime和heightDime属性来确定自己的尺寸，其中的equalTo方法的值可以是一个确定的数字，也可以是父布局视图，也可以是自己。
+       这个例子里面我们可以用框架布局来实现一些复杂的界面布局。框架布局中的子视图还可以利用widthSize和heightSize属性来确定自己的尺寸，其中的equalTo方法的值可以是一个确定的数字，也可以是父布局视图，也可以是自己。
      */
     
     MyFrameLayout *rootLayout = [MyFrameLayout new];
@@ -31,16 +31,16 @@
     //背景占用用户信息布局的一半高度，宽度和布局一样宽
     UIImageView *backImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk1"]];
     backImageView.contentMode = UIViewContentModeScaleToFill;
-    backImageView.heightDime.equalTo(rootLayout.heightDime).multiply(0.5);
-    backImageView.widthDime.equalTo(rootLayout.widthDime);
+    backImageView.heightSize.equalTo(rootLayout.heightSize).multiply(0.5);
+    backImageView.widthSize.equalTo(rootLayout.widthSize);
     [rootLayout addSubview:backImageView];
     
     //右上角图片
     UIImageView *rightImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user"]];
     rightImageView.backgroundColor = [UIColor whiteColor];
     rightImageView.layer.cornerRadius = 16;
-    rightImageView.myTopMargin = 10;
-    rightImageView.myRightMargin = 10;  //顶部和右边边距10
+    rightImageView.myTop = 10;
+    rightImageView.myRight = 10;  //顶部和右边边距10
     [rootLayout addSubview:rightImageView];
   
     
@@ -51,8 +51,8 @@
     headImage.layer.masksToBounds = YES;
     headImage.layer.cornerRadius = 5;
     headImage.layer.borderWidth = 0.5;
-    headImage.heightDime.equalTo(rootLayout.heightDime).multiply(1.0/3); //高度是父布局高度1/3
-    headImage.widthDime.equalTo(headImage.heightDime);    //宽度等于高度
+    headImage.heightSize.equalTo(rootLayout.heightSize).multiply(1.0/3); //高度是父布局高度1/3
+    headImage.widthSize.equalTo(headImage.heightSize);    //宽度等于高度
     headImage.centerXPos.equalTo(@0);
     headImage.centerYPos.equalTo(@0);
     [rootLayout addSubview:headImage];
@@ -72,23 +72,23 @@
     
     //左中右三张图片,设定宽度和限制高度。
     UIImageView *leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image2"]];
-    leftView.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0); // 宽度是父布局宽度的1/3
-    leftView.heightDime.equalTo(leftView.widthDime).max(100);  //高度和宽度相等，当最大只能是100
+    leftView.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0); // 宽度是父布局宽度的1/3
+    leftView.heightSize.equalTo(leftView.widthSize).max(100);  //高度和宽度相等，当最大只能是100
     leftView.leftPos.equalTo(@0);
     leftView.bottomPos.equalTo(@0);
     [rootLayout addSubview:leftView];
     
     UIImageView *centerView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image3"]];
-    centerView.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
-    centerView.heightDime.equalTo(centerView.widthDime).max(100);
+    centerView.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0);
+    centerView.heightSize.equalTo(centerView.widthSize).max(100);
     centerView.centerXPos.equalTo(@0);
     centerView.bottomPos.equalTo(@0);
     [rootLayout addSubview:centerView];
 
     
     UIImageView *rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image4"]];
-    rightView.widthDime.equalTo(rootLayout.widthDime).multiply(1/3.0);
-    rightView.heightDime.equalTo(rightView.widthDime).max(100);
+    rightView.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0);
+    rightView.heightSize.equalTo(rightView.widthSize).max(100);
     rightView.rightPos.equalTo(@0);
     rightView.bottomPos.equalTo(@0);
     [rootLayout addSubview:rightView];

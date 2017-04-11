@@ -36,10 +36,10 @@
     layout3.backgroundColor = [CFTool color:0];
     
     
-    layout1.widthDime.equalTo(rootLayout.widthDime);
-    layout2.widthDime.equalTo(rootLayout.widthDime);
-    layout3.widthDime.equalTo(rootLayout.widthDime);
-    layout1.heightDime.equalTo(@[layout2.heightDime.add(-10), layout3.heightDime]).add(-10); //均分三个布局的高度。
+    layout1.widthSize.equalTo(rootLayout.widthSize);
+    layout2.widthSize.equalTo(rootLayout.widthSize);
+    layout3.widthSize.equalTo(rootLayout.widthSize);
+    layout1.heightSize.equalTo(@[layout2.heightSize.add(-10), layout3.heightSize]).add(-10); //均分三个布局的高度。
     layout2.topPos.equalTo(layout1.bottomPos).offset(10);
     layout3.topPos.equalTo(layout2.bottomPos).offset(10);
     
@@ -94,15 +94,15 @@
     
     
     UIView *v1 = [self createLabel:@"" backgroundColor:[CFTool color:5]];
-    v1.widthDime.equalTo(@100);
-    v1.heightDime.equalTo(@50);
+    v1.widthSize.equalTo(@100);
+    v1.heightSize.equalTo(@50);
     v1.centerYPos.equalTo(@0);
     [layout addSubview:v1];
     
     
     UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:6]];
-    v2.widthDime.equalTo(@50);
-    v2.heightDime.equalTo(@50);
+    v2.widthSize.equalTo(@50);
+    v2.heightSize.equalTo(@50);
     v2.centerYPos.equalTo(@0);
     [layout addSubview:v2];
     
@@ -129,15 +129,15 @@
     
     
     UIView *v1 = [self createLabel:@"" backgroundColor:[CFTool color:5]];
-    v1.widthDime.equalTo(@200);
-    v1.heightDime.equalTo(@50);
+    v1.widthSize.equalTo(@200);
+    v1.heightSize.equalTo(@50);
     v1.centerXPos.equalTo(@0);
     [layout addSubview:v1];
     
     
     UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:6]];
-    v2.widthDime.equalTo(@200);
-    v2.heightDime.equalTo(@30);
+    v2.widthSize.equalTo(@200);
+    v2.heightSize.equalTo(@30);
     v2.centerXPos.equalTo(@0);
     [layout addSubview:v2];
     

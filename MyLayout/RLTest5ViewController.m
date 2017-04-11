@@ -34,7 +34,7 @@
     rootLayout.leftPos.equalTo(@0);
     rootLayout.rightPos.equalTo(@0);
     rootLayout.wrapContentHeight = YES;
-    rootLayout.subviewMargin = 10;
+    rootLayout.subviewVSpace = 10;
     [scrollView addSubview:rootLayout];
     
     //最小最大间距限制例子。segment的简易实现。
@@ -76,7 +76,7 @@
     
     //调整underLineView的位置。
     underLineView.leftPos.equalTo(button.leftPos);
-    underLineView.widthDime.equalTo(button.widthDime);
+    underLineView.widthSize.equalTo(button.widthSize);
     
     
     [containerLayout layoutAnimationWithDuration:0.3];
@@ -129,8 +129,8 @@
     UIView *underLineView = [UIView new];
     underLineView.backgroundColor = [CFTool color:7];
     underLineView.tag = 3;
-    underLineView.heightDime.equalTo(@1);
-    underLineView.widthDime.equalTo(leftButton.widthDime);
+    underLineView.heightSize.equalTo(@1);
+    underLineView.widthSize.equalTo(leftButton.widthSize);
     underLineView.leftPos.equalTo(leftButton.leftPos);
     underLineView.topPos.equalTo(leftButton.bottomPos).offset(6);
     [containerLayout addSubview:underLineView];
@@ -196,7 +196,7 @@
         rightLabel.topPos.equalTo(leftImageView.topPos).offset(4);
         [containerLayout addSubview:rightLabel];
         
-        flexedLabel.widthDime.equalTo(flexedLabel.widthDime); //宽度等于自身的宽度
+        flexedLabel.widthSize.equalTo(flexedLabel.widthSize); //宽度等于自身的宽度
         flexedLabel.rightPos.uBound(rightLabel.leftPos, editImageView.frame.size.width + 10); //右边的最大的边界就等于rightLabel的最左边再减去editImageView的尺寸外加上10,这里的10是视图之间的间距，为了让视图之间保持有足够的间距。这样当flexedLabel的宽度超过这个最大的右边界时，系统自动会缩小flexedLabel的宽度，以便来满足右边界的限制。 这个场景非常适合某个UITableViewCell里面的两个子视图之间有尺寸长度约束的情况。
         
         
@@ -226,7 +226,7 @@
     MyRelativeLayout *containerLayout = [MyRelativeLayout new];
     containerLayout.leftPos.equalTo(rootLayout.leftPos);
     containerLayout.rightPos.equalTo(rootLayout.rightPos);
-    containerLayout.heightDime.equalTo(@150);
+    containerLayout.heightSize.equalTo(@150);
     containerLayout.padding = UIEdgeInsetsMake(6, 6, 6, 6);
     containerLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:containerLayout];
@@ -237,7 +237,7 @@
     leftLabel.backgroundColor = [CFTool color:5];
     leftLabel.text = @"Click me:";
     leftLabel.textColor = [CFTool color:4];
-    leftLabel.widthDime.equalTo(@100);  //宽度固定为100
+    leftLabel.widthSize.equalTo(@100);  //宽度固定为100
     leftLabel.wrapContentHeight = YES;       //高度由子视图的内容确定，自动计算高度。
     leftLabel.topPos.lBound(containerLayout.topPos,0);   //最小的上边界是父布局的顶部。
     leftLabel.bottomPos.uBound(containerLayout.bottomPos, 0);  //最大的下边界是父布局的底部
@@ -259,9 +259,9 @@
     rightLabel.rightPos.equalTo(containerLayout.rightPos);  //和父布局视图右对齐。
     rightLabel.centerYPos.equalTo(leftLabel.centerYPos);   //和左边视图垂直居中对齐。
     rightLabel.leftPos.lBound(leftLabel.rightPos, 10);     //右边视图的最小边界是等于左边视图的右边再偏移10，这样当右边视图的宽度超过这个最小边界时则会自动压缩视图的宽度。
-    rightLabel.widthDime.equalTo(rightLabel.widthDime);    //宽度等于自身的宽度。这个设置和上面的leftPos.lBound方法配合使用实现子视图宽度的压缩。
+    rightLabel.widthSize.equalTo(rightLabel.widthSize);    //宽度等于自身的宽度。这个设置和上面的leftPos.lBound方法配合使用实现子视图宽度的压缩。
     rightLabel.wrapContentHeight = YES;  //高度动态调整
-    rightLabel.heightDime.uBound(containerLayout.heightDime, 0, 1); //但是最大的高度等于父布局视图的高度(注意这里内部自动减去了padding的值)
+    rightLabel.heightSize.uBound(containerLayout.heightSize, 0, 1); //但是最大的高度等于父布局视图的高度(注意这里内部自动减去了padding的值)
     [containerLayout addSubview:rightLabel];
     
     //添加手势处理。

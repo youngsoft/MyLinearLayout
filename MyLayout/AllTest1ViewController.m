@@ -125,7 +125,7 @@
     MyLinearLayout *tableHeaderViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     tableHeaderViewLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     tableHeaderViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 0); //高度不确定可以设置为0。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用MyLayout的特性，减少常数的使用。
-    tableHeaderViewLayout.myLeftMargin = tableHeaderViewLayout.myRightMargin = 0; //这里注意设置宽度和父布局保持一致。
+    tableHeaderViewLayout.myLeft = tableHeaderViewLayout.myRight = 0; //这里注意设置宽度和父布局保持一致。
     tableHeaderViewLayout.backgroundImage = [UIImage imageNamed:@"bk1"];
     [tableHeaderViewLayout setTarget:self action:@selector(handleTableHeaderViewLayoutClick:)];
     
@@ -134,7 +134,7 @@
     label1.tag = 1000;
     label1.textColor = [CFTool color:0];
     label1.font = [CFTool font:17];
-    label1.myCenterXOffset = 0;
+    label1.myCenterX = 0;
     [label1 sizeToFit];
     [tableHeaderViewLayout addSubview:label1];
     
@@ -143,9 +143,9 @@
     label2.text = NSLocalizedString(@" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", @"");
     label2.textColor = [CFTool color:4];
     label2.font = [CFTool font:15];
-    label2.myLeftMargin = label2.myRightMargin = 5;
+    label2.myLeft = label2.myRight = 5;
     label2.wrapContentHeight = YES;
-    label2.myTopMargin = 10;
+    label2.myTop = 10;
     [label2 sizeToFit];
     [tableHeaderViewLayout addSubview:label2];
     
@@ -162,9 +162,9 @@
     MyLinearLayout *tableFooterViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     tableFooterViewLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     tableFooterViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 80); //这里明确设定高度。
-    tableFooterViewLayout.myLeftMargin = tableFooterViewLayout.myRightMargin = 0; //这里注意设置宽度和父布局保持一致。
+    tableFooterViewLayout.myLeft = tableFooterViewLayout.myRight = 0; //这里注意设置宽度和父布局保持一致。
     tableFooterViewLayout.backgroundColor = [CFTool color:6];
-    tableFooterViewLayout.gravity = MyMarginGravity_Vert_Center | MyMarginGravity_Horz_Fill;
+    tableFooterViewLayout.gravity = MyGravity_Vert_Center | MyGravity_Horz_Fill;
     
     UILabel *label3 = [UILabel new];
     label3.text = NSLocalizedString(@"add tableFooterView", @"");
@@ -179,7 +179,7 @@
     label4.textAlignment = NSTextAlignmentCenter;
     label4.textColor = [CFTool color:3];
     label4.font = [CFTool font:14];
-    label4.myTopMargin = 10;
+    label4.myTop = 10;
     label4.adjustsFontSizeToFitWidth = YES;
     [label4 sizeToFit];
     [tableFooterViewLayout addSubview:label4];
@@ -210,12 +210,12 @@
     //这里最后一行没有下划线
     if (indexPath.row  == self.datas.count - 1)
     {
-        cell.rootLayout.bottomBorderLine = nil;
+        cell.rootLayout.bottomBorderline = nil;
     }
     else
     {
-        MyBorderLineDraw  *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]];
-        cell.rootLayout.bottomBorderLine = bld;
+        MyBorderline  *bld = [[MyBorderline alloc] initWithColor:[UIColor redColor]];
+        cell.rootLayout.bottomBorderline = bld;
     }
     
     return cell;

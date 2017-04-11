@@ -78,13 +78,13 @@
     
     MyLinearLayout *rootLayout= [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     rootLayout.myMargin = 0;   //四周边距是0表示布局视图的尺寸和contentView的尺寸一致。
-    [self.contentView addSubview:rootLayout]; //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时用了myLeftMargin和myRightMargin来做边界的话，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
+    [self.contentView addSubview:rootLayout]; //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时用了myLeft和myRight来做边界的话，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
     
-    MyBorderLineDraw *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];
+    MyBorderline *bld = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
     bld.headIndent = bld.tailIndent = 10;
-    rootLayout.bottomBorderLine = bld;
+    rootLayout.bottomBorderline = bld;
     rootLayout.leftPadding = rootLayout.rightPadding = 10;  //两边保留10的内边距。
-    rootLayout.gravity = MyMarginGravity_Vert_Center;       //整个布局内容垂直居中。
+    rootLayout.gravity = MyGravity_Vert_Center;       //整个布局内容垂直居中。
     
     /*
       如果用线性布局的话，分为左中右三段，因此用水平线性布局：左边头像，中间用户信息，右边价格。中间用户信息在用一个垂直线性布局分为上下两部分：上面是用户名称和几个图标，下面是个人介绍。而用户名称和图标部分右通过建立一个水平线性布局来实现。
@@ -99,8 +99,8 @@
     MyLinearLayout *userInfoLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     userInfoLayout.wrapContentHeight = YES;  //高度由子视图决定
     userInfoLayout.weight = 1;               //中间部分的宽度占用整个水平线性布局剩余的空间。
-    userInfoLayout.gravity = MyMarginGravity_Horz_Fill;   //里面的子视图宽度和布局视图相等。
-    userInfoLayout.subviewMargin = 5;       //子视图间距为5。
+    userInfoLayout.gravity = MyGravity_Horz_Fill;   //里面的子视图宽度和布局视图相等。
+    userInfoLayout.subviewVSpace = 5;       //子视图间距为5。
     [rootLayout addSubview:userInfoLayout];
     
     
@@ -108,8 +108,8 @@
     MyLinearLayout *userNameLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     userNameLayout.wrapContentHeight = YES;   //高度由子视图决定
     userNameLayout.wrapContentWidth  = NO;    //因为布局的宽度是和父布局相等，因此这里必须要设置为NO！！否则会有约束冲突。
-    userNameLayout.subviewMargin = 5;    //子视图之间宽度间隔是5
-    userNameLayout.gravity = MyMarginGravity_Vert_Bottom;  //整体垂直底部对齐。
+    userNameLayout.subviewHSpace = 5;    //子视图之间宽度间隔是5
+    userNameLayout.gravity = MyGravity_Vert_Bottom;  //整体垂直底部对齐。
     [userInfoLayout addSubview:userNameLayout];
     
     _nameLabel = [UILabel new];
@@ -118,7 +118,7 @@
     //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
     //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
     //您可以通过uBound方法设置尺寸的最大上边界。具体参见对uBound的方法的详细介绍。
-    _nameLabel.widthDime.equalTo(_nameLabel.widthDime).uBound(userNameLayout.widthDime, -(5 + 14 + 5 + 14), 1);
+    _nameLabel.widthSize.equalTo(_nameLabel.widthSize).uBound(userNameLayout.widthSize, -(5 + 14 + 5 + 14), 1);
     [userNameLayout addSubview:_nameLabel];
     
     UIImageView *editImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit"]];
@@ -145,8 +145,8 @@
     _priceLabel.textAlignment = NSTextAlignmentRight;
     _priceLabel.adjustsFontSizeToFitWidth = YES;
     //宽度最宽为100,注意到这里使用了宏MYDIMESCALEW表示会根据屏幕的宽度来对100进行缩放。这个100是按iPhone6为标准设置的。具体请参考MyDimeScale类。
-    _priceLabel.widthDime.equalTo(_priceLabel.widthDime).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
-    _priceLabel.myLeftMargin = 10;
+    _priceLabel.widthSize.equalTo(_priceLabel.widthSize).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
+    _priceLabel.myLeft = 10;
     [rootLayout addSubview:_priceLabel];
     
  }
@@ -163,9 +163,9 @@
     rootLayout.myMargin = 0;   //四周边距是0表示布局视图的尺寸和contentView的尺寸一致。
     [self.contentView addSubview:rootLayout];
     
-    MyBorderLineDraw *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];
+    MyBorderline *bld = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
     bld.headIndent = bld.tailIndent = 10;
-    rootLayout.bottomBorderLine = bld;
+    rootLayout.bottomBorderline = bld;
     rootLayout.leftPadding = rootLayout.rightPadding = 10;  //两边保留10的内边距。
     
     
@@ -182,14 +182,14 @@
     _priceLabel.rightPos.equalTo(rootLayout.rightPos);
     _priceLabel.centerYPos.equalTo(rootLayout.centerYPos);
     //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了宏MYDIMESCALEW表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考MyDimeScale类的介绍。
-    _priceLabel.widthDime.equalTo(_priceLabel.widthDime).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
+    _priceLabel.widthSize.equalTo(_priceLabel.widthSize).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
     [rootLayout addSubview:_priceLabel];
 
     
     _nameLabel = [UILabel new];
     _nameLabel.font = [CFTool font:17];
     _nameLabel.textColor = [CFTool color:3];
-    _nameLabel.widthDime.equalTo(_nameLabel.widthDime);
+    _nameLabel.widthSize.equalTo(_nameLabel.widthSize);
     _nameLabel.leftPos.equalTo(_headImageView.rightPos);
     //1.3.0版本最新支持。设置_nameLabel的右边距最大是_priceLabel的左边距，再偏移两个小图标和间距的距离。这样当_nameLabel的尺寸超过这个最大的右边距时就会自动的缩小视图的宽度。
     _nameLabel.rightPos.uBound(_priceLabel.leftPos, (5 + 14 + 5 + 14));
@@ -233,14 +233,14 @@
     rootLayout.myMargin = 0;   //四周边距是0表示布局视图的尺寸和contentView的尺寸一致。
     [self.contentView addSubview:rootLayout];
     
-    MyBorderLineDraw *bld = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];
+    MyBorderline *bld = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
     bld.headIndent = bld.tailIndent = 10;
-    rootLayout.bottomBorderLine = bld;
+    rootLayout.bottomBorderline = bld;
     rootLayout.leftPadding = rootLayout.rightPadding = 10;  //两边保留10的内边距。
     
     _headImageView = [UIImageView new];
     _headImageView.contentMode = UIViewContentModeScaleAspectFit;
-    _headImageView.heightDime.equalTo(rootLayout.heightDime);
+    _headImageView.heightSize.equalTo(rootLayout.heightSize);
     [rootLayout addSubview:_headImageView];
     
     
@@ -250,19 +250,19 @@
     _priceLabel.textAlignment = NSTextAlignmentRight;
     _priceLabel.adjustsFontSizeToFitWidth = YES;
     _priceLabel.reverseFloat = YES;
-    _priceLabel.myLeftMargin = 10;
+    _priceLabel.myLeft = 10;
     //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了宏MYDIMESCALEW表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考MyDimeScale类的介绍。
-    _priceLabel.widthDime.equalTo(_priceLabel.widthDime).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
-    _priceLabel.heightDime.equalTo(rootLayout.heightDime);
+    _priceLabel.widthSize.equalTo(_priceLabel.widthSize).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
+    _priceLabel.heightSize.equalTo(rootLayout.heightSize);
     [rootLayout addSubview:_priceLabel];
     
     
     MyFloatLayout *userInfoLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    userInfoLayout.heightDime.equalTo(rootLayout.heightDime);
+    userInfoLayout.heightSize.equalTo(rootLayout.heightSize);
     userInfoLayout.weight = 1;
-    userInfoLayout.gravity = MyMarginGravity_Vert_Center;
-    userInfoLayout.subviewVertMargin = 5;
-    userInfoLayout.subviewHorzMargin = 5;
+    userInfoLayout.gravity = MyGravity_Vert_Center;
+    userInfoLayout.subviewVSpace = 5;
+    userInfoLayout.subviewHSpace = 5;
     [rootLayout addSubview:userInfoLayout];
     
     _nameLabel = [UILabel new];
@@ -271,7 +271,7 @@
     //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
     //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
     //您可以通过uBound方法设置尺寸的最大上边界。具体参见对uBound的方法的详细介绍。
-    _nameLabel.widthDime.equalTo(_nameLabel.widthDime).uBound(userInfoLayout.widthDime, -(5 + 14 + 5 + 14), 1);
+    _nameLabel.widthSize.equalTo(_nameLabel.widthSize).uBound(userInfoLayout.widthSize, -(5 + 14 + 5 + 14), 1);
     [userInfoLayout addSubview:_nameLabel];
     
     UIImageView *editImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit"]];

@@ -130,14 +130,14 @@
 
 /**
  *流式布局内所有子视图的整体停靠对齐位置设定。
- *MyMarginGravity_Vert_Top,MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom 表示整体垂直居上，居中，居下
- *MyMarginGravity_Horz_Left,MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right 表示整体水平居左，居中，居右
- *MyMarginGravity_Vert_Between 表示在流式布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。
- *MyMarginGravity_Horz_Between 表示在流式布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。
- *MyMarginGravity_Vert_Fill 在垂直流式布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平数量流式布局里面表示每列的高度都相等并且填充满整个布局视图的高度；在水平内容约束布局里面表示布局会自动拉升每列的高度，以便垂直方向填充满布局视图的高度(这种设置方法代替过期的方法：averageArrange)。
- *MyMarginGravity_Horz_Fill 在水平流式布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直数量流式布局里面表示每行的宽度都相等并且填充满整个布局视图的宽度；在垂直内容约束布局里面表示布局会自动拉升每行的宽度，以便水平方向填充满布局视图的宽度(这种设置方法代替过期的方法：averageArrange)。
+ *MyGravity_Vert_Top,MyGravity_Vert_Center,MyGravity_Vert_Bottom 表示整体垂直居上，居中，居下
+ *MyGravity_Horz_Left,MyGravity_Horz_Center,MyGravity_Horz_Right 表示整体水平居左，居中，居右
+ *MyGravity_Vert_Between 表示在流式布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。
+ *MyGravity_Horz_Between 表示在流式布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。
+ *MyGravity_Vert_Fill 在垂直流式布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平数量流式布局里面表示每列的高度都相等并且填充满整个布局视图的高度；在水平内容约束布局里面表示布局会自动拉升每列的高度，以便垂直方向填充满布局视图的高度(这种设置方法代替过期的方法：averageArrange)。
+ *MyGravity_Horz_Fill 在水平流式布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直数量流式布局里面表示每行的宽度都相等并且填充满整个布局视图的宽度；在垂直内容约束布局里面表示布局会自动拉升每行的宽度，以便水平方向填充满布局视图的宽度(这种设置方法代替过期的方法：averageArrange)。
  */
-@property(nonatomic,assign)  MyMarginGravity gravity;
+@property(nonatomic,assign)  MyGravity gravity;
 
 
 /**
@@ -189,24 +189,16 @@
 /**
  *设置流式布局中每排子视图的对齐方式。
  如果布局的方向是MyLayoutViewOrientation_Vert则表示每排子视图的上中下对齐方式，这里的对齐基础是以每排中的最高的子视图为基准。这个属性只支持：
-    MyMarginGravity_Vert_Top     顶部对齐
-    MyMarginGravity_Vert_Center  垂直居中对齐
-    MyMarginGravity_Vert_Bottom  底部对齐
-    MyMarginGravity_Vert_Fill    两端对齐
- 如果布局的方向是MyLayoutViewOrientation_Horz则表示每排子视图的左中右对齐方式，这里的对齐基础是以每排中的最宽的子视图为基准。这个属性只支持：MyMarginGravity_Horz_Left    左边对齐
-     MyMarginGravity_Horz_Center  水平居中对齐
-     MyMarginGravity_Horz_Right   右边对齐
-     MyMarginGravity_Horz_Fill    两端对齐
+    MyGravity_Vert_Top     顶部对齐
+    MyGravity_Vert_Center  垂直居中对齐
+    MyGravity_Vert_Bottom  底部对齐
+    MyGravity_Vert_Fill    两端对齐
+ 如果布局的方向是MyLayoutViewOrientation_Horz则表示每排子视图的左中右对齐方式，这里的对齐基础是以每排中的最宽的子视图为基准。这个属性只支持：MyGravity_Horz_Left    左边对齐
+     MyGravity_Horz_Center  水平居中对齐
+     MyGravity_Horz_Right   右边对齐
+     MyGravity_Horz_Fill    两端对齐
  */
-@property(nonatomic,assign)  MyMarginGravity arrangedGravity;
-
-
-/**
- *布局内所有子视图之间的垂直和水平的间距，默认为0。当每个子视图之间的间距都是一样时可以通过直接设置这三个属性值来指定间距而不需要为每个子视图来单独设置。
- */
-@property(nonatomic ,assign) IBInspectable CGFloat subviewVertMargin;
-@property(nonatomic, assign) IBInspectable CGFloat subviewHorzMargin;
-@property(nonatomic, assign) IBInspectable CGFloat subviewMargin;  //同时设置水平和垂直间距。
+@property(nonatomic,assign)  MyGravity arrangedGravity;
 
 
 
@@ -234,7 +226,7 @@
  如果是MyLayoutViewOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
  内容填充约束流式布局下averageArrange设置为YES时表示拉伸子视图的宽度或者高度以便填充满整个布局视图。
  */
-@property(nonatomic,assign)  BOOL averageArrange MYDEPRECATED("use gravity = MyMarginGravity_Horz_Fill or gravity = MyMarginGravity_Vert_Fill to instead");
+@property(nonatomic,assign)  BOOL averageArrange MYMETHODDEPRECATED("use gravity = MyGravity_Horz_Fill or gravity = MyGravity_Vert_Fill to instead");
 
 
 @end

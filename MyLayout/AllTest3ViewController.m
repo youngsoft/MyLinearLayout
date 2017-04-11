@@ -73,15 +73,15 @@
     button.titleLabel.font = [CFTool font:16];
     button.tintColor = [CFTool color:0];
     button.myHeight = 50;
-    button.myLeftMargin = button.myRightMargin = 0;
-    button.myBottomMargin = 0;
+    button.myLeft = button.myRight = 0;
+    button.myBottom = 0;
     [self.view addSubview:button];
 
     //整体一个线性布局，实现各种片段。
     
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    contentLayout.myLeftMargin = contentLayout.myRightMargin = 0;
-    contentLayout.gravity = MyMarginGravity_Horz_Fill;  //子视图里面的内容的宽度跟布局视图相等，这样子视图就不需要设置宽度了。
+    contentLayout.myLeft = contentLayout.myRight = 0;
+    contentLayout.gravity = MyGravity_Horz_Fill;  //子视图里面的内容的宽度跟布局视图相等，这样子视图就不需要设置宽度了。
     contentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [scrollView addSubview:contentLayout];
     
@@ -167,18 +167,18 @@
     
     //具有事件处理的layout,以及边界线效果的layout
     MyLinearLayout *layout1 = [self createActionLayout:NSLocalizedString(@"please touch here(no highlighted)", @"") action:@selector(handleTap:)];
-    layout1.myTopMargin = 10;
-    layout1.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor yellowColor]];
-    layout1.topBorderLine.headIndent = -10;
-    layout1.topBorderLine.tailIndent = -10; //底部边界线如果为负数则外部缩进
-    layout1.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]];  //设置底部和顶部都有红色的线
+    layout1.myTop = 10;
+    layout1.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor yellowColor]];
+    layout1.topBorderline.headIndent = -10;
+    layout1.topBorderline.tailIndent = -10; //底部边界线如果为负数则外部缩进
+    layout1.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor redColor]];  //设置底部和顶部都有红色的线
     [contentLayout addSubview:layout1];
     
     //具有事件处理的layout,高亮背景色的设置。
     MyLinearLayout *layout2 = [self createActionLayout:NSLocalizedString(@"please touch here(highlighted background)", @"") action:@selector(handleTap:)];
     layout2.highlightedBackgroundColor = [CFTool color:5]; //可以设置高亮的背景色用于单击事件
-    layout2.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[CFTool color:3]];
-    layout2.bottomBorderLine.thick = 4; //设置底部有红色的线，并且粗细为4
+    layout2.bottomBorderline = [[MyBorderline alloc] initWithColor:[CFTool color:3]];
+    layout2.bottomBorderline.thick = 4; //设置底部有红色的线，并且粗细为4
     //您还可以为布局视图设置按下、按下取消的事件处理逻辑。
     [layout2 setTouchDownTarget:self action:@selector(handleTouchDown:)];
     [layout2 setTouchCancelTarget:self action:@selector(handleTouchCancel:)];
@@ -187,10 +187,10 @@
     //具有事件处理的layout, 可以设置触摸时的高亮背景图。虚线边界线。
     MyLinearLayout *layout3 = [self createActionLayout:NSLocalizedString(@"please touch here(highlighted background image)", @"") action:@selector(handleTap:)];
     layout3.highlightedBackgroundImage = [UIImage imageNamed:@"image2"]; //设置单击时的高亮背景图片。
-    MyBorderLineDraw *dashLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor greenColor]];
+    MyBorderline *dashLine = [[MyBorderline alloc] initWithColor:[UIColor greenColor]];
     dashLine.dash = 3;    //设置为非0表示虚线边界线。
-    layout3.leftBorderLine = dashLine; //设置左右边绿色的虚线
-    layout3.rightBorderLine = dashLine;
+    layout3.leftBorderline = dashLine; //设置左右边绿色的虚线
+    layout3.rightBorderline = dashLine;
     [contentLayout addSubview:layout3];
     
 }
@@ -199,7 +199,7 @@
 {
     MyLinearLayout *layout = [self createActionLayout:NSLocalizedString(@"please touch here(will pop menu)", @"") action:@selector(handleShowPopMenu:)];
     layout.highlightedOpacity = 0.2;  //按下时的高亮透明度。为1全部透明。
-    layout.myTopMargin = 10;
+    layout.myTop = 10;
     [contentLayout addSubview:layout];
 }
 
@@ -208,10 +208,10 @@
 {
     //下面两个布局用来测试布局视图的hideSubviewReLayout属性。
     MyLinearLayout *switchLayout = [self createSwitchLayout:NSLocalizedString(@"relayout switch when subview hidden&show", @"") action:@selector(handleReLayoutSwitch:)];
-    switchLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
-    switchLayout.bottomBorderLine.headIndent = 10;
-    switchLayout.bottomBorderLine.tailIndent = 10;
-    switchLayout.myTopMargin = 10;
+    switchLayout.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
+    switchLayout.bottomBorderline.headIndent = 10;
+    switchLayout.bottomBorderline.tailIndent = 10;
+    switchLayout.myTop = 10;
     [contentLayout addSubview:switchLayout];
 
 
@@ -220,8 +220,8 @@
     testLayout.leftPadding = 10;
     testLayout.rightPadding = 10;
     testLayout.myHeight = 50;
-    testLayout.gravity = MyMarginGravity_Vert_Fill;
-    testLayout.subviewMargin = 10;
+    testLayout.gravity = MyGravity_Vert_Fill;
+    testLayout.subviewHSpace = 10;
     [contentLayout addSubview:testLayout];
     self.hideSubviewRelayoutLayout = testLayout;
     
@@ -255,10 +255,10 @@
 -(void)addFlexedWidthLayout:(MyLinearLayout*)contentLayout
 {
     MyBaseLayout *operatorLayout = [self createSegmentedLayout:@selector(handleLeftFlexed:) rightAction:@selector(handleRightFlexed:)];
-    operatorLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
-    operatorLayout.bottomBorderLine.headIndent = 10;
-    operatorLayout.bottomBorderLine.tailIndent = 10;
-    operatorLayout.myTopMargin = 10;
+    operatorLayout.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
+    operatorLayout.bottomBorderline.headIndent = 10;
+    operatorLayout.bottomBorderline.tailIndent = 10;
+    operatorLayout.myTop = 10;
     [contentLayout addSubview:operatorLayout];
     
     MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
@@ -266,9 +266,9 @@
     testLayout.leftPadding = 10;
     testLayout.rightPadding = 10;
     testLayout.myHeight = 50;
-    testLayout.gravity = MyMarginGravity_Vert_Fill;
+    testLayout.gravity = MyGravity_Vert_Fill;
     testLayout.shrinkType = MySubviewsShrink_Auto;  //左右2个子视图会根据自身的宽度自动调整。不会产生覆盖和重叠。
-    testLayout.subviewMargin = 10;
+    testLayout.subviewHSpace = 10;
     [contentLayout addSubview:testLayout];
     self.flexedLayout = testLayout;
     
@@ -280,7 +280,7 @@
     leftLabel.backgroundColor = [CFTool color:5];
     leftLabel.font = [CFTool font:14];
     leftLabel.rightPos.equalTo(@0.5).min(0); //右边浮动间距为0.5,最小为0
-    leftLabel.widthDime.equalTo(leftLabel.widthDime);
+    leftLabel.widthSize.equalTo(leftLabel.widthSize);
     [testLayout addSubview:leftLabel];
     self.leftFlexedLabel = leftLabel;
     
@@ -291,7 +291,7 @@
     rightLabel.backgroundColor = [CFTool color:6];
     rightLabel.font = [CFTool font:14];
     rightLabel.leftPos.equalTo(@0.5).min(0);   //左边浮动间距为0.5，最小为0
-    rightLabel.widthDime.equalTo(rightLabel.widthDime);
+    rightLabel.widthSize.equalTo(rightLabel.widthSize);
     [testLayout addSubview:rightLabel];
     self.rightFlexedLabel = rightLabel;
     
@@ -303,19 +303,19 @@
 {
     //下面两个布局用来测试布局视图的hideSubviewReLayout属性。
     MyLinearLayout *switchLayout = [self createSwitchLayout:NSLocalizedString(@"show all switch", @"") action:@selector(handleShrinkSwitch:)];
-    switchLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
-    switchLayout.bottomBorderLine.headIndent = 10;
-    switchLayout.bottomBorderLine.tailIndent = 10;
-    switchLayout.myTopMargin = 10;
+    switchLayout.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
+    switchLayout.bottomBorderline.headIndent = 10;
+    switchLayout.bottomBorderline.tailIndent = 10;
+    switchLayout.myTop = 10;
     [contentLayout addSubview:switchLayout];
     
     MyFlowLayout *testLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
     testLayout.backgroundColor = [UIColor whiteColor];
-    testLayout.gravity = MyMarginGravity_Horz_Fill;  //尺寸相等
+    testLayout.gravity = MyGravity_Horz_Fill;  //尺寸相等
     testLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    testLayout.subviewHorzMargin = 10;
-    testLayout.subviewVertMargin = 10;
-    testLayout.heightDime.equalTo(@50);
+    testLayout.subviewHSpace = 10;
+    testLayout.subviewVSpace = 10;
+    testLayout.heightSize.equalTo(@50);
     testLayout.clipsToBounds = YES;
     [contentLayout addSubview:testLayout];
     self.shrinkLayout = testLayout;
@@ -343,15 +343,15 @@
     MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     testLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     testLayout.backgroundColor = [UIColor whiteColor];
-    testLayout.myTopMargin = 10;
-    testLayout.myBottomMargin = 50;   //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。你也可以设置contentLayout的bottomPadding = 50来解决这个问题。
+    testLayout.myTop = 10;
+    testLayout.myBottom = 50;   //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。你也可以设置contentLayout的bottomPadding = 50来解决这个问题。
     [contentLayout addSubview:testLayout];
     
     UIButton *testButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [testButton setTitle:@"Click me" forState:UIControlStateNormal];
     testButton.backgroundColor = [CFTool color:0];
-    testButton.heightDime.equalTo(@50);
-    testButton.widthDime.equalTo(testButton.widthDime).add(20);
+    testButton.heightSize.equalTo(@50);
+    testButton.widthSize.equalTo(testButton.widthSize).add(20);
     testButton.leftPos.equalTo(@10).active = YES;  //左边边距是10，设置active为YES表示左边位置对象的设置是生效的。
     testButton.rightPos.equalTo(@10).active = NO;  //右边边距是10，设置active为NO表示右边位置对象的设置是不生效的。
     
@@ -372,8 +372,8 @@
     actionLayout.leftPadding = 10;
     actionLayout.rightPadding = 10;
     actionLayout.wrapContentWidth = NO;
-    actionLayout.heightDime.equalTo(@50);
-    actionLayout.gravity = MyMarginGravity_Vert_Center;
+    actionLayout.heightSize.equalTo(@50);
+    actionLayout.gravity = MyGravity_Vert_Center;
     
     
     UILabel *label = [UILabel new];
@@ -405,8 +405,8 @@
     switchLayout.leftPadding = 10;
     switchLayout.rightPadding = 10;
     switchLayout.wrapContentWidth = NO;
-    switchLayout.heightDime.equalTo(@50);
-    switchLayout.gravity = MyMarginGravity_Vert_Center;
+    switchLayout.heightSize.equalTo(@50);
+    switchLayout.gravity = MyGravity_Vert_Center;
     
     
     UILabel *label = [UILabel new];
@@ -437,8 +437,8 @@
     //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
     segmentedLayout.leftPadding = 10;
     segmentedLayout.rightPadding = 10;
-    segmentedLayout.heightDime.equalTo(@50);
-    segmentedLayout.gravity = MyMarginGravity_Vert_Center;
+    segmentedLayout.heightSize.equalTo(@50);
+    segmentedLayout.gravity = MyGravity_Vert_Center;
     
     //向左浮动
     UISegmentedControl *leftSegmented = [[UISegmentedControl alloc] initWithItems:@[@"  -  ",@"  +  "]];
@@ -546,12 +546,12 @@
 {
     if (sender.isOn)
     {
-        self.shrinkLayout.heightDime.equalTo(nil);
+        self.shrinkLayout.heightSize.equalTo(nil);
         self.shrinkLayout.wrapContentHeight = YES;
     }
     else
     {
-        self.shrinkLayout.heightDime.equalTo(@50);
+        self.shrinkLayout.heightSize.equalTo(@50);
         self.shrinkLayout.wrapContentHeight = NO;
     }
     
@@ -567,12 +567,12 @@
     
     MyLinearLayout *menuLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     menuLayout.myWidth = CGRectGetWidth(rc) - 20;  //宽度是sender的宽度减20
-    menuLayout.myCenterXOffset = 0;  //因为我们是把弹出菜单展示在self.view下，这时候self.view是一个框架布局。所以这里这是水平居中。
-    menuLayout.myTopMargin = CGRectGetMaxY(rc) + 5;  //弹出菜单的顶部位置。
+    menuLayout.myCenterX = 0;  //因为我们是把弹出菜单展示在self.view下，这时候self.view是一个框架布局。所以这里这是水平居中。
+    menuLayout.myTop = CGRectGetMaxY(rc) + 5;  //弹出菜单的顶部位置。
 
     
     UIImageView *arrowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"uptip"]];
-    arrowImageView.myCenterXOffset = 0;
+    arrowImageView.myCenterX = 0;
     [menuLayout addSubview:arrowImageView];
     
     
@@ -583,9 +583,9 @@
     containerLayout.layer.shadowOffset = CGSizeZero;
     containerLayout.layer.shadowOpacity = 0.5;
     containerLayout.layer.shadowColor = [CFTool color:4].CGColor;
-    containerLayout.myLeftMargin = containerLayout.myRightMargin = 0;
+    containerLayout.myLeft = containerLayout.myRight = 0;
     containerLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    containerLayout.gravity = MyMarginGravity_Horz_Fill;
+    containerLayout.gravity = MyGravity_Horz_Fill;
     [menuLayout addSubview:containerLayout];
     self.popmenuContainerLayout = containerLayout;
     
@@ -594,10 +594,10 @@
     self.popmenuScrollView = scrollView;
     
     MyFlowLayout *itemLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
-    itemLayout.myLeftMargin = itemLayout.myRightMargin = 0;
-    itemLayout.gravity = MyMarginGravity_Horz_Fill;
-    itemLayout.subviewHorzMargin = 10;
-    itemLayout.subviewVertMargin = 10;
+    itemLayout.myLeft = itemLayout.myRight = 0;
+    itemLayout.gravity = MyGravity_Horz_Fill;
+    itemLayout.subviewHSpace = 10;
+    itemLayout.subviewVSpace = 10;
     itemLayout.wrapContentHeight = YES;
     [scrollView addSubview:itemLayout];
     self.popmenuItemLayout = itemLayout;
@@ -629,7 +629,7 @@
     
     //评估出itemLayout的尺寸，注意这里要明确指定itemLayout的宽度，因为弹出菜单的宽度是sender的宽度-20，而itemLayout的父容器又有20的左右内边距，因此这里要减去40.
     CGRect sz = [itemLayout estimateLayoutRect:CGSizeMake(CGRectGetWidth(rc) - 40, 0)];
-    scrollView.heightDime.equalTo(@(sz.size.height)).min(50).max(155);  //设置scrollView的高度，以及最大最小高度。正是这个实现了拉伸限制功能。
+    scrollView.heightSize.equalTo(@(sz.size.height)).min(50).max(155);  //设置scrollView的高度，以及最大最小高度。正是这个实现了拉伸限制功能。
     
     UIButton *closeButton = [UIButton new];
     closeButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
@@ -640,7 +640,7 @@
     closeButton.titleLabel.font = [CFTool font:14];
     closeButton.backgroundColor = [UIColor whiteColor];
     [closeButton addTarget:self action:@selector(handleClosePopmenu:) forControlEvents:UIControlEventTouchUpInside];
-    closeButton.myTopMargin = 5;
+    closeButton.myTop = 5;
     [closeButton sizeToFit];
     [containerLayout addSubview:closeButton];
     
@@ -677,7 +677,7 @@
     
     //重新评估popmenuItemLayout的高度，这里宽度是0的原因是因为宽度已经明确了，也就是在现有的宽度下评估。而前面是因为popmenuItemLayout的宽度还没有明确所以要指定宽度。
     CGRect sz = [self.popmenuItemLayout estimateLayoutRect:CGSizeMake(0, 0)];
-    self.popmenuScrollView.heightDime.equalTo(@(sz.size.height));
+    self.popmenuScrollView.heightSize.equalTo(@(sz.size.height));
     
     //多个布局同时动画。
     [self.popmenuItemLayout layoutAnimationWithDuration:0.3];
@@ -690,7 +690,7 @@
 {
     [sender removeFromSuperview];
     CGRect sz = [self.popmenuItemLayout estimateLayoutRect:CGSizeMake(0, 0)];
-    self.popmenuScrollView.heightDime.equalTo(@(sz.size.height));
+    self.popmenuScrollView.heightSize.equalTo(@(sz.size.height));
 
     [self.popmenuItemLayout layoutAnimationWithDuration:0.3];
     [self.popmenuLayout layoutAnimationWithDuration:0.3];
@@ -700,7 +700,7 @@
 -(void)handleClosePopmenu:(UIButton*)sender
 {
     //因为popmenuLayout的设置会激发frameLayout的重新布局，所以这里用这个方法进行动画消失处理。
-    self.popmenuLayout.myTopMargin = self.frameLayout.frame.size.height;
+    self.popmenuLayout.myTop = self.frameLayout.frame.size.height;
 
     [UIView animateWithDuration:0.3 animations:^{
         

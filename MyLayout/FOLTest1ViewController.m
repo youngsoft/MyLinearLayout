@@ -67,10 +67,10 @@
     
     if (arr.count == 6)
     {
-        tagButton.myLeftMargin = [arr[2] floatValue];
-        tagButton.myTopMargin = [arr[3] floatValue];
-        tagButton.myRightMargin = [arr[4] floatValue];
-        tagButton.myBottomMargin = [arr[5] floatValue];
+        tagButton.myLeft = [arr[2] floatValue];
+        tagButton.myTop = [arr[3] floatValue];
+        tagButton.myRight = [arr[4] floatValue];
+        tagButton.myBottom = [arr[5] floatValue];
     }
     
     tagButton.reverseFloat = self.reverseFloatSwitch.isOn;

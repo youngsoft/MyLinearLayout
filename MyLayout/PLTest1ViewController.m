@@ -404,9 +404,10 @@
 
     
     //提供一个计算圆的极坐标函数。
+    __weak typeof(&*self) weakSelf = self;
      self.pathLayout.polarEquation = ^(CGFloat angle)
     {
-        CGFloat radius = (CGRectGetWidth(self.view.bounds) - 40) / 2;  //半径是视图的宽度 - 两边的左右边距 再除2
+        CGFloat radius = (CGRectGetWidth(weakSelf.view.bounds) - 40) / 2;  //半径是视图的宽度 - 两边的左右边距 再除2
         return radius;
     };
 
@@ -422,9 +423,10 @@
 
     
     //提供一个计算圆弧的极坐标函数
+    __weak typeof(&*self) weakSelf = self;
     self.pathLayout.polarEquation = ^(CGFloat angle)
     {
-        CGFloat radius = (CGRectGetWidth(self.view.bounds) - 40);  //半径是视图的宽度 - 两边的左右边距
+        CGFloat radius = (CGRectGetWidth(weakSelf.view.bounds) - 40);  //半径是视图的宽度 - 两边的左右边距
         
         if (angle >= 0 && angle <= M_PI_2)   //angle的单位是弧度，这里我们只处理0度 - 90度之间的路径，其他返回NAN。如果coordinateSetting.isMath设置为NO则需要把有效角度改为270到360度。
             return radius;
@@ -442,9 +444,10 @@
     self.pathLayout.coordinateSetting.end = CGFLOAT_MAX;
     
     //提供一个计算圆弧的极坐标函数
+    __weak typeof(&*self) weakSelf = self;
     self.pathLayout.polarEquation = ^(CGFloat angle)
     {
-        CGFloat radius = (CGRectGetWidth(self.view.bounds) - 40)/2;  //半径是视图的宽度 - 两边的左右边距 再除2
+        CGFloat radius = (CGRectGetWidth(weakSelf.view.bounds) - 40)/2;  //半径是视图的宽度 - 两边的左右边距 再除2
         
         if (angle >= 0 && angle <= M_PI)   //angle的单位是弧度，这里我们只处理0度 - 180度之间的路径，因为用的是数学坐标系
             return radius;

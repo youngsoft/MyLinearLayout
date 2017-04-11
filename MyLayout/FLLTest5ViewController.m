@@ -29,8 +29,8 @@
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [UIColor whiteColor];
-    rootLayout.myLeftMargin = rootLayout.myRightMargin = 0; //宽度和滚动视图保持一致。
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;  //里面的所有子视图和布局视图宽度一致。
+    rootLayout.myLeft = rootLayout.myRight = 0; //宽度和滚动视图保持一致。
+    rootLayout.gravity = MyGravity_Horz_Fill;  //里面的所有子视图和布局视图宽度一致。
     [scrollView addSubview:rootLayout];
     
     
@@ -93,7 +93,7 @@
     titleLabel.text = @"水平流式布局分页从左往右滚动:➡︎";
     [titleLabel sizeToFit];
     [rootLayout addSubview:titleLabel];
-    titleLabel.myTopMargin = 20;
+    titleLabel.myTop = 20;
     
     //要开启分页功能，必须要将流式布局加入到一个滚动视图里面作为子视图！！！
     UIScrollView *scrollView = [UIScrollView new];
@@ -106,13 +106,13 @@
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Horz arrangedCount:3];
     flowLayout.pagedCount = 9; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
     flowLayout.wrapContentWidth = YES; //设置布局视图的宽度由子视图包裹，当水平流式布局的这个属性设置为YES，并和pagedCount搭配使用会产生分页从左到右滚动的效果。
-    flowLayout.heightDime.equalTo(scrollView.heightDime); //因为是分页从左到右滚动，因此布局视图的高度必须设置为和父滚动视图相等。
+    flowLayout.heightSize.equalTo(scrollView.heightSize); //因为是分页从左到右滚动，因此布局视图的高度必须设置为和父滚动视图相等。
      /*
         上面是实现一个水平流式布局分页且从左往右滚动的标准属性设置方法。
       */
     
-    flowLayout.subviewHorzMargin = 10;
-    flowLayout.subviewVertMargin = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.subviewHSpace = 10;
+    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
     [scrollView addSubview:flowLayout];
     flowLayout.backgroundColor = [CFTool color:0];
@@ -133,7 +133,7 @@
     titleLabel.text = @"水平流式布局分页从上往下滚动:⬇︎";
     [titleLabel sizeToFit];
     [rootLayout addSubview:titleLabel];
-    titleLabel.myTopMargin = 20;
+    titleLabel.myTop = 20;
     
     //要开启分页功能，必须要将流式布局加入到一个滚动视图里面作为子视图！！！
     UIScrollView *scrollView = [UIScrollView new];
@@ -146,13 +146,13 @@
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Horz arrangedCount:3];
     flowLayout.pagedCount = 9; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
     flowLayout.wrapContentHeight = YES; //设置布局视图的高度由子视图包裹，当水平流式布局的这个属性设置为YES，并和pagedCount搭配使用会产生分页从上到下滚动的效果。
-    flowLayout.widthDime.equalTo(scrollView.widthDime); //因为是分页从左到右滚动，因此布局视图的宽度必须设置为和父滚动视图相等。
+    flowLayout.widthSize.equalTo(scrollView.widthSize); //因为是分页从左到右滚动，因此布局视图的宽度必须设置为和父滚动视图相等。
     /*
      上面是实现一个水平流式布局分页且从上往下滚动的标准属性设置方法。
      */
     
-    flowLayout.subviewHorzMargin = 10;
-    flowLayout.subviewVertMargin = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.subviewHSpace = 10;
+    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
     [scrollView addSubview:flowLayout];
     flowLayout.backgroundColor = [CFTool color:0];
@@ -175,7 +175,7 @@
     titleLabel.text = @"垂直流式布局分页从上往下滚动:⬇︎";
     [titleLabel sizeToFit];
     [rootLayout addSubview:titleLabel];
-    titleLabel.myTopMargin = 20;
+    titleLabel.myTop = 20;
 
     //要开启分页功能，必须要将流式布局加入到一个滚动视图里面作为子视图！！！
     UIScrollView *scrollView = [UIScrollView new];
@@ -187,14 +187,14 @@
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
     flowLayout.pagedCount = 9; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
     flowLayout.wrapContentHeight = YES; //设置布局视图的高度由子视图包裹，当垂直流式布局的这个属性设置为YES，并和pagedCount搭配使用会产生分页从上到下滚动的效果。
-    flowLayout.widthDime.equalTo(scrollView.widthDime);
+    flowLayout.widthSize.equalTo(scrollView.widthSize);
     /*
      上面是实现一个垂直流式布局分页且从上往下滚动的标准属性设置方法。
      */
     
     
-    flowLayout.subviewHorzMargin = 10;
-    flowLayout.subviewVertMargin = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.subviewHSpace = 10;
+    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
     [scrollView addSubview:flowLayout];
     flowLayout.backgroundColor = [CFTool color:0];
@@ -219,7 +219,7 @@
     titleLabel.text = @"垂直流式布局分页从左往右滚动:➡︎";
     [titleLabel sizeToFit];
     [rootLayout addSubview:titleLabel];
-    titleLabel.myTopMargin = 20;
+    titleLabel.myTop = 20;
     
     //要开启分页功能，必须要将流式布局加入到一个滚动视图里面作为子视图！！！
     UIScrollView *scrollView = [UIScrollView new];
@@ -231,14 +231,14 @@
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
     flowLayout.pagedCount = 9; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
     flowLayout.wrapContentWidth = YES; //设置布局视图的宽度由子视图包裹，当垂直流式布局的这个属性设置为YES，并和pagedCount搭配使用会产生分页从左到右滚动的效果。
-    flowLayout.heightDime.equalTo(scrollView.heightDime);
+    flowLayout.heightSize.equalTo(scrollView.heightSize);
     /*
      上面是实现一个垂直流式布局分页且从左往右滚动的标准属性设置方法。
      */
     
     
-    flowLayout.subviewHorzMargin = 10;
-    flowLayout.subviewVertMargin = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.subviewHSpace = 10;
+    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
     [scrollView addSubview:flowLayout];
     flowLayout.backgroundColor = [CFTool color:0];

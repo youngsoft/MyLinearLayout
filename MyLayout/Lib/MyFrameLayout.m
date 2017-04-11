@@ -23,106 +23,7 @@
 */
 
 
--(void)calcSubView:(UIView*)sbv pRect:(CGRect*)pRect inSize:(CGSize)selfSize
-{
-    
-    MyMarginGravity horz = MyMarginGravity_Horz_Left;
-    MyMarginGravity vert = MyMarginGravity_Vert_Top;
-    
-    if (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil)
-        horz = MyMarginGravity_Horz_Fill;
-    else if (sbv.centerXPos.posVal != nil)
-        horz = MyMarginGravity_Horz_Center;
-    else if (sbv.rightPos.posVal != nil)
-        horz = MyMarginGravity_Horz_Right;
-    else
-        ;
-    
-    if (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil)
-        vert = MyMarginGravity_Vert_Fill;
-    else if (sbv.centerYPos.posVal != nil)
-        vert = MyMarginGravity_Vert_Center;
-    else if (sbv.bottomPos.posVal != nil)
-        vert = MyMarginGravity_Vert_Bottom;
-    else
-        ;
-    
-    
-    MyLayoutSize *sbvWidthDime = sbv.widthDime;
-    MyLayoutSize *sbvHeightDime = sbv.heightDime;
-     
-    //优先用设定的宽度尺寸。
-    if (sbvWidthDime.dimeNumVal != nil)
-        pRect->size.width = sbvWidthDime.measure;
-    
-    if (sbvHeightDime.dimeNumVal != nil)
-        pRect->size.height = sbvHeightDime.measure;
-    
-    if (sbvWidthDime.dimeRelaVal != nil && sbvWidthDime.dimeRelaVal.view != sbv)
-    {
-        if (sbvWidthDime.dimeRelaVal.view == self)
-            pRect->size.width = [sbvWidthDime measureWith:(selfSize.width - self.leftPadding - self.rightPadding)];
-        else
-            pRect->size.width = [sbvWidthDime measureWith:sbvWidthDime.dimeRelaVal.view.estimatedRect.size.width];
-    }
-    
-    if (sbvHeightDime.dimeRelaVal != nil && sbvHeightDime.dimeRelaVal.view != sbv)
-    {
-        if (sbvHeightDime.dimeRelaVal.view == self)
-            pRect->size.height = [sbvHeightDime measureWith:(selfSize.height - self.topPadding - self.bottomPadding)];
-        else
-            pRect->size.height = [sbvHeightDime measureWith:sbvHeightDime.dimeRelaVal.view.estimatedRect.size.height];
-        
-    }
-    
-    pRect->size.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
-    
-    
-    [self horzGravity:horz selfSize:selfSize sbv:sbv rect:pRect];
-   
-    
-    
-    if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
-    {
-        pRect->size.height = [self heightFromFlexedHeightView:sbv inWidth:pRect->size.width];
-
-    }
-    
-     pRect->size.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
-    
-    
-    [self vertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
-    
-    
-    if (sbvWidthDime.dimeRelaVal != nil && sbvWidthDime.dimeRelaVal.view == sbv && sbvWidthDime.dimeRelaVal.dime == MyMarginGravity_Vert_Fill)
-    {
-        pRect->size.width = [sbvWidthDime measureWith:pRect->size.height];
-        pRect->size.width = [self validMeasure:sbvWidthDime sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
-    
-        [self horzGravity:horz selfSize:selfSize sbv:sbv rect:pRect];
-        
-    }
-    
-    if (sbvHeightDime.dimeRelaVal != nil && sbvHeightDime.dimeRelaVal.view == sbv && sbvHeightDime.dimeRelaVal.dime == MyMarginGravity_Horz_Fill)
-    {
-        pRect->size.height = [sbvHeightDime measureWith:pRect->size.width];
-        
-        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
-        {
-            pRect->size.height = [self heightFromFlexedHeightView:sbv inWidth:pRect->size.width];
-        }
-        
-        pRect->size.height = [self validMeasure:sbvHeightDime sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
-        
-        [self vertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
-
-
-    }
-
-    
- 
-    
-}
+#pragma mark -- Override Method
 
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray *)sbs
 {
@@ -131,7 +32,7 @@
     CGFloat maxHeight = self.topPadding;
     
     if (sbs == nil)
-        sbs = [self getLayoutSubviews];
+        sbs = [self myGetLayoutSubviews];
     
     for (UIView *sbv in sbs)
     {
@@ -139,7 +40,7 @@
         if (!isEstimate)
         {
             sbv.myFrame.frame = sbv.bounds;
-            [self calcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
+            [self myCalcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
         }
 
         if ([sbv isKindOfClass:[MyBaseLayout class]])
@@ -147,14 +48,14 @@
             
             MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
             
-            if (sbvl.wrapContentHeight && (sbvl.heightDime.dimeVal != nil || (sbvl.topPos.posVal != nil && sbvl.bottomPos.posVal != nil)))
+            if (sbvl.wrapContentHeight && (sbvl.heightSizeInner.dimeVal != nil || (sbvl.topPosInner.posVal != nil && sbvl.bottomPosInner.posVal != nil)))
             {
-                [sbvl setWrapContentHeightNoLayout:NO];
+                [sbvl mySetWrapContentHeightNoLayout:NO];
             }
             
-            if (sbvl.wrapContentWidth && (sbvl.widthDime.dimeVal != nil || (sbvl.leftPos.posVal != nil && sbvl.rightPos.posVal != nil)))
+            if (sbvl.wrapContentWidth && (sbvl.widthSizeInner.dimeVal != nil || (sbvl.leftPosInner.posVal != nil && sbvl.rightPosInner.posVal != nil)))
             {
-                [sbvl setWrapContentWidthNoLayout:NO];
+                [sbvl mySetWrapContentWidthNoLayout:NO];
             }
             
             
@@ -171,16 +72,16 @@
     
         //计算自己的位置和高宽
         CGRect rect = sbv.myFrame.frame;
-        [self calcSubView:sbv pRect:&rect inSize:selfSize];
+        [self myCalcSubView:sbv pRect:&rect inSize:selfSize];
         sbv.myFrame.frame = rect;
         
-        if (sbv.widthDime.dimeRelaVal != self.widthDime)
+        if (sbv.widthSizeInner.dimeRelaVal == nil || sbv.widthSizeInner.dimeRelaVal != self.widthSizeInner)
         {
             if (maxWidth < CGRectGetMaxX(rect))
                 maxWidth = CGRectGetMaxX(rect);
         }
         
-        if (sbv.heightDime.dimeRelaVal != self.heightDime)
+        if (sbv.heightSizeInner.dimeRelaVal == nil || sbv.heightSizeInner.dimeRelaVal != self.heightSizeInner)
         {
             if (maxHeight < CGRectGetMaxY(rect))
                 maxHeight = CGRectGetMaxY(rect);
@@ -198,22 +99,22 @@
         selfSize.height = maxHeight + self.bottomPadding;
     }
     
-    selfSize.height = [self validMeasure:self.heightDime sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    selfSize.height = [self myValidMeasure:self.heightSizeInner sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
-    selfSize.width = [self validMeasure:self.widthDime sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    selfSize.width = [self myValidMeasure:self.widthSizeInner sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     //调整尺寸和父布局相等的视图的尺寸。
     if (self.wrapContentWidth || self.wrapContentHeight)
     {
         for (UIView *sbv in sbs)
         {
-            if (sbv.widthDime.dimeRelaVal == self.widthDime ||
-                (sbv.leftPos.posVal != nil && sbv.rightPos.posVal != nil) ||
-                sbv.heightDime.dimeRelaVal == self.heightDime ||
-                (sbv.topPos.posVal != nil && sbv.bottomPos.posVal != nil))
+            if ((sbv.widthSizeInner.dimeRelaVal != nil && sbv.widthSizeInner.dimeRelaVal == self.widthSizeInner) ||
+                (sbv.leftPosInner.posVal != nil && sbv.rightPosInner.posVal != nil) ||
+                (sbv.heightSizeInner.dimeRelaVal != nil && sbv.heightSizeInner.dimeRelaVal == self.heightSizeInner) ||
+                (sbv.topPosInner.posVal != nil && sbv.bottomPosInner.posVal != nil))
             {
                 CGRect rect = sbv.myFrame.frame;
-                [self calcSubView:sbv pRect:&rect inSize:selfSize];
+                [self myCalcSubView:sbv pRect:&rect inSize:selfSize];
                 sbv.myFrame.frame = rect;
             }
             
@@ -221,7 +122,7 @@
     }
     
        
-    return [self adjustSizeWhenNoSubviews:selfSize sbs:sbs];
+    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs];
 
 }
 
@@ -229,5 +130,111 @@
 {
     return [MyFrameLayoutViewSizeClass new];
 }
+
+
+#pragma mark -- Private Method
+
+
+-(void)myCalcSubView:(UIView*)sbv pRect:(CGRect*)pRect inSize:(CGSize)selfSize
+{
+    
+    MyGravity horz = MyGravity_Horz_Left;
+    MyGravity vert = MyGravity_Vert_Top;
+    
+    if (sbv.leftPosInner.posVal != nil && sbv.rightPosInner.posVal != nil)
+        horz = MyGravity_Horz_Fill;
+    else if (sbv.centerXPosInner.posVal != nil)
+        horz = MyGravity_Horz_Center;
+    else if (sbv.rightPosInner.posVal != nil)
+        horz = MyGravity_Horz_Right;
+    else
+        ;
+    
+    if (sbv.topPosInner.posVal != nil && sbv.bottomPosInner.posVal != nil)
+        vert = MyGravity_Vert_Fill;
+    else if (sbv.centerYPosInner.posVal != nil)
+        vert = MyGravity_Vert_Center;
+    else if (sbv.bottomPosInner.posVal != nil)
+        vert = MyGravity_Vert_Bottom;
+    else
+        ;
+    
+    
+    MyLayoutSize *sbvWidthSize = sbv.widthSizeInner;
+    MyLayoutSize *sbvHeightSize = sbv.heightSizeInner;
+    
+    //优先用设定的宽度尺寸。
+    if (sbvWidthSize.dimeNumVal != nil)
+        pRect->size.width = sbvWidthSize.measure;
+    
+    if (sbvHeightSize.dimeNumVal != nil)
+        pRect->size.height = sbvHeightSize.measure;
+    
+    if (sbvWidthSize.dimeRelaVal != nil && sbvWidthSize.dimeRelaVal.view != sbv)
+    {
+        if (sbvWidthSize.dimeRelaVal.view == self)
+            pRect->size.width = [sbvWidthSize measureWith:(selfSize.width - self.leftPadding - self.rightPadding)];
+        else
+            pRect->size.width = [sbvWidthSize measureWith:sbvWidthSize.dimeRelaVal.view.estimatedRect.size.width];
+    }
+    
+    if (sbvHeightSize.dimeRelaVal != nil && sbvHeightSize.dimeRelaVal.view != sbv)
+    {
+        if (sbvHeightSize.dimeRelaVal.view == self)
+            pRect->size.height = [sbvHeightSize measureWith:(selfSize.height - self.topPadding - self.bottomPadding)];
+        else
+            pRect->size.height = [sbvHeightSize measureWith:sbvHeightSize.dimeRelaVal.view.estimatedRect.size.height];
+        
+    }
+    
+    pRect->size.width = [self myValidMeasure:sbvWidthSize sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
+    
+    
+    [self myHorzGravity:horz selfSize:selfSize sbv:sbv rect:pRect];
+    
+    
+    
+    if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+    {
+        pRect->size.height = [self myHeightFromFlexedHeightView:sbv inWidth:pRect->size.width];
+        
+    }
+    
+    pRect->size.height = [self myValidMeasure:sbvHeightSize sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
+    
+    
+    [self myVertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
+    
+    
+    if (sbvWidthSize.dimeRelaVal != nil && sbvWidthSize.dimeRelaVal.view == sbv && sbvWidthSize.dimeRelaVal.dime == MyGravity_Vert_Fill)
+    {
+        pRect->size.width = [sbvWidthSize measureWith:pRect->size.height];
+        pRect->size.width = [self myValidMeasure:sbvWidthSize sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
+        
+        [self myHorzGravity:horz selfSize:selfSize sbv:sbv rect:pRect];
+        
+    }
+    
+    if (sbvHeightSize.dimeRelaVal != nil && sbvHeightSize.dimeRelaVal.view == sbv && sbvHeightSize.dimeRelaVal.dime == MyGravity_Horz_Fill)
+    {
+        pRect->size.height = [sbvHeightSize measureWith:pRect->size.width];
+        
+        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+        {
+            pRect->size.height = [self myHeightFromFlexedHeightView:sbv inWidth:pRect->size.width];
+        }
+        
+        pRect->size.height = [self myValidMeasure:sbvHeightSize sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
+        
+        [self myVertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
+        
+        
+    }
+    
+    
+    
+    
+}
+
 
 @end

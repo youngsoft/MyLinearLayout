@@ -47,18 +47,18 @@
      6.非布局子视图：如果某个视图的子视图不是一个布局视图，那么这个子视图就是非布局子视图。
      
      
-     这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。myLeftMargin,myRightMargin,myTopMargin,myBottomMargin这几个子视图的扩展属性即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
+     这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。myLeft,myRight,myTop,myBottom这几个子视图的扩展属性即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
      
-     1.垂直线性布局MyLinearLayout中的子视图： myLeftMargin,myRightMargin表示边距，而myTopMargin,myBottomMargin则表示间距。
-     2.水平线性布局MyLinearLayout中的子视图： myLeftMargin,myRightMargin表示间距，而myTopMargin,myBottomMargin则表示边距。
-     3.表格布局中的子视图：                  myLeftMargin,myRightMargin,myTopMargin,myBottomMargin的定义和线性布局是一致的。
-     4.框架布局MyFrameLayout中的子视图：     myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
-     5.相对布局MyRelativeLayout中的子视图：  myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
-     6.流式布局MyFlowLayout中的子视图：      myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示间距。
-     7.浮动布局MyFloatLayout中的子视图：     myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示间距。
-     8.路径布局MyPathLayout中的子视图：      myLeftMargin,myRightMargin,myTopMargin,myBottomMargin即不表示间距也不表示边距，它表示自己中心位置的偏移量。
-     9.非布局父视图中的布局子视图：           myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
-     10.非布局父视图中的非布局子视图：         myLeftMargin,myRightMargin,myTopMargin,myBottomMargin的设置不会起任何作用，因为MyLayout已经无法控制了。
+     1.垂直线性布局MyLinearLayout中的子视图： myLeft,myRight表示边距，而myTop,myBottom则表示间距。
+     2.水平线性布局MyLinearLayout中的子视图： myLeft,myRight表示间距，而myTop,myBottom则表示边距。
+     3.表格布局中的子视图：                  myLeft,myRight,myTop,myBottom的定义和线性布局是一致的。
+     4.框架布局MyFrameLayout中的子视图：     myLeft,myRight,myTop,myBottom都表示边距。
+     5.相对布局MyRelativeLayout中的子视图：  myLeft,myRight,myTop,myBottom都表示边距。
+     6.流式布局MyFlowLayout中的子视图：      myLeft,myRight,myTop,myBottom都表示间距。
+     7.浮动布局MyFloatLayout中的子视图：     myLeft,myRight,myTop,myBottom都表示间距。
+     8.路径布局MyPathLayout中的子视图：      myLeft,myRight,myTop,myBottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
+     9.非布局父视图中的布局子视图：           myLeft,myRight,myTop,myBottom都表示边距。
+     10.非布局父视图中的非布局子视图：         myLeft,myRight,myTop,myBottom的设置不会起任何作用，因为MyLayout已经无法控制了。
      
      再次强调的是：
      1. 如果同时设置了左右边距就能决定自己的宽度，同时设置左右间距不能决定自己的宽度！
@@ -80,7 +80,7 @@
     frameLayout.myMargin = 0;              //这个表示框架布局的尺寸和self.view保持一致,四周离父视图的边距都是0
     frameLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     [self.view addSubview:frameLayout];
-
+    
     /*
      建立12个子视图，并进行布局。这12个子视图表示可以在框架布局中定位和填充的12个位置和尺寸。
      */
@@ -93,79 +93,78 @@
     
     //左右填充。
     UILabel *horzFill = [self createLabel:@"horz fill" backgroundColor:[CFTool color:8]];
-    horzFill.myLeftMargin = horzFill.myRightMargin = 0;
-    horzFill.myTopMargin = 40;
+    horzFill.myLeft = horzFill.myRight = 0;
+    horzFill.myTop = 40;
     [frameLayout addSubview:horzFill];
     
     //上下填充
     UILabel *vertFill = [self createLabel:@"vert fill" backgroundColor:[CFTool color:9]];
     vertFill.numberOfLines = 0;
-    vertFill.myTopMargin = vertFill.myBottomMargin = 0;
-    vertFill.myLeftMargin = 90;
+    vertFill.myTop = vertFill.myBottom = 0;
+    vertFill.myLeft = 90;
     vertFill.myWidth = 10;
     [frameLayout addSubview:vertFill];
 
-    
-    
+        
     //左上(默认)
     UILabel *topLeft = [self createLabel:@"top left" backgroundColor:[CFTool color:5]];
-    topLeft.myLeftMargin = 0;
-    topLeft.myTopMargin = 0;
+    topLeft.myLeft = 0;
+    topLeft.myTop = 0;
     [frameLayout addSubview:topLeft];
     
     //左中
     UILabel *centerLeft = [self createLabel:@"center left" backgroundColor:[CFTool color:5]];
-    centerLeft.myLeftMargin = 0;
-    centerLeft.myCenterYOffset = 0;
+    centerLeft.myLeft = 0;
+    centerLeft.myCenterY = 0;
     [frameLayout addSubview:centerLeft];
     
     
     //左下
     UILabel *bottomLeft = [self createLabel:@"bottom left" backgroundColor:[CFTool color:5]];
-    bottomLeft.myLeftMargin = 0;
-    bottomLeft.myBottomMargin = 0;
+    bottomLeft.myLeft = 0;
+    bottomLeft.myBottom = 0;
     [frameLayout addSubview:bottomLeft];
     
     
     //中上
     UILabel *topCenter = [self createLabel:@"top center" backgroundColor:[CFTool color:6]];
-    topCenter.myCenterXOffset = 0;
-    topCenter.myTopMargin = 0;
+    topCenter.myCenterX = 0;
+    topCenter.myTop = 0;
     [frameLayout addSubview:topCenter];
     
     
     //中中。
     UILabel *centerCenter = [self createLabel:@"center center" backgroundColor:[CFTool color:6]];
-    centerCenter.myCenterXOffset = 0;
-    centerCenter.myCenterYOffset = 0;
+    centerCenter.myCenterX = 0;
+    centerCenter.myCenterY = 0;
     [frameLayout addSubview:centerCenter];
     
     
     //中下
     UILabel *bottomCenter = [self createLabel:@"bottom center" backgroundColor:[CFTool color:6]];
-    bottomCenter.myCenterXOffset = 0;
-    bottomCenter.myBottomMargin = 0;
+    bottomCenter.myCenterX = 0;
+    bottomCenter.myBottom = 0;
     [frameLayout addSubview:bottomCenter];
     
     
     //右上
     UILabel *topRight = [self createLabel:@"top right" backgroundColor:[CFTool color:7]];
-    topRight.myRightMargin = 0;
-    topRight.myTopMargin = 0;
+    topRight.myRight = 0;
+    topRight.myTop = 0;
     [frameLayout addSubview:topRight];
     
     
     //右中
     UILabel *centerRight = [self createLabel:@"center right" backgroundColor:[CFTool color:7]];
-    centerRight.myRightMargin = 0;
-    centerRight.myCenterYOffset = 0;
+    centerRight.myRight = 0;
+    centerRight.myCenterY = 0;
     [frameLayout addSubview:centerRight];
     
     
     //右下
     UILabel *bottomRight = [self createLabel:@"bottom right" backgroundColor:[CFTool color:7]];
-    bottomRight.myRightMargin = 0;
-    bottomRight.myBottomMargin = 0;
+    bottomRight.myRight = 0;
+    bottomRight.myBottom = 0;
     [frameLayout addSubview:bottomRight];
     
     

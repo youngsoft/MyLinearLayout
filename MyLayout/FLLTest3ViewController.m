@@ -37,7 +37,7 @@
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [UIColor whiteColor];
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;  //垂直线性布局里面的子视图的宽度和布局视图一致。
+    rootLayout.gravity = MyGravity_Horz_Fill;  //垂直线性布局里面的子视图的宽度和布局视图一致。
     rootLayout.wrapContentWidth = NO;
     rootLayout.wrapContentHeight = NO;
     self.view = rootLayout;
@@ -55,17 +55,17 @@
     tip2Label.font = [CFTool font:13];
     tip2Label.textColor = [CFTool color:3];
     tip2Label.textAlignment = NSTextAlignmentCenter;
-    tip2Label.myTopMargin = 3;
+    tip2Label.myTop = 3;
     [tip2Label sizeToFit];
     [rootLayout addSubview:tip2Label];
     
     self.flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:4];
     self.flowLayout.backgroundColor = [CFTool color:0];
     self.flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    self.flowLayout.subviewMargin = 10;   //流式布局里面的子视图的水平和垂直间距都设置为10
-    self.flowLayout.gravity = MyMarginGravity_Horz_Fill;  //流式布局里面的子视图的宽度将平均分配。
+    self.flowLayout.subviewSpace = 10;   //流式布局里面的子视图的水平和垂直间距都设置为10
+    self.flowLayout.gravity = MyGravity_Horz_Fill;  //流式布局里面的子视图的宽度将平均分配。
     self.flowLayout.weight = 1;   //流式布局占用线性布局里面的剩余高度。
-    self.flowLayout.myTopMargin = 10;
+    self.flowLayout.myTop = 10;
     [rootLayout addSubview:self.flowLayout];
     
 }
@@ -102,7 +102,7 @@
     tagButton.titleLabel.font = [CFTool font:14];
     tagButton.layer.cornerRadius = 20;
     tagButton.backgroundColor = [CFTool color:(random()%14 + 1)];
-    tagButton.heightDime.equalTo(@44);
+    tagButton.heightSize.equalTo(@44);
     
     [tagButton addTarget:self action:@selector(handleTouchDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside]; //注册拖动事件。
     [tagButton addTarget:self action:@selector(handleTouchDown:withEvent:) forControlEvents:UIControlEventTouchDown]; //注册按下事件
@@ -122,7 +122,7 @@
     addButton.layer.cornerRadius = 20;
     addButton.layer.borderWidth = 0.5;
     addButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    addButton.heightDime.equalTo(@44);
+    addButton.heightSize.equalTo(@44);
     
     [addButton addTarget:self action:@selector(handleAddTagButton:) forControlEvents:UIControlEventTouchUpInside];
     

@@ -68,8 +68,8 @@
      */
     UIView *topLeftCircle = [UIView new];
     topLeftCircle.backgroundColor = [CFTool color:2];
-    topLeftCircle.widthDime.equalTo(rootLayout.widthDime).multiply(3/5.0).max(200); //宽度是父视图宽度的3/5,且最大只能是200。
-    topLeftCircle.heightDime.equalTo(topLeftCircle.widthDime);    //高度和自身宽度相等。
+    topLeftCircle.widthSize.equalTo(rootLayout.widthSize).multiply(3/5.0).max(200); //宽度是父视图宽度的3/5,且最大只能是200。
+    topLeftCircle.heightSize.equalTo(topLeftCircle.widthSize);    //高度和自身宽度相等。
     topLeftCircle.leftPos.equalTo(@10);    //左边距离父视图10
     topLeftCircle.topPos.equalTo(@90);     //顶部距离父视图90
     [rootLayout addSubview:topLeftCircle];
@@ -85,7 +85,7 @@
      [topLeftCircle makeLayout:^(MyMaker *make) {
      
      make.width.equalTo(rootLayout).multiply(3/5.0).max(@200);
-     make.height.equalTo(topLeftCircle.widthDime);
+     make.height.equalTo(topLeftCircle.widthSize);
      make.left.equalTo(@10);
      make.top.equalTo(@90);
      
@@ -153,8 +153,8 @@
     topRightCircle.backgroundColor = [CFTool color:3];
     topRightCircle.topPos.equalTo(topLeftCircle.topPos).offset(-10);  //顶部和greenCircle顶部对齐，并且往上偏移10个点。
     topRightCircle.rightPos.equalTo(rootLayout.rightPos).offset(10);  //右边和布局视图右对齐，并且往左边偏移10个点。
-    topRightCircle.widthDime.equalTo(@120);                           //宽度是120
-    topRightCircle.heightDime.equalTo(topRightCircle.widthDime);           //高度和宽度相等。
+    topRightCircle.widthSize.equalTo(@120);                           //宽度是120
+    topRightCircle.heightSize.equalTo(topRightCircle.widthSize);           //高度和宽度相等。
     topRightCircle.viewLayoutCompleteBlock = ^(MyBaseLayout *layout, UIView *sbv)
     {//viewLayoutCompleteBlock是在子视图布局完成后给子视图一个机会进行一些特殊设置的block。这里面我们将子视图的半径设置为尺寸的一半，这样就可以实现在任意的屏幕上，这个子视图总是呈现为圆形。viewLayoutCompleteBlock只会在布局完成后调用一次，就会被布局系统销毁。
         sbv.layer.cornerRadius = sbv.frame.size.width / 2;
@@ -166,7 +166,7 @@
         make.top.equalTo(topLeftCircle).offset(-10);
         make.right.equalTo(rootLayout).offset(10);
         make.width.equalTo(@120);
-        make.height.equalTo(topRightCircle.widthDime);
+        make.height.equalTo(topRightCircle.widthSize);
         
     }];
     */
@@ -214,7 +214,7 @@
     lineView1.backgroundColor = [CFTool color:7];
     lineView1.leftPos.equalTo(@0);
     lineView1.rightPos.equalTo(@0);  //和父布局的左右边距为0，这个也同时确定了视图的宽度和父视图一样。
-    lineView1.heightDime.equalTo(@2);  //高度固定为2
+    lineView1.heightSize.equalTo(@2);  //高度固定为2
     lineView1.centerYPos.equalTo(@0);   //和父视图垂直居中对齐。
     [rootLayout addSubview:lineView1];
     /*
@@ -227,8 +227,8 @@
     
     UIView *lineView2 = [UIView new];
     lineView2.backgroundColor = [CFTool color:8];
-    lineView2.widthDime.equalTo(rootLayout.widthDime).add(-20);  //宽度等于父视图的宽度减20
-    lineView2.heightDime.equalTo(@2);                            //高度固定为2
+    lineView2.widthSize.equalTo(rootLayout.widthSize).add(-20);  //宽度等于父视图的宽度减20
+    lineView2.heightSize.equalTo(@2);                            //高度固定为2
     lineView2.topPos.equalTo(lineView1.bottomPos).offset(2);    //顶部在lineView1的下面往下偏移2
     lineView2.centerXPos.equalTo(rootLayout.centerXPos);       //和父视图水平居中对齐
     [rootLayout addSubview:lineView2];
@@ -249,8 +249,8 @@
     UIView *bottomHalfCircleView = [UIView new];
     bottomHalfCircleView.backgroundColor = [CFTool color:5];
     bottomHalfCircleView.layer.cornerRadius = 25;
-    bottomHalfCircleView.widthDime.equalTo(@50);      //宽度固定为50
-    bottomHalfCircleView.heightDime.equalTo(bottomHalfCircleView.widthDime);  //高度等于宽度
+    bottomHalfCircleView.widthSize.equalTo(@50);      //宽度固定为50
+    bottomHalfCircleView.heightSize.equalTo(bottomHalfCircleView.widthSize);  //高度等于宽度
     bottomHalfCircleView.centerYPos.equalTo(rootLayout.bottomPos).offset(10); //垂直中心点和父布局的底部对齐，并且往下偏移10个点。 因为rootLayout设置了bottomPadding为10，所以这里要偏移10，否则不需要设置偏移。
     bottomHalfCircleView.leftPos.equalTo(rootLayout.leftPos).offset(50); //左边父布局左对齐，并且向右偏移50个点。
     [rootLayout addSubview:bottomHalfCircleView];
@@ -258,7 +258,7 @@
     [bottomHalfCircleView makeLayout:^(MyMaker *make) {
         
         make.width.equalTo(@50);
-        make.height.equalTo(bottomHalfCircleView.widthDime);
+        make.height.equalTo(bottomHalfCircleView.widthSize);
         make.centerY.equalTo(rootLayout.bottomPos).offset(10);
         make.left.equalTo(rootLayout).offset(50);
         
@@ -267,8 +267,8 @@
     
     UIView *lineView3 = [UIView new];
     lineView3.backgroundColor = [CFTool color:5];
-    lineView3.widthDime.equalTo(@5);
-    lineView3.heightDime.equalTo(@50);
+    lineView3.widthSize.equalTo(@5);
+    lineView3.heightSize.equalTo(@50);
     lineView3.bottomPos.equalTo(bottomHalfCircleView.topPos);
     lineView3.centerXPos.equalTo(bottomHalfCircleView.centerXPos);
     [rootLayout addSubview:lineView3];
@@ -354,8 +354,8 @@
     UIView *lineView4 = [UIView new];
     lineView4.backgroundColor = [CFTool color:5];
     lineView4.layer.cornerRadius = 25;
-    lineView4.widthDime.equalTo(bottomHalfCircleView.widthDime);
-    lineView4.heightDime.equalTo(lineView4.widthDime).add(30);
+    lineView4.widthSize.equalTo(bottomHalfCircleView.widthSize);
+    lineView4.heightSize.equalTo(lineView4.widthSize).add(30);
     lineView4.bottomPos.equalTo(lineView3.topPos);
     lineView4.centerXPos.equalTo(lineView3.centerXPos);
     [rootLayout addSubview:lineView4];
@@ -363,15 +363,15 @@
     [lineView4 makeLayout:^(MyMaker *make) {
         
         make.width.equalTo(bottomHalfCircleView);
-        make.height.equalTo(lineView4.widthDime).add(30);
+        make.height.equalTo(lineView4.widthSize).add(30);
         make.bottom.equalTo(lineView3.topPos);
         make.centerX.equalTo(lineView3);
     }];
      */
     
     UIImageView *imageView4 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user"]];
-    imageView4.widthDime.equalTo(lineView4.widthDime).multiply(1/3.0);
-    imageView4.heightDime.equalTo(imageView4.widthDime);
+    imageView4.widthSize.equalTo(lineView4.widthSize).multiply(1/3.0);
+    imageView4.heightSize.equalTo(imageView4.widthSize);
     imageView4.centerXPos.equalTo(lineView4.centerXPos);
     imageView4.centerYPos.equalTo(lineView4.centerYPos);
     [rootLayout addSubview:imageView4];
@@ -379,7 +379,7 @@
     [imageView4 makeLayout:^(MyMaker *make) {
         
         make.width.equalTo(lineView4).multiply(1/3.0);
-        make.height.equalTo(imageView4.widthDime);
+        make.height.equalTo(imageView4.widthSize);
         make.center.equalTo(lineView4);
      
     }];

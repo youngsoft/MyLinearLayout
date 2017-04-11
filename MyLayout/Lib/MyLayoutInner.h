@@ -36,61 +36,73 @@
 @interface MyBaseLayout()
 
 
-@property(nonatomic ,strong) CAShapeLayer *leftBorderLineLayer;
-@property(nonatomic ,strong) CAShapeLayer *rightBorderLineLayer;
-@property(nonatomic ,strong) CAShapeLayer *topBorderLineLayer;
-@property(nonatomic ,strong) CAShapeLayer *bottomBorderLineLayer;
+@property(nonatomic ,strong) CAShapeLayer *leftBorderlineLayer;
+@property(nonatomic ,strong) CAShapeLayer *rightBorderlineLayer;
+@property(nonatomic ,strong) CAShapeLayer *topBorderlineLayer;
+@property(nonatomic ,strong) CAShapeLayer *bottomBorderlineLayer;
 
 
 //派生类重载这个函数进行布局
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs;
 
+-(id)createSizeClassInstance;
+
 
 //判断margin是否是相对margin
--(BOOL)isRelativeMargin:(CGFloat)margin;
+-(BOOL)myIsRelativeMargin:(CGFloat)margin;
 
 
--(void)vertGravity:(MyMarginGravity)vert
+-(void)myVertGravity:(MyGravity)vert
         selfSize:(CGSize)selfSize
                sbv:(UIView*)sbv
               rect:(CGRect*)pRect;
 
 
--(void)horzGravity:(MyMarginGravity)horz
+-(void)myHorzGravity:(MyGravity)horz
          selfSize:(CGSize)selfSize
                sbv:(UIView*)sbv
               rect:(CGRect*)pRect;
 
 
--(void)setWrapContentWidthNoLayout:(BOOL)wrapContentWidth;
+-(void)mySetWrapContentWidthNoLayout:(BOOL)wrapContentWidth;
 
--(void)setWrapContentHeightNoLayout:(BOOL)wrapContentHeight;
+-(void)mySetWrapContentHeightNoLayout:(BOOL)wrapContentHeight;
 
--(void)calcSizeOfWrapContentSubview:(UIView*)sbv selfLayoutSize:(CGSize)selfLayoutSize;
+-(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv selfLayoutSize:(CGSize)selfLayoutSize;
 
 
--(CGFloat)heightFromFlexedHeightView:(UIView*)sbv inWidth:(CGFloat)width;
+-(CGFloat)myHeightFromFlexedHeightView:(UIView*)sbv inWidth:(CGFloat)width;
 
--(CGFloat)validMeasure:(MyLayoutSize*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize;
+-(CGFloat)myValidMeasure:(MyLayoutSize*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize;
 
--(CGFloat)validMargin:(MyLayoutPos*)pos sbv:(UIView*)sbv calcPos:(CGFloat)calcPos selfLayoutSize:(CGSize)selfLayoutSize;
+-(CGFloat)myValidMargin:(MyLayoutPos*)pos sbv:(UIView*)sbv calcPos:(CGFloat)calcPos selfLayoutSize:(CGSize)selfLayoutSize;
 
--(BOOL)isNoLayoutSubview:(UIView*)sbv;
+-(BOOL)myIsNoLayoutSubview:(UIView*)sbv;
 
--(NSMutableArray*)getLayoutSubviews;
--(NSMutableArray*)getLayoutSubviewsFrom:(NSArray*)sbsFrom;
+-(NSMutableArray*)myGetLayoutSubviews;
+-(NSMutableArray*)myGetLayoutSubviewsFrom:(NSArray*)sbsFrom;
 
 //设置子视图的相对依赖的尺寸
--(void)setSubviewRelativeDimeSize:(MyLayoutSize*)dime selfSize:(CGSize)selfSize pRect:(CGRect*)pRect;
+-(void)mySetSubviewRelativeDimeSize:(MyLayoutSize*)dime selfSize:(CGSize)selfSize pRect:(CGRect*)pRect;
 
--(CGSize)adjustSizeWhenNoSubviews:(CGSize)size sbs:(NSArray*)sbs;
+-(CGSize)myAdjustSizeWhenNoSubviews:(CGSize)size sbs:(NSArray*)sbs;
 
 @end
 
 
 
+@interface MyViewSizeClass()
 
+@property(nonatomic, strong,readonly)  MyLayoutPos *leftPosInner;
+@property(nonatomic, strong,readonly)  MyLayoutPos *topPosInner;
+@property(nonatomic, strong,readonly)  MyLayoutPos *rightPosInner;
+@property(nonatomic, strong,readonly)  MyLayoutPos *bottomPosInner;
+@property(nonatomic, strong,readonly)  MyLayoutPos *centerXPosInner;
+@property(nonatomic, strong,readonly)  MyLayoutPos *centerYPosInner;
+@property(nonatomic, strong,readonly)  MyLayoutSize *widthSizeInner;
+@property(nonatomic, strong,readonly)  MyLayoutSize *heightSizeInner;
 
+@end
 
 
 @interface UIView(MyLayoutExtInner)
@@ -104,7 +116,23 @@
 
 -(instancetype)myCurrentSizeClass;
 
+-(instancetype)myCurrentSizeClassInner;
+
+
 -(id)createSizeClassInstance;
+
+
+@property(nonatomic, readonly)  MyLayoutPos *leftPosInner;
+@property(nonatomic, readonly)  MyLayoutPos *topPosInner;
+@property(nonatomic, readonly)  MyLayoutPos *rightPosInner;
+@property(nonatomic, readonly)  MyLayoutPos *bottomPosInner;
+@property(nonatomic, readonly)  MyLayoutPos *centerXPosInner;
+@property(nonatomic, readonly)  MyLayoutPos *centerYPosInner;
+@property(nonatomic, readonly)  MyLayoutSize *widthSizeInner;
+@property(nonatomic, readonly)  MyLayoutSize *heightSizeInner;
+
+
+
 
 @end
 

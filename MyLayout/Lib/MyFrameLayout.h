@@ -12,14 +12,14 @@
 @interface UIView(MyFrameLayoutExt)
 
 //新版本1.3.3以后的版本将不再提供框架布局对子视图的这个扩展属性的支持。
-@property(nonatomic, assign)  MyMarginGravity marginGravity;
+@property(nonatomic, assign)  MyGravity marginGravity;
  
- 1.如果您想让子视图右对齐框架布局，则只需要设置myRightMargin = 数值 和宽度即可 不再需要设置marginGravity = MyMarginGravity_Horz_Right
- 2.如果您想让子视图底对齐框架布局，则只需要设置myBottomMargin = 数值 和高度即可，不再需要设置marginGravity = MyMarginGravity_Vert_Bottom
- 3.如果您想让子视图在框架布局中垂直居中，则只需要设置myCenterYOffset = 数值 和高度即可，不再需要设置marginGravity = MyMarginGravity_Vert_Center
- 4.如果您想让子视图在框架布局中水平居中，则只需要设置myCenterXOffset = 数值 和宽度即可，不再需要设置marginGravity = MyMarginGravity_Horz_Center
- 5.如果您想让子视图在框架布局中宽度填满，则只需要设置myLeftMargin = myRightMargin = 0，不再需要设置marginGravity = MyMarginGravity_Horz_Fill
- 6.如果您想让子视图在框架布局中高度填满，则只需要设置myTopMargin = myBottomMargin = 0, 不再需要设置marginGravity = MyMarginGravity_Vert_Fill
+ 1.如果您想让子视图右对齐框架布局，则只需要设置myRight = 数值 和宽度即可 不再需要设置marginGravity = MyGravity_Horz_Right
+ 2.如果您想让子视图底对齐框架布局，则只需要设置myBottom = 数值 和高度即可，不再需要设置marginGravity = MyGravity_Vert_Bottom
+ 3.如果您想让子视图在框架布局中垂直居中，则只需要设置myCenterY = 数值 和高度即可，不再需要设置marginGravity = MyGravity_Vert_Center
+ 4.如果您想让子视图在框架布局中水平居中，则只需要设置myCenterX = 数值 和宽度即可，不再需要设置marginGravity = MyGravity_Horz_Center
+ 5.如果您想让子视图在框架布局中宽度填满，则只需要设置myLeft = myRight = 0，不再需要设置marginGravity = MyGravity_Horz_Fill
+ 6.如果您想让子视图在框架布局中高度填满，则只需要设置myTop = myBottom = 0, 不再需要设置marginGravity = MyGravity_Vert_Fill
  7.如果你要水平和垂直方向都设置，则请同时设置对应位置对象的值。
  8.新版本将不再支持让框架布局中的子视图在窗口中居中了。
  

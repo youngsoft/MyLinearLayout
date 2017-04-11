@@ -108,26 +108,19 @@
 
 
 /**
- *浮动布局内所有子视图的整体停靠对齐位置设定，默认是MyMarginGravity_None
+ *浮动布局内所有子视图的整体停靠对齐位置设定，默认是MyGravity_None
  *如果视图方向为MyLayoutViewOrientation_Vert时则水平方向的停靠失效。只能设置：
-  MyMarginGravity_Vert_Top  整体顶部停靠
-  MyMarginGravity_Vert_Center  整体垂直居中停靠
-  MyMarginGravity_Vert_Bottom  整体底部停靠
+  MyGravity_Vert_Top  整体顶部停靠
+  MyGravity_Vert_Center  整体垂直居中停靠
+  MyGravity_Vert_Bottom  整体底部停靠
  *如果视图方向为MyLayoutViewOrientation_Horz时则垂直方向的停靠失效。只能设置：
-  MyMarginGravity_Horz_Left 整体左边停靠
-  MyMarginGravity_Horz_Center 整体水平居中停靠
-  MyMarginGravity_Horz_Right 整体右边停靠
+  MyGravity_Horz_Left 整体左边停靠
+  MyGravity_Horz_Center 整体水平居中停靠
+  MyGravity_Horz_Right 整体右边停靠
  */
-@property(nonatomic,assign) IBInspectable MyMarginGravity gravity;
+@property(nonatomic,assign) IBInspectable MyGravity gravity;
 
 
-
-/**
- *子视图之间的垂直和水平的间距，默认为0。当子视图之间的间距是固定时可以通过直接设置这两个属性值来指定间距而不需要为每个子视图来设置margin值。
- */
-@property(nonatomic ,assign) IBInspectable CGFloat subviewVertMargin;
-@property(nonatomic, assign) IBInspectable CGFloat subviewHorzMargin;
-@property(nonatomic, assign) IBInspectable CGFloat subviewMargin;  //同时设置水平和垂直间距。
 
 /**
  *不做布局边界尺寸的限制，子视图不会自动换行，因此当设置为YES时，子视图需要设置clearFloat来实现主动换行的处理。默认为NO。这个属性设置的意义是我们可以自定义子视图的换行而不受布局边界尺寸的限制。
@@ -156,8 +149,9 @@
 
 @interface MyFloatLayout(MyFloatLayoutDeprecated)
 
--(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin  MYDEPRECATED("use method: setSubviews:minSpace:maxSpace to replace");
--(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin inSizeClass:(MySizeClass)sizeClass  MYDEPRECATED("use method: setSubviews:minSpace:maxSpace:inSizeClass to replace");
+-(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin  MYMETHODDEPRECATED("use method: setSubviews:minSpace:maxSpace to replace");
+-(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin inSizeClass:(MySizeClass)sizeClass  MYMETHODDEPRECATED("use method: setSubviews:minSpace:maxSpace:inSizeClass to replace");
+
 
 @end
 

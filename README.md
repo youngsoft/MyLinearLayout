@@ -9,7 +9,7 @@
 
 ![Logo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayout.png)
 
-## MyLayout(2017.3.04)
+## MyLayout(2017.4.11)
 
 MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayout provides some simple functions to build a variety of complex interface. It integrates the functions including: Autolayout and SizeClass of iOS, five layout classes of Android, float and flex-box and bootstrap of HTML/CSS. The MyLayout's Swift version are named: **[TangramKit](https://github.com/youngsoft/TangramKit)**
 
@@ -31,31 +31,31 @@ MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayou
 ```objective-c
 
     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    S.subviewMargin = 10;
-    S.widthDime.equalTo(@100);
+    S.subviewSpace = 10;
+    S.widthSize.equalTo(@100);
     
     UIView *A = UIView.new;
     A.leftPos.equalTo(@0.2);
     A.rightPos.equalTo(@0.3);
-    A.heightDime.equalTo(A.widthDime);
+    A.heightSize.equalTo(A.widthSize);
     [S addSubview:A];
     
     UIView *B = UIView.new;
     B.leftPos.equalTo(@40);
-    B.widthDime.equalTo(@60);
-    B.heightDime.equalTo(@40);
+    B.widthSize.equalTo(@60);
+    B.heightSize.equalTo(@40);
     [S addSubview:B];
     
     UIView *C = UIView.new;
     C.leftPos.equalTo(@0);
     C.rightPos.equalTo(@0);
-    C.heightDime.equalTo(@40);
+    C.heightSize.equalTo(@40);
     [S addSubview:C];
     
     UIView *D = UIView.new;
     D.rightPos.equalTo(@20);
-    D.widthDime.equalTo(S.widthDime).multiply(0.5);
-    D.heightDime.equalTo(@40);
+    D.widthSize.equalTo(S.widthSize).multiply(0.5);
+    D.heightSize.equalTo(@40);
     [S addSubview:D];
     
 
@@ -67,11 +67,11 @@ MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayou
 ![demo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayoutClass.png)
 
 ### MyLayoutPos
-`MyLayoutPos` is represent to the position of a view. UIView provides six extension variables:leftPos, topPos, bottomPos, rightPos, centerXPos, centerYPos to set view's margin or space distance between self and others. You can use `equalTo` method to set NSNumber or MyLayoutPos or NSArray<MyLayoutPos*> value. there are six simple variables:myLeftMargin,myTopMargin,myBottomMargin,myRightMargin,myCenterXOffset,myCenterYOffset use to set NSNumber value. eg. `A.leftPos.equalTo(@10); <==> A.myLeftMargin = 10;`
+`MyLayoutPos` is represent to the position of a view. UIView provides six extension variables:leftPos, topPos, bottomPos, rightPos, centerXPos, centerYPos to set view's margin or space distance between self and others. You can use `equalTo` method to set NSNumber or MyLayoutPos or NSArray<MyLayoutPos*> value. there are six simple variables:myLeft,myTop,myBottom,myRight,myCenterX,myCenterY use to set NSNumber value. eg. `A.leftPos.equalTo(@10); <==> A.myLeft = 10;`
 
 
 ### MyLayoutSize
-`MyLayoutSize` is represent to the size of a view. UIView provides two extension variables:widthDime,heightDime to set view's width and height dimension. You can use `equalTo` method to set NSNumber or MyLayoutSize or NSArray<MyLayoutSize*> value. there are two simple variables: myWidth, myHeight use to set NSNumber value. eg. `A.widthDime.equalTo(@10); <==> A.myWidth = 10;`
+`MyLayoutSize` is represent to the size of a view. UIView provides two extension variables:widthSize,heightSize to set view's width and height dimension. You can use `equalTo` method to set NSNumber or MyLayoutSize or NSArray<MyLayoutSize*> value. there are two simple variables: myWidth, myHeight use to set NSNumber value. eg. `A.widthSize.equalTo(@10); <==> A.myWidth = 10;`
 
 
 ### MyLinearLayout
@@ -92,26 +92,26 @@ Sample code:
     
     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     S.myWidth = 120;
-    S.subviewMargin = 10;
+    S.subviewSpace = 10;
     
     UIView *A = [UIView new];
-    A.myLeftMargin = A.myRightMargin = 5;
+    A.myLeft = A.myRight = 5;
     A.myHeight = 40;
     [S addSubview:A];
     
     UIView *B = [UIView new];
-    B.myLeftMargin = 20;
+    B.myLeft = 20;
     B.myWidth = B.myHeight = 40;
     [S addSubview:B];
     
     UIView *C = [UIView new];
-    C.myRightMargin = 40;
+    C.myRight = 40;
     C.myWidth = 50;
     C.myHeight = 40;
     [S addSubview:C];
     
     UIView *D = [UIView new];
-    D.myLeftMargin = D.myRightMargin = 10;
+    D.myLeft = D.myRight = 10;
     D.myHeight = 40;
     [S addSubview:D];
     
@@ -142,42 +142,42 @@ Sample code:
     [super loadView];
     
     MyRelativeLayout *S = [MyRelativeLayout new];
-    S.widthDime.equalTo(@170);
-    S.heightDime.equalTo(@280);
+    S.widthSize.equalTo(@170);
+    S.heightSize.equalTo(@280);
     
     UIView *A = [UIView new];
     A.leftPos.equalTo(@20);
     A.topPos.equalTo(@20);
-    A.widthDime.equalTo(@40);
-    A.heightDime.equalTo(A.widthDime);
+    A.widthSize.equalTo(@40);
+    A.heightSize.equalTo(A.widthSize);
     [S addSubview:A];
     
     UIView *B = [UIView new];
     B.leftPos.equalTo(A.centerXPos);
     B.topPos.equalTo(A.bottomPos).offset(10);
-    B.widthDime.equalTo(@60);
-    B.heightDime.equalTo(A.heightDime);
+    B.widthSize.equalTo(@60);
+    B.heightSize.equalTo(A.heightSize);
     [S addSubview:B];
     
     UIView *C = [UIView new];
     C.leftPos.equalTo(B.rightPos).offset(10);
     C.bottomPos.equalTo(B.bottomPos);
-    C.widthDime.equalTo(@40);
-    C.heightDime.equalTo(B.heightDime).multiply(0.5);
+    C.widthSize.equalTo(@40);
+    C.heightSize.equalTo(B.heightSize).multiply(0.5);
     [S addSubview:C];
     
     UIView *D = [UIView new];
     D.bottomPos.equalTo(C.topPos).offset(10);
     D.rightPos.equalTo(@15);
-    D.heightDime.equalTo(A.heightDime);
-    D.widthDime.equalTo(D.heightDime);
+    D.heightSize.equalTo(A.heightSize);
+    D.widthSize.equalTo(D.heightSize);
     [S addSubview:D];
     
     UIView *E = [UIView new];
     E.centerYPos.equalTo(@0);
     E.centerXPos.equalTo(@0);
-    E.heightDime.equalTo(@40);
-    E.widthDime.equalTo(S.widthDime).add(-20);
+    E.heightSize.equalTo(@40);
+    E.widthSize.equalTo(S.widthSize).add(-20);
     [S addSubview:E];
     //.. F, G
     
@@ -217,17 +217,17 @@ Sample code:
     
     UIView *B = [UIView new];
     B.mySize = CGSizeMake(40,40);
-    B.myRightMargin = 0;
+    B.myRight = 0;
     [S addSubview:B];
     
     UIView *C = [UIView new];
     C.mySize = CGSizeMake(40,40);
-    C.myCenterYOffset = 0;
+    C.myCenterY = 0;
     [S addSubview:C];
     
     UIView *D = [UIView new];
     D.mySize = CGSizeMake(40,40);
-    D.myCenterOffset = CGPointZero;
+    D.myCenter = CGPointZero;
     [S addSubview:D];
     
     //..E，F,G
@@ -260,8 +260,8 @@ Sample code:
     
     MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     S.wrapContentWidth = YES;
-    S.rowSpacing = 10;
-    S.colSpacing = 10;
+    S.subviewHSpace = 10;
+    S.subviewVSpace = 10;
     
     [S addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_WRAPCONTENT];
     
@@ -317,13 +317,13 @@ Sample code:
     S.wrapContentHeight = YES;
     S.myWidth = 300;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    S.gravity = MyMarginGravity_Horz_Fill;
-    S.subviewMargin = 10;
+    S.gravity = MyGravity_Horz_Fill;
+    S.subviewSpace = 10;
     
     for (int i = 0; i < 10; i++)
     {
         UIView *A = [UIView new];
-        A.heightDime.equalTo(A.widthDime);
+        A.heightSize.equalTo(A.widthSize);
         [S addSubview:A];
         
         A.backgroundColor = [UIColor greenColor];
@@ -360,7 +360,7 @@ Sample code:
     MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     S.wrapContentHeight = YES;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    S.subviewMargin = 10;
+    S.subviewSpace = 10;
     S.myWidth = 300;
     
     UIView *A = [UIView new];
@@ -464,14 +464,14 @@ to set Size Classes Characteristics like below:
  MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = NO;
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;
+    rootLayout.gravity = MyGravity_Horz_Fill;
 
 //MySizeClass_wAny | MySizeClass_hCompact is iPhone landscape orientation.
  MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
  
     lsc.orientation = MyLayoutViewOrientation_Horz;
     lsc.wrapContentWidth = NO;
-    lsc.gravity = MyMarginGravity_Vert_Fill;
+    lsc.gravity = MyGravity_Vert_Fill;
 
 
 
@@ -535,7 +535,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.3.4'
+pod 'MyLayout', '~> 1.3.5'
 ```
    
 Then, run the following command:
@@ -550,7 +550,7 @@ Then, run the following command:
 
 * If you use MyLayout runtime cause 100% CPU usage said appeared constraint conflict, please check the subview's constraint set.
 * If you use MyLayout exception crashed in MyBaseLayout *willMoveToSuperview* method. it does not matter, just remove the exception break setting in CMD+7.
-* If you set wrapConentWidth or wrapContentHeight while set widthDime or heightDime in layout view may be constraint conflict。
+* If you set wrapConentWidth or wrapContentHeight while set widthSize or heightSize in layout view may be constraint conflict。
 * If you set the layout view as a UIViewController's root view. please set wrapContentWidth and wrapContentHeight to NO.
 - Just only MyLinearLayout and MyFrameLayout's subview support relative margin.
 - If subview added in layout view, the setFrame method can't setting the origin but the size.

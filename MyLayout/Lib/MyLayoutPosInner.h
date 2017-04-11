@@ -13,7 +13,7 @@
 @interface MyLayoutPos()
 
 @property(nonatomic, weak) UIView *view;
-@property(nonatomic, assign) MyMarginGravity pos;
+@property(nonatomic, assign) MyGravity pos;
 @property(nonatomic, assign) MyLayoutValueType posValType;
 
 @property(nonatomic, readonly, strong) NSNumber *posNumVal;
@@ -22,6 +22,10 @@
 
 @property(nonatomic, readonly, strong) MyLayoutPos *lBoundVal;
 @property(nonatomic, readonly, strong) MyLayoutPos *uBoundVal;
+
+@property(nonatomic, readonly, strong) MyLayoutPos *lBoundValInner;
+@property(nonatomic, readonly, strong) MyLayoutPos *uBoundValInner;
+
 
 
 -(MyLayoutPos*)__equalTo:(id)val;

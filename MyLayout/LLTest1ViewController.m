@@ -32,18 +32,18 @@
      6.非布局子视图：如果某个视图的子视图不是一个布局视图，那么这个子视图就是非布局子视图。
      
      
-     这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。myLeftMargin,myRightMargin,myTopMargin,myBottomMargin这几个子视图的扩展属性即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
+     这要区分一下边距和间距和概念，所谓边距是指子视图距离父视图的距离；而间距则是指子视图距离兄弟视图的距离。myLeft,myRight,myTop,myBottom这几个子视图的扩展属性即可用来表示边距也可以用来表示间距，这个要根据子视图所归属的父布局视图的类型而确定：
      
-     1.垂直线性布局MyLinearLayout中的子视图： myLeftMargin,myRightMargin表示边距，而myTopMargin,myBottomMargin则表示间距。
-     2.水平线性布局MyLinearLayout中的子视图： myLeftMargin,myRightMargin表示间距，而myTopMargin,myBottomMargin则表示边距。
-     3.表格布局中的子视图：                  myLeftMargin,myRightMargin,myTopMargin,myBottomMargin的定义和线性布局是一致的。
-     4.框架布局MyFrameLayout中的子视图：     myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
-     5.相对布局MyRelativeLayout中的子视图：  myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
-     6.流式布局MyFlowLayout中的子视图：      myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示间距。
-     7.浮动布局MyFloatLayout中的子视图：     myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示间距。
-     8.路径布局MyPathLayout中的子视图：      myLeftMargin,myRightMargin,myTopMargin,myBottomMargin即不表示间距也不表示边距，它表示自己中心位置的偏移量。
-     9.非布局父视图中的布局子视图：           myLeftMargin,myRightMargin,myTopMargin,myBottomMargin都表示边距。
-     10.非布局父视图中的非布局子视图：         myLeftMargin,myRightMargin,myTopMargin,myBottomMargin的设置不会起任何作用，因为MyLayout已经无法控制了。
+     1.垂直线性布局MyLinearLayout中的子视图： myLeft,myRight表示边距，而myTop,myBottom则表示间距。
+     2.水平线性布局MyLinearLayout中的子视图： myLeft,myRight表示间距，而myTop,myBottom则表示边距。
+     3.表格布局中的子视图：                  myLeft,myRight,myTop,myBottom的定义和线性布局是一致的。
+     4.框架布局MyFrameLayout中的子视图：     myLeft,myRight,myTop,myBottom都表示边距。
+     5.相对布局MyRelativeLayout中的子视图：  myLeft,myRight,myTop,myBottom都表示边距。
+     6.流式布局MyFlowLayout中的子视图：      myLeft,myRight,myTop,myBottom都表示间距。
+     7.浮动布局MyFloatLayout中的子视图：     myLeft,myRight,myTop,myBottom都表示间距。
+     8.路径布局MyPathLayout中的子视图：      myLeft,myRight,myTop,myBottom即不表示间距也不表示边距，它表示自己中心位置的偏移量。
+     9.非布局父视图中的布局子视图：           myLeft,myRight,myTop,myBottom都表示边距。
+     10.非布局父视图中的非布局子视图：         myLeft,myRight,myTop,myBottom的设置不会起任何作用，因为MyLayout已经无法控制了。
      
      再次强调的是：
      1. 如果同时设置了左右边距就能决定自己的宽度，同时设置左右间距不能决定自己的宽度！
@@ -77,25 +77,25 @@
     //下面的例子中vertLayout是一个垂直线性布局，垂直线性布局中的子视图按照添加的顺序依次从上到下排列。
     
     UILabel *vertTitleLabel = [self createSectionLabel:NSLocalizedString(@"vertical(from top to bottom)",@"")];
-    vertTitleLabel.myTopMargin = 10;  //顶部间距设置为10
+    vertTitleLabel.myTop = 10;  //顶部间距设置为10
     [rootLayout addSubview:vertTitleLabel];
-
     
+    
+     
     MyLinearLayout *vertLayout = [self createVertSubviewLayout];//垂直线性布局的高度默认是由子视图的高度决定的，也就是wrapContentHeight默认设置为YES
-    vertLayout.myLeftMargin = vertLayout.myRightMargin = 0;  //对于垂直线性布局rootLayout的子视图vertLayout来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
+    vertLayout.myHorzMargin = 0;  //对于垂直线性布局rootLayout的子视图vertLayout来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
     [rootLayout addSubview:vertLayout];
     
-
     
     
     //下面的例子中horzLayout是一个水平线性布局，水平线性布局中的子视图按照添加的顺序依次从左到右排列。
     
     UILabel *horzTitleLabel = [self createSectionLabel:NSLocalizedString(@"horizontal(from left to right)",@"")];
-    horzTitleLabel.myTopMargin = 10;
+    horzTitleLabel.myTop = 10;
     [rootLayout addSubview:horzTitleLabel];
     
     MyLinearLayout *horzLayout = [self createHorzSubviewLayout];
-    horzLayout.myLeftMargin = horzLayout.myRightMargin = 0;  //对于垂直线性布局rootLayout的子视图vertLayout来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
+    horzLayout.myLeft = horzLayout.myRight = 0;  //对于垂直线性布局rootLayout的子视图vertLayout来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
     horzLayout.weight = 1.0;   //高度则由weight设置为1确定的，表示其高度将占用整个垂直线性布局父视图的剩余高度，具体weight属性的意义参考类库中的属性介绍。
     [rootLayout addSubview:horzLayout];
     
@@ -151,33 +151,33 @@
     /*
       对于垂直线性布局里面的子视图来说:
        1.默认子视图的左边都跟父视图左对齐，而上下则依次按加入的顺序排列。
-       2.myLeftMargin, myRightMargin的意义是子视图距离父视图的左右边距。
-       3.myTopMargin, myBottomMargin的意义是子视图和兄弟视图之间的上下间距。
-       4.如果同时设置了myLeftMargin,myRightMargin则除了能确定左右边距，还能确定子视图的宽度 = 布局视图的宽度 - myLeftMargin - myRightMargin
-       5.如果同时设置了myTopMargin,myBottomMargin则只能确定和其他兄弟视图之间的上下间距，但不能确定子视图的高度。
-       6.myCenterXOffset表示子视图的水平中心点在父视图的水平中心点上的偏移。
-       7.myCenterYOffset的设置没有意义。
+       2.myLeft, myRight的意义是子视图距离父视图的左右边距。
+       3.myTop, myBottom的意义是子视图和兄弟视图之间的上下间距。
+       4.如果同时设置了myLeft,myRight则除了能确定左右边距，还能确定子视图的宽度 = 布局视图的宽度 - myLeft - myRight
+       5.如果同时设置了myTop,myBottom则只能确定和其他兄弟视图之间的上下间距，但不能确定子视图的高度。
+       6.myCenterX表示子视图的水平中心点在父视图的水平中心点上的偏移。
+       7.myCenterY的设置没有意义。
      */
     
     
     UILabel *v1 = [self createLabel:NSLocalizedString(@"left margin", @"") backgroundColor:[CFTool color:5]];
-    v1.myTopMargin = 10;  //上边间距10
-    v1.myLeftMargin = 10; //左边边距10
+    v1.myTop = 10;  //上边间距10
+    v1.myLeft = 10; //左边边距10
     v1.myWidth = 200;
     v1.myHeight = 35;     //设置布局尺寸
     [vertLayout addSubview:v1];
 
     
     UILabel *v2 = [self createLabel:NSLocalizedString(@"horz center", @"") backgroundColor:[CFTool color:6]];
-    v2.myTopMargin = 10;
-    v2.myCenterXOffset = 0;            //水平居中,如果不等于0则会产生居中偏移
+    v2.myTop = 10;
+    v2.myCenterX = 0;            //水平居中,如果不等于0则会产生居中偏移
     v2.mySize = CGSizeMake(200, 35);   //效果和上面意义一致！
     [vertLayout addSubview:v2];
 
     
     UILabel *v3 = [self createLabel:NSLocalizedString(@"right margin", @"") backgroundColor:[CFTool color:7]];
-    v3.myTopMargin = 10;
-    v3.myRightMargin = 10; //右边边距10
+    v3.myTop = 10;
+    v3.myRight = 10; //右边边距10
     v3.frame = CGRectMake(0, 0, 200, 35);  //设置视图的尺寸，详见下面的注释。
     [vertLayout addSubview:v3];
 
@@ -193,10 +193,10 @@
     
     
     UILabel *v4 = [self createLabel:NSLocalizedString(@"left right", @"") backgroundColor:[CFTool color:8]];
-    v4.myTopMargin = 10;
-    v4.myBottomMargin = 10;
-    v4.myLeftMargin = 10;
-    v4.myRightMargin = 10; //上面两行代码将左右边距设置为10。对于垂直线性布局来说如果子视图同时设置了左右边距则宽度会自动算出，因此不需要设置myWidth的值了。
+    v4.myTop = 10;
+    v4.myBottom = 10;
+    v4.myLeft = 10;
+    v4.myRight = 10; //上面两行代码将左右边距设置为10。对于垂直线性布局来说如果子视图同时设置了左右边距则宽度会自动算出，因此不需要设置myWidth的值了。
     v4.myHeight = 35;
     [vertLayout addSubview:v4];
 
@@ -213,22 +213,23 @@
     //创建水平布局视图。
     MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     horzLayout.backgroundColor = [CFTool color:0];
+    
 
     /*
      对于水平线性布局里面的子视图来说:
      1.默认子视图的上边都跟父视图上对齐，而左右则依次按加入的顺序排列。
-     2.myTopMargin, myBottomMargin的意义是子视图距离父视图的上下边距。
-     3.myLeftMargin, myRightMargin的意义是子视图和兄弟视图之间的左右间距。
-     4.如果同时设置了myTopMargin,myBottomMargin则除了能确定上下边距，还能确定子视图的高度 = 布局视图的高度 - myTopMargin - myBottomMargin。
-     5.如果同时设置了myLeftMargin,myRightMargin则只能确定和其他兄弟视图之间的左右间距，但不能确定子视图的宽度。
-     6.myCenterYOffset表示子视图的垂直中心点在父视图的垂直中心点上的偏移。
-     7.myCenterXOffset的设置没有意义。
+     2.myTop, myBottom的意义是子视图距离父视图的上下边距。
+     3.myLeft, myRight的意义是子视图和兄弟视图之间的左右间距。
+     4.如果同时设置了myTop,myBottom则除了能确定上下边距，还能确定子视图的高度 = 布局视图的高度 - myTop - myBottom。
+     5.如果同时设置了myLeft,myRight则只能确定和其他兄弟视图之间的左右间距，但不能确定子视图的宽度。
+     6.myCenterY表示子视图的垂直中心点在父视图的垂直中心点上的偏移。
+     7.myCenterX的设置没有意义。
      */
 
     
     UILabel *v1 = [self createLabel:NSLocalizedString(@"top margin", @"") backgroundColor:[CFTool color:5]];
-    v1.myTopMargin = 10; //上边边距10
-    v1.myLeftMargin = 10; //左边间距10
+    v1.myTop = 10; //上边边距10
+    v1.myLeft = 10; //左边间距10
     v1.myWidth = 60;
     v1.myHeight = 60;
     [horzLayout addSubview:v1];
@@ -236,25 +237,25 @@
     
     
     UILabel *v2 = [self createLabel:NSLocalizedString(@"vert center", @"") backgroundColor:[CFTool color:6]];
-    v2.myLeftMargin = 10;
-    v2.myCenterYOffset = 0; //垂直居中，如果不等于0则会产生居中偏移
+    v2.myLeft = 10;
+    v2.myCenterY = 0; //垂直居中，如果不等于0则会产生居中偏移
     v2.mySize = CGSizeMake(60, 60);
     [horzLayout addSubview:v2];
 
     
     UILabel *v3 = [self createLabel:NSLocalizedString(@"bottom margin", @"") backgroundColor:[CFTool color:7]];
-    v3.myBottomMargin = 10; //下边边距10
-    v3.myLeftMargin = 10;
-    v3.myRightMargin = 5;
+    v3.myBottom = 10; //下边边距10
+    v3.myLeft = 10;
+    v3.myRight = 5;
     v3.frame = CGRectMake(0, 0, 60, 60);
     [horzLayout addSubview:v3];
 
     
     UILabel *v4 = [self createLabel:NSLocalizedString(@"top bottom", @"") backgroundColor:[CFTool color:8]];
-    v4.myTopMargin = 10;
-    v4.myBottomMargin = 10; //上面两行代码将上下边距设置为10,对于水平线性布局来说如果子视图同时设置了上下边距则高度会自动算出,因此不需要设置myHeight的值了。
-    v4.myLeftMargin = 10;
-    v4.myRightMargin = 10;
+    v4.myTop = 10;
+    v4.myBottom = 10; //上面两行代码将上下边距设置为10,对于水平线性布局来说如果子视图同时设置了上下边距则高度会自动算出,因此不需要设置myHeight的值了。
+    v4.myLeft = 10;
+    v4.myRight = 10;
     v4.myWidth = 60;
     [horzLayout addSubview:v4];
 

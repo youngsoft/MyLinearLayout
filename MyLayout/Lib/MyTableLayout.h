@@ -38,13 +38,6 @@
 +(instancetype)tableLayoutWithOrientation:(MyLayoutViewOrientation)orientation;
 
 
-/**
- *  设置表格的行间距和列间距
- */
-@property(nonatomic ,assign) IBInspectable CGFloat rowSpacing;
-@property(nonatomic, assign) IBInspectable CGFloat colSpacing;
-
-
 
 /**
  *  添加一个新行。对于垂直表格来说每一行是从上往下排列的，而水平表格则每一行是从左往右排列的。
@@ -134,3 +127,17 @@
 
 
 @end
+
+
+@interface MyTableLayout(MyTableDeprecated)
+
+
+/**
+ *  不再单独设置表格的行间距和列间距了，而是复用视图的水平间距和垂直间距。原来表格的行间距和列间距会根据不同的表格方向定义不同而不同，现在统一为水平和垂直间距，不管表格的方向如何，水平间距都是定义左右的间距，垂直间距都是定义上下的间距。
+ */
+@property(nonatomic ,assign, getter=subviewVSpace, setter=setSubviewVSpace:)  CGFloat rowSpacing MYMETHODDEPRECATED("use subviewVSpace to instead");
+@property(nonatomic, assign, getter=subviewHSpace, setter=setSubviewHSpace:)  CGFloat colSpacing MYMETHODDEPRECATED("use subviewHSpace to instead");
+
+
+@end
+

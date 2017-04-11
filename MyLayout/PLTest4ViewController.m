@@ -46,7 +46,7 @@
     {
         UILabel *label = [UILabel new];
         label.layer.anchorPoint = CGPointMake(0.05, 0.5);   //把子视图的相对中心点换成（0.05，0.5)这个相对值，这样曲线上的点就定位在了子视图的这个特定位置。
-        label.myLeftMargin = -1; //这里通过margin的设置还可以设置曲线上定位的点的中心点的偏移值。
+        label.myLeft = -1; //这里通过margin的设置还可以设置曲线上定位的点的中心点的偏移值。
         label.myWidth = 200;
         label.myHeight = 30;
         

@@ -86,13 +86,13 @@
  
     /*
      在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
-     _rootLayout.widthDime.equalTo(self.contentView.widthDime);
+     _rootLayout.widthSize.equalTo(self.contentView.widthSize);
      _rootLayout.wrapContentHeight = YES;
      */
-    _rootLayout.widthDime.equalTo(self.contentView.widthDime);
+    _rootLayout.widthSize.equalTo(self.contentView.widthSize);
     _rootLayout.wrapContentHeight = YES;
     _rootLayout.wrapContentWidth = NO;
-    [self.contentView addSubview:_rootLayout];  //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时用了myLeftMargin和myRightMargin来做边界的话，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
+    [self.contentView addSubview:_rootLayout];  //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时用了myLeft和myRight来做边界的话，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
     
     
     
@@ -107,8 +107,8 @@
     
     MyLinearLayout *messageLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     messageLayout.weight = 1;
-    messageLayout.myLeftMargin = 5;  //前面2行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。
-    messageLayout.subviewMargin = 5; //垂直布局里面所有子视图都保持5个点的间距。
+    messageLayout.myLeft = 5;  //前面2行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。
+    messageLayout.subviewVSpace = 5; //垂直布局里面所有子视图都保持5个点的间距。
     [_rootLayout addSubview:messageLayout];
     
     
@@ -121,14 +121,14 @@
     _textMessageLabel = [UILabel new];
     _textMessageLabel.font = [CFTool font:15];
     _textMessageLabel.textColor = [CFTool color:4];
-    _textMessageLabel.myLeftMargin = 0;
-    _textMessageLabel.myRightMargin = 0; //垂直线性布局里面如果同时设置了左右边距则能确定子视图的宽度，这里表示宽度和父视图相等。
+    _textMessageLabel.myLeft = 0;
+    _textMessageLabel.myRight = 0; //垂直线性布局里面如果同时设置了左右边距则能确定子视图的宽度，这里表示宽度和父视图相等。
     _textMessageLabel.wrapContentHeight = YES; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [messageLayout addSubview:_textMessageLabel];
     
     
     _imageMessageImageView = [UIImageView new];
-    _imageMessageImageView.myCenterXOffset = 0;  //图片视图在父布局视图中水平居中。
+    _imageMessageImageView.myCenterX = 0;  //图片视图在父布局视图中水平居中。
     [messageLayout addSubview:_imageMessageImageView];
 }
 
@@ -141,10 +141,10 @@
  
     /*
      在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
-     _rootLayout.widthDime.equalTo(self.contentView.widthDime);
+     _rootLayout.widthSize.equalTo(self.contentView.widthSize);
      _rootLayout.wrapContentHeight = YES;
      */
-    _rootLayout.widthDime.equalTo(self.contentView.widthDime);
+    _rootLayout.widthSize.equalTo(self.contentView.widthSize);
     _rootLayout.wrapContentHeight = YES;
     [self.contentView addSubview:_rootLayout];
     
@@ -190,10 +190,10 @@
     
     /*
      在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
-     _rootLayout.widthDime.equalTo(self.contentView.widthDime);
+     _rootLayout.widthSize.equalTo(self.contentView.widthSize);
      _rootLayout.wrapContentHeight = YES;
      */
-    _rootLayout.widthDime.equalTo(self.contentView.widthDime);
+    _rootLayout.widthSize.equalTo(self.contentView.widthSize);
     _rootLayout.wrapContentHeight = YES;
     [self.contentView addSubview:_rootLayout];
 
@@ -204,13 +204,13 @@
 
     
     _headImageView = [UIImageView new];
-    _headImageView.myRightMargin = 5;  //右边保留出5个点的视图间距。
+    _headImageView.myRight = 5;  //右边保留出5个点的视图间距。
     [_rootLayout addSubview:_headImageView];
     
     _nickNameLabel = [UILabel new];
     _nickNameLabel.textColor = [CFTool color:3];
     _nickNameLabel.font = [CFTool font:17];
-    _nickNameLabel.myBottomMargin = 5;  //下边保留出5个点的视图间距。
+    _nickNameLabel.myBottom = 5;  //下边保留出5个点的视图间距。
     _nickNameLabel.weight = 1;          //占用剩余宽度。
     [_rootLayout addSubview:_nickNameLabel];
     
@@ -222,7 +222,7 @@
     [_rootLayout addSubview:_textMessageLabel];
     
     _imageMessageImageView = [UIImageView new];
-    _imageMessageImageView.myTopMargin = 5;
+    _imageMessageImageView.myTop = 5;
     _imageMessageImageView.reverseFloat = YES; //反向浮动
     _imageMessageImageView.weight = 1;   //占用剩余空间。
     _imageMessageImageView.contentMode = UIViewContentModeCenter;

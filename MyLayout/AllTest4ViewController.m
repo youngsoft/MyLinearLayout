@@ -55,9 +55,9 @@ static NSInteger sBaseTag = 100000;
     [self.view addSubview:scrollView];
     
     _rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    _rootLayout.gravity = MyMarginGravity_Horz_Fill;  //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
+    _rootLayout.gravity = MyGravity_Horz_Fill;  //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
     
-    _rootLayout.widthDime.equalTo(scrollView.widthDime);
+    _rootLayout.widthSize.equalTo(scrollView.widthSize);
     _rootLayout.wrapContentHeight = YES; //布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
     [scrollView addSubview:_rootLayout];
     
@@ -70,7 +70,7 @@ static NSInteger sBaseTag = 100000;
         
         //添加单元格容器视图
         MyFlowLayout *cellContainerLayout = [self createCellContainerLayout:i + 2];
-        cellContainerLayout.myBottomMargin = 10;
+        cellContainerLayout.myBottom = 10;
         [self.containerLayouts addObject:cellContainerLayout];
         [_rootLayout addSubview:cellContainerLayout];
         
@@ -105,7 +105,7 @@ static NSInteger sBaseTag = 100000;
     MyRelativeLayout *supplementaryLayout = [MyRelativeLayout new];
     supplementaryLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     supplementaryLayout.myHeight = 40;
-    supplementaryLayout.bottomBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor lightGrayColor]];  //设置底部边界线。
+    supplementaryLayout.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];  //设置底部边界线。
     supplementaryLayout.backgroundColor = [UIColor whiteColor];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"next"]];
@@ -135,9 +135,9 @@ static NSInteger sBaseTag = 100000;
 {
     MyFlowLayout *containerLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:arrangedCount];
     containerLayout.wrapContentHeight = YES;
-    containerLayout.gravity = MyMarginGravity_Horz_Fill; //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
-    containerLayout.subviewHorzMargin = 5;
-    containerLayout.subviewVertMargin = 5;
+    containerLayout.gravity = MyGravity_Horz_Fill; //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
+    containerLayout.subviewHSpace = 5;
+    containerLayout.subviewVSpace = 5;
     containerLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     
     return containerLayout;
@@ -148,9 +148,9 @@ static NSInteger sBaseTag = 100000;
 {
     MyLinearLayout *cellLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     cellLayout.wrapContentHeight = NO;
-    cellLayout.gravity = MyMarginGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
+    cellLayout.gravity = MyGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
     cellLayout.myHeight = 100;
-    cellLayout.subviewMargin = 5;  //设置布局视图里面子视图之间的间距为5个点。
+    cellLayout.subviewVSpace = 5;  //设置布局视图里面子视图之间的间距为5个点。
     cellLayout.backgroundColor = [UIColor whiteColor];
     [cellLayout setTarget:self action:@selector(handleCellLayoutTap:)];
     cellLayout.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
@@ -166,7 +166,7 @@ static NSInteger sBaseTag = 100000;
     titleLabel.textColor = [CFTool color:4];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.adjustsFontSizeToFitWidth = YES;
-    titleLabel.myBottomMargin = 2;
+    titleLabel.myBottom = 2;
     [titleLabel sizeToFit];
     [cellLayout addSubview:titleLabel];
     

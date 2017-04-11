@@ -33,13 +33,13 @@
     self.view = scrollView;
     
     /*
-     这里的contentLayout是非布局视图UIScrollView的子视图。因为同时设置了myLeftMargin和myRightMargin为0表示宽度和UIScrollView是保持一致；而高度则因为垂直线性布局的wrapContentHeight属性设置来确定,表示垂直线性布局的高度等于里面的所有子视图高度；而其中的x,y轴的位置则因为没有设置默认是0。
+     这里的contentLayout是非布局视图UIScrollView的子视图。因为同时设置了myLeft和myRight为0表示宽度和UIScrollView是保持一致；而高度则因为垂直线性布局的wrapContentHeight属性设置来确定,表示垂直线性布局的高度等于里面的所有子视图高度；而其中的x,y轴的位置则因为没有设置默认是0。
      */
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     contentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10); //设置布局内的子视图离自己的边距.
-    contentLayout.myLeftMargin = 0;
-    contentLayout.myRightMargin = 0;                          //同时指定左右边距为0表示宽度和父视图一样宽
-    contentLayout.heightDime.lBound(scrollView.heightDime, 10, 1); //高度虽然是wrapContentHeight的。但是最小的高度不能低于父视图的高度加10.
+    contentLayout.myLeft = 0;
+    contentLayout.myRight = 0;                          //同时指定左右边距为0表示宽度和父视图一样宽
+    contentLayout.heightSize.lBound(scrollView.heightSize, 10, 1); //高度虽然是wrapContentHeight的。但是最小的高度不能低于父视图的高度加10.
     [scrollView addSubview:contentLayout];
     self.contentLayout = contentLayout;
     
@@ -116,21 +116,21 @@
 //线性布局片段1：上面编号文本，下面一个编辑框
 -(void)createSection1:(MyLinearLayout*)contentLayout
 {
-    //numTitleLabel的sizeToFit确定了视图的尺寸；myLeftMargin确定了视图在x轴的位置；垂直线性布局下的子视图可以自动算出在y轴的位置。
+    //numTitleLabel的sizeToFit确定了视图的尺寸；myLeft确定了视图在x轴的位置；垂直线性布局下的子视图可以自动算出在y轴的位置。
     UILabel *numTitleLabel = [UILabel new];
     numTitleLabel.text = NSLocalizedString(@"No.:", @"");
     numTitleLabel.font = [CFTool font:15];
     [numTitleLabel sizeToFit];
-    numTitleLabel.myLeftMargin = 5;
+    numTitleLabel.myLeft = 5;
     [contentLayout addSubview:numTitleLabel];
     
-    //numField的myHeight确定了视图的高度；myLeftMargin,myRightMargin确定了视图的宽度和x轴的位置；myTopMargin确定了y轴上离兄弟视图间距5.
+    //numField的myHeight确定了视图的高度；myLeft,myRight确定了视图的宽度和x轴的位置；myTop确定了y轴上离兄弟视图间距5.
     UITextField *numField = [UITextField new];
     numField.borderStyle = UITextBorderStyleRoundedRect;
     numField.font = [CFTool font:15];
     numField.placeholder = NSLocalizedString(@"Input the No. here", @"");
-    numField.myTopMargin = 5;
-    numField.myLeftMargin = numField.myRightMargin = 0;
+    numField.myTop = 5;
+    numField.myLeft = numField.myRight = 0;
     numField.myHeight = 40;
     [contentLayout addSubview:numField];
 }
@@ -140,26 +140,26 @@
 -(void)createSection2:(MyLinearLayout*)contentLayout
 {
     
-    //userInfoLayout的myLeftMargin,myRightMargin确定了视图的x轴的位置和宽度；wrapContentHeight为YES确定了视图的高度；myTopMargin确定了y轴上离兄弟视图间距20
+    //userInfoLayout的myLeft,myRight确定了视图的x轴的位置和宽度；wrapContentHeight为YES确定了视图的高度；myTop确定了y轴上离兄弟视图间距20
     MyLinearLayout *userInfoLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     userInfoLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
     userInfoLayout.layer.borderWidth = 0.5;
     userInfoLayout.layer.cornerRadius = 4;
     userInfoLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    userInfoLayout.myTopMargin = 20;
-    userInfoLayout.myLeftMargin = userInfoLayout.myRightMargin = 0;
+    userInfoLayout.myTop = 20;
+    userInfoLayout.myLeft = userInfoLayout.myRight = 0;
     userInfoLayout.wrapContentHeight = YES;
     [contentLayout addSubview:userInfoLayout];
     
-    //headImageView的sizeToFit确定了视图的尺寸；myCenterYOffset确定了在y轴垂直居中；水平线性布局下的子视图可以自动算出在x轴的位置。
+    //headImageView的sizeToFit确定了视图的尺寸；myCenterY确定了在y轴垂直居中；水平线性布局下的子视图可以自动算出在x轴的位置。
     UIImageView *headImageView = [[UIImageView  alloc] initWithImage:[UIImage imageNamed:@"head1"]];
-    headImageView.myCenterYOffset = 0;
+    headImageView.myCenterY = 0;
     [userInfoLayout addSubview:headImageView];
  
     //nameLayout是垂直线性布局因此默认的wrapContentHeight确定了视图的高度；weight=1设置宽度比重值，表示占用父布局infoLayout的剩余宽度；y轴上默认和父布局上边对齐；x轴则根据其在父布局下的顺序自动算出。这个部分也是一个水平线性布局套垂直线性布局的场景。
     MyLinearLayout *nameLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     nameLayout.weight = 1.0;
-    nameLayout.myLeftMargin = 10;
+    nameLayout.myLeft = 10;
     [userInfoLayout addSubview:nameLayout];
     
     //userNameLabel的sizeToFit确定视图的尺寸;x轴位置和父布局左对齐;y轴位置由添加到父布局中的顺序决定。
@@ -186,11 +186,11 @@
     userInfoLayout.layer.borderWidth = 0.5;
     userInfoLayout.layer.cornerRadius = 4;
     userInfoLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    userInfoLayout.myTopMargin = 20;
-    userInfoLayout.myLeftMargin = userInfoLayout.myRightMargin = 0;
-    userInfoLayout.subviewHorzMargin = 10;  //子视图的水平间距为10
+    userInfoLayout.myTop = 20;
+    userInfoLayout.myLeft = userInfoLayout.myRight = 0;
+    userInfoLayout.subviewHSpace = 10;  //子视图的水平间距为10
     userInfoLayout.wrapContentHeight = YES;
-    userInfoLayout.gravity = MyMarginGravity_Vert_Center; //里面的子视图整体垂直居中。
+    userInfoLayout.gravity = MyGravity_Vert_Center; //里面的子视图整体垂直居中。
     [contentLayout addSubview:userInfoLayout];
     
     //第一列： 一个头像视图，一个占位视图。
@@ -223,15 +223,15 @@
 -(void)createSection3:(MyLinearLayout*)contentLayout
 {
     
-    //ageLayout是垂直线性布局默认的wrapContentHeight决定了视图的高度；myLeftMargin,myRightMargin决定了视图的x轴的位置和宽度；添加到垂直布局父视图的顺序决定了y轴的位置。
+    //ageLayout是垂直线性布局默认的wrapContentHeight决定了视图的高度；myLeft,myRight决定了视图的x轴的位置和宽度；添加到垂直布局父视图的顺序决定了y轴的位置。
     MyLinearLayout *ageLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     ageLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
     ageLayout.layer.borderWidth = 0.5;
     ageLayout.layer.cornerRadius = 4;
-    ageLayout.gravity = MyMarginGravity_Horz_Fill;   //布局视图里面的所有子视图的宽度和布局相等。
+    ageLayout.gravity = MyGravity_Horz_Fill;   //布局视图里面的所有子视图的宽度和布局相等。
     ageLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    ageLayout.myTopMargin = 20;
-    ageLayout.myLeftMargin = ageLayout.myRightMargin = 0;
+    ageLayout.myTop = 20;
+    ageLayout.myLeft = ageLayout.myRight = 0;
     [contentLayout addSubview:ageLayout];
     
     
@@ -243,9 +243,9 @@
     
     //垂直线性布局套水平线性布局
     MyLinearLayout *ageSelectLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
-    ageSelectLayout.myTopMargin = 5;
+    ageSelectLayout.myTop = 5;
     ageSelectLayout.wrapContentHeight = YES;
-    ageSelectLayout.subviewMargin = 10;   //里面所有子视图之间的水平间距。
+    ageSelectLayout.subviewHSpace = 10;   //里面所有子视图之间的水平间距。
     [ageLayout addSubview:ageSelectLayout];
     
     for (int i = 0; i < 3; i++)
@@ -271,18 +271,18 @@
     ageLayout.layer.borderWidth = 0.5;
     ageLayout.layer.cornerRadius = 4;
     ageLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    ageLayout.myTopMargin = 20;
-    ageLayout.myLeftMargin = ageLayout.myRightMargin = 0;  // 宽度和父布局相等
+    ageLayout.myTop = 20;
+    ageLayout.myLeft = ageLayout.myRight = 0;  // 宽度和父布局相等
     ageLayout.wrapContentHeight = YES;  //高度由子视图包裹。
-    ageLayout.subviewVertMargin = 5; //所有子视图垂直间距为5
-    ageLayout.subviewHorzMargin = 10; //所有子视图水平间距为10
+    ageLayout.subviewVSpace = 5; //所有子视图垂直间距为5
+    ageLayout.subviewHSpace = 10; //所有子视图水平间距为10
     [contentLayout addSubview:ageLayout];
     
     UILabel *ageTitleLabel = [UILabel new];
     ageTitleLabel.text = NSLocalizedString(@"Age:", @"");
     ageTitleLabel.font = [CFTool font:15];
     [ageTitleLabel sizeToFit];
-    ageTitleLabel.widthDime.equalTo(ageLayout.widthDime);
+    ageTitleLabel.widthSize.equalTo(ageLayout.widthSize);
     [ageLayout addSubview:ageTitleLabel];
     
 
@@ -295,11 +295,11 @@
         ageLabel.layer.borderColor = [CFTool color:3].CGColor;
         ageLabel.layer.borderWidth = 0.5;
         ageLabel.font = [CFTool font:13];
-        ageLabel.heightDime.equalTo(@30);
+        ageLabel.heightSize.equalTo(@30);
         //宽度这样设置的原因是：3个子视图要平分布局视图的宽度，这里每个子视图的间距是10。
         //因此每个子视图的宽度 = (布局视图宽度 - 2 * 子视图间距)/3 = 布局视图宽度 * 1/3 - 2*子视图间距/3
         //MyLayoutSize中的equalTo方法设置布局宽度，multiply方法用来设置1/3，add方法用来设置2*子视图间距/3. 因此可以进行如下设置：
-        ageLabel.widthDime.equalTo(ageLayout.widthDime).multiply(1.0/3).add(-1 * 2 * ageLayout.subviewHorzMargin / 3);
+        ageLabel.widthSize.equalTo(ageLayout.widthSize).multiply(1.0/3).add(-1 * 2 * ageLayout.subviewHSpace / 3);
         [ageLayout addSubview:ageLabel];
     }
     */
@@ -315,8 +315,8 @@
     addressLayout.layer.borderWidth = 0.5;
     addressLayout.layer.cornerRadius = 4;
     addressLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    addressLayout.myTopMargin = 20;
-    addressLayout.myLeftMargin = addressLayout.myRightMargin = 0;
+    addressLayout.myTop = 20;
+    addressLayout.myLeft = addressLayout.myRight = 0;
     addressLayout.wrapContentHeight = YES;
     [contentLayout addSubview:addressLayout];
     
@@ -333,7 +333,7 @@
     addressLabel.text = NSLocalizedString(@"Winterless Building, West Dawang Road, Chaoyang district CBD, Beijing, People's Republic of China", @"");
     addressLabel.textColor = [CFTool color:4];
     addressLabel.font = [CFTool font:14];
-    addressLabel.myLeftMargin = 10;
+    addressLabel.myLeft = 10;
     addressLabel.weight = 1.0;
     addressLabel.wrapContentHeight = YES;     //这个属性设置为YES表示视图的高度动态确定。设置这个属性的前提是必须有指定视图的宽度.
     [addressLayout addSubview:addressLabel];
@@ -347,23 +347,23 @@
     sexLayout.layer.borderWidth = 0.5;
     sexLayout.layer.cornerRadius = 4;
     sexLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    sexLayout.myTopMargin = 20;
-    sexLayout.myLeftMargin = sexLayout.myRightMargin = 0;
+    sexLayout.myTop = 20;
+    sexLayout.myLeft = sexLayout.myRight = 0;
     sexLayout.wrapContentHeight = YES;
     [contentLayout addSubview:sexLayout];
     
     
-    //sexLabel, sexSwitch两个子视图在水平线性布局里面一个左一个右的原理是使用了相对间距的原因。假设某个水平线性布局的宽度是100，里面有两个子视图A，B。其中A的宽度是20，B的宽度是30。同时假设A的myRightMargin = 0.5。B的myLeftMarigin=0.5。则这时候A的右边距 = (100 - 20 - 30) * 0.5 / (0.5 + 0.5) = 25， B的左边距也是25。通过相对间距可以实现动态的视图之间的间距。
+    //sexLabel, sexSwitch两个子视图在水平线性布局里面一个左一个右的原理是使用了相对间距的原因。假设某个水平线性布局的宽度是100，里面有两个子视图A，B。其中A的宽度是20，B的宽度是30。同时假设A的myRight = 0.5。B的myLeftMarigin=0.5。则这时候A的右边距 = (100 - 20 - 30) * 0.5 / (0.5 + 0.5) = 25， B的左边距也是25。通过相对间距可以实现动态的视图之间的间距。
     UILabel *sexTitleLabel = [UILabel new];
     sexTitleLabel.text = NSLocalizedString(@"Sex:", @"");
     sexTitleLabel.font = [CFTool font:15];
     [sexTitleLabel sizeToFit];
-    sexTitleLabel.myCenterYOffset = 0;
-    sexTitleLabel.myRightMargin = 0.5;  //线性布局中的子视图的边距如果设置为大于0小于1的值表示的是相对间距，0.5的右边距表示右边是父布局剩余空间的50%。
+    sexTitleLabel.myCenterY = 0;
+    sexTitleLabel.myRight = 0.5;  //线性布局中的子视图的边距如果设置为大于0小于1的值表示的是相对间距，0.5的右边距表示右边是父布局剩余空间的50%。
     [sexLayout addSubview:sexTitleLabel];
     
     UISwitch *sexSwitch = [UISwitch new];
-    sexSwitch.myLeftMargin = 0.5; //线性布局中的子视图的边距如果设置为大于0小于1的值表示的是相对间距，0.5的左边距表示左边是父布局剩余空间的50%
+    sexSwitch.myLeft = 0.5; //线性布局中的子视图的边距如果设置为大于0小于1的值表示的是相对间距，0.5的左边距表示左边是父布局剩余空间的50%
     [sexLayout addSubview:sexSwitch];
 
     
@@ -376,8 +376,8 @@
     shrinkLabel.text = NSLocalizedString(@"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the wrapContentHeight to YES.You can try to switch different simulator or different orientation screen to see the effect.", @"");
     shrinkLabel.backgroundColor = [CFTool color:2];
     shrinkLabel.font = [CFTool font:14];
-    shrinkLabel.myTopMargin = 20;
-    shrinkLabel.myLeftMargin = shrinkLabel.myRightMargin = 0;
+    shrinkLabel.myTop = 20;
+    shrinkLabel.myLeft = shrinkLabel.myRight = 0;
     
     //下面四个属性配合一起简单的实现文本的收起和展开。
     shrinkLabel.clipsToBounds = YES;  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
@@ -390,7 +390,7 @@
     [button addTarget:self action:@selector(handleLabelShrink:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:NSLocalizedString(@"Show&Hide the Text", @"") forState:UIControlStateNormal];
     button.titleLabel.font = [CFTool font:16];
-    button.myCenterXOffset = 0;
+    button.myCenterX = 0;
     button.myHeight = 60;
     [button sizeToFit];
     [contentLayout addSubview:button];
@@ -404,16 +404,16 @@
     [button setTitle:NSLocalizedString(@"Show more》", @"") forState:UIControlStateNormal];
     button.titleLabel.font = [CFTool font:16];
     [button addTarget:self action:@selector(handleHideAndShowMore:) forControlEvents:UIControlEventTouchUpInside];
-    button.myTopMargin = 50;
-    button.myRightMargin = 0;
+    button.myTop = 50;
+    button.myRight = 0;
     [button sizeToFit];
     [contentLayout addSubview:button];
     
     UIView *hiddenView = [UIView new];
     hiddenView.backgroundColor = [CFTool color:3];
     hiddenView.hidden = YES;
-    hiddenView.myTopMargin = 20;
-    hiddenView.myLeftMargin = hiddenView.myRightMargin = 0;
+    hiddenView.myTop = 20;
+    hiddenView.myLeft = hiddenView.myRight = 0;
     hiddenView.myHeight = 800;
     [contentLayout addSubview:hiddenView];
     self.hiddenView = hiddenView;

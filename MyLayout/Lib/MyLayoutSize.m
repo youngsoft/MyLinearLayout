@@ -10,6 +10,7 @@
 #import "MyLayoutSizeInner.h"
 #import "MyBaseLayout.h"
 
+
 @implementation MyLayoutSize
 {
     id _dimeVal;
@@ -26,30 +27,7 @@
     {
         _active = YES;
         _view = nil;
-        _dime = MyMarginGravity_None;
-        _dimeVal = nil;
-        _dimeValType = MyLayoutValueType_Nil;
-        _addVal = 0;
-        _multiVal = 1;
-        _lBoundVal = [[MyLayoutSize alloc] initWithNoBound];
-        [_lBoundVal __equalTo:@(-CGFLOAT_MAX)];
-        _uBoundVal = [[MyLayoutSize alloc] initWithNoBound];
-        [_uBoundVal __equalTo:@(CGFLOAT_MAX)];
-
-        
-    }
-    
-    return self;
-}
-
--(id)initWithNoBound
-{
-    self = [super init];
-    if (self !=nil)
-    {
-        _active = YES;
-        _view = nil;
-        _dime = MyMarginGravity_None;
+        _dime = MyGravity_None;
         _dimeVal = nil;
         _dimeValType = MyLayoutValueType_Nil;
         _addVal = 0;
@@ -59,144 +37,6 @@
     }
     
     return self;
-}
-
-
--(MyLayoutSize*)__equalTo:(id)val
-{
-    
-    if (![_dimeVal isEqual:val])
-    {
-        _dimeVal = val;
-        
-        if ([val isKindOfClass:[NSNumber class]])
-        {
-            _dimeValType = MyLayoutValueType_NSNumber;
-        }
-        else if ([val isKindOfClass:[MyLayoutSize class]])
-        {
-            _dimeValType = MyLayoutValueType_LayoutDime;
-            
-            //我们支持尺寸等于自己的情况，用来支持那些尺寸包裹内容但又想扩展尺寸的场景，为了不造成循环引用这里做特殊处理
-            //当尺寸等于自己时，我们只记录_dimeValType，而把值设置为nil
-            if (val == self)
-                _dimeVal = nil;
-        }
-        else if ([val isKindOfClass:[NSArray class]])
-        {
-            _dimeValType = MyLayoutValueType_Array;
-        }
-        else
-        {
-            _dimeValType = MyLayoutValueType_Nil;
-        }
-        
-        [self setNeedLayout];
-    }
-    else
-    {
-        //参考上面自己等于自己的特殊情况需要特殊处理。
-        if (val == nil && _dimeVal == nil && _dimeValType == MyLayoutValueType_LayoutDime)
-        {
-            _dimeValType = MyLayoutValueType_Nil;
-            [self setNeedLayout];
-        }
-    }
-    
-    return self;
-}
-
-//加
--(MyLayoutSize*)__add:(CGFloat)val
-{
-    
-    
-    if (_addVal != val)
-    {
-        _addVal = val;
-        [self setNeedLayout];
-    }
-    
-    return self;
-}
-
-
-//乘
--(MyLayoutSize*)__multiply:(CGFloat)val
-{
-    
-    if (_multiVal != val)
-    {
-        _multiVal = val;
-        [self setNeedLayout];
-    }
-    
-    return self;
-    
-}
-
-
--(MyLayoutSize*)__min:(CGFloat)val
-{
-    if (_lBoundVal.dimeNumVal.doubleValue != val)
-    {
-        [_lBoundVal __equalTo:@(val)];
-        [self setNeedLayout];
-    }
-    
-    return self;
-}
-
-
--(MyLayoutSize*)__lBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal
-{
-    if (sizeVal == self)
-        sizeVal = _lBoundVal;
-    
-    [[[_lBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
-    [self setNeedLayout];
-    
-    return self;
-}
-
-
--(MyLayoutSize*)__max:(CGFloat)val
-{
-    if (_uBoundVal.dimeNumVal.doubleValue != val)
-    {
-        [_uBoundVal __equalTo:@(val)];
-        [self setNeedLayout];
-    }
-    
-    return self;
-}
-
--(MyLayoutSize*)__uBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal
-{
-    if (sizeVal == self)
-        sizeVal = _uBoundVal;
-    
-    [[[_uBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
-    [self setNeedLayout];
-    
-    return self;
-}
-
-
-
--(void)__clear
-{
-    _active = YES;
-    _addVal = 0;
-    _multiVal = 1;
-    [[[_lBoundVal __equalTo:@(-CGFLOAT_MAX)] __add:0] __multiply:1];
-    [[[_uBoundVal __equalTo:@(CGFLOAT_MAX)] __add:0] __multiply:1];
-    _lBoundVal->_active = YES;
-    _uBoundVal->_active = YES;
-    _dimeVal = nil;
-    _dimeValType = MyLayoutValueType_Nil;
-    
-    [self setNeedLayout];
 }
 
 
@@ -360,6 +200,52 @@
     
 }
 
+-(CGFloat)minVal
+{
+    return (self.isActive && _lBoundVal != nil) ?  _lBoundVal.dimeNumVal.doubleValue : -CGFLOAT_MAX;
+}
+
+-(CGFloat)maxVal
+{
+    return (self.isActive && _uBoundVal != nil) ?  _uBoundVal.dimeNumVal.doubleValue : CGFLOAT_MAX;
+}
+
+
+#pragma mark -- NSCopying
+
+-(id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutSize *ld = [[[self class] allocWithZone:zone] init];
+    ld.view = self.view;
+    ld->_active = _active;
+    ld->_dime = _dime;
+    ld->_addVal = _addVal;
+    ld->_multiVal = _multiVal;
+    ld->_dimeVal = _dimeVal;
+    ld->_dimeValType = _dimeValType;
+    if (_lBoundVal != nil)
+    {
+        ld->_lBoundVal = [[[self class] allocWithZone:zone] init];
+        ld->_lBoundVal->_active = _active;
+        [[[ld->_lBoundVal __equalTo:_lBoundVal.dimeVal] __add:_lBoundVal.addVal] __multiply:_lBoundVal.multiVal];
+
+    }
+    
+    if (_uBoundVal != nil)
+    {
+        ld->_uBoundVal = [[[self class] allocWithZone:zone] init];
+        ld->_uBoundVal->_active = _active;
+        [[[ld->_uBoundVal __equalTo:_uBoundVal.dimeVal] __add:_uBoundVal.addVal] __multiply:_uBoundVal.multiVal];
+        
+    }
+  
+    
+    return self;
+}
+
+#pragma mark -- Private Method
+
+
 -(NSNumber*)dimeNumVal
 {
     if (_dimeVal == nil || !self.isActive)
@@ -403,23 +289,176 @@
 
 -(MyLayoutSize*)lBoundVal
 {
+    if (_lBoundVal == nil)
+    {
+        _lBoundVal = [[MyLayoutSize alloc] init];
+        _lBoundVal->_active = _active;
+        [_lBoundVal __equalTo:@(-CGFLOAT_MAX)];
+    }
+    
     return _lBoundVal;
 }
 
 -(MyLayoutSize*)uBoundVal
 {
+    
+    if (_uBoundVal == nil)
+    {
+        _uBoundVal = [[MyLayoutSize alloc] init];
+        _uBoundVal->_active = _active;
+        [_uBoundVal __equalTo:@(CGFLOAT_MAX)];
+    }
     return _uBoundVal;
 }
 
--(CGFloat)minVal
+-(MyLayoutSize*)lBoundValInner
 {
-    return self.isActive ?  _lBoundVal.dimeNumVal.doubleValue : -CGFLOAT_MAX;
+    return _lBoundVal;
 }
 
--(CGFloat)maxVal
+-(MyLayoutSize*)uBoundValInner
 {
-    return self.isActive ?  _uBoundVal.dimeNumVal.doubleValue : CGFLOAT_MAX;
+    return _uBoundVal;
 }
+
+
+-(MyLayoutSize*)__equalTo:(id)val
+{
+    
+    if (![_dimeVal isEqual:val])
+    {
+        _dimeVal = val;
+        
+        if ([val isKindOfClass:[NSNumber class]])
+        {
+            _dimeValType = MyLayoutValueType_NSNumber;
+        }
+        else if ([val isKindOfClass:[MyLayoutSize class]])
+        {
+            _dimeValType = MyLayoutValueType_LayoutDime;
+            
+            //我们支持尺寸等于自己的情况，用来支持那些尺寸包裹内容但又想扩展尺寸的场景，为了不造成循环引用这里做特殊处理
+            //当尺寸等于自己时，我们只记录_dimeValType，而把值设置为nil
+            if (val == self)
+            {
+                _dimeVal = nil;
+            }
+        }
+        else if ([val isKindOfClass:[NSArray class]])
+        {
+            _dimeValType = MyLayoutValueType_Array;
+        }
+        else
+        {
+            _dimeValType = MyLayoutValueType_Nil;
+        }
+        
+        [self setNeedLayout];
+    }
+    else
+    {
+        //参考上面自己等于自己的特殊情况需要特殊处理。
+        if (val == nil && _dimeVal == nil && _dimeValType == MyLayoutValueType_LayoutDime)
+        {
+            _dimeValType = MyLayoutValueType_Nil;
+            [self setNeedLayout];
+        }
+    }
+    
+    return self;
+}
+
+//加
+-(MyLayoutSize*)__add:(CGFloat)val
+{
+    
+    if (_addVal != val)
+    {
+        _addVal = val;
+        [self setNeedLayout];
+    }
+    
+    return self;
+}
+
+
+//乘
+-(MyLayoutSize*)__multiply:(CGFloat)val
+{
+    
+    if (_multiVal != val)
+    {
+        _multiVal = val;
+        [self setNeedLayout];
+    }
+    
+    return self;
+    
+}
+
+
+-(MyLayoutSize*)__min:(CGFloat)val
+{
+    if (self.lBoundVal.dimeNumVal.doubleValue != val)
+    {
+        [self.lBoundVal __equalTo:@(val)];
+        [self setNeedLayout];
+    }
+    
+    return self;
+}
+
+
+-(MyLayoutSize*)__lBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal
+{
+    if (sizeVal == self)
+        sizeVal = self.lBoundVal;
+    
+    [[[self.lBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
+    [self setNeedLayout];
+    
+    return self;
+}
+
+
+-(MyLayoutSize*)__max:(CGFloat)val
+{
+    if (self.uBoundVal.dimeNumVal.doubleValue != val)
+    {
+        [self.uBoundVal __equalTo:@(val)];
+        [self setNeedLayout];
+    }
+    
+    return self;
+}
+
+-(MyLayoutSize*)__uBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal
+{
+    if (sizeVal == self)
+        sizeVal = self.uBoundVal;
+    
+    [[[self.uBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
+    [self setNeedLayout];
+    
+    return self;
+}
+
+
+
+-(void)__clear
+{
+    _active = YES;
+    _addVal = 0;
+    _multiVal = 1;
+    _lBoundVal = nil;
+    _uBoundVal = nil;
+    _dimeVal = nil;
+    _dimeValType = MyLayoutValueType_Nil;
+    
+    [self setNeedLayout];
+}
+
+
 
 -(BOOL)isMatchParent
 {
@@ -445,28 +484,6 @@
 
 
 
-#pragma mark -- NSCopying
-
--(id)copyWithZone:(NSZone *)zone
-{
-    MyLayoutSize *ld = [[[self class] allocWithZone:zone] init];
-    ld->_active = self.isActive;
-    ld.view = self.view;
-    ld.dime = self.dime;
-    ld->_addVal = self.addVal;
-    [[[ld->_lBoundVal __equalTo:_lBoundVal.dimeVal] __add:_lBoundVal.addVal] __multiply:_lBoundVal.multiVal];
-    [[[ld->_uBoundVal __equalTo:_uBoundVal.dimeVal] __add:_uBoundVal.addVal] __multiply:_uBoundVal.multiVal];
-    ld->_lBoundVal->_active = self.isActive;
-    ld->_uBoundVal->_active = self.isActive;
-    ld->_multiVal = self.multiVal;
-    ld->_dimeVal = self->_dimeVal;
-    ld.dimeValType = self.dimeValType;
-    
-    return self;
-}
-
-#pragma mark -- Private Method
-
 -(void)setNeedLayout
 {
     if (_view != nil && _view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
@@ -491,11 +508,11 @@
     NSString *dimeStr = @"";
     
     switch (dimeobj.dime) {
-        case MyMarginGravity_Horz_Fill:
-            dimeStr = @"widthDime";
+        case MyGravity_Horz_Fill:
+            dimeStr = @"widthSize";
             break;
-        case MyMarginGravity_Vert_Fill:
-            dimeStr = @"heightDime";
+        case MyGravity_Vert_Fill:
+            dimeStr = @"heightSize";
             break;
         default:
             break;
@@ -504,6 +521,8 @@
     return [NSString stringWithFormat:@"%@%@",viewstr,dimeStr];
     
 }
+
+#pragma mark -- Override Method
 
 -(NSString*)description
 {

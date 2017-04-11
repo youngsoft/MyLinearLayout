@@ -44,13 +44,15 @@
 -(MyMaker*)padding;
 -(MyMaker*)zeroPadding;
 -(MyMaker*)reverseLayout;
+-(MyMaker*)vertSpace;
+-(MyMaker*)horzSpace;
+-(MyMaker*)space;
 
 
 
 //线性布局和流式布局独有
 -(MyMaker*)orientation;
 -(MyMaker*)gravity;
--(MyMaker*)space;
 
 //线性布局独有
 -(MyMaker*)shrinkType;
@@ -59,8 +61,6 @@
 -(MyMaker*)arrangedCount;
 -(MyMaker*)autoArrange;
 -(MyMaker*)arrangedGravity;
--(MyMaker*)vertSpace;
--(MyMaker*)horzSpace;
 -(MyMaker*)pagedCount;
 
 

@@ -38,7 +38,7 @@
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [UIColor whiteColor];
-    rootLayout.gravity = MyMarginGravity_Horz_Fill;  //设置里面所有子视图的宽度填充布局视图的宽度。
+    rootLayout.gravity = MyGravity_Horz_Fill;  //设置里面所有子视图的宽度填充布局视图的宽度。
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     rootLayout.wrapContentHeight = NO;
     rootLayout.wrapContentWidth = NO;
@@ -52,28 +52,28 @@
     [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&space no centered", @"") tag:100]];
     [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&space centered", @"") tag:200]];
     [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size no centered",@"") tag:300]];
-    [action1Layout averageSubviews:NO withMargin:5];  //均分action1Layout中的所有子视图的宽度
+    [action1Layout equalizeSubviews:NO withSpace:5];  //均分action1Layout中的所有子视图的宽度
 
     //创建动作布局
     MyLinearLayout *action2Layout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     action2Layout.wrapContentHeight = YES;
-    action2Layout.myTopMargin = 5;
+    action2Layout.myTop = 5;
     [rootLayout addSubview:action2Layout];
     
     [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average size centered",@"") tag:400]];
     [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average space no centered",@"") tag:500]];
     [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average space centered",@"") tag:600]];
-    [action2Layout averageSubviews:NO withMargin:5]; //均分action1Layout中的所有子视图的宽度
+    [action2Layout equalizeSubviews:NO withSpace:5]; //均分action1Layout中的所有子视图的宽度
    
     //创建供动作测试的布局。
     self.testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     self.testLayout.backgroundColor = [CFTool color:0];
-    self.testLayout.gravity = MyMarginGravity_Horz_Fill;  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
+    self.testLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
     self.testLayout.wrapContentHeight = NO;
     self.testLayout.weight = 1.0;
     self.testLayout.leftPadding = 10;
     self.testLayout.rightPadding = 10;
-    self.testLayout.myTopMargin = 5;
+    self.testLayout.myTop = 5;
     [rootLayout addSubview:self.testLayout];
     
     UIView *v1 = [self createView:[CFTool color:5]];
@@ -117,7 +117,7 @@
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
     button.titleLabel.font = [CFTool font:14];
     [button sizeToFit];
-    button.heightDime.equalTo(button.heightDime).add(20);  //高度等于内容的高度再加20
+    button.heightSize.equalTo(button.heightSize).add(20);  //高度等于内容的高度再加20
     button.layer.borderColor = [UIColor lightGrayColor].CGColor;
     button.layer.borderWidth = 0.5;
     button.layer.cornerRadius = 4;
@@ -151,22 +151,22 @@
     
     switch (sender.tag) {
         case 100:
-            [self.testLayout averageSubviews:NO];  //均分所有子视图尺寸和间距不留最外面间距
+            [self.testLayout equalizeSubviews:NO];  //均分所有子视图尺寸和间距不留最外面间距
             break;
         case 200:
-            [self.testLayout averageSubviews:YES];  //均分所有子视图的尺寸和间距保留最外间距
+            [self.testLayout equalizeSubviews:YES];  //均分所有子视图的尺寸和间距保留最外间距
             break;
         case 300:
-            [self.testLayout averageSubviews:NO withMargin:40]; //均分所有子视图尺寸，固定间距，不保留最外间距
+            [self.testLayout equalizeSubviews:NO withSpace:40]; //均分所有子视图尺寸，固定间距，不保留最外间距
             break;
         case 400:
-            [self.testLayout averageSubviews:YES withMargin:40];  //均分所有子视图尺寸，固定间距，保留最外间距
+            [self.testLayout equalizeSubviews:YES withSpace:40];  //均分所有子视图尺寸，固定间距，保留最外间距
             break;
         case 500:
-            [self.testLayout averageMargin:NO];   //均分所有间距，子视图尺寸不变，不保留最外间距
+            [self.testLayout equalizeSubviewsSpace:NO];   //均分所有间距，子视图尺寸不变，不保留最外间距
             break;
         case 600:
-            [self.testLayout averageMargin:YES];  //均分所有间距，子视图尺寸不变，保留最外间距。
+            [self.testLayout equalizeSubviewsSpace:YES];  //均分所有间距，子视图尺寸不变，保留最外间距。
             break;
         default:
             break;

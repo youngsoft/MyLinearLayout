@@ -32,10 +32,10 @@
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     rootLayout.backgroundColor = [CFTool color:11];
-    rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
+    rootLayout.myLeft = rootLayout.myRight = 0;
     rootLayout.wrapContentHeight = YES;
-    rootLayout.subviewMargin = 10; //子视图之间的间距设置为10
-    rootLayout.gravity = MyMarginGravity_Horz_Fill; //所有子视图的宽度都和自己相等，这样子视图就不再需要设置宽度了。
+    rootLayout.subviewVSpace = 10; //子视图之间的间距设置为10
+    rootLayout.gravity = MyGravity_Horz_Fill; //所有子视图的宽度都和自己相等，这样子视图就不再需要设置宽度了。
     [scrollView addSubview:rootLayout];
     
     //这里一个模拟的用户登录界面，用垂直流式布局来实现。
@@ -72,15 +72,15 @@
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:2];
     flowLayout.backgroundColor = [UIColor whiteColor];
     flowLayout.wrapContentHeight = YES;  //高度由子视图决定。
-    flowLayout.gravity = MyMarginGravity_Horz_Center; //所有子视图整体水平居中
-    flowLayout.arrangedGravity = MyMarginGravity_Vert_Center; //每行子视图垂直居中对齐。您可以这里尝试设置为：MyMarginGravity_Vert_Top, MyMarginGravity_Vert_Bottom的效果。
+    flowLayout.gravity = MyGravity_Horz_Center; //所有子视图整体水平居中
+    flowLayout.arrangedGravity = MyGravity_Vert_Center; //每行子视图垂直居中对齐。您可以这里尝试设置为：MyGravity_Vert_Top, MyGravity_Vert_Bottom的效果。
     flowLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);  //四周内边距设置为20
     [rootLayout addSubview:flowLayout];
     
     //the first line: head image
     UIImageView *headerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions1"]];
-    headerImageView.myTopMargin = 20;
-    headerImageView.myBottomMargin = 20;
+    headerImageView.myTop = 20;
+    headerImageView.myBottom = 20;
     [flowLayout addSubview:headerImageView];
     
     UIView *placeholderView1 = [UIView new]; //因为流式布局这里面每行两列，所以这里建立一个宽高为0的占位视图。我们可以在流式布局中通过使用占位视图来充满行的数量。
@@ -100,7 +100,7 @@
     userNameTextField.borderStyle = UITextBorderStyleRoundedRect;
     userNameTextField.weight = 1;  //这里weight = 1表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
     userNameTextField.myHeight = 44;  //高度44
-    userNameTextField.myLeftMargin = 20; //文本输入框距的左边间距为20
+    userNameTextField.myLeft = 20; //文本输入框距的左边间距为20
     [flowLayout addSubview:userNameTextField];
     
     
@@ -110,8 +110,8 @@
     passwordLabel.text = @"Password:";
     passwordLabel.textColor = [CFTool color:4];
     passwordLabel.font = [CFTool font:15];
-    passwordLabel.widthDime.lBound(userNameLabel.widthDime,0,1);  //注意这里，因为"password"的长度要小于"User name",所以我们这里设定passwordLabel的最小宽度要和userNameLabel相等。这样目的是为了让后面的输入框具有左对齐的效果。
-    passwordLabel.myTopMargin = 20;  //距离上行的顶部间距为20
+    passwordLabel.widthSize.lBound(userNameLabel.widthSize,0,1);  //注意这里，因为"password"的长度要小于"User name",所以我们这里设定passwordLabel的最小宽度要和userNameLabel相等。这样目的是为了让后面的输入框具有左对齐的效果。
+    passwordLabel.myTop = 20;  //距离上行的顶部间距为20
     [passwordLabel sizeToFit];
     [flowLayout addSubview:passwordLabel];
     
@@ -119,8 +119,8 @@
     passwordTextField.borderStyle = UITextBorderStyleRoundedRect;
     passwordTextField.weight = 1;   //这里weight = 1表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
     passwordTextField.myHeight = 44;
-    passwordTextField.myTopMargin = 20;  //距离上行的顶部间距为20,注意这里要和passwordLabel设置的顶部间距一致，否则可能导致无法居中对齐。
-    passwordTextField.myLeftMargin = 20; //文本输入框距的左边间距为20
+    passwordTextField.myTop = 20;  //距离上行的顶部间距为20,注意这里要和passwordLabel设置的顶部间距一致，否则可能导致无法居中对齐。
+    passwordTextField.myLeft = 20; //文本输入框距的左边间距为20
     [flowLayout addSubview:passwordTextField];
     
     
@@ -156,9 +156,9 @@
     submitButton.layer.cornerRadius = 5;
     submitButton.layer.borderColor = [CFTool color:3].CGColor;
     submitButton.layer.borderWidth = 0.5;
-    submitButton.myTopMargin = 20;
+    submitButton.myTop = 20;
     submitButton.myHeight = 44;
-    submitButton.widthDime.equalTo(flowLayout.widthDime).add(-40);  //宽度等于父视图的宽度再减去40。
+    submitButton.widthSize.equalTo(flowLayout.widthSize).add(-40);  //宽度等于父视图的宽度再减去40。
     [flowLayout addSubview:submitButton];
     
     //第六行因为最后只有一个按钮，所以这里不需要建立占位视图。
@@ -174,8 +174,8 @@
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Horz arrangedCount:3];
     flowLayout.backgroundColor = [CFTool color:7];
     flowLayout.myHeight = 240;
-    flowLayout.gravity = MyMarginGravity_Vert_Bottom | MyMarginGravity_Horz_Center;   //子视图整体垂直底部对齐，水平居中对齐。
-    flowLayout.arrangedGravity = MyMarginGravity_Horz_Center;  //每列子视图水平居中对齐。
+    flowLayout.gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Center;   //子视图整体垂直底部对齐，水平居中对齐。
+    flowLayout.arrangedGravity = MyGravity_Horz_Center;  //每列子视图水平居中对齐。
     flowLayout.padding = UIEdgeInsetsMake(10, 10, 5, 10);  //四周内边距设置。
     [rootLayout addSubview:flowLayout];
     
@@ -205,13 +205,13 @@
       //  imageView.layer.cornerRadius = 5;
        // imageView.layer.masksToBounds = YES;
         imageView.weight = 1;      //每个子视图的高度比重都是1，也就是意味着均分处理。
-        imageView.myLeftMargin = 10;
-        imageView.myRightMargin = 10;
-        imageView.myTopMargin = 10;
-        imageView.widthDime.equalTo(imageView.heightDime);   //宽度等于高度，对于水平流式布局来说，子视图的宽度可以等于高度，反之不可以；而对于垂直流式布局来说则高度可以等于宽度，反之则不可以。
+        imageView.myLeft = 10;
+        imageView.myRight = 10;
+        imageView.myTop = 10;
+        imageView.widthSize.equalTo(imageView.heightSize);   //宽度等于高度，对于水平流式布局来说，子视图的宽度可以等于高度，反之不可以；而对于垂直流式布局来说则高度可以等于宽度，反之则不可以。
         if (i % flowLayout.arrangedCount == 0)
         {
-            imageView.myTopMargin = 60;   //每列的第一个增加缩进量。。
+            imageView.myTop = 60;   //每列的第一个增加缩进量。。
         }
         
         [flowLayout addSubview:imageView];
@@ -219,7 +219,7 @@
     
     //the last col
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    addButton.myLeftMargin = 10;
+    addButton.myLeft = 10;
     [flowLayout addSubview:addButton];
     
 }
@@ -230,7 +230,7 @@
     flowLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:flowLayout];
    flowLayout.wrapContentHeight = YES;
-    flowLayout.subviewMargin = 10;
+    flowLayout.subviewSpace = 10;
     flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     
     //第一行占据全部
@@ -257,14 +257,14 @@
     UIView *v4 = [UIView new];
     v4.backgroundColor = [CFTool color:5];
     v4.weight = 1/3.0;
-    v4.widthDime.add(-20);  //因为要均分为3部分，而我们设置了水平间距subviewHorzMargin为10.所以我们这里要减去20。也就是减去2个间隔。
+    v4.widthSize.add(-20);  //因为要均分为3部分，而我们设置了水平间距subviewHSpace为10.所以我们这里要减去20。也就是减去2个间隔。
     v4.myHeight = 50;
     [flowLayout addSubview:v4];
     
     UIView *v5 = [UIView new];
     v5.backgroundColor = [CFTool color:6];
     v5.weight = 1/2.0;
-    v5.widthDime.add(-10); //因为剩下的要均分为2部分，而我们设置了水平间距subviewHorzMargin为10.所以我们这里要减去10。也就是减去1个间隔。
+    v5.widthSize.add(-10); //因为剩下的要均分为2部分，而我们设置了水平间距subviewHSpace为10.所以我们这里要减去10。也就是减去1个间隔。
     v5.myHeight = 50;
     [flowLayout addSubview:v5];
     

@@ -3,6 +3,71 @@
 
 ---
 
+## [V1.3.5](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.5)(2017/4/11)
+
+#### Added
+1. 线性布局`MyLinearLayout`中的`shrinkType`属性增加了对`MySubviewsShrink_Space`枚举的支持，也就是可以支持当子视图的尺寸大于布局的尺寸时会自动压缩子视图之间的间距。具体例子参见（DEMO:AllTest7ViewController）中最后一个小例子。
+2. 添加了同时设置左右边距的`horzMargin`和同时设置上下边距的`vertMargin`两个视图的扩展属性，方便进行左右和上下边距的设置。
+
+#### Fixed
+1. 修复了数量约束流式布局`MyFlowLayout`中当最后一行的数量等于每行的数量时无法拉伸间距的[#BUG35](https://github.com/youngsoft/MyLinearLayout/issues/35)。
+
+
+####Changed
+1.  大大优化了布局库里面布局位置对象和布局尺寸的内存占用问题，将原来的每个视图都会建立18个布局位置对象和6个布局尺寸对象变化为了只按需要才建立，也就是只有用到了某个位置和某个尺寸才会建立的懒加载模式，这样减少了将近10倍的对象数量的创建，同时还优化了性能和布局的速度：比如屏幕旋转，sizeclass类型的获取，以及布局扩展属性的获取都进行优化处理。
+2. 对代码进行了规范化整理，对所有内部的方法都以my开头，并进行了分类处理。这样便于管理和理解。
+3. V1.3.5中对布局库中的一些方法名或者属性名进行了重新命名处理，目的是为了使命名更加规范合理，以及和TangramKit更加保持一致。下面列出了名字变更的列表：
+
+
+所属类(class)|老命名(old name)|新命名(new name)
+------------|---------------|---------------
+UIView(MyLayoutExt)|myTopMargin|myTop
+UIView(MyLayoutExt)|myLeftMargin|myLeft
+UIView(MyLayoutExt)|myBottomMargin|myBottom
+UIView(MyLayoutExt)|myRightMargin|myRight
+UIView(MyLayoutExt)|myCenterXOffset|myCenterX
+UIView(MyLayoutExt)|myCenterYOffset|myCenterY
+UIView(MyLayoutExt)|myCenterOffset|myCenter
+UIView(MyLayoutExt)|widthDime|widthSize
+UIView(MyLayoutExt)|heightDime|heightSize
+UIView(MyLayoutExt)|flexedHeight|wrapContentHeight
+MyBaseLayout|subviewMargin|subviewSpace
+MyBaseLayout|subviewVertMargin|subviewVSpace
+MyBaseLayout|subviewHorzMargin|subviewHSpace
+MyBaseLayout|leftBorderLine|leftBorderline
+MyBaseLayout|rightBorderLine|rightBorderline
+MyBaseLayout|topBorderLine|topBorderline
+MyBaseLayout|bottomBorderLine|bottomBorderline
+MyBaseLayout|boundBorderLine|boundBorderline
+MyBaseLayout|IntelligentBorderLine|intelligentBorderline
+MyBaseLayout|notUseIntelligentBorderLine|notUseIntelligentBorderline
+MyBorderline|MyBorderLineDraw|MyBorderline
+MyGravity|MyMarginGravity|MyGravity
+MyGravity|MyMarginGravity_XXXX|MyGravity_XXXX
+MyLinearLayout|averageSubviews:|equalizeSubviews:
+MyLinearLayout|averageSubviews:inSizeClass:|equalizeSubviews:inSizeClass:
+MyLinearLayout|averageSubviews:withMargin|equalizeSubviews:withSpace
+MyLinearLayout|averageSubviews:withMargin:inSizeClass:|equalizeSubviews:withSpace:inSizeClass:
+MyLinearLayout|averageMargin:|equalizeSubviewsSpace:
+MyLinearLayout|averageMargin:inSizeClass:|equalizeSubviewsSpace:inSizeClass:
+MyTableLayout|rowSpacing|subviewVSpace
+MyTableLayout|colSpacing|subviewHSpace
+
+非常抱歉进行了这么多名称的变更。现在是将所有老的属性和方法名都设置为了过期属性和方法，并且依然能够使用，但是会报告警。
+> 为了保持对老版本的兼容性，您可以在**PCH文件，或者MyLayout.h的头文件引用前，或者工程设置中** 加入宏定义：** \#define MY_USEOLDMETHODNOWARNING = 1 ** 样就不会产代码中使用老方法名而报警了。
+
+ 如果您要替换掉所有老方法和属性(建议替换)，则您可以按照如下步骤来完成代码的替换工作：
+ 
+ 	1. 查找所有：MyMarginGravity_   并替换为MyGravity_  (选择Containning, 查找后选择preview，然后把除MyLayout库之外的其他都替换掉）
+ 	2. 把所有.myLeftMargin, .myRightMargin, .myTopMargin, .myBottomMargin,  .myCenterXOffset, .myCenterYOffset, .myCenterOffset 分别替换为.myLeft, .myRight, .myTop, .myBottom, .myCenterX, .myCenterY, .myCenter (选择Matching模式)
+ 	3. 把所有.widthDime替换为.widthSize, .heightDime替换为.heightSize (选择Matching模式)
+ 	4. 把所有.subviewMargin替换为.subviewSpace, .subviewVertMargin替换为.subviewVSpace, .subviewHorzMargin替换为.subviewHSpace  (选择Matching模式)
+    5. 把所有的MyBorderLineDraw替换为MyBorderline（选择Matching模式 并注意MyBaseLayout.h中的不要替换）
+    6. 把.leftBorderLine替换为.leftBorderline,  .rightBorderLine替换为.rightBorderline,  .topBorderLine替换为.topBorderline,  .bottomBorderLine替换为.bottomBorderline,  .IntelligentBorderLine替换为.intelligentBorderline, .notUseIntelligentBorderLine替换为.notUseIntelligentBorderline（选择Matching模式）
+    7. 把averageSubviews:方法替换为equalizeSubviews: 把averageMargin:替换为equalizeSubviewsSpace: (注意不要替换MyLinearLayout.h和MyLinearLayout.m中的部分)
+
+
+
 ## [V1.3.4](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.4)(2017/3/04)
 
 #### Added

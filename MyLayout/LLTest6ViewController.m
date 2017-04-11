@@ -33,8 +33,8 @@
      */
     
     /*
-       1.如果想让一个布局视图的宽度和非布局父视图的宽度相等则请将布局视图的myLeftMargin = myRightMargin = 0或者widthDime.equalTo(superview.widthDime)
-       2.如果想让一个布局视图的高度和非布局父视图的高度相等则请将布局视图的myTopMargin = myBottomMargin = 0或者heightDime.equalTo(superview.heightDime)
+       1.如果想让一个布局视图的宽度和非布局父视图的宽度相等则请将布局视图的myLeft = myRight = 0或者widthSize.equalTo(superview.widthSize)
+       2.如果想让一个布局视图的高度和非布局父视图的高度相等则请将布局视图的myTop = myBottom = 0或者heightSize.equalTo(superview.heightSize)
      */
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
@@ -46,12 +46,12 @@
     rootLayout.backgroundColor = [UIColor whiteColor];
     [rootLayout setTarget:self action:@selector(handleHideKeyboard:)];  //设置布局上的触摸事件。布局视图支持触摸事件的设置，可以使用setTarget方法来实现。
     
-    //设置布局视图的宽度等于父视图的宽度，这个方法等价于 rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;
-    rootLayout.widthDime.equalTo(scrollView.widthDime);
+    //设置布局视图的宽度等于父视图的宽度，这个方法等价于 rootLayout.myLeft = rootLayout.myRight = 0;
+    rootLayout.widthSize.equalTo(scrollView.widthSize);
     //设置布局视图的高度等于父视图的高度，并且最低高度不能低于568-64.这两个数字的意思是iPhone5的高度减去导航条的高度部分。这句话的意思也就是说明最低不能低于iPhone5的高度，因此在iPhone4上就会出现滚动的效果！！！通过lBound,uBound方法的应用可以很容易实现各种屏幕的完美适配！！。
-    //rootLayout.heightDime.equalTo(scrollView.heightDime)等于于rootLayout.myTopMargin = rootLayout.myBottomMargin = 0;
+    //rootLayout.heightSize.equalTo(scrollView.heightSize)等于于rootLayout.myTop = rootLayout.myBottom = 0;
     //请您分别测试在iPhone4设备和非iPhone4设备上的情况，看看这个神奇的效果。你不再需要写if条件来做适配处理了。
-    rootLayout.heightDime.equalTo(scrollView.heightDime).min(568 - 64);
+    rootLayout.heightSize.equalTo(scrollView.heightSize).min(568 - 64);
     [scrollView addSubview:rootLayout];
     
     UILabel *userInfoLabel = [UILabel new];
@@ -61,9 +61,9 @@
     userInfoLabel.adjustsFontSizeToFitWidth = YES;
     userInfoLabel.textAlignment = NSTextAlignmentCenter;
     [userInfoLabel sizeToFit];
-    userInfoLabel.myTopMargin = 10;
-    userInfoLabel.myCenterXOffset = 0;
-    userInfoLabel.widthDime.uBound(rootLayout.widthDime, 0, 1);  //最大的宽度和父视图相等，这里第二个参数是第一个值的增量，第三个参数是第一个值的倍数
+    userInfoLabel.myTop = 10;
+    userInfoLabel.myCenterX = 0;
+    userInfoLabel.widthSize.uBound(rootLayout.widthSize, 0, 1);  //最大的宽度和父视图相等，这里第二个参数是第一个值的增量，第三个参数是第一个值的倍数
     [rootLayout addSubview:userInfoLabel];
     
     
@@ -73,8 +73,8 @@
     headImageView.image = [UIImage imageNamed:@"head1"];
     headImageView.backgroundColor = [CFTool color:1];
     [headImageView sizeToFit];
-    headImageView.myTopMargin = 0.25;
-    headImageView.myCenterXOffset = 0;     //距离顶部间隙剩余空间的25%，水平居中对齐。
+    headImageView.myTop = 0.25;
+    headImageView.myCenterX = 0;     //距离顶部间隙剩余空间的25%，水平居中对齐。
     [rootLayout addSubview:headImageView];
     self.headImageView = headImageView;
     
@@ -85,9 +85,9 @@
     nameField.textAlignment = NSTextAlignmentCenter;
     nameField.font = [CFTool font:15];
     nameField.myHeight = 40;
-    nameField.myLeftMargin = 0.1;
-    nameField.myRightMargin = 0.1;
-    nameField.myTopMargin = 0.1;     //高度为40，左右边距为布局的10%, 顶部间距为剩余空间的10%
+    nameField.myLeft = 0.1;
+    nameField.myRight = 0.1;
+    nameField.myTop = 0.1;     //高度为40，左右边距为布局的10%, 顶部间距为剩余空间的10%
     [rootLayout addSubview:nameField];
     
     
@@ -102,7 +102,7 @@
     userDescLabel.textColor = [CFTool color:4];
     userDescLabel.font = [CFTool font:14];
     [userDescLabel sizeToFit];
-    userDescLabel.myTopMargin = 10;
+    userDescLabel.myTop = 10;
     userDescLabel.leftPos.equalTo(@0.05).min(17).max(19);
     [rootLayout addSubview:userDescLabel];
     
@@ -117,11 +117,11 @@
 
     //左右边距为布局的10%，距离底部间距为65%,高度自适应，但高度最高为300，最低为30
     //wrapContentHeight和max,min的结合能做到一些完美的自动伸缩功能。
-    textView.myLeftMargin = 0.05;
-    textView.myRightMargin = 0.05;
-    textView.myBottomMargin = 0.65;
+    textView.myLeft = 0.05;
+    textView.myRight = 0.05;
+    textView.myBottom = 0.65;
     textView.wrapContentHeight = YES;
-    textView.heightDime.max(300).min(60);  //虽然wrapContentHeight属性设置了视图的高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
+    textView.heightSize.max(300).min(60);  //虽然wrapContentHeight属性设置了视图的高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
     [rootLayout addSubview:textView];
     
     
@@ -129,8 +129,8 @@
     copyRightLabel.text = NSLocalizedString(@"copy rights reserved by Youngsoft", @"");
     copyRightLabel.textColor = [CFTool color:4];
     copyRightLabel.font = [CFTool font:15];
-    copyRightLabel.myBottomMargin = 20;   //总是固定在底部20的间距,因为上面的textView用了底部相对间距。
-    copyRightLabel.myCenterXOffset = 0;
+    copyRightLabel.myBottom = 20;   //总是固定在底部20的间距,因为上面的textView用了底部相对间距。
+    copyRightLabel.myCenterX = 0;
     [copyRightLabel sizeToFit];
     [rootLayout addSubview:copyRightLabel];
     

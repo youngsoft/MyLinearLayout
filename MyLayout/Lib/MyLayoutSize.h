@@ -8,6 +8,7 @@
 
 #import "MyLayoutDef.h"
 
+
 /**
  *视图的布局尺寸类，用来设置视图在布局视图中宽度和高度的尺寸值。布局尺寸类是对尺寸的一个抽象，一个尺寸不一定描述为一个具体的数值，也有可能描述为和另外一个尺寸相等也就是依赖另外一个尺寸，同时一个尺寸可能也会有最大和最小值的限制等等。因此用MyLayoutSize类来描述这种尺寸的抽象概念。
  *一个尺寸对象的最终尺寸值 = min(max(sizeVal * multiVal + addVal, lBound.sizeVal * lBound.multiVal + lBound.addVal), uBound.sizeVal * uBound.multiVal + uBound.addVal)
@@ -19,7 +20,6 @@
         uBound.sizeVal,uBound.multiVal,uBound.addVal是通过uBound方法设置的值。他表示尺寸的最大边界值。
  */
 @interface MyLayoutSize : NSObject<NSCopying>
-
 
 //because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
 //if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.
@@ -36,6 +36,7 @@
 
 
 #else
+
 
 
 /**
@@ -70,13 +71,13 @@
  @multiVal: 指定边界值的倍数值，如果没有倍数请设置为1。
  
  *1.比如我们有一个UILabel的宽度是由内容决定的，但是最小的宽度大于等于父视图的宽度，则设置为：
- A.widthDime.equalTo(A.widthDime).lBound(superview.widthDime, 0, 1);
+ A.widthSize.equalTo(A.widthSize).lBound(superview.widthSize, 0, 1);
  *2.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度大于等于父视图宽度的1/2，则设置为：
- A.widthDime.equalTo(A.widthDime).lBound(superview.widthDime, 0, 0.5);
+ A.widthSize.equalTo(A.widthSize).lBound(superview.widthSize, 0, 0.5);
  *3.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度大于等于父视图的宽度-30，则设置为：
- A.widthDime.equalTo(A.widthDime).lBound(superview.widthDime, -30, 1);
+ A.widthSize.equalTo(A.widthSize).lBound(superview.widthSize, -30, 1);
  *4.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度不能低于100，则设置为：
- A.widthDime.equalTo(A.widthDime).lBound(@100, 0, 1);
+ A.widthSize.equalTo(A.widthSize).lBound(@100, 0, 1);
  */
 -(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))lBound;
 
@@ -94,13 +95,13 @@
  @multiVal: 指定边界值的倍数值，如果没有倍数请设置为1。
  
  *1.比如我们有一个UILabel的宽度是由内容决定的，但是最大的宽度小于等于父视图的宽度，则设置为：
-   A.widthDime.equalTo(A.widthDime).uBound(superview.widthDime, 0, 1);
+   A.widthSize.equalTo(A.widthSize).uBound(superview.widthSize, 0, 1);
  *2.比如我们有一个视图的宽度也是由内容决定的，但是最大的宽度小于等于父视图宽度的1/2，则设置为：
-   A.widthDime.equalTo(A.widthDime).uBound(superview.widthDime, 0, 0.5);
+   A.widthSize.equalTo(A.widthSize).uBound(superview.widthSize, 0, 0.5);
  *3.比如我们有一个视图的宽度也是由内容决定的，但是最大的宽度小于等于父视图的宽度-30，则设置为：
-   A.widthDime.equalTo(A.widthDime).uBound(superview.widthDime, -30, 1);
+   A.widthSize.equalTo(A.widthSize).uBound(superview.widthSize, -30, 1);
  *4.比如我们有一个视图的宽度也是由内容决定的，但是最大的宽度小于等于100，则设置为：
-   A.widthDime.equalTo(A.widthDime).uBound(@100, 0, 1);
+   A.widthSize.equalTo(A.widthSize).uBound(@100, 0, 1);
  */
 -(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))uBound;
 

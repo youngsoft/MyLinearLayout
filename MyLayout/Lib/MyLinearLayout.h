@@ -76,26 +76,24 @@
 
 /**
  *线性布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
- *MyMarginGravity_Vert_Top,MyMarginGravity_Vert_Center,MyMarginGravity_Vert_Bottom 表示整体垂直居上，居中，居下
- *MyMarginGravity_Horz_Left,MyMarginGravity_Horz_Center,MyMarginGravity_Horz_Right 表示整体水平居左，居中，居右
- *MyMarginGravity_Vert_Between 表示在垂直线性布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。水平线性布局里面这个设置无效。
- *MyMarginGravity_Horz_Between 表示在水平线性布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。垂直线性布局里面这个设置无效。
- *MyMarginGravity_Vert_Fill 在垂直线性布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平线性布局里面表示每个个子视图的高度都将和父视图保持一致，这样就不再需要设置子视图的高度了。
- *MyMarginGravity_Horz_Fill 在水平线性布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直线性布局里面表示每个子视图的宽度都将和父视图保持一致，这样就不再需要设置子视图的宽度了。
+ *MyGravity_Vert_Top,MyGravity_Vert_Center,MyGravity_Vert_Bottom 表示整体垂直居上，居中，居下
+ *MyGravity_Horz_Left,MyGravity_Horz_Center,MyGravity_Horz_Right 表示整体水平居左，居中，居右
+ *MyGravity_Vert_Between 表示在垂直线性布局里面，每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。水平线性布局里面这个设置无效。
+ *MyGravity_Horz_Between 表示在水平线性布局里面，每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。垂直线性布局里面这个设置无效。
+ *MyGravity_Vert_Fill 在垂直线性布局里面表示布局会拉伸每行子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度；在水平线性布局里面表示每个个子视图的高度都将和父视图保持一致，这样就不再需要设置子视图的高度了。
+ *MyGravity_Horz_Fill 在水平线性布局里面表示布局会拉伸每行子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度；在垂直线性布局里面表示每个子视图的宽度都将和父视图保持一致，这样就不再需要设置子视图的宽度了。
  */
-@property(nonatomic, assign) IBInspectable MyMarginGravity gravity;
+@property(nonatomic, assign) IBInspectable MyGravity gravity;
+
+
 
 
 /**
- *设置布局视图里面子视图之间的间距。如果是垂直线性布局则设置的是垂直间距，如果是水平线性布局则设置的是水平间距。两个视图之间的最终间距等于MyLayoutPos设置的间距加上subviewMargin设置的间距的和。
- */
-@property(nonatomic, assign) IBInspectable CGFloat subviewMargin;
-
-
-/**
- * 用来设置当线性布局中的子视图的尺寸大于线性布局的尺寸时的子视图压缩策略。默认值是MySubviewsShrink_None。
+ * 用来设置当线性布局中的子视图的尺寸和间距的值大于线性布局的尺寸时子视图压缩策略。默认值是MySubviewsShrink_None，表示什么也不压缩。
  这个枚举类型定义了在线性布局里面当某个子视图的尺寸设置为weight比重值或者间距为相对间距时，并且其他剩余的子视图的尺寸和间距的总和要大于
  布局视图本身的尺寸时，对那些具有固定尺寸的子视图的处理方式。需要强调的是只有当子视图的尺寸和间距总和大于布局视图的尺寸时才有意义，否则无意义。
+ 我们定义了4种压缩策略和2种压缩内容，4种压缩策略分别是：不压缩、平均压缩多余的值、按比例压缩多余的值、自动压缩多余的值。
+ 2种压缩内容是压缩子视图的尺寸还是压缩子视图之间的间距。下面分别描述压缩策略和压缩内容的组合：
  比如某个垂直线性布局的高度是100。 里面分别有A,B,C,D四个子视图。其中:
  A.topPos = 10
  A.height = 50
@@ -109,15 +107,15 @@
  这里面多出了40的高度值，并且B和D设置了尺寸和间距的相对值，因此满足压缩条件。那么这时候我们可以用如下压缩策略来处理所有具有固定尺寸的子视图：
  
  
- 1. MySubviewsShrink_None(这是布局的默认设置属性):
+ 1. MySubviewsShrink_None | MySubviewsShrink_Size(这是布局的默认设置属性):
  这种情况下即使是固定的视图的尺寸超出也不会进行任何压缩！！！！
  
- 2. MySubviewsShrink_Average (平均压缩)
+ 2. MySubviewsShrink_Average | MySubviewsShrink_Size (平均压缩)
  这种情况下，我们只会压缩那些具有固定尺寸的子视图A和C的高度，每个子视图被压缩的值是：剩余的尺寸40 / 固定尺寸的子视图数量2 = 20。 这样:
  A的最终高度 = 50 - 20 = 30
  C的最终高度 = 60 - 20 = 40
  
- 3.MySubviewsShrink_Weight (按比例压缩)
+ 3.MySubviewsShrink_Weight | MySubviewsShrink_Size(按比例压缩)
  这种情况下，我们只会压缩那些具有固定尺寸的子视图A和C的高度，这些固定尺寸的子视图高度总和为50 + 60 = 110. 这样：
  A的最终高度 = 50 - 40 *(50/110) = 32
  C的最终高度 = 60 - 40 *（60/110) = 38
@@ -128,14 +126,14 @@
  假如某个水平线性布局里面里面有左右2个UILabel A和B。A和B的宽度都不确定，但是二者不能覆盖重叠，而且当间距小于一个值后要求自动换行。因为宽度都不确定所以不能为子视图指定具体的宽度值和最大最小的宽度值，但是又要利用好剩余的空间，这时候就可以用这个属性。比如下面的例子：
  
  MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
- horzLayout.myLeftMargin = horzLayout.myRightMargin = 0;
+ horzLayout.myLeft = horzLayout.myRight = 0;
  horzLayout.wrapContentHeight = YES;
- horzLayout.subviewMargin = 10;  //二者的最小间距不能小于20
+ horzLayout.subviewSpace = 10;  //二者的最小间距不能小于20
  horzLayout.shrinkType = MySubviewsShrink_Auto;
  
  UILabel *A = [UILabel new];
  A.text = @"xxxxxxx";
- A.widthDime.equalTo(A.widthDime); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
+ A.widthSize.equalTo(A.widthSize); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
  A.wrapContentHeight = YES;        //自动换行
  A.rightPos.equalTo(@0.5);         //右边间距是剩余的50%
  [horzLayout addSubview:A];
@@ -143,11 +141,22 @@
  
  UILabel *B = [UILabel new];
  B.text = @"XXXXXXXX";
- B.widthDime.equalTo(B.widthDime); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
+ B.widthSize.equalTo(B.widthSize); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
  B.wrapContentHeight = YES;        //自动换行
  B.leftPos.equalTo(@0.5);         //左边间距是剩余的50%
  [horzLayout addSubview:B];
  
+ 
+ 5. MySubviewsShrink_Average | MySubviewsShrink_Space (平均压缩间距）
+ 这种情况下，我们只会压缩那些具有固定间距的视图:A,D的间距，每个子视图的压缩的值是：剩余的尺寸40 / 固定间距的视图的数量2 = 20。 这样：
+ A的最终topPos = 10 - 20 = -10
+ D的最终topPos = 20 - 20 = 0
+ 
+ 
+ 6. MySubviewsShrink_Weight | MySubviewsShrink_Space: (按比重压缩间距)
+ 这种情况下，我们只会压缩那些具有固定间距的视图:A,D的间距，这些总的间距为10+20 = 30. 这样：
+ A的最终topPos = 10 - 40 *(10/30) = -3
+ D的最终topPos = 20 - 40 *(20/30) = -7
  
  
  */
@@ -160,25 +169,48 @@
  *@centered参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
  *@sizeClass参数表示设置在指定sizeClass下进行子视图和间距的均分
  */
--(void)averageSubviews:(BOOL)centered;
--(void)averageSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+-(void)equalizeSubviews:(BOOL)centered;
+-(void)equalizeSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+
+
 
 /**
  *均分子视图，并指定固定的间距。上面的函数会导致子视图的高度或者宽度和他们之间的间距相等，而这个函数则表示间距是一个指定的值而子视图的高度或者宽度则会被均分。
  *这个函数只对已经加入布局的视图有效，函数调用后加入的子视图无效。
  *@centered参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
+ *@space参数描述子视图之间的间距为某个固定的值。
  *@sizeClass参数表示设置在指定sizeClass下进行子视图高度或者宽度的均分以及间距的指定
  */
--(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin;
--(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin inSizeClass:(MySizeClass)sizeClass;
+-(void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space;
+-(void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space inSizeClass:(MySizeClass)sizeClass;
+
+
 
 /**
  *均分子视图的间距，上面函数会调整子视图的尺寸以及间距，而这个函数则是子视图的尺寸保持不变而间距自动平均分配，也就是用布局视图的剩余空间来均分间距
  *@centered参数意义同上。
  *@sizeClass参数的意义同上。
  */
--(void)averageMargin:(BOOL)centered;
--(void)averageMargin:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+-(void)equalizeSubviewsSpace:(BOOL)centered;
+-(void)equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+
+
+@end
+
+
+@interface MyLinearLayout(MyLinearLayoutDeprecated)
+
+/**
+ * 过期的方法，这些过期的方法名取名不规范，因此为了和TangramKit统一，这里将这些不规范的方法设置为过期。
+ */
+-(void)averageSubviews:(BOOL)centered  MYMETHODDEPRECATED("use ’equalizeSubviews:(BOOL)centered‘ to instead");
+-(void)averageSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass MYMETHODDEPRECATED("use ‘equalizeSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass’ to instead");
+
+-(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin MYMETHODDEPRECATED("use ‘equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space’ to instead");
+-(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin inSizeClass:(MySizeClass)sizeClass MYMETHODDEPRECATED("use ‘equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space inSizeClass:(MySizeClass)sizeClass’ to instead");
+
+-(void)averageMargin:(BOOL)centered MYMETHODDEPRECATED("use ‘equalizeSubviewsSpace:(BOOL)centered’ to instead");
+-(void)averageMargin:(BOOL)centered inSizeClass:(MySizeClass)sizeClass MYMETHODDEPRECATED("use ‘equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass’ to instead");
 
 
 @end

@@ -37,8 +37,8 @@
      */
     MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
     tableLayout.backgroundColor = [CFTool color:0];
-    tableLayout.colSpacing = 2;  //表格的列间距
-    tableLayout.rowSpacing = 2;  //表格的行间距
+    tableLayout.subviewHSpace = 2;  //表格的列间距
+    tableLayout.subviewVSpace = 2;  //表格的行间距
     tableLayout.myMargin = 0;   //和父视图保持一致的尺寸，因为这里和父视图四周的边距都是0
     [self.view addSubview:tableLayout];
 
@@ -47,14 +47,14 @@
     [tableLayout addRow:30 colSize:70];
     
     UILabel *colView = [self createLabel:@"Cell00" backgroundColor:[CFTool color:1]];
-    colView.myLeftMargin = 10; //可以使用myLeftMargin,myTopMargin,myRightMargin,myBottomMargin来调整间隔
-    colView.myTopMargin = 5;
-    colView.myBottomMargin = 5;
-    colView.myRightMargin = 40;
+    colView.myLeft = 10; //可以使用myLeft,myTop,myRight,myBottom来调整间隔
+    colView.myTop = 5;
+    colView.myBottom = 5;
+    colView.myRight = 40;
     [tableLayout addCol:colView atRow:0];
     
     colView = [self createLabel:@"Cell01" backgroundColor:[CFTool color:2]];
-    colView.myLeftMargin = 20;
+    colView.myLeft = 20;
     [tableLayout addCol:colView atRow:0];
     
     colView = [self createLabel:@"Cell02" backgroundColor:[CFTool color:3]];
@@ -103,8 +103,8 @@
     MyLinearLayout *row4 = [tableLayout viewAtRowIndex:4];
     //可以设置行的属性.比如padding, 线条颜色，
     row4.padding = UIEdgeInsetsMake(3, 3, 3, 3);
-    row4.topBorderLine = [[MyBorderLineDraw alloc] initWithColor:[UIColor blackColor]];
-    row4.topBorderLine.thick = 2;
+    row4.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor]];
+    row4.topBorderline.thick = 2;
 
     colView = [self createLabel:@"Cell40" backgroundColor:[CFTool color:1]];
     [tableLayout addCol:colView atRow:4];

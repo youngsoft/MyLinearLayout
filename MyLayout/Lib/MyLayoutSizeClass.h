@@ -115,19 +115,21 @@ typedef enum : unsigned char{
 @property(nonatomic, strong)  MyLayoutPos *centerYPos;
 
 
-@property(nonatomic, assign) CGFloat myLeftMargin;
-@property(nonatomic, assign) CGFloat myTopMargin;
-@property(nonatomic, assign) CGFloat myRightMargin;
-@property(nonatomic, assign) CGFloat myBottomMargin;
+@property(nonatomic, assign) CGFloat myLeft;
+@property(nonatomic, assign) CGFloat myTop;
+@property(nonatomic, assign) CGFloat myRight;
+@property(nonatomic, assign) CGFloat myBottom;
+@property(nonatomic, assign) CGFloat myCenterX;
+@property(nonatomic, assign) CGFloat myCenterY;
+@property(nonatomic, assign) CGPoint myCenter;
+
 @property(nonatomic, assign) CGFloat myMargin;
-@property(nonatomic, assign) CGFloat myCenterXOffset;
-@property(nonatomic, assign) CGFloat myCenterYOffset;
-@property(nonatomic, assign) CGPoint myCenterOffset;
+@property(nonatomic, assign) CGFloat myHorzMargin;
+@property(nonatomic, assign) CGFloat myVertMargin;
 
 
-
-@property(nonatomic, strong)  MyLayoutSize *widthDime;
-@property(nonatomic, strong)  MyLayoutSize *heightDime;
+@property(nonatomic, strong)  MyLayoutSize *widthSize;
+@property(nonatomic, strong)  MyLayoutSize *heightSize;
 
 @property(nonatomic,assign) CGFloat myWidth;
 @property(nonatomic,assign) CGFloat myHeight;
@@ -173,6 +175,10 @@ typedef enum : unsigned char{
 
 @property(nonatomic, assign) BOOL zeroPadding;
 
+@property(nonatomic ,assign) CGFloat subviewVSpace;
+@property(nonatomic, assign) CGFloat subviewHSpace;
+@property(nonatomic, assign) CGFloat subviewSpace;
+
 @property(nonatomic, assign) BOOL hideSubviewReLayout;
 
 @property(nonatomic, assign) BOOL reverseLayout;   //逆序布局，子视图从后往前。
@@ -185,11 +191,8 @@ typedef enum : unsigned char{
 @interface MySequentLayoutViewSizeClass : MyLayoutViewSizeClass
 
 @property(nonatomic,assign) MyLayoutViewOrientation orientation;
-@property(nonatomic, assign) MyMarginGravity gravity;
+@property(nonatomic, assign) MyGravity gravity;
 
-@property(nonatomic ,assign) CGFloat subviewVertMargin;
-@property(nonatomic, assign) CGFloat subviewHorzMargin;
-@property(nonatomic, assign) CGFloat subviewMargin;
 
 
 @end
@@ -207,9 +210,6 @@ typedef enum : unsigned char{
 
 @interface MyTableLayoutViewSizeClass : MyLinearLayoutViewSizeClass
 
-@property(nonatomic, assign) CGFloat rowSpacing;
-@property(nonatomic, assign) CGFloat colSpacing;
-
 @end
 
 
@@ -218,7 +218,7 @@ typedef enum : unsigned char{
 @property(nonatomic,assign) NSInteger arrangedCount;
 @property(nonatomic, assign) NSInteger pagedCount;
 @property(nonatomic,assign) BOOL autoArrange;
-@property(nonatomic,assign) MyMarginGravity arrangedGravity;
+@property(nonatomic,assign) MyGravity arrangedGravity;
 
 @property(nonatomic, assign) CGFloat subviewSize;
 @property(nonatomic, assign) CGFloat minSpace;

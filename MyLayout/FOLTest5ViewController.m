@@ -50,9 +50,9 @@
 
     
     MyFloatLayout *rootLayout = [[MyFloatLayout alloc] initWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.myLeftMargin = rootLayout.myRightMargin = 0;  //宽度和滚动条视图保持一致。
+    rootLayout.myLeft = rootLayout.myRight = 0;  //宽度和滚动条视图保持一致。
     rootLayout.wrapContentHeight = YES;
-    rootLayout.subviewVertMargin = 5;
+    rootLayout.subviewVSpace = 5;
     [scrollView addSubview:rootLayout];
     
     //介绍页
@@ -77,8 +77,8 @@
     for (NSInteger i = 0; i < images.count; i++)
     {
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:images[i]]];
-        imageView.widthDime.equalTo(rootLayout.widthDime).multiply(1.0 / images.count);
-        imageView.heightDime.equalTo(imageView.widthDime);
+        imageView.widthSize.equalTo(rootLayout.widthSize).multiply(1.0 / images.count);
+        imageView.heightSize.equalTo(imageView.widthSize);
         [rootLayout addSubview:imageView];
     }
     
@@ -90,7 +90,7 @@
         titleLabel.textColor = [CFTool color:i + 1];
         titleLabel.font = [CFTool font:15];
         titleLabel.clearFloat = YES;     //换行重新布局。
-        titleLabel.widthDime.equalTo(rootLayout.widthDime).multiply(0.25); //宽度是父视图宽度的1/4
+        titleLabel.widthSize.equalTo(rootLayout.widthSize).multiply(0.25); //宽度是父视图宽度的1/4
         titleLabel.adjustsFontSizeToFitWidth = YES;
         [titleLabel sizeToFit];
         [rootLayout addSubview:titleLabel];

@@ -27,16 +27,16 @@
     
     //根视图用一个水平内容约束流式布局，这里实现了一个类似于垂直线性布局的能力。
     MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Horz arrangedCount:0];
-    rootLayout.gravity = MyMarginGravity_Horz_Fill; //里面所有子视图的宽度都填充为和父视图一样宽。
+    rootLayout.gravity = MyGravity_Horz_Fill; //里面所有子视图的宽度都填充为和父视图一样宽。
     self.view = rootLayout;
     
     //添加操作按钮。
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:2];
     actionLayout.wrapContentHeight = YES;
-    actionLayout.gravity = MyMarginGravity_Horz_Fill;  //所有子视图水平填充，也就是所有子视图的宽度相等。
+    actionLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平填充，也就是所有子视图的宽度相等。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    actionLayout.subviewHorzMargin = 5;
-    actionLayout.subviewVertMargin = 5;
+    actionLayout.subviewHSpace = 5;
+    actionLayout.subviewVSpace = 5;
     [rootLayout addSubview:actionLayout];
     
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust orientation", @"")
@@ -65,7 +65,7 @@
     scrollView.alwaysBounceHorizontal = YES;
     scrollView.alwaysBounceVertical = YES;
     scrollView.weight = 1;   //占用剩余高度。
-    scrollView.myTopMargin = 10;
+    scrollView.myTop = 10;
     [rootLayout addSubview:scrollView];
     
     
@@ -73,8 +73,8 @@
     flowLayout.backgroundColor = [CFTool color:0];
     flowLayout.frame = CGRectMake(0, 0, 800, 800);
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    flowLayout.subviewVertMargin = 5;
-    flowLayout.subviewHorzMargin = 5;
+    flowLayout.subviewVSpace = 5;
+    flowLayout.subviewHSpace = 5;
     [scrollView addSubview:flowLayout];
     self.flowLayout = flowLayout;
     
@@ -154,26 +154,26 @@
 {
     //调整整体垂直方向的停靠
     
-    MyMarginGravity vertGravity = self.flowLayout.gravity & MyMarginGravity_Horz_Mask;
-    MyMarginGravity horzGravity = self.flowLayout.gravity & MyMarginGravity_Vert_Mask;
+    MyGravity vertGravity = self.flowLayout.gravity & MyGravity_Horz_Mask;
+    MyGravity horzGravity = self.flowLayout.gravity & MyGravity_Vert_Mask;
     
     switch (vertGravity) {
-        case MyMarginGravity_None:
-        case MyMarginGravity_Vert_Top:
-            vertGravity = MyMarginGravity_Vert_Center;
+        case MyGravity_None:
+        case MyGravity_Vert_Top:
+            vertGravity = MyGravity_Vert_Center;
             break;
-        case MyMarginGravity_Vert_Center:
-            vertGravity = MyMarginGravity_Vert_Bottom;
+        case MyGravity_Vert_Center:
+            vertGravity = MyGravity_Vert_Bottom;
             break;
-        case MyMarginGravity_Vert_Bottom:
-            vertGravity = MyMarginGravity_Vert_Between;
+        case MyGravity_Vert_Bottom:
+            vertGravity = MyGravity_Vert_Between;
             break;
-        case MyMarginGravity_Vert_Between:
-            vertGravity = MyMarginGravity_Vert_Fill;
+        case MyGravity_Vert_Between:
+            vertGravity = MyGravity_Vert_Fill;
             break;
-        case MyMarginGravity_Vert_Fill:
+        case MyGravity_Vert_Fill:
         {
-            vertGravity = MyMarginGravity_Vert_Top;
+            vertGravity = MyGravity_Vert_Top;
             [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
         }
         default:
@@ -191,26 +191,26 @@
 {
     //调整整体水平方向的停靠。
     
-    MyMarginGravity vertGravity = self.flowLayout.gravity & MyMarginGravity_Horz_Mask;
-    MyMarginGravity horzGravity = self.flowLayout.gravity & MyMarginGravity_Vert_Mask;
+    MyGravity vertGravity = self.flowLayout.gravity & MyGravity_Horz_Mask;
+    MyGravity horzGravity = self.flowLayout.gravity & MyGravity_Vert_Mask;
     
     switch (horzGravity) {
-        case MyMarginGravity_None:
-        case MyMarginGravity_Horz_Left:
-            horzGravity = MyMarginGravity_Horz_Center;
+        case MyGravity_None:
+        case MyGravity_Horz_Left:
+            horzGravity = MyGravity_Horz_Center;
             break;
-        case MyMarginGravity_Horz_Center:
-            horzGravity = MyMarginGravity_Horz_Right;
+        case MyGravity_Horz_Center:
+            horzGravity = MyGravity_Horz_Right;
             break;
-        case MyMarginGravity_Horz_Right:
-            horzGravity = MyMarginGravity_Horz_Between;
+        case MyGravity_Horz_Right:
+            horzGravity = MyGravity_Horz_Between;
             break;
-        case MyMarginGravity_Horz_Between:
-            horzGravity = MyMarginGravity_Horz_Fill;
+        case MyGravity_Horz_Between:
+            horzGravity = MyGravity_Horz_Fill;
             break;
-        case MyMarginGravity_Horz_Fill:
+        case MyGravity_Horz_Fill:
         {
-            horzGravity = MyMarginGravity_Horz_Left;
+            horzGravity = MyGravity_Horz_Left;
             [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
         }
         default:
@@ -227,26 +227,26 @@
 -(void)handleAdjustArrangeGravity:(id)sender
 {
     //调整行内的对齐方式。
-    MyMarginGravity vertArrangeGravity = self.flowLayout.arrangedGravity & MyMarginGravity_Horz_Mask;
-    MyMarginGravity horzArrangeGravity = self.flowLayout.arrangedGravity & MyMarginGravity_Vert_Mask;
+    MyGravity vertArrangeGravity = self.flowLayout.arrangedGravity & MyGravity_Horz_Mask;
+    MyGravity horzArrangeGravity = self.flowLayout.arrangedGravity & MyGravity_Vert_Mask;
 
     if (self.flowLayout.orientation == MyLayoutViewOrientation_Vert)
     {
         
         switch (vertArrangeGravity) {
-            case MyMarginGravity_None:
-            case MyMarginGravity_Vert_Top:
-                vertArrangeGravity = MyMarginGravity_Vert_Center;
+            case MyGravity_None:
+            case MyGravity_Vert_Top:
+                vertArrangeGravity = MyGravity_Vert_Center;
                 break;
-            case MyMarginGravity_Vert_Center:
-                vertArrangeGravity = MyMarginGravity_Vert_Bottom;
+            case MyGravity_Vert_Center:
+                vertArrangeGravity = MyGravity_Vert_Bottom;
                 break;
-            case MyMarginGravity_Vert_Bottom:
-                vertArrangeGravity = MyMarginGravity_Vert_Fill;
+            case MyGravity_Vert_Bottom:
+                vertArrangeGravity = MyGravity_Vert_Fill;
                 break;
-            case MyMarginGravity_Vert_Fill:
+            case MyGravity_Vert_Fill:
             {
-                vertArrangeGravity = MyMarginGravity_Vert_Top;
+                vertArrangeGravity = MyGravity_Vert_Top;
                 [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
             }
                 break;
@@ -257,19 +257,19 @@
     else
     {
         switch (horzArrangeGravity) {
-            case MyMarginGravity_None:
-            case MyMarginGravity_Horz_Left:
-                horzArrangeGravity = MyMarginGravity_Horz_Center;
+            case MyGravity_None:
+            case MyGravity_Horz_Left:
+                horzArrangeGravity = MyGravity_Horz_Center;
                 break;
-            case MyMarginGravity_Horz_Center:
-                horzArrangeGravity = MyMarginGravity_Horz_Right;
+            case MyGravity_Horz_Center:
+                horzArrangeGravity = MyGravity_Horz_Right;
                 break;
-            case MyMarginGravity_Horz_Right:
-                horzArrangeGravity = MyMarginGravity_Horz_Fill;
+            case MyGravity_Horz_Right:
+                horzArrangeGravity = MyGravity_Horz_Fill;
                 break;
-            case MyMarginGravity_Horz_Fill:
+            case MyGravity_Horz_Fill:
             {
-                horzArrangeGravity = MyMarginGravity_Horz_Left;
+                horzArrangeGravity = MyGravity_Horz_Left;
                 [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
             }
                 break;
@@ -288,15 +288,15 @@
 -(void)handleAdjustMargin:(id)sender
 {
     //调整所有子视图的水平和垂直间距。
-    if (self.flowLayout.subviewHorzMargin == 0)
-        self.flowLayout.subviewHorzMargin = 5;
+    if (self.flowLayout.subviewHSpace == 0)
+        self.flowLayout.subviewHSpace = 5;
     else
-        self.flowLayout.subviewHorzMargin = 0;
+        self.flowLayout.subviewHSpace = 0;
     
-    if (self.flowLayout.subviewVertMargin == 0)
-        self.flowLayout.subviewVertMargin = 5;
+    if (self.flowLayout.subviewVSpace == 0)
+        self.flowLayout.subviewVSpace = 5;
     else
-        self.flowLayout.subviewVertMargin = 0;
+        self.flowLayout.subviewVSpace = 0;
     
     [self.flowLayout layoutAnimationWithDuration:0.4];
     [self flowlayoutInfo];
@@ -318,65 +318,65 @@
     
     NSString *arrangedGravityStr = [self gravityInfo:self.flowLayout.arrangedGravity];
     
-    NSString *subviewMarginStr = [NSString stringWithFormat:@"vert:%.0f,horz:%.0f",self.flowLayout.subviewVertMargin, self.flowLayout.subviewHorzMargin];
+    NSString *subviewSpaceStr = [NSString stringWithFormat:@"vert:%.0f,horz:%.0f",self.flowLayout.subviewVSpace, self.flowLayout.subviewHSpace];
     
     
-    self.flowLayoutSetLabel.text = [NSString stringWithFormat:@"flowLayout:\norientation=%@, arrangedCount=%@\ngravity=%@\narrangedGravity=%@\nsubviewMargin=(%@)",orientationStr,arrangeCountStr,gravityStr,arrangedGravityStr,subviewMarginStr];
+    self.flowLayoutSetLabel.text = [NSString stringWithFormat:@"flowLayout:\norientation=%@, arrangedCount=%@\ngravity=%@\narrangedGravity=%@\nsubviewSpace=(%@)",orientationStr,arrangeCountStr,gravityStr,arrangedGravityStr,subviewSpaceStr];
 }
 
--(NSString*)gravityInfo:(MyMarginGravity)gravity
+-(NSString*)gravityInfo:(MyGravity)gravity
 {
     //分别取出垂直和水平方向的停靠设置。
-    MyMarginGravity vertGravity = gravity & MyMarginGravity_Horz_Mask;
-    MyMarginGravity horzGravity = gravity & MyMarginGravity_Vert_Mask;
+    MyGravity vertGravity = gravity & MyGravity_Horz_Mask;
+    MyGravity horzGravity = gravity & MyGravity_Vert_Mask;
     
     NSString *vertGravityStr = @"";
     switch (vertGravity) {
-        case MyMarginGravity_Vert_Top:
-            vertGravityStr = @"MyMarginGravity_Vert_Top";
+        case MyGravity_Vert_Top:
+            vertGravityStr = @"MyGravity_Vert_Top";
             break;
-        case MyMarginGravity_Vert_Center:
-            vertGravityStr = @"MyMarginGravity_Vert_Center";
+        case MyGravity_Vert_Center:
+            vertGravityStr = @"MyGravity_Vert_Center";
             break;
-        case MyMarginGravity_Vert_Bottom:
-            vertGravityStr = @"MyMarginGravity_Vert_Bottom";
+        case MyGravity_Vert_Bottom:
+            vertGravityStr = @"MyGravity_Vert_Bottom";
             break;
-        case MyMarginGravity_Vert_Fill:
-            vertGravityStr = @"MyMarginGravity_Vert_Fill";
+        case MyGravity_Vert_Fill:
+            vertGravityStr = @"MyGravity_Vert_Fill";
             break;
-        case MyMarginGravity_Vert_Between:
-            vertGravityStr = @"MyMarginGravity_Vert_Between";
+        case MyGravity_Vert_Between:
+            vertGravityStr = @"MyGravity_Vert_Between";
             break;
-        case MyMarginGravity_Vert_Window_Center:
-            vertGravityStr = @"MyMarginGravity_Vert_Window_Center";
+        case MyGravity_Vert_Window_Center:
+            vertGravityStr = @"MyGravity_Vert_Window_Center";
             break;
         default:
-            vertGravityStr = @"MyMarginGravity_Vert_Top";
+            vertGravityStr = @"MyGravity_Vert_Top";
             break;
     }
     
     NSString *horzGravityStr = @"";
     switch (horzGravity) {
-        case MyMarginGravity_Horz_Left:
-            horzGravityStr = @"MyMarginGravity_Horz_Left";
+        case MyGravity_Horz_Left:
+            horzGravityStr = @"MyGravity_Horz_Left";
             break;
-        case MyMarginGravity_Horz_Center:
-            horzGravityStr = @"MyMarginGravity_Horz_Center";
+        case MyGravity_Horz_Center:
+            horzGravityStr = @"MyGravity_Horz_Center";
             break;
-        case MyMarginGravity_Horz_Right:
-            horzGravityStr = @"MyMarginGravity_Horz_Right";
+        case MyGravity_Horz_Right:
+            horzGravityStr = @"MyGravity_Horz_Right";
             break;
-        case MyMarginGravity_Horz_Fill:
-            horzGravityStr = @"MyMarginGravity_Horz_Fill";
+        case MyGravity_Horz_Fill:
+            horzGravityStr = @"MyGravity_Horz_Fill";
             break;
-        case MyMarginGravity_Horz_Between:
-            horzGravityStr = @"MyMarginGravity_Horz_Between";
+        case MyGravity_Horz_Between:
+            horzGravityStr = @"MyGravity_Horz_Between";
             break;
-        case MyMarginGravity_Horz_Window_Center:
-            horzGravityStr = @"MyMarginGravity_Horz_Window_Center";
+        case MyGravity_Horz_Window_Center:
+            horzGravityStr = @"MyGravity_Horz_Window_Center";
             break;
         default:
-            horzGravityStr = @"MyMarginGravity_Horz_Left";
+            horzGravityStr = @"MyGravity_Horz_Left";
             break;
     }
     

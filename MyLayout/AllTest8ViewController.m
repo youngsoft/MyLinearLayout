@@ -37,7 +37,7 @@
     // Do any additional setup after loading the view.
     
     /*
-        本例子演示当把一个布局视图加入到非布局视图时的各种场景。当把一个布局视图加入到非布局父视图时，因为无法完全对非布局父视图进行控制。所以一些布局视图的属性将不再起作用了，但是基本的视图扩展属性： leftPos,rightPos,topPos,bottomPos,centerXPos,centerYPos，widthDime,heightDime,wrapContentWidth, wrapContentHeight这几个属性仍然有意义，只不过这些属性的equalTo方法能设置的类型有限，而且这些设置都只是基于父视图的。
+        本例子演示当把一个布局视图加入到非布局视图时的各种场景。当把一个布局视图加入到非布局父视图时，因为无法完全对非布局父视图进行控制。所以一些布局视图的属性将不再起作用了，但是基本的视图扩展属性： leftPos,rightPos,topPos,bottomPos,centerXPos,centerYPos，widthSize,heightSize,wrapContentWidth, wrapContentHeight这几个属性仍然有意义，只不过这些属性的equalTo方法能设置的类型有限，而且这些设置都只是基于父视图的。
      */
     
     
@@ -71,9 +71,9 @@
     }
     */
     //如果您用MyLayout布局。并且button在一个垂直线性布局下那么可以写成如下：
-   /* button.myTopMargin = 10;
+   /* button.myTop = 10;
     button.myHeight = 40;
-    button.myLeftMargin = button.myRightMargin = 10;
+    button.myLeft = button.myRight = 10;
     */
 
     
@@ -85,11 +85,11 @@
     //建立一个浮动布局,这个浮动布局不会控制父视图UIScrollView的contentSize。
     MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
     floatLayout.backgroundColor = [CFTool color:0];
-    floatLayout.subviewMargin = 10;
-    floatLayout.myLeftMargin = floatLayout.myRightMargin = 10;  //同时设定了左边和右边边距，布局视图的宽度就决定了。
+    floatLayout.subviewSpace = 10;
+    floatLayout.myLeft = floatLayout.myRight = 10;  //同时设定了左边和右边边距，布局视图的宽度就决定了。
     floatLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);  //设置内边距。
-    floatLayout.myTopMargin = 60;
-    floatLayout.myBottomMargin = 10; //底部边距为10，这样同样设置了顶部和底部边距后布局的高度就决定了。
+    floatLayout.myTop = 60;
+    floatLayout.myBottom = 10; //底部边距为10，这样同样设置了顶部和底部边距后布局的高度就决定了。
     floatLayout.adjustScrollViewContentSizeMode = MyLayoutAdjustScrollViewContentSizeModeNo;  //布局视图不控制滚动视图的contentSize。
     /*这里面把布局视图加入到滚动视图时不会自动调整滚动视图的contentSize，如果不设置这个属性则当布局视图加入滚动视图时会自动调整滚动视图的contentSize。您可以把adjustScrollViewContentSizeMode属性设置这句话注释掉，可以看到当使用默认设置时，UIScrollView的contentSize的值会完全受到布局视图的尺寸和边距控制，这时候：
     
@@ -111,8 +111,8 @@
         buttonTag.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         buttonTag.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;  //按钮内容左上角对齐。
         buttonTag.backgroundColor = [CFTool color:i + 5];
-        buttonTag.widthDime.equalTo(floatLayout.widthDime).multiply(0.5).add(-5); //因为宽度都是父视图的一半，并且水平间距是10，所以这里比例是0.5，分别减去5个间距宽度。
-        buttonTag.heightDime.equalTo(floatLayout.heightDime).multiply(heightscale[i]).add(heightinc[i]); //高度占比和所减的间距在上面数组里面定义。
+        buttonTag.widthSize.equalTo(floatLayout.widthSize).multiply(0.5).add(-5); //因为宽度都是父视图的一半，并且水平间距是10，所以这里比例是0.5，分别减去5个间距宽度。
+        buttonTag.heightSize.equalTo(floatLayout.heightSize).multiply(heightscale[i]).add(heightinc[i]); //高度占比和所减的间距在上面数组里面定义。
         [floatLayout addSubview:buttonTag];
     }
     
@@ -153,12 +153,12 @@
     layout.backgroundColor = [CFTool color:14];
     layout.layer.cornerRadius = 5;
     layout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //设置布局视图的内边距。
-    layout.subviewMargin = 5;  //设置视图之间的间距，这样子视图就不再需要单独设置间距了。
-    layout.gravity = MyMarginGravity_Horz_Fill;   //里面的子视图宽度和自己一样，这样就不再需要设置子视图的宽度了。
-    layout.myLeftMargin = 0.2;
-    layout.myRightMargin = 0.2;  //左右边距0.2表示相对边距，也就是左右边距都是父视图总宽度的20%，这样布局视图的宽度就默认为父视图的60%了。
-    layout.myCenterYOffset = 0;  //布局视图在父视图中垂直居中出现。
-    //layout.myBottomMargin = 0;  //布局视图在父视图中底部出现。您可以注释上面居中的代码并解开这句看看效果。
+    layout.subviewVSpace = 5;  //设置视图之间的间距，这样子视图就不再需要单独设置间距了。
+    layout.gravity = MyGravity_Horz_Fill;   //里面的子视图宽度和自己一样，这样就不再需要设置子视图的宽度了。
+    layout.myLeft = 0.2;
+    layout.myRight = 0.2;  //左右边距0.2表示相对边距，也就是左右边距都是父视图总宽度的20%，这样布局视图的宽度就默认为父视图的60%了。
+    layout.myCenterY = 0;  //布局视图在父视图中垂直居中出现。
+    //layout.myBottom = 0;  //布局视图在父视图中底部出现。您可以注释上面居中的代码并解开这句看看效果。
     [self.view addSubview:layout];
     
     //标题
@@ -181,8 +181,9 @@
     //按钮容器。如果您想让两个按钮水平排列则只需在btnContainer初始化中把方向改为：MyLayoutViewOrientation_Horz 。您可以尝试看看效果。
     MyLinearLayout *btnContainer = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert /*MyLayoutViewOrientation_Horz*/];
     btnContainer.wrapContentHeight = YES;  //高度由子视图确定。
-    btnContainer.subviewMargin = 5;   //视图之间的间距设置为5
-    btnContainer.gravity = MyMarginGravity_Horz_Fill; //里面的子视图的宽度水平填充，如果是垂直线性布局则里面的所有子视图的宽度都和父视图相等。如果是水平线性布局则会均分所有子视图的宽度。
+    btnContainer.subviewVSpace = 5;   //视图之间的间距设置为5
+    btnContainer.subviewHSpace = 5;   //视图之间的间距设置为5
+    btnContainer.gravity = MyGravity_Horz_Fill; //里面的子视图的宽度水平填充，如果是垂直线性布局则里面的所有子视图的宽度都和父视图相等。如果是水平线性布局则会均分所有子视图的宽度。
     [layout addSubview:btnContainer];
     
     /*

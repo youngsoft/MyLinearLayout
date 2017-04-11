@@ -65,7 +65,7 @@
     
     /**水平平分3个子视图**/
     UIButton *v1 = [self createButton:NSLocalizedString(@"average 1/3 width\nturn above switch", @"") backgroundColor:[CFTool color:5]];
-    v1.heightDime.equalTo(@40);
+    v1.heightSize.equalTo(@40);
     v1.topPos.equalTo(@60);
     v1.leftPos.equalTo(@10);
     [rootLayout addSubview:v1];
@@ -73,7 +73,7 @@
     
     UIButton *v2 = [self createButton:NSLocalizedString(@"average 1/3 width\nhide me", @"") backgroundColor:[CFTool color:6]];
     [v2 addTarget:self action:@selector(handleHidden:) forControlEvents:UIControlEventTouchUpInside];
-    v2.heightDime.equalTo(v1.heightDime);
+    v2.heightSize.equalTo(v1.heightSize);
     v2.topPos.equalTo(v1.topPos);
     v2.leftPos.equalTo(v1.rightPos).offset(10);
     [rootLayout addSubview:v2];
@@ -81,14 +81,14 @@
 
     UIButton *v3 = [self createButton:NSLocalizedString(@"average 1/3 width\nshow me", @"") backgroundColor:[CFTool color:7]];
     [v3 addTarget:self action:@selector(handleShow:) forControlEvents:UIControlEventTouchUpInside];
-    v3.heightDime.equalTo(v1.heightDime);
+    v3.heightSize.equalTo(v1.heightSize);
     v3.topPos.equalTo(v1.topPos);
     v3.leftPos.equalTo(v2.rightPos).offset(10);
     [rootLayout addSubview:v3];
     
 
     //v1,v2,v3平分父视图的宽度。因为每个子视图之间都有10的间距，因此平分时要减去这个间距值。这里的宽度通过设置等于数组来完成均分。
-    v1.widthDime.equalTo(@[v2.widthDime.add(-10), v3.widthDime.add(-10)]).add(-10);
+    v1.widthSize.equalTo(@[v2.widthSize.add(-10), v3.widthSize.add(-10)]).add(-10);
     
 
     
@@ -96,27 +96,27 @@
     UIButton *v4 = [self createButton:NSLocalizedString(@"width equal to 260", @"") backgroundColor:[CFTool color:5]];
     v4.topPos.equalTo(v1.bottomPos).offset(30);
     v4.leftPos.equalTo(@10);
-    v4.heightDime.equalTo(@40);
-    v4.widthDime.equalTo(@160); //第一个视图宽度固定
+    v4.heightSize.equalTo(@40);
+    v4.widthSize.equalTo(@160); //第一个视图宽度固定
     [rootLayout addSubview:v4];
     
     
     UIButton *v5 = [self createButton:NSLocalizedString(@"1/2 with of free superview", @"") backgroundColor:[CFTool color:6]];
     v5.topPos.equalTo(v4.topPos);
     v5.leftPos.equalTo(v4.rightPos).offset(10);
-    v5.heightDime.equalTo(v4.heightDime);
+    v5.heightSize.equalTo(v4.heightSize);
     [rootLayout addSubview:v5];
     
 
     UIButton *v6 = [self createButton:NSLocalizedString(@"1/2 with of free superview", @"") backgroundColor:[CFTool color:7]];
     v6.topPos.equalTo(v4.topPos);
     v6.leftPos.equalTo(v5.rightPos).offset(10);
-    v6.heightDime.equalTo(v4.heightDime);
+    v6.heightSize.equalTo(v4.heightSize);
     [rootLayout addSubview:v6];
     
     
     //v4宽度固定,v5,v6按一定的比例来平分父视图的宽度，这里同样也是因为每个子视图之间有间距，因此都要减10
-    v5.widthDime.equalTo(@[v4.widthDime.add(-10), v6.widthDime.add(-10)]).add(-10);
+    v5.widthSize.equalTo(@[v4.widthSize.add(-10), v6.widthSize.add(-10)]).add(-10);
     
     
     
@@ -125,25 +125,25 @@
     UIButton *v7 = [self createButton:NSLocalizedString(@"20% with of superview", @"") backgroundColor:[CFTool color:5]];
     v7.topPos.equalTo(v4.bottomPos).offset(30);
     v7.leftPos.equalTo(@10);
-    v7.heightDime.equalTo(@40);
+    v7.heightSize.equalTo(@40);
     [rootLayout addSubview:v7];
     
     
     UIButton *v8 = [self createButton:NSLocalizedString(@"30% with of superview", @"") backgroundColor:[CFTool color:6]];
     v8.topPos.equalTo(v7.topPos);
     v8.leftPos.equalTo(v7.rightPos).offset(10);
-    v8.heightDime.equalTo(v7.heightDime);
+    v8.heightSize.equalTo(v7.heightSize);
     [rootLayout addSubview:v8];
     
     
     UIButton *v9 = [self createButton:NSLocalizedString(@"50% with of superview", @"") backgroundColor:[CFTool color:7]];
     v9.topPos.equalTo(v7.topPos);
     v9.leftPos.equalTo(v8.rightPos).offset(10);
-    v9.heightDime.equalTo(v7.heightDime);
+    v9.heightSize.equalTo(v7.heightSize);
     [rootLayout addSubview:v9];
     
     //v7,v8,v9按照2：3：5的比例均分父视图。
-    v7.widthDime.equalTo(@[v8.widthDime.multiply(0.3).add(-10),v9.widthDime.multiply(0.5).add(-10)]).multiply(0.2).add(-10);
+    v7.widthSize.equalTo(@[v8.widthSize.multiply(0.3).add(-10),v9.widthSize.multiply(0.5).add(-10)]).multiply(0.2).add(-10);
     
     
     /*
@@ -160,41 +160,41 @@
     
     /*高度均分*/
     UIButton *v10 = [self createButton:@"" backgroundColor:[CFTool color:5]];
-    v10.widthDime.equalTo(@40);
+    v10.widthSize.equalTo(@40);
     v10.rightPos.equalTo(bottomLayout.centerXPos).offset(50);
     v10.topPos.equalTo(@10);
     [bottomLayout addSubview:v10];
     
     UIButton *v11 = [self createButton:@"" backgroundColor:[CFTool color:6]];
-    v11.widthDime.equalTo(v10.widthDime);
+    v11.widthSize.equalTo(v10.widthSize);
     v11.rightPos.equalTo(v10.rightPos);
     v11.topPos.equalTo(v10.bottomPos).offset(10);
     [bottomLayout addSubview:v11];
 
     //V10,V11实现了高度均分
-    v10.heightDime.equalTo(@[v11.heightDime.add(-20)]).add(-10);
+    v10.heightSize.equalTo(@[v11.heightSize.add(-20)]).add(-10);
     
     
     UIButton *v12 = [self createButton:@"" backgroundColor:[CFTool color:5]];
-    v12.widthDime.equalTo(@40);
+    v12.widthSize.equalTo(@40);
     v12.leftPos.equalTo(bottomLayout.centerXPos).offset(50);
     v12.topPos.equalTo(@10);
     [bottomLayout addSubview:v12];
     
     UIButton *v13 = [self createButton:@"" backgroundColor:[CFTool color:6]];
-    v13.widthDime.equalTo(v12.widthDime);
+    v13.widthSize.equalTo(v12.widthSize);
     v13.leftPos.equalTo(v12.leftPos);
     v13.topPos.equalTo(v12.bottomPos).offset(10);
     [bottomLayout addSubview:v13];
     
     UIButton *v14 = [self createButton:@"" backgroundColor:[CFTool color:7]];
-    v14.widthDime.equalTo(v12.widthDime);
+    v14.widthSize.equalTo(v12.widthSize);
     v14.leftPos.equalTo(v12.leftPos);
     v14.topPos.equalTo(v13.bottomPos).offset(10);
     [bottomLayout addSubview:v14];
     
     //注意这里最后一个偏移-20，也能达到和底部边距的效果。
-    v12.heightDime.equalTo(@[v13.heightDime.add(-10),v14.heightDime.add(-20)]).add(-10);
+    v12.heightSize.equalTo(@[v13.heightSize.add(-10),v14.heightSize.add(-20)]).add(-10);
     
     
 }
