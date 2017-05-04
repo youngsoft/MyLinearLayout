@@ -41,7 +41,7 @@
 /**
  *流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一排再重新排列的多行多列展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，排列的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品。
  1.垂直数量约束流式布局
- orientation为MyLayoutViewOrientation_Vert,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,不支持autoArrange。
+ orientation为MyOrientation_Vert,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,不支持autoArrange。
  
  
 每排数量为3的垂直数量约束流式布局
@@ -55,7 +55,7 @@
    +-----+-----+----+
 
  2.垂直内容约束流式布局.
-    orientation为MyLayoutViewOrientation_Vert,arrangedCount为0,支持wrapContentHeight,不支持wrapContentWidth,支持autoArrange。
+    orientation为MyOrientation_Vert,arrangedCount为0,支持wrapContentHeight,不支持wrapContentWidth,支持autoArrange。
  
      垂直内容约束流式布局
            =>
@@ -70,7 +70,7 @@
  
  
  3.水平数量约束流式布局。
- orientation为MyLayoutViewOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,不支持autoArrange。
+ orientation为MyOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,不支持autoArrange。
  
  每排数量为3的水平数量约束流式布局
             =>
@@ -88,7 +88,7 @@
  
  
  4.水平内容约束流式布局
-    orientation为MyLayoutViewOrientation_Horz,arrangedCount为0,不支持wrapContentHeight,支持wrapContentWidth,支持autoArrange。
+    orientation为MyOrientation_Horz,arrangedCount为0,不支持wrapContentHeight,支持wrapContentWidth,支持autoArrange。
  
  
      水平内容约束流式布局
@@ -115,17 +115,17 @@
 /**
  *初始化一个流式布局并指定布局的方向和布局的数量,如果数量为0则表示内容约束流式布局
  */
--(instancetype)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
--(instancetype)initWithFrame:(CGRect)frame orientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
-+(instancetype)flowLayoutWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
+-(instancetype)initWithOrientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
+-(instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
++(instancetype)flowLayoutWithOrientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
 
 
 /**
  *流式布局的布局方向
- *如果是MyLayoutViewOrientation_Vert则表示每排先从左到右，再从上到下的垂直布局方式，这个方式是默认方式。
- *如果是MyLayoutViewOrientation_Horz则表示每排先从上到下，在从左到右的水平布局方式。
+ *如果是MyOrientation_Vert则表示每排先从左到右，再从上到下的垂直布局方式，这个方式是默认方式。
+ *如果是MyOrientation_Horz则表示每排先从上到下，在从左到右的水平布局方式。
  */
-@property(nonatomic,assign) IBInspectable MyLayoutViewOrientation orientation;
+@property(nonatomic,assign) IBInspectable MyOrientation orientation;
 
 
 /**
@@ -188,12 +188,12 @@
 
 /**
  *设置流式布局中每排子视图的对齐方式。
- 如果布局的方向是MyLayoutViewOrientation_Vert则表示每排子视图的上中下对齐方式，这里的对齐基础是以每排中的最高的子视图为基准。这个属性只支持：
+ 如果布局的方向是MyOrientation_Vert则表示每排子视图的上中下对齐方式，这里的对齐基础是以每排中的最高的子视图为基准。这个属性只支持：
     MyGravity_Vert_Top     顶部对齐
     MyGravity_Vert_Center  垂直居中对齐
     MyGravity_Vert_Bottom  底部对齐
     MyGravity_Vert_Fill    两端对齐
- 如果布局的方向是MyLayoutViewOrientation_Horz则表示每排子视图的左中右对齐方式，这里的对齐基础是以每排中的最宽的子视图为基准。这个属性只支持：MyGravity_Horz_Left    左边对齐
+ 如果布局的方向是MyOrientation_Horz则表示每排子视图的左中右对齐方式，这里的对齐基础是以每排中的最宽的子视图为基准。这个属性只支持：MyGravity_Horz_Left    左边对齐
      MyGravity_Horz_Center  水平居中对齐
      MyGravity_Horz_Right   右边对齐
      MyGravity_Horz_Fill    两端对齐
@@ -204,11 +204,14 @@
 
 
 /**
- *在内容约束流式布局的一些应用场景中我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的，这样就可以尽可能的容纳更多的子视图。比如每个子视图的宽度是固定80，那么在小屏幕下每行只能放3个，而我们希望大屏幕每行能放4个或者5个子视图。 因此您可以通过如下方法来设置浮动间距，这个方法会根据您当前布局的orientation方向不同而意义不同：
+ *@brief 在内容约束流式布局的一些应用场景中我们有时候希望某些子视图的宽度是固定的情况下，子视图的间距是浮动的而不是固定的，这样就可以尽可能的容纳更多的子视图。比如每个子视图的宽度是固定80，那么在小屏幕下每行只能放3个，而我们希望大屏幕每行能放4个或者5个子视图。 因此您可以通过如下方法来设置浮动间距，这个方法会根据您当前布局的orientation方向不同而意义不同：
  1.如果您的布局方向是.vert表示设置的是子视图的水平间距，其中的size指定的是子视图的宽度，minSpace指定的是最小的水平间距,maxSpace指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的宽度。
  2.如果您的布局方向是.horz表示设置的是子视图的垂直间距，其中的size指定的是子视图的高度，minSpace指定的是最小的垂直间距,maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于这个值则会调整subviewSize的高度。
  3.如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
  4.这个方法只在内容约束流式布局里面设置才有意义。
+ *@param subviewSize 指定子视图的尺寸。
+ *@param minSpace 指定子视图之间的最小间距
+ *@param maxSpace 指定子视图之间的最大间距
  */
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
@@ -222,8 +225,8 @@
 
 /**
  *指定是否均分布局方向上的子视图的宽度或者高度，或者拉伸子视图的尺寸，默认是NO。
- 如果是MyLayoutViewOrientation_Vert则表示每行的子视图的宽度会被均分，这样子视图不需要指定宽度，但是布局视图必须要指定一个明确的宽度值，如果设置为YES则wrapContentWidth会失效。
- 如果是MyLayoutViewOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
+ 如果是MyOrientation_Vert则表示每行的子视图的宽度会被均分，这样子视图不需要指定宽度，但是布局视图必须要指定一个明确的宽度值，如果设置为YES则wrapContentWidth会失效。
+ 如果是MyOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
  内容填充约束流式布局下averageArrange设置为YES时表示拉伸子视图的宽度或者高度以便填充满整个布局视图。
  */
 @property(nonatomic,assign)  BOOL averageArrange MYMETHODDEPRECATED("use gravity = MyGravity_Horz_Fill or gravity = MyGravity_Vert_Fill to instead");

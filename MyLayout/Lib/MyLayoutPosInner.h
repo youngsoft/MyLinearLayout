@@ -40,12 +40,12 @@
 
 // minVal <= posNumVal + offsetVal <=maxVal . 注意这个只试用于相对布局。对于线性布局和框架布局来说，因为可以支持相对边距。
 // 所以线性布局和框架布局不能使用这个属性。
-@property(nonatomic,readonly, assign) CGFloat margin;
+@property(nonatomic,readonly, assign) CGFloat absVal;
 
 //获取真实的位置值
--(CGFloat)realMarginInSize:(CGFloat)size;
+-(CGFloat)realPosIn:(CGFloat)size;
 
--(BOOL)isRelativeMargin;
+-(BOOL)isRelativePos;
 
 
 @end

@@ -13,9 +13,9 @@
  *定义子视图在路径布局中的距离的类型。
  */
 typedef enum : NSUInteger {
-    MyPathSpace_Flexed,    //浮动距离，子视图之间的距离根据路径布局的尺寸和子视图的数量而确定。
-    MyPathSpace_Fixed,     //固定距离，就是子视图之间的距离是固定的某个数值。
-    MyPathSpace_Count,     //固定数量距离，就是子视图之间的距离根据路径布局的尺寸和某个具体的数量而确定。
+    MyPathSpace_Flexed,    /**浮动距离，子视图之间的距离根据路径布局的尺寸和子视图的数量而确定。*/
+    MyPathSpace_Fixed,     /**固定距离，就是子视图之间的距离是固定的某个数值。*/
+    MyPathSpace_Count,     /**固定数量距离，就是子视图之间的距离根据路径布局的尺寸和某个具体的数量而确定。*/
 } MyPathSpaceType;
 
 
@@ -25,19 +25,19 @@ typedef enum : NSUInteger {
  */
 @interface MyPathSpace : NSObject
 
-//浮动距离，根据布局视图的尺寸和子视图的数量动态决定
+/**浮动距离，根据布局视图的尺寸和子视图的数量动态决定*/
 +(id)flexed;
 
-//固定距离，len为长度，每个子视图之间的距离都是len
+/**固定距离，len为长度，每个子视图之间的距离都是len*/
 +(id)fixed:(CGFloat)len;
 
-//数量距离，根据布局视图的尺寸和指定的数量动态决定。
+/**数量距离，根据布局视图的尺寸和指定的数量动态决定。*/
 +(id)count:(NSInteger)count;
 
 
-//距离类型。
+/**距离类型。*/
 @property(nonatomic, assign, readonly) MyPathSpaceType type;
-//距离的值。
+/**距离的值。*/
 @property(nonatomic, assign, readonly) CGFloat value;
 
 @end
@@ -65,11 +65,11 @@ typedef enum : NSUInteger {
 @property(nonatomic, assign) BOOL isReverse;
 
 
-//开始位置和结束位置。如果不设置则根据坐标原点设置以及视图的尺寸自动确定.默认是-CGFLOAT_MAX, CGFLOAT_MAX
+/**开始位置和结束位置。如果不设置则根据坐标原点设置以及视图的尺寸自动确定.默认是-CGFLOAT_MAX, CGFLOAT_MAX*/
 @property(nonatomic, assign) CGFloat start;
 @property(nonatomic, assign) CGFloat end;
 
--(void)reset;  //恢复默认设置。
+-(void)reset;  /**恢复默认设置。*/
 
 @end
 
@@ -139,6 +139,8 @@ typedef enum : NSUInteger {
 
 /**
  *得到子视图在曲线路径中定位时的函数的自变量的值。也就是说在函数中当值等于下面的返回值时，这个视图的位置就被确定了。方法如果返回NAN则表示这个子视图没有定位。
+ *@param subview 指定的子视图
+ *@return 返回指定子视图在曲线路径中的自变量值
  */
 -(CGFloat)argumentFrom:(UIView*)subview;
 
@@ -147,19 +149,22 @@ typedef enum : NSUInteger {
  *下面三个函数用来获取两个子视图之间的曲线路径数据，在调用getSubviewPathPoint方法之前请先调用beginSubviewPathPoint方法，而调用完毕后请调用endSubviewPathPoint方法，否则getSubviewPathPoint返回的结果未可知。
  */
 
-//开始和结束获取子视图路径数据的方法,full表示getSubviewPathPoint获取的是否是全部路径点。如果为NO则只会获取子视图的位置的点。
+/**开始和结束获取子视图路径数据的方法,full表示getSubviewPathPoint获取的是否是全部路径点。如果为NO则只会获取子视图的位置的点。*/
 -(void)beginSubviewPathPoint:(BOOL)full;
 -(void)endSubviewPathPoint;
 
 /**
  *创建从某个子视图到另外一个子视图之间的路径点，返回NSValue数组，里面的值是CGPoint。
- *fromIndex指定开始的子视图的索引位置，toIndex指定结束的子视图的索引位置。如果有原点子视图时,这两个索引值不能算上原点子视图的索引值。
+ *@param fromIndex 指定开始的子视图的索引位置
+ *@param toIndex 指定结束的子视图的索引位置。如果有原点子视图时,这两个索引值不能算上原点子视图的索引值。
+ *@return 返回fromIndex到toIndex之间的所有曲线路径点数组
  */
 -(NSArray*)getSubviewPathPoint:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 
 /**
  *创建布局的曲线的路径。用户需要负责销毁返回的值。调用者可以用这个方法来获得曲线的路径，进行一些绘制的工作。
- *subviewCount:指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的spaceType为Flexed,Count的话则这个参数设置无效。
+ *@param subviewCount 指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的spaceType为Flexed,Count的话则这个参数设置无效。
+ *@return 返回指定数量的子视图的曲线路径，用户需要负责销毁返回的对象。
  */
 -(CGPathRef)createPath:(NSInteger)subviewCount;
 

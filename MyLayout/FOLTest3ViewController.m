@@ -87,9 +87,11 @@
 
 - (void)viewDidLoad {
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+    
     [super viewDidLoad];
     
-    MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     floatLayout.myMargin = 0;  //浮动布局和父视图四周的边界是0，也就是说浮动布局的宽度和高度和父视图相等。
     [self.view addSubview:floatLayout];
     self.floatLayout = floatLayout;
@@ -125,7 +127,7 @@
 -(UIView*)createPictureNewsItemLayout:(FOLTest3DataModel*)dataModel tag:(NSInteger)tag
 {
     //创建一个左右浮动布局。这个DEMO是为了介绍浮动布局,在实践中你可以用其他布局来创建条目布局
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     itemLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [itemLayout setTarget:self action:@selector(handleItemLayoutTap:)];
     itemLayout.highlightedBackgroundColor = [UIColor lightGrayColor];
@@ -155,7 +157,7 @@
 -(UIView*)createWholeWidthTextNewsItemLayout:(FOLTest3DataModel*)dataModel tag:(NSInteger)tag
 {
     //创建一个左右浮动布局。这个DEMO是为了介绍浮动布局,在实践中你可以用其他布局来创建条目布局
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     itemLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [itemLayout setTarget:self action:@selector(handleItemLayoutTap:)];
     itemLayout.highlightedBackgroundColor = [UIColor lightGrayColor];
@@ -191,7 +193,7 @@
 -(MyBaseLayout*)createHalfWidthTextNewsItemLayout:(FOLTest3DataModel*)dataModel tag:(NSInteger)tag
 {
     //里面每个元素可以是各种布局，这里为了突出浮动布局，因此条目布局也做成了浮动布局。
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     itemLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [itemLayout setTarget:self action:@selector(handleItemLayoutTap:)];
     itemLayout.highlightedBackgroundColor = [UIColor lightGrayColor];

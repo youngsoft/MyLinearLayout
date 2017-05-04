@@ -39,10 +39,6 @@
 -(void)__clear;
 
 
-//是否跟父视图相关
-@property(nonatomic, readonly,assign) BOOL isMatchParent;
-
--(BOOL)isMatchView:(UIView*)v;
 
 //只有为数值时才有意义。
 @property(nonatomic, readonly, assign) CGFloat measure;

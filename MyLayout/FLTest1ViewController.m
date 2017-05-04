@@ -73,6 +73,8 @@
        框架布局中的子视图可以层叠显示，因此框架布局常用来作为视图控制器里面的跟视图。
      */
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
     [super loadView];
     
     MyFrameLayout *frameLayout = [MyFrameLayout new];
@@ -93,37 +95,37 @@
     
     //左右填充。
     UILabel *horzFill = [self createLabel:@"horz fill" backgroundColor:[CFTool color:8]];
-    horzFill.myLeft = horzFill.myRight = 0;
+    horzFill.myHorzMargin = 0;  //右边边距是0
     horzFill.myTop = 40;
     [frameLayout addSubview:horzFill];
     
     //上下填充
     UILabel *vertFill = [self createLabel:@"vert fill" backgroundColor:[CFTool color:9]];
     vertFill.numberOfLines = 0;
-    vertFill.myTop = vertFill.myBottom = 0;
-    vertFill.myLeft = 90;
+    vertFill.myVertMargin = 0; //上下边距是0
+    vertFill.myLeading = 90;
     vertFill.myWidth = 10;
     [frameLayout addSubview:vertFill];
 
         
     //左上(默认)
-    UILabel *topLeft = [self createLabel:@"top left" backgroundColor:[CFTool color:5]];
-    topLeft.myLeft = 0;
-    topLeft.myTop = 0;
-    [frameLayout addSubview:topLeft];
+    UILabel *topLeading = [self createLabel:@"top leading" backgroundColor:[CFTool color:5]];
+    topLeading.myLeading = 0;
+    topLeading.myTop = 0;
+    [frameLayout addSubview:topLeading];
     
     //左中
-    UILabel *centerLeft = [self createLabel:@"center left" backgroundColor:[CFTool color:5]];
-    centerLeft.myLeft = 0;
-    centerLeft.myCenterY = 0;
-    [frameLayout addSubview:centerLeft];
+    UILabel *centerLeading = [self createLabel:@"center leading" backgroundColor:[CFTool color:5]];
+    centerLeading.myLeading = 0;
+    centerLeading.myCenterY = 0;
+    [frameLayout addSubview:centerLeading];
     
     
     //左下
-    UILabel *bottomLeft = [self createLabel:@"bottom left" backgroundColor:[CFTool color:5]];
-    bottomLeft.myLeft = 0;
-    bottomLeft.myBottom = 0;
-    [frameLayout addSubview:bottomLeft];
+    UILabel *bottomLeading = [self createLabel:@"bottom leading" backgroundColor:[CFTool color:5]];
+    bottomLeading.myLeading = 0;
+    bottomLeading.myBottom = 0;
+    [frameLayout addSubview:bottomLeading];
     
     
     //中上
@@ -148,24 +150,24 @@
     
     
     //右上
-    UILabel *topRight = [self createLabel:@"top right" backgroundColor:[CFTool color:7]];
-    topRight.myRight = 0;
-    topRight.myTop = 0;
-    [frameLayout addSubview:topRight];
+    UILabel *topTrailing = [self createLabel:@"top trailing" backgroundColor:[CFTool color:7]];
+    topTrailing.myTrailing = 0;
+    topTrailing.myTop = 0;
+    [frameLayout addSubview:topTrailing];
     
     
     //右中
-    UILabel *centerRight = [self createLabel:@"center right" backgroundColor:[CFTool color:7]];
-    centerRight.myRight = 0;
-    centerRight.myCenterY = 0;
-    [frameLayout addSubview:centerRight];
+    UILabel *centerTrailing = [self createLabel:@"center trailing" backgroundColor:[CFTool color:7]];
+    centerTrailing.myTrailing = 0;
+    centerTrailing.myCenterY = 0;
+    [frameLayout addSubview:centerTrailing];
     
     
     //右下
-    UILabel *bottomRight = [self createLabel:@"bottom right" backgroundColor:[CFTool color:7]];
-    bottomRight.myRight = 0;
-    bottomRight.myBottom = 0;
-    [frameLayout addSubview:bottomRight];
+    UILabel *bottomTrailing = [self createLabel:@"bottom trailing" backgroundColor:[CFTool color:7]];
+    bottomTrailing.myTrailing = 0;
+    bottomTrailing.myBottom = 0;
+    [frameLayout addSubview:bottomTrailing];
     
     
 

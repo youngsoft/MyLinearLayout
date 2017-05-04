@@ -23,6 +23,8 @@
        这个例子里面我们可以用框架布局来实现一些复杂的界面布局。框架布局中的子视图还可以利用widthSize和heightSize属性来确定自己的尺寸，其中的equalTo方法的值可以是一个确定的数字，也可以是父布局视图，也可以是自己。
      */
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+    
     MyFrameLayout *rootLayout = [MyFrameLayout new];
     rootLayout.backgroundColor = [CFTool color:15];
     self.view = rootLayout;
@@ -40,7 +42,7 @@
     rightImageView.backgroundColor = [UIColor whiteColor];
     rightImageView.layer.cornerRadius = 16;
     rightImageView.myTop = 10;
-    rightImageView.myRight = 10;  //顶部和右边边距10
+    rightImageView.myTrailing = 10;  //顶部和右边边距10
     [rootLayout addSubview:rightImageView];
   
     
@@ -71,12 +73,12 @@
     
     
     //左中右三张图片,设定宽度和限制高度。
-    UIImageView *leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image2"]];
-    leftView.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0); // 宽度是父布局宽度的1/3
-    leftView.heightSize.equalTo(leftView.widthSize).max(100);  //高度和宽度相等，当最大只能是100
-    leftView.leftPos.equalTo(@0);
-    leftView.bottomPos.equalTo(@0);
-    [rootLayout addSubview:leftView];
+    UIImageView *leadingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image2"]];
+    leadingView.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0); // 宽度是父布局宽度的1/3
+    leadingView.heightSize.equalTo(leadingView.widthSize).max(100);  //高度和宽度相等，当最大只能是100
+    leadingView.leadingPos.equalTo(@0);
+    leadingView.bottomPos.equalTo(@0);
+    [rootLayout addSubview:leadingView];
     
     UIImageView *centerView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image3"]];
     centerView.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0);
@@ -86,12 +88,12 @@
     [rootLayout addSubview:centerView];
 
     
-    UIImageView *rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image4"]];
-    rightView.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0);
-    rightView.heightSize.equalTo(rightView.widthSize).max(100);
-    rightView.rightPos.equalTo(@0);
-    rightView.bottomPos.equalTo(@0);
-    [rootLayout addSubview:rightView];
+    UIImageView *trailingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image4"]];
+    trailingView.widthSize.equalTo(rootLayout.widthSize).multiply(1/3.0);
+    trailingView.heightSize.equalTo(trailingView.widthSize).max(100);
+    trailingView.trailingPos.equalTo(@0);
+    trailingView.bottomPos.equalTo(@0);
+    [rootLayout addSubview:trailingView];
     
 }
 

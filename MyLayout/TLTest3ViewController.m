@@ -27,13 +27,15 @@
      */
     [super loadView];
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectInset(self.view.bounds, 10, 10)];
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:scrollView];
     
     //建立一个垂直表格
-    MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    tableLayout.myLeft = tableLayout.myRight = 0;  //宽度和非布局父视图一样宽
+    MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
+    tableLayout.myLeading = tableLayout.myTrailing = 0;  //宽度和非布局父视图一样宽
     [scrollView addSubview:tableLayout];
     self.tableLayout = tableLayout;
     

@@ -20,7 +20,7 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 
-    //self.testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    //self.testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     
 }
 
@@ -31,18 +31,6 @@
 
 - (void)testExample {
     // This is an example of a functional test case.
-       
-    
-    XCTAssert(YES, @"Pass");
-    
-
-    
-//    MyLinearLayout *ll = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-//    ll.wrapContentWidth = YES;
-//    UILabel *label = [UILabel new];
-//    label.mySize = CGSizeMake(100, 100);
-//    [ll addSubview:label];
-    
 }
 
 - (void)testPerformanceExample {

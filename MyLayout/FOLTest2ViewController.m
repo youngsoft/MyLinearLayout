@@ -377,8 +377,8 @@ static NSInteger sBaseTag = 100000;
     UIScrollView *scrollView = [UIScrollView new];
     self.view = scrollView;
     
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.myLeft = rootLayout.myRight = 0;
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    rootLayout.myHorzMargin = 0;
     rootLayout.gravity = MyGravity_Horz_Fill;
     rootLayout.backgroundColor = [UIColor colorWithWhite:0xe7/255.0 alpha:1];
     rootLayout.intelligentBorderline = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]]; //设置智能边界线，布局里面的子视图会根据布局自动产生边界线。
@@ -425,7 +425,7 @@ static NSInteger sBaseTag = 100000;
     }
     
     //创建条目容器布局。
-    MyFloatLayout *itemContainerLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *itemContainerLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     itemContainerLayout.backgroundColor = [UIColor whiteColor];
     itemContainerLayout.wrapContentHeight = YES;
     itemContainerLayout.intelligentBorderline = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
@@ -475,20 +475,20 @@ static NSInteger sBaseTag = 100000;
      */
     
     //建立上下浮动布局
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     
     //向上浮动，左边顶部边距为5
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeft = 5;
+    titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
     //向上浮动，左边顶部边距为5，高度为20
     UIImageView *subImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.subImage]];
-    subImageView.myLeft = 5;
+    subImageView.myLeading = 5;
     subImageView.myTop = 5;
     subImageView.myHeight = 20;
     [subImageView sizeToFit];
@@ -508,14 +508,14 @@ static NSInteger sBaseTag = 100000;
 -(MyFloatLayout*)createItemLayout1_2:(FOLTest2DataModel*)dataModel
 {
     //建立左右浮动布局
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     
     //向左浮动，宽度和父视图宽度保持一致，顶部和左边距为5
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.widthSize.equalTo(itemLayout.widthSize);
-    titleLabel.myLeft = 5;
+    titleLabel.weight = 1; //widthSize.equalTo(itemLayout.widthSize);
+    titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
@@ -525,15 +525,15 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:12];
     subTitleLabel.textColor = [UIColor lightGrayColor];
-    subTitleLabel.widthSize.equalTo(itemLayout.widthSize);
-    subTitleLabel.myLeft = 5;
+    subTitleLabel.weight = 1;//widthSize.equalTo(itemLayout.widthSize);
+    subTitleLabel.myLeading = 5;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];
     
     //图片向右浮动，并且右边距为5，上面因为占据了全宽，因此这里会另起一行向右浮动。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
     imageView.reverseFloat = YES;
-    imageView.myRight = 5;
+    imageView.myTrailing = 5;
     [itemLayout addSubview:imageView];
     
     return itemLayout;
@@ -543,7 +543,7 @@ static NSInteger sBaseTag = 100000;
 //建立品牌特卖的其他条目布局，这种布局整体是左右结构，因此建立左右浮动布局。
 -(MyFloatLayout*)createItemLayout1_3:(FOLTest2DataModel*)dataModel
 {
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
 
     //因为图片要占据全高，所以必须优先向右浮动。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
@@ -555,7 +555,7 @@ static NSInteger sBaseTag = 100000;
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeft = 5;
+    titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
     titleLabel.weight = 1;
     [titleLabel sizeToFit];
@@ -566,7 +566,7 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:12];
     subTitleLabel.textColor = [UIColor lightGrayColor];
-    subTitleLabel.myLeft = 5;
+    subTitleLabel.myLeading = 5;
     subTitleLabel.clearFloat = YES; //清除浮动，另起一行。
     subTitleLabel.weight = 1;
     subTitleLabel.wrapContentHeight = YES;
@@ -579,7 +579,7 @@ static NSInteger sBaseTag = 100000;
     {
         UIImageView *subImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.subImage]];
         subImageView.clearFloat = YES;
-        subImageView.myLeft = 5;
+        subImageView.myLeading = 5;
         [itemLayout addSubview:subImageView];
     }
     
@@ -590,7 +590,7 @@ static NSInteger sBaseTag = 100000;
 //建立超级品牌日布局，这里因为就只有一张图，所以设置布局的背景图片即可。
 -(MyFloatLayout*)createItemLayout2_1:(FOLTest2DataModel*)dataModel
 {
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     
     itemLayout.backgroundImage = [UIImage imageNamed:dataModel.image];
     
@@ -601,13 +601,13 @@ static NSInteger sBaseTag = 100000;
 //精选市场主条目布局，这个布局整体从上到下因此用上下浮动布局建立。
 -(MyFloatLayout*)createItemLayout3_1:(FOLTest2DataModel*)dataModel
 {
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     
     //向上浮动
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeft = 5;
+    titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
@@ -616,7 +616,7 @@ static NSInteger sBaseTag = 100000;
     UILabel *subTitleLabel = [UILabel new];
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
-    subTitleLabel.myLeft = 5;
+    subTitleLabel.myLeading = 5;
     subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];
@@ -626,7 +626,7 @@ static NSInteger sBaseTag = 100000;
     priceLabel.text = dataModel.price;
     priceLabel.font = [UIFont systemFontOfSize:11];
     priceLabel.textColor = [UIColor redColor];
-    priceLabel.myLeft = 5;
+    priceLabel.myLeading = 5;
     priceLabel.myBottom = 5;
     [priceLabel sizeToFit];
     priceLabel.reverseFloat = YES;
@@ -637,7 +637,7 @@ static NSInteger sBaseTag = 100000;
     descLabel.text = dataModel.desc;
     descLabel.font = [UIFont systemFontOfSize:11];
     descLabel.textColor = [UIColor lightGrayColor];
-    descLabel.myLeft = 5;
+    descLabel.myLeading = 5;
     [descLabel sizeToFit];
     descLabel.reverseFloat = YES;
     [itemLayout addSubview:descLabel];
@@ -654,13 +654,13 @@ static NSInteger sBaseTag = 100000;
 //建立精选市场其他条目布局，这个布局整体还是从上到下，因此用上下浮动布局
 -(MyFloatLayout*)createItemLayout3_2:(FOLTest2DataModel*)dataModel
 {
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     
     //向上浮动
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeft = 5;
+    titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
     titleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
     [titleLabel sizeToFit];
@@ -670,7 +670,7 @@ static NSInteger sBaseTag = 100000;
     UILabel *subTitleLabel = [UILabel new];
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
-    subTitleLabel.myLeft = 5;
+    subTitleLabel.myLeading = 5;
     subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
     subTitleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
@@ -681,7 +681,7 @@ static NSInteger sBaseTag = 100000;
     priceLabel.text = dataModel.price;
     priceLabel.font = [UIFont systemFontOfSize:11];
     priceLabel.textColor = [UIColor redColor];
-    priceLabel.myLeft = 5;
+    priceLabel.myLeading = 5;
     priceLabel.myBottom = 5;
     [priceLabel sizeToFit];
     priceLabel.reverseFloat = YES;
@@ -693,7 +693,7 @@ static NSInteger sBaseTag = 100000;
     descLabel.text = dataModel.desc;
     descLabel.font = [UIFont systemFontOfSize:11];
     descLabel.textColor = [UIColor lightGrayColor];
-    descLabel.myLeft = 5;
+    descLabel.myLeading = 5;
     [descLabel sizeToFit];
     descLabel.reverseFloat = YES;
     descLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
@@ -713,13 +713,13 @@ static NSInteger sBaseTag = 100000;
 //热门市场主条目布局，这个结构可以用上下浮动布局也可以用左右浮动布局。
 -(MyFloatLayout*)createItemLayout4_1:(FOLTest2DataModel*)dataModel
 {
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     
     //向上浮动
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeft = 5;
+    titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
     titleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
     [titleLabel sizeToFit];
@@ -729,7 +729,7 @@ static NSInteger sBaseTag = 100000;
     UILabel *subTitleLabel = [UILabel new];
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
-    subTitleLabel.myLeft = 5;
+    subTitleLabel.myLeading = 5;
     subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
     subTitleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
@@ -747,13 +747,13 @@ static NSInteger sBaseTag = 100000;
 //热门市场其他条目布局，这个整体是上下布局，因此用上下浮动布局。
 -(MyFloatLayout*)createItemLayout4_2:(FOLTest2DataModel*)dataModel
 {
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     
     //向上浮动
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeft = 5;
+    titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
@@ -762,7 +762,7 @@ static NSInteger sBaseTag = 100000;
     UILabel *subTitleLabel = [UILabel new];
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
-    subTitleLabel.myLeft = 5;
+    subTitleLabel.myLeading = 5;
     subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];
@@ -779,12 +779,12 @@ static NSInteger sBaseTag = 100000;
 //主题市场条目布局，这个整体就是上下浮动布局
 -(MyFloatLayout*)createItemLayout5_1:(FOLTest2DataModel*)dataModel
 {
-    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
-    titleLabel.myLeft = 5;
+    titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
@@ -793,7 +793,7 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.text = dataModel.subTitle;
     subTitleLabel.font = [UIFont systemFontOfSize:11];
     subTitleLabel.textColor = [UIColor redColor];
-    subTitleLabel.myLeft = 5;
+    subTitleLabel.myLeading = 5;
     subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];

@@ -40,10 +40,11 @@
 
 
 /**
- *设置尺寸的具体值，这个具体值可以设置为NSNumber, MyLayoutSize以及NSArray<MyLayoutSize*>数组和nil值。
+ *设置尺寸的具体值，这个具体值可以设置为NSNumber, MyLayoutSize以及NSArray<MyLayoutSize*>数组,UIView和nil值。
  *设置为NSNumber值表示指定具体的宽度或者高度数值
  *设置为MyLayoutSize值表示宽度和高度与设置的对象有依赖关系, 甚至可以依赖对象本身
  *设置为NSArray<MyLayoutSize*>数组的概念就是所有数组里面的子视图的尺寸平分父视图的尺寸。只有相对布局里面的子视图才支持这种设置。
+ *设置为UIView的概念就是尺寸依赖于指定视图的相对应的尺寸。
  *设置为nil时则清除设置的具体值。
  */
 -(MyLayoutSize* (^)(id val))equalTo;
@@ -66,10 +67,6 @@
 -(MyLayoutSize* (^)(CGFloat val))min;
 /**
  * 设置尺寸的最小边界值，如果尺寸对象没有设置最小边界值，那么最小边界默认就是无穷小-CGFLOAT_MAX。lBound方法除了能设置为数值外，还可以设置为MyLayoutSize值，并且还可以指定增量值和倍数值。
- @sizeVal:指定边界的值。可设置的类型有NSNumber和MyLayoutSize类型，前者表示最小限制不能小于某个常量值，而后者表示最小限制不能小于另外一个尺寸对象所表示的尺寸值。
- @addVal: 指定边界值的增量值，如果没有增量请设置为0。
- @multiVal: 指定边界值的倍数值，如果没有倍数请设置为1。
- 
  *1.比如我们有一个UILabel的宽度是由内容决定的，但是最小的宽度大于等于父视图的宽度，则设置为：
  A.widthSize.equalTo(A.widthSize).lBound(superview.widthSize, 0, 1);
  *2.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度大于等于父视图宽度的1/2，则设置为：
@@ -78,6 +75,10 @@
  A.widthSize.equalTo(A.widthSize).lBound(superview.widthSize, -30, 1);
  *4.比如我们有一个视图的宽度也是由内容决定的，但是最小的宽度不能低于100，则设置为：
  A.widthSize.equalTo(A.widthSize).lBound(@100, 0, 1);
+ 
+ *sizeVal 指定边界的值。可设置的类型有NSNumber和MyLayoutSize类型，前者表示最小限制不能小于某个常量值，而后者表示最小限制不能小于另外一个尺寸对象所表示的尺寸值。
+ *addVal 指定边界值的增量值，如果没有增量请设置为0。
+ *multiVal 指定边界值的倍数值，如果没有倍数请设置为1。
  */
 -(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))lBound;
 
@@ -90,9 +91,6 @@
 
 /**
  * 设置尺寸的最大边界值，如果尺寸对象没有设置最大边界值，那么最大边界默认就是无穷大CGFLOAT_MAX。uBound方法除了能设置为数值外，还可以设置为MyLayoutSize值和nil值，并且还可以指定增量值和倍数值。
- @sizeVal:指定边界的值。可设置的类型有NSNumber和MyLayoutSize类型，前者表示最大限制不能超过某个常量值，而后者表示最大限制不能超过另外一个尺寸对象所表示的尺寸值。
- @addVal: 指定边界值的增量值，如果没有增量请设置为0。
- @multiVal: 指定边界值的倍数值，如果没有倍数请设置为1。
  
  *1.比如我们有一个UILabel的宽度是由内容决定的，但是最大的宽度小于等于父视图的宽度，则设置为：
    A.widthSize.equalTo(A.widthSize).uBound(superview.widthSize, 0, 1);
@@ -102,6 +100,10 @@
    A.widthSize.equalTo(A.widthSize).uBound(superview.widthSize, -30, 1);
  *4.比如我们有一个视图的宽度也是由内容决定的，但是最大的宽度小于等于100，则设置为：
    A.widthSize.equalTo(A.widthSize).uBound(@100, 0, 1);
+ 
+ *sizeVal 指定边界的值。可设置的类型有NSNumber和MyLayoutSize类型，前者表示最大限制不能超过某个常量值，而后者表示最大限制不能超过另外一个尺寸对象所表示的尺寸值。
+ *addVal 指定边界值的增量值，如果没有增量请设置为0。
+ *multiVal 指定边界值的倍数值，如果没有倍数请设置为1。
  */
 -(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))uBound;
 

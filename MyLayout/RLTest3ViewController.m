@@ -23,6 +23,9 @@
        对于AutoLayout来说一直被诟病的是要实现某些视图整体在父视图中居中时，需要在外层包裹一个视图，然后再将这个包裹的视图在父视图中居中。而对于MyRelativeLayout来说实现起来则非常的简单。
      */
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+    
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
@@ -68,6 +71,7 @@
     v.backgroundColor = color;
     v.text = title;
     v.font = [CFTool font:17];
+    v.textAlignment = NSTextAlignmentCenter;
     [v sizeToFit];
     v.layer.shadowOffset = CGSizeMake(3, 3);
     v.layer.shadowColor = [CFTool color:4].CGColor;
@@ -89,18 +93,18 @@
     titleLabel.font = [CFTool font:16];
     titleLabel.textColor = [CFTool color:4];
     [titleLabel sizeToFit];
-    titleLabel.leftPos.equalTo(@5);
+    titleLabel.leadingPos.equalTo(@5);
     [layout addSubview:titleLabel];
     
     
-    UIView *v1 = [self createLabel:@"" backgroundColor:[CFTool color:5]];
+    UIView *v1 = [self createLabel:@"A" backgroundColor:[CFTool color:5]];
     v1.widthSize.equalTo(@100);
     v1.heightSize.equalTo(@50);
     v1.centerYPos.equalTo(@0);
     [layout addSubview:v1];
     
     
-    UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:6]];
+    UIView *v2 = [self createLabel:@"B" backgroundColor:[CFTool color:6]];
     v2.widthSize.equalTo(@50);
     v2.heightSize.equalTo(@50);
     v2.centerYPos.equalTo(@0);
@@ -124,18 +128,18 @@
     titleLabel.font = [CFTool font:16];
     titleLabel.textColor = [CFTool color:4];
     [titleLabel sizeToFit];
-    titleLabel.leftPos.equalTo(@5);
+    titleLabel.leadingPos.equalTo(@5);
     [layout addSubview:titleLabel];
     
     
-    UIView *v1 = [self createLabel:@"" backgroundColor:[CFTool color:5]];
+    UIView *v1 = [self createLabel:@"A" backgroundColor:[CFTool color:5]];
     v1.widthSize.equalTo(@200);
     v1.heightSize.equalTo(@50);
     v1.centerXPos.equalTo(@0);
     [layout addSubview:v1];
     
     
-    UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:6]];
+    UIView *v2 = [self createLabel:@"B" backgroundColor:[CFTool color:6]];
     v2.widthSize.equalTo(@200);
     v2.heightSize.equalTo(@30);
     v2.centerXPos.equalTo(@0);
@@ -157,13 +161,13 @@
     titleLabel.font = [CFTool font:16];
     titleLabel.textColor = [CFTool color:4];
     [titleLabel sizeToFit];
-    titleLabel.leftPos.equalTo(@5);
+    titleLabel.leadingPos.equalTo(@5);
     [layout addSubview:titleLabel];
     
-    UILabel *lb1up = [self createLabel:@"top left" backgroundColor:[CFTool color:5]];
+    UILabel *lb1up = [self createLabel:@"top leading" backgroundColor:[CFTool color:5]];
     [layout addSubview:lb1up];
     
-    UILabel *lb1down = [self createLabel:@"bottom left" backgroundColor:[CFTool color:6]];
+    UILabel *lb1down = [self createLabel:@"bottom leading" backgroundColor:[CFTool color:6]];
      [layout addSubview:lb1down];
     
     
@@ -174,10 +178,10 @@
     [layout addSubview:lb2down];
     
     
-    UILabel *lb3up = [self createLabel:@"top right" backgroundColor:[CFTool color:9]];
+    UILabel *lb3up = [self createLabel:@"top trailing" backgroundColor:[CFTool color:9]];
     [layout addSubview:lb3up];
     
-    UILabel *lb3down = [self createLabel:@"bottom right" backgroundColor:[CFTool color:10]];
+    UILabel *lb3down = [self createLabel:@"bottom trailing" backgroundColor:[CFTool color:10]];
     [layout addSubview:lb3down];
     
     //左，中，右三组视图分别整体垂直居中显示，并且下面和上面间隔10

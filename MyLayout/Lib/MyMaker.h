@@ -21,6 +21,10 @@
 -(MyMaker*)right;
 -(MyMaker*)margin;
 
+-(MyMaker*)leading;
+-(MyMaker*)trailing;
+
+
 -(MyMaker*)wrapContentHeight;
 -(MyMaker*)wrapContentWidth;
 
@@ -41,6 +45,8 @@
 -(MyMaker*)leftPadding;
 -(MyMaker*)bottomPadding;
 -(MyMaker*)rightPadding;
+-(MyMaker*)leadingPadding;
+-(MyMaker*)trailingPadding;
 -(MyMaker*)padding;
 -(MyMaker*)zeroPadding;
 -(MyMaker*)reverseLayout;

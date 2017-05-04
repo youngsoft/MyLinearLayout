@@ -26,8 +26,8 @@
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
     
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.myLeft = rootLayout.myRight = 0;
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    rootLayout.myHorzMargin = 0;
     rootLayout.gravity = MyGravity_Horz_Fill;
     rootLayout.heightSize.lBound(scrollView.heightSize, 0, 1);
     [scrollView addSubview:rootLayout];
@@ -82,7 +82,7 @@
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.wrapContentWidth = NO;
     contentLayout.wrapContentHeight = YES;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -98,9 +98,7 @@
     label1.font = [CFTool font:16];
     label1.backgroundColor = [CFTool color:5];
     label1.adjustsFontSizeToFitWidth = YES;
-    [label1 sizeToFit];
-    label1.wrapContentHeight = YES; //自动换行。
-    label1.widthSize.equalTo(label1.widthSize); //宽度等于自己的内容，
+    label1.wrapContentSize = YES; //尺寸等于视图的内容包裹。
     label1.widthSize.lBound(label1.widthSize,0,1); //并且最小宽度也等于自己，这样设置的话可以保证这个视图永远不会被压缩。您可以注释掉这句看看效果。
     [contentLayout addSubview:label1];
     
@@ -110,8 +108,8 @@
     label2.font = [CFTool font:16];
     label2.backgroundColor = [CFTool color:6];
     label2.adjustsFontSizeToFitWidth = YES;
-    [label2 sizeToFit];
-    label2.widthSize.equalTo(label2.widthSize); //宽度等于自己的内容宽度
+    label2.wrapContentSize = YES; //尺寸等于自身的内容
+    label2.numberOfLines = 1; //如果你只想要一行，那么要记得在设置包裹后设置行数。。
     [contentLayout addSubview:label2];
 
     //第三个子视图。
@@ -120,11 +118,9 @@
     label3.font = [CFTool font:15];
     label3.backgroundColor = [CFTool color:7];
     label3.adjustsFontSizeToFitWidth = YES;
-    [label3 sizeToFit];
-    label3.wrapContentHeight = YES;
-    label3.widthSize.equalTo(label3.widthSize); //宽度等于自己的内容宽度
+    label3.wrapContentSize = YES;
     [contentLayout addSubview:label3];
-    label3.myRight = 0.5;  //这句设置非常重要，设置为右间距为相对间距，从而达到如果屏幕小则会缩小固定尺寸，如果大则不会的效果。
+    label3.myTrailing = 0.5;  //这句设置非常重要，设置为右间距为相对间距，从而达到如果屏幕小则会缩小固定尺寸，如果大则不会的效果。
 
 }
 
@@ -141,7 +137,7 @@
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.wrapContentWidth = NO;
     contentLayout.wrapContentHeight = YES;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -183,7 +179,6 @@
     UILabel *label1 = [sender.superview viewWithTag:1000];
     
     label1.text = [label1.text stringByAppendingString:@"/您好！"];
-    [label1 sizeToFit]; //这句要调用重新激发布局。
     
 }
 
@@ -192,7 +187,6 @@
     UILabel *label1 = [sender.superview viewWithTag:1000];
     
     label1.text =  [label1.text stringByDeletingLastPathComponent];
-    [label1 sizeToFit]; //这句要调用重新激发布局。
 
 }
 
@@ -209,7 +203,7 @@
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.wrapContentWidth = NO;
     contentLayout.wrapContentHeight = YES;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -222,11 +216,9 @@
     label1.text = @"点击右边的按钮：";
     label1.font = [CFTool font:14];
     label1.backgroundColor = [CFTool color:5];
-    label1.adjustsFontSizeToFitWidth = YES;
     label1.tag = 1000; //为了测试用。。
-    label1.wrapContentHeight = YES; //自动换行。
-    label1.widthSize.equalTo(label1.widthSize); //宽度等于自己的内容。
-    label1.myRight = 0.5;  //设置相对间距
+    label1.wrapContentSize = YES;   //尺寸由内容包裹
+    label1.myTrailing = 0.5;  //设置相对间距
     [contentLayout addSubview:label1];
     
     //第二个子视图。
@@ -235,7 +227,7 @@
     button2.tintColor = [UIColor blueColor];
     button2.titleLabel.font = [CFTool font:14];
     [button2 sizeToFit];
-    button2.myLeft = 0.5;  //设置相对间距。
+    button2.myLeading = 0.5;  //设置相对间距。
     [contentLayout addSubview:button2];
     [button2 addTarget:self action:@selector(handleAdd:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -262,13 +254,12 @@
     
     
     MyLinearLayout *layout = [sender.superview viewWithTag:4000];
-    UILabel *leftLabel = [layout viewWithTag:1000];
-    UILabel *rightLabel = [layout viewWithTag:2000];
+    UILabel *leadingLabel = [layout viewWithTag:1000];
+    UILabel *trailingLabel = [layout viewWithTag:2000];
     
     
-    leftLabel.text = texts[arc4random_uniform((uint32_t)texts.count)];
-    rightLabel.text = texts[arc4random_uniform((uint32_t)texts.count)];
-    [layout setNeedsLayout];  //设置文本后激活布局重新布局
+    leadingLabel.text = texts[arc4random_uniform((uint32_t)texts.count)];
+    trailingLabel.text = texts[arc4random_uniform((uint32_t)texts.count)];
     
 }
 
@@ -291,7 +282,7 @@
     [rootLayout addSubview:changeButton];
     [changeButton addTarget:self action:@selector(handleChangeText:) forControlEvents:UIControlEventTouchUpInside];
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.wrapContentWidth = NO;
     contentLayout.wrapContentHeight = YES;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -311,25 +302,23 @@
      */
      
     //左边子视图。
-    UILabel *leftLabel = [UILabel new];
-    leftLabel.font = [UIFont systemFontOfSize:14];
-    leftLabel.textColor = [UIColor redColor];
-    leftLabel.widthSize.equalTo(leftLabel.widthSize); //设置宽度等于自身内容的宽度
-    leftLabel.wrapContentHeight = YES;
-    leftLabel.rightPos.equalTo(@0.5); //设置右边的相对间距.
-    [contentLayout addSubview:leftLabel];
-    leftLabel.tag = 1000;
+    UILabel *leadingLabel = [UILabel new];
+    leadingLabel.font = [UIFont systemFontOfSize:14];
+    leadingLabel.textColor = [UIColor redColor];
+    leadingLabel.wrapContentSize = YES;
+    leadingLabel.trailingPos.equalTo(@0.5); //设置右边的相对间距.
+    [contentLayout addSubview:leadingLabel];
+    leadingLabel.tag = 1000;
 
     
     //右边子视图。
-    UILabel *rightLabel = [UILabel new];
-    rightLabel.font = [UIFont systemFontOfSize:14];
-    rightLabel.textColor = [UIColor blueColor];
-    rightLabel.widthSize.equalTo(rightLabel.widthSize);  //设置宽度等于自身内容的宽度
-    rightLabel.wrapContentHeight = YES;
-    rightLabel.leftPos.equalTo(@0.5); //设置右边的相对间距.
-    [contentLayout addSubview:rightLabel];
-    rightLabel.tag = 2000;
+    UILabel *trailingLabel = [UILabel new];
+    trailingLabel.font = [UIFont systemFontOfSize:14];
+    trailingLabel.textColor = [UIColor blueColor];
+    trailingLabel.wrapContentSize = YES;
+    trailingLabel.leadingPos.equalTo(@0.5); //设置右边的相对间距.
+    [contentLayout addSubview:trailingLabel];
+    trailingLabel.tag = 2000;
 
     
     
@@ -377,7 +366,7 @@
     
     CGFloat subviewWidth = 60;  //您可以修改这个宽度值，可以看出不管宽度设置多大都能完美的填充整个屏幕，因为系统会自动调整子视图之间的间距。
     
-    MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:0];
+    MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
     contentLayout.backgroundColor = [CFTool color:0];
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.wrapContentHeight = YES;
@@ -414,7 +403,7 @@
     cellLabel.font = [CFTool font:15];
     cellLabel.backgroundColor = [CFTool color:random()%14 + 1];
     cellLabel.myWidth = 80;  //宽度是80
-    cellLabel.myRight = 0.1;  //右间距占用剩余的空间，这里设置为 0 < myRight < 1 的结果都是一样的。这样子视图总是会往左边靠拢。
+    cellLabel.myTrailing = 0.1;  //右间距占用剩余的空间，这里设置为 0 < myTrailing < 1 的结果都是一样的。这样子视图总是会往左边靠拢。
     [cellLabel sizeToFit];
     
     
@@ -445,7 +434,7 @@
         }
         else
         {
-            lastView.myRight = 0;  //因为新添加的单元格视图的右边是相对间距，也就是占用剩余空间，因此这里要把最后一个单元的右间距设置为0，这样就不会造成有多个单元格的右间距占用剩余空间。注意理解一下这里的设置！！！。
+            lastView.myTrailing = 0;  //因为新添加的单元格视图的右边是相对间距，也就是占用剩余空间，因此这里要把最后一个单元的右间距设置为0，这样就不会造成有多个单元格的右间距占用剩余空间。注意理解一下这里的设置！！！。
         }
     }
     
@@ -472,7 +461,7 @@
     [rootLayout addSubview:addButton];
     [addButton addTarget:self action:@selector(handleAddCell:) forControlEvents:UIControlEventTouchUpInside];
 
-    MyTableLayout *contentLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyTableLayout *contentLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewVSpace = 5;
     contentLayout.subviewHSpace = 5;  //设置行间距和列间距都为5.
@@ -497,7 +486,7 @@
     [rootLayout addSubview:tipLabel];
     
     
-    MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:0];
+    MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
     contentLayout.wrapContentHeight = YES;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewSpace = 5;
@@ -506,8 +495,7 @@
     
     contentLayout.autoArrange = YES;  //自动排列，布局视图会根据里面子视图的尺寸进行智能的排列。
     contentLayout.gravity = MyGravity_Horz_Fill;  //对于内容填充流式布局来说会拉升所有子视图的尺寸，以便铺满整个布局视图。
-    
-    
+        
     //添加N个长短不一的子视图。
     for (int i = 0; i < 15; i++)
     {
@@ -542,7 +530,7 @@
     [rootLayout addSubview:scrollView];
     
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.backgroundColor = [CFTool color:0];
     contentLayout.myTop = 0;
     contentLayout.myBottom = 0;
@@ -568,8 +556,8 @@
     label2.backgroundColor = [CFTool color:6];
     [label2 sizeToFit];
     //中间视图的左边间距是0.5,右边间距是0.5。表明中间视图的左右间距占用剩余的空间而达到居中的效果。这样在屏幕尺寸足够时则会产生居中效果，而屏幕尺寸不足时则会缩小间距，但是这里面最左边的最小间距是0而最右边的最小间距是30，这样布局视图因为具有wrapContentWidth属性所以会扩充宽度而达到滚动的效果。
-    label2.leftPos.equalTo(@0.5).min(0);
-    label2.rightPos.equalTo(@0.5).min(30);
+    label2.leadingPos.equalTo(@0.5).min(0);
+    label2.trailingPos.equalTo(@0.5).min(30);
     [contentLayout addSubview:label2];
     
     //第三个子视图。
@@ -599,7 +587,7 @@
     scrollView.myHeight = 60;
     [rootLayout addSubview:scrollView];
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.backgroundColor = [CFTool color:0];
     contentLayout.myTop = 0;
     contentLayout.myBottom = 0;
@@ -632,7 +620,7 @@
     label3.font = [CFTool font:15];
     label3.backgroundColor = [CFTool color:7];
     [label3 sizeToFit];
-    label3.leftPos.equalTo(@0.5).min(30); //最后一个视图的左边距占用剩余的空间，但是最低不能小于30。这样设置的意义是如果布局视图够宽则第三个子视图的左边间距是剩余的空间，这样就保证了第三个子视图总是在最右边。而如果剩余空间不够时，则因为这里最小的宽度是30，而布局视图又是wrapContentWidth,所以就会扩充布局视图的宽度，而产生滚动效果。这里的最小值30很重要，也就是第三个子视图和其他子视图的最小间距，具体设置多少就要看UI的界面效果图了。
+    label3.leadingPos.equalTo(@0.5).min(30); //最后一个视图的左边距占用剩余的空间，但是最低不能小于30。这样设置的意义是如果布局视图够宽则第三个子视图的左边间距是剩余的空间，这样就保证了第三个子视图总是在最右边。而如果剩余空间不够时，则因为这里最小的宽度是30，而布局视图又是wrapContentWidth,所以就会扩充布局视图的宽度，而产生滚动效果。这里的最小值30很重要，也就是第三个子视图和其他子视图的最小间距，具体设置多少就要看UI的界面效果图了。
     [contentLayout addSubview:label3];
     
 }
@@ -663,7 +651,7 @@
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.wrapContentWidth = NO;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.myHeight = 60;  //高度为60.
@@ -696,22 +684,22 @@
     [contentLayout addSubview:A];
     
     UILabel *B = [self createLabel:@"B" color:6];
-    B.myLeft = 10 / totalFloatWidth;  //B与A的间距，也就是左间距用浮动间距。对于线性布局来说如果间距值大于0小于1则表示是浮动间距。
+    B.myLeading = 10 / totalFloatWidth;  //B与A的间距，也就是左间距用浮动间距。对于线性布局来说如果间距值大于0小于1则表示是浮动间距。
     B.weight = 60 / totalFloatWidth;   //对象水平线性布局来说weight值设置的是视图的比重宽度.
     [contentLayout addSubview:B];
     
     UILabel *C  = [self createLabel:@"C" color:7];
-    C.myLeft = 16 / totalFloatWidth;
+    C.myLeading = 16 / totalFloatWidth;
     C.weight = 80 / totalFloatWidth;
     [contentLayout addSubview:C];
     
     UILabel *D = [self createLabel:@"D" color:8];
-    D.myLeft = 16;  //D与C的间距是固定的16
+    D.myLeading = 16;  //D与C的间距是固定的16
     D.weight = 100 / totalFloatWidth;
     [contentLayout addSubview:D];
     
     UILabel *E = [self createLabel:@"E" color:9];
-    E.myLeft = 13 / totalFloatWidth;
+    E.myLeading = 13 / totalFloatWidth;
     E.myWidth = 40; //固定的宽度。
     [contentLayout addSubview:E];
     
@@ -731,7 +719,7 @@
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.wrapContentWidth = NO;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.myHeight = 60;  //高度为60.
@@ -746,7 +734,7 @@
     
     UILabel *A = [self createLabel:@"Objective-C" color:5];
     [A sizeToFit];
-   // A.myLeft = 80;   //您可以解注释这条语句，并将上面的shrinkType设置为MySubviewsShrink_Average或者MySubviewsShrink_Weight查看效果
+   // A.myLeading = 80;   //您可以解注释这条语句，并将上面的shrinkType设置为MySubviewsShrink_Average或者MySubviewsShrink_Weight查看效果
     [contentLayout addSubview:A];
     
     UILabel *B = [self createLabel:@"Swift" color:6];

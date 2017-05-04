@@ -45,11 +45,11 @@
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    contentLayout.myLeft = contentLayout.myRight = 0;
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    contentLayout.myLeading = contentLayout.myTrailing = 0;
     [scrollView addSubview:contentLayout];
     
-    contentLayout.gravity = MyGravity_Horz_Fill;  //设置这个属性后contentLayout的所有子视图都不需要指定宽度了，MyGravity_Horz_Fill的意义是所有子视图的宽度都填充满布局并和布局宽度相等。也就是说设置了这个值后每个子视图不需要通过设置myLeft, myRight或者myWidth来指定宽度了。
+    contentLayout.gravity = MyGravity_Horz_Fill;  //设置这个属性后contentLayout的所有子视图都不需要指定宽度了，MyGravity_Horz_Fill的意义是所有子视图的宽度都填充满布局并和布局宽度相等。也就是说设置了这个值后每个子视图不需要通过设置myHorzMargin或者myWidth来指定宽度了。
     
     
     //创建垂直布局停靠操作动作布局。
@@ -110,7 +110,7 @@
     
     
     //用流式布局来创建动作菜单布局。流式布局请参考后面关于流式布局的DEMO。
-    MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
+    MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     actionLayout.wrapContentHeight = YES;
     actionLayout.gravity = MyGravity_Horz_Fill; //平均分配里面所有子视图的宽度
     actionLayout.subviewHSpace = 5;
@@ -151,12 +151,12 @@
     self.vertGravitySetLabel = vertGravitySetLabel;
 
     
-    MyLinearLayout *vertGravityLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *vertGravityLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     vertGravityLayout.wrapContentHeight = NO;
     vertGravityLayout.backgroundColor = [CFTool color:0];
     vertGravityLayout.myHeight = 160;
     vertGravityLayout.myTop = 10;
-    vertGravityLayout.myLeft = 20;
+    vertGravityLayout.myLeading = 20;
     vertGravityLayout.subviewVSpace = 10; //设置每个子视图之间的间距为10
     [contentLayout addSubview:vertGravityLayout];
     self.vertGravityLayout = vertGravityLayout;
@@ -176,8 +176,8 @@
     
     UILabel *v4 = [self createLabel:NSLocalizedString(@"set left and right margin to determine width", @"") backgroundColor:[CFTool color:8]];
     v4.myHeight = 25;
-    v4.myLeft = 20;
-    v4.myRight = 30;
+    v4.myLeading = 20;
+    v4.myTrailing = 30;
     [self.vertGravityLayout addSubview:v4];
 }
 
@@ -198,7 +198,7 @@
 
     
     //用流式布局来创建动作菜单布局。流式布局请参考后面关于流式布局的DEMO。
-    MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
+    MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     actionLayout.wrapContentHeight = YES;
     actionLayout.gravity = MyGravity_Horz_Fill;  //平均分配里面所有子视图的宽度
     actionLayout.subviewHSpace = 5;
@@ -237,12 +237,12 @@
     [contentLayout addSubview:horzGravitySetLabel];
     self.horzGravitySetLabel = horzGravitySetLabel;
     
-    MyLinearLayout *horzGravityLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *horzGravityLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     horzGravityLayout.backgroundColor = [CFTool color:0];
     horzGravityLayout.wrapContentWidth = NO;  //因为默认水平线性布局的宽度由子视图包裹，但这里的宽度由父布局决定的，所有这里必须设置为NO。
     horzGravityLayout.myHeight = 200;
     horzGravityLayout.myTop = 10;
-    horzGravityLayout.myLeft = 20;
+    horzGravityLayout.myLeading = 20;
     horzGravityLayout.subviewHSpace = 5;  //设置子视图之间的水平间距为5
     [contentLayout addSubview:horzGravityLayout];
     self.horzGravityLayout = horzGravityLayout;
@@ -401,7 +401,7 @@
 
 -(void)handleNavigationTitleCentre:(id)sender
 {
-    MyLinearLayout *navigationItemLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *navigationItemLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     navigationItemLayout.wrapContentHeight = NO;
     navigationItemLayout.wrapContentWidth = NO; //将线性布局放入navigationItem.titleView需要把包裹属性设置为NO。
     
@@ -417,7 +417,7 @@
     topLabel.textAlignment = NSTextAlignmentCenter;
     topLabel.textColor = [CFTool color:4];
     topLabel.font = [CFTool font:17];
-    topLabel.myLeft = topLabel.myRight = 10;
+    topLabel.myLeading = topLabel.myTrailing = 10;
     [topLabel sizeToFit];
     [navigationItemLayout addSubview:topLabel];
     

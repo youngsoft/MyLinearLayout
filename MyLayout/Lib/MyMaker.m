@@ -75,6 +75,18 @@
    return [self bottom];
 }
 
+-(MyMaker*)leading
+{
+    return [self addMethod:@"leadingPos"];
+
+}
+
+-(MyMaker*)trailing
+{
+    return [self addMethod:@"trailingPos"];
+
+}
+
 
 -(MyMaker*)height
 {
@@ -161,6 +173,20 @@
     return [self addMethod:@"rightPadding"];
     
 }
+
+-(MyMaker*)leadingPadding
+{
+    
+    return [self addMethod:@"leadingPadding"];
+    
+}
+
+-(MyMaker*)trailingPadding
+{
+    return [self addMethod:@"trailingPadding"];
+    
+}
+
 
 -(MyMaker*)padding
 {

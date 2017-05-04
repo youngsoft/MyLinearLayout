@@ -105,23 +105,35 @@ typedef enum : unsigned char{
  */
 @interface MyViewSizeClass:NSObject<NSCopying>
 
+@property(nonatomic, weak) UIView *view;
 
 //所有视图通用
-@property(nonatomic, strong)  MyLayoutPos *leftPos;
 @property(nonatomic, strong)  MyLayoutPos *topPos;
-@property(nonatomic, strong)  MyLayoutPos *rightPos;
+@property(nonatomic, strong)  MyLayoutPos *leadingPos;
 @property(nonatomic, strong)  MyLayoutPos *bottomPos;
+@property(nonatomic, strong)  MyLayoutPos *trailingPos;
 @property(nonatomic, strong)  MyLayoutPos *centerXPos;
 @property(nonatomic, strong)  MyLayoutPos *centerYPos;
 
 
-@property(nonatomic, assign) CGFloat myLeft;
+@property(nonatomic, strong,readonly)  MyLayoutPos *leftPos;
+@property(nonatomic, strong,readonly)  MyLayoutPos *rightPos;
+
+
+
 @property(nonatomic, assign) CGFloat myTop;
-@property(nonatomic, assign) CGFloat myRight;
+@property(nonatomic, assign) CGFloat myLeading;
 @property(nonatomic, assign) CGFloat myBottom;
+@property(nonatomic, assign) CGFloat myTrailing;
 @property(nonatomic, assign) CGFloat myCenterX;
 @property(nonatomic, assign) CGFloat myCenterY;
 @property(nonatomic, assign) CGPoint myCenter;
+
+
+@property(nonatomic, assign) CGFloat myLeft;
+@property(nonatomic, assign) CGFloat myRight;
+
+
 
 @property(nonatomic, assign) CGFloat myMargin;
 @property(nonatomic, assign) CGFloat myHorzMargin;
@@ -131,15 +143,15 @@ typedef enum : unsigned char{
 @property(nonatomic, strong)  MyLayoutSize *widthSize;
 @property(nonatomic, strong)  MyLayoutSize *heightSize;
 
-@property(nonatomic,assign) CGFloat myWidth;
-@property(nonatomic,assign) CGFloat myHeight;
-@property(nonatomic,assign) CGSize  mySize;
+@property(nonatomic, assign) CGFloat myWidth;
+@property(nonatomic, assign) CGFloat myHeight;
+@property(nonatomic, assign) CGSize  mySize;
 
 
-@property(nonatomic,assign) BOOL wrapContentWidth;
-@property(nonatomic,assign) BOOL wrapContentHeight;
+@property(nonatomic, assign) BOOL wrapContentWidth;
+@property(nonatomic, assign) BOOL wrapContentHeight;
 
-
+@property(nonatomic, assign) BOOL wrapContentSize;
 
 @property(nonatomic, assign) BOOL useFrame;
 @property(nonatomic, assign) BOOL noLayout;
@@ -167,11 +179,16 @@ typedef enum : unsigned char{
 
 @interface MyLayoutViewSizeClass : MyViewSizeClass
 
-@property(nonatomic,assign) UIEdgeInsets padding;
 @property(nonatomic, assign) CGFloat topPadding;
-@property(nonatomic, assign) CGFloat leftPadding;
+@property(nonatomic, assign) CGFloat leadingPadding;
 @property(nonatomic, assign) CGFloat bottomPadding;
+@property(nonatomic, assign) CGFloat trailingPadding;
+@property(nonatomic, assign) UIEdgeInsets padding;
+
+
+@property(nonatomic, assign) CGFloat leftPadding;
 @property(nonatomic, assign) CGFloat rightPadding;
+
 
 @property(nonatomic, assign) BOOL zeroPadding;
 
@@ -190,7 +207,7 @@ typedef enum : unsigned char{
 
 @interface MySequentLayoutViewSizeClass : MyLayoutViewSizeClass
 
-@property(nonatomic,assign) MyLayoutViewOrientation orientation;
+@property(nonatomic,assign) MyOrientation orientation;
 @property(nonatomic, assign) MyGravity gravity;
 
 

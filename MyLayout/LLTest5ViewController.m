@@ -70,7 +70,7 @@
      
      */
     
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.backgroundColor = [CFTool color:0];
     rootLayout.wrapContentWidth = NO;
     rootLayout.wrapContentHeight = NO;
@@ -79,8 +79,8 @@
     
     UILabel *v1 = [self createLabel:NSLocalizedString(@"width equal to superview, height equal to 20% of free height of superview", @"") backgroundColor:[CFTool color:5]];
     v1.numberOfLines = 3;
-    v1.myTop = 10;
-    v1.myLeft = v1.myRight = 0; //宽度和父视图相等,等价于v1.widthSize.equalTo(rootLayout.widthSize);
+    v1.topPos.equalTo(self.topLayoutGuide).offset(10);
+    v1.myLeading = v1.myTrailing = 0; //宽度和父视图相等,等价于v1.widthSize.equalTo(rootLayout.widthSize);
     v1.weight = 0.2;     //高度的比重是剩余空间的20%
     [rootLayout addSubview:v1];
     
@@ -97,8 +97,8 @@
     UILabel *v3 = [self createLabel:NSLocalizedString(@"width equal to superview - 20, height equal to 50% of free height of superview", @"") backgroundColor:[CFTool color:7]];
     v3.numberOfLines = 0;
     v3.myTop = 10;
-    v3.widthSize.equalTo(rootLayout.widthSize).add(-20);  //父视图的宽度-20 或者v3.myLeft = 20; v3.myRight = 0;
-    v3.myRight = 0;
+    v3.widthSize.equalTo(rootLayout.widthSize).add(-20);  //父视图的宽度-20, v3.myTrailing = 0;
+    v3.myTrailing = 0;
     v3.weight = 0.5;  //高度的比重是剩余空间的50%
     [rootLayout addSubview:v3];
     
@@ -114,8 +114,8 @@
     UILabel *v5 = [self createLabel:NSLocalizedString(@"left margin equal to 20% of superview, right margin equal to 30% of superview, width equal to 50% of superview, top spacing equal to 5% of free height of superview, bottom spacing equal to 10% of free height of superview", @"") backgroundColor:[CFTool color:9]];
     v5.numberOfLines = 0;
     //下面设置的值都是0和1之间的值。表示都是相对。
-    v5.myLeft = 0.2;   //左边的边距是父视图的20%
-    v5.myRight = 0.3;  //左右的边距是父视图的30%， 这样也就是说视图的宽度是父视图的50%
+    v5.myLeading = 0.2;   //左边的边距是父视图的20%
+    v5.myTrailing = 0.3;  //左右的边距是父视图的30%， 这样也就是说视图的宽度是父视图的50%
     v5.weight = 0.1;
     v5.myTop = 0.05;
     v5.myBottom = 0.1;

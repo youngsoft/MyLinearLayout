@@ -54,7 +54,7 @@ static NSInteger sBaseTag = 100000;
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight; //让uiscrollView的尺寸总是保持和父视图一致。
     [self.view addSubview:scrollView];
     
-    _rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    _rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     _rootLayout.gravity = MyGravity_Horz_Fill;  //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
     
     _rootLayout.widthSize.equalTo(scrollView.widthSize);
@@ -110,7 +110,7 @@ static NSInteger sBaseTag = 100000;
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"next"]];
     imageView.centerYPos.equalTo(supplementaryLayout.centerYPos);  //垂直居中
-    imageView.rightPos.equalTo(supplementaryLayout.rightPos);      //和父视图右对齐。
+    imageView.trailingPos.equalTo(supplementaryLayout.trailingPos);      //和父视图右对齐。
     [supplementaryLayout addSubview:imageView];
         
     UILabel *sectionTitleLabel = [UILabel new];
@@ -121,8 +121,8 @@ static NSInteger sBaseTag = 100000;
     sectionTitleLabel.minimumScaleFactor = 0.7;
     sectionTitleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     sectionTitleLabel.centerYPos.equalTo(supplementaryLayout.centerYPos);  //垂直居中
-    sectionTitleLabel.leftPos.equalTo(supplementaryLayout.leftPos);        //左边和父视图左对齐
-    sectionTitleLabel.rightPos.equalTo(imageView.leftPos);                 //右边是图标的左边。
+    sectionTitleLabel.leadingPos.equalTo(supplementaryLayout.leadingPos);        //左边和父视图左对齐
+    sectionTitleLabel.trailingPos.equalTo(imageView.leadingPos);                 //右边是图标的左边。
     [sectionTitleLabel sizeToFit];
     [supplementaryLayout addSubview:sectionTitleLabel];
     
@@ -133,7 +133,7 @@ static NSInteger sBaseTag = 100000;
 //创建单元格容器布局视图，并指定每行的数量。
 -(MyFlowLayout*)createCellContainerLayout:(NSInteger)arrangedCount
 {
-    MyFlowLayout *containerLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:arrangedCount];
+    MyFlowLayout *containerLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:arrangedCount];
     containerLayout.wrapContentHeight = YES;
     containerLayout.gravity = MyGravity_Horz_Fill; //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
     containerLayout.subviewHSpace = 5;
@@ -146,7 +146,7 @@ static NSInteger sBaseTag = 100000;
 //创建单元格布局视图，其中的高度固定为100
 -(UIView*)createCellLayout1:(NSString*)image title:(NSString*)title
 {
-    MyLinearLayout *cellLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *cellLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     cellLayout.wrapContentHeight = NO;
     cellLayout.gravity = MyGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
     cellLayout.myHeight = 100;

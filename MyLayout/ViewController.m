@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "CFTool.h"
+#import "MyLayout.h"
 #import "LLTest1ViewController.h"
 #import "LLTest2ViewController.h"
 #import "LLTest3ViewController.h"
@@ -221,6 +222,8 @@
     tipLabel.adjustsFontSizeToFitWidth = YES;
     self.tableView.tableHeaderView = tipLabel;
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"RTL" style:UIBarButtonItemStylePlain target:self action:@selector(handleRTL:)];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -232,6 +235,27 @@
 {
     [super viewDidAppear:animated];
     
+}
+
+#pragma mark -- Handle Method
+
+-(void)handleRTL:(UIBarButtonItem*)sender
+{
+    if ([MyBaseLayout isRTL])
+    {
+        sender.title = @"RTL";
+        [UILabel appearance].textAlignment = NSTextAlignmentLeft;
+        
+    }
+    else
+    {
+        sender.title = @"LTR";
+        [UILabel appearance].textAlignment = NSTextAlignmentRight;
+    }
+    
+    [MyBaseLayout setIsRTL:![MyBaseLayout isRTL]];
+    
+    [self.tableView reloadData];
 }
 
 
@@ -255,6 +279,7 @@
     cell.textLabel.font = [CFTool font:15];
     cell.textLabel.textColor = [CFTool color:4];
     cell.textLabel.text = self.demoVCLists[indexPath.row][@"title"];
+    cell.textLabel.textAlignment = [MyBaseLayout isRTL] ? NSTextAlignmentRight : NSTextAlignmentLeft;
     return cell;
     
 }

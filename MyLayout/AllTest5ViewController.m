@@ -22,8 +22,11 @@
         这个例子用来介绍MyLayout对sizeClasses的支持的能力
      */
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+    
     //默认设置为垂直布局
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyGravity_Horz_Fill;
@@ -61,7 +64,7 @@
     //虽然fetchLayoutSizeClass方法真实返回的是MyLayoutSize或者其派生类，但是仍然可以用视图以及布局来设置其中的属性
     //但是调用lsc.backgroundColor = xx 则会崩溃，因为fetchLayoutSizeClass返回的并不是真的视图对象。
     MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-    lsc.orientation = MyLayoutViewOrientation_Horz;
+    lsc.orientation = MyOrientation_Horz;
     lsc.wrapContentWidth = NO;
     lsc.gravity = MyGravity_Vert_Fill;
     

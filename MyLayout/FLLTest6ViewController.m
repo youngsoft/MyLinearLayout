@@ -30,7 +30,7 @@
     self.view = scrollView;
     self.scrollView = scrollView;
 
-    MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
+    MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     rootLayout.backgroundColor = [CFTool color:0];
     rootLayout.pagedCount = 9;
     rootLayout.wrapContentHeight = YES;  //上下滚动，每页9个。

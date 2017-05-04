@@ -9,7 +9,7 @@
 
 ![Logo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayout.png)
 
-## MyLayout(2017.04.11)
+## MyLayout(2017.05.05)
 
 MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIView的layoutSubviews方法的重载以及对子视图的bounds和center属性的设置而实现的。MyLayout功能强大而且简单易用，它集成了:iOS Autolayout和SizeClass、android的5大布局体系、HTML/CSS的浮动定位技术以及flex-box和bootstrap框架等市面上主流的平台的界面布局功能，同时提供了一套非常简单和完备的多屏幕尺寸适配的解决方案。MyLayout的Swift版本的名字叫做：**[TangramKit](https://github.com/youngsoft/TangramKit)**   
 
@@ -36,11 +36,40 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 * MyLayout主要是一种通过代码进行布局的解决方案，但是框架一样可以支持和XIB以及SB结合布局的方式。并提供了视图隐藏和显示时会自动激发布局、布局视图的高度自适应(UITableviewCell动态高度)、标签云实现、左右内容宽度自适应、按比例分配尺寸和间距、整体停靠控制等等各种强大的功能。
 
 
-### AutoLayout和frame布局的性能比较
-![](http://upload-images.jianshu.io/upload_images/1432482-e7e8c36e1b790d92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/1432482-69bddc21e9c9df5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+### MyLayout和各种布局方式的性能比较
+![demo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayoutP.png)
 
-参考的文章地址:[ http://floriankugler.com/2013/04/22/auto-layout-performance-on-ios/]( http://floriankugler.com/2013/04/22/auto-layout-performance-on-ios/)
+下面两张表格分别列表每个子视图的建立消耗的时间和布局消耗时间，单位为：毫秒
+
+create time(ms)/per subview|Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+------------|---------------|---------------
+MyLinearLayout|0.08|0.164|0.219|0.304|0.131
+MyFrameLayout|0.05|0.149|0.209|0.273|0.131
+MyRelativeLayout|0.079|0.182|0.116|0.359|0.131
+MyFlowLayout|0.08|0.107|0.198|0.258|0.131
+MyFloatLayout|0.044|0.148|0.203|0.250|0.131
+
+
+
+layout time(ms)/per subview |Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+------------|---------------|---------------
+MyLinearLayout|0|0.049|0.269|0.269|0.272
+MyFrameLayout|0|0.042|0.243|0.243|0.272
+MyRelativeLayout|0|0.068|0.274|0.274|0.272
+MyFlowLayout|0|0.036|0.279|0.279|0.272
+MyFloatLayout|0|0.055|0.208|0.208|0.272
+
+
+
+从上面的表格可以总结如下：
+
+ 1. 用frame构建视图用时最少，平均每个视图花费0.068ms。当视图的frame指定后就不再需要布局视图了，所以布局时间几乎是0。
+  2. 当用AutoLayout进行布局时每个子视图的平均构建时长约为0.189ms，而Masonry因为是对AutoLayout的封装所以平均构建时长约为0.289ms。在布局时则因为都是使用了AutoLayout所以是相等的，大概花费0.255ms左右。
+  3. MyLayout的实现因为是对frame的封装，所以无论是构建时长和布局时长都要优于AutoLayout，但低于原始的frame方法。MyLayout的平均构建时长约0.150ms，比frame构建要多花费2.2倍的时间；而AutoLayout的平均构建时长是MyLayout的1.26倍；Masonry的平均构建时长则是MyLayout的1.9倍。
+  4. MyLayout的平均布局时长是0.05ms, 而AutoLayout的布局时长则是MyLayout的5倍。
+  5. UIStackView的构建时长要稍微优于MyLayout的线性布局MyLinearLayout.但是布局时长则是MyLinearLayout的5.5倍。
+  6. MyLayout中流式布局MyFlowLayout的构建时长和布局时长最小，而相对布局的构建和布局时长最长。
+
 
 
 
@@ -70,7 +99,7 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 
 ```objective-c
 
-     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     S.subviewSpace = 10;
     S.widthSize.equalTo(@100);
     
@@ -130,7 +159,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 {
     [super loadView];
     
-    MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     S.myWidth = 120;
     S.subviewSpace = 10;
     
@@ -297,7 +326,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 {
     [super loadView];
     
-    MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     S.wrapContentWidth = YES;
     S.subviewHSpace = 10;
     S.subviewVSpace = 10;
@@ -353,7 +382,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 {
     [super loadView];
     
-    MyFlowLayout *S = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:4];
+    MyFlowLayout *S = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
     S.wrapContentHeight = YES;
     S.myWidth = 300;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
@@ -396,7 +425,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 {
     [super loadView];
     
-    MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     S.wrapContentHeight = YES;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     S.subviewSpace = 10;
@@ -500,7 +529,7 @@ MyLayout布局体系为了实现对不同屏幕尺寸的设备进行适配，提
 ```objective-c
 
 //默认所有设备的设置。
- MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+ MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyGravity_Horz_Fill;
@@ -508,7 +537,7 @@ MyLayout布局体系为了实现对不同屏幕尺寸的设备进行适配，提
 //MySizeClass_wAny | MySizeClass_hCompact 表明的是iPhone设备的横屏.
  MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
  
-    lsc.orientation = MyLayoutViewOrientation_Horz;
+    lsc.orientation = MyOrientation_Horz;
     lsc.wrapContentWidth = NO;
     lsc.gravity = MyGravity_Vert_Fill;
 
@@ -536,7 +565,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.3.5'
+pod 'MyLayout', '~> 1.3.6'
 ```
    
 然后运行如下命令:

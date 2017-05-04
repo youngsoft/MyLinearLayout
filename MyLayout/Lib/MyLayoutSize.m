@@ -327,13 +327,11 @@
     
     if (![_dimeVal isEqual:val])
     {
-        _dimeVal = val;
-        
         if ([val isKindOfClass:[NSNumber class]])
         {
             _dimeValType = MyLayoutValueType_NSNumber;
         }
-        else if ([val isKindOfClass:[MyLayoutSize class]])
+        else if ([val isMemberOfClass:[MyLayoutSize class]])
         {
             _dimeValType = MyLayoutValueType_LayoutDime;
             
@@ -341,8 +339,27 @@
             //当尺寸等于自己时，我们只记录_dimeValType，而把值设置为nil
             if (val == self)
             {
-                _dimeVal = nil;
+                val = nil;
             }
+        }
+        else if ([val isKindOfClass:[UIView class]])
+        {
+            
+            UIView *rview = (UIView*)val;
+            _dimeValType = MyLayoutValueType_LayoutDime;
+            
+            switch (_dime) {
+                case MyGravity_Horz_Fill:
+                    val = rview.widthSize;
+                    break;
+                case MyGravity_Vert_Fill:
+                    val = rview.heightSize;
+                    break;
+                default:
+                    NSAssert(0, @"oops!");
+                    break;
+            }
+
         }
         else if ([val isKindOfClass:[NSArray class]])
         {
@@ -353,6 +370,7 @@
             _dimeValType = MyLayoutValueType_Nil;
         }
         
+        _dimeVal = val;
         [self setNeedLayout];
     }
     else
@@ -460,16 +478,6 @@
 
 
 
--(BOOL)isMatchParent
-{
-    return self.isActive && self.dimeRelaVal != nil && self.dimeRelaVal.view == _view.superview;
-}
-
-
--(BOOL)isMatchView:(UIView*)v
-{
-    return self.isActive && self.dimeRelaVal != nil && self.dimeRelaVal.view == v;
-}
 
 
 -(CGFloat) measure
@@ -542,7 +550,7 @@
             dimeValStr = @"[";
             for (NSObject *obj in _dimeVal)
             {
-                if ([obj isKindOfClass:[MyLayoutSize class]])
+                if ([obj isMemberOfClass:[MyLayoutSize class]])
                 {
                     dimeValStr = [dimeValStr stringByAppendingString:[MyLayoutSize dimestrFromDime:(MyLayoutSize*)obj showView:YES]];
                 }

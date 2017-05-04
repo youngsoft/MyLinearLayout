@@ -47,7 +47,7 @@
             return (CGFloat)30.0;
         };
         
-        [self addSubview:_circleView];
+      [self addSubview:_circleView];
 
         
         UILabel *numLabel = [UILabel new];
@@ -60,12 +60,13 @@
         numLabel.clipsToBounds = YES;
         numLabel.text = [NSString stringWithFormat:@"%ld",(long)index];
         numLabel.textAlignment = NSTextAlignmentCenter;
-        [_circleView addSubview:numLabel];
+       [_circleView addSubview:numLabel];
 
         
         
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:image]];
         [imageView sizeToFit];
+        
         imageView.centerXPos.equalTo(_circleView.centerXPos);
         imageView.centerYPos.equalTo(_circleView.centerYPos);
         [self addSubview:imageView];
@@ -102,6 +103,8 @@
 
 -(void)loadView
 {
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
     _pathLayout = [MyPathLayout new];
     self.view =  _pathLayout;
     

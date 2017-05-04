@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "MyLayout.h"
 
 @interface MyLayoutTestCaseBase : XCTestCase
 

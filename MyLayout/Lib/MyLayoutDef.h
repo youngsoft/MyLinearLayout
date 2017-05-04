@@ -32,10 +32,18 @@
  *布局视图方向的枚举类型定义。用来指定布局内子视图的整体排列布局方向。
  */
 typedef enum : unsigned char {
-    MyLayoutViewOrientation_Vert = 0,  //垂直方向，布局视图内所有子视图整体从上到下排列布局
-    MyLayoutViewOrientation_Horz = 1,  //水平方向，布局视图内所有子视图整体从左到右排列布局
-} MyLayoutViewOrientation;
+    MyOrientation_Vert = 0,  /**垂直方向，布局视图内所有子视图整体从上到下排列布局*/
+    MyOrientation_Horz = 1,  /**水平方向，布局视图内所有子视图整体从左到右排列布局*/
+    
+    
+    //兼容老版本而定义，请使用新的定义值。
+    MyLayoutViewOrientation_Vert MYMETHODDEPRECATED("use MyOrientation_Vert to instead") = MyOrientation_Vert,
+    MyLayoutViewOrientation_Horz MYMETHODDEPRECATED("use MyOrientation_Horz to instead") = MyOrientation_Horz,
+    
+} MyOrientation;
 
+//为了兼容老版本而定义
+typedef MyOrientation MyLayoutViewOrientation MYMETHODDEPRECATED("use MyOrientation to instead");
 
 
 /**
@@ -49,37 +57,41 @@ typedef enum : unsigned short {
     
     
     
-    //默认值，不停靠、不填充、不对齐。
-    MyGravity_None = 0,
+   
+    MyGravity_None = 0,   /**默认值，不停靠、不填充、不对齐。*/
 
     
     //水平方向
-    MyGravity_Horz_Left = 1,             //左边停靠或者左对齐
-    MyGravity_Horz_Center = 2,           //水平中心停靠或者水平居中对齐
-    MyGravity_Horz_Right = 4,            //右边停靠或者右对齐
-    MyGravity_Horz_Window_Center = 8,    //窗口水平中心停靠，表示在屏幕窗口的水平中心停靠
-    MyGravity_Horz_Between = 16,         //水平间距拉伸
-    MyGravity_Horz_Fill = MyGravity_Horz_Left | MyGravity_Horz_Center | MyGravity_Horz_Right, //水平宽度填充
-    MyGravity_Horz_Mask = 0xFF00,        //水平掩码，用来获取水平方向的枚举值
+    MyGravity_Horz_Left = 1,             /**左边停靠或者左对齐*/
+    MyGravity_Horz_Center = 2,           /**水平中心停靠或者水平居中对齐*/
+    MyGravity_Horz_Right = 4,            /**右边停靠或者右对齐*/
+    MyGravity_Horz_Window_Center = 8,    /**窗口水平中心停靠，表示在屏幕窗口的水平中心停靠*/
+    MyGravity_Horz_Between = 16,         /**水平间距拉伸*/
+    MyGravity_Horz_Leading = 32,         /**头部对齐,对于阿拉伯国家来说是和Right等价的,对于非阿拉伯国家则是和Left等价的*/
+    MyGravity_Horz_Trailing = 64,        /**尾部对齐,对于阿拉伯国家来说是和Left等价的,对于非阿拉伯国家则是和Right等价的*/
+    MyGravity_Horz_Fill = MyGravity_Horz_Left | MyGravity_Horz_Center | MyGravity_Horz_Right, /**水平宽度填充*/
+    MyGravity_Horz_Mask = 0xFF00,        /**水平掩码，用来获取水平方向的枚举值*/
 
     //垂直方向
-    MyGravity_Vert_Top = 1 << 8,             //上边停靠或者上对齐
-    MyGravity_Vert_Center = 2 << 8,          //垂直中心停靠或者垂直居中对齐
-    MyGravity_Vert_Bottom = 4 << 8,          //下边停靠或者下边对齐
-    MyGravity_Vert_Window_Center = 8 << 8,   //窗口垂直中心停靠，表示在屏幕窗口的垂直中心停靠
-    MyGravity_Vert_Between = 16 << 8,        //垂直间距拉伸
-    MyGravity_Vert_Fill = MyGravity_Vert_Top | MyGravity_Vert_Center | MyGravity_Vert_Bottom,  //垂直高度填充
-    MyGravity_Vert_Mask = 0x00FF,            //垂直掩码，用来获取垂直方向的枚举值
+    MyGravity_Vert_Top = 1 << 8,             /**上边停靠或者上对齐*/
+    MyGravity_Vert_Center = 2 << 8,          /**垂直中心停靠或者垂直居中对齐*/
+    MyGravity_Vert_Bottom = 4 << 8,          /**下边停靠或者下边对齐*/
+    MyGravity_Vert_Window_Center = 8 << 8,   /**窗口垂直中心停靠，表示在屏幕窗口的垂直中心停靠*/
+    MyGravity_Vert_Between = 16 << 8,        /**垂直间距拉伸*/
+    MyGravity_Vert_Fill = MyGravity_Vert_Top | MyGravity_Vert_Center | MyGravity_Vert_Bottom,  /**垂直高度填充*/
+    MyGravity_Vert_Mask = 0x00FF,            /**垂直掩码，用来获取垂直方向的枚举值*/
 
-    //整体居中
-    MyGravity_Center = MyGravity_Horz_Center | MyGravity_Vert_Center,
+    
+    MyGravity_Center = MyGravity_Horz_Center | MyGravity_Vert_Center, /**整体居中*/
 
-    //全部填充
-    MyGravity_Fill = MyGravity_Horz_Fill | MyGravity_Vert_Fill,
     
-    //全部拉伸
-    MyGravity_Between = MyGravity_Horz_Between | MyGravity_Vert_Between, 
+    MyGravity_Fill = MyGravity_Horz_Fill | MyGravity_Vert_Fill, /**全部填充*/
     
+    
+    MyGravity_Between = MyGravity_Horz_Between | MyGravity_Vert_Between,  /**全部拉伸*/
+    
+    //基线对齐，只用在水平线性布局和垂直流式布局中，暂时不支持。
+    MyGravity_Baseline = 32 << 8,           //基线对齐，只支持水平线性布局和垂直流式布局，指定基线对齐必须要指定出一个基线标准的子视图，如果不指定默认是第一个。
     
     
     //为了更正确的统一命名规范以及和TangramKit保持一致，下列属性定义设置为过期！！。您在更新版本后只需要统一将MyMarginGravity替换为MyGravity 即可
@@ -114,28 +126,36 @@ typedef MyGravity MyMarginGravity MYMETHODDEPRECATED("use MyGravity to instead")
  */
 typedef enum :unsigned char 
 {
-    MyLayoutAdjustScrollViewContentSizeModeAuto = 0,   //自动调整，在添加到UIScrollView之前(UITableView, UICollectionView除外)。如果值被设置Auto则在添加到父视图后自动会变为YES。
-    MyLayoutAdjustScrollViewContentSizeModeNo = 1,     //不调整，任何加入到UIScrollView中的布局视图在尺寸变化时都不会调整和设置contentSize的值。
-    MyLayoutAdjustScrollViewContentSizeModeYes = 2     //会调整，任何加入到UIScrollView中的布局视图在尺寸变化时都会调整和设置contentSize的值。
-}MyLayoutAdjustScrollViewContentSizeMode;
+    MyAdjustScrollViewContentSizeModeAuto = 0,   /**自动调整，在添加到UIScrollView之前(UITableView, UICollectionView除外)。如果值被设置Auto则在添加到父视图后自动会变为YES。*/
+    MyAdjustScrollViewContentSizeModeNo = 1,     /**不调整，任何加入到UIScrollView中的布局视图在尺寸变化时都不会调整和设置contentSize的值。*/
+    MyAdjustScrollViewContentSizeModeYes = 2,     /**会调整，任何加入到UIScrollView中的布局视图在尺寸变化时都会调整和设置contentSize的值。*/
+    
+    
+    //下面为兼容老版本而定义，请使用新属性
+    MyLayoutAdjustScrollViewContentSizeModeAuto MYMETHODDEPRECATED("use MyAdjustScrollViewContentSizeModeAuto to instead") = MyAdjustScrollViewContentSizeModeAuto,
+    MyLayoutAdjustScrollViewContentSizeModeNo MYMETHODDEPRECATED("use MyAdjustScrollViewContentSizeModeNo to instead") = MyAdjustScrollViewContentSizeModeNo,
+    MyLayoutAdjustScrollViewContentSizeModeYes MYMETHODDEPRECATED("use MyAdjustScrollViewContentSizeModeYes to instead") = MyAdjustScrollViewContentSizeModeYes,
+    
+}MyAdjustScrollViewContentSizeMode;
 
+//为兼容老版本而定义
+typedef MyAdjustScrollViewContentSizeMode  MyLayoutAdjustScrollViewContentSizeMode MYMETHODDEPRECATED("use MyAdjustScrollViewContentSizeMode to instead");
 
 /**
  *用来设置当线性布局中的子视图的尺寸大于线性布局的尺寸时的子视图的压缩策略和压缩内容枚举类型定义。请参考线性布局的shrinkType属性的定义。
  */
 typedef enum : NSUInteger {
-    MySubviewsShrink_None = 0,     //不压缩。
-    MySubviewsShrink_Average = 1,  //平均压缩。
-    MySubviewsShrink_Weight = 2,   //比例压缩。
-    MySubviewsShrink_Auto = 4,     //自动压缩。这个属性只有在水平线性布局里面并且只有2个子视图的宽度等于自身时才有用。这个属性主要用来实现左右两个子视图根据自身内容来进行缩放，以便实现最佳的宽度空间利用。
+    MySubviewsShrink_None = 0,     /**不压缩。*/
+    MySubviewsShrink_Average = 1,  /**平均压缩。*/
+    MySubviewsShrink_Weight = 2,   /**比例压缩。*/
+    MySubviewsShrink_Auto = 4,     /**自动压缩。这个属性只有在水平线性布局里面并且只有2个子视图的宽度等于自身时才有用。这个属性主要用来实现左右两个子视图根据自身内容来进行缩放，以便实现最佳的宽度空间利用。*/
     
     //上面部分是压缩的策略，下面部分指定压缩的内容，因此一个shrinkType的指定时上面部分和下面部分的 | 操作。比如让间距平均压缩：MySubviewsShrink_Average | MySubviewsShrink_Space
-    MySubviewsShrink_Size =   0 << 4,    //只压缩尺寸，因为这里是0所以这部分可以不设置，为默认。
-    MySubviewsShrink_Space =  1 << 4,    //只压缩间距。
-    MySubviewsShrink_SizeAndSpace = 2 << 4  //压缩尺寸和间距。暂时不支持！！！
+    MySubviewsShrink_Size =   0 << 4,    /**只压缩尺寸，因为这里是0所以这部分可以不设置，为默认。*/
+    MySubviewsShrink_Space =  1 << 4,    /**只压缩间距。*/
+    MySubviewsShrink_SizeAndSpace = 2 << 4  /**压缩尺寸和间距。暂时不支持！！！*/
     
 } MySubviewsShrinkType;
-
 
 
 //内部使用
@@ -145,5 +165,6 @@ typedef enum : unsigned char
     MyLayoutValueType_NSNumber,
     MyLayoutValueType_LayoutDime,
     MyLayoutValueType_LayoutPos,
-    MyLayoutValueType_Array
+    MyLayoutValueType_Array,
+    MyLayoutValueType_UILayoutSupport
 }MyLayoutValueType;

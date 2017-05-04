@@ -21,17 +21,20 @@
 
 -(void)loadView
 {
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+    
     /*
         这个例子用来介绍流式布局的特性，流式布局中的子视图总是按一定的规则一次排列，当数量到达一定程度或者内容到达一定程度时就会自动换行从新排列。
      */
     
-    //根视图用一个水平内容约束流式布局，这里实现了一个类似于垂直线性布局的能力。
-    MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Horz arrangedCount:0];
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.gravity = MyGravity_Horz_Fill; //里面所有子视图的宽度都填充为和父视图一样宽。
+    rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
     
     //添加操作按钮。
-    MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:2];
+    MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:2];
     actionLayout.wrapContentHeight = YES;
     actionLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平填充，也就是所有子视图的宽度相等。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -69,7 +72,7 @@
     [rootLayout addSubview:scrollView];
     
     
-    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
+    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     flowLayout.backgroundColor = [CFTool color:0];
     flowLayout.frame = CGRectMake(0, 0, 800, 800);
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -128,10 +131,10 @@
 -(void)handleAdjustOrientation:(id)sender
 {
     //调整方向
-    if (self.flowLayout.orientation == MyLayoutViewOrientation_Vert)
-        self.flowLayout.orientation = MyLayoutViewOrientation_Horz;
+    if (self.flowLayout.orientation == MyOrientation_Vert)
+        self.flowLayout.orientation = MyOrientation_Horz;
     else
-        self.flowLayout.orientation = MyLayoutViewOrientation_Vert;
+        self.flowLayout.orientation = MyOrientation_Vert;
     
     [self.flowLayout layoutAnimationWithDuration:0.4];
     [self flowlayoutInfo];
@@ -230,7 +233,7 @@
     MyGravity vertArrangeGravity = self.flowLayout.arrangedGravity & MyGravity_Horz_Mask;
     MyGravity horzArrangeGravity = self.flowLayout.arrangedGravity & MyGravity_Vert_Mask;
 
-    if (self.flowLayout.orientation == MyLayoutViewOrientation_Vert)
+    if (self.flowLayout.orientation == MyOrientation_Vert)
     {
         
         switch (vertArrangeGravity) {
@@ -307,12 +310,12 @@
 -(void)flowlayoutInfo
 {
     NSString *orientationStr = @"";
-    if (self.flowLayout.orientation == MyLayoutViewOrientation_Vert)
-        orientationStr = @"MyLayoutViewOrientation_Vert";
+    if (self.flowLayout.orientation == MyOrientation_Vert)
+        orientationStr = @"MyOrientation_Vert";
     else
-        orientationStr = @"MyLayoutViewOrientation_Horz";
+        orientationStr = @"MyOrientation_Horz";
     
-    NSString *arrangeCountStr = [NSString stringWithFormat:@"%ld", self.flowLayout.arrangedCount];
+    NSString *arrangeCountStr = [NSString stringWithFormat:@"%ld", (long)self.flowLayout.arrangedCount];
     
     NSString *gravityStr = [self gravityInfo:self.flowLayout.gravity];
     

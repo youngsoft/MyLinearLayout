@@ -126,6 +126,7 @@
     button.layer.cornerRadius = 20;
     button.layer.masksToBounds = YES;
     button.backgroundColor = colors[(NSInteger)arc4random_uniform((uint32_t)colors.count)];
+    [button setTitle:[NSString stringWithFormat:@"%ld", (unsigned long)self.pathLayout.subviews.count] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(handleDel:) forControlEvents:UIControlEventTouchUpInside];
     [self.pathLayout addSubview:button];
     

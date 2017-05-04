@@ -33,6 +33,10 @@
 
 
 - (void)viewDidLoad {
+    
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
@@ -42,6 +46,7 @@
     
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    scrollView.backgroundColor = [UIColor whiteColor];
     scrollView.contentSize = self.view.bounds.size;
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:scrollView];
@@ -73,7 +78,7 @@
     //如果您用MyLayout布局。并且button在一个垂直线性布局下那么可以写成如下：
    /* button.myTop = 10;
     button.myHeight = 40;
-    button.myLeft = button.myRight = 10;
+    button.myLeading = button.myTrailing = 10;
     */
 
     
@@ -83,14 +88,14 @@
      */
     
     //建立一个浮动布局,这个浮动布局不会控制父视图UIScrollView的contentSize。
-    MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     floatLayout.backgroundColor = [CFTool color:0];
     floatLayout.subviewSpace = 10;
-    floatLayout.myLeft = floatLayout.myRight = 10;  //同时设定了左边和右边边距，布局视图的宽度就决定了。
+    floatLayout.myLeading = floatLayout.myTrailing = 10;  //同时设定了左边和右边边距，布局视图的宽度就决定了。
     floatLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);  //设置内边距。
     floatLayout.myTop = 60;
     floatLayout.myBottom = 10; //底部边距为10，这样同样设置了顶部和底部边距后布局的高度就决定了。
-    floatLayout.adjustScrollViewContentSizeMode = MyLayoutAdjustScrollViewContentSizeModeNo;  //布局视图不控制滚动视图的contentSize。
+    floatLayout.adjustScrollViewContentSizeMode = MyAdjustScrollViewContentSizeModeNo;  //布局视图不控制滚动视图的contentSize。
     /*这里面把布局视图加入到滚动视图时不会自动调整滚动视图的contentSize，如果不设置这个属性则当布局视图加入滚动视图时会自动调整滚动视图的contentSize。您可以把adjustScrollViewContentSizeMode属性设置这句话注释掉，可以看到当使用默认设置时，UIScrollView的contentSize的值会完全受到布局视图的尺寸和边距控制，这时候：
     
     contentSize.height = 布局视图的高度+布局视图的topPos设置的上边距值 + 布局视图的bottomPos设置的下边距值。
@@ -105,9 +110,10 @@
     CGFloat heightscale[7] = {0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.4};
     //因为分为左右2列，而要求每个视图之间的垂直间距为10，左边列的总间距是30，一共有4个，因此前4个都要减去-30/4的间距高度；右边列总间距为20，一共有3个，因此后3个都要减去-20/3的间距高度。
     CGFloat heightinc[7] = {-30.0/4, -30.0/4, -30.0/4, -30.0/4, -20.0/3, -20.0/3, -20.0/3};
+    NSArray *titles = @[@"酒店",@"机票",@"旅游",@"美食",@"银行",@"地图",@"设置"];
     for (int i = 0; i < 7; i++)
     {
-        UIButton *buttonTag = [self createDemoButton:@"不规则功能块" action:@selector(handleDemo1:)];
+        UIButton *buttonTag = [self createDemoButton:titles[i] action:@selector(handleDemo1:)];
         buttonTag.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         buttonTag.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;  //按钮内容左上角对齐。
         buttonTag.backgroundColor = [CFTool color:i + 5];
@@ -133,7 +139,6 @@
     
    UILabel *label = (UILabel*)sender.superview.superview.subviews[1]; //取第二个子视图
     label.text = [label.text stringByAppendingString:@"添加文字。"];
-    [label sizeToFit];
 }
 
 -(void)handleDemo1RemoveLayout:(UIButton*)sender
@@ -149,14 +154,14 @@
 -(void)handleDemo1:(UIButton*)sender
 {
     //布局视图用来实现弹框，这里把一个布局视图放入一个非布局视图里面。
-    MyLinearLayout *layout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *layout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     layout.backgroundColor = [CFTool color:14];
     layout.layer.cornerRadius = 5;
     layout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //设置布局视图的内边距。
     layout.subviewVSpace = 5;  //设置视图之间的间距，这样子视图就不再需要单独设置间距了。
     layout.gravity = MyGravity_Horz_Fill;   //里面的子视图宽度和自己一样，这样就不再需要设置子视图的宽度了。
-    layout.myLeft = 0.2;
-    layout.myRight = 0.2;  //左右边距0.2表示相对边距，也就是左右边距都是父视图总宽度的20%，这样布局视图的宽度就默认为父视图的60%了。
+    layout.myLeading = 0.2;
+    layout.myTrailing = 0.2;  //左右边距0.2表示相对边距，也就是左右边距都是父视图总宽度的20%，这样布局视图的宽度就默认为父视图的60%了。
     layout.myCenterY = 0;  //布局视图在父视图中垂直居中出现。
     //layout.myBottom = 0;  //布局视图在父视图中底部出现。您可以注释上面居中的代码并解开这句看看效果。
     [self.view addSubview:layout];
@@ -178,8 +183,8 @@
     [layout addSubview:label];
     
     
-    //按钮容器。如果您想让两个按钮水平排列则只需在btnContainer初始化中把方向改为：MyLayoutViewOrientation_Horz 。您可以尝试看看效果。
-    MyLinearLayout *btnContainer = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert /*MyLayoutViewOrientation_Horz*/];
+    //按钮容器。如果您想让两个按钮水平排列则只需在btnContainer初始化中把方向改为：MyOrientation_Horz 。您可以尝试看看效果。
+    MyLinearLayout *btnContainer = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert /*MyOrientation_Horz*/];
     btnContainer.wrapContentHeight = YES;  //高度由子视图确定。
     btnContainer.subviewVSpace = 5;   //视图之间的间距设置为5
     btnContainer.subviewHSpace = 5;   //视图之间的间距设置为5
@@ -196,7 +201,7 @@
      */
     
     MyLinearLayout *btnContainerSC = [btnContainer fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-    btnContainerSC.orientation = MyLayoutViewOrientation_Horz;
+    btnContainerSC.orientation = MyOrientation_Horz;
     
     
     //您可以看到下面的两个按钮没有出现任何的需要进行布局的属性设置，直接添加到父视图就能达到想要的效果，这样就简化了程序的开发。

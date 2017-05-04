@@ -30,7 +30,7 @@
        创建一个水平的表格布局，水平表格布局主要用于建立瀑布流视图。需要注意的是水平表格中row也就是行是从左到右排列的，而每行中的col也就是列是从上到下排列的。
      */
     
-    MyTableLayout *rootLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyTableLayout *rootLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Horz];
     rootLayout.subviewHSpace = 5;
     rootLayout.subviewVSpace = 10;
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //分别设置表格布局里面的行间距、列间距、内部padding边距。
@@ -71,7 +71,7 @@
 //创建列布局视图
 -(UIView*)createColLayout:(NSString*)image title:(NSString*)title
 {
-    MyLinearLayout *colLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *colLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     colLayout.gravity = MyGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
     colLayout.wrapContentHeight = YES;
     colLayout.subviewVSpace = 5;  //设置布局视图里面子视图之间的间距为5个点。

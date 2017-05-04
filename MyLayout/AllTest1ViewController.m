@@ -122,10 +122,10 @@
 -(void)createTableHeaderView
 {
     //这个例子用来构建一个动态高度的头部布局视图。
-    MyLinearLayout *tableHeaderViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *tableHeaderViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     tableHeaderViewLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     tableHeaderViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 0); //高度不确定可以设置为0。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用MyLayout的特性，减少常数的使用。
-    tableHeaderViewLayout.myLeft = tableHeaderViewLayout.myRight = 0; //这里注意设置宽度和父布局保持一致。
+    tableHeaderViewLayout.myHorzMargin = 0; //这里注意设置宽度和父布局保持一致。
     tableHeaderViewLayout.backgroundImage = [UIImage imageNamed:@"bk1"];
     [tableHeaderViewLayout setTarget:self action:@selector(handleTableHeaderViewLayoutClick:)];
     
@@ -143,7 +143,7 @@
     label2.text = NSLocalizedString(@" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", @"");
     label2.textColor = [CFTool color:4];
     label2.font = [CFTool font:15];
-    label2.myLeft = label2.myRight = 5;
+    label2.myHorzMargin = 5;
     label2.wrapContentHeight = YES;
     label2.myTop = 10;
     [label2 sizeToFit];
@@ -153,16 +153,15 @@
     [tableHeaderViewLayout layoutIfNeeded];    //这里必须要在加入前执行这句！！！
     self.tableView.tableHeaderView = tableHeaderViewLayout;
 
-    
 }
 
 -(void)createTableFooterView
 {
     //这个例子用来构建一个固定高度的尾部布局视图。
-    MyLinearLayout *tableFooterViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *tableFooterViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     tableFooterViewLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     tableFooterViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 80); //这里明确设定高度。
-    tableFooterViewLayout.myLeft = tableFooterViewLayout.myRight = 0; //这里注意设置宽度和父布局保持一致。
+    tableFooterViewLayout.myHorzMargin = 0; //这里注意设置宽度和父布局保持一致。
     tableFooterViewLayout.backgroundColor = [CFTool color:6];
     tableFooterViewLayout.gravity = MyGravity_Vert_Center | MyGravity_Horz_Fill;
     

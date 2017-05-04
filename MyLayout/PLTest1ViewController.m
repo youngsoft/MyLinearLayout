@@ -22,6 +22,9 @@
      *本例子是介绍MyPathLayout布局视图的。用来建立曲线布局。
      */
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+    
     MyPathLayout *pathLayout = [MyPathLayout new];
     
      self.view  = pathLayout;
@@ -113,6 +116,7 @@
     
     NSArray *colors = @[[UIColor redColor], [UIColor blueColor], [UIColor greenColor], [UIColor blackColor], [UIColor orangeColor]];
     button.backgroundColor = colors[(NSInteger)arc4random_uniform((uint32_t)colors.count)];
+    [button setTitle:[NSString stringWithFormat:@"%ld", (unsigned long)self.pathLayout.subviews.count] forState:UIControlStateNormal];
     
     [self.pathLayout insertSubview:button atIndex:0];
     [self.pathLayout layoutAnimationWithDuration:0.5];

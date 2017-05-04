@@ -233,6 +233,9 @@
     
     if (_posValType == MyLayoutValueType_NSNumber)
         return _posVal;
+    else if (_posValType == MyLayoutValueType_UILayoutSupport)
+        return @([((id<UILayoutSupport>)_posVal) length]);
+    
     
     return nil;
     
@@ -303,19 +306,58 @@
 -(MyLayoutPos*)__equalTo:(id)val
 {
     
-    
     if (![_posVal isEqual:val])
     {
-        _posVal = val;
         if ([val isKindOfClass:[NSNumber class]])
             _posValType = MyLayoutValueType_NSNumber;
         else if ([val isKindOfClass:[MyLayoutPos class]])
             _posValType = MyLayoutValueType_LayoutPos;
         else if ([val isKindOfClass:[NSArray class]])
             _posValType = MyLayoutValueType_Array;
+        else if ([val isKindOfClass:[UIView class]])
+        {
+            UIView *rview = (UIView*)val;
+            _posValType = MyLayoutValueType_LayoutPos;
+            
+            switch (_pos) {
+                case MyGravity_Horz_Leading:
+                    val = rview.leadingPos;
+                    break;
+                case MyGravity_Horz_Center:
+                    val = rview.centerXPos;
+                    break;
+                case MyGravity_Horz_Trailing:
+                    val = rview.trailingPos;
+                    break;
+                case MyGravity_Vert_Top:
+                    val = rview.topPos;
+                    break;
+                case MyGravity_Vert_Center:
+                    val = rview.centerYPos;
+                    break;
+                case MyGravity_Vert_Bottom:
+                    val = rview.bottomPos;
+                    break;
+                default:
+                    NSAssert(0, @"oops!");
+                    break;
+            }
+            
+        }
+        else if ([val conformsToProtocol:@protocol(UILayoutSupport)])
+        {
+            //这里只有上边和下边支持，其他不支持。。
+            if (_pos != MyGravity_Vert_Top && _pos != MyGravity_Vert_Bottom)
+            {
+                NSAssert(0, @"oops! only topPos or bottomPos can set to id<UILayoutSupport>");
+            }
+            
+            _posValType = MyLayoutValueType_UILayoutSupport;
+        }
         else
             _posValType = MyLayoutValueType_Nil;
         
+        _posVal = val;
         [self setNeedLayout];
     }
     
@@ -396,7 +438,7 @@
 
 
 
--(CGFloat)margin
+-(CGFloat)absVal
 {
     if (self.isActive)
     {
@@ -417,35 +459,35 @@
         return 0;
 }
 
--(BOOL)isRelativeMargin
+-(BOOL)isRelativePos
 {
     if (self.isActive)
     {
-        CGFloat realMargin = self.posNumVal.doubleValue;
-        return realMargin > 0 && realMargin < 1;
+        CGFloat realPos = self.posNumVal.doubleValue;
+        return realPos > 0 && realPos < 1;
         
     }
     else
         return NO;
 }
 
--(CGFloat)realMarginInSize:(CGFloat)size
+-(CGFloat)realPosIn:(CGFloat)size
 {
     if (self.isActive)
     {
-        CGFloat realMargin = self.posNumVal.doubleValue;
-        if (realMargin > 0 && realMargin < 1)
-            realMargin *= size;
+        CGFloat realPos = self.posNumVal.doubleValue;
+        if (realPos > 0 && realPos < 1)
+            realPos *= size;
         
-        CGFloat retVal =  realMargin + _offsetVal;
+        realPos += _offsetVal;
         
         if (_uBoundVal != nil)
-            retVal = MIN(_uBoundVal.posNumVal.doubleValue, retVal);
+            realPos = MIN(_uBoundVal.posNumVal.doubleValue, realPos);
         
         if (_lBoundVal != nil)
-            retVal = MAX(_lBoundVal.posNumVal.doubleValue, retVal);
+            realPos = MAX(_lBoundVal.posNumVal.doubleValue, realPos);
 
-        return retVal;
+        return realPos;
     }
     else
         return 0;
@@ -478,14 +520,14 @@
     NSString *posStr = @"";
     
     switch (posobj.pos) {
-        case MyGravity_Horz_Left:
-            posStr = @"leftPos";
+        case MyGravity_Horz_Leading:
+            posStr = @"leadingPos";
             break;
         case MyGravity_Horz_Center:
             posStr = @"centerXPos";
             break;
-        case MyGravity_Horz_Right:
-            posStr = @"rightPos";
+        case MyGravity_Horz_Trailing:
+            posStr = @"trailingPos";
             break;
         case MyGravity_Vert_Top:
             posStr = @"topPos";

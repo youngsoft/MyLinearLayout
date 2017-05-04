@@ -23,13 +23,16 @@
        这个DEMO 主要介绍了MyLayout对SizeClass的支持能力。下面的代码分别针对iPhone设备的横竖屏以及iPad设备的横竖屏分别做了适配处理。
      */
     
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+    
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyGravity_Horz_Fill;
     self.view = rootLayout;
     
     //创建顶部的菜单布局部分。
-    MyFlowLayout *menuLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
+    MyFlowLayout *menuLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     menuLayout.gravity = MyGravity_Fill; //填充所有尺寸。
     menuLayout.wrapContentHeight = YES;
     menuLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
@@ -87,7 +90,7 @@
     [contentLayout addSubview:func2Label];
     
     func1Label.widthSize.equalTo(@[func2Label.widthSize]);
-    func2Label.leftPos.equalTo(func1Label.rightPos);
+    func2Label.leadingPos.equalTo(func1Label.trailingPos);
     
     UILabel *func3Label = [UILabel new];
     func3Label.text = NSLocalizedString(@"Content3:please run in different iPhone&iPad device and change different screen orientation", @"");
@@ -103,12 +106,12 @@
     
     //下面定义iPhone设备横屏时的界面布局。
     MyLinearLayout *rootLayoutSC = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
-    rootLayoutSC.orientation = MyLayoutViewOrientation_Horz;
+    rootLayoutSC.orientation = MyOrientation_Horz;
     rootLayoutSC.gravity = MyGravity_Vert_Fill;
     
     
     MyFlowLayout *menuLayoutSC = [menuLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_hAny | MySizeClass_wAny];
-    menuLayoutSC.orientation = MyLayoutViewOrientation_Horz;
+    menuLayoutSC.orientation = MyOrientation_Horz;
     menuLayoutSC.wrapContentWidth = YES;
     
     
@@ -117,8 +120,8 @@
     UILabel *func3LabelSC = [func3Label fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
 
     func1LabelSC.widthSize.equalTo(@[func2LabelSC.widthSize, func3LabelSC.widthSize]);
-    func2LabelSC.leftPos.equalTo(func1LabelSC.rightPos);
-    func3LabelSC.leftPos.equalTo(func2LabelSC.rightPos);
+    func2LabelSC.leadingPos.equalTo(func1LabelSC.trailingPos);
+    func3LabelSC.leadingPos.equalTo(func2LabelSC.trailingPos);
     func1LabelSC.heightSize.equalTo(contentLayout.heightSize);
     func2LabelSC.heightSize.equalTo(contentLayout.heightSize);
     func3LabelSC.heightSize.equalTo(contentLayout.heightSize);

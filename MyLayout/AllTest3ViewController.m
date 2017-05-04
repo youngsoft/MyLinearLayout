@@ -73,14 +73,14 @@
     button.titleLabel.font = [CFTool font:16];
     button.tintColor = [CFTool color:0];
     button.myHeight = 50;
-    button.myLeft = button.myRight = 0;
+    button.myHorzMargin = 0;
     button.myBottom = 0;
     [self.view addSubview:button];
 
     //整体一个线性布局，实现各种片段。
     
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    contentLayout.myLeft = contentLayout.myRight = 0;
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    contentLayout.myHorzMargin = 0;
     contentLayout.gravity = MyGravity_Horz_Fill;  //子视图里面的内容的宽度跟布局视图相等，这样子视图就不需要设置宽度了。
     contentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [scrollView addSubview:contentLayout];
@@ -88,6 +88,7 @@
     //头部布局。
     [self addHeaderLayout:contentLayout];
 
+    
     //添加，弹出菜单的布局
     [self addPopmenuLayout:contentLayout];
     
@@ -189,8 +190,8 @@
     layout3.highlightedBackgroundImage = [UIImage imageNamed:@"image2"]; //设置单击时的高亮背景图片。
     MyBorderline *dashLine = [[MyBorderline alloc] initWithColor:[UIColor greenColor]];
     dashLine.dash = 3;    //设置为非0表示虚线边界线。
-    layout3.leftBorderline = dashLine; //设置左右边绿色的虚线
-    layout3.rightBorderline = dashLine;
+    layout3.leadingBorderline = dashLine; //设置左右边绿色的虚线
+    layout3.trailingBorderline = dashLine;
     [contentLayout addSubview:layout3];
     
 }
@@ -215,7 +216,7 @@
     [contentLayout addSubview:switchLayout];
 
 
-    MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     testLayout.backgroundColor = [UIColor whiteColor];
     testLayout.leftPadding = 10;
     testLayout.rightPadding = 10;
@@ -261,7 +262,7 @@
     operatorLayout.myTop = 10;
     [contentLayout addSubview:operatorLayout];
     
-    MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     testLayout.backgroundColor = [UIColor whiteColor];
     testLayout.leftPadding = 10;
     testLayout.rightPadding = 10;
@@ -279,8 +280,8 @@
     leftLabel.textColor = [UIColor whiteColor];
     leftLabel.backgroundColor = [CFTool color:5];
     leftLabel.font = [CFTool font:14];
-    leftLabel.rightPos.equalTo(@0.5).min(0); //右边浮动间距为0.5,最小为0
-    leftLabel.widthSize.equalTo(leftLabel.widthSize);
+    leftLabel.trailingPos.equalTo(@0.5).min(0); //右边浮动间距为0.5,最小为0
+    leftLabel.wrapContentWidth = YES;  //宽度由内容包裹
     [testLayout addSubview:leftLabel];
     self.leftFlexedLabel = leftLabel;
     
@@ -290,8 +291,8 @@
     rightLabel.textColor = [UIColor whiteColor];
     rightLabel.backgroundColor = [CFTool color:6];
     rightLabel.font = [CFTool font:14];
-    rightLabel.leftPos.equalTo(@0.5).min(0);   //左边浮动间距为0.5，最小为0
-    rightLabel.widthSize.equalTo(rightLabel.widthSize);
+    rightLabel.leadingPos.equalTo(@0.5).min(0);   //左边浮动间距为0.5，最小为0
+    rightLabel.wrapContentWidth = YES; //宽度由内容包裹
     [testLayout addSubview:rightLabel];
     self.rightFlexedLabel = rightLabel;
     
@@ -309,7 +310,7 @@
     switchLayout.myTop = 10;
     [contentLayout addSubview:switchLayout];
     
-    MyFlowLayout *testLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
+    MyFlowLayout *testLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     testLayout.backgroundColor = [UIColor whiteColor];
     testLayout.gravity = MyGravity_Horz_Fill;  //尺寸相等
     testLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
@@ -340,7 +341,7 @@
     /*
        这个例子提供了1.3.1版本中MyLayoutSize和MyLayoutPos类新加入的属性active属性的使用方法。默认情况下这个属性的值都是YES表示指定的位置或者尺寸的设置是有效的，如果设置为NO则这个位置或者这个尺寸的设置将无效，不会对布局产生影响。因此你可以通过为位置对象或者尺寸对象设置是否为active来在运行中进行界面布局的动态调整。
      */
-    MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     testLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     testLayout.backgroundColor = [UIColor whiteColor];
     testLayout.myTop = 10;
@@ -352,8 +353,8 @@
     testButton.backgroundColor = [CFTool color:0];
     testButton.heightSize.equalTo(@50);
     testButton.widthSize.equalTo(testButton.widthSize).add(20);
-    testButton.leftPos.equalTo(@10).active = YES;  //左边边距是10，设置active为YES表示左边位置对象的设置是生效的。
-    testButton.rightPos.equalTo(@10).active = NO;  //右边边距是10，设置active为NO表示右边位置对象的设置是不生效的。
+    testButton.leadingPos.equalTo(@10).active = YES;  //左边边距是10，设置active为YES表示左边位置对象的设置是生效的。
+    testButton.trailingPos.equalTo(@10).active = NO;  //右边边距是10，设置active为NO表示右边位置对象的设置是不生效的。
     
     [testButton addTarget:self action:@selector(handleActiveTest:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -364,7 +365,7 @@
 //创建可执动作事件的布局
 -(MyLinearLayout*)createActionLayout:(NSString*)title action:(SEL)action
 {
-    MyLinearLayout *actionLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *actionLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     actionLayout.backgroundColor = [UIColor whiteColor];
     [actionLayout setTarget:self action:action];    //这里设置布局的触摸事件处理。
     
@@ -383,12 +384,12 @@
     label.adjustsFontSizeToFitWidth = YES;
     [label sizeToFit];
     label.tag = 1000;
-    label.rightPos.equalTo(@0.5);  //水平线性布局通过相对间距来实现左右分开排列。
+    label.trailingPos.equalTo(@0.5);  //水平线性布局通过相对间距来实现左右分开排列。
     [actionLayout addSubview:label];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"next"]];
     [imageView sizeToFit];
-    imageView.leftPos.equalTo(@0.5);
+    imageView.leadingPos.equalTo(@0.5);
     [actionLayout addSubview:imageView];
     
     return actionLayout;
@@ -398,7 +399,7 @@
 //创建具有开关的布局
 -(MyLinearLayout*)createSwitchLayout:(NSString*)title action:(SEL)action
 {
-    MyLinearLayout *switchLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *switchLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     switchLayout.backgroundColor = [UIColor whiteColor];
     
     //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
@@ -422,7 +423,7 @@
     
     UISwitch *switchCtrl = [UISwitch new];
     [switchCtrl addTarget:self action:action forControlEvents:UIControlEventValueChanged];
-    switchCtrl.rightPos.min(5);
+    switchCtrl.trailingPos.min(5);
     [switchLayout addSubview:switchCtrl];
     
     return switchLayout;
@@ -430,8 +431,8 @@
 
 -(MyFloatLayout*)createSegmentedLayout:(SEL)leftAction rightAction:(SEL)rightAction
 {
-    //建立一个左右浮动布局(注意左右浮动布局的orientation是MyLayoutViewOrientation_Vert)
-    MyFloatLayout *segmentedLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    //建立一个左右浮动布局(注意左右浮动布局的orientation是MyOrientation_Vert)
+    MyFloatLayout *segmentedLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     segmentedLayout.backgroundColor = [UIColor whiteColor];
     
     //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
@@ -517,8 +518,6 @@
         NSString *strs = @"abcdefghijklmnopqrstuvwxyz";
         self.leftFlexedLabel.text = [self.leftFlexedLabel.text stringByAppendingString:[strs substringWithRange:NSMakeRange(arc4random_uniform((uint32_t)strs.length), 1)]];
     }
-   
-    [self.leftFlexedLabel sizeToFit];
     
 }
 
@@ -537,8 +536,6 @@
             
         }
     }
-    
-    [self.rightFlexedLabel sizeToFit];
     
 }
 
@@ -565,7 +562,7 @@
     
    CGRect rc = [sender convertRect:sender.bounds toView:self.frameLayout]; // 计算应该弹出的位置。要转化为框架布局的rect
     
-    MyLinearLayout *menuLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *menuLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     menuLayout.myWidth = CGRectGetWidth(rc) - 20;  //宽度是sender的宽度减20
     menuLayout.myCenterX = 0;  //因为我们是把弹出菜单展示在self.view下，这时候self.view是一个框架布局。所以这里这是水平居中。
     menuLayout.myTop = CGRectGetMaxY(rc) + 5;  //弹出菜单的顶部位置。
@@ -576,14 +573,14 @@
     [menuLayout addSubview:arrowImageView];
     
     
-    MyLinearLayout *containerLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *containerLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     containerLayout.backgroundColor = [UIColor colorWithRed:0xBF/255.0f green:0xBD/255.0 blue:0xBF/255.0 alpha:1];
     containerLayout.layer.cornerRadius = 4;
     containerLayout.layer.shadowRadius = 5;
     containerLayout.layer.shadowOffset = CGSizeZero;
     containerLayout.layer.shadowOpacity = 0.5;
     containerLayout.layer.shadowColor = [CFTool color:4].CGColor;
-    containerLayout.myLeft = containerLayout.myRight = 0;
+    containerLayout.myHorzMargin = 0;
     containerLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     containerLayout.gravity = MyGravity_Horz_Fill;
     [menuLayout addSubview:containerLayout];
@@ -593,8 +590,8 @@
     [containerLayout addSubview:scrollView];
     self.popmenuScrollView = scrollView;
     
-    MyFlowLayout *itemLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:3];
-    itemLayout.myLeft = itemLayout.myRight = 0;
+    MyFlowLayout *itemLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
+    itemLayout.myHorzMargin = 0;
     itemLayout.gravity = MyGravity_Horz_Fill;
     itemLayout.subviewHSpace = 10;
     itemLayout.subviewVSpace = 10;
@@ -718,20 +715,20 @@
 -(void)handleActiveTest:(UIButton*)sender
 {
     //下面代码中布局位置的active属性设置的变化所产生的效果。
-    if (sender.leftPos.isActive && sender.rightPos.isActive)
+    if (sender.leadingPos.isActive && sender.trailingPos.isActive)
     {
-        sender.leftPos.active = YES;
-        sender.rightPos.active = NO;  //按钮将停靠在父布局的左边。
+        sender.leadingPos.active = YES;
+        sender.trailingPos.active = NO;  //按钮将停靠在父布局的左边。
     }
-    else if (sender.leftPos.isActive)
+    else if (sender.leadingPos.isActive)
     {
-        sender.leftPos.active = NO;
-        sender.rightPos.active = YES;  //按钮将停靠在父布局的右边
+        sender.leadingPos.active = NO;
+        sender.trailingPos.active = YES;  //按钮将停靠在父布局的右边
     }
-    else if (sender.rightPos.isActive)
+    else if (sender.trailingPos.isActive)
     {
-        sender.leftPos.active = YES;
-        sender.rightPos.active = YES;  //按钮的左右边距都生效，并且会拉伸按钮的宽度。
+        sender.leadingPos.active = YES;
+        sender.trailingPos.active = YES;  //按钮的左右边距都生效，并且会拉伸按钮的宽度。
     }
     
     MyLinearLayout *superLayout = (MyLinearLayout*)sender.superview;

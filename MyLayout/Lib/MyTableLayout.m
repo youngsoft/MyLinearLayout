@@ -14,7 +14,7 @@
 @interface MyTableRowLayout : MyLinearLayout
 
 
-+(id)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyLayoutViewOrientation)orientation;
++(id)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation;
 
 @property(nonatomic,assign, readonly) CGFloat rowSize;
 @property(nonatomic,assign, readonly) CGFloat colSize;
@@ -27,7 +27,7 @@
    CGFloat _colSize;
 }
 
--(id)initWith:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyLayoutViewOrientation)orientation
+-(id)initWith:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
 {
     self = [super initWithOrientation:orientation];
     if (self != nil)
@@ -35,21 +35,23 @@
         _rowSize = rowSize;
         _colSize = colSize;
         
+        UIView *lsc = self.myCurrentSizeClass;
+        
         if (rowSize == MTLSIZE_AVERAGE)
-            self.weight = 1;
+            lsc.weight = 1;
         else if (rowSize > 0)
         {
-            if (orientation == MyLayoutViewOrientation_Horz)
-                self.myHeight = rowSize;
+            if (orientation == MyOrientation_Horz)
+                lsc.myHeight = rowSize;
             else
-                self.myWidth = rowSize;
+                lsc.myWidth = rowSize;
         }
         else if (rowSize == MTLSIZE_WRAPCONTENT)
         {
-            if (orientation == MyLayoutViewOrientation_Horz)
-                self.wrapContentHeight = YES;
+            if (orientation == MyOrientation_Horz)
+                lsc.wrapContentHeight = YES;
             else
-                self.wrapContentWidth = YES;
+                lsc.wrapContentWidth = YES;
         }
         else
         {
@@ -58,29 +60,29 @@
         
         if (colSize == MTLSIZE_AVERAGE)
         {
-            if (orientation == MyLayoutViewOrientation_Horz)
+            if (orientation == MyOrientation_Horz)
             {
-                self.wrapContentWidth = NO;
-                self.myLeft = self.myRight = 0;
+                lsc.wrapContentWidth = NO;
+                lsc.myHorzMargin = 0;
             }
             else
             {
-                self.wrapContentHeight = NO;
-                self.myTop = self.myBottom = 0;
+                lsc.wrapContentHeight = NO;
+                lsc.myVertMargin = 0;
             }
             
         }
         else if (colSize == MTLSIZE_MATCHPARENT)
         {
-            if (orientation == MyLayoutViewOrientation_Horz)
+            if (orientation == MyOrientation_Horz)
             {
-                self.wrapContentWidth = NO;
-                self.myLeft = self.myRight = 0;
+                lsc.wrapContentWidth = NO;
+                lsc.myHorzMargin = 0;
             }
             else
             {
-                self.wrapContentHeight = NO;
-                self.myTop = self.myBottom = 0;
+                lsc.wrapContentHeight = NO;
+                lsc.myVertMargin = 0;
             }
         }
     }
@@ -88,7 +90,7 @@
     return self;
 }
 
-+(id)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyLayoutViewOrientation)orientation
++(id)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
 {
     return [[self alloc] initWith:rowSize colSize:colSize orientation:orientation];
 }
@@ -114,7 +116,7 @@
 
 @implementation MyTableLayout
 
-+(instancetype)tableLayoutWithOrientation:(MyLayoutViewOrientation)orientation
++(instancetype)tableLayoutWithOrientation:(MyOrientation)orientation
 {
     return [self linearLayoutWithOrientation:orientation];
 }
@@ -127,20 +129,22 @@
 
 -(MyLinearLayout*)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex
 {
-    MyLayoutViewOrientation ori = MyLayoutViewOrientation_Vert;
-    if (self.orientation == MyLayoutViewOrientation_Vert)
-        ori = MyLayoutViewOrientation_Horz;
+    MyTableLayout *lsc = self.myCurrentSizeClass;
+    
+    MyOrientation ori = MyOrientation_Vert;
+    if (lsc.orientation == MyOrientation_Vert)
+        ori = MyOrientation_Horz;
     else
-        ori = MyLayoutViewOrientation_Vert;
+        ori = MyOrientation_Vert;
     
     MyTableRowLayout *rowView = [MyTableRowLayout rowSize:rowSize colSize:colSize orientation:ori];
-    if (ori == MyLayoutViewOrientation_Horz)
+    if (ori == MyOrientation_Horz)
     {
-        rowView.subviewHSpace = self.subviewHSpace;
+        rowView.subviewHSpace = lsc.subviewHSpace;
     }
     else
     {
-        rowView.subviewVSpace = self.subviewVSpace;
+        rowView.subviewVSpace = lsc.subviewVSpace;
     }
     rowView.intelligentBorderline = self.intelligentBorderline;
     [super insertSubview:rowView atIndex:rowIndex];
@@ -177,42 +181,45 @@
 {
     MyTableRowLayout *rowView = (MyTableRowLayout*)[self viewAtRowIndex:indexPath.row];
     
+    MyLinearLayout *rowsc = rowView.myCurrentSizeClass;
+    UIView *colsc = colView.myCurrentSizeClass;
+    
     //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
     if (rowView.colSize == MTLSIZE_AVERAGE)
-        colView.weight = 1;
+        colsc.weight = 1;
     else if (rowView.colSize > 0)
     {
-        if (rowView.orientation == MyLayoutViewOrientation_Horz)
-            colView.myWidth = rowView.colSize;
+        if (rowsc.orientation == MyOrientation_Horz)
+            colsc.myWidth = rowView.colSize;
         else
-            colView.myHeight = rowView.colSize;
+            colsc.myHeight = rowView.colSize;
     }
     
-    if (rowView.orientation == MyLayoutViewOrientation_Horz)
+    if (rowsc.orientation == MyOrientation_Horz)
     {
-        if (CGRectGetHeight(colView.bounds) == 0 && colView.heightSizeInner.dimeVal == nil)
+        if (CGRectGetHeight(colView.bounds) == 0 && colsc.heightSizeInner.dimeVal == nil)
         {
             if ([colView isKindOfClass:[MyBaseLayout class]])
             {
-                if (!((MyBaseLayout*)colView).wrapContentHeight)
-                    [colView.heightSize __equalTo:rowView.heightSize];
+                if (!colsc.wrapContentHeight)
+                    [colsc.heightSize __equalTo:rowsc.heightSize];
             }
             else
-                [colView.heightSize __equalTo:rowView.heightSize];
+                [colsc.heightSize __equalTo:rowsc.heightSize];
         }
     }
     else
     {
-        if (CGRectGetWidth(colView.bounds) == 0 && colView.widthSizeInner.dimeVal == nil)
+        if (CGRectGetWidth(colView.bounds) == 0 && colsc.widthSizeInner.dimeVal == nil)
         {
             
             if ([colView isKindOfClass:[MyBaseLayout class]])
             {
-                if (!((MyBaseLayout*)colView).wrapContentWidth)
-                    [colView.widthSize __equalTo:rowView.widthSize];
+                if (!colsc.wrapContentWidth)
+                    [colsc.widthSize __equalTo:rowsc.widthSize];
             }
             else
-                [colView.widthSize __equalTo:rowView.widthSize];
+                [colsc.widthSize __equalTo:rowsc.widthSize];
         }
         
     }
@@ -259,7 +266,7 @@
 -(void)setSubviewVSpace:(CGFloat)subviewVSpace
 {
     [super setSubviewVSpace:subviewVSpace];
-    if (self.orientation == MyLayoutViewOrientation_Horz)
+    if (self.orientation == MyOrientation_Horz)
     {
         for (NSInteger i  = 0; i < self.countOfRow; i++)
         {
@@ -271,7 +278,7 @@
 -(void)setSubviewHSpace:(CGFloat)subviewHSpace
 {
     [super setSubviewHSpace:subviewHSpace];
-    if (self.orientation == MyLayoutViewOrientation_Vert)
+    if (self.orientation == MyOrientation_Vert)
     {
         for (NSInteger i  = 0; i < self.countOfRow; i++)
         {
@@ -315,26 +322,5 @@
 
 #pragma mark -- Deprecated Method
 
-/*
--(void)setRowSpacing:(CGFloat)rowSpacing
-{
-    self.subviewVSpace = rowSpacing;
-}
-
--(CGFloat)rowSpacing
-{
-    return self.subviewVSpace;
-}
-
--(void)setColSpacing:(CGFloat)colSpacing
-{
-    self.subviewHSpace = colSpacing;
-}
-
--(CGFloat)colSpacing
-{
-    return self.subviewHSpace;
-}
-*/
 
 @end

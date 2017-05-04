@@ -23,7 +23,10 @@
 
 -(void)loadView
 {
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
     [super loadView];
+    
     
     //注意这个DEMO进来慢的原因是其中使用了UITextView,和MyLayout无关。UITextView会在第一次使用时非常的慢，后续就快了。。
     
@@ -33,20 +36,20 @@
      */
     
     /*
-       1.如果想让一个布局视图的宽度和非布局父视图的宽度相等则请将布局视图的myLeft = myRight = 0或者widthSize.equalTo(superview.widthSize)
-       2.如果想让一个布局视图的高度和非布局父视图的高度相等则请将布局视图的myTop = myBottom = 0或者heightSize.equalTo(superview.heightSize)
+       1.如果想让一个布局视图的宽度和非布局父视图的宽度相等则请将布局视图的myHorzMargin = 0或者widthSize.equalTo(superview.widthSize)
+       2.如果想让一个布局视图的高度和非布局父视图的高度相等则请将布局视图的myVertMargin = 0或者heightSize.equalTo(superview.heightSize)
      */
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:scrollView];
     
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.wrapContentHeight = NO;
     rootLayout.backgroundColor = [UIColor whiteColor];
     [rootLayout setTarget:self action:@selector(handleHideKeyboard:)];  //设置布局上的触摸事件。布局视图支持触摸事件的设置，可以使用setTarget方法来实现。
     
-    //设置布局视图的宽度等于父视图的宽度，这个方法等价于 rootLayout.myLeft = rootLayout.myRight = 0;
+    //设置布局视图的宽度等于父视图的宽度，这个方法等价于 rootLayout.myHorzMargin = 0;
     rootLayout.widthSize.equalTo(scrollView.widthSize);
     //设置布局视图的高度等于父视图的高度，并且最低高度不能低于568-64.这两个数字的意思是iPhone5的高度减去导航条的高度部分。这句话的意思也就是说明最低不能低于iPhone5的高度，因此在iPhone4上就会出现滚动的效果！！！通过lBound,uBound方法的应用可以很容易实现各种屏幕的完美适配！！。
     //rootLayout.heightSize.equalTo(scrollView.heightSize)等于于rootLayout.myTop = rootLayout.myBottom = 0;
@@ -85,8 +88,8 @@
     nameField.textAlignment = NSTextAlignmentCenter;
     nameField.font = [CFTool font:15];
     nameField.myHeight = 40;
-    nameField.myLeft = 0.1;
-    nameField.myRight = 0.1;
+    nameField.myLeading = 0.1;
+    nameField.myTrailing = 0.1;
     nameField.myTop = 0.1;     //高度为40，左右边距为布局的10%, 顶部间距为剩余空间的10%
     [rootLayout addSubview:nameField];
     
@@ -103,7 +106,7 @@
     userDescLabel.font = [CFTool font:14];
     [userDescLabel sizeToFit];
     userDescLabel.myTop = 10;
-    userDescLabel.leftPos.equalTo(@0.05).min(17).max(19);
+    userDescLabel.leadingPos.equalTo(@0.05).min(17).max(19);
     [rootLayout addSubview:userDescLabel];
     
     
@@ -117,8 +120,8 @@
 
     //左右边距为布局的10%，距离底部间距为65%,高度自适应，但高度最高为300，最低为30
     //wrapContentHeight和max,min的结合能做到一些完美的自动伸缩功能。
-    textView.myLeft = 0.05;
-    textView.myRight = 0.05;
+    textView.myLeading = 0.05;
+    textView.myTrailing = 0.05;
     textView.myBottom = 0.65;
     textView.wrapContentHeight = YES;
     textView.heightSize.max(300).min(60);  //虽然wrapContentHeight属性设置了视图的高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
@@ -165,7 +168,7 @@
     
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-}
+ }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

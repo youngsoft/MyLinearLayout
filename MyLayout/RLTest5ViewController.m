@@ -30,9 +30,9 @@
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
     
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.leftPos.equalTo(@0);
-    rootLayout.rightPos.equalTo(@0);
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    rootLayout.leadingPos.equalTo(@0);
+    rootLayout.trailingPos.equalTo(@0);
     rootLayout.wrapContentHeight = YES;
     rootLayout.subviewVSpace = 10;
     [scrollView addSubview:rootLayout];
@@ -66,16 +66,16 @@
     
     MyRelativeLayout *containerLayout = (MyRelativeLayout*)button.superview;
     
-    UIButton *leftButton = [containerLayout viewWithTag:1];
-    UIButton *rightButton = [containerLayout viewWithTag:2];
+    UIButton *leadingButton = [containerLayout viewWithTag:1];
+    UIButton *trailingButton = [containerLayout viewWithTag:2];
     UIView  *underLineView = [containerLayout viewWithTag:3];
     
     NSInteger tag = button.tag;
-    leftButton.selected = (tag == 1);
-    rightButton.selected = (tag == 2);
+    leadingButton.selected = (tag == 1);
+    trailingButton.selected = (tag == 2);
     
     //调整underLineView的位置。
-    underLineView.leftPos.equalTo(button.leftPos);
+    underLineView.leadingPos.equalTo(button.leadingPos);
     underLineView.widthSize.equalTo(button.widthSize);
     
     
@@ -91,38 +91,38 @@
      */
     
     MyRelativeLayout *containerLayout = [MyRelativeLayout new];
-    containerLayout.leftPos.equalTo(rootLayout.leftPos);
-    containerLayout.rightPos.equalTo(rootLayout.rightPos);
+    containerLayout.leadingPos.equalTo(rootLayout.leadingPos);
+    containerLayout.trailingPos.equalTo(rootLayout.trailingPos);
     containerLayout.wrapContentHeight = YES;
     containerLayout.topPadding = 6;
     containerLayout.bottomPadding = 6;
     containerLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:containerLayout];
     
-    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftButton setTitle:@"Left button" forState:UIControlStateNormal];
-    [leftButton setTitleColor:[CFTool color:4] forState:UIControlStateNormal];
-    [leftButton setTitleColor:[CFTool color:7] forState:UIControlStateSelected];
-    leftButton.tag = 1;
-    [leftButton addTarget:self action:@selector(handleButtonSelect:) forControlEvents:UIControlEventTouchUpInside];
-    [leftButton sizeToFit]; //根据内容得到高度和宽度
-    leftButton.leftPos.lBound(containerLayout.leftPos, 0);  //左边最小边界是父视图左边偏移0
-    leftButton.rightPos.uBound(containerLayout.centerXPos, 0); //右边最大的边界是父视图中心点偏移0
-    //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中leftButton始终在父视图的左边和父视图的水平中心这个边界内居中显示。
-    [containerLayout addSubview:leftButton];
-    leftButton.selected = YES;
+    UIButton *leadingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leadingButton setTitle:@"Leading Button" forState:UIControlStateNormal];
+    [leadingButton setTitleColor:[CFTool color:4] forState:UIControlStateNormal];
+    [leadingButton setTitleColor:[CFTool color:7] forState:UIControlStateSelected];
+    leadingButton.tag = 1;
+    [leadingButton addTarget:self action:@selector(handleButtonSelect:) forControlEvents:UIControlEventTouchUpInside];
+    [leadingButton sizeToFit]; //根据内容得到高度和宽度
+    leadingButton.leadingPos.lBound(containerLayout.leadingPos, 0);  //左边最小边界是父视图左边偏移0
+    leadingButton.trailingPos.uBound(containerLayout.centerXPos, 0); //右边最大的边界是父视图中心点偏移0
+    //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中leadingButton始终在父视图的左边和父视图的水平中心这个边界内居中显示。
+    [containerLayout addSubview:leadingButton];
+    leadingButton.selected = YES;
     
-    UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [rightButton setTitle:@"Right button" forState:UIControlStateNormal];
-    [rightButton setTitleColor:[CFTool color:4] forState:UIControlStateNormal];
-    [rightButton setTitleColor:[CFTool color:7] forState:UIControlStateSelected];
-    rightButton.tag = 2;
-    [rightButton addTarget:self action:@selector(handleButtonSelect:) forControlEvents:UIControlEventTouchUpInside];
-    [rightButton sizeToFit]; //根据内容得到高度和宽度
-    rightButton.leftPos.lBound(containerLayout.centerXPos, 0); //左边最小边界是父视图中心点偏移0
-    rightButton.rightPos.uBound(containerLayout.rightPos, 0);   //右边最大边界是父视图右边偏移0
-    //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中rightButton始终在父视图的水平中心和父视图的右边这个边界内居中显示。
-    [containerLayout addSubview:rightButton];
+    UIButton *trailingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [trailingButton setTitle:@"Trailing Button" forState:UIControlStateNormal];
+    [trailingButton setTitleColor:[CFTool color:4] forState:UIControlStateNormal];
+    [trailingButton setTitleColor:[CFTool color:7] forState:UIControlStateSelected];
+    trailingButton.tag = 2;
+    [trailingButton addTarget:self action:@selector(handleButtonSelect:) forControlEvents:UIControlEventTouchUpInside];
+    [trailingButton sizeToFit]; //根据内容得到高度和宽度
+    trailingButton.leadingPos.lBound(containerLayout.centerXPos, 0); //左边最小边界是父视图中心点偏移0
+    trailingButton.trailingPos.uBound(containerLayout.trailingPos, 0);   //右边最大边界是父视图右边偏移0
+    //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中trailingButton始终在父视图的水平中心和父视图的右边这个边界内居中显示。
+    [containerLayout addSubview:trailingButton];
     
     
     //添加下划线视图。
@@ -130,9 +130,9 @@
     underLineView.backgroundColor = [CFTool color:7];
     underLineView.tag = 3;
     underLineView.heightSize.equalTo(@1);
-    underLineView.widthSize.equalTo(leftButton.widthSize);
-    underLineView.leftPos.equalTo(leftButton.leftPos);
-    underLineView.topPos.equalTo(leftButton.bottomPos).offset(6);
+    underLineView.widthSize.equalTo(leadingButton.widthSize);
+    underLineView.leadingPos.equalTo(leadingButton.leadingPos);
+    underLineView.topPos.equalTo(leadingButton.bottomPos).offset(6);
     [containerLayout addSubview:underLineView];
     
 
@@ -147,57 +147,59 @@
      */
     
     MyRelativeLayout *containerLayout = [MyRelativeLayout new];
-    containerLayout.leftPos.equalTo(rootLayout.leftPos);
-    containerLayout.rightPos.equalTo(rootLayout.rightPos);
+    containerLayout.leadingPos.equalTo(rootLayout.leadingPos);
+    containerLayout.trailingPos.equalTo(rootLayout.trailingPos);
     containerLayout.wrapContentHeight = YES;
     containerLayout.padding = UIEdgeInsetsMake(6, 6, 6, 6);
     containerLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:containerLayout];
     
     /*
-      这个例子中，水平方向一共有leftImageView,flexedLabel,editImageView,rightLabel四个子视图水平排列。其中leftImageView在最左边且宽度固定，flexedLabel则跟在leftImageView的右边但是宽度是不确定的，editImageView则是跟在flexedLabel的后面宽度是固定的，rightLabel则总是在屏幕的右边且宽度是固定的，但是其中的flexedLabel的宽度最宽不能无限制的延生，且不能和rightLabel进行重叠。
+      这个例子中，水平方向一共有leadingImageView,flexedLabel,editImageView,trailingLabel四个子视图水平排列。其中leadingImageView在最左边且宽度固定，flexedLabel则跟在leadingImageView的右边但是宽度是不确定的，editImageView则是跟在flexedLabel的后面宽度是固定的，trailingLabel则总是在屏幕的右边且宽度是固定的，但是其中的flexedLabel的宽度最宽不能无限制的延生，且不能和trailingLabel进行重叠。
      */
     
     NSArray *images = @[@"minions1",@"minions2",@"minions3",@"minions4"];
-    NSArray *texts = @[@"test text1",
-                       @"test text1 test text2",
-                       @"test text1 test text2 test text3 test text4",
-                       @"test text1 test text2 test text3 test text4 test text5"];
+    NSArray *texts = @[@"这是一段很长的文本，目的是为了实现最大限度的利用整个空间而不出现多余的缝隙",
+                       @"您好",
+                       @"北京市朝阳区三里屯SOHO城",
+                       @"我是醉里挑灯看键",
+                       @"欧阳大哥",
+                       @"MyLayout是一套功能强大的综合界面布局库"];
     
-    NSArray *rightTexts =  @[@"100.00",@"1000.00",@"10000.00",@"100000.00"];
+    NSArray *trailingTexts =  @[@"100.00",@"1000.00",@"10000.00",@"100000.00"];
     
     for (int i = 0; i < images.count; i++)
     {
-        UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:images[arc4random()%4]]];
-        leftImageView.topPos.equalTo(@(90*i));
-        [containerLayout addSubview:leftImageView];
+        UIImageView *leadingImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:images[arc4random()%4]]];
+        leadingImageView.topPos.equalTo(@(90*i));
+        [containerLayout addSubview:leadingImageView];
         
         UILabel *flexedLabel = [UILabel new];
-        flexedLabel.text = texts[arc4random()%4];
+        flexedLabel.text = texts[arc4random()%6];
         flexedLabel.font = [CFTool font:17];
         flexedLabel.textColor = [CFTool color:4];
         flexedLabel.lineBreakMode = NSLineBreakByCharWrapping;
         flexedLabel.wrapContentHeight = YES;   //高度自动计算。
-        flexedLabel.leftPos.equalTo(leftImageView.rightPos).offset(5);  //左边等于leftImageView的右边
-        flexedLabel.topPos.equalTo(leftImageView.topPos);  //顶部和leftImageView相等。
+        flexedLabel.leadingPos.equalTo(leadingImageView.trailingPos).offset(5);  //左边等于leadingImageView的右边
+        flexedLabel.topPos.equalTo(leadingImageView.topPos);  //顶部和leadingImageView相等。
         [containerLayout addSubview:flexedLabel];
         
         UIImageView *editImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit"]];
-        editImageView.leftPos.equalTo(flexedLabel.rightPos);  //这个图片总是跟随在flexedLabel的后面。
-        editImageView.topPos.equalTo(leftImageView.topPos).offset(4);
+        editImageView.leadingPos.equalTo(flexedLabel.trailingPos);  //这个图片总是跟随在flexedLabel的后面。
+        editImageView.topPos.equalTo(leadingImageView.topPos).offset(4);
         [containerLayout addSubview:editImageView];
         
-        UILabel *rightLabel = [UILabel new];
-        rightLabel.text = rightTexts[arc4random()%4];
-        rightLabel.font = [CFTool font:15];
-        rightLabel.textColor = [CFTool color:7];
-        [rightLabel sizeToFit]; //尺寸固定。
-        rightLabel.rightPos.equalTo(containerLayout.rightPos);  //右边等于父视图的右边，也就是现实在最右边。
-        rightLabel.topPos.equalTo(leftImageView.topPos).offset(4);
-        [containerLayout addSubview:rightLabel];
+        UILabel *trailingLabel = [UILabel new];
+        trailingLabel.text = trailingTexts[arc4random()%4];
+        trailingLabel.font = [CFTool font:15];
+        trailingLabel.textColor = [CFTool color:7];
+        [trailingLabel sizeToFit]; //尺寸固定。
+        trailingLabel.trailingPos.equalTo(containerLayout.trailingPos);  //右边等于父视图的右边，也就是现实在最右边。
+        trailingLabel.topPos.equalTo(leadingImageView.topPos).offset(4);
+        [containerLayout addSubview:trailingLabel];
         
         flexedLabel.widthSize.equalTo(flexedLabel.widthSize); //宽度等于自身的宽度
-        flexedLabel.rightPos.uBound(rightLabel.leftPos, editImageView.frame.size.width + 10); //右边的最大的边界就等于rightLabel的最左边再减去editImageView的尺寸外加上10,这里的10是视图之间的间距，为了让视图之间保持有足够的间距。这样当flexedLabel的宽度超过这个最大的右边界时，系统自动会缩小flexedLabel的宽度，以便来满足右边界的限制。 这个场景非常适合某个UITableViewCell里面的两个子视图之间有尺寸长度约束的情况。
+        flexedLabel.trailingPos.uBound(trailingLabel.leadingPos, editImageView.frame.size.width + 10); //右边的最大的边界就等于trailingLabel的最左边再减去editImageView的尺寸外加上10,这里的10是视图之间的间距，为了让视图之间保持有足够的间距。这样当flexedLabel的宽度超过这个最大的右边界时，系统自动会缩小flexedLabel的宽度，以便来满足右边界的限制。 这个场景非常适合某个UITableViewCell里面的两个子视图之间有尺寸长度约束的情况。
         
         
     }
@@ -212,8 +214,6 @@
     NSString *text = label.text;
     label.text = [text stringByAppendingString:@"+++"];
     
-    [label.superview setNeedsLayout];
-    
 }
 
 -(void)createDemo3:(UIView*)rootLayout
@@ -224,8 +224,8 @@
      
     
     MyRelativeLayout *containerLayout = [MyRelativeLayout new];
-    containerLayout.leftPos.equalTo(rootLayout.leftPos);
-    containerLayout.rightPos.equalTo(rootLayout.rightPos);
+    containerLayout.leadingPos.equalTo(rootLayout.leadingPos);
+    containerLayout.trailingPos.equalTo(rootLayout.trailingPos);
     containerLayout.heightSize.equalTo(@150);
     containerLayout.padding = UIEdgeInsetsMake(6, 6, 6, 6);
     containerLayout.backgroundColor = [CFTool color:0];
@@ -233,41 +233,41 @@
     
     
     //左边文字居中并且根据内容变化。
-    UILabel *leftLabel = [UILabel new];
-    leftLabel.backgroundColor = [CFTool color:5];
-    leftLabel.text = @"Click me:";
-    leftLabel.textColor = [CFTool color:4];
-    leftLabel.widthSize.equalTo(@100);  //宽度固定为100
-    leftLabel.wrapContentHeight = YES;       //高度由子视图的内容确定，自动计算高度。
-    leftLabel.topPos.lBound(containerLayout.topPos,0);   //最小的上边界是父布局的顶部。
-    leftLabel.bottomPos.uBound(containerLayout.bottomPos, 0);  //最大的下边界是父布局的底部
-    //通过这两个位置的最小最大边界设置，视图leftLabel将会在这个范围内垂直居中显示，并且当高度超过这个边界时，会自动的压缩子视图的高度。
-    [containerLayout addSubview:leftLabel];
+    UILabel *leadingLabel = [UILabel new];
+    leadingLabel.backgroundColor = [CFTool color:5];
+    leadingLabel.text = @"Click me:";
+    leadingLabel.textColor = [CFTool color:4];
+    leadingLabel.widthSize.equalTo(@100);  //宽度固定为100
+    leadingLabel.wrapContentHeight = YES;       //高度由子视图的内容确定，自动计算高度。
+    leadingLabel.topPos.lBound(containerLayout.topPos,0);   //最小的上边界是父布局的顶部。
+    leadingLabel.bottomPos.uBound(containerLayout.bottomPos, 0);  //最大的下边界是父布局的底部
+    //通过这两个位置的最小最大边界设置，视图leadingLabel将会在这个范围内垂直居中显示，并且当高度超过这个边界时，会自动的压缩子视图的高度。
+    [containerLayout addSubview:leadingLabel];
     
     //添加手势处理。
-    UITapGestureRecognizer *leftLabelTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleClick:)];
-    leftLabel.userInteractionEnabled = YES;
-    [leftLabel addGestureRecognizer:leftLabelTapGesture];
+    UITapGestureRecognizer *leadingLabelTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleClick:)];
+    leadingLabel.userInteractionEnabled = YES;
+    [leadingLabel addGestureRecognizer:leadingLabelTapGesture];
     
     
     
     //右边按钮
-    UILabel *rightLabel = [UILabel new];
-    rightLabel.backgroundColor = [CFTool color:6];
-    rightLabel.text = @"Click me:";
-    rightLabel.textColor = [CFTool color:4];
-    rightLabel.rightPos.equalTo(containerLayout.rightPos);  //和父布局视图右对齐。
-    rightLabel.centerYPos.equalTo(leftLabel.centerYPos);   //和左边视图垂直居中对齐。
-    rightLabel.leftPos.lBound(leftLabel.rightPos, 10);     //右边视图的最小边界是等于左边视图的右边再偏移10，这样当右边视图的宽度超过这个最小边界时则会自动压缩视图的宽度。
-    rightLabel.widthSize.equalTo(rightLabel.widthSize);    //宽度等于自身的宽度。这个设置和上面的leftPos.lBound方法配合使用实现子视图宽度的压缩。
-    rightLabel.wrapContentHeight = YES;  //高度动态调整
-    rightLabel.heightSize.uBound(containerLayout.heightSize, 0, 1); //但是最大的高度等于父布局视图的高度(注意这里内部自动减去了padding的值)
-    [containerLayout addSubview:rightLabel];
+    UILabel *trailingLabel = [UILabel new];
+    trailingLabel.backgroundColor = [CFTool color:6];
+    trailingLabel.text = @"Click me:";
+    trailingLabel.textColor = [CFTool color:4];
+    trailingLabel.trailingPos.equalTo(containerLayout.trailingPos);  //和父布局视图右对齐。
+    trailingLabel.centerYPos.equalTo(leadingLabel.centerYPos);   //和左边视图垂直居中对齐。
+    trailingLabel.leadingPos.lBound(leadingLabel.trailingPos, 10);     //右边视图的最小边界是等于左边视图的右边再偏移10，这样当右边视图的宽度超过这个最小边界时则会自动压缩视图的宽度。
+    trailingLabel.widthSize.equalTo(trailingLabel.widthSize);    //宽度等于自身的宽度。这个设置和上面的leadingPos.lBound方法配合使用实现子视图宽度的压缩。
+    trailingLabel.wrapContentHeight = YES;  //高度动态调整
+    trailingLabel.heightSize.uBound(containerLayout.heightSize, 0, 1); //但是最大的高度等于父布局视图的高度(注意这里内部自动减去了padding的值)
+    [containerLayout addSubview:trailingLabel];
     
     //添加手势处理。
-    UITapGestureRecognizer *rightLabelTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleClick:)];
-    rightLabel.userInteractionEnabled = YES;
-    [rightLabel addGestureRecognizer:rightLabelTapGesture];
+    UITapGestureRecognizer *trailingLabelTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleClick:)];
+    trailingLabel.userInteractionEnabled = YES;
+    [trailingLabel addGestureRecognizer:trailingLabelTapGesture];
 
     
     

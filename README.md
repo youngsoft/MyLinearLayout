@@ -9,7 +9,7 @@
 
 ![Logo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayout.png)
 
-## MyLayout(2017.4.11)
+## MyLayout(2017.05.05)
 
 MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayout provides some simple functions to build a variety of complex interface. It integrates the functions including: Autolayout and SizeClass of iOS, five layout classes of Android, float and flex-box and bootstrap of HTML/CSS. The MyLayout's Swift version are named: **[TangramKit](https://github.com/youngsoft/TangramKit)**
 
@@ -30,7 +30,7 @@ MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayou
 
 ```objective-c
 
-    MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     S.subviewSpace = 10;
     S.widthSize.equalTo(@100);
     
@@ -61,6 +61,30 @@ MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayou
 
 ```
 
+## Performance comparison
+
+![demo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayoutP.png)
+
+
+create time(ms)/per subview|Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+------------|---------------|---------------
+MyLinearLayout|0.08|0.164|0.219|0.304|0.131
+MyFrameLayout|0.05|0.149|0.209|0.273|0.131
+MyRelativeLayout|0.079|0.182|0.116|0.359|0.131
+MyFlowLayout|0.08|0.107|0.198|0.258|0.131
+MyFloatLayout|0.044|0.148|0.203|0.250|0.131
+
+
+
+layout time(ms)/per subview |Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+------------|---------------|---------------
+MyLinearLayout|0|0.049|0.269|0.269|0.272
+MyFrameLayout|0|0.042|0.243|0.243|0.272
+MyRelativeLayout|0|0.068|0.274|0.274|0.272
+MyFlowLayout|0|0.036|0.279|0.279|0.272
+MyFloatLayout|0|0.055|0.208|0.208|0.272
+
+
 
 ## Architecture
 
@@ -90,7 +114,7 @@ Sample code:
 {
     [super loadView];
     
-    MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     S.myWidth = 120;
     S.subviewSpace = 10;
     
@@ -258,7 +282,7 @@ Sample code:
 {
     [super loadView];
     
-    MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     S.wrapContentWidth = YES;
     S.subviewHSpace = 10;
     S.subviewVSpace = 10;
@@ -313,7 +337,7 @@ Sample code:
 {
     [super loadView];
     
-    MyFlowLayout *S = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:4];
+    MyFlowLayout *S = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
     S.wrapContentHeight = YES;
     S.myWidth = 300;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
@@ -357,7 +381,7 @@ Sample code:
 {
     [super loadView];
     
-    MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     S.wrapContentHeight = YES;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     S.subviewSpace = 10;
@@ -461,7 +485,7 @@ to set Size Classes Characteristics like below:
 ```objective-c
 
 //default is all Size Classes
- MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+ MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyGravity_Horz_Fill;
@@ -469,7 +493,7 @@ to set Size Classes Characteristics like below:
 //MySizeClass_wAny | MySizeClass_hCompact is iPhone landscape orientation.
  MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
  
-    lsc.orientation = MyLayoutViewOrientation_Horz;
+    lsc.orientation = MyOrientation_Horz;
     lsc.wrapContentWidth = NO;
     lsc.gravity = MyGravity_Vert_Fill;
 
@@ -535,7 +559,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.3.5'
+pod 'MyLayout', '~> 1.3.6'
 ```
    
 Then, run the following command:

@@ -24,6 +24,8 @@
        这个例子详细说明wrapContentHeight和wrapContentWidth的包裹属性的设置、以及边界线性的设定、以及布局中可局部缩放背景图片的设定方法。
      */
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+    
     [super loadView];
     
     UIView *contentView = [UIView new];
@@ -33,11 +35,12 @@
     contentView.wrapContentHeight = YES;   //如果一个非布局父视图里面有布局子视图，那么这个非布局父视图也是可以设置wrapContentHeight和wrapContentWidth的，他表示的意义是这个非布局父视图的尺寸由里面的布局子视图的尺寸来决定的。这个功能是在1.3.3版本支持的。 还有一个场景是非布局父视图是一个UIScrollView。他是左右滚动的，但是滚动视图的高度是由里面的布局子视图确定的，而宽度则是和窗口保持一致。这样只需要将滚动视图的宽度设置为和屏幕保持一致，高度设置为wrapContentHeight，并且把一个水平线性布局添加到滚动视图即可。
     
     
-    self.rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    self.rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     self.rootLayout.layer.borderWidth = 1;
     self.rootLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.rootLayout.wrapContentHeight = YES;
     self.rootLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
+    self.rootLayout.myTop = 10;
     self.rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.rootLayout.zeroPadding = NO;  //这个属性设置为NO时表示当布局视图的尺寸是wrap也就是由子视图决定时并且在没有任何子视图是不会参与布局视图高度的计算的。您可以在这个DEMO的测试中将所有子视图都删除掉，看看效果，然后注释掉这句代码看看效果。
     self.rootLayout.subviewVSpace = 5;
@@ -64,7 +67,7 @@
 -(MyLinearLayout*)addWrapContentLayout
 {
     
-    MyLinearLayout *wrapContentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyLinearLayout *wrapContentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     wrapContentLayout.wrapContentHeight = YES;
     wrapContentLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
     wrapContentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -89,12 +92,12 @@
     bl.thick = 1;        //粗细为1
     wrapContentLayout.bottomBorderline = bl;
     wrapContentLayout.topBorderline = bl;
-    wrapContentLayout.leftBorderline = bl;
-    wrapContentLayout.rightBorderline = bl;
+    wrapContentLayout.leadingBorderline = bl;
+    wrapContentLayout.trailingBorderline = bl;
     
     
     
-    MyLinearLayout *actionLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *actionLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     actionLayout.layer.borderWidth = 1;
     actionLayout.layer.borderColor = [CFTool color:9].CGColor;
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);

@@ -16,21 +16,22 @@
  
  下面的表格描述了各种布局下的子视图的布局位置对象的equalTo方法可以设置的值。
  为了表示方便我们把：线性布局简写为L、相对布局简写为R、表格布局简写为T、框架布局简写为FR、流式布局简写为FL、浮动布局简写为FO、全部简写为ALL，不支持为-
- +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
- |method\val|NSNumber|NSArray<MyLayoutPos*>|leftPos|topPos|rightPos|bottomPos|centerXPos|centerYPos|
- +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
- | leftPos	| ALL    | -                   | R     | -    |  R     | -       | R        | -        |
- +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
- | topPos   | ALL    | -                   | -     | R    |  -     | R       | -        | R        |
- +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
- |rightPos	| ALL    | -                   | R     | -    |  R     | -       | R        | -        |
- +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
- |bottomPos	| ALL    | -                   | -     | R    |  -     | R       | -        | R        |
- +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
- |centerXPos| ALL    | R                   | R     | -    |  R     | -       | R        | -        |
- +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
- |centerYPos| ALL    | R                   | -     | R    |  -     | R       | -        | R        |
- +----------+--------+---------------------+-------+------+--------+---------+----------+----------+
+ +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
+ |method\val |NSNumber|NSArray<MyLayoutPos*>|leftPos|topPos|rightPos|bottomPos|centerXPos|centerYPos|UILayoutSupport|UIView|
+ +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
+ | topPos    | ALL    | -                   | -     | R    |  -     | R       | -        | R        | L/R/FR/FO/FL  |ALL   |
+ +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
+ |leftPos    | ALL    | -                   | R     | -    |  R     | -       | R        | -        | -             |ALL   |
+ +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
+ |bottomPos	 | ALL    | -                   | -     | R    |  -     | R       | -        | R        | L/R/FR/FO/FL  |ALL   |
+ +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
+ |rightPos   | ALL    | -                   | R     | -    |  R     | -       | R        | -        | -             |ALL   |
+ +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
+ |centerXPos | ALL    | R                   | R     | -    |  R     | -       | R        | -        | -             |ALL   |
+ +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
+ |centerYPos | ALL    | R                   | -     | R    |  -     | R       | -        | R        | -             |ALL   |
+ +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
+
  
  上表中所有布局下的子视图的布局位置都支持设置为数值，而数值对于线性布局，表格布局，框架布局这三种布局来说当设置的结果>0且<1时表示的是相对的边界值
  比如一个框架布局的宽度是100，而其中的一个子视图的leftPos.equalTo(@0.1)则表示这个子视图左边距离框架布局的左边的宽度是100*0.1
@@ -43,7 +44,9 @@
  1.NSNumber: the layout position is equal to a number. e.g. leftPos.equalTo (@100) indicates that the value of the left boundary is 100.
  2.MyLayoutPos: the layout position depends on aother layout position. e.g. A.leftPos.equalTo(B.rightPos) indicates that A is on the right side of B.
  3.NSArray<MyLayoutPos*>: all views in the array and View are centered. e.g. A.centerXPos.equalTo(@[B.centerXPos, C.centerXPos]) indicates that A,B,C are overall horizontal centered.
- 4.nil: the layout position value is clear.
+ 4.id<UILayoutSupport>: you can only set topPos equalTo UIViewController‘s topLayoutGuide or bottomPos equalTo UIViewController‘s bottomLayoutGuide， then the view will always below the nav。
+ 5.UIView: the layout position is depends view's relevant position.
+ 6.nil: the layout position value is clear.
  
  you can use offset() method of MyLayoutPos to set offset of the layout position,but it is generally used together when equalTo() is set at MyLayoutPos or NSArray. e.g. A.leftPos.equalTo(B.rightPos).offset(5) indicates that A is on the right side of B and increase 5 point offset.
  
@@ -84,13 +87,15 @@
 #else
 
 /**
- *设置布局位置的值。参数val可以接收下面四种类型的值：
+ *设置布局位置的值。参数val可以接收下面六种类型的值：
  *1.NSNumber表示位置是一个具体的数值。
     对于框架布局和线性布局中的子视图来说，如果数值是一个大于0而小于1的数值时表示的是相对的间距或者边距。如果是相对边距那么真实的位置 = 布局视图尺寸*相对边距值；如果是相对间距那么真实的位置 = 布局视图剩余尺寸 * 相对间距值 /(所有相对间距值的总和)。
  
  *2.MyLayoutPos表示位置依赖于另外一个位置。
  *3.NSArray<MyLayoutPos*>表示位置和数组里面的其他位置整体居中。
- *4.nil表示位置的值被清除。
+ *4.id<UILayoutSupport> 对于iOS7以后视图控制器会根据导航条是否半透明而确定是占据整个屏幕。因此当topPos,bottomPos设置为视图控制器的topLayoutGuide或者bottomLayoutGuide时这样子视图就会偏移出导航条的高度，而如果没有导航条时则不会偏移出导航条的高度。注意的是这个值不能设置在非布局父视图的布局视图中。
+ *5.UIView表示位置依赖指定视图的对应位置。
+ *6.nil表示位置的值被清除。
  */
 -(MyLayoutPos* (^)(id val))equalTo;
 
@@ -136,9 +141,6 @@
 
 /**
  *设置布局位置的最大边界值。 如果位置对象没有设置最大边界值，那么最大边界默认就是无穷大CGFLOAT_MAX。uBound方法除了能设置为NSNumber外，还可以设置为MyLayoutPos值，并且还可以指定最大位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最大边界值为MyLayoutPos类型的值，其他类型布局中的子视图只支持NSNumber类型的最大边界值。
- @posVal指定位置边界值。可设置的类型有NSNumber和MyLayoutPos类型，前者表示最大位置不能大于某个常量值，而后者表示最大位置不能大于另外一个位置对象所表示的位置值。
- @offsetVal指定位置边界值的偏移量。
- 
  1.比如某个视图A的左边位置最大不能超过30则设置为：
    A.leftPos.uBound(30,0); 或者A.leftPos.uBound(30,10);
  2.对于相对布局中的子视图来说可以通过uBound值来实现那些尺寸不确定但是最大边界不能超过某个关联的视图的位置的场景，比如说视图B的位置和宽度固定，而A视图的左边位置固定，但是A视图的宽度不确定，且A的最右边不能超过B视图的左边边界减20，那么A就可以设置为：
@@ -146,6 +148,8 @@
  3.对于相对布局中的子视图来说可以同时通过lBound,uBound方法的设置来实现某个子视图总是在对应的两个其他的子视图中央显示且尺寸不能超过其他两个子视图边界的场景。比如说视图B要放置在A和C之间水平居中显示且不能超过A和C的边界。那么就可以设置为：
    B.leftPos.lBound(A.rightPos,0); B.rightPos.uBound(C.leftPos,0); //这时B不用指定宽度，而且总是在A和C的水平中间显示。
  
+ *posVal 指定位置边界值。可设置的类型有NSNumber和MyLayoutPos类型，前者表示最大位置不能大于某个常量值，而后者表示最大位置不能大于另外一个位置对象所表示的位置值。
+ *offsetVal 指定位置边界值的偏移量。
  */
 -(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))uBound;
 

@@ -15,12 +15,12 @@
 @implementation MyFrameLayout
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 
 
 #pragma mark -- Override Method
@@ -28,102 +28,108 @@
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray *)sbs
 {
     CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
-    CGFloat maxWidth = self.leftPadding;
-    CGFloat maxHeight = self.topPadding;
     
     if (sbs == nil)
         sbs = [self myGetLayoutSubviews];
     
+    MyFrameLayout *lsc = self.myCurrentSizeClass;
+    CGFloat paddingTop = lsc.topPadding;
+    CGFloat paddingLeading = lsc.leadingPadding;
+    CGFloat paddingBottom = lsc.bottomPadding;
+    CGFloat paddingTrailing = lsc.trailingPadding;
+    
+    CGSize maxWrapSize = CGSizeMake(paddingLeading + paddingTrailing, paddingTop + paddingBottom);
+    CGSize *pMaxWrapSize = &maxWrapSize;
+    if (!lsc.wrapContentHeight && !lsc.wrapContentWidth)
+        pMaxWrapSize = NULL;
+    
     for (UIView *sbv in sbs)
     {
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
         
         if (!isEstimate)
         {
-            sbv.myFrame.frame = sbv.bounds;
-            [self myCalcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
+            sbvMyFrame.frame = sbv.bounds;
+            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvMyFrame:sbvMyFrame selfLayoutSize:selfSize];
         }
-
+        
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
             
-            MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
-            
-            if (sbvl.wrapContentHeight && (sbvl.heightSizeInner.dimeVal != nil || (sbvl.topPosInner.posVal != nil && sbvl.bottomPosInner.posVal != nil)))
+            if (sbvsc.wrapContentHeight && (sbvsc.heightSizeInner.dimeVal != nil || (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)))
             {
-                [sbvl mySetWrapContentHeightNoLayout:NO];
+                sbvsc.wrapContentHeight = NO;
             }
             
-            if (sbvl.wrapContentWidth && (sbvl.widthSizeInner.dimeVal != nil || (sbvl.leftPosInner.posVal != nil && sbvl.rightPosInner.posVal != nil)))
+            if (sbvsc.wrapContentWidth && (sbvsc.widthSizeInner.dimeVal != nil || (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)))
             {
-                [sbvl mySetWrapContentWidthNoLayout:NO];
+                sbvsc.wrapContentWidth = NO;
             }
             
             
-            if (pHasSubLayout != nil && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
+            if (pHasSubLayout != nil && (sbvsc.wrapContentHeight || sbvsc.wrapContentWidth))
                 *pHasSubLayout = YES;
             
-            if (isEstimate && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
+            if (isEstimate && (sbvsc.wrapContentHeight || sbvsc.wrapContentWidth))
             {
-               [sbvl estimateLayoutRect:sbvl.myFrame.frame.size inSizeClass:sizeClass];
-                sbvl.myFrame.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                [(MyBaseLayout*)sbv estimateLayoutRect:sbvMyFrame.frame.size inSizeClass:sizeClass];
+                if (sbvMyFrame.multiple)
+                {
+                    sbvMyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    sbvsc = sbvMyFrame.sizeClass;
+                }
             }
         }
         
-    
+        
         //计算自己的位置和高宽
-        CGRect rect = sbv.myFrame.frame;
-        [self myCalcSubView:sbv pRect:&rect inSize:selfSize];
-        sbv.myFrame.frame = rect;
+        [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvMyFrame:sbvMyFrame lsc:lsc inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:pMaxWrapSize];
         
-        if (sbv.widthSizeInner.dimeRelaVal == nil || sbv.widthSizeInner.dimeRelaVal != self.widthSizeInner)
-        {
-            if (maxWidth < CGRectGetMaxX(rect))
-                maxWidth = CGRectGetMaxX(rect);
-        }
-        
-        if (sbv.heightSizeInner.dimeRelaVal == nil || sbv.heightSizeInner.dimeRelaVal != self.heightSizeInner)
-        {
-            if (maxHeight < CGRectGetMaxY(rect))
-                maxHeight = CGRectGetMaxY(rect);
-        }
-
     }
     
-    if (self.wrapContentWidth)
+    if (lsc.wrapContentWidth)
     {
-        selfSize.width = maxWidth + self.rightPadding;
+        selfSize.width = maxWrapSize.width;
     }
     
-    if (self.wrapContentHeight)
+    if (lsc.wrapContentHeight)
     {
-        selfSize.height = maxHeight + self.bottomPadding;
+        selfSize.height = maxWrapSize.height;
     }
     
-    selfSize.height = [self myValidMeasure:self.heightSizeInner sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    //调整布局视图自己的尺寸。
+    [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
     
-    selfSize.width = [self myValidMeasure:self.widthSizeInner sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
-    
-    //调整尺寸和父布局相等的视图的尺寸。
-    if (self.wrapContentWidth || self.wrapContentHeight)
+    //如果布局视图具有包裹属性这里要调整那些依赖父视图宽度和高度的子视图的位置和尺寸。
+    if (lsc.wrapContentWidth || lsc.wrapContentHeight)
     {
         for (UIView *sbv in sbs)
         {
-            if ((sbv.widthSizeInner.dimeRelaVal != nil && sbv.widthSizeInner.dimeRelaVal == self.widthSizeInner) ||
-                (sbv.leftPosInner.posVal != nil && sbv.rightPosInner.posVal != nil) ||
-                (sbv.heightSizeInner.dimeRelaVal != nil && sbv.heightSizeInner.dimeRelaVal == self.heightSizeInner) ||
-                (sbv.topPosInner.posVal != nil && sbv.bottomPosInner.posVal != nil))
+            UIView *sbvsc = sbv.myCurrentSizeClass;
+            
+            
+            //只有子视图的尺寸或者位置依赖父视图的情况下才需要重新计算位置和尺寸。
+            if ((sbvsc.trailingPosInner.posVal != nil) ||
+                (sbvsc.bottomPosInner.posVal != nil) ||
+                (sbvsc.centerXPosInner.posVal != nil) ||
+                (sbvsc.centerYPosInner.posVal != nil) ||
+                (sbvsc.widthSizeInner.dimeRelaVal.view == self) ||
+                (sbvsc.heightSizeInner.dimeRelaVal.view == self)
+                )
             {
-                CGRect rect = sbv.myFrame.frame;
-                [self myCalcSubView:sbv pRect:&rect inSize:selfSize];
-                sbv.myFrame.frame = rect;
+                [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvMyFrame:sbv.myFrame lsc:lsc inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
             }
             
         }
     }
     
-       
-    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs];
-
+    
+    //如果是反向则调整左右位置。
+    [self myAdjustSubviewsRTLPos:sbs selfWidth:selfSize.width];
+    
+    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs lsc:lsc];
+    
 }
 
 -(id)createSizeClassInstance
@@ -135,103 +141,156 @@
 #pragma mark -- Private Method
 
 
--(void)myCalcSubView:(UIView*)sbv pRect:(CGRect*)pRect inSize:(CGSize)selfSize
+-(void)myCalcSubViewRect:(UIView*)sbv
+                   sbvsc:(UIView*)sbvsc
+              sbvMyFrame:(MyFrame*)sbvMyFrame
+                     lsc:(MyFrameLayout*)lsc
+              inSelfSize:(CGSize)selfSize
+              paddingTop:(CGFloat)paddingTop
+          paddingLeading:(CGFloat)paddingLeading
+           paddingBottom:(CGFloat)paddingBottom
+         paddingTrailing:(CGFloat)paddingTrailing
+            pMaxWrapSize:(CGSize*)pMaxWrapSize
 {
     
-    MyGravity horz = MyGravity_Horz_Left;
-    MyGravity vert = MyGravity_Vert_Top;
-    
-    if (sbv.leftPosInner.posVal != nil && sbv.rightPosInner.posVal != nil)
-        horz = MyGravity_Horz_Fill;
-    else if (sbv.centerXPosInner.posVal != nil)
-        horz = MyGravity_Horz_Center;
-    else if (sbv.rightPosInner.posVal != nil)
-        horz = MyGravity_Horz_Right;
+    MyGravity horzGravity = MyGravity_Horz_Leading;
+    if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
+        horzGravity = MyGravity_Horz_Fill;
+    else if (sbvsc.centerXPosInner.posVal != nil)
+        horzGravity = MyGravity_Horz_Center;
+    else if (sbvsc.trailingPosInner.posVal != nil)
+        horzGravity = MyGravity_Horz_Trailing;
+    else if (sbvsc.leadingPosInner.posVal != nil)
+        horzGravity = MyGravity_Horz_Leading;
     else
         ;
     
-    if (sbv.topPosInner.posVal != nil && sbv.bottomPosInner.posVal != nil)
-        vert = MyGravity_Vert_Fill;
-    else if (sbv.centerYPosInner.posVal != nil)
-        vert = MyGravity_Vert_Center;
-    else if (sbv.bottomPosInner.posVal != nil)
-        vert = MyGravity_Vert_Bottom;
+    MyGravity vertGravity = MyGravity_Vert_Top;
+    if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
+        vertGravity = MyGravity_Vert_Fill;
+    else if (sbvsc.centerYPosInner.posVal != nil)
+        vertGravity = MyGravity_Vert_Center;
+    else if (sbvsc.bottomPosInner.posVal != nil)
+        vertGravity = MyGravity_Vert_Bottom;
     else
         ;
     
     
-    MyLayoutSize *sbvWidthSize = sbv.widthSizeInner;
-    MyLayoutSize *sbvHeightSize = sbv.heightSizeInner;
+    CGRect rect = sbvMyFrame.frame;
     
-    //优先用设定的宽度尺寸。
-    if (sbvWidthSize.dimeNumVal != nil)
-        pRect->size.width = sbvWidthSize.measure;
-    
-    if (sbvHeightSize.dimeNumVal != nil)
-        pRect->size.height = sbvHeightSize.measure;
-    
-    if (sbvWidthSize.dimeRelaVal != nil && sbvWidthSize.dimeRelaVal.view != sbv)
-    {
-        if (sbvWidthSize.dimeRelaVal.view == self)
-            pRect->size.width = [sbvWidthSize measureWith:(selfSize.width - self.leftPadding - self.rightPadding)];
+    if (sbvsc.widthSizeInner.dimeNumVal != nil)
+    {//宽度等于固定的值。
+        
+        rect.size.width = sbvsc.widthSizeInner.measure;
+    }
+    else if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal.view != sbv)
+    {//宽度等于其他的依赖的视图。
+        
+        if (sbvsc.widthSizeInner.dimeRelaVal == self.widthSizeInner)
+            rect.size.width = [sbvsc.widthSizeInner measureWith:selfSize.width - paddingLeading - paddingTrailing];
         else
-            pRect->size.width = [sbvWidthSize measureWith:sbvWidthSize.dimeRelaVal.view.estimatedRect.size.width];
+            rect.size.width = [sbvsc.widthSizeInner measureWith:sbvsc.widthSizeInner.dimeRelaVal.view.estimatedRect.size.width];
     }
     
-    if (sbvHeightSize.dimeRelaVal != nil && sbvHeightSize.dimeRelaVal.view != sbv)
-    {
-        if (sbvHeightSize.dimeRelaVal.view == self)
-            pRect->size.height = [sbvHeightSize measureWith:(selfSize.height - self.topPadding - self.bottomPadding)];
+    rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+    [self myHorzGravity:horzGravity sbv:sbv sbvsc:sbvsc paddingLeading:paddingLeading paddingTrailing:paddingTrailing selfSize:selfSize pRect:&rect];
+    
+    
+    
+    if (sbvsc.heightSizeInner.dimeNumVal != nil)
+    {//高度等于固定的值。
+        rect.size.height = sbvsc.heightSizeInner.measure;
+    }
+    else if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal.view != sbv)
+    {//高度等于其他依赖的视图
+        if (sbvsc.heightSizeInner.dimeRelaVal == self.heightSizeInner)
+            rect.size.height = [sbvsc.heightSizeInner measureWith:selfSize.height - paddingTop - paddingBottom];
         else
-            pRect->size.height = [sbvHeightSize measureWith:sbvHeightSize.dimeRelaVal.view.estimatedRect.size.height];
-        
+            rect.size.height = [sbvsc.heightSizeInner measureWith:sbvsc.heightSizeInner.dimeRelaVal.view.estimatedRect.size.height];
     }
     
-    pRect->size.width = [self myValidMeasure:sbvWidthSize sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
-    
-    
-    [self myHorzGravity:horz selfSize:selfSize sbv:sbv rect:pRect];
-    
-    
-    
-    if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
-    {
-        pRect->size.height = [self myHeightFromFlexedHeightView:sbv inWidth:pRect->size.width];
-        
+    if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+    {//高度等于内容的高度
+        rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
     }
     
-    pRect->size.height = [self myValidMeasure:sbvHeightSize sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
+    rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+    [self myVertGravity:vertGravity sbv:sbv sbvsc:sbvsc paddingTop:paddingTop paddingBottom:paddingBottom selfSize:selfSize pRect:&rect];
     
     
-    [self myVertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
-    
-    
-    if (sbvWidthSize.dimeRelaVal != nil && sbvWidthSize.dimeRelaVal.view == sbv && sbvWidthSize.dimeRelaVal.dime == MyGravity_Vert_Fill)
+    //特殊处理宽度等于高度
+    if (sbvsc.widthSizeInner.dimeRelaVal.view == sbv && sbvsc.widthSizeInner.dimeRelaVal.dime == MyGravity_Vert_Fill)
     {
-        pRect->size.width = [sbvWidthSize measureWith:pRect->size.height];
-        pRect->size.width = [self myValidMeasure:sbvWidthSize sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
+        rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
+        rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
-        [self myHorzGravity:horz selfSize:selfSize sbv:sbv rect:pRect];
-        
+        [self myHorzGravity:horzGravity sbv:sbv sbvsc:sbvsc paddingLeading:paddingLeading paddingTrailing:paddingTrailing selfSize:selfSize pRect:&rect];
     }
     
-    if (sbvHeightSize.dimeRelaVal != nil && sbvHeightSize.dimeRelaVal.view == sbv && sbvHeightSize.dimeRelaVal.dime == MyGravity_Horz_Fill)
+    //特殊处理高度等于宽度。
+    if (sbvsc.heightSizeInner.dimeRelaVal.view == sbv && sbvsc.heightSizeInner.dimeRelaVal.dime == MyGravity_Horz_Fill)
     {
-        pRect->size.height = [sbvHeightSize measureWith:pRect->size.width];
+        rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
         
-        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+        if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
         {
-            pRect->size.height = [self myHeightFromFlexedHeightView:sbv inWidth:pRect->size.width];
+            rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
         }
         
-        pRect->size.height = [self myValidMeasure:sbvHeightSize sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
+        rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
-        [self myVertGravity:vert selfSize:selfSize sbv:sbv rect:pRect];
-        
+        [self myVertGravity:vertGravity sbv:sbv sbvsc:sbvsc paddingTop:paddingTop paddingBottom:paddingBottom selfSize:selfSize pRect:&rect];
         
     }
     
+    sbvMyFrame.frame = rect;
     
+    if (pMaxWrapSize != NULL)
+    {
+        if (lsc.wrapContentWidth)
+        {
+            //如果同时设置左右边界则左右边界为最小的宽度
+            if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
+            {
+                if (pMaxWrapSize->width < sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing)
+                    pMaxWrapSize->width = sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing;
+            }
+            
+            //宽度不依赖布局并且没有同时设置左右边距则参与最大宽度计算。
+            if ((sbvsc.widthSizeInner.dimeRelaVal.view != self) &&
+                (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
+            {
+                
+                if (pMaxWrapSize->width < sbvMyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing)
+                    pMaxWrapSize->width = sbvMyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing;
+                
+                if (pMaxWrapSize->width < sbvMyFrame.trailing + sbvsc.trailingPosInner.absVal + paddingTrailing)
+                    pMaxWrapSize->width = sbvMyFrame.trailing + sbvsc.trailingPosInner.absVal + paddingTrailing;
+                
+            }
+        }
+        
+        if (lsc.wrapContentHeight)
+        {
+            //如果同时设置上下边界则上下边界为最小的高度
+            if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
+            {
+                if (pMaxWrapSize->height < sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom)
+                    pMaxWrapSize->height = sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom;
+            }
+            
+            //高度不依赖布局并且没有同时设置上下边距则参与最大高度计算。
+            if ((sbvsc.heightSizeInner.dimeRelaVal.view != self) &&
+                (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil))
+            {
+                if (pMaxWrapSize->height < sbvMyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom)
+                    pMaxWrapSize->height = sbvMyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom;
+                
+                if (pMaxWrapSize->height < sbvMyFrame.bottom + sbvsc.bottomPosInner.absVal + paddingBottom)
+                    pMaxWrapSize->height = sbvMyFrame.bottom + sbvsc.bottomPosInner.absVal + paddingBottom;
+            }
+        }
+    }
     
     
 }

@@ -30,9 +30,9 @@
     UIScrollView *scrollView = [UIScrollView new];
     self.view = scrollView;
     
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.backgroundColor = [CFTool color:11];
-    rootLayout.myLeft = rootLayout.myRight = 0;
+    rootLayout.myHorzMargin = 0;
     rootLayout.wrapContentHeight = YES;
     rootLayout.subviewVSpace = 10; //子视图之间的间距设置为10
     rootLayout.gravity = MyGravity_Horz_Fill; //所有子视图的宽度都和自己相等，这样子视图就不再需要设置宽度了。
@@ -46,6 +46,9 @@
     
     //这是一个内容填充布局的例子。通过weight来进行均分处理。可以看出内容约束流式布局中的子视图的weight和数量约束流式布局中的子视图的weight之间的差异。
     [self createFlowLayout3:rootLayout];
+
+    //这是一个综合的例子。
+    [self createFlowLayout4:rootLayout];
 
 }
 
@@ -69,7 +72,7 @@
     //如果是我们用线性布局来实现这个登录界面，一般用法是建立一个垂直线性布局，然后其中的用户和密码部分则通过建立2个子的水平线性布局来实现。但是如果我们用流式布局的话则不再需要用嵌套子布局来实现了。
     
     //每行2列的垂直流式布局。
-    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:2];
+    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:2];
     flowLayout.backgroundColor = [UIColor whiteColor];
     flowLayout.wrapContentHeight = YES;  //高度由子视图决定。
     flowLayout.gravity = MyGravity_Horz_Center; //所有子视图整体水平居中
@@ -100,7 +103,7 @@
     userNameTextField.borderStyle = UITextBorderStyleRoundedRect;
     userNameTextField.weight = 1;  //这里weight = 1表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
     userNameTextField.myHeight = 44;  //高度44
-    userNameTextField.myLeft = 20; //文本输入框距的左边间距为20
+    userNameTextField.myLeading = 20; //文本输入框距的左边间距为20
     [flowLayout addSubview:userNameTextField];
     
     
@@ -120,7 +123,7 @@
     passwordTextField.weight = 1;   //这里weight = 1表示宽度用来占用流式布局每行的剩余宽度，这样就不需要明确的设置宽度了。
     passwordTextField.myHeight = 44;
     passwordTextField.myTop = 20;  //距离上行的顶部间距为20,注意这里要和passwordLabel设置的顶部间距一致，否则可能导致无法居中对齐。
-    passwordTextField.myLeft = 20; //文本输入框距的左边间距为20
+    passwordTextField.myLeading = 20; //文本输入框距的左边间距为20
     [flowLayout addSubview:passwordTextField];
     
     
@@ -171,7 +174,7 @@
 -(void)createFlowLayout2:(MyLinearLayout*)rootLayout
 {
     //这个例子建立一个水平流式布局来
-    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Horz arrangedCount:3];
+    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:3];
     flowLayout.backgroundColor = [CFTool color:7];
     flowLayout.myHeight = 240;
     flowLayout.gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Center;   //子视图整体垂直底部对齐，水平居中对齐。
@@ -205,8 +208,8 @@
       //  imageView.layer.cornerRadius = 5;
        // imageView.layer.masksToBounds = YES;
         imageView.weight = 1;      //每个子视图的高度比重都是1，也就是意味着均分处理。
-        imageView.myLeft = 10;
-        imageView.myRight = 10;
+        imageView.myLeading = 10;
+        imageView.myTrailing = 10;
         imageView.myTop = 10;
         imageView.widthSize.equalTo(imageView.heightSize);   //宽度等于高度，对于水平流式布局来说，子视图的宽度可以等于高度，反之不可以；而对于垂直流式布局来说则高度可以等于宽度，反之则不可以。
         if (i % flowLayout.arrangedCount == 0)
@@ -219,14 +222,14 @@
     
     //the last col
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    addButton.myLeft = 10;
+    addButton.myLeading = 10;
     [flowLayout addSubview:addButton];
     
 }
 
 -(void)createFlowLayout3:(MyLinearLayout *)rootLayout
 {
-    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyLayoutViewOrientation_Vert arrangedCount:0];
+    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
     flowLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:flowLayout];
    flowLayout.wrapContentHeight = YES;
@@ -234,34 +237,49 @@
     flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     
     //第一行占据全部
-    UIView *v1 = [UIView new];
+    UILabel *v1 = [UILabel new];
+    v1.text = @"100%";
+    v1.textAlignment = NSTextAlignmentCenter;
+    v1.adjustsFontSizeToFitWidth = YES;
     v1.backgroundColor = [CFTool color:5];
     v1.weight = 1;
     v1.myHeight = 50;
     [flowLayout addSubview:v1];
     
     //第二行第一个固定，剩余的占据全部
-    UIView *v2 = [UIView new];
+    UILabel *v2 = [UILabel new];
+    v2.text = @"50";
+    v2.textAlignment = NSTextAlignmentCenter;
+    v2.adjustsFontSizeToFitWidth = YES;
     v2.backgroundColor = [CFTool color:6];
     v2.myWidth = 50;
     v2.myHeight = 50;
     [flowLayout addSubview:v2];
     
-    UIView *v3 = [UIView new];
+    UILabel *v3 = [UILabel new];
+    v3.text = @"100%";
+    v3.textAlignment = NSTextAlignmentCenter;
+    v3.adjustsFontSizeToFitWidth = YES;
     v3.backgroundColor = [CFTool color:7];
     v3.weight = 1;
     v3.myHeight = 50;
     [flowLayout addSubview:v3];
     
     //第三行，三个子视图均分。
-    UIView *v4 = [UIView new];
+    UILabel *v4 = [UILabel new];
+    v4.text = @"1/3";
+    v4.textAlignment = NSTextAlignmentCenter;
+    v4.adjustsFontSizeToFitWidth = YES;
     v4.backgroundColor = [CFTool color:5];
     v4.weight = 1/3.0;
     v4.widthSize.add(-20);  //因为要均分为3部分，而我们设置了水平间距subviewHSpace为10.所以我们这里要减去20。也就是减去2个间隔。
     v4.myHeight = 50;
     [flowLayout addSubview:v4];
     
-    UIView *v5 = [UIView new];
+    UILabel *v5 = [UILabel new];
+    v5.text = @"1/2";
+    v5.textAlignment = NSTextAlignmentCenter;
+    v5.adjustsFontSizeToFitWidth = YES;
     v5.backgroundColor = [CFTool color:6];
     v5.weight = 1/2.0;
     v5.widthSize.add(-10); //因为剩下的要均分为2部分，而我们设置了水平间距subviewHSpace为10.所以我们这里要减去10。也就是减去1个间隔。
@@ -269,13 +287,68 @@
     [flowLayout addSubview:v5];
     
     
-    UIView *v6 = [UIView new];
+    UILabel *v6 = [UILabel new];
+    v6.text = @"1/1";
+    v6.textAlignment = NSTextAlignmentCenter;
+    v6.adjustsFontSizeToFitWidth = YES;
     v6.backgroundColor = [CFTool color:7];
     v6.weight = 1/1.0;  //最后一个占用剩余的所有空间。这里没有间距了，所以不需要再减。
     v6.myHeight = 50;
     [flowLayout addSubview:v6];
 
 
+    
+}
+
+-(void)createFlowLayout4:(MyLinearLayout *)rootLayout
+{
+    /**
+       这个例子中有2行，每行2列，这个符合流式布局的规律。因此你不需要用一个垂直布局套两个水平线性布局来实现，而是一个流式布局就好了。另外这个例子里面还展示了边界线的功能，你可以设置边界线的首尾缩进，还可以设置边界线的偏移。这样在一些场合您可以用边界线来代替横线的视图。
+     */
+    
+    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:2];
+    flowLayout.backgroundColor = [CFTool color:0];
+    [rootLayout addSubview:flowLayout];
+    flowLayout.wrapContentHeight = YES;
+    flowLayout.subviewSpace = 10;
+    flowLayout.arrangedGravity = MyGravity_Vert_Center;
+    flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    
+    MyBorderline *bottomBorderline = [[MyBorderline alloc] initWithColor:[CFTool color:5]];
+    bottomBorderline.offset = 45;   //下面的边界线往上偏移45
+    bottomBorderline.headIndent = 10;  //头部缩进10
+    bottomBorderline.tailIndent = 30;  //尾部缩进30
+    flowLayout.bottomBorderline = bottomBorderline;
+    
+    //第一行占据全部
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = @"这个例子里面有2行，每行有2个子视图，这样符合流式布局的规则。因此可以用一个流式布局来实现而不必要用一个垂直线性布局套2个水平线性布局来实现。";
+    titleLabel.textColor = [CFTool color:5];
+    titleLabel.font = [CFTool font:14];
+    titleLabel.weight = 1;   //对于指定数量的流式布局来说这个weight的是剩余的占比。
+    titleLabel.wrapContentHeight = YES;
+    [flowLayout addSubview:titleLabel];
+    
+    //第二行第一个固定，剩余的占据全部
+    UIImageView *editImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit"]];
+    [flowLayout addSubview:editImageView];
+    
+    UILabel *priceLabel = [UILabel new];
+    priceLabel.text = @"$123.23 - $200.12";
+    priceLabel.textColor = [UIColor redColor];
+    priceLabel.font = [CFTool font:13];
+    priceLabel.wrapContentWidth = YES;
+    priceLabel.myHeight = 30;
+    [flowLayout addSubview:priceLabel];
+    
+    //第三行，三个子视图均分。
+    UILabel *buyButton = [UILabel new];
+    buyButton.text = @"Buy";
+    buyButton.font = [CFTool font:12];
+    buyButton.wrapContentWidth = YES;
+    buyButton.myLeading = 20;
+    buyButton.myHeight = 30;
+    [flowLayout addSubview:buyButton];
     
 }
 

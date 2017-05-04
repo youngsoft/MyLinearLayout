@@ -40,6 +40,9 @@
        这里之所以用相对布局来实现滚动和停靠的原因是，线性布局、流式布局、浮动布局这几种布局都是根据添加的顺序来排列的。一般情况下，前面添加的子视图会显示在底部，而后面添加的子视图则会显示在顶部，所以一旦我们出现这种滚动，且某个子视图固定停靠时，我们一般要求这个停靠的子视图要放在最上面，也就是最后一个。
      */
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
+    
     UIScrollView *scrollView = [UIScrollView new];
     scrollView.delegate = self;
     self.view = scrollView;
@@ -116,6 +119,7 @@
 {
     
     //因为这里第一个视图的高度是80外加10的顶部padding，这样这里判断的偏移位置是90.
+    NSLog(@"%f",scrollView.contentOffset.y);
     if (scrollView.contentOffset.y > 90)
     {
         

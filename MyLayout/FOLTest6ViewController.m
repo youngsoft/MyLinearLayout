@@ -26,9 +26,9 @@
     UIScrollView *scrollView = [UIScrollView new];
     self.view = scrollView;
     
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.backgroundColor = [CFTool color:0];
-    rootLayout.myLeft = rootLayout.myRight = 0;
+    rootLayout.myHorzMargin = 0;
     rootLayout.heightSize.lBound(scrollView.heightSize,0,1); //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
     rootLayout.subviewVSpace = 10;
     [scrollView addSubview:rootLayout];
@@ -76,11 +76,11 @@
     //在常规情况下，如果使用左右浮动布局时，要求必须有明确的宽度，也就是不要用wrapContentWidth。同样使用上下浮动布局时，要求必须要有明确的高度，也就是不要用wrapContentHeight。这样设置明确宽度或者高度的原因是浮动布局需要根据这些宽度或者高度的约束自动换行浮动。但是在实践的场景中，有时候我们在浮动方向上没有尺寸约束限制，而是人为的来控制子视图的换行，并且还要布局视图的宽度和高度具有包裹属性，那么这时候我们就可以用浮动布局的noBoundaryLimit属性来进行控制了。
     //设置noBoundaryLimit为YES时必要同时设置包裹属性。具体情况见属性noBoundaryLimit的说明。
     
-    MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.backgroundColor = [UIColor whiteColor];
     contentLayout.noBoundaryLimit = YES;
     contentLayout.wrapContentHeight = YES;  //对于上下浮动布局来说，如果只想向上浮动，而高度又希望是由子视图决定，则必须要设置noBoundaryLimit的值为YES。
-    contentLayout.myLeft = contentLayout.myRight = 0;
+    contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewHSpace = 5;
     contentLayout.subviewVSpace = 5;
@@ -149,10 +149,10 @@
 {
     //浮动布局的一个缺点是居中对齐难以实现，所以这里需要对子视图做一些特殊处理.注意这里weight的使用。
     
-    MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.backgroundColor = [UIColor whiteColor];
     contentLayout.wrapContentHeight = YES;
-    contentLayout.myLeft = contentLayout.myRight = 0;
+    contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
 
@@ -237,17 +237,17 @@
 {
     //这个例子里面上下浮动布局还是可以设置wrapContentHeight的，并且这里用了viewLayoutCompleteBlock来实现一些特殊化处理。
     
-    MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Horz];
+    MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.backgroundColor = [UIColor whiteColor];
     contentLayout.wrapContentHeight = YES;   //虽然说上下浮动布局一般要明确有高度，但是我们依然可以用wrapContentHeight属性，这时候布局视图的高度就是子视图里面高度最高的子视图了。
-    contentLayout.myLeft = contentLayout.myRight = 0;
+    contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
     
     
     UIImageView *headImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions4"]];
     headImageView.mySize = CGSizeMake(80, 80);
-    headImageView.myRight = 10;
+    headImageView.myTrailing = 10;
     headImageView.layer.cornerRadius = 5;
     headImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     headImageView.layer.borderWidth = 0.5;
@@ -304,16 +304,16 @@
 
 -(void)createUserProfile4Layout:(MyLinearLayout*)rootLayout
 {
-    MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.backgroundColor = [UIColor whiteColor];
     contentLayout.wrapContentHeight = YES;
-    contentLayout.myLeft = contentLayout.myRight = 0;
+    contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
     
     UIImageView *headImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions4"]];
     headImageView.mySize = CGSizeMake(80, 80);
-    headImageView.myRight = 10;
+    headImageView.myTrailing = 10;
     headImageView.layer.cornerRadius = 5;
     headImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     headImageView.layer.borderWidth = 0.5;

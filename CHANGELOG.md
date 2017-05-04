@@ -3,6 +3,98 @@
 
 ---
 
+## [V1.3.6](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.6)(2017/5/5)
+
+#### Added
+1. 添加了对阿拉伯国家的从右往左方向布局的功能[#issue33](https://github.com/youngsoft/MyLinearLayout/issues/33)。系统提供了一个类属性：`isRTL`来实现对RTL布局的支持。同时为了支持RTL系统增加了UIView的扩展属性：`leadingPos, trailingPos, myLeading,myTrailing`用来实现头部和尾部的方向，MyBaseLayout则添加了`leadingPadding,trailingPadding`用来实现内边距的RTL支持。而边界线则增加了`leadingBorderline, trailingBorderline`属性来支持RTL。同时新增了`MyGravity_Horz_Leading,MyGravity_Horz_Trailing`两个停靠属性。下面的表格是介绍这些属性的意义。
+
+	所属类名|新属性|等价于LRT方向布局|等价于RTL布局方向
+------------|---------------|---------------
+UIView(MyLayoutExt)|leadingPos|leftPos|rightPos
+UIView(MyLayoutExt)|trailingPos|rightPos|leftPos
+UIView(MyLayoutExt)|myLeading|myLeft|myRight
+UIView(MyLayoutExt)|myTrailing|myRight|myLeft
+MyBaseLayout|leadingPadding|leftPadding|rightPadding
+MyBaseLayout|trailingPadding|rightPadding|leftPadding
+MyBaseLayout|leadingBorderline|leftBorderline|rightBorderline
+MyBaseLayout|trailingBorderline|rightBorderline|leftBorderline
+MyGravity|MyGravity_Horz_Leading|MyGravity_Horz_Left|MyGravity_Horz_Right
+MyGravity|MyGravity_Horz_Trailing|MyGravity_Horz_Right|MyGravity_Horz_Left
+
+	如果您的界面布局不需要考虑RTL以及对阿拉伯国际的支持则不需要使用上述新添加的属性。
+
+2. 添加了UIView扩展新属性`wrapContentSize`用来简化对`wrapContentHeight和wrapContentWidth`的设置。这个属性尤其对`UILabel`有用，表示视图的尺寸由内容自适用。
+3. 实现了对UILabel的`text`和`attributedText`进行设置后自动布局的功能，老版本的代码中每次设置完毕text值后要调用一下sizeToFit来激发布局，新版本自动添加了这个功能，使得不需要明确调用sizeToFit了。但是这样的前提是您必须对UILabel设置了wrapContentHeight或者wrapContentWidth。
+4. 对布局类添加新属性`cacheEstimatedRect`，这个属性用来和高度自实用的UITableViewCell结合使用能大幅度的提供布局计算的性能。这个属性提供了缓存一次尺寸评估的机制，使得当存在有复用的cell时减少布局的计算。 具体例子参考(DEMO:AllTest1TableViewCell)
+5. MyLayoutPos对象的equalTo方法的val值新增加了对UIView对象的支持，可以直接设置某个视图的位置等于另外一个视图，表示等于另外一个视图的对应的位置；另外val的值还支持对id<UILayoutSupport>对象的支持，比如topPos可以等于视图控制器的topLayoutGuide属性，bottomPos可以等于视图控制器的bottomLayoutGuide属性，这样就可以使得某个布局视图下的子视图的位置不会延生到导航条下面去。具体请参考DEMO:LLTest1ViewController。
+6. MyLayoutSize对象的equalTo方法的val值新增加了对UIView对象的支持，可以直接设置某个视图的尺寸等于另外一个视图，表示等于另外一个视图的对应的尺寸。
+7. 对边界线类`MyBorderline`增加属性`offset`可以实现边界线绘制的偏移位置，而不是默认的在视图的边界上。
+
+#### Fixed
+1. 修复了将一个布局视图加入到SB或者XIB上时同时设置了四周边距而不起作用的[#BUG36](https://github.com/youngsoft/MyLinearLayout/issues/36)。具体解决的方法是实现了MyBaseLayout的awakeFromNib方法，然后在里面更新了布局。
+2. 修复了框架布局`MyFrameLayout`和相对布局`MyRelativeLayout`中计算`wrapContentSize`时可能计算错误的BUG。
+
+#### Changed
+1.  为了和[TangramKit](https://github.com/youngsoft/TangramKit)库保持一致，对一些名字进行了统一的定义。下面表格列出了新旧名称的定义变化。
+
+	所属类名|新定义|老定义|
+------------|---------------|---------------
+MyOrientation|MyOrientation|MyLayoutViewOrientation
+MyOrientation|MyOrientation_Vert|MyLayoutViewOrientation_Vert
+MyOrientation|MyOrientation_Horz|MyLayoutViewOrientation_Horz
+MyAdjustScrollViewContentSizeMode|MyAdjustScrollViewContentSizeMode|MyLayoutAdjustScrollViewContentSizeMode
+MyAdjustScrollViewContentSizeMode|MyAdjustScrollViewContentSizeModeAuto|MyLayoutAdjustScrollViewContentSizeModeAuto
+MyAdjustScrollViewContentSizeMode|MyAdjustScrollViewContentSizeModeNo|MyLayoutAdjustScrollViewContentSizeModeNo
+MyAdjustScrollViewContentSizeMode|MyAdjustScrollViewContentSizeModeYes|MyLayoutAdjustScrollViewContentSizeModeYes
+
+	如果您要替换掉所有老方法和属性(建议替换)，则您可以按照如下步骤来完成代码的替换工作：
+ 
+ 			1. 查找所有：MyLayoutViewOrientation_  并替换为MyOrientation_  (选择Containning, 查找后选择preview，然后把除MyLayout库之外的其他都替换掉）
+ 			2. 查找所有：MyLayoutAdjustScrollViewContentSizeMode  并替换为MyAdjustScrollViewContentSizeMode  (选择Containning, 查找后选择preview，然后把除MyLayout库之外的其他都替换掉）
+
+
+2. 新版本优化了布局库的子视图构建性能和布局性能。下面表格是新旧版本各布局视图内单个子视图在iPhone6真机设备下的构建和布局时长值(单位是毫秒ms)
+
+	create time|1.3.6|1.3.5|提升%|layout time|1.3.6|1.3.5|提升%
+------------|---------------|---------------
+MyLinearLayout|0.164|0.211|28%||0.049|0.160|226%
+MyFrameLayout|0.149|0.212|42%||0.042|0.142|234%
+MyRelativeLayout|0.182|0.215|18%||0.068|0.137|101%
+MyFlowLayout|0.107|0.146|37%||0.036|0.111|210%
+MyFloatLayout|0.148|0.147|-0.48%||0.055|0.117|113%
+MyTableLayout\*|||
+MyPathLayout\*|||
+
+	这里没有提供表格布局和路径布局数据是因为表格布局就是一种线性套线性的线性布局，路径布局则没有进行多少优化。下面的一个表格则是单个视图分别在MyLayout,frame,AutoLayout,Masonry,UIStackView5种布局体系下的构建和布局时长对比值。
+	
+	create time|Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+------------|---------------|---------------
+MyLinearLayout|0.08|0.164|0.219|0.304|0.131
+MyFrameLayout|0.05|0.149|0.209|0.273|0.131
+MyRelativeLayout|0.079|0.182|0.116|0.359|0.131
+MyFlowLayout|0.08|0.107|0.198|0.258|0.131
+MyFloatLayout|0.044|0.148|0.203|0.250|0.131
+
+
+
+	layout time |Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+------------|---------------|---------------
+MyLinearLayout|0|0.049|0.269|0.269|0.272
+MyFrameLayout|0|0.042|0.243|0.243|0.272
+MyRelativeLayout|0|0.068|0.274|0.274|0.272
+MyFlowLayout|0|0.036|0.279|0.279|0.272
+MyFloatLayout|0|0.055|0.208|0.208|0.272
+
+  从上面的表格中我们得出如下结论[issue#25](https://github.com/youngsoft/MyLinearLayout/issues/25)：
+  1. 用frame构建视图用时最少，平均每个视图花费0.068ms。当视图的frame指定后就不再需要布局视图了，所以布局时间几乎是0。
+  2. 当用AutoLayout进行布局时每个子视图的平均构建时长约为0.189ms，而Masonry因为是对AutoLayout的封装所以平均构建时长约为0.289ms。在布局时则因为都是使用了AutoLayout所以是相等的，大概花费0.255ms左右。
+  3. MyLayout的实现因为是对frame的封装，所以无论是构建时长和布局时长都要优于AutoLayout，但低于原始的frame方法。MyLayout的平均构建时长约0.150ms，比frame构建要多花费2.2倍的时间；而AutoLayout的平均构建时长是MyLayout的1.26倍；Masonry的平均构建时长则是MyLayout的1.9倍。
+  4. MyLayout的平均布局时长是0.05ms, 而AutoLayout的布局时长则是MyLayout的5倍。
+  5. UIStackView的构建时长要稍微优于MyLayout的线性布局MyLinearLayout.但是布局时长则是MyLinearLayout的5.5倍。
+  6. MyLayout中流式布局MyFlowLayout的构建时长和布局时长最小，而相对布局的构建和布局时长最长。
+
+
+
 ## [V1.3.5](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.5)(2017/4/11)
 
 #### Added

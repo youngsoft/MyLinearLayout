@@ -29,13 +29,16 @@
 
 -(void)loadView
 {
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
     [super loadView];
+ 
     
     /*
      有的时候我们希望让一个布局视图放入到非布局父视图中去，但又希望布局视图的宽高和非布局父视图宽高一致。
      这时候我们可以设置myHeight,myWidth来指定自身的高宽，我们也可以通过myMargin = 0来让其跟父视图保持一样的宽度。
      */
-    MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     tableLayout.backgroundColor = [CFTool color:0];
     tableLayout.subviewHSpace = 2;  //表格的列间距
     tableLayout.subviewVSpace = 2;  //表格的行间距
@@ -47,14 +50,14 @@
     [tableLayout addRow:30 colSize:70];
     
     UILabel *colView = [self createLabel:@"Cell00" backgroundColor:[CFTool color:1]];
-    colView.myLeft = 10; //可以使用myLeft,myTop,myRight,myBottom来调整间隔
+    colView.myLeading = 10; //可以使用myLeft,myTop,myRight,myBottom,myLeading,myTrailing来调整间隔
     colView.myTop = 5;
     colView.myBottom = 5;
-    colView.myRight = 40;
+    colView.myTrailing = 40;
     [tableLayout addCol:colView atRow:0];
     
     colView = [self createLabel:@"Cell01" backgroundColor:[CFTool color:2]];
-    colView.myLeft = 20;
+    colView.myLeading = 20;
     [tableLayout addCol:colView atRow:0];
     
     colView = [self createLabel:@"Cell02" backgroundColor:[CFTool color:3]];

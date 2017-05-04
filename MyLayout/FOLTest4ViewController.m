@@ -133,8 +133,8 @@ static CGFloat sTagWidth = 70;
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:scrollView];
     
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
-    rootLayout.myLeft = rootLayout.myRight = 0;  //宽度和滚动条视图保持一致。
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    rootLayout.myHorzMargin = 0;  //宽度和滚动条视图保持一致。
     rootLayout.gravity = MyGravity_Horz_Fill;
     [scrollView addSubview:rootLayout];
     
@@ -143,7 +143,7 @@ static CGFloat sTagWidth = 70;
     
     
     //添加数据内容布局
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.backgroundColor = [CFTool color:0];
     contentLayout.gravity = MyGravity_Horz_Fill;
     contentLayout.subviewVSpace = 10;
@@ -160,6 +160,8 @@ static CGFloat sTagWidth = 70;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 /*
 #pragma mark - Navigation
@@ -179,7 +181,7 @@ static CGFloat sTagWidth = 70;
     NSInteger partIndex = 0;
     for (NSDictionary *dict in self.datas)
     {
-        MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+        MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
         floatLayout.backgroundColor = [UIColor whiteColor];
         floatLayout.padding = UIEdgeInsetsMake(20, 10, 20, 10);
         floatLayout.wrapContentHeight = YES;
@@ -253,13 +255,13 @@ static CGFloat sTagWidth = 70;
 -(void)style2Layout:(MyLinearLayout*)contentLayout
 {
     /*
-     通过对浮动布局的setSubviewFloatMargin的使用，可以很方便的设置浮动间距值。布局会根据布局的宽度值，和你设置的子视图的固定宽度值，以及虽小间距值来自动算出您的子视图间距。需要注意的是如果当前的浮动布局的方向是MyLayoutViewOrientation_Vert,则setSubviewFloatMargin设置的是水平浮动间距，否则设置的将是垂直浮动间距。
+     通过对浮动布局的setSubviewFloatMargin的使用，可以很方便的设置浮动间距值。布局会根据布局的宽度值，和你设置的子视图的固定宽度值，以及虽小间距值来自动算出您的子视图间距。需要注意的是如果当前的浮动布局的方向是MyOrientation_Vert,则setSubviewFloatMargin设置的是水平浮动间距，否则设置的将是垂直浮动间距。
      */
     
     NSInteger partIndex = 0;
     for (NSDictionary *dict in self.datas)
     {
-        MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+        MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
         floatLayout.backgroundColor = [UIColor whiteColor];
         floatLayout.padding = UIEdgeInsetsMake(20, 5, 20, 5);
         floatLayout.wrapContentHeight = YES;
@@ -332,7 +334,7 @@ static CGFloat sTagWidth = 70;
 //创建操作动作布局。
 -(UIView*)createActionLayout
 {
-    MyFloatLayout *actionLayout = [MyFloatLayout floatLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyFloatLayout *actionLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewHSpace = 5;
     actionLayout.wrapContentHeight = YES;
@@ -366,7 +368,7 @@ static CGFloat sTagWidth = 70;
 -(UIView*)createSectionView:(NSString*)title image:(NSString*)image
 {
     
-    MyLinearLayout *sectionLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Vert];
+    MyLinearLayout *sectionLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     sectionLayout.wrapContentHeight = NO;
     sectionLayout.layer.cornerRadius = 5;
     sectionLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -383,7 +385,7 @@ static CGFloat sTagWidth = 70;
     sectionLabel.textColor = [UIColor lightGrayColor];
     sectionLabel.adjustsFontSizeToFitWidth = YES;
     sectionLabel.textAlignment = NSTextAlignmentCenter;
-    sectionLabel.myLeft = sectionLabel.myRight = 0;
+    sectionLabel.myHorzMargin = 0;
     [sectionLabel sizeToFit];
     [sectionLayout addSubview:sectionLabel];
  
@@ -453,5 +455,6 @@ static CGFloat sTagWidth = 70;
     }
     
 }
+
 
 @end

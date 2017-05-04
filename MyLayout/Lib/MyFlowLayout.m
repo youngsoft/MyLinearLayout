@@ -20,9 +20,10 @@
 
 -(void)setWeight:(CGFloat)weight
 {
-    if (self.myCurrentSizeClass.weight != weight)
+    UIView *sc = self.myCurrentSizeClass;
+    if (sc.weight != weight)
     {
-        self.myCurrentSizeClass.weight = weight;
+        sc.weight = weight;
         if (self.superview != nil)
             [self.superview setNeedsLayout];
     }
@@ -34,7 +35,7 @@
 @implementation MyFlowLayout
 
 
--(instancetype)initWithFrame:(CGRect)frame orientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
+-(instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount
 {
     self = [super initWithFrame:frame];
     if (self != nil)
@@ -46,19 +47,19 @@
     return  self;
 }
 
--(instancetype)initWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
+-(instancetype)initWithOrientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount
 {
     return [self initWithFrame:CGRectZero orientation:orientation arrangedCount:arrangedCount];
 }
 
 
-+(instancetype)flowLayoutWithOrientation:(MyLayoutViewOrientation)orientation arrangedCount:(NSInteger)arrangedCount
++(instancetype)flowLayoutWithOrientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount
 {
     MyFlowLayout *layout = [[[self class] alloc] initWithOrientation:orientation arrangedCount:arrangedCount];
     return layout;
 }
 
--(void)setOrientation:(MyLayoutViewOrientation)orientation
+-(void)setOrientation:(MyOrientation)orientation
 {
      MyFlowLayout *lsc = self.myCurrentSizeClass;
     if (lsc.orientation != orientation)
@@ -68,7 +69,7 @@
     }
 }
 
--(MyLayoutViewOrientation)orientation
+-(MyOrientation)orientation
 {
     return self.myCurrentSizeClass.orientation;
 }
@@ -174,29 +175,33 @@
 
 -(void)setAverageArrange:(BOOL)averageArrange
 {
-    if (self.orientation == MyLayoutViewOrientation_Vert)
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
+    
+    if (lsc.orientation == MyOrientation_Vert)
     {
         if (averageArrange)
-            self.gravity = (self.gravity & MyGravity_Horz_Mask) | MyGravity_Horz_Fill;
+            lsc.gravity = (lsc.gravity & MyGravity_Horz_Mask) | MyGravity_Horz_Fill;
         else
-            self.gravity = (self.gravity & MyGravity_Horz_Mask) | MyGravity_None;
+            lsc.gravity = (lsc.gravity & MyGravity_Horz_Mask) | MyGravity_None;
     }
     else
     {
         if (averageArrange)
-            self.gravity = (self.gravity & MyGravity_Vert_Mask) | MyGravity_Vert_Fill;
+            lsc.gravity = (lsc.gravity & MyGravity_Vert_Mask) | MyGravity_Vert_Fill;
         else
-            self.gravity = (self.gravity & MyGravity_Vert_Mask) | MyGravity_None;
+            lsc.gravity = (lsc.gravity & MyGravity_Vert_Mask) | MyGravity_None;
     }
     
 }
 
 -(BOOL)averageArrange
 {
-    if (self.orientation == MyLayoutViewOrientation_Vert)
-        return (self.gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill;
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
+
+    if (lsc.orientation == MyOrientation_Vert)
+        return (lsc.gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill;
     else
-        return (self.gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill;
+        return (lsc.gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill;
 }
 
 
@@ -209,74 +214,87 @@
     if (sbs == nil)
         sbs = [self myGetLayoutSubviews];
     
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
+    
+    MyOrientation orientation = lsc.orientation;
+    MyGravity gravity = lsc.gravity;
+    MyGravity arrangedGravity = lsc.arrangedGravity;
     
     for (UIView *sbv in sbs)
     {
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
         
         if (!isEstimate)
         {
-            sbv.myFrame.frame = sbv.bounds;
-            [self myCalcSizeOfWrapContentSubview:sbv selfLayoutSize:selfSize];
+            sbvMyFrame.frame = sbv.bounds;
+            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvMyFrame:sbvMyFrame selfLayoutSize:selfSize];
         }
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
             
-            MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
-            
-            if (sbvl.wrapContentWidth)
+            if (sbvsc.wrapContentWidth)
             {
-                if (sbvl.widthSizeInner.dimeVal != nil ||
-                    (self.orientation == MyLayoutViewOrientation_Horz && (self.arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill) ||
-                    (self.orientation == MyLayoutViewOrientation_Vert && ((self.gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill || sbvl.weight != 0)))
+                if (sbvsc.widthSizeInner.dimeVal != nil ||
+                    (orientation == MyOrientation_Horz && (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill) ||
+                    (orientation == MyOrientation_Vert && ((gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill || sbvsc.weight != 0)))
                 {
-                    [sbvl mySetWrapContentWidthNoLayout:NO];
+                    sbvsc.wrapContentWidth = NO;
                 }
             }
             
-            if (sbvl.wrapContentHeight)
+            if (sbvsc.wrapContentHeight)
             {
-                if (sbvl.heightSizeInner.dimeVal != nil ||
-                    (self.orientation == MyLayoutViewOrientation_Vert && (self.arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill) ||
-                    (self.orientation == MyLayoutViewOrientation_Horz && ((self.gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill || sbvl.weight != 0)))
+                if (sbvsc.heightSizeInner.dimeVal != nil ||
+                    (orientation == MyOrientation_Vert && (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill) ||
+                    (orientation == MyOrientation_Horz && ((gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill || sbvsc.weight != 0)))
                 {
-                    [sbvl mySetWrapContentHeightNoLayout:NO];
+                    sbvsc.wrapContentHeight = NO;
                 }
             }
 
-            if (pHasSubLayout != nil && (sbvl.wrapContentHeight || sbvl.wrapContentWidth))
+            
+            BOOL isSbvWrap = sbvsc.wrapContentHeight || sbvsc.wrapContentWidth;
+
+            if (pHasSubLayout != nil && isSbvWrap)
                 *pHasSubLayout = YES;
             
-            if (isEstimate && (sbvl.wrapContentWidth || sbvl.wrapContentHeight))
+            if (isEstimate && isSbvWrap)
             {
-                [sbvl estimateLayoutRect:sbvl.myFrame.frame.size inSizeClass:sizeClass];
-                sbvl.myFrame.sizeClass = [sbvl myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                [(MyBaseLayout*)sbv estimateLayoutRect:sbvMyFrame.frame.size inSizeClass:sizeClass];
+                if (sbvMyFrame.multiple)
+                {
+                    sbvMyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    sbvsc = sbvMyFrame.sizeClass;
+                }
             }
         }
     }
 
     
     
-    if (self.orientation == MyLayoutViewOrientation_Vert)
+    if (orientation == MyOrientation_Vert)
     {
-        if (self.arrangedCount == 0)
-            selfSize = [self myLayoutSubviewsForVertContent:selfSize sbs:sbs];
+        if (lsc.arrangedCount == 0)
+            selfSize = [self myLayoutSubviewsForVertContent:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
         else
-            selfSize = [self myLayoutSubviewsForVert:selfSize sbs:sbs];
+            selfSize = [self myLayoutSubviewsForVert:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
     }
     else
     {
-        if (self.arrangedCount == 0)
-            selfSize = [self myLayoutSubviewsForHorzContent:selfSize sbs:sbs];
+        if (lsc.arrangedCount == 0)
+            selfSize = [self myLayoutSubviewsForHorzContent:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
         else
-            selfSize = [self myLayoutSubviewsForHorz:selfSize sbs:sbs];
+            selfSize = [self myLayoutSubviewsForHorz:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
     }
     
-    selfSize.height = [self myValidMeasure:self.heightSizeInner sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    //调整布局视图自己的尺寸。
+    [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
+    //如果是反向则调整所有子视图的左右位置。
+    [self myAdjustSubviewsRTLPos:sbs selfWidth:selfSize.width];
     
-    selfSize.width = [self myValidMeasure:self.widthSizeInner sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
-    
-    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs];
+    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs lsc:lsc];
 }
 
 -(id)createSizeClassInstance
@@ -292,14 +310,17 @@
     for (NSInteger j = startIndex - count; j < startIndex; j++)
     {
         UIView *sbv = sbs[j];
-        if (sbv.weight != 0)
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
+        
+        if (sbvsc.weight != 0)
         {
-            CGFloat tempWidth = (totalFloatWidth * sbv.weight / totalWeight);
-            if (sbv.widthSizeInner != nil)
-                tempWidth = [sbv.widthSizeInner measureWith:tempWidth];
+            CGFloat tempWidth = (totalFloatWidth * sbvsc.weight / totalWeight);
+            if (sbvsc.widthSizeInner != nil)
+                tempWidth = [sbvsc.widthSizeInner measureWith:tempWidth];
             
-            sbv.myFrame.width =  [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:tempWidth sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
-            sbv.myFrame.rightPos = sbv.myFrame.leftPos + sbv.myFrame.width;
+            sbvMyFrame.width =  [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:tempWidth sbvSize:sbvMyFrame.frame.size selfLayoutSize:selfSize];
+            sbvMyFrame.trailing = sbvMyFrame.leading + sbvMyFrame.width;
         }
     }
 }
@@ -309,17 +330,20 @@
     for (NSInteger j = startIndex - count; j < startIndex; j++)
     {
         UIView *sbv = sbs[j];
-        if (sbv.weight != 0)
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
+        
+        if (sbvsc.weight != 0)
         {
-            CGFloat tempHeight = (totalFloatHeight * sbv.weight / totalWeight);
-            if (sbv.heightSizeInner != nil)
-                tempHeight = [sbv.heightSizeInner measureWith:tempHeight];
+            CGFloat tempHeight = (totalFloatHeight * sbvsc.weight / totalWeight);
+            if (sbvsc.heightSizeInner != nil)
+                tempHeight = [sbvsc.heightSizeInner measureWith:tempHeight];
             
-            sbv.myFrame.height =  [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:tempHeight sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
-            sbv.myFrame.bottomPos = sbv.myFrame.topPos + sbv.myFrame.height;
+            sbvMyFrame.height =  [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:tempHeight sbvSize:sbvMyFrame.frame.size selfLayoutSize:selfSize];
+            sbvMyFrame.bottom = sbvMyFrame.top + sbvMyFrame.height;
             
-            if (sbv.widthSizeInner.dimeRelaVal != nil && sbv.widthSizeInner.dimeRelaVal == sbv.heightSizeInner)
-                sbv.myFrame.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:[sbv.widthSizeInner measureWith: sbv.myFrame.height ] sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+            if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+                sbvMyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:[sbvsc.widthSizeInner measureWith: sbvMyFrame.height ] sbvSize:sbvMyFrame.frame.size selfLayoutSize:selfSize];
             
         }
     }
@@ -327,33 +351,36 @@
 
 
 
-- (void)myCalcVertLayoutGravity:(CGSize)selfSize rowMaxHeight:(CGFloat)rowMaxHeight rowMaxWidth:(CGFloat)rowMaxWidth mg:(MyGravity)mg amg:(MyGravity)amg sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count vertMargin:(CGFloat)vertMargin horzMargin:(CGFloat)horzMargin
+- (void)myCalcVertLayoutGravity:(CGSize)selfSize rowMaxHeight:(CGFloat)rowMaxHeight rowMaxWidth:(CGFloat)rowMaxWidth mg:(MyGravity)mg amg:(MyGravity)amg sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count vertSpace:(CGFloat)vertSpace horzSpace:(CGFloat)horzSpace isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
     
-    UIEdgeInsets padding = self.padding;
+    CGFloat paddingLeading = lsc.leadingPadding;
+    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingHorz = paddingLeading + paddingTrailing;
+ 
     CGFloat addXPos = 0; //多出来的空隙区域，用于停靠处理。
     CGFloat addXFill = 0;  //多出来的平均区域，用于拉伸间距或者尺寸
     BOOL averageArrange = (mg == MyGravity_Horz_Fill);
     
-    if (!averageArrange || self.arrangedCount == 0)
+    if (!averageArrange || lsc.arrangedCount == 0)
     {
         switch (mg) {
             case MyGravity_Horz_Center:
             {
-                addXPos = (selfSize.width - padding.left - padding.right - rowMaxWidth) / 2;
+                addXPos = (selfSize.width - paddingHorz - rowMaxWidth) / 2;
             }
                 break;
-            case MyGravity_Horz_Right:
+            case MyGravity_Horz_Trailing:
             {
-                addXPos = selfSize.width - padding.left - padding.right - rowMaxWidth; //因为具有不考虑左边距，而原来的位置增加了左边距，因此
+                addXPos = selfSize.width - paddingHorz - rowMaxWidth; //因为具有不考虑左边距，而原来的位置增加了左边距，因此
             }
                 break;
             case MyGravity_Horz_Between:
             {
                 //总宽度减去最大的宽度。再除以数量表示每个应该扩展的空间。最后一行无效(如果最后一行的数量和其他行的数量一样除外)。
-                if ((startIndex != sbs.count || count == self.arrangedCount) && count > 1)
+                if ((startIndex != sbs.count || count == lsc.arrangedCount) && count > 1)
                 {
-                    addXFill = (selfSize.width - padding.left - padding.right - rowMaxWidth) / (count - 1);
+                    addXFill = (selfSize.width - paddingHorz - rowMaxWidth) / (count - 1);
                 }
             }
                 break;
@@ -362,12 +389,12 @@
         }
         
         //处理内容拉伸的情况。这里是只有内容约束布局才支持尺寸拉伸。
-        if (self.arrangedCount == 0 && averageArrange)
+        if (lsc.arrangedCount == 0 && averageArrange)
         {
             //不是最后一行。。
             if (startIndex != sbs.count)
             {
-                addXFill = (selfSize.width - padding.left - padding.right - rowMaxWidth) / count;
+                addXFill = (selfSize.width - paddingHorz - rowMaxWidth) / count;
             }
             
         }
@@ -379,16 +406,19 @@
     {
         UIView *sbv = sbs[j];
         
-        if (self.intelligentBorderline != nil)
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
+        
+        if (!isEstimate && self.intelligentBorderline != nil)
         {
             if ([sbv isKindOfClass:[MyBaseLayout class]])
             {
                 MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
                 if (!sbvl.notUseIntelligentBorderline)
                 {
-                    sbvl.leftBorderline = nil;
+                    sbvl.leadingBorderline = nil;
                     sbvl.topBorderline = nil;
-                    sbvl.rightBorderline = nil;
+                    sbvl.trailingBorderline = nil;
                     sbvl.bottomBorderline = nil;
                     
                     //如果不是最后一行就画下面，
@@ -400,70 +430,70 @@
                     //如果不是最后一列就画右边,
                     if (j < startIndex - 1)
                     {
-                        sbvl.rightBorderline = self.intelligentBorderline;
+                        sbvl.trailingBorderline = self.intelligentBorderline;
                     }
                     
                     //如果最后一行的最后一个没有满列数时
-                    if (j == sbs.count - 1 && self.arrangedCount != count )
+                    if (j == sbs.count - 1 && lsc.arrangedCount != count )
                     {
-                        sbvl.rightBorderline = self.intelligentBorderline;
+                        sbvl.trailingBorderline = self.intelligentBorderline;
                     }
                     
                     //如果有垂直间距则不是第一行就画上
-                    if (vertMargin != 0 && startIndex - count != 0)
+                    if (vertSpace != 0 && startIndex - count != 0)
                     {
                         sbvl.topBorderline = self.intelligentBorderline;
                     }
                     
                     //如果有水平间距则不是第一列就画左
-                    if (horzMargin != 0 && j != startIndex - count)
+                    if (horzSpace != 0 && j != startIndex - count)
                     {
-                        sbvl.leftBorderline = self.intelligentBorderline;
+                        sbvl.leadingBorderline = self.intelligentBorderline;
                     }
                     
                 }
             }
         }
         
-        if ((amg != MyGravity_None && amg != MyGravity_Vert_Top) || /*addXPos != 0*/_myCGFloatNotEqual(addXPos, 0)  || /*addXFill != 0*/ _myCGFloatNotEqual(addXFill, 0))
+        if ((amg != MyGravity_None && amg != MyGravity_Vert_Top) || _myCGFloatNotEqual(addXPos, 0)  ||  _myCGFloatNotEqual(addXFill, 0))
         {
             
-            sbv.myFrame.leftPos += addXPos;
+            sbvMyFrame.leading += addXPos;
             
             //内容约束布局并且是拉伸尺寸。。
-            if (self.arrangedCount == 0 && averageArrange)
+            if (lsc.arrangedCount == 0 && averageArrange)
             {
                 //只拉伸宽度不拉伸间距
-                sbv.myFrame.width += addXFill;
+                sbvMyFrame.width += addXFill;
                 
                 if (j != startIndex - count)
                 {
-                    sbv.myFrame.leftPos += addXFill * (j - (startIndex - count));
+                    sbvMyFrame.leading += addXFill * (j - (startIndex - count));
                     
                 }
             }
             else
             {
                 //其他的只拉伸间距
-                sbv.myFrame.leftPos += addXFill * (j - (startIndex - count));
+                sbvMyFrame.leading += addXFill * (j - (startIndex - count));
             }
             
             
             switch (amg) {
                 case MyGravity_Vert_Center:
                 {
-                    sbv.myFrame.topPos += (rowMaxHeight - sbv.topPosInner.margin - sbv.bottomPosInner.margin - sbv.myFrame.height) / 2;
+                    sbvMyFrame.top += (rowMaxHeight - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal - sbvMyFrame.height) / 2;
                     
                 }
                     break;
                 case MyGravity_Vert_Bottom:
                 {
-                    sbv.myFrame.topPos += rowMaxHeight - sbv.topPosInner.margin - sbv.bottomPosInner.margin - sbv.myFrame.height;
+                    sbvMyFrame.top += rowMaxHeight - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal - sbvMyFrame.height;
                 }
                     break;
                 case MyGravity_Vert_Fill:
                 {
-                    sbv.myFrame.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rowMaxHeight - sbv.topPosInner.margin - sbv.bottomPosInner.margin sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+                    sbvMyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rowMaxHeight - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal sbvSize:sbvMyFrame.frame.size selfLayoutSize:selfSize];
                 }
                     break;
                 default:
@@ -474,33 +504,37 @@
     
 }
 
-- (void)myCalcHorzLayoutGravity:(CGSize)selfSize colMaxWidth:(CGFloat)colMaxWidth colMaxHeight:(CGFloat)colMaxHeight mg:(MyGravity)mg  amg:(MyGravity)amg sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count vertMargin:(CGFloat)vertMargin horzMargin:(CGFloat)horzMargin
+- (void)myCalcHorzLayoutGravity:(CGSize)selfSize colMaxWidth:(CGFloat)colMaxWidth colMaxHeight:(CGFloat)colMaxHeight mg:(MyGravity)mg  amg:(MyGravity)amg sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count vertSpace:(CGFloat)vertSpace horzSpace:(CGFloat)horzSpace isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
+    
+    CGFloat paddingTop = lsc.topPadding;
+    CGFloat paddingBottom = lsc.bottomPadding;
+    CGFloat paddingVert = paddingTop + paddingBottom;
     
     CGFloat addYPos = 0;
     CGFloat addYFill = 0;
-    UIEdgeInsets padding = self.padding;
+    
     BOOL averageArrange = (mg == MyGravity_Vert_Fill);
     
-    if (!averageArrange || self.arrangedCount == 0)
+    if (!averageArrange || lsc.arrangedCount == 0)
     {
         switch (mg) {
             case MyGravity_Vert_Center:
             {
-                addYPos = (selfSize.height - padding.top - padding.bottom - colMaxHeight) / 2;
+                addYPos = (selfSize.height - paddingVert - colMaxHeight) / 2;
             }
                 break;
             case MyGravity_Vert_Bottom:
             {
-                addYPos = selfSize.height - padding.top - padding.bottom - colMaxHeight;
+                addYPos = selfSize.height - paddingVert - colMaxHeight;
             }
                 break;
             case MyGravity_Vert_Between:
             {
                 //总宽度减去最大的宽度。再除以数量表示每个应该扩展的空间。最后一行无效(如果数量和单行的数量相等除外)。
-                if ((startIndex != sbs.count || count == self.arrangedCount) && count > 1)
+                if ((startIndex != sbs.count || count == lsc.arrangedCount) && count > 1)
                 {
-                    addYFill = (selfSize.height - padding.top - padding.bottom - colMaxHeight) / (count - 1);
+                    addYFill = (selfSize.height - paddingVert - colMaxHeight) / (count - 1);
                 }
                 
             }
@@ -509,11 +543,11 @@
         }
         
         //处理内容拉伸的情况。
-        if (self.arrangedCount == 0 && averageArrange)
+        if (lsc.arrangedCount == 0 && averageArrange)
         {
             if (startIndex != sbs.count)
             {
-                addYFill = (selfSize.height  - padding.top - padding.bottom - colMaxHeight) / count;
+                addYFill = (selfSize.height  - paddingVert - colMaxHeight) / count;
             }
             
         }
@@ -527,17 +561,20 @@
     for (NSInteger j = startIndex - count; j < startIndex; j++)
     {
         UIView *sbv = sbs[j];
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
         
-        if (self.intelligentBorderline != nil)
+        
+        if (!isEstimate && self.intelligentBorderline != nil)
         {
             if ([sbv isKindOfClass:[MyBaseLayout class]])
             {
                 MyBaseLayout *sbvl = (MyBaseLayout*)sbv;
                 if (!sbvl.notUseIntelligentBorderline)
                 {
-                    sbvl.leftBorderline = nil;
+                    sbvl.leadingBorderline = nil;
                     sbvl.topBorderline = nil;
-                    sbvl.rightBorderline = nil;
+                    sbvl.trailingBorderline = nil;
                     sbvl.bottomBorderline = nil;
                     
                     
@@ -550,25 +587,27 @@
                     //如果不是最后一列就画右边,
                     if (startIndex != sbs.count )
                     {
-                        sbvl.rightBorderline = self.intelligentBorderline;
+                        sbvl.trailingBorderline = self.intelligentBorderline;
+                        
                     }
                     
                     //如果最后一行的最后一个没有满列数时
-                    if (j == sbs.count - 1 && self.arrangedCount != count )
+                    if (j == sbs.count - 1 && lsc.arrangedCount != count )
                     {
                         sbvl.bottomBorderline = self.intelligentBorderline;
                     }
                     
                     //如果有垂直间距则不是第一行就画上
-                    if (vertMargin != 0 && j != startIndex - count)
+                    if (vertSpace != 0 && j != startIndex - count)
                     {
                         sbvl.topBorderline = self.intelligentBorderline;
                     }
                     
                     //如果有水平间距则不是第一列就画左
-                    if (horzMargin != 0 && startIndex - count != 0  )
+                    if (horzSpace != 0 && startIndex - count != 0  )
                     {
-                        sbvl.leftBorderline = self.intelligentBorderline;
+                       sbvl.leadingBorderline = self.intelligentBorderline;
+                        
                     }
                     
                     
@@ -578,43 +617,43 @@
         }
         
         
-        if ((amg != MyGravity_None && amg != MyGravity_Horz_Left) || /*addYPos != 0*/_myCGFloatNotEqual(addYPos, 0) || /*addYFill != 0*/_myCGFloatNotEqual(addYFill, 0) )
+        if ((amg != MyGravity_None && amg != MyGravity_Horz_Leading) || _myCGFloatNotEqual(addYPos, 0) || _myCGFloatNotEqual(addYFill, 0) )
         {
-            sbv.myFrame.topPos += addYPos;
+            sbvMyFrame.top += addYPos;
             
-            if (self.arrangedCount == 0 && averageArrange)
+            if (lsc.arrangedCount == 0 && averageArrange)
             {
                 //只拉伸宽度不拉伸间距
-                sbv.myFrame.height += addYFill;
+                sbvMyFrame.height += addYFill;
                 
                 if (j != startIndex - count)
                 {
-                    sbv.myFrame.topPos += addYFill * (j - (startIndex - count));
+                    sbvMyFrame.top += addYFill * (j - (startIndex - count));
                     
                 }
             }
             else
             {
                 //只拉伸间距
-                sbv.myFrame.topPos += addYFill * (j - (startIndex - count));
+                sbvMyFrame.top += addYFill * (j - (startIndex - count));
             }
             
             
             switch (amg) {
                 case MyGravity_Horz_Center:
                 {
-                    sbv.myFrame.leftPos += (colMaxWidth - sbv.leftPosInner.margin - sbv.rightPosInner.margin - sbv.myFrame.width) / 2;
+                    sbvMyFrame.leading += (colMaxWidth - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal - sbvMyFrame.width) / 2;
                     
                 }
                     break;
-                case MyGravity_Horz_Right:
+                case MyGravity_Horz_Trailing:
                 {
-                    sbv.myFrame.leftPos += colMaxWidth - sbv.leftPosInner.margin - sbv.rightPosInner.margin - sbv.myFrame.width;
+                    sbvMyFrame.leading += colMaxWidth - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal - sbvMyFrame.width;
                 }
                     break;
                 case MyGravity_Horz_Fill:
                 {
-                    sbv.myFrame.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:colMaxWidth - sbv.leftPosInner.margin - sbv.rightPosInner.margin sbvSize:sbv.myFrame.frame.size selfLayoutSize:selfSize];
+                    sbvMyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:colMaxWidth - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal sbvSize:sbvMyFrame.frame.size selfLayoutSize:selfSize];
                 }
                     break;
                 default:
@@ -625,20 +664,20 @@
 }
 
 
--(CGFloat)myCalcSingleLineSize:(NSArray*)sbs margin:(CGFloat)margin
+-(CGFloat)myCalcSingleLineSize:(NSArray*)sbs space:(CGFloat)space
 {
     CGFloat size = 0;
     for (UIView *sbv in sbs)
     {
-        size += sbv.myFrame.rightPos;
+        size += sbv.myFrame.trailing;
         if (sbv != sbs.lastObject)
-            size += margin;
+            size += space;
     }
     
     return size;
 }
 
--(NSArray*)myGetAutoArrangeSubviews:(NSMutableArray*)sbs selfSize:(CGFloat)selfSize margin:(CGFloat)margin
+-(NSArray*)myGetAutoArrangeSubviews:(NSMutableArray*)sbs selfSize:(CGFloat)selfSize space:(CGFloat)space
 {
     
     NSMutableArray *retArray = [NSMutableArray arrayWithCapacity:sbs.count];
@@ -651,7 +690,7 @@
                                           index:0
                                       calcArray:@[]
                                        selfSize:selfSize
-                                         margin:margin
+                                         space:space
                             bestSingleLineArray:bestSingleLineArray];
         
         [retArray addObjectsFromArray:bestSingleLineArray];
@@ -670,13 +709,13 @@
                                    index:(NSInteger)index
                                calcArray:(NSArray*)calcArray
                                 selfSize:(CGFloat)selfSize
-                                  margin:(CGFloat)margin
+                                  space:(CGFloat)space
                      bestSingleLineArray:(NSMutableArray*)bestSingleLineArray
 {
     if (index >= sbs.count)
     {
-        CGFloat s1 = [self myCalcSingleLineSize:calcArray margin:margin];
-        CGFloat s2 = [self myCalcSingleLineSize:bestSingleLineArray margin:margin];
+        CGFloat s1 = [self myCalcSingleLineSize:calcArray space:space];
+        CGFloat s2 = [self myCalcSingleLineSize:bestSingleLineArray space:space];
         if (fabs(selfSize - s1) < fabs(selfSize - s2) && /*s1 <= selfSize*/ _myCGFloatLessOrEqual(s1, selfSize) )
         {
             [bestSingleLineArray setArray:calcArray];
@@ -692,23 +731,23 @@
         NSMutableArray *calcArray2 = [NSMutableArray arrayWithArray:calcArray];
         [calcArray2 addObject:sbs[i]];
         
-        CGFloat s1 = [self myCalcSingleLineSize:calcArray2 margin:margin];
-        if (/*s1 <= selfSize*/ _myCGFloatLessOrEqual(s1, selfSize))
+        CGFloat s1 = [self myCalcSingleLineSize:calcArray2 space:space];
+        if (_myCGFloatLessOrEqual(s1, selfSize))
         {
-            CGFloat s2 = [self myCalcSingleLineSize:bestSingleLineArray margin:margin];
+            CGFloat s2 = [self myCalcSingleLineSize:bestSingleLineArray space:space];
             if (fabs(selfSize - s1) < fabs(selfSize - s2))
             {
                 [bestSingleLineArray setArray:calcArray2];
             }
             
-            if (/*s1 == selfSize*/ _myCGFloatEqual(s1, selfSize))
+            if (_myCGFloatEqual(s1, selfSize))
                 break;
             
             [self myCalcAutoArrangeSingleLineSubviews:sbs
                                               index:i + 1
                                           calcArray:calcArray2
                                            selfSize:selfSize
-                                             margin:margin
+                                             space:space
                                 bestSingleLineArray:bestSingleLineArray];
             
         }
@@ -720,22 +759,38 @@
 }
 
 
--(CGSize)myLayoutSubviewsForVertContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs
+-(CGSize)myLayoutSubviewsForVertContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
     
-    UIEdgeInsets padding = self.padding;
-    CGFloat xPos = padding.left;
-    CGFloat yPos = padding.top;
+    CGFloat paddingTop = lsc.topPadding;
+    CGFloat paddingBottom = lsc.bottomPadding;
+    CGFloat paddingLeading = lsc.leadingPadding;
+    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingHorz = paddingLeading + paddingTrailing;
+
+    CGFloat xPos = paddingLeading;
+    CGFloat yPos = paddingTop;
     CGFloat rowMaxHeight = 0;  //某一行的最高值。
     CGFloat rowMaxWidth = 0;   //某一行的最宽值
     
-    MyGravity mgvert = self.gravity & MyGravity_Horz_Mask;
-    MyGravity mghorz = self.gravity & MyGravity_Vert_Mask;
-    MyGravity amgvert = self.arrangedGravity & MyGravity_Horz_Mask;
+    MyGravity mgvert = lsc.gravity & MyGravity_Horz_Mask;
+    MyGravity mghorz = lsc.gravity & MyGravity_Vert_Mask;
+    MyGravity amgvert = lsc.arrangedGravity & MyGravity_Horz_Mask;
+    
+    if (mghorz == MyGravity_Horz_Left)
+    {
+        mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
+    }
+    else if (mghorz == MyGravity_Horz_Right)
+    {
+        mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
+    }
+    else;
+
     
     //支持浮动水平间距。
-    CGFloat vertSpace = self.subviewVSpace;
-    CGFloat horzSpace = self.subviewHSpace;
+    CGFloat vertSpace = lsc.subviewVSpace;
+    CGFloat horzSpace = lsc.subviewHSpace;
     CGFloat subviewSize = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
     if (subviewSize != 0)
     {
@@ -743,50 +798,52 @@
         CGFloat minSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
         CGFloat maxSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
         
-        NSInteger rowCount =  floor((selfSize.width - padding.left - padding.right  + minSpace) / (subviewSize + minSpace));
+        NSInteger rowCount =  floor((selfSize.width - paddingHorz  + minSpace) / (subviewSize + minSpace));
         if (rowCount > 1)
         {
-            horzSpace = (selfSize.width - padding.left - padding.right - subviewSize * rowCount)/(rowCount - 1);
+            horzSpace = (selfSize.width - paddingHorz - subviewSize * rowCount)/(rowCount - 1);
             if (horzSpace > maxSpace)
             {
                 horzSpace = maxSpace;
                 
-                subviewSize =  (selfSize.width - padding.left - padding.right -  horzSpace * (rowCount - 1)) / rowCount;
+                subviewSize =  (selfSize.width - paddingHorz -  horzSpace * (rowCount - 1)) / rowCount;
                 
             }
         }
     }
     
     
-    if (self.autoArrange)
+    if (lsc.autoArrange)
     {
         //计算出每个子视图的宽度。
         for (UIView* sbv in sbs)
         {
+            UIView *sbvsc = sbv.myCurrentSizeClass;
+            MyFrame *sbvMyFrame = sbv.myFrame;
             
 #ifdef DEBUG
             //约束异常：垂直流式布局设置autoArrange为YES时，子视图不能将weight设置为非0.
-            NSCAssert(sbv.weight == 0, @"Constraint exception!! vertical flow layout:%@ 's subview:%@ can't set weight when the autoArrange set to YES",self, sbv);
+            NSCAssert(sbvsc.weight == 0, @"Constraint exception!! vertical flow layout:%@ 's subview:%@ can't set weight when the autoArrange set to YES",self, sbv);
 #endif
-            CGFloat leftMargin = sbv.leftPosInner.margin;
-            CGFloat rightMargin = sbv.rightPosInner.margin;
-            CGRect rect = sbv.myFrame.frame;
+            CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
+            CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
+            CGRect rect = sbvMyFrame.frame;
             
-            if (sbv.widthSizeInner.dimeNumVal != nil)
-                rect.size.width = sbv.widthSizeInner.measure;
+            if (sbvsc.widthSizeInner.dimeNumVal != nil)
+                rect.size.width = sbvsc.widthSizeInner.measure;
             
             
-            [self mySetSubviewRelativeDimeSize:sbv.widthSizeInner selfSize:selfSize pRect:&rect];
+            [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
             
-            rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+            rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
-            //暂时把宽度存放sbv.myFrame.rightPos上。因为浮动布局来说这个属性无用。
-            sbv.myFrame.rightPos = leftMargin + rect.size.width + rightMargin;
-            if (sbv.myFrame.rightPos > selfSize.width - padding.left - padding.right)
-                sbv.myFrame.rightPos = selfSize.width - padding.left - padding.right;
+            //暂时把宽度存放sbv.myFrame.trailing上。因为浮动布局来说这个属性无用。
+            sbvMyFrame.trailing = leadingSpace + rect.size.width + trailingSpace;
+            if (sbvMyFrame.trailing > selfSize.width - paddingHorz)
+                sbvMyFrame.trailing = selfSize.width - paddingHorz;
         }
         
-        [sbs setArray:[self myGetAutoArrangeSubviews:sbs selfSize:selfSize.width - padding.left - padding.right margin:horzSpace]];
+        [sbs setArray:[self myGetAutoArrangeSubviews:sbs selfSize:selfSize.width - paddingHorz space:horzSpace]];
         
     }
     
@@ -798,33 +855,36 @@
     {
         UIView *sbv = sbs[i];
         
-        CGFloat topMargin = sbv.topPosInner.margin;
-        CGFloat leftMargin = sbv.leftPosInner.margin;
-        CGFloat bottomMargin = sbv.bottomPosInner.margin;
-        CGFloat rightMargin = sbv.rightPosInner.margin;
-        CGRect rect = sbv.myFrame.frame;
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
+        
+        CGFloat topSpace = sbvsc.topPosInner.absVal;
+        CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
+        CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
+        CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
+        CGRect rect = sbvMyFrame.frame;
         
         
         if (subviewSize != 0)
             rect.size.width = subviewSize;
         
-        if (sbv.widthSizeInner.dimeNumVal != nil)
-            rect.size.width = sbv.widthSizeInner.measure;
+        if (sbvsc.widthSizeInner.dimeNumVal != nil)
+            rect.size.width = sbvsc.widthSizeInner.measure;
         
-        if (sbv.heightSizeInner.dimeNumVal != nil)
-            rect.size.height = sbv.heightSizeInner.measure;
-        
-        
-        [self mySetSubviewRelativeDimeSize:sbv.widthSizeInner selfSize:selfSize pRect:&rect];
-        
-        [self mySetSubviewRelativeDimeSize:sbv.heightSizeInner selfSize:selfSize pRect:&rect];
+        if (sbvsc.heightSizeInner.dimeNumVal != nil)
+            rect.size.height = sbvsc.heightSizeInner.measure;
         
         
-        if (sbv.weight != 0)
+        [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
+        
+        [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
+        
+        
+        if (sbvsc.weight != 0)
         {
             //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
-            CGFloat floatWidth = selfSize.width - padding.left - padding.right - rowMaxWidth;
-            if (/*floatWidth <= 0*/ _myCGFloatLessOrEqual(floatWidth, 0))
+            CGFloat floatWidth = selfSize.width - paddingHorz - rowMaxWidth;
+            if (_myCGFloatLessOrEqual(floatWidth, 0))
             {
                 floatWidth += rowMaxWidth;
                 arrangedIndex = 0;
@@ -833,51 +893,51 @@
             if (arrangedIndex != 0)
                 floatWidth -= horzSpace;
             
-            rect.size.width = (floatWidth + sbv.widthSizeInner.addVal) * sbv.weight - leftMargin - rightMargin;
+            rect.size.width = (floatWidth + sbvsc.widthSizeInner.addVal) * sbvsc.weight - leadingSpace - trailingSpace;
             
         }
         
         
-        rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
-        if (sbv.heightSizeInner.dimeRelaVal != nil && sbv.heightSizeInner.dimeRelaVal == sbv.widthSizeInner)
-            rect.size.height = [sbv.heightSizeInner measureWith:rect.size.width ];
+        if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
+            rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width ];
         
         
         //如果高度是浮动的则需要调整高度。
-        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
-            rect.size.height = [self myHeightFromFlexedHeightView:sbv inWidth:rect.size.width];
+        if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+            rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
         
-        rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
-        //计算xPos的值加上leftMargin + rect.size.width + rightMargin + horzMargin 的值要小于整体的宽度。
-        CGFloat place = xPos + leftMargin + rect.size.width + rightMargin;
+        //计算xPos的值加上leadingSpace + rect.size.width + trailingSpace 的值要小于整体的宽度。
+        CGFloat place = xPos + leadingSpace + rect.size.width + trailingSpace;
         if (arrangedIndex != 0)
             place += horzSpace;
-        place += padding.right;
+        place += paddingTrailing;
         
         //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
         if (place - selfSize.width > 0.0001)
         {
-            xPos = padding.left;
+            xPos = paddingLeading;
             yPos += vertSpace;
             yPos += rowMaxHeight;
             
             
             [arrangeIndexSet addIndex:i - arrangedIndex];
             //计算每行的gravity情况。
-            [self myCalcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex vertMargin:vertSpace horzMargin:horzSpace];
+            [self myCalcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
             
             //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
-            if (leftMargin + rightMargin + rect.size.width > selfSize.width - padding.left - padding.right)
+            if (leadingSpace + trailingSpace + rect.size.width > selfSize.width - paddingHorz)
             {
                 
-                rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:selfSize.width - padding.left - padding.right - leftMargin - rightMargin sbvSize:rect.size selfLayoutSize:selfSize];
+                rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:selfSize.width - paddingHorz - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
                 
-                if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+                if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
                 {
-                    rect.size.height = [self myHeightFromFlexedHeightView:sbv inWidth:rect.size.width];
-                    rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+                    rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
+                    rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
                 }
                 
             }
@@ -892,19 +952,19 @@
             xPos += horzSpace;
         
         
-        rect.origin.x = xPos + leftMargin;
-        rect.origin.y = yPos + topMargin;
-        xPos += leftMargin + rect.size.width + rightMargin;
+        rect.origin.x = xPos + leadingSpace;
+        rect.origin.y = yPos + topSpace;
+        xPos += leadingSpace + rect.size.width + trailingSpace;
         
-        if (rowMaxHeight < topMargin + bottomMargin + rect.size.height)
-            rowMaxHeight = topMargin + bottomMargin + rect.size.height;
+        if (rowMaxHeight < topSpace + bottomSpace + rect.size.height)
+            rowMaxHeight = topSpace + bottomSpace + rect.size.height;
         
-        if (rowMaxWidth < (xPos - padding.left))
-            rowMaxWidth = (xPos - padding.left);
+        if (rowMaxWidth < (xPos - paddingLeading))
+            rowMaxWidth = (xPos - paddingLeading);
         
         
         
-        sbv.myFrame.frame = rect;
+        sbvMyFrame.frame = rect;
         
         arrangedIndex++;
         
@@ -915,11 +975,11 @@
     //最后一行
     [arrangeIndexSet addIndex:i - arrangedIndex];
     
-    [self myCalcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex vertMargin:vertSpace horzMargin:horzSpace];
+    [self myCalcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
     
     
-    if (self.wrapContentHeight)
-        selfSize.height = yPos + padding.bottom + rowMaxHeight;
+    if (lsc.wrapContentHeight)
+        selfSize.height = yPos + paddingBottom + rowMaxHeight;
     else
     {
         CGFloat addYPos = 0;
@@ -928,21 +988,21 @@
         
         if (mgvert == MyGravity_Vert_Center)
         {
-            addYPos = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / 2;
+            addYPos = (selfSize.height - paddingBottom - rowMaxHeight - yPos) / 2;
         }
         else if (mgvert == MyGravity_Vert_Bottom)
         {
-            addYPos = selfSize.height - padding.bottom - rowMaxHeight - yPos;
+            addYPos = selfSize.height - paddingBottom - rowMaxHeight - yPos;
         }
         else if (mgvert == MyGravity_Vert_Fill)
         {
             if (arrangeIndexSet.count > 0)
-                fill = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / arrangeIndexSet.count;
+                fill = (selfSize.height - paddingBottom - rowMaxHeight - yPos) / arrangeIndexSet.count;
         }
         else if (mgvert == MyGravity_Vert_Between)
         {
             if (arrangeIndexSet.count > 1)
-                between = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / (arrangeIndexSet.count - 1);
+                between = (selfSize.height - paddingBottom - rowMaxHeight - yPos) / (arrangeIndexSet.count - 1);
         }
         
         if (addYPos != 0 || between != 0 || fill != 0)
@@ -953,7 +1013,9 @@
             {
                 UIView *sbv = sbs[i];
                 
-                sbv.myFrame.topPos += addYPos;
+                MyFrame *sbvMyFrame = sbv.myFrame;
+                
+                sbvMyFrame.top += addYPos;
                 
                 //找到行的最初索引。
                 NSUInteger index = [arrangeIndexSet indexLessThanOrEqualToIndex:i];
@@ -963,10 +1025,10 @@
                     line ++;
                 }
                 
-                sbv.myFrame.height += fill;
-                sbv.myFrame.topPos += fill * line;
+                sbvMyFrame.height += fill;
+                sbvMyFrame.top += fill * line;
                 
-                sbv.myFrame.topPos += between * line;
+                sbvMyFrame.top += between * line;
                 
             }
         }
@@ -979,21 +1041,38 @@
 }
 
 
--(CGSize)myLayoutSubviewsForVert:(CGSize)selfSize sbs:(NSMutableArray*)sbs
+-(CGSize)myLayoutSubviewsForVert:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
-    UIEdgeInsets padding = self.padding;
-    NSInteger arrangedCount = self.arrangedCount;
-    CGFloat xPos = padding.left;
-    CGFloat yPos = padding.top;
+    CGFloat paddingTop = lsc.topPadding;
+    CGFloat paddingBottom = lsc.bottomPadding;
+    CGFloat paddingLeading = lsc.leadingPadding;
+    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingHorz = paddingLeading + paddingTrailing;
+    CGFloat paddingVert = paddingTop + paddingBottom;
+    
+    NSInteger arrangedCount = lsc.arrangedCount;
+    CGFloat xPos = paddingLeading;
+    CGFloat yPos = paddingTop;
     CGFloat rowMaxHeight = 0;  //某一行的最高值。
     CGFloat rowMaxWidth = 0;   //某一行的最宽值
-    CGFloat maxWidth = padding.left;  //全部行的最宽值
-    MyGravity mgvert = self.gravity & MyGravity_Horz_Mask;
-    MyGravity mghorz = self.gravity & MyGravity_Vert_Mask;
-    MyGravity amgvert = self.arrangedGravity & MyGravity_Horz_Mask;
+    CGFloat maxWidth = paddingLeading;  //全部行的最宽值
+    MyGravity mgvert = lsc.gravity & MyGravity_Horz_Mask;
+    MyGravity mghorz = lsc.gravity & MyGravity_Vert_Mask;
+    MyGravity amgvert = lsc.arrangedGravity & MyGravity_Horz_Mask;
     
-    CGFloat vertSpace = self.subviewVSpace;
-    CGFloat horzSpace = self.subviewHSpace;
+    if (mghorz == MyGravity_Horz_Left)
+    {
+        mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
+    }
+    else if (mghorz == MyGravity_Horz_Right)
+    {
+        mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
+    }
+    else;
+
+    
+    CGFloat vertSpace = lsc.subviewVSpace;
+    CGFloat horzSpace = lsc.subviewHSpace;
     
     //判断父滚动视图是否分页滚动
     BOOL isPagingScroll = (self.superview != nil &&
@@ -1003,30 +1082,30 @@
     CGFloat pagingItemWidth = 0;
     BOOL isVertPaging = NO;
     BOOL isHorzPaging = NO;
-    if (self.pagedCount > 0 && self.superview != nil)
+    if (lsc.pagedCount > 0 && self.superview != nil)
     {
-        NSInteger rows = self.pagedCount / arrangedCount;  //每页的行数。
+        NSInteger rows = lsc.pagedCount / arrangedCount;  //每页的行数。
         
         //对于垂直流式布局来说，要求要有明确的宽度。因此如果我们启用了分页又设置了宽度包裹时则我们的分页是从左到右的排列。否则分页是从上到下的排列。
-        if (self.wrapContentWidth)
+        if (lsc.wrapContentWidth)
         {
             isHorzPaging = YES;
             if (isPagingScroll)
-                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - padding.left - padding.right - (arrangedCount - 1) * horzSpace ) / arrangedCount;
+                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - paddingHorz - (arrangedCount - 1) * horzSpace ) / arrangedCount;
             else
-                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - padding.left - arrangedCount * horzSpace ) / arrangedCount;
+                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - paddingLeading - arrangedCount * horzSpace ) / arrangedCount;
             
-            pagingItemHeight = (selfSize.height - padding.top - padding.bottom - (rows - 1) * vertSpace) / rows;
+            pagingItemHeight = (selfSize.height - paddingVert - (rows - 1) * vertSpace) / rows;
         }
         else
         {
             isVertPaging = YES;
-            pagingItemWidth = (selfSize.width - padding.left - padding.right - (arrangedCount - 1) * horzSpace) / arrangedCount;
+            pagingItemWidth = (selfSize.width - paddingHorz - (arrangedCount - 1) * horzSpace) / arrangedCount;
             //分页滚动时和非分页滚动时的高度计算是不一样的。
             if (isPagingScroll)
-                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - padding.top - padding.bottom - (rows - 1) * vertSpace) / rows;
+                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - paddingVert - (rows - 1) * vertSpace) / rows;
             else
-                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - padding.top - rows * vertSpace) / rows;
+                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - paddingTop - rows * vertSpace) / rows;
             
         }
         
@@ -1043,13 +1122,16 @@
     {
         UIView *sbv = sbs[i];
         
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
+        
         if (arrangedIndex >= arrangedCount)
         {
             arrangedIndex = 0;
             
             if (rowTotalWeight != 0 && !averageArrange)
             {
-                [self myCalcVertLayoutWeight:selfSize totalFloatWidth:selfSize.width - padding.left - padding.right - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedCount];
+                [self myCalcVertLayoutWeight:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedCount];
             }
             
             rowTotalWeight = 0;
@@ -1057,40 +1139,40 @@
             
         }
         
-        CGFloat leftMargin = sbv.leftPosInner.margin;
-        CGFloat rightMargin = sbv.rightPosInner.margin;
-        CGRect rect = sbv.myFrame.frame;
+        CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
+        CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
+        CGRect rect = sbvMyFrame.frame;
         
         
-        if (sbv.weight != 0)
+        if (sbvsc.weight != 0)
         {
             
-            rowTotalWeight += sbv.weight;
+            rowTotalWeight += sbvsc.weight;
         }
         else
         {
             if (pagingItemWidth != 0)
                 rect.size.width = pagingItemWidth;
             
-            if (sbv.widthSizeInner.dimeNumVal != nil && !averageArrange)
-                rect.size.width = sbv.widthSizeInner.measure;
+            if (sbvsc.widthSizeInner.dimeNumVal != nil && !averageArrange)
+                rect.size.width = sbvsc.widthSizeInner.measure;
             
             
-            [self mySetSubviewRelativeDimeSize:sbv.widthSizeInner selfSize:selfSize pRect:&rect];
+            [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
             
             
-            rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+            rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
             rowTotalFixedWidth += rect.size.width;
         }
         
-        rowTotalFixedWidth += leftMargin + rightMargin;
+        rowTotalFixedWidth += leadingSpace + trailingSpace;
         
         if (arrangedIndex != (arrangedCount - 1))
             rowTotalFixedWidth += horzSpace;
         
         
-        sbv.myFrame.frame = rect;
+        sbvMyFrame.frame = rect;
         
         arrangedIndex++;
         
@@ -1102,17 +1184,19 @@
         if (arrangedIndex < arrangedCount)
             rowTotalFixedWidth -= horzSpace;
         
-        [self myCalcVertLayoutWeight:selfSize totalFloatWidth:selfSize.width - padding.left - padding.right - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
+        [self myCalcVertLayoutWeight:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
     }
     
     
     CGFloat pageWidth  = 0; //页宽。
-    CGFloat averageWidth = (selfSize.width - padding.left - padding.right - (arrangedCount - 1) * horzSpace) / arrangedCount;
+    CGFloat averageWidth = (selfSize.width - paddingHorz - (arrangedCount - 1) * horzSpace) / arrangedCount;
     arrangedIndex = 0;
     i = 0;
     for (; i < sbs.count; i++)
     {
         UIView *sbv = sbs[i];
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
         
         //新的一行
         if (arrangedIndex >=  arrangedCount)
@@ -1124,14 +1208,14 @@
             //分别处理水平分页和垂直分页。
             if (isHorzPaging)
             {
-                if (i % self.pagedCount == 0)
+                if (i % lsc.pagedCount == 0)
                 {
                     pageWidth += CGRectGetWidth(self.superview.bounds);
                     
                     if (!isPagingScroll)
-                        pageWidth -= padding.left;
+                        pageWidth -= paddingLeading;
                     
-                    yPos = padding.top;
+                    yPos = paddingTop;
                 }
                 
             }
@@ -1139,96 +1223,96 @@
             if (isVertPaging)
             {
                 //如果是分页滚动则要多添加垂直间距。
-                if (i % self.pagedCount == 0)
+                if (i % lsc.pagedCount == 0)
                 {
                     
                     if (isPagingScroll)
                     {
                         yPos -= vertSpace;
-                        yPos += padding.bottom;
-                        yPos += padding.top;
+                        yPos += paddingVert;
+                        
                     }
                 }
             }
             
             
-            xPos = padding.left + pageWidth;
+            xPos = paddingLeading + pageWidth;
             
             
             //计算每行的gravity情况。
-            [self myCalcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedCount vertMargin:vertSpace horzMargin:horzSpace];
+            [self myCalcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedCount vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
             rowMaxHeight = 0;
             rowMaxWidth = 0;
             
         }
         
         
-        CGFloat topMargin = sbv.topPosInner.margin;
-        CGFloat leftMargin = sbv.leftPosInner.margin;
-        CGFloat bottomMargin = sbv.bottomPosInner.margin;
-        CGFloat rightMargin = sbv.rightPosInner.margin;
-        CGRect rect = sbv.myFrame.frame;
-        BOOL isFlexedHeight = sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && !sbv.heightSizeInner.isMatchParent;
+        CGFloat topSpace = sbvsc.topPosInner.absVal;
+        CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
+        CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
+        CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
+        CGRect rect = sbvMyFrame.frame;
+        BOOL isFlexedHeight = sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && sbvsc.heightSizeInner.dimeRelaVal.view != self;
         
         if (pagingItemHeight != 0)
             rect.size.height = pagingItemHeight;
         
         
-        if (sbv.heightSizeInner.dimeNumVal != nil)
-            rect.size.height = sbv.heightSizeInner.measure;
+        if (sbvsc.heightSizeInner.dimeNumVal != nil)
+            rect.size.height = sbvsc.heightSizeInner.measure;
         
         if (averageArrange)
         {
-            rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:averageWidth - leftMargin - rightMargin sbvSize:rect.size selfLayoutSize:selfSize];
+            rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:averageWidth - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
         }
         
         
-        [self mySetSubviewRelativeDimeSize:sbv.heightSizeInner selfSize:selfSize pRect:&rect];
+        [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
         
         //如果高度是浮动的则需要调整高度。
         if (isFlexedHeight)
-            rect.size.height = [self myHeightFromFlexedHeightView:sbv inWidth:rect.size.width];
+            rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
         
         
-        rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
-        rect.origin.x = xPos + leftMargin;
-        rect.origin.y = yPos + topMargin;
-        xPos += leftMargin + rect.size.width + rightMargin;
+        rect.origin.x = xPos + leadingSpace;
+        rect.origin.y = yPos + topSpace;
+        xPos += leadingSpace + rect.size.width + trailingSpace;
         
         if (arrangedIndex != (arrangedCount - 1))
             xPos += horzSpace;
         
         
-        if (rowMaxHeight < topMargin + bottomMargin + rect.size.height)
-            rowMaxHeight = topMargin + bottomMargin + rect.size.height;
+        if (rowMaxHeight < topSpace + bottomSpace + rect.size.height)
+            rowMaxHeight = topSpace + bottomSpace + rect.size.height;
         
-        if (rowMaxWidth < (xPos - padding.left))
-            rowMaxWidth = (xPos - padding.left);
+        if (rowMaxWidth < (xPos - paddingLeading))
+            rowMaxWidth = (xPos - paddingLeading);
         
         if (maxWidth < xPos)
             maxWidth = xPos;
         
         
         
-        sbv.myFrame.frame = rect;
+        sbvMyFrame.frame = rect;
         
         arrangedIndex++;
         
     }
     
     //最后一行
-    [self myCalcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex vertMargin:vertSpace horzMargin:horzSpace];
+    [self myCalcVertLayoutGravity:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth mg:mghorz amg:amgvert sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
     
-    if (self.wrapContentHeight)
+    if (lsc.wrapContentHeight)
     {
-        selfSize.height = yPos + padding.bottom + rowMaxHeight;
+        selfSize.height = yPos + paddingBottom + rowMaxHeight;
         
         //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
         if (isVertPaging && isPagingScroll)
         {
             //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
-            NSInteger totalPages = floor((sbs.count + self.pagedCount - 1.0 ) / self.pagedCount);
+            NSInteger totalPages = floor((sbs.count + lsc.pagedCount - 1.0 ) / lsc.pagedCount);
             if (selfSize.height < totalPages * CGRectGetHeight(self.superview.bounds))
                 selfSize.height = totalPages * CGRectGetHeight(self.superview.bounds);
         }
@@ -1243,22 +1327,22 @@
         
         if (mgvert == MyGravity_Vert_Center)
         {
-            addYPos = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / 2;
+            addYPos = (selfSize.height - paddingBottom - rowMaxHeight - yPos) / 2;
         }
         else if (mgvert == MyGravity_Vert_Bottom)
         {
-            addYPos = selfSize.height - padding.bottom - rowMaxHeight - yPos;
+            addYPos = selfSize.height - paddingBottom - rowMaxHeight - yPos;
         }
         else if (mgvert == MyGravity_Vert_Fill)
         {
             if (arranges > 0)
-                fill = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / arranges;
+                fill = (selfSize.height - paddingBottom - rowMaxHeight - yPos) / arranges;
         }
         else if (mgvert == MyGravity_Vert_Between)
         {
             
             if (arranges > 1)
-                between = (selfSize.height - padding.bottom - rowMaxHeight - yPos) / (arranges - 1);
+                between = (selfSize.height - paddingBottom - rowMaxHeight - yPos) / (arranges - 1);
         }
         
         
@@ -1268,34 +1352,35 @@
             {
                 UIView *sbv = sbs[i];
                 
+                MyFrame *sbvMyFrame = sbv.myFrame;
+                
                 int lines = i / arrangedCount;
-                sbv.myFrame.height += fill;
-                sbv.myFrame.topPos += fill * lines;
+                sbvMyFrame.height += fill;
+                sbvMyFrame.top += fill * lines;
                 
-                sbv.myFrame.topPos += addYPos;
+                sbvMyFrame.top += addYPos;
                 
-                sbv.myFrame.topPos += between * lines;
+                sbvMyFrame.top += between * lines;
                 
             }
         }
         
     }
     
-    if (self.wrapContentWidth && !averageArrange)
+    if (lsc.wrapContentWidth && !averageArrange)
     {
-        selfSize.width = maxWidth + padding.right;
+        selfSize.width = maxWidth + paddingTrailing;
         
         //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
         if (isHorzPaging && isPagingScroll)
         {
             //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
-            NSInteger totalPages = floor((sbs.count + self.pagedCount - 1.0 ) / self.pagedCount);
+            NSInteger totalPages = floor((sbs.count + lsc.pagedCount - 1.0 ) / lsc.pagedCount);
             if (selfSize.width < totalPages * CGRectGetWidth(self.superview.bounds))
                 selfSize.width = totalPages * CGRectGetWidth(self.superview.bounds);
         }
         
     }
-    
     
     return selfSize;
 }
@@ -1304,91 +1389,118 @@
 
 
 
--(CGSize)myLayoutSubviewsForHorzContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs
+-(CGSize)myLayoutSubviewsForHorzContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
-    
-    UIEdgeInsets padding = self.padding;
-    CGFloat xPos = padding.left;
-    CGFloat yPos = padding.top;
+
+    CGFloat paddingTop = lsc.topPadding;
+    CGFloat paddingBottom = lsc.bottomPadding;
+    CGFloat paddingLeading = lsc.leadingPadding;
+    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingVert = paddingTop + paddingBottom;
+
+    CGFloat xPos = paddingLeading;
+    CGFloat yPos = paddingTop;
     CGFloat colMaxWidth = 0;  //某一列的最宽值。
     CGFloat colMaxHeight = 0;   //某一列的最高值
     
-    MyGravity mgvert = self.gravity & MyGravity_Horz_Mask;
-    MyGravity mghorz = self.gravity & MyGravity_Vert_Mask;
-    MyGravity amghorz = self.arrangedGravity & MyGravity_Vert_Mask;
+    MyGravity mgvert = lsc.gravity & MyGravity_Horz_Mask;
+    MyGravity mghorz = lsc.gravity & MyGravity_Vert_Mask;
+    MyGravity amghorz = lsc.arrangedGravity & MyGravity_Vert_Mask;
     
+    if (mghorz == MyGravity_Horz_Left)
+    {
+        mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
+    }
+    else if (mghorz == MyGravity_Horz_Right)
+    {
+        mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
+    }
+    else;
+    
+    if (amghorz == MyGravity_Horz_Left)
+    {
+        amghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
+    }
+    else if (amghorz == MyGravity_Horz_Right)
+    {
+        amghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
+    }
+    else;
+
     
     //支持浮动垂直间距。
-    CGFloat vertSpace = self.subviewVSpace;
-    CGFloat horzSpace = self.subviewHSpace;
+    CGFloat vertSpace = lsc.subviewVSpace;
+    CGFloat horzSpace = lsc.subviewHSpace;
     CGFloat subviewSize = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
     if (subviewSize != 0)
     {
         
         CGFloat minSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
         CGFloat maxSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
-        NSInteger rowCount =  floor((selfSize.height - padding.top - padding.bottom  + minSpace) / (subviewSize + minSpace));
+        NSInteger rowCount =  floor((selfSize.height - paddingVert  + minSpace) / (subviewSize + minSpace));
         if (rowCount > 1)
         {
-            vertSpace = (selfSize.height - padding.top - padding.bottom - subviewSize * rowCount)/(rowCount - 1);
+            vertSpace = (selfSize.height - paddingVert - subviewSize * rowCount)/(rowCount - 1);
             if (vertSpace > maxSpace)
             {
                 vertSpace = maxSpace;
                 
-                subviewSize =  (selfSize.height - padding.top - padding.bottom -  vertSpace * (rowCount - 1)) / rowCount;
+                subviewSize =  (selfSize.height - paddingVert -  vertSpace * (rowCount - 1)) / rowCount;
                 
             }
         }
     }
     
     
-    if (self.autoArrange)
+    if (lsc.autoArrange)
     {
         //计算出每个子视图的宽度。
         for (UIView* sbv in sbs)
         {
+            UIView *sbvsc = sbv.myCurrentSizeClass;
+            MyFrame *sbvMyFrame = sbv.myFrame;
             
 #ifdef DEBUG
             //约束异常：水平流式布局设置autoArrange为YES时，子视图不能将weight设置为非0.
-            NSCAssert(sbv.weight == 0, @"Constraint exception!! horizontal flow layout:%@ 's subview:%@ can't set weight when the autoArrange set to YES",self, sbv);
+            NSCAssert(sbvsc.weight == 0, @"Constraint exception!! horizontal flow layout:%@ 's subview:%@ can't set weight when the autoArrange set to YES",self, sbv);
 #endif
             
             
-            CGFloat topMargin = sbv.topPosInner.margin;
-            CGFloat bottomMargin = sbv.bottomPosInner.margin;
-            CGRect rect = sbv.myFrame.frame;
+            CGFloat topSpace = sbvsc.topPosInner.absVal;
+            CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
+            CGRect rect = sbvMyFrame.frame;
             
-            if (sbv.widthSizeInner.dimeNumVal != nil)
-                rect.size.width = sbv.widthSizeInner.measure;
+            if (sbvsc.widthSizeInner.dimeNumVal != nil)
+                rect.size.width = sbvsc.widthSizeInner.measure;
             
-            if (sbv.heightSizeInner.dimeNumVal != nil)
-                rect.size.height = sbv.heightSizeInner.measure;
+            if (sbvsc.heightSizeInner.dimeNumVal != nil)
+                rect.size.height = sbvsc.heightSizeInner.measure;
             
-            [self mySetSubviewRelativeDimeSize:sbv.heightSizeInner selfSize:selfSize pRect:&rect];
+            [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
             
-            rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
             
-            [self mySetSubviewRelativeDimeSize:sbv.widthSizeInner selfSize:selfSize pRect:&rect];
+            [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
             
-            rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+            rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
             
             //如果高度是浮动的则需要调整高度。
-            if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+            if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
             {
-                rect.size.height = [self myHeightFromFlexedHeightView:sbv inWidth:rect.size.width];
+                rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
                 
-                rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+                rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
             }
             
             
-            //暂时把宽度存放sbv.myFrame.rightPos上。因为浮动布局来说这个属性无用。
-            sbv.myFrame.rightPos = topMargin + rect.size.height + bottomMargin;
-            if (sbv.myFrame.rightPos > selfSize.height - padding.top - padding.bottom)
-                sbv.myFrame.rightPos = selfSize.height - padding.top - padding.bottom;
+            //暂时把宽度存放sbv.myFrame.trailing上。因为浮动布局来说这个属性无用。
+            sbvMyFrame.trailing = topSpace + rect.size.height + bottomSpace;
+            if (sbvMyFrame.trailing > selfSize.height - paddingVert)
+                sbvMyFrame.trailing = selfSize.height - paddingVert;
         }
         
-        [sbs setArray:[self myGetAutoArrangeSubviews:sbs selfSize:selfSize.height - padding.top - padding.bottom margin:vertSpace]];
+        [sbs setArray:[self myGetAutoArrangeSubviews:sbs selfSize:selfSize.height - paddingVert space:vertSpace]];
         
     }
     
@@ -1401,32 +1513,36 @@
     {
         UIView *sbv = sbs[i];
         
-        CGFloat topMargin = sbv.topPosInner.margin;
-        CGFloat leftMargin = sbv.leftPosInner.margin;
-        CGFloat bottomMargin = sbv.bottomPosInner.margin;
-        CGFloat rightMargin = sbv.rightPosInner.margin;
-        CGRect rect = sbv.myFrame.frame;
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
+
         
-        if (sbv.widthSizeInner.dimeNumVal != nil)
-            rect.size.width = sbv.widthSizeInner.measure;
+        CGFloat topSpace = sbvsc.topPosInner.absVal;
+        CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
+        CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
+        CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
+        CGRect rect = sbvMyFrame.frame;
         
-        if (sbv.heightSizeInner.dimeNumVal != nil)
-            rect.size.height = sbv.heightSizeInner.measure;
+        if (sbvsc.widthSizeInner.dimeNumVal != nil)
+            rect.size.width = sbvsc.widthSizeInner.measure;
         
-        [self mySetSubviewRelativeDimeSize:sbv.heightSizeInner selfSize:selfSize pRect:&rect];
+        if (sbvsc.heightSizeInner.dimeNumVal != nil)
+            rect.size.height = sbvsc.heightSizeInner.measure;
+        
+        [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
         
         if (subviewSize != 0)
             rect.size.height = subviewSize;
         
         
-        [self mySetSubviewRelativeDimeSize:sbv.widthSizeInner selfSize:selfSize pRect:&rect];
+        [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
         
         
-        if (sbv.weight != 0)
+        if (sbvsc.weight != 0)
         {
             //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
-            CGFloat floatHeight = selfSize.height - padding.top - padding.bottom - colMaxHeight;
-            if (/*floatHeight <= 0*/ _myCGFloatLessOrEqual(floatHeight, 0))
+            CGFloat floatHeight = selfSize.height - paddingVert - colMaxHeight;
+            if (_myCGFloatLessOrEqual(floatHeight, 0))
             {
                 floatHeight += colMaxHeight;
                 arrangedIndex = 0;
@@ -1435,50 +1551,50 @@
             if (arrangedIndex != 0)
                 floatHeight -= vertSpace;
             
-            rect.size.height = (floatHeight + sbv.heightSizeInner.addVal) * sbv.weight - topMargin - bottomMargin;
+            rect.size.height = (floatHeight + sbvsc.heightSizeInner.addVal) * sbvsc.weight - topSpace - bottomSpace;
             
         }
         
         
-        rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
-        if (sbv.widthSizeInner.dimeRelaVal != nil && sbv.widthSizeInner.dimeRelaVal == sbv.heightSizeInner)
-            rect.size.width = [sbv.widthSizeInner measureWith:rect.size.height ];
+        if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+            rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height ];
         
         
         
-        rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         //如果高度是浮动的则需要调整高度。
-        if (sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+        if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
         {
-            rect.size.height = [self myHeightFromFlexedHeightView:sbv inWidth:rect.size.width];
+            rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
             
-            rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         }
         
-        //计算yPos的值加上topMargin + rect.size.height + bottomMargin + vertMargin 的值要小于整体的宽度。
-        CGFloat place = yPos + topMargin + rect.size.height + bottomMargin;
+        //计算yPos的值加上topSpace + rect.size.height + bottomSpace的值要小于整体的高度。
+        CGFloat place = yPos + topSpace + rect.size.height + bottomSpace;
         if (arrangedIndex != 0)
             place += vertSpace;
-        place += padding.bottom;
+        place += paddingBottom;
         
         //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
         if (place - selfSize.height > 0.0001)
         {
-            yPos = padding.top;
+            yPos = paddingTop;
             xPos += horzSpace;
             xPos += colMaxWidth;
             
             
             //计算每行的gravity情况。
             [arrangeIndexSet addIndex:i - arrangedIndex];
-            [self myCalcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex vertMargin:vertSpace horzMargin:horzSpace];
+            [self myCalcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
             
             //计算单独的sbv的高度是否大于整体的高度。如果大于则缩小高度。
-            if (topMargin + bottomMargin + rect.size.height > selfSize.height - padding.top - padding.bottom)
+            if (topSpace + bottomSpace + rect.size.height > selfSize.height - paddingVert)
             {
-                rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:selfSize.height - padding.top - padding.bottom - topMargin - bottomMargin sbvSize:rect.size selfLayoutSize:selfSize];
+                rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:selfSize.height - paddingVert - topSpace - bottomSpace sbvSize:rect.size selfLayoutSize:selfSize];
             }
             
             colMaxWidth = 0;
@@ -1491,19 +1607,19 @@
             yPos += vertSpace;
         
         
-        rect.origin.x = xPos + leftMargin;
-        rect.origin.y = yPos + topMargin;
-        yPos += topMargin + rect.size.height + bottomMargin;
+        rect.origin.x = xPos + leadingSpace;
+        rect.origin.y = yPos + topSpace;
+        yPos += topSpace + rect.size.height + bottomSpace;
         
-        if (colMaxWidth < leftMargin + rightMargin + rect.size.width)
-            colMaxWidth = leftMargin + rightMargin + rect.size.width;
+        if (colMaxWidth < leadingSpace + trailingSpace + rect.size.width)
+            colMaxWidth = leadingSpace + trailingSpace + rect.size.width;
         
-        if (colMaxHeight < (yPos - padding.top))
-            colMaxHeight = (yPos - padding.top);
+        if (colMaxHeight < (yPos - paddingTop))
+            colMaxHeight = (yPos - paddingTop);
         
         
         
-        sbv.myFrame.frame = rect;
+        sbvMyFrame.frame = rect;
         
         arrangedIndex++;
         
@@ -1513,11 +1629,11 @@
     
     //最后一行
     [arrangeIndexSet addIndex:i - arrangedIndex];
-    [self myCalcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex vertMargin:vertSpace horzMargin:horzSpace];
+    [self myCalcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
     
     
-    if (self.wrapContentWidth)
-        selfSize.width = xPos + padding.right + colMaxWidth;
+    if (lsc.wrapContentWidth)
+        selfSize.width = xPos + paddingTrailing + colMaxWidth;
     else
     {
         CGFloat addXPos = 0;
@@ -1526,21 +1642,21 @@
         
         if (mghorz == MyGravity_Horz_Center)
         {
-            addXPos = (selfSize.width - padding.right - colMaxWidth - xPos) / 2;
+            addXPos = (selfSize.width - paddingTrailing - colMaxWidth - xPos) / 2;
         }
-        else if (mghorz == MyGravity_Horz_Right)
+        else if (mghorz == MyGravity_Horz_Trailing)
         {
-            addXPos = selfSize.width - padding.right - colMaxWidth - xPos;
+            addXPos = selfSize.width - paddingTrailing - colMaxWidth - xPos;
         }
         else if (mghorz == MyGravity_Horz_Fill)
         {
             if (arrangeIndexSet.count > 0)
-                fill = (selfSize.width - padding.right - colMaxWidth - xPos) / arrangeIndexSet.count;
+                fill = (selfSize.width - paddingTrailing - colMaxWidth - xPos) / arrangeIndexSet.count;
         }
         else if (mghorz == MyGravity_Horz_Between)
         {
             if (arrangeIndexSet.count > 1)
-                between = (selfSize.width - padding.right - colMaxWidth - xPos) / (arrangeIndexSet.count - 1);
+                between = (selfSize.width - paddingTrailing - colMaxWidth - xPos) / (arrangeIndexSet.count - 1);
         }
         
         
@@ -1551,8 +1667,9 @@
             for (int i = 0; i < sbs.count; i++)
             {
                 UIView *sbv = sbs[i];
+                MyFrame *sbvMyFrame = sbv.myFrame;
                 
-                sbv.myFrame.leftPos += addXPos;
+                sbvMyFrame.leading += addXPos;
                 
                 //找到行的最初索引。
                 NSUInteger index = [arrangeIndexSet indexLessThanOrEqualToIndex:i];
@@ -1562,38 +1679,66 @@
                     line ++;
                 }
                 
-                sbv.myFrame.width += fill;
-                sbv.myFrame.leftPos += fill * line;
+                sbvMyFrame.width += fill;
+                sbvMyFrame.leading += fill * line;
                 
-                sbv.myFrame.leftPos += between * line;
+                sbvMyFrame.leading += between * line;
                 
             }
         }
         
     }
     
-    
+   
     return selfSize;
 }
 
 
 
--(CGSize)myLayoutSubviewsForHorz:(CGSize)selfSize sbs:(NSMutableArray*)sbs
+-(CGSize)myLayoutSubviewsForHorz:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
-    UIEdgeInsets padding = self.padding;
-    NSInteger arrangedCount = self.arrangedCount;
-    CGFloat xPos = padding.left;
-    CGFloat yPos = padding.top;
+    CGFloat paddingTop = lsc.topPadding;
+    CGFloat paddingBottom = lsc.bottomPadding;
+    CGFloat paddingLeading = lsc.leadingPadding;
+    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingHorz = paddingLeading + paddingTrailing;
+    CGFloat paddingVert = paddingTop + paddingBottom;
+
+    NSInteger arrangedCount = lsc.arrangedCount;
+    CGFloat xPos = paddingLeading;
+    CGFloat yPos = paddingTop;
     CGFloat colMaxWidth = 0;  //每列的最大宽度
     CGFloat colMaxHeight = 0; //每列的最大高度
-    CGFloat maxHeight = padding.top;
+    CGFloat maxHeight = paddingTop;
     
-    MyGravity mgvert = self.gravity & MyGravity_Horz_Mask;
-    MyGravity mghorz = self.gravity & MyGravity_Vert_Mask;
-    MyGravity amghorz = self.arrangedGravity & MyGravity_Vert_Mask;
+    MyGravity mgvert = lsc.gravity & MyGravity_Horz_Mask;
+    MyGravity mghorz = lsc.gravity & MyGravity_Vert_Mask;
+    MyGravity amghorz = lsc.arrangedGravity & MyGravity_Vert_Mask;
     
-    CGFloat vertSpace = self.subviewVSpace;
-    CGFloat horzSpace = self.subviewHSpace;
+    if (mghorz == MyGravity_Horz_Left)
+    {
+        mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
+    }
+    else if (mghorz == MyGravity_Horz_Right)
+    {
+        mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
+    }
+    else;
+    
+    if (amghorz == MyGravity_Horz_Left)
+    {
+        amghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
+    }
+    else if (amghorz == MyGravity_Horz_Right)
+    {
+        amghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
+    }
+    else;
+
+
+    
+    CGFloat vertSpace = lsc.subviewVSpace;
+    CGFloat horzSpace = lsc.subviewHSpace;
     
     //父滚动视图是否分页滚动。
     BOOL isPagingScroll = (self.superview != nil &&
@@ -1604,30 +1749,30 @@
     CGFloat pagingItemWidth = 0;
     BOOL isVertPaging = NO;
     BOOL isHorzPaging = NO;
-    if (self.pagedCount > 0 && self.superview != nil)
+    if (lsc.pagedCount > 0 && self.superview != nil)
     {
-        NSInteger cols = self.pagedCount / arrangedCount;  //每页的列数。
+        NSInteger cols = lsc.pagedCount / arrangedCount;  //每页的列数。
         
         //对于水平流式布局来说，要求要有明确的高度。因此如果我们启用了分页又设置了高度包裹时则我们的分页是从上到下的排列。否则分页是从左到右的排列。
-        if (self.wrapContentHeight)
+        if (lsc.wrapContentHeight)
         {
             isVertPaging = YES;
             if (isPagingScroll)
-                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - padding.top - padding.bottom - (arrangedCount - 1) * vertSpace ) / arrangedCount;
+                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - paddingVert - (arrangedCount - 1) * vertSpace ) / arrangedCount;
             else
-                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - padding.top - arrangedCount * vertSpace ) / arrangedCount;
+                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - paddingTop - arrangedCount * vertSpace ) / arrangedCount;
             
-            pagingItemWidth = (selfSize.width - padding.left - padding.right - (cols - 1) * horzSpace) / cols;
+            pagingItemWidth = (selfSize.width - paddingHorz - (cols - 1) * horzSpace) / cols;
         }
         else
         {
             isHorzPaging = YES;
-            pagingItemHeight = (selfSize.height - padding.top - padding.bottom - (arrangedCount - 1) * vertSpace) / arrangedCount;
+            pagingItemHeight = (selfSize.height - paddingVert - (arrangedCount - 1) * vertSpace) / arrangedCount;
             //分页滚动时和非分页滚动时的宽度计算是不一样的。
             if (isPagingScroll)
-                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - padding.left - padding.right - (cols - 1) * horzSpace) / cols;
+                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - paddingHorz - (cols - 1) * horzSpace) / cols;
             else
-                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - padding.left - cols * horzSpace) / cols;
+                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - paddingLeading - cols * horzSpace) / cols;
             
         }
         
@@ -1642,6 +1787,8 @@
     for (; i < sbs.count; i++)
     {
         UIView *sbv = sbs[i];
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
         
         if (arrangedIndex >= arrangedCount)
         {
@@ -1649,7 +1796,7 @@
             
             if (rowTotalWeight != 0 && !averageArrange)
             {
-                [self myCalcHorzLayoutWeight:selfSize totalFloatHeight:selfSize.height - padding.top - padding.bottom - rowTotalFixedHeight totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedCount];
+                [self myCalcHorzLayoutWeight:selfSize totalFloatHeight:selfSize.height - paddingVert - rowTotalFixedHeight totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedCount];
             }
             
             rowTotalWeight = 0;
@@ -1657,64 +1804,64 @@
             
         }
         
-        CGFloat topMargin = sbv.topPosInner.margin;
-        CGFloat bottomMargin = sbv.bottomPosInner.margin;
-        CGRect rect = sbv.myFrame.frame;
+        CGFloat topSpace = sbvsc.topPosInner.absVal;
+        CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
+        CGRect rect = sbvMyFrame.frame;
         
         
         if (pagingItemWidth != 0)
             rect.size.width = pagingItemWidth;
         
-        if (sbv.widthSizeInner.dimeNumVal != nil)
-            rect.size.width = sbv.widthSizeInner.measure;
+        if (sbvsc.widthSizeInner.dimeNumVal != nil)
+            rect.size.width = sbvsc.widthSizeInner.measure;
         
         //当子视图的尺寸是相对依赖于其他尺寸的值。
-        [self mySetSubviewRelativeDimeSize:sbv.widthSizeInner selfSize:selfSize pRect:&rect];
+        [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
         
         
-        rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         
-        if (sbv.weight != 0)
+        if (sbvsc.weight != 0)
         {
             
-            rowTotalWeight += sbv.weight;
+            rowTotalWeight += sbvsc.weight;
         }
         else
         {
             
-            BOOL isFlexedHeight = sbv.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && !sbv.heightSizeInner.isMatchParent;
+            BOOL isFlexedHeight = sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && sbvsc.heightSizeInner.dimeRelaVal.view != self;
             
             if (pagingItemHeight != 0)
                 rect.size.height = pagingItemHeight;
             
-            if (sbv.heightSizeInner.dimeNumVal != nil && !averageArrange)
-                rect.size.height = sbv.heightSizeInner.measure;
+            if (sbvsc.heightSizeInner.dimeNumVal != nil && !averageArrange)
+                rect.size.height = sbvsc.heightSizeInner.measure;
             
             //当子视图的尺寸是相对依赖于其他尺寸的值。
-            [self mySetSubviewRelativeDimeSize:sbv.heightSizeInner selfSize:selfSize pRect:&rect];
+            [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
             
             
             //如果高度是浮动的则需要调整高度。
             if (isFlexedHeight)
-                rect.size.height = [self myHeightFromFlexedHeightView:sbv inWidth:rect.size.width];
+                rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
             
-            rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
             
-            if (sbv.widthSizeInner.dimeRelaVal != nil && sbv.widthSizeInner.dimeRelaVal == sbv.heightSizeInner)
-                rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:[sbv.widthSizeInner measureWith: rect.size.height ] sbvSize:rect.size selfLayoutSize:selfSize];
+            if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+                rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:[sbvsc.widthSizeInner measureWith: rect.size.height ] sbvSize:rect.size selfLayoutSize:selfSize];
             
             rowTotalFixedHeight += rect.size.height;
         }
         
-        rowTotalFixedHeight += topMargin + bottomMargin;
+        rowTotalFixedHeight += topSpace + bottomSpace;
         
         
         if (arrangedIndex != (arrangedCount - 1))
             rowTotalFixedHeight += vertSpace;
         
         
-        sbv.myFrame.frame = rect;
+        sbvMyFrame.frame = rect;
         
         arrangedIndex++;
         
@@ -1726,17 +1873,19 @@
         if (arrangedIndex < arrangedCount)
             rowTotalFixedHeight -= vertSpace;
         
-        [self myCalcHorzLayoutWeight:selfSize totalFloatHeight:selfSize.height - padding.top - padding.bottom - rowTotalFixedHeight totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
+        [self myCalcHorzLayoutWeight:selfSize totalFloatHeight:selfSize.height - paddingVert - rowTotalFixedHeight totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
     }
     
     
     CGFloat pageHeight = 0; //页高
-    CGFloat averageHeight = (selfSize.height - padding.top - padding.bottom - (arrangedCount - 1) * vertSpace) / arrangedCount;
+    CGFloat averageHeight = (selfSize.height - paddingVert - (arrangedCount - 1) * vertSpace) / arrangedCount;
     arrangedIndex = 0;
     i = 0;
     for (; i < sbs.count; i++)
     {
         UIView *sbv = sbs[i];
+        UIView *sbvsc = sbv.myCurrentSizeClass;
+        MyFrame *sbvMyFrame = sbv.myFrame;
         
         if (arrangedIndex >=  arrangedCount)
         {
@@ -1747,14 +1896,14 @@
             //分别处理水平分页和垂直分页。
             if (isVertPaging)
             {
-                if (i % self.pagedCount == 0)
+                if (i % lsc.pagedCount == 0)
                 {
                     pageHeight += CGRectGetHeight(self.superview.bounds);
                     
                     if (!isPagingScroll)
-                        pageHeight -= padding.top;
+                        pageHeight -= paddingTop;
                     
-                    xPos = padding.left;
+                    xPos = paddingLeading;
                 }
                 
             }
@@ -1762,65 +1911,65 @@
             if (isHorzPaging)
             {
                 //如果是分页滚动则要多添加垂直间距。
-                if (i % self.pagedCount == 0)
+                if (i % lsc.pagedCount == 0)
                 {
                     
                     if (isPagingScroll)
                     {
                         xPos -= horzSpace;
-                        xPos += padding.right;
-                        xPos += padding.left;
+                        xPos += paddingTrailing;
+                        xPos += paddingLeading;
                     }
                 }
             }
             
             
-            yPos = padding.top + pageHeight;
+            yPos = paddingTop + pageHeight;
             
             
             //计算每行的gravity情况。
-            [self myCalcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedCount vertMargin:vertSpace horzMargin:horzSpace];
+            [self myCalcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedCount vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
             
             colMaxWidth = 0;
             colMaxHeight = 0;
         }
         
-        CGFloat topMargin = sbv.topPosInner.margin;
-        CGFloat leftMargin = sbv.leftPosInner.margin;
-        CGFloat bottomMargin = sbv.bottomPosInner.margin;
-        CGFloat rightMargin = sbv.rightPosInner.margin;
-        CGRect rect = sbv.myFrame.frame;
+        CGFloat topSpace = sbvsc.topPosInner.absVal;
+        CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
+        CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
+        CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
+        CGRect rect = sbvMyFrame.frame;
         
         
         if (averageArrange)
         {
             
-            rect.size.height = [self myValidMeasure:sbv.heightSizeInner sbv:sbv calcSize:averageHeight - topMargin - bottomMargin sbvSize:rect.size selfLayoutSize:selfSize];
+            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:averageHeight - topSpace - bottomSpace sbvSize:rect.size selfLayoutSize:selfSize];
             
-            if (sbv.widthSizeInner.dimeRelaVal != nil && sbv.widthSizeInner.dimeRelaVal == sbv.heightSizeInner)
-                rect.size.width = [self myValidMeasure:sbv.widthSizeInner sbv:sbv calcSize:[sbv.widthSizeInner measureWith: rect.size.height ] sbvSize:rect.size selfLayoutSize:selfSize];
+            if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+                rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:[sbvsc.widthSizeInner measureWith: rect.size.height ] sbvSize:rect.size selfLayoutSize:selfSize];
         }
         
         
-        rect.origin.y = yPos + topMargin;
-        rect.origin.x = xPos + leftMargin;
-        yPos += topMargin + rect.size.height + bottomMargin;
+        rect.origin.y = yPos + topSpace;
+        rect.origin.x = xPos + leadingSpace;
+        yPos += topSpace + rect.size.height + bottomSpace;
         
         if (arrangedIndex != (arrangedCount - 1))
             yPos += vertSpace;
         
         
-        if (colMaxWidth < leftMargin + rightMargin + rect.size.width)
-            colMaxWidth = leftMargin + rightMargin + rect.size.width;
+        if (colMaxWidth < leadingSpace + trailingSpace + rect.size.width)
+            colMaxWidth = leadingSpace + trailingSpace + rect.size.width;
         
-        if (colMaxHeight < (yPos - padding.top))
-            colMaxHeight = yPos - padding.top;
+        if (colMaxHeight < (yPos - paddingTop))
+            colMaxHeight = yPos - paddingTop;
         
         if (maxHeight < yPos)
             maxHeight = yPos;
         
         
-        sbv.myFrame.frame = rect;
+        sbvMyFrame.frame = rect;
         
         
         arrangedIndex++;
@@ -1828,17 +1977,17 @@
     }
     
     //最后一列
-    [self myCalcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex vertMargin:vertSpace horzMargin:horzSpace];
+    [self myCalcHorzLayoutGravity:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight mg:mgvert amg:amghorz sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
     
-    if (self.wrapContentHeight && !averageArrange)
+    if (lsc.wrapContentHeight && !averageArrange)
     {
-        selfSize.height = maxHeight + padding.bottom;
+        selfSize.height = maxHeight + paddingBottom;
         
         //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
         if (isVertPaging && isPagingScroll)
         {
             //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
-            NSInteger totalPages = floor((sbs.count + self.pagedCount - 1.0 ) / self.pagedCount);
+            NSInteger totalPages = floor((sbs.count + lsc.pagedCount - 1.0 ) / lsc.pagedCount);
             if (selfSize.height < totalPages * CGRectGetHeight(self.superview.bounds))
                 selfSize.height = totalPages * CGRectGetHeight(self.superview.bounds);
         }
@@ -1846,15 +1995,15 @@
         
     }
     
-    if (self.wrapContentWidth)
+    if (lsc.wrapContentWidth)
     {
-        selfSize.width = xPos + padding.right + colMaxWidth;
+        selfSize.width = xPos + paddingTrailing + colMaxWidth;
         
         //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
         if (isHorzPaging && isPagingScroll)
         {
             //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
-            NSInteger totalPages = floor((sbs.count + self.pagedCount - 1.0 ) / self.pagedCount);
+            NSInteger totalPages = floor((sbs.count + lsc.pagedCount - 1.0 ) / lsc.pagedCount);
             if (selfSize.width < totalPages * CGRectGetWidth(self.superview.bounds))
                 selfSize.width = totalPages * CGRectGetWidth(self.superview.bounds);
         }
@@ -1870,21 +2019,21 @@
         
         if (mghorz == MyGravity_Horz_Center)
         {
-            addXPos = (selfSize.width - padding.right - colMaxWidth - xPos) / 2;
+            addXPos = (selfSize.width - paddingTrailing - colMaxWidth - xPos) / 2;
         }
-        else if (mghorz == MyGravity_Horz_Right)
+        else if (mghorz == MyGravity_Horz_Trailing)
         {
-            addXPos = selfSize.width - padding.right - colMaxWidth - xPos;
+            addXPos = selfSize.width - paddingTrailing - colMaxWidth - xPos;
         }
         else if (mghorz == MyGravity_Horz_Fill)
         {
             if (arranges > 0)
-                fill = (selfSize.width - padding.right - colMaxWidth - xPos) / arranges;
+                fill = (selfSize.width - paddingTrailing - colMaxWidth - xPos) / arranges;
         }
         else if (mghorz == MyGravity_Horz_Between)
         {
             if (arranges > 1)
-                between = (selfSize.width - padding.left - colMaxWidth - xPos) / (arranges - 1);
+                between = (selfSize.width - paddingLeading - colMaxWidth - xPos) / (arranges - 1);
         }
         
         if (addXPos != 0 || between != 0 || fill != 0)
@@ -1893,19 +2042,19 @@
             {
                 UIView *sbv = sbs[i];
                 
+                MyFrame *sbvMyFrame = sbv.myFrame;
+                
                 int lines = i / arrangedCount;
-                sbv.myFrame.width += fill;
-                sbv.myFrame.leftPos += fill * lines;
+                sbvMyFrame.width += fill;
+                sbvMyFrame.leading += fill * lines;
                 
-                sbv.myFrame.leftPos += addXPos;
+                sbvMyFrame.leading += addXPos;
                 
-                sbv.myFrame.leftPos += between * lines;
+                sbvMyFrame.leading += between * lines;
                 
             }
         }
     }
-    
-    
     
     
     return selfSize;

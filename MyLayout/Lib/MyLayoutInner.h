@@ -12,18 +12,24 @@
 #import "MyLayoutSizeClass.h"
 
 
+
+
+
 //视图在布局中的评估测量值
 @interface MyFrame : NSObject
 
-@property(nonatomic, assign) CGFloat leftPos;
-@property(nonatomic, assign) CGFloat rightPos;
-@property(nonatomic, assign) CGFloat topPos;
-@property(nonatomic, assign) CGFloat bottomPos;
+@property(nonatomic, assign) CGFloat top;
+@property(nonatomic, assign) CGFloat leading;
+@property(nonatomic, assign) CGFloat bottom;
+@property(nonatomic, assign) CGFloat trailing;
 @property(nonatomic, assign) CGFloat width;
 @property(nonatomic, assign) CGFloat height;
 
 @property(nonatomic, weak) UIView *sizeClass;
 
+@property(nonatomic, assign, readonly) BOOL multiple; //是否设置了多个sizeclass
+
+@property(nonatomic, strong) NSMutableDictionary *sizeClasses;
 
 -(void)reset;
 
@@ -35,11 +41,10 @@
 
 @interface MyBaseLayout()
 
-
-@property(nonatomic ,strong) CAShapeLayer *leftBorderlineLayer;
-@property(nonatomic ,strong) CAShapeLayer *rightBorderlineLayer;
 @property(nonatomic ,strong) CAShapeLayer *topBorderlineLayer;
+@property(nonatomic ,strong) CAShapeLayer *leadingBorderlineLayer;
 @property(nonatomic ,strong) CAShapeLayer *bottomBorderlineLayer;
+@property(nonatomic ,strong) CAShapeLayer *trailingBorderlineLayer;
 
 
 //派生类重载这个函数进行布局
@@ -49,29 +54,29 @@
 
 
 //判断margin是否是相对margin
--(BOOL)myIsRelativeMargin:(CGFloat)margin;
+-(BOOL)myIsRelativePos:(CGFloat)margin;
 
 
 -(void)myVertGravity:(MyGravity)vert
-        selfSize:(CGSize)selfSize
-               sbv:(UIView*)sbv
-              rect:(CGRect*)pRect;
+                 sbv:(UIView *)sbv
+               sbvsc:(UIView*)sbvsc
+          paddingTop:(CGFloat)paddingTop
+       paddingBottom:(CGFloat)paddingBottom
+            selfSize:(CGSize)selfSize
+               pRect:(CGRect*)pRect;
 
 
 -(void)myHorzGravity:(MyGravity)horz
-         selfSize:(CGSize)selfSize
-               sbv:(UIView*)sbv
-              rect:(CGRect*)pRect;
+                 sbv:(UIView *)sbv
+               sbvsc:(UIView*)sbvsc
+      paddingLeading:(CGFloat)paddingLeading
+     paddingTrailing:(CGFloat)paddingTrailing
+            selfSize:(CGSize)selfSize
+               pRect:(CGRect*)pRect;
 
+-(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvMyFrame:(MyFrame*)sbvMyFrame selfLayoutSize:(CGSize)selfLayoutSize;
 
--(void)mySetWrapContentWidthNoLayout:(BOOL)wrapContentWidth;
-
--(void)mySetWrapContentHeightNoLayout:(BOOL)wrapContentHeight;
-
--(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv selfLayoutSize:(CGSize)selfLayoutSize;
-
-
--(CGFloat)myHeightFromFlexedHeightView:(UIView*)sbv inWidth:(CGFloat)width;
+-(CGFloat)myHeightFromFlexedHeightView:(UIView*)sbv sbvsc:(UIView*)sbvsc inWidth:(CGFloat)width;
 
 -(CGFloat)myValidMeasure:(MyLayoutSize*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize;
 
@@ -83,9 +88,13 @@
 -(NSMutableArray*)myGetLayoutSubviewsFrom:(NSArray*)sbsFrom;
 
 //设置子视图的相对依赖的尺寸
--(void)mySetSubviewRelativeDimeSize:(MyLayoutSize*)dime selfSize:(CGSize)selfSize pRect:(CGRect*)pRect;
+-(void)mySetSubviewRelativeDimeSize:(MyLayoutSize*)dime selfSize:(CGSize)selfSize lsc:(MyBaseLayout*)lsc pRect:(CGRect*)pRect;
 
--(CGSize)myAdjustSizeWhenNoSubviews:(CGSize)size sbs:(NSArray*)sbs;
+-(CGSize)myAdjustSizeWhenNoSubviews:(CGSize)size sbs:(NSArray*)sbs lsc:(MyBaseLayout*)lsc;
+
+- (void)myAdjustLayoutSelfSize:(CGSize *)pSelfSize lsc:(MyBaseLayout*)lsc;
+
+-(void)myAdjustSubviewsRTLPos:(NSArray*)sbs selfWidth:(CGFloat)selfWidth;
 
 @end
 
@@ -93,14 +102,25 @@
 
 @interface MyViewSizeClass()
 
-@property(nonatomic, strong,readonly)  MyLayoutPos *leftPosInner;
 @property(nonatomic, strong,readonly)  MyLayoutPos *topPosInner;
-@property(nonatomic, strong,readonly)  MyLayoutPos *rightPosInner;
+@property(nonatomic, strong,readonly)  MyLayoutPos *leadingPosInner;
 @property(nonatomic, strong,readonly)  MyLayoutPos *bottomPosInner;
+@property(nonatomic, strong,readonly)  MyLayoutPos *trailingPosInner;
 @property(nonatomic, strong,readonly)  MyLayoutPos *centerXPosInner;
 @property(nonatomic, strong,readonly)  MyLayoutPos *centerYPosInner;
 @property(nonatomic, strong,readonly)  MyLayoutSize *widthSizeInner;
 @property(nonatomic, strong,readonly)  MyLayoutSize *heightSizeInner;
+
+@property(nonatomic, strong,readonly)  MyLayoutPos *leftPosInner;
+@property(nonatomic, strong,readonly)  MyLayoutPos *rightPosInner;
+
+
+#if UIKIT_DEFINE_AS_PROPERTIES
+@property(class, nonatomic, assign) BOOL isRTL;
+#else
++(BOOL)isRTL;
++(void)setIsRTL:(BOOL)isRTL;
+#endif
 
 @end
 
@@ -122,15 +142,17 @@
 -(id)createSizeClassInstance;
 
 
-@property(nonatomic, readonly)  MyLayoutPos *leftPosInner;
 @property(nonatomic, readonly)  MyLayoutPos *topPosInner;
-@property(nonatomic, readonly)  MyLayoutPos *rightPosInner;
+@property(nonatomic, readonly)  MyLayoutPos *leadingPosInner;
 @property(nonatomic, readonly)  MyLayoutPos *bottomPosInner;
+@property(nonatomic, readonly)  MyLayoutPos *trailingPosInner;
 @property(nonatomic, readonly)  MyLayoutPos *centerXPosInner;
 @property(nonatomic, readonly)  MyLayoutPos *centerYPosInner;
 @property(nonatomic, readonly)  MyLayoutSize *widthSizeInner;
 @property(nonatomic, readonly)  MyLayoutSize *heightSizeInner;
 
+@property(nonatomic, readonly)  MyLayoutPos *leftPosInner;
+@property(nonatomic, readonly)  MyLayoutPos *rightPosInner;
 
 
 

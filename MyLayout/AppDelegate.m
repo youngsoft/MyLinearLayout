@@ -22,6 +22,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+        
     //this place add the ui template size dime
     [MyDimeScale setUITemplateSize:CGSizeMake(375, 667)];
         
@@ -30,9 +31,7 @@
         
     ViewController *vc = [[ViewController alloc] init];
    
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    nav.navigationBar.translucent = NO;
-    nav.toolbar.translucent = NO;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];    
     self.window.rootViewController = nav;
         
     [self.window makeKeyAndVisible];

@@ -64,14 +64,14 @@
 /**
  *初始化一个线性布局，并指定子视图布局的方向。如果不明确指定方向则默认是建立一个垂直线性布局。建立一个垂直线性布局时默认的wrapContentHeight设置为YES，而建立一个水平线性布局时默认的wrapContentWidth设置为YES。
  */
--(instancetype)initWithOrientation:(MyLayoutViewOrientation)orientation;
--(instancetype)initWithFrame:(CGRect)frame orientation:(MyLayoutViewOrientation)orientation;
-+(instancetype)linearLayoutWithOrientation:(MyLayoutViewOrientation)orientation;
+-(instancetype)initWithOrientation:(MyOrientation)orientation;
+-(instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation;
++(instancetype)linearLayoutWithOrientation:(MyOrientation)orientation;
 
 /**
  *线性布局的布局方向。
  */
-@property(nonatomic,assign) IBInspectable MyLayoutViewOrientation orientation;
+@property(nonatomic,assign) IBInspectable MyOrientation orientation;
 
 
 /**
@@ -125,8 +125,8 @@
  4.MySubviewsShrink_Auto (自动压缩，只对水平线性布局有效）
  假如某个水平线性布局里面里面有左右2个UILabel A和B。A和B的宽度都不确定，但是二者不能覆盖重叠，而且当间距小于一个值后要求自动换行。因为宽度都不确定所以不能为子视图指定具体的宽度值和最大最小的宽度值，但是又要利用好剩余的空间，这时候就可以用这个属性。比如下面的例子：
  
- MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:MyLayoutViewOrientation_Horz];
- horzLayout.myLeft = horzLayout.myRight = 0;
+ MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+ horzLayout.myHorzMargin = 0;
  horzLayout.wrapContentHeight = YES;
  horzLayout.subviewSpace = 10;  //二者的最小间距不能小于20
  horzLayout.shrinkType = MySubviewsShrink_Auto;
@@ -166,8 +166,7 @@
 /**
  *均分子视图和间距,布局会根据里面的子视图的数量来平均分配子视图的高度或者宽度以及间距。
  *这个函数只对已经加入布局的视图有效，函数调用后新加入的子视图无效。
- *@centered参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
- *@sizeClass参数表示设置在指定sizeClass下进行子视图和间距的均分
+ *@param centered 参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
  */
 -(void)equalizeSubviews:(BOOL)centered;
 -(void)equalizeSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
@@ -177,9 +176,8 @@
 /**
  *均分子视图，并指定固定的间距。上面的函数会导致子视图的高度或者宽度和他们之间的间距相等，而这个函数则表示间距是一个指定的值而子视图的高度或者宽度则会被均分。
  *这个函数只对已经加入布局的视图有效，函数调用后加入的子视图无效。
- *@centered参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
- *@space参数描述子视图之间的间距为某个固定的值。
- *@sizeClass参数表示设置在指定sizeClass下进行子视图高度或者宽度的均分以及间距的指定
+ *@param centered 参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距
+ *@param space 参数描述子视图之间的间距为某个固定的值。
  */
 -(void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space;
 -(void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space inSizeClass:(MySizeClass)sizeClass;
@@ -188,8 +186,7 @@
 
 /**
  *均分子视图的间距，上面函数会调整子视图的尺寸以及间距，而这个函数则是子视图的尺寸保持不变而间距自动平均分配，也就是用布局视图的剩余空间来均分间距
- *@centered参数意义同上。
- *@sizeClass参数的意义同上。
+ *@param centered 参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距。
  */
 -(void)equalizeSubviewsSpace:(BOOL)centered;
 -(void)equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;

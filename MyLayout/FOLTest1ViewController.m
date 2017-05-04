@@ -24,6 +24,9 @@
 @implementation FOLTest1ViewController
 
 - (void)viewDidLoad {
+    
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
@@ -67,9 +70,9 @@
     
     if (arr.count == 6)
     {
-        tagButton.myLeft = [arr[2] floatValue];
+        tagButton.myLeading = [arr[2] floatValue];
         tagButton.myTop = [arr[3] floatValue];
-        tagButton.myRight = [arr[4] floatValue];
+        tagButton.myTrailing = [arr[4] floatValue];
         tagButton.myBottom = [arr[5] floatValue];
     }
     
@@ -109,10 +112,10 @@
 
 - (IBAction)handleChangeOrientaion:(id)sender {
     
-    if (self.floatLayout.orientation == MyLayoutViewOrientation_Vert)
-        self.floatLayout.orientation = MyLayoutViewOrientation_Horz;
+    if (self.floatLayout.orientation == MyOrientation_Vert)
+        self.floatLayout.orientation = MyOrientation_Horz;
     else
-        self.floatLayout.orientation = MyLayoutViewOrientation_Vert;
+        self.floatLayout.orientation = MyOrientation_Vert;
     
     [self.floatLayout layoutAnimationWithDuration:0.3];
     

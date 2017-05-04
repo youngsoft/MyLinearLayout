@@ -35,19 +35,19 @@
 @interface MyTableLayout : MyLinearLayout
 
 
-+(instancetype)tableLayoutWithOrientation:(MyLayoutViewOrientation)orientation;
++(instancetype)tableLayoutWithOrientation:(MyOrientation)orientation;
 
 
 
 /**
  *  添加一个新行。对于垂直表格来说每一行是从上往下排列的，而水平表格则每一行是从左往右排列的。
  *
- *  @param rowSize行的尺寸值，可以设置如下：
+ *@param rowSize 行的尺寸值，可以设置如下：
       1.MTLSIZE_WRAPCONTENT表示由列子视图决定本行尺寸(垂直表格为行高，水平表格为行宽)，每个列子视图都需要自己设置尺寸(垂直表格为高度，水平表格为宽度)
       2.MTLSIZE_AVERAGE表示均分尺寸(垂直表格为行高 = 总行高/行数，水平表格为行宽 = 总行宽/行数)，列子视图不需要设置尺寸(垂直表格为高度，水平表格为宽度)
       3.大于0表示固定尺寸，表示这行的尺寸为这个固定的数值(垂直表格为行高，水平表格为行宽)，列子视图不需要设置尺寸(垂直表格为高度，水平表格为宽度)。
       4.不能设置为MTLSIZE_MATCHPARENT。
- *  @param colSize列的尺寸值，可以设置如下：
+ *@param colSize 列的尺寸值，可以设置如下：
       1.MTLSIZE_MATCHPARENT表示整列尺寸和父视图一样的尺寸(垂直表格为列宽，水平表格为列高)，每个子视图需要设置自己的尺寸(垂直表格为宽度，水平表格为高度)
       2.MTLSIZE_WRAPCONTENT表示整列的尺寸由列内所有子视图包裹(垂直表格为列宽，水平表格为列高).每个子视图需要设置自己的尺寸(垂直表格为宽度，水平表格为高度)
       3.MTLSIZE_AVERAGE表示整列的尺寸和父视图一样的尺寸(垂直表格为列宽，水平表格为列高)，每列内子视图的尺寸均分(垂直表格 = 列宽/行内子视图数，水平表格 = 行高/列内子视图数)
@@ -82,8 +82,8 @@
 
 /**
  * 添加一个新的列。再添加一个新的列前必须要先添加行，对于垂直表格来说每一列是从左到右排列的，而对于水平表格来说每一列是从上到下排列的。
- * @colView:  列视图
- * @rowIndex: 指定要添加列的行的索引
+ * @param colView  列视图
+ * @param rowIndex 指定要添加列的行的索引
  */
 -(void)addCol:(UIView*)colView atRow:(NSInteger)rowIndex;
 
