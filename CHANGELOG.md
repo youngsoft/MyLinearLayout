@@ -8,8 +8,8 @@
 #### Added
 1. 添加了对阿拉伯国家的从右往左方向布局的功能[#issue33](https://github.com/youngsoft/MyLinearLayout/issues/33)。系统提供了一个类属性：`isRTL`来实现对RTL布局的支持。同时为了支持RTL系统增加了UIView的扩展属性：`leadingPos, trailingPos, myLeading,myTrailing`用来实现头部和尾部的方向，MyBaseLayout则添加了`leadingPadding,trailingPadding`用来实现内边距的RTL支持。而边界线则增加了`leadingBorderline, trailingBorderline`属性来支持RTL。同时新增了`MyGravity_Horz_Leading,MyGravity_Horz_Trailing`两个停靠属性。下面的表格是介绍这些属性的意义。
 
-	所属类名|新属性|等价于LRT方向布局|等价于RTL布局方向
-------------|---------------|---------------
+所属类名|新属性|等价于LRT方向布局|等价于RTL布局方向
+-------|---------------|---------------|------------
 UIView(MyLayoutExt)|leadingPos|leftPos|rightPos
 UIView(MyLayoutExt)|trailingPos|rightPos|leftPos
 UIView(MyLayoutExt)|myLeading|myLeft|myRight
@@ -37,7 +37,7 @@ MyGravity|MyGravity_Horz_Trailing|MyGravity_Horz_Right|MyGravity_Horz_Left
 #### Changed
 1.  为了和[TangramKit](https://github.com/youngsoft/TangramKit)库保持一致，对一些名字进行了统一的定义。下面表格列出了新旧名称的定义变化。
 
-	所属类名|新定义|老定义|
+所属类名|新定义|老定义|
 ------------|---------------|---------------
 MyOrientation|MyOrientation|MyLayoutViewOrientation
 MyOrientation|MyOrientation_Vert|MyLayoutViewOrientation_Vert
@@ -55,8 +55,8 @@ MyAdjustScrollViewContentSizeMode|MyAdjustScrollViewContentSizeModeYes|MyLayoutA
 
 2. 新版本优化了布局库的子视图构建性能和布局性能。下面表格是新旧版本各布局视图内单个子视图在iPhone6真机设备下的构建和布局时长值(单位是毫秒ms)
 
-	create time|1.3.6|1.3.5|提升%|layout time|1.3.6|1.3.5|提升%
-------------|---------------|---------------
+create time|1.3.6|1.3.5|提升%|layout time|1.3.6|1.3.5|提升%
+-------|---|---|----|----|----|-------|--------
 MyLinearLayout|0.164|0.211|28%||0.049|0.160|226%
 MyFrameLayout|0.149|0.212|42%||0.042|0.142|234%
 MyRelativeLayout|0.182|0.215|18%||0.068|0.137|101%
@@ -67,8 +67,8 @@ MyPathLayout\*|||
 
 	这里没有提供表格布局和路径布局数据是因为表格布局就是一种线性套线性的线性布局，路径布局则没有进行多少优化。下面的一个表格则是单个视图分别在MyLayout,frame,AutoLayout,Masonry,UIStackView5种布局体系下的构建和布局时长对比值。
 	
-	create time|Frame|MyLayout|AutoLayout|Masonry|UIStackView	
-------------|---------------|---------------
+create time|Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+-------|-----|------|---------|----------|-----
 MyLinearLayout|0.08|0.164|0.219|0.304|0.131
 MyFrameLayout|0.05|0.149|0.209|0.273|0.131
 MyRelativeLayout|0.079|0.182|0.116|0.359|0.131
@@ -77,8 +77,8 @@ MyFloatLayout|0.044|0.148|0.203|0.250|0.131
 
 
 
-	layout time |Frame|MyLayout|AutoLayout|Masonry|UIStackView	
-------------|---------------|---------------
+layout time |Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+-------|-----|-------|--------|--------|-------
 MyLinearLayout|0|0.049|0.269|0.269|0.272
 MyFrameLayout|0|0.042|0.243|0.243|0.272
 MyRelativeLayout|0|0.068|0.274|0.274|0.272
