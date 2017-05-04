@@ -65,9 +65,8 @@ MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayou
 
 ![demo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayoutP.png)
 
-
-create time(ms)/per subview|Frame|MyLayout|AutoLayout|Masonry|UIStackView	
-------------|---------------|---------------
+create time(ms)/per subview|Frame|MyLayout|AutoLayout|Masonry|UIStackView
+-----|-------|---------|------|------|---------
 MyLinearLayout|0.08|0.164|0.219|0.304|0.131
 MyFrameLayout|0.05|0.149|0.209|0.273|0.131
 MyRelativeLayout|0.079|0.182|0.116|0.359|0.131
@@ -75,9 +74,8 @@ MyFlowLayout|0.08|0.107|0.198|0.258|0.131
 MyFloatLayout|0.044|0.148|0.203|0.250|0.131
 
 
-
-layout time(ms)/per subview |Frame|MyLayout|AutoLayout|Masonry|UIStackView	
-------------|---------------|---------------
+layout time(ms)/per subview |Frame|MyLayout|AutoLayout|Masonry|UIStackView   
+ -----|-------|---------|------|------|---------
 MyLinearLayout|0|0.049|0.269|0.269|0.272
 MyFrameLayout|0|0.042|0.243|0.243|0.272
 MyRelativeLayout|0|0.068|0.274|0.274|0.272
