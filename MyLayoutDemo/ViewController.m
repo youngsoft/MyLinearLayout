@@ -60,7 +60,7 @@
 #import "PLTest2ViewController.h"
 #import "PLTest3ViewController.h"
 #import "PLTest4ViewController.h"
-
+#import "PLTest5ViewController.h"
 
 @interface ViewController ()
 
@@ -173,6 +173,9 @@
                            },
                          @{@"title":NSLocalizedString(@"4.PathLayout - Fan", @""),
                            @"class":[PLTest4ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"5.PathLayout - Roulette", @""),
+                           @"class":[PLTest5ViewController class]
                            },
                          @{@"title":NSLocalizedString(@"1.UITableView - Dynamic height", @""),
                            @"class":[AllTest1ViewController class]

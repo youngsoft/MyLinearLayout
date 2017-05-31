@@ -54,6 +54,7 @@
 -(void)loadView
 {
     UIScrollView *scrollView = [UIScrollView new];
+    scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
     
     _pathLayout = [MyTestPathLayou new];
@@ -238,6 +239,8 @@
         self.pathLayout.polarEquation = ^(CGFloat angle)
         {
             return (CGFloat)(120 * (1 + cos(angle)));
+            
+            //return 40000.0/(250 - 150 * cos(angle));
         };
         
     }

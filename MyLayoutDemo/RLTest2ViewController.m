@@ -12,7 +12,8 @@
 
 @interface RLTest2ViewController ()
 
-@property(nonatomic,strong) UIButton *hiddenButton;
+@property(nonatomic,strong) UIButton *visibilityButton;
+@property(nonatomic, strong) UISwitch *visibilitySwitch;
 
 @end
 
@@ -50,20 +51,20 @@
     rootLayout.trailingPadding = 10;
     self.view = rootLayout;
     
-    UISwitch *hiddenSwitch = [UISwitch new];
-    [hiddenSwitch addTarget:self action:@selector(handleSwitch:) forControlEvents:UIControlEventValueChanged];
-    hiddenSwitch.trailingPos.equalTo(@0);
-    hiddenSwitch.topPos.equalTo(@10);
-    [rootLayout addSubview:hiddenSwitch];
+    UISwitch *visibilitySwitch = [UISwitch new];
+    visibilitySwitch.trailingPos.equalTo(@0);
+    visibilitySwitch.topPos.equalTo(@10);
+    [rootLayout addSubview:visibilitySwitch];
+    self.visibilitySwitch = visibilitySwitch;
     
-    UILabel *hiddenSwitchLabel = [UILabel new];
-    hiddenSwitchLabel.text = NSLocalizedString(@"flex size when subview hidden switch:", @"");
-    hiddenSwitchLabel.textColor = [CFTool color:4];
-    hiddenSwitchLabel.font = [CFTool font:15];
-    [hiddenSwitchLabel sizeToFit];
-    hiddenSwitchLabel.leadingPos.equalTo(@10);
-    hiddenSwitchLabel.centerYPos.equalTo(hiddenSwitch.centerYPos);
-    [rootLayout addSubview:hiddenSwitchLabel];
+    UILabel *visibilitySwitchLabel = [UILabel new];
+    visibilitySwitchLabel.text = NSLocalizedString(@"flex size when subview hidden switch:", @"");
+    visibilitySwitchLabel.textColor = [CFTool color:4];
+    visibilitySwitchLabel.font = [CFTool font:15];
+    [visibilitySwitchLabel sizeToFit];
+    visibilitySwitchLabel.leadingPos.equalTo(@10);
+    visibilitySwitchLabel.centerYPos.equalTo(visibilitySwitch.centerYPos);
+    [rootLayout addSubview:visibilitySwitchLabel];
     
     
     /**水平平分3个子视图**/
@@ -80,6 +81,7 @@
     v2.topPos.equalTo(v1.topPos);
     v2.leadingPos.equalTo(v1.trailingPos).offset(10);
     [rootLayout addSubview:v2];
+    self.visibilityButton = v2;
     
 
     UIButton *v3 = [self createButton:NSLocalizedString(@"average 1/3 width\nshow me", @"") backgroundColor:[CFTool color:7]];
@@ -216,26 +218,22 @@
 
 #pragma mark -- Handle Method
 
--(void)handleSwitch:(id)sender
-{
-    //flexOtherViewWidthWhenSubviewHidden这个相对布局的属性表示当某个均分宽度的视图隐藏后，是否会激发剩余的子视图重新均分宽度。
-    MyRelativeLayout *rl = (MyRelativeLayout*)self.view;
-    rl.flexOtherViewWidthWhenSubviewHidden = !rl.flexOtherViewWidthWhenSubviewHidden;
-}
-
 -(void)handleHidden:(UIButton*)sender
 {
-    sender.hidden = YES;
-    self.hiddenButton = sender;
+    if (self.visibilitySwitch.isOn)
+    {
+        self.visibilityButton.myVisibility = MyVisibility_Gone;
+    }
+    else
+    {
+        self.visibilityButton.myVisibility = MyVisibility_Invisible;
+    }
+
 }
 
 -(void)handleShow:(UIButton*)sender
 {
-    if (self.hiddenButton != nil)
-    {
-        self.hiddenButton.hidden = NO;
-        self.hiddenButton = nil;
-    }
+    self.visibilityButton.myVisibility = MyVisibility_Visible;
 }
 
 /*

@@ -1,4 +1,5 @@
 [![Version](https://img.shields.io/cocoapods/v/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
 [![Platform](https://img.shields.io/cocoapods/p/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
 [![Support](https://img.shields.io/badge/support-iOS%205%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
@@ -9,7 +10,7 @@
 
 ![Logo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayout.png)
 
-## MyLayout(2017.05.05)
+## MyLayout
 
 MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIView的layoutSubviews方法的重载以及对子视图的bounds和center属性的设置而实现的。MyLayout功能强大而且简单易用，它集成了:iOS Autolayout和SizeClass、android的5大布局体系、HTML/CSS的浮动定位技术以及flex-box和bootstrap框架等市面上主流的平台的界面布局功能，同时提供了一套非常简单和完备的多屏幕尺寸适配的解决方案。MyLayout的Swift版本的名字叫做：**[TangramKit](https://github.com/youngsoft/TangramKit)**   
 
@@ -565,7 +566,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.3.6'
+pod 'MyLayout', '~> 1.3.7'
 ```
    
 然后运行如下命令:
@@ -573,6 +574,26 @@ pod 'MyLayout', '~> 1.3.6'
 ```
 $ pod install
 ```
+
+### 使用[Carthage](https://github.com/Carthage/Carthage)
+
+1.创建一个 `Cartfile` 文件，内容如下：
+
+	github "youngsoft/MyLinearLayout"
+	
+2.终端执行`carthage update`。
+ 
+3.点击“General”按钮，然后把`Carthage/Build/iOS/MyLayout.framework`拖拽到到“Linked Frameworks and Libraries”栏目里。
+
+4.点击“Build Phases”按钮, 然后点击左上角的加号 “+” 选择“New Run Script Phase”，在`Shell`下面填写下面内容:
+
+	/usr/local/bin/carthage copy-frameworks
+	
+  然后在 “Input Files”栏目加上：
+
+	
+	$(SRCROOT)/Carthage/Build/iOS/MyLayout.framework
+	
 
 
 

@@ -410,7 +410,7 @@
     
     UIView *hiddenView = [UIView new];
     hiddenView.backgroundColor = [CFTool color:3];
-    hiddenView.hidden = YES;
+    hiddenView.myVisibility = MyVisibility_Gone;
     hiddenView.myTop = 20;
     hiddenView.myLeading = hiddenView.myTrailing = 0;
     hiddenView.myHeight = 800;
@@ -442,16 +442,16 @@
 
 -(void)handleHideAndShowMore:(UIButton*)sender
 {
-    if (self.hiddenView.isHidden)
+    if (self.hiddenView.myVisibility == MyVisibility_Visible)
     {
-        self.hiddenView.hidden = NO;
-        [sender setTitle:NSLocalizedString(@"Close up《", @"") forState:UIControlStateNormal];
+        self.hiddenView.myVisibility = MyVisibility_Gone;
+        [sender setTitle:NSLocalizedString(@"Show more》", @"") forState:UIControlStateNormal];
         [sender sizeToFit];
     }
     else
     {
-        self.hiddenView.hidden = YES;
-        [sender setTitle:NSLocalizedString(@"Show more》", @"") forState:UIControlStateNormal];
+        self.hiddenView.myVisibility = MyVisibility_Visible;
+        [sender setTitle:NSLocalizedString(@"Close up《", @"") forState:UIControlStateNormal];
         [sender sizeToFit];
     }
 }

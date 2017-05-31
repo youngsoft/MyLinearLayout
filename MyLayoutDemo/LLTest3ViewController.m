@@ -41,6 +41,7 @@
      
      */
     
+    
     UIScrollView *scrollView = [UIScrollView new];
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
@@ -166,8 +167,9 @@
     v1.myHeight = 20;
     [self.vertGravityLayout addSubview:v1];
     
-    UILabel *v2 = [self createLabel:NSLocalizedString(@"test text2 test text2", @"") backgroundColor:[CFTool color:6]];
+    UILabel *v2 = [self createLabel:NSLocalizedString(@"always alignment to left", @"") backgroundColor:[CFTool color:6]];
     v2.myHeight = 20;
+    v2.myAlignment = MyGravity_Horz_Left;  //对于垂直布局里面的子视图可以通过这个属性来设置水平对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
     [self.vertGravityLayout addSubview:v2];
     
     UILabel *v3 = [self createLabel:NSLocalizedString(@"test text3 test text3 test text3", @"") backgroundColor:[CFTool color:7]];
@@ -252,9 +254,10 @@
     v1.myWidth = 60;
     [self.horzGravityLayout addSubview:v1];
     
-    UILabel *v2 = [self createLabel:NSLocalizedString(@"test text2 test text2", @"") backgroundColor:[CFTool color:6]];
+    UILabel *v2 = [self createLabel:NSLocalizedString(@"always alignment to top", @"") backgroundColor:[CFTool color:6]];
     v2.wrapContentHeight = YES;
     v2.myWidth = 60;
+    v2.myAlignment = MyGravity_Vert_Top;  //对于水平布局里面的子视图可以通过这个属性来设置垂直对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
     [self.horzGravityLayout addSubview:v2];
     
     

@@ -168,7 +168,7 @@
        _active = active;
         _lBoundVal.active = active;
         _uBoundVal.active = active;
-      [self setNeedLayout];
+      [self setNeedsLayout];
     }
 }
 
@@ -314,6 +314,16 @@
             _posValType = MyLayoutValueType_LayoutPos;
         else if ([val isKindOfClass:[NSArray class]])
             _posValType = MyLayoutValueType_Array;
+        else if ([val conformsToProtocol:@protocol(UILayoutSupport)])
+        {
+            //这里只有上边和下边支持，其他不支持。。
+            if (_pos != MyGravity_Vert_Top && _pos != MyGravity_Vert_Bottom)
+            {
+                NSAssert(0, @"oops! only topPos or bottomPos can set to id<UILayoutSupport>");
+            }
+            
+            _posValType = MyLayoutValueType_UILayoutSupport;
+        }
         else if ([val isKindOfClass:[UIView class]])
         {
             UIView *rview = (UIView*)val;
@@ -344,21 +354,11 @@
             }
             
         }
-        else if ([val conformsToProtocol:@protocol(UILayoutSupport)])
-        {
-            //这里只有上边和下边支持，其他不支持。。
-            if (_pos != MyGravity_Vert_Top && _pos != MyGravity_Vert_Bottom)
-            {
-                NSAssert(0, @"oops! only topPos or bottomPos can set to id<UILayoutSupport>");
-            }
-            
-            _posValType = MyLayoutValueType_UILayoutSupport;
-        }
         else
             _posValType = MyLayoutValueType_Nil;
         
         _posVal = val;
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
     
     return self;
@@ -370,7 +370,7 @@
     if (_offsetVal != val)
     {
         _offsetVal = val;
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
     
     return self;
@@ -383,7 +383,7 @@
     {
         [self.lBoundVal __equalTo:@(val)];
         
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
     
     return self;
@@ -394,7 +394,7 @@
     
     [[self.lBoundVal __equalTo:posVal] __offset:offsetVal];
     
-    [self setNeedLayout];
+    [self setNeedsLayout];
     
     return self;
 }
@@ -406,7 +406,7 @@
     if (self.uBoundVal.posNumVal.doubleValue != val)
     {
         [self.uBoundVal __equalTo:@(val)];
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
     
     return self;
@@ -417,7 +417,7 @@
     
     [[self.uBoundVal __equalTo:posVal] __offset:offsetVal];
     
-    [self setNeedLayout];
+    [self setNeedsLayout];
     
     return self;
 }
@@ -432,7 +432,7 @@
     _offsetVal = 0;
     _lBoundVal = nil;
     _uBoundVal = nil;
-    [self setNeedLayout];
+    [self setNeedsLayout];
 }
 
 
@@ -495,7 +495,7 @@
 }
 
 
--(void)setNeedLayout
+-(void)setNeedsLayout
 {
     if (_view != nil && _view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
     {

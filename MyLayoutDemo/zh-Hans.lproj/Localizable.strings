@@ -41,6 +41,7 @@
 "2.PathLayout - Curves"="2.路径布局-各种函数曲线";
 "3.PathLayout - Menu in Circle"="3.路径布局-圆环型菜单";
 "4.PathLayout - Fan"="4.路径布局-扇子效果";
+"5.PathLayout - Roulette"="5.路径布局-转动的轮盘";
 "1.UITableView - Dynamic height" = "1.综合布局-布局和UITableView(动态高度)";
 "2.UITableView - Static height" = "2.综合布局-布局和UITableView(静态高度)";
 "3.Replacement of UITableView" = "3.综合布局-UITableView的替换方案";
@@ -94,7 +95,8 @@
 "space" = "间距调整";
 "between" = "间距拉伸";
 "test text1"="测试文本1";
-"test text2 test text2"="测试文本2测试文本2";
+"always alignment to left"="总是停靠在左边";
+"always alignment to top"="总是停靠在上边";
 "test text3 test text3 test text3"="测试文本3测试文本3测试文本3";
 "set left and right margin to determine width"="你可以自定义左右边距和宽度";
 "set top and bottom margin to determine height"="您可以自定义上下边距和高度";
@@ -232,8 +234,9 @@
 "please touch here(highlighted background color)"="请单击这里(有高亮颜色)";
 "please touch here(highlighted background image)"="请单击这里(有高亮图片)";
 "please touch here(will pop menu)"="请单击这里(弹出可伸缩的菜单视图)";
-"relayout switch when subview hidden&show"="下面的子视图隐藏重新布局开关";
-"touch hide me"="点击我隐藏";
+"reset show" = "恢复显示";
+"invisible"="占位隐藏";
+"gone"="不占位隐藏";
 "touch show me"="点击我显示";
 "show all switch"="显示全部开关";
 "add item"="添加条目";

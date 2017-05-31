@@ -12,9 +12,6 @@
 #import "MyLayoutSizeClass.h"
 
 
-
-
-
 //视图在布局中的评估测量值
 @interface MyFrame : NSObject
 
@@ -31,6 +28,8 @@
 
 @property(nonatomic, strong) NSMutableDictionary *sizeClasses;
 
+@property(nonatomic, assign) BOOL hasObserver;
+
 -(void)reset;
 
 @property(nonatomic,assign) CGRect frame;
@@ -39,12 +38,52 @@
 
 
 
+@interface MyTouchEventDelegate : NSObject
+
+-(instancetype)initWithLayout:(MyBaseLayout*)layout;
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
+
+-(void)setTarget:(id)target action:(SEL)action;
+-(void)setTouchDownTarget:(id)target action:(SEL)action;
+-(void)setTouchCancelTarget:(id)target action:(SEL)action;
+
+@end
+
+
+/**绘制线条层委托实现类**/
+#ifdef MAC_OS_X_VERSION_10_12
+@interface MyBorderlineLayerDelegate : NSObject<CALayerDelegate>
+#else
+@interface MyBorderlineLayerDelegate : NSObject
+#endif
+
+@property(nonatomic, strong) MyBorderline *topBorderline; /**顶部边界线*/
+@property(nonatomic, strong) MyBorderline *leadingBorderline; /**头部边界线*/
+@property(nonatomic, strong) MyBorderline *bottomBorderline;  /**底部边界线*/
+@property(nonatomic, strong) MyBorderline *trailingBorderline;  /**尾部边界线*/
+@property(nonatomic, strong) MyBorderline *leftBorderline;   /**左边边界线*/
+@property(nonatomic, strong) MyBorderline *rightBorderline;   /**左边边界线*/
+
+
+@property(nonatomic ,weak) CAShapeLayer *topBorderlineLayer;
+@property(nonatomic ,weak) CAShapeLayer *leadingBorderlineLayer;
+@property(nonatomic ,weak) CAShapeLayer *bottomBorderlineLayer;
+@property(nonatomic ,weak) CAShapeLayer *trailingBorderlineLayer;
+
+
+-(instancetype)initWithLayout:(MyBaseLayout*)layout;
+
+-(void)setNeedsLayout;
+
+@end
+
+
 @interface MyBaseLayout()
 
-@property(nonatomic ,strong) CAShapeLayer *topBorderlineLayer;
-@property(nonatomic ,strong) CAShapeLayer *leadingBorderlineLayer;
-@property(nonatomic ,strong) CAShapeLayer *bottomBorderlineLayer;
-@property(nonatomic ,strong) CAShapeLayer *trailingBorderlineLayer;
 
 
 //派生类重载这个函数进行布局
@@ -56,8 +95,10 @@
 //判断margin是否是相对margin
 -(BOOL)myIsRelativePos:(CGFloat)margin;
 
+-(MyGravity)myGetSubviewVertGravity:(UIView*)sbv sbvsc:(UIView*)sbvsc vertGravity:(MyGravity)vertGravity;
 
--(void)myVertGravity:(MyGravity)vert
+
+-(void)myCalcVertGravity:(MyGravity)vert
                  sbv:(UIView *)sbv
                sbvsc:(UIView*)sbvsc
           paddingTop:(CGFloat)paddingTop
@@ -65,8 +106,10 @@
             selfSize:(CGSize)selfSize
                pRect:(CGRect*)pRect;
 
+-(MyGravity)myGetSubviewHorzGravity:(UIView*)sbv sbvsc:(UIView*)sbvsc horzGravity:(MyGravity)horzGravity;
 
--(void)myHorzGravity:(MyGravity)horz
+
+-(void)myCalcHorzGravity:(MyGravity)horz
                  sbv:(UIView *)sbv
                sbvsc:(UIView*)sbvsc
       paddingLeading:(CGFloat)paddingLeading
@@ -74,7 +117,7 @@
             selfSize:(CGSize)selfSize
                pRect:(CGRect*)pRect;
 
--(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvMyFrame:(MyFrame*)sbvMyFrame selfLayoutSize:(CGSize)selfLayoutSize;
+-(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvmyFrame:(MyFrame*)sbvmyFrame selfLayoutSize:(CGSize)selfLayoutSize;
 
 -(CGFloat)myHeightFromFlexedHeightView:(UIView*)sbv sbvsc:(UIView*)sbvsc inWidth:(CGFloat)width;
 
@@ -95,6 +138,8 @@
 - (void)myAdjustLayoutSelfSize:(CGSize *)pSelfSize lsc:(MyBaseLayout*)lsc;
 
 -(void)myAdjustSubviewsRTLPos:(NSArray*)sbs selfWidth:(CGFloat)selfWidth;
+
+-(MyGravity)myConvertLeftRightGravityToLeadingTrailing:(MyGravity)horzGravity;
 
 @end
 
@@ -139,6 +184,8 @@
 -(instancetype)myCurrentSizeClassInner;
 
 
+-(instancetype)myCurrentSizeClassFrom:(MyFrame*)myFrame;
+
 -(id)createSizeClassInstance;
 
 
@@ -163,4 +210,8 @@ extern BOOL _myCGFloatEqual(CGFloat f1, CGFloat f2);
 extern BOOL _myCGFloatNotEqual(CGFloat f1, CGFloat f2);
 extern BOOL _myCGFloatLessOrEqual(CGFloat f1, CGFloat f2);
 extern BOOL _myCGFloatGreatOrEqual(CGFloat f1, CGFloat f2);
+extern CGFloat _myRoundNumber(CGFloat f);
+extern CGRect _myRoundRect(CGRect rect);
+extern CGSize _myRoundSize(CGSize size);
+extern CGPoint _myRoundPoint(CGPoint point);
 

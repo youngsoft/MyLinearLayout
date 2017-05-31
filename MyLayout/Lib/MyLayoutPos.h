@@ -64,12 +64,14 @@
  视图的水平位置可以用左、水平中、右三个方位的值来描述，垂直位置则可以用上、垂直中、下三个方位的值来描述。
  也就是说一个视图的位置需要用水平的某个方位的值以及垂直的某个方位的值来确定。一个位置的值可以是一个具体的数值，也可以依赖于另外一个视图的位置来确定。
  
+ @code
  一个布局位置对象的最终位置值 = min(max(posVal + offsetVal, lBound.posVal+lBound.offsetVal), uBound.posVal+uBound.offsetVal)
  其中:
     posVal是通过equalTo方法设置。
     offsetVal是通过offset方法设置。
     lBound.posVal,lBound.offsetVal是通过lBound方法设置。
     uBound.posVal,uBound.offsetVal是通过uBound方法设置。
+ @endcode
  */
 @interface MyLayoutPos : NSObject<NSCopying>
 
@@ -87,30 +89,41 @@
 #else
 
 /**
- *设置布局位置的值。参数val可以接收下面六种类型的值：
- *1.NSNumber表示位置是一个具体的数值。
+ 设置布局位置的值。参数val可以接收下面六种类型的值：
+ 
+ 1. NSNumber表示位置是一个具体的数值。
     对于框架布局和线性布局中的子视图来说，如果数值是一个大于0而小于1的数值时表示的是相对的间距或者边距。如果是相对边距那么真实的位置 = 布局视图尺寸*相对边距值；如果是相对间距那么真实的位置 = 布局视图剩余尺寸 * 相对间距值 /(所有相对间距值的总和)。
  
- *2.MyLayoutPos表示位置依赖于另外一个位置。
- *3.NSArray<MyLayoutPos*>表示位置和数组里面的其他位置整体居中。
- *4.id<UILayoutSupport> 对于iOS7以后视图控制器会根据导航条是否半透明而确定是占据整个屏幕。因此当topPos,bottomPos设置为视图控制器的topLayoutGuide或者bottomLayoutGuide时这样子视图就会偏移出导航条的高度，而如果没有导航条时则不会偏移出导航条的高度。注意的是这个值不能设置在非布局父视图的布局视图中。
- *5.UIView表示位置依赖指定视图的对应位置。
- *6.nil表示位置的值被清除。
+ 2. MyLayoutPos表示位置依赖于另外一个位置。
+ 
+ 3. NSArray<MyLayoutPos*>表示位置和数组里面的其他位置整体居中。
+ 
+ 4. id<UILayoutSupport> 对于iOS7以后视图控制器会根据导航条是否半透明而确定是占据整个屏幕。因此当topPos,bottomPos设置为视图控制器的topLayoutGuide或者bottomLayoutGuide时这样子视图就会偏移出导航条的高度，而如果没有导航条时则不会偏移出导航条的高度。注意的是这个值不能设置在非布局父视图的布局视图中。
+ 
+ 5. UIView表示位置依赖指定视图的对应位置。
+ 
+ 6. nil表示位置的值被清除。
  */
 -(MyLayoutPos* (^)(id val))equalTo;
 
 
 /**
- *设置布局位置值的偏移量。 所谓偏移量是指布局位置在设置了某种值后增加或减少的偏移值。
- *这里偏移值的正负值所表示的意义是根据位置的不同而不同的：
-   1.如果是leftPos和centerXPos那么正数表示往右偏移，负数表示往左偏移。
-   2.如果是topPos和centerYPos那么正数表示往下偏移，负数表示往上偏移。
-   3.如果是rightPos那么正数表示往左偏移，负数表示往右偏移。
-   4.如果是bottomPos那么正数表示往上偏移，负数表示往下偏移。
+ 设置布局位置值的偏移量。 所谓偏移量是指布局位置在设置了某种值后增加或减少的偏移值。
+ 这里偏移值的正负值所表示的意义是根据位置的不同而不同的：
+   
+ 1.如果是leftPos和centerXPos那么正数表示往右偏移，负数表示往左偏移。
+   
+ 2.如果是topPos和centerYPos那么正数表示往下偏移，负数表示往上偏移。
  
+ 3.如果是rightPos那么正数表示往左偏移，负数表示往右偏移。
+ 
+ 4.如果是bottomPos那么正数表示往上偏移，负数表示往下偏移。
+ 
+ @code
  示例代码：
  1.比如：A.leftPos.equalTo(@10).offset(5)表示A视图的左边边距等于10再往右偏移5,也就是最终的左边边距是15。
  2.比如：A.rightPos.equalTo(B.rightPos).offset(5)表示A视图的右边位置等于B视图的右边位置再往左偏移5。
+ @endcode
  */
 -(MyLayoutPos* (^)(CGFloat val))offset;
 
@@ -122,14 +135,20 @@
 
 /**
  *设置布局位置的最小边界值。 如果位置对象没有设置最小边界值，那么最小边界默认就是无穷小-CGFLOAT_MAX。lBound方法除了能设置为NSNumber外，还可以设置为MyLayoutPos值，并且还可以指定最小位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最小边界值为MyLayoutPos类型的值，其他类型布局中的子视图只支持NSNumber类型的最小边界值。
- @posVal指定位置边界值。可设置的类型有NSNumber和MyLayoutPos类型，前者表示最小位置不能小于某个常量值，而后者表示最小位置不能小于另外一个位置对象所表示的位置值。
- @offsetVal指定位置边界值的偏移量。
+ 
+ posVal: 指定位置边界值。可设置的类型有NSNumber和MyLayoutPos类型，前者表示最小位置不能小于某个常量值，而后者表示最小位置不能小于另外一个位置对象所表示的位置值。
+ 
+ offsetVal: 指定位置边界值的偏移量。
  
  1.比如某个视图A的左边位置最小不能小于30则设置为：
+ @code
    A.leftPos.lBound(30,0); 或者A.leftPos.lBound(20,10);
- 2.对于相对布局中的子视图来说可以通过lBound值来实现那些尺寸不确定但是最小边界不能低于某个关联的视图的位置的场景，比如说视图B的位置和宽度固定，而A视图的右边位置固定，但是A视图的宽度不确定，且A的最左边不能小于B视图的右边边界加20，那么A就可以设置为：
-   A.leftPos.lBound(B.rightPos, 20); //这时A是不必要指定明确的宽度的。
+ @endcode
  
+ 2.对于相对布局中的子视图来说可以通过lBound值来实现那些尺寸不确定但是最小边界不能低于某个关联的视图的位置的场景，比如说视图B的位置和宽度固定，而A视图的右边位置固定，但是A视图的宽度不确定，且A的最左边不能小于B视图的右边边界加20，那么A就可以设置为：
+ @code
+ A.leftPos.lBound(B.rightPos, 20); //这时A是不必要指定明确的宽度的。
+ @endcode
  */
 -(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))lBound;
 
@@ -140,16 +159,25 @@
 -(MyLayoutPos* (^)(CGFloat val))max;
 
 /**
- *设置布局位置的最大边界值。 如果位置对象没有设置最大边界值，那么最大边界默认就是无穷大CGFLOAT_MAX。uBound方法除了能设置为NSNumber外，还可以设置为MyLayoutPos值，并且还可以指定最大位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最大边界值为MyLayoutPos类型的值，其他类型布局中的子视图只支持NSNumber类型的最大边界值。
- 1.比如某个视图A的左边位置最大不能超过30则设置为：
-   A.leftPos.uBound(30,0); 或者A.leftPos.uBound(30,10);
- 2.对于相对布局中的子视图来说可以通过uBound值来实现那些尺寸不确定但是最大边界不能超过某个关联的视图的位置的场景，比如说视图B的位置和宽度固定，而A视图的左边位置固定，但是A视图的宽度不确定，且A的最右边不能超过B视图的左边边界减20，那么A就可以设置为：
-   A.reftPos.uBound(B.leftPos, -20); //这时A是不必要指定明确的宽度的。
- 3.对于相对布局中的子视图来说可以同时通过lBound,uBound方法的设置来实现某个子视图总是在对应的两个其他的子视图中央显示且尺寸不能超过其他两个子视图边界的场景。比如说视图B要放置在A和C之间水平居中显示且不能超过A和C的边界。那么就可以设置为：
-   B.leftPos.lBound(A.rightPos,0); B.rightPos.uBound(C.leftPos,0); //这时B不用指定宽度，而且总是在A和C的水平中间显示。
+ 设置布局位置的最大边界值。 如果位置对象没有设置最大边界值，那么最大边界默认就是无穷大CGFLOAT_MAX。uBound方法除了能设置为NSNumber外，还可以设置为MyLayoutPos值，并且还可以指定最大位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最大边界值为MyLayoutPos类型的值，其他类型布局中的子视图只支持NSNumber类型的最大边界值。
  
- *posVal 指定位置边界值。可设置的类型有NSNumber和MyLayoutPos类型，前者表示最大位置不能大于某个常量值，而后者表示最大位置不能大于另外一个位置对象所表示的位置值。
- *offsetVal 指定位置边界值的偏移量。
+ 1.比如某个视图A的左边位置最大不能超过30则设置为：
+ @code
+ A.leftPos.uBound(30,0); 或者A.leftPos.uBound(30,10);
+ @endcode
+ 2.对于相对布局中的子视图来说可以通过uBound值来实现那些尺寸不确定但是最大边界不能超过某个关联的视图的位置的场景，比如说视图B的位置和宽度固定，而A视图的左边位置固定，但是A视图的宽度不确定，且A的最右边不能超过B视图的左边边界减20，那么A就可以设置为：
+ @code
+ A.reftPos.uBound(B.leftPos, -20); //这时A是不必要指定明确的宽度的。
+ @endcode
+ 
+ 3.对于相对布局中的子视图来说可以同时通过lBound,uBound方法的设置来实现某个子视图总是在对应的两个其他的子视图中央显示且尺寸不能超过其他两个子视图边界的场景。比如说视图B要放置在A和C之间水平居中显示且不能超过A和C的边界。那么就可以设置为：
+ @code
+ B.leftPos.lBound(A.rightPos,0); B.rightPos.uBound(C.leftPos,0); //这时B不用指定宽度，而且总是在A和C的水平中间显示。
+ @endcode
+ 
+ posVal 指定位置边界值。可设置的类型有NSNumber和MyLayoutPos类型，前者表示最大位置不能大于某个常量值，而后者表示最大位置不能大于另外一个位置对象所表示的位置值。
+ 
+ offsetVal 指定位置边界值的偏移量。
  */
 -(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))uBound;
 

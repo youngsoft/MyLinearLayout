@@ -47,6 +47,18 @@ typedef MyOrientation MyLayoutViewOrientation MYMETHODDEPRECATED("use MyOrientat
 
 
 /**
+ *视图的可见性枚举类型定义。用来指定视图是否在布局中可见，他是对hidden属性的扩展设置。
+ */
+typedef enum : unsigned char {
+    
+    MyVisibility_Visible,   /**视图可见，等价于hidden = false*/
+    MyVisibility_Invisible,  /**视图隐藏，等价于hidden = true, 但是会在父布局视图中占位空白区域*/
+    MyVisibility_Gone        /**视图隐藏，等价于hidden = true, 但是不会在父视图中占位空白区域*/
+    
+}MyVisibility;
+
+
+/**
  *布局视图内所有子视图的停靠方向和填充拉伸属性以及对齐方式的枚举类型定义。
  所谓停靠方向就是指子视图停靠在布局视图中水平方向和垂直方向的位置。水平方向一共有左、水平中心、右、窗口水平中心四个位置，垂直方向一共有上、垂直中心、下、窗口垂直中心四个位置。
  所谓填充拉伸属性就是指子视图的尺寸填充或者子视图的间距拉伸满整个布局视图。一共有水平宽度、垂直高度两种尺寸填充，水平间距、垂直间距两种间距拉伸。

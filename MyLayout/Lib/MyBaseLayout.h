@@ -368,7 +368,91 @@
 
 
 /**
- *设置视图不受布局父视图的布局约束控制和不再参与视图的布局，所有设置的其他扩展属性都将失效而必须用frame来设置视图的位置和尺寸，默认值是NO。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+ 设置子视图的相对比重尺寸。也就是子视图的尺寸并不是一个绝对值而是一个相对值，在最终布局时系统会根据布局视图的剩余尺寸来将这个相对的值转化为绝对的值。通过对子视图设置相对的尺寸可以很方便的适配各种屏幕尺寸的设备，以便达到完美的布局效果。这个属性默认值是0表示不使用相对尺寸。weight属性的引入是参考android中的weight的概念而来的。
+ 
+ 目前只有在线性布局、表格布局、流式布局、浮动布局下的子视图设置weight才有效，相对布局、框架布局、路径布局里面的子视图不支持weight属性的设置。
+ 在不同的布局下的子视图的weight属性所表达的意义也有所差异：
+ 
+ @note
+ 1.在线性布局和表格布局下：
+
+    1.1. 当线性布局是垂直线性布局时这个属性用来设置子视图高度占用父线性布局剩余高度的比重，这样子视图就不需要明确的设定高度值。
+ 
+    1.2. 当线性布局是水平线性布局时这个属性用来设置子视图宽度占用父线性布局剩余宽度的比重，这样子视图就不需要明确的设定宽度值。
+ 
+    @code
+    视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重/(布局视图内所有设置了weight比重值的子视图比重之和)。
+    @endcode
+ 
+    对一个垂直线性布局举例来说：假设布局视图的高度是100，A子视图占据了20的固定高度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么:
+    @code
+    A子视图的高度 = 20
+    B子视图的高度 = (100-20)*0.4/(0.4+0.6) = 32
+    C子视图的高度 = (100-20)*0.6/(0.4+0.6) = 48
+    @endcode
+ 
+ 子视图设置weight属性时要注意如下几点：
+ 
+    - 垂直线性布局必须指定明确的高度，而不能使用wrapContentHeight属性；水平线性布局必须指定明确的宽度，而不能使用wrapContentWidth属性。
+ 
+    - 如果比重属性设置为0的话则表示视图的尺寸必须要明确的被指定，这也是默认值。
+ 
+    - 线性布局里面的所有子视图的比重值的和不一定要求是1，比如线性布局里面两个视图的比重都设置为1和都设置为0.5以及都设置为0.1的意义是一样的，都是占用50%。
+
+ @note
+ 2.在流式布局下：
+ 
+    2.1. 当流式布局是垂直流式布局时这个属性用来设置子视图宽度占用父流式布局当前行的剩余宽度的比重，这样子视图就不需要明确的设定宽度值。
+    
+    2.2. 当流式布局是水平流式布局时这个属性用来设置子视图高度占用父流式布局当前列的剩余高度的比重，这样子视图就不需要明确的设定高度值。
+ 
+    同时在数量约束和内容约束两种布局中视图设置的比重值在最终计算出真实尺寸时也是有差异的：
+ 
+    @code
+    数量约束流式布局内的视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重/(视图所在行的所有设置了weight比重值的视图比重之和)。
+ 
+    内容约束流式布局内的视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重。
+ 
+    对一个垂直数量约束流式布局举例来说：假设布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么:
+    A子视图的宽度 = 20
+    B子视图的宽度 = (100-20)*0.4/(0.4+0.6) = 32
+    C子视图的宽度 = (100-20)*0.6/(0.4+0.6) = 48
+ 
+    对一个垂直内容约束流式布局举例来说：假设布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么：
+    A子视图的宽度 = 20
+    B子视图的宽度 = (100-20)*0.4 = 32
+    C子视图的宽度 = (100-20-32)*0.6 = 28.8
+ @endcode
+ 
+
+ @note
+ 3. 在浮动布局下：
+ 
+    3.1. 当浮动布局的方向是垂直布局时，这个属性用来设置视图宽度占用当前浮动布局父视图剩余宽度的比重，这样视图就不需要明确的设定宽度值。
+  
+    3.2. 当浮动布局的方向是水平布局时，这个属性用来设置视图高度占用当前浮动布局父视图剩余高度的比重，这样子视图就不需要明确的设定高度值。
+ 
+  @code
+ 视图的真实尺寸 = 布局父视图的剩余尺寸 * 视图的weight比重值。
+  @endcode
+ 
+ 举例来说：假设一个垂直浮动布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么：
+ 
+ @code
+ A子视图的宽度 = 20
+ B子视图的宽度 = (100-20)*0.4 = 32
+ C子视图的宽度 = (100-20-32)*0.6 = 28.8
+ @endcode
+ 
+ */
+@property(nonatomic, assign) IBInspectable CGFloat weight;
+
+
+
+/**
+ 设置视图不受布局父视图的布局约束控制和不再参与视图的布局，所有设置的其他扩展属性都将失效而必须用frame来设置视图的位置和尺寸，默认值是NO。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+
+ @code
  A.mySize = CGSizeMake(100,100);
  B.mySize = CGSizeMake(100,50);
  C.mySize = CGSizeMake(100,200);
@@ -391,14 +475,19 @@
  B.frame == {20,20,200,100}   //可以看出B并没有受到约束的限制，结果就是B设置的frame值。
  C.frame == {0, 100,100,200}  //因为B不再参与布局了，所以C就往上移动了，由原来的150变为了100.
  
- *useFrame的应用场景是某个视图虽然是布局视图的子视图但不想受到父布局视图的约束，而是可以通过frame进行自由位置和尺寸调整的场景。
+ @endcode 
+ 
+ @note
+ useFrame的应用场景是某个视图虽然是布局视图的子视图但不想受到父布局视图的约束，而是可以通过frame进行自由位置和尺寸调整的场景。
 
  */
 @property(nonatomic, assign) IBInspectable BOOL useFrame;
 
 
 /**
- *设置视图在进行布局时只会参与布局但不会真实的调整位置和尺寸，默认值是NO。当设置为YES时会在布局时保留出视图的布局位置和布局尺寸的空间，但不会更新视图的位置和尺寸，也就是说只会占位但不会更新。因此你可以通过frame值来进行位置和尺寸的任意设置，而不会受到你的布局视图的影响。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+ 设置视图在进行布局时只会参与布局但不会真实的调整位置和尺寸，默认值是NO。当设置为YES时会在布局时保留出视图的布局位置和布局尺寸的空间，但不会更新视图的位置和尺寸，也就是说只会占位但不会更新。因此你可以通过frame值来进行位置和尺寸的任意设置，而不会受到你的布局视图的影响。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
+
+ @code
  A.mySize = CGSizeMake(100,100);
  B.mySize = CGSizeMake(100,50);
  C.mySize = CGSizeMake(100,200);
@@ -420,26 +509,72 @@
  A.frame == {0,0,100,100}
  B.frame == {20,20,200,100}  //可以看出虽然B参与了布局，但是并没有更新B的frame值，而是保持为通过frame设置的原始值。
  C.frame == {0,150,100,200}  //因为B参与了布局，占用了50的高度，所以这里C的位置还是150，而不是100.
+@endcode
 
+ @note
+ useFrame和noLayout的区别是：
+  
+ 1.前者不会参与布局而必须要通过frame值进行设置，而后者则会参与布局但是不会将布局的结果更新到frame中。
  
-* useFrame和noLayout的区别是：
-  1.前者不会参与布局而必须要通过frame值进行设置，而后者则会参与布局但是不会将布局的结果更新到frame中。
-  2.当前者设置为YES时后者的设置将无效，而后者的设置并不会影响前者的设置。
+ 2.当前者设置为YES时后者的设置将无效，而后者的设置并不会影响前者的设置。
  
- *noLayout的应用场景是那些想在运行时动态调整某个视图的位置和尺寸，但是又不想破坏布局视图中其他子视图的布局结构的场景，也就是调整了视图的位置和尺寸，但是不会调整其他的兄弟子视图的位置和尺寸。
+ 
+ @note
+ noLayout的应用场景是那些想在运行时动态调整某个视图的位置和尺寸，但是又不想破坏布局视图中其他子视图的布局结构的场景，也就是调整了视图的位置和尺寸，但是不会调整其他的兄弟子视图的位置和尺寸。
  
 */
 @property(nonatomic, assign) IBInspectable BOOL noLayout;
 
 
 /**
- *视图在父布局视图中布局完成后也就是视图的frame更新完成后执行的block，执行完block后会被重置为nil。通过在viewLayoutCompleteBlock中我们可以得到这个视图真实的frame值,当然您也可以在里面进行其他业务逻辑的操作和属性的获取和更新。block方法中layout参数就是父布局视图，而v就是视图本身，block中这两个参数目的是为了防止循环引用的问题。
+ 指定视图的可见性，默认是visible。这个属性是对视图hidden属性的扩展，布局系统对视图的hidden属性设置后，视图将不再参与布局。但在实际中有些场景我们希望视图隐藏后
+ 仍然会占用空间仍然会参与布局。因此我们可以用这个属性来设置当视图隐藏后是否继续参与布局。
+ 如果您使用了这个属性来对视图进行隐藏和取消隐藏操作则请不要再去操作hidden属性，否则可能出现二者效果不一致的情况。因此建议视图的隐藏和显示用这个属性进行设置。
+ 在老版本中布局中的子视图隐藏时要么都参与布局，要么都不参与布局，这是通过布局属性hideSubviewReLayout来设置，新版本中这个属性将会设置为无效了！
+ 
+ 属性可以设置的值如下：
+ 
+  1. MyVisibility_Visible     视图可见，等价于hidden = NO
+ 
+  2. MyVisibility_Invisible   视图不可见，等价于hidden = YES, 但是会在父布局视图中占位空白区域
+ 
+  3. MyVisibility_Gone        视图不可见，等价于hidden = YES, 但是不会在父视图中占位空白区域
+ 
+ 
+ @note
+   建议您用这个属性设置视图的隐藏的显示而不用系统默认的hidden来进行设置。
+ 
+ */
+@property(nonatomic, assign) MyVisibility  myVisibility;
+
+
+/**
+ 指定子在布局视图上的对齐方式，默认是None表示未指定，这个属性目前只支持框架布局，线性布局，流式布局下的属性设置。
+ 
+ 1. 在框架布局中支持上、中、下、垂直拉伸和左、中、右、水平拉伸8个设置
+ 
+ 2. 在垂直线性布局中只支持左、中、右、水平拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
+ 
+ 3. 在水平线性布局中只支持上、中、下、垂直拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
+ 
+ 4. 在垂直流式布局中用来设置一行内的上、中、下、垂直拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
+ 
+ 5. 在水平流式布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
+ */
+@property(nonatomic, assign) MyGravity myAlignment;
+
+
+
+/**
+ 视图在父布局视图中布局完成后也就是视图的frame更新完成后执行的block，执行完block后会被重置为nil。通过在viewLayoutCompleteBlock中我们可以得到这个视图真实的frame值,当然您也可以在里面进行其他业务逻辑的操作和属性的获取和更新。block方法中layout参数就是父布局视图，而v就是视图本身，block中这两个参数目的是为了防止循环引用的问题。
  */
 @property(nonatomic,copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
 
 
 /**
- *视图的在父布局视图调用完评估尺寸的方法后，可以通过这个方法来获取评估的CGRect值。评估的CGRect值是在布局前评估计算的值，而frame则是视图真正完成布局后的真实的CGRect值。在调用这个方法前请先调用父布局视图的-(CGRect)estimateLayoutRect方法进行布局视图的尺寸评估，否则此方法返回的值未可知。这个方法主要用于在视图布局前而想得到其在父布局视图中的位置和尺寸的场景。
+ 视图的在父布局视图调用完评估尺寸的方法后，可以通过这个方法来获取评估的CGRect值。评估的CGRect值是在布局前评估计算的值，而frame则是视图真正完成布局后的真实的CGRect值。在调用这个方法前请先调用父布局视图的-(CGRect)estimateLayoutRect方法进行布局视图的尺寸评估，否则此方法返回的值未可知。这个方法主要用于在视图布局前而想得到其在父布局视图中的位置和尺寸的场景。
+ 
+ @return 返回被子视图的评估的CGRect值。
  */
 -(CGRect)estimatedRect;
 
@@ -452,18 +587,19 @@
 
 
 /**
- *@brief 获取视图在某个Size Classes下的MyLayoutSizeClass对象。视图可以通过得到的MyLayoutSizeClass对象来设置视图在对应Size Classes下的各种布局约束属性。
- *@param sizeClass 指定获取某种SizeClass
- *@return 返回指定的SizeClass
+  获取视图在某个Size Classes下的MyLayoutSizeClass对象。视图可以通过得到的MyLayoutSizeClass对象来设置视图在对应Size Classes下的各种布局约束属性。
+ 
+ @param sizeClass 指定获取某种SizeClass
+ @return 返回指定的SizeClass
  */
 -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass;
 
 
 /**
- *@brief 获取视图在某个Size Classes下的MyLayoutSizeClass对象，如果对象不存在则会新建立一个MyLayoutSizeClass对象，并且其布局约束属性都拷贝自srcSizeClass中的属性，如果对象已经存在则srcSizeClass不起作用，如果srcSizeClass本来就不存在则也不会起作用。
- *@param sizeClass 指定获取某个SizeClass
- *@param srcSizeClass 指定从哪种SizeClass中拷贝
- *@return 返回指定的SizeClass
+  获取视图在某个Size Classes下的MyLayoutSizeClass对象，如果对象不存在则会新建立一个MyLayoutSizeClass对象，并且其布局约束属性都拷贝自srcSizeClass中的属性，如果对象已经存在则srcSizeClass不起作用，如果srcSizeClass本来就不存在则也不会起作用。
+ @param sizeClass 指定获取某个SizeClass
+ @param srcSizeClass 指定从哪种SizeClass中拷贝
+ @return 返回指定的SizeClass
  */
 -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
 
@@ -547,7 +683,7 @@
 @property(nonatomic,strong) UIColor *color;
 
 /**
- *边界线的厚度，默认是1
+ *边界线的厚度，默认是1,设置的值不能小于1. 单位是像素。
  */
 @property(nonatomic,assign) CGFloat thick;
 
@@ -581,7 +717,7 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
 
 
 /**
- *布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
+ 布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
  布局视图通过重载layoutSubviews方法来完成子视图的布局和排列的工作。对于每个加入到布局视图中的子视图，都会在加入时通过KVO机制监控子视图的center和bounds以及frame值的变化，每当子视图的这些属性一变化时就又会重新引发布局视图的布局动作。同时对每个视图的布局扩展属性的设置以及对布局视图的布局属性的设置都会引发布局视图的布局动作。布局视图在添加到非布局父视图时也会通过KVO机制来监控非布局父视图的frame值和bounds值，这样每当非布局父视图的尺寸变更时也会引发布局视图的布局动作。前面说的引起变动的方法就是会在KVO处理逻辑以及布局扩展属性和布局属性设置完毕后通过调用setNeedLayout来实现的，当布局视图收到setNeedLayout的请求后，会在下一个runloop中对布局视图进行重新布局而这就是通过调用layoutSubviews方法来实现的。布局视图基类只提供了更新所有子视图的位置和尺寸以及一些基础的设置，而至于如何排列和布局这些子视图则要根据应用的场景和需求来确定，因此布局基类视图提供了一个：
    -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
      的方法，要求派生类去重载这个方法，这样不同的派生类就可以实现不同的应用场景，这就是布局视图的核心实现机制。
@@ -590,10 +726,11 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
  */
 @interface MyBaseLayout : UIView
 
-/**
- * 用于实现对阿拉伯国家的布局适配。对于非阿拉伯国家来说，界面布局都是默认从左到右排列。而对于阿拉伯国家来说界面布局则默认是从右往左排列。默认这个属性是NO，您可以将这个属性设置为YES，这样布局里面的所有视图都将从右到左进行排列布局。如果您需要考虑国际化布局的问题，那么您应该用leadingPos来表示头部的位置，而用trailingPos来表示尾部的位置，这样当布局方向是LTR时那么leadingPos就表示的是左边而trailingPos则表示的是右边；而当布局方向是RTL时那么leadingPos表示的是右边而trailingPos则表示的是左边。如果您的界面布局不会考虑到国际化以及不需要考虑RTL时那么您可以用leftPos和rightPos来表示左右而不需要用leadingPos和trailingPos。
- */
 #if UIKIT_DEFINE_AS_PROPERTIES
+
+/**
+  用于实现对阿拉伯国家的布局适配。对于非阿拉伯国家来说，界面布局都是默认从左到右排列。而对于阿拉伯国家来说界面布局则默认是从右往左排列。默认这个属性是NO，您可以将这个属性设置为YES，这样布局里面的所有视图都将从右到左进行排列布局。如果您需要考虑国际化布局的问题，那么您应该用leadingPos来表示头部的位置，而用trailingPos来表示尾部的位置，这样当布局方向是LTR时那么leadingPos就表示的是左边而trailingPos则表示的是右边；而当布局方向是RTL时那么leadingPos表示的是右边而trailingPos则表示的是左边。如果您的界面布局不会考虑到国际化以及不需要考虑RTL时那么您可以用leftPos和rightPos来表示左右而不需要用leadingPos和trailingPos。
+ */
 @property(class, nonatomic, assign) BOOL isRTL;
 #else
 +(BOOL)isRTL;
@@ -673,11 +810,38 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
 
 
 /**
- *设置布局视图里面子视图之间的间距。如果是垂直线性布局则设置的是垂直间距，如果是水平线性布局则设置的是水平间距。两个视图之间的最终间距等于MyLayoutPos设置的间距加上subviewSpace设置的间距的和。
+ *设置布局视图里面子视图之间的垂直间距。如果布局内每个子视图的垂直间距都相等则可以用这个属性来设置。这个属性不支持框架布局、相对布局、路径布局。
  */
 @property(nonatomic ,assign) IBInspectable CGFloat subviewVSpace;
+/**
+ *设置布局视图里面子视图之间的水平间距。如果布局内每个子视图的水平间距都相等则可以用这个属性来设置。这个属性不支持框架布局、相对布局、路径布局。
+ */
 @property(nonatomic, assign) IBInspectable CGFloat subviewHSpace;
+/**
+ *设置布局视图里面子视图之间的间距。如果布局内每个子视图的间距都相等则可以用这个属性来设置。这个属性不支持框架布局、相对布局、路径布局。
+ */
 @property(nonatomic, assign) IBInspectable CGFloat subviewSpace;
+
+
+/**
+ 布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
+ 
+ @note
+ 只有框架布局、线性布局、表格布局、流式布局、浮动布局支持gravity属性，相对布局和路径布局不支持。
+ 
+ 1. MyGravity_Vert_Top,MyGravity_Vert_Center,MyGravity_Vert_Bottom 表示整体垂直居上，居中，居下 (支持：框架布局,线性布局,表格布局,流式布局,垂直浮动布局)
+ 
+ 2. MyGravity_Horz_Left,MyGravity_Horz_Center,MyGravity_Horz_Right 表示整体水平居左，居中，居右 (支持：框架布局,线性布局,表格布局,流式布局,水平浮动布局)
+ 
+ 3. MyGravity_Vert_Between 表示每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图。 (支持：垂直线性布局,垂直表格布局，流式布局)
+ 
+ 4. MyGravity_Horz_Between 表示每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
+ 
+ 5. MyGravity_Vert_Fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
+ 
+ 6. MyGravity_Horz_Fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
+ */
+@property(nonatomic, assign) IBInspectable MyGravity gravity;
 
 
 /**
@@ -698,22 +862,22 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
 @property(nonatomic, assign) BOOL priorAutoresizingMask;
 
 
-/**
- *设置当布局视图里面的子视图隐藏时，是否重新布局并调整所有非隐藏的子视图的位置或者尺寸。默认值是YES，表示当有子视图隐藏时，隐藏的子视图不会参与布局也不会占据任何位置和尺寸。而当设置为NO时则所有隐藏的子视图都会参与布局以及会占据相应的位置和尺寸。
- */
-@property(nonatomic, assign) BOOL hideSubviewReLayout;
 
 
 /**
- *设置布局视图在布局开始之前和布局完成之后的处理块。系统会在每次布局完成前后分别执行对应的处理块后将处理块清空为nil。您也可以在endLayoutBlock块内取到所有子视图真实布局后的frame值。系统会在调用layoutSubviews方法前执行beginLayoutBlock，而在layoutSubviews方法执行后执行endLayoutBlock。
+ *设置布局视图在布局开始之前的处理块。系统会在每次布局完成前调用对应的处理块后将处理块清空为nil。系统会在调用layoutSubviews方法前执行beginLayoutBlock。
  */
 @property(nonatomic,copy) void (^beginLayoutBlock)();
+/**
+ *设置布局视图在布局完成之后的处理块。系统会在每次布局完成后调用对应的处理块后将处理块清空为nil。您也可以在endLayoutBlock块内取到所有子视图真实布局后的frame值。系统会在调用layoutSubviews方法后执行endLayoutBlock。
+ */
 @property(nonatomic,copy) void (^endLayoutBlock)();
 
 
 /**
  *设置布局时的动画。并指定时间。这个函数是下面方法的简单实现：
  
+ @code
   self.beginLayoutBlock = ^{
  
  [UIView beginAnimations:nil context:nil];
@@ -725,19 +889,23 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
  [UIView commitAnimations];
  };
 
-
- *@param duration 指定动画的时间间隔
+@endcode
+ 
+ @param duration 指定动画的时间间隔
  */
 -(void)layoutAnimationWithDuration:(NSTimeInterval)duration;
 
 
 /**
- *设置布局视图在第一次布局完成之后或者有横竖屏切换时进行处理的block。这个block不像beginLayoutBlock以及endLayoutBlock那样只会执行一次,而是会一直存在
- *因此需要注意代码块里面的循环引用的问题。这个block调用的时机是第一次布局完成或者每次横竖屏切换时布局完成被调用。
- *这个方法会在endLayoutBlock后调用。
- *layout 参数就是布局视图本身。
- *isFirst 表明当前是否是第一次布局时调用。
- *isPortrait 表明当前是横屏还是竖屏。
+ 设置布局视图在第一次布局完成之后或者有横竖屏切换时进行处理的block。这个block不像beginLayoutBlock以及endLayoutBlock那样只会执行一次,而是会一直存在
+ 因此需要注意代码块里面的循环引用的问题。这个block调用的时机是第一次布局完成或者每次横竖屏切换时布局完成被调用。
+ 这个方法会在endLayoutBlock后调用。
+ 
+ layout 参数就是布局视图本身。
+ 
+ isFirst 表明当前是否是第一次布局时调用。
+ 
+ isPortrait 表明当前是横屏还是竖屏。
  */
 @property(nonatomic,copy) void (^rotationToDeviceOrientationBlock)(MyBaseLayout *layout, BOOL isFirst, BOOL isPortrait);
 
@@ -751,11 +919,17 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
 /**
  *设置布局视图的四周的边界线对象。boundBorderLine是同时设置四周的边界线。您也可以单独设置布局视图某些边的边界线。边界线对象默认是nil，您必须通过建立边界线类MyBorderline的对象实例并赋值给下面的属性来实现边界线的指定。
  */
-@property(nonatomic, strong) MyBorderline *topBorderline; /**顶部边界线*/
-@property(nonatomic, strong) MyBorderline *leadingBorderline; /**头部边界线*/
-@property(nonatomic, strong) MyBorderline *bottomBorderline;  /**底部边界线*/
-@property(nonatomic, strong) MyBorderline *trailingBorderline;  /**尾部边界线*/
-@property(nonatomic, strong) MyBorderline *boundBorderline;   /**四周边界线*/
+
+/**顶部边界线*/
+@property(nonatomic, strong) MyBorderline *topBorderline;
+/**头部边界线*/
+@property(nonatomic, strong) MyBorderline *leadingBorderline;
+/**底部边界线*/
+@property(nonatomic, strong) MyBorderline *bottomBorderline;
+/**尾部边界线*/
+@property(nonatomic, strong) MyBorderline *trailingBorderline;
+/**四周边界线*/
+@property(nonatomic, strong) MyBorderline *boundBorderline;
 
 /**
  *如果您不需要考虑国际化的问题则请用这个属性设置左边边界线，否则用leadingBorderline
@@ -801,9 +975,9 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
 @property(nonatomic,strong)  UIImage *highlightedBackgroundImage;
 
 /**
- *@brief 设置布局的touch up 、touch down、touch cancel事件的处理动作,后两个事件的处理必须依赖于第一个事件的处理。请不要在这些处理动作中修改背景色，不透明度，以及背景图片。如果您只想要高亮效果但是不想处理事件则将action设置为nil即可了。
- *@param target 事件的处理对象，如果设置为nil则表示取消事件。
- *@param action 事件的处理动作，格式为：-(void)handleAction:(MyBaseLayout*)sender。
+  设置布局的touch up 、touch down、touch cancel事件的处理动作,后两个事件的处理必须依赖于第一个事件的处理。请不要在这些处理动作中修改背景色，不透明度，以及背景图片。如果您只想要高亮效果但是不想处理事件则将action设置为nil即可了。
+ @param target 事件的处理对象，如果设置为nil则表示取消事件。
+ @param action 事件的处理动作，格式为：-(void)handleAction:(MyBaseLayout*)sender。
  */
 -(void)setTarget:(id)target action:(SEL)action;
 -(void)setTouchDownTarget:(id)target action:(SEL)action;
@@ -811,21 +985,22 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
 
 
 /**
- *@brief 评估布局视图的尺寸。这个方法并不会让布局视图进行真正的布局，只是对布局的尺寸进行评估，主要用于在布局完成前想预先知道布局尺寸的场景。通过对布局进行尺寸的评估，可以在不进行布局的情况下动态的计算出布局的位置和大小，但需要注意的是这个评估值有可能不是真实显示的实际位置和尺寸。
- *@param size 指定期望的宽度或者高度，如果size中对应的值设置为0则根据布局自身的高度和宽度来进行评估，而设置为非0则固定指定的高度或者宽度来进行评估。比如下面的例子：
+评估布局视图的尺寸。这个方法并不会让布局视图进行真正的布局，只是对布局的尺寸进行评估，主要用于在布局完成前想预先知道布局尺寸的场景。通过对布局进行尺寸的评估，可以在不进行布局的情况下动态的计算出布局的位置和大小，但需要注意的是这个评估值有可能不是真实显示的实际位置和尺寸。
+ @param size 指定期望的宽度或者高度，如果size中对应的值设置为0则根据布局自身的高度和宽度来进行评估，而设置为非0则固定指定的高度或者宽度来进行评估。比如下面的例子：
   1.estimateLayoutRect:CGSizeMake(0,0) 表示按布局的位置和尺寸根据布局的子视图来进行动态评估。
   2.estimateLayoutRect:CGSizeMake(320,0) 表示布局的宽度固定为320,而高度则根据布局的子视图来进行动态评估。这个情况非常适用于UITableViewCell的动态高度的计算评估。
   3.estimateLayoutRect:CGSizeMake(0,100) 表示布局的高度固定为100,而宽度则根据布局的子视图来进行动态评估。
- *@return 返回评估的尺寸。
+ @return 返回评估的尺寸。
  */
 -(CGRect)estimateLayoutRect:(CGSize)size;
 -(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass;
 
 
 /**
- * 是否缓存经过estimateLayoutRect方法评估后的所有子视图的位置和尺寸一次!，默认设置为NO不缓存。当我们用estimateLayoutRect方法评估布局视图的尺寸后，所有子视图都会生成评估的位置和尺寸，因为此时并没有执行布局所以子视图并没有真实的更新frame值。而当布局视图要进行真实布局时又会重新计算所有子视图的位置和尺寸，因此为了优化性能当我们对布局进行评估后在下次真实布局时我们可以不再重新计算子视图的位置和尺寸而是用前面评估的值来设置位置和尺寸。这个属性设置为YES时则每次评估后到下一次布局时不会再重新计算子视图的布局了，而是用评估值来布局子视图的位置和尺寸。而当这个属性设置为NO时则每次布局都会重新计算子视图的位置和布局。
+  是否缓存经过estimateLayoutRect方法评估后的所有子视图的位置和尺寸一次!，默认设置为NO不缓存。当我们用estimateLayoutRect方法评估布局视图的尺寸后，所有子视图都会生成评估的位置和尺寸，因为此时并没有执行布局所以子视图并没有真实的更新frame值。而当布局视图要进行真实布局时又会重新计算所有子视图的位置和尺寸，因此为了优化性能当我们对布局进行评估后在下次真实布局时我们可以不再重新计算子视图的位置和尺寸而是用前面评估的值来设置位置和尺寸。这个属性设置为YES时则每次评估后到下一次布局时不会再重新计算子视图的布局了，而是用评估值来布局子视图的位置和尺寸。而当这个属性设置为NO时则每次布局都会重新计算子视图的位置和布局。
    这个属性一般用在那些动态高度UITableviewCell中进行配合使用，我们一般将布局视图作为UITableviewCell的contentView的子视图:
  
+ @code
  MyXXXLayout *rootLayout= [MyXXXLayout new];
  rootLayout.cacheEstimatedRect = YES;   //设置缓存评估的rect,如果您的cell是高度自适应的话，强烈建立打开这个属性，这会大大的增强您的tableview的性能！！
  rootLayout.myHorzMargin = 0;           //宽度和父视图相等
@@ -844,24 +1019,29 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
      CGRect rect = [cell.rootLayout estimateLayoutRect:CGSizeMake(tableView.frame.size.width, 0)];
      return rect.size.height;
  }
+ 
+ @endcode
  */
 @property(nonatomic, assign) BOOL cacheEstimatedRect;
 
 
 /**
- *评估计算一个未加入到布局视图中的子视图subview在加入后的frame值。在实践中我们希望得到某个未加入的子视图在添加到布局视图后的应该具有的frame值，这时候就可以用这个方法来获取。比如我们希望把一个子视图从一个布局视图里面移到另外一个布局视图的末尾时希望能够提供动画效果,这时候就可以通过这个方法来得到加入后的子视图的位置和尺寸。
- *这个方法只有针对那些通过添加顺序进行约束的布局视图才有意义，相对布局和框架布局则没有意义。
- *使用示例：假设存在两个布局视图L1,L2他们的父视图是S，现在要实现将L1中的任意一个子视图A移动到L2的末尾中去，而且要带动画效果，那么代码如下：
+ 评估计算一个未加入到布局视图中的子视图subview在加入后的frame值。在实践中我们希望得到某个未加入的子视图在添加到布局视图后的应该具有的frame值，这时候就可以用这个方法来获取。比如我们希望把一个子视图从一个布局视图里面移到另外一个布局视图的末尾时希望能够提供动画效果,这时候就可以通过这个方法来得到加入后的子视图的位置和尺寸。
+     这个方法只有针对那些通过添加顺序进行约束的布局视图才有意义，相对布局和框架布局则没有意义。
  
+ @note 使用示例：假设存在两个布局视图L1,L2他们的父视图是S，现在要实现将L1中的任意一个子视图A移动到L2的末尾中去，而且要带动画效果，那么代码如下：
+ @code
    //得到A在S中的frame，这里需要进行坐标转换为S在中的frame
    CGRect rectOld =  [L1 convertRect:A.frame toView:S];
    //得到将A加入到L2后的评估的frame值，注意这时候A还没有加入到L2。
    CGRect rectNew = [L2 subview:A estimatedRectInLayoutSize:CGSizeZero];
-   rectNew = [L2 convertRect:rectNew toView:self.view]; //将新位置的评估的frame值，这里需要进行坐标转换为S在中的frame。
+   //将新位置的评估的frame值，这里需要进行坐标转换为S在中的frame。
+   rectNew = [L2 convertRect:rectNew toView:self.view];
  
    //动画的过程是先将A作为S的子视图进行位置的调整后再加入到L2中去
    [A removeFromSuperview];
-   A.useFrame = YES; //因为A要使用frame进行位置的调整，所以这里要记得将useFrame设置为YES。
+   //因为A要使用frame进行位置的调整，所以这里要记得将useFrame设置为YES。
+   A.useFrame = YES;
    A.frame = rectOld;
    [S addSubview:A];
    [UIView animateWithDuration:0.3 animations:^{
@@ -872,14 +1052,15 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
  
      //动画结束后再将A移植到L2中。
      [A removeFromSuperview];
-     A.useFrame = NO; //将useFrame设置为NO表示，视图A重新受到布局视图的约束控制
+     //将useFrame设置为NO表示，视图A重新受到布局视图的约束控制
+     A.useFrame = NO;
      [L2 addSubview:A];
- 
    }];
-
- *@param subview 一个未加入布局视图的子视图，如果子视图已经加入则直接返回子视图的frame值。
- *@param size 指定布局视图期望的宽度或者高度，一般请将这个值设置为CGSizeZero。 具体请参考estimateLayoutRect方法中的size的说明。
- *@return 子视图在布局视图最后一个位置(假如加入后)的frame值。 
+ @endcode
+ 
+ @param subview 一个未加入布局视图的子视图，如果子视图已经加入则直接返回子视图的frame值。
+ @param size 指定布局视图期望的宽度或者高度，一般请将这个值设置为CGSizeZero。 具体请参考estimateLayoutRect方法中的size的说明。
+ @return 子视图在布局视图最后一个位置(假如加入后)的frame值。
  */
 -(CGRect)subview:(UIView*)subview estimatedRectInLayoutSize:(CGSize)size;
 
@@ -948,6 +1129,12 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
  *过期属性,请用notUseIntelligentBorderline
  */
 @property(nonatomic, assign, getter=notUseIntelligentBorderline, setter=setNotUseIntelligentBorderline:) BOOL notUseIntelligentBorderLine MYMETHODDEPRECATED("use notUseIntelligentBorderline to instead");
+
+
+/**
+ *这个属性在新版本将失效并且无任何意义了。如果想让子视图隐藏时是否继续占据位置则请参考使用子视图的myVisibility属性来进行单独设置。
+ */
+@property(nonatomic, assign) BOOL hideSubviewReLayout  MYMETHODDEPRECATED("this property was invalid, please use subview's myVisibility to instead");
 
 
 @end

@@ -466,7 +466,7 @@ BOOL _myisRTL = NO;
 -(NSString*)debugDescription
 {
     
-    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nwrapContentWidth=%@\nwrapContentHeight=%@\nreverseFloat=%@\nclearFloat=%@",
+    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nmyVisibility=%c\nmyAlignment=%hu\nwrapContentWidth=%@\nwrapContentHeight=%@\nreverseFloat=%@\nclearFloat=%@",
                     self.topPosInner,
                     self.leadingPosInner,
                     self.bottomPosInner,
@@ -478,6 +478,8 @@ BOOL _myisRTL = NO;
                     self.weight,
                     self.useFrame ? @"YES":@"NO",
                     self.noLayout? @"YES":@"NO",
+                    self.myVisibility,
+                    self.myAlignment,
                     self.wrapContentWidth ? @"YES":@"NO",
                     self.wrapContentHeight ? @"YES":@"NO",
                     self.reverseFloat ? @"YES":@"NO",
@@ -509,7 +511,8 @@ BOOL _myisRTL = NO;
     lsc->_wrapHeight = self.wrapHeight;
     lsc.useFrame = self.useFrame;
     lsc.noLayout = self.noLayout;
-    lsc.hidden = self.hidden;
+    lsc.myVisibility = self.myVisibility;
+    lsc.myAlignment = self.myAlignment;
     lsc.weight = self.weight;
     lsc.reverseFloat = self.isReverseFloat;
     lsc.clearFloat = self.clearFloat;
@@ -528,7 +531,6 @@ BOOL _myisRTL = NO;
     self = [super init];
     if (self != nil)
     {
-        _hideSubviewReLayout = YES;
         _zeroPadding = YES;
         
     }
@@ -626,7 +628,7 @@ BOOL _myisRTL = NO;
     lsc.bottomPadding = self.bottomPadding;
     lsc.trailingPadding = self.trailingPadding;
     lsc.zeroPadding = self.zeroPadding;
-    lsc.hideSubviewReLayout = self.hideSubviewReLayout;
+    lsc.gravity = self.gravity;
     lsc.reverseLayout = self.reverseLayout;
     lsc.subviewVSpace = self.subviewVSpace;
     lsc.subviewHSpace = self.subviewHSpace;
@@ -638,11 +640,11 @@ BOOL _myisRTL = NO;
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nzeroPadding=%@\nhideSubviewRelayout=%@\nreverseLayout=%@\nsubviewVertSpace=%f\nsubviewHorzSpace=%f",
+    dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nzeroPadding=%@\ngravity=%hu\nreverseLayout=%@\nsubviewVertSpace=%f\nsubviewHorzSpace=%f",
                dbgDesc,
                NSStringFromUIEdgeInsets(self.padding),
                self.zeroPadding?@"YES":@"NO",
-               self.hideSubviewReLayout?@"YES":@"NO",
+               self.gravity,
                self.reverseLayout ? @"YES":@"NO",
                self.subviewVSpace,
                self.subviewHSpace
@@ -664,7 +666,6 @@ BOOL _myisRTL = NO;
 {
     MySequentLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     lsc.orientation = self.orientation;
-    lsc.gravity = self.gravity;
    
     
      return lsc;
@@ -674,10 +675,9 @@ BOOL _myisRTL = NO;
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nSequentLayout: \norientation=%lu\ngravity=%hu",
+    dbgDesc = [NSString stringWithFormat:@"%@\nSequentLayout: \norientation=%lu",
                dbgDesc,
-              (unsigned long)self.orientation,
-               self.gravity
+              (unsigned long)self.orientation
                ];
     
     
@@ -791,31 +791,6 @@ BOOL _myisRTL = NO;
 
 
 @implementation MyRelativeLayoutViewSizeClass
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    MyRelativeLayoutViewSizeClass *lsc = [super copyWithZone:zone];
-    lsc.flexOtherViewWidthWhenSubviewHidden = self.flexOtherViewWidthWhenSubviewHidden;
-    lsc.flexOtherViewHeightWhenSubviewHidden = self.flexOtherViewHeightWhenSubviewHidden;
-    
-    return lsc;
-}
-
-
--(NSString*)debugDescription
-{
-    NSString *dbgDesc = [super debugDescription];
-    
-    dbgDesc = [NSString stringWithFormat:@"%@\nRelativeLayout: \nflexOtherViewWidthWhenSubviewHidden=%@\nflexOtherViewHeightWhenSubviewHidden=%@",
-               dbgDesc,
-               self.flexOtherViewWidthWhenSubviewHidden ? @"YES":@"NO",
-               self.flexOtherViewHeightWhenSubviewHidden ? @"YES":@"NO"
-               ];
-    
-    return dbgDesc;
-}
-
-
 
 @end
 

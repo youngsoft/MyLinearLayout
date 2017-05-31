@@ -28,6 +28,8 @@
     
     [super loadView];
     
+    self.view.backgroundColor = [UIColor whiteColor];
+
     UIView *contentView = [UIView new];
     contentView.backgroundColor = [CFTool color:5];
     [self.view addSubview:contentView];

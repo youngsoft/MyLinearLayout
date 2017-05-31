@@ -130,9 +130,9 @@
 
 @interface MyPathLayout()
 
-@property(nonatomic, strong) NSArray *subviewPoints;
-@property(nonatomic, strong) NSArray *pointIndexs;
-@property(nonatomic, strong) NSMutableArray *argumentArray;  //保存变量数组。
+@property(nonatomic, strong) NSArray *pathPoints;        //记录路径内所有算出来的点，内容为NSValue(CGPoint)
+@property(nonatomic, strong) NSArray *pointIndexs;           //记录每个子视图在pathPoints中的索引位置。内容为NSNumber。比如pathPoints有1000个点，一共有10个子视图那么pointIndexs的长度就是10，每个元素就是在subviewPoints里面的索引。
+@property(nonatomic, strong) NSMutableArray *argumentArray;  //记录每个子视图在路径曲线函数中的变量值的数组，数组的内容为NSValue。
 
 @end
 
@@ -316,12 +316,12 @@
     if (full)
     {
         NSMutableArray *pointIndexs = [NSMutableArray new];
-        self.subviewPoints = [self myCalcPoints:self.pathSubviews path:nil pointIndexArray:pointIndexs lsc:self.myCurrentSizeClass];
+        self.pathPoints = [self myCalcPoints:self.pathSubviews path:nil pointIndexArray:pointIndexs lsc:self.myCurrentSizeClass];
         self.pointIndexs = pointIndexs;
     }
     else
     {
-        self.subviewPoints = [self myCalcPoints:self.pathSubviews path:nil pointIndexArray:nil lsc:self.myCurrentSizeClass];
+        self.pathPoints = [self myCalcPoints:self.pathSubviews path:nil pointIndexArray:nil lsc:self.myCurrentSizeClass];
         self.pointIndexs = nil;
     }
     
@@ -329,13 +329,13 @@
 
 -(void)endSubviewPathPoint
 {
-    self.subviewPoints = nil;
+    self.pathPoints = nil;
     self.pointIndexs = nil;
 }
 
 -(NSArray*)getSubviewPathPoint:(NSInteger)fromIndex toIndex:(NSInteger)toIndex
 {
-    if (self.subviewPoints == nil)
+    if (self.pathPoints == nil)
         return nil;
     
     NSInteger realFromIndex = fromIndex;
@@ -364,7 +364,7 @@
         
         for (NSInteger i = start; i <= end; i++)
         {
-            [retPoints addObject:self.subviewPoints[i]];
+            [retPoints addObject:self.pathPoints[i]];
         }
     }
     else
@@ -374,7 +374,7 @@
         
         for (NSInteger i = end; i >= start; i--)
         {
-            [retPoints addObject:self.subviewPoints[i]];
+            [retPoints addObject:self.pathPoints[i]];
         }
     }
     
@@ -388,14 +388,14 @@
     
     if (self.spaceType.type != MyPathSpace_Fixed)
     {
-        [self myCalcPathPoints:retPath pTotalLen:NULL subviewCount:-1 pointIndexArray:nil viewSpacing:0 lsc:self.myCurrentSizeClass];
+        [self myCalcPathPoints:retPath pPathLen:NULL subviewCount:-1 pointIndexArray:nil viewSpace:0 lsc:self.myCurrentSizeClass];
     }
     else
     {
         if (subviewCount == -1)
             subviewCount = self.pathSubviews.count;
         
-        [self myCalcPathPoints:retPath pTotalLen:NULL subviewCount:subviewCount pointIndexArray:nil viewSpacing:self.spaceType.value lsc:self.myCurrentSizeClass];
+        [self myCalcPathPoints:retPath pPathLen:NULL subviewCount:subviewCount pointIndexArray:nil viewSpace:self.spaceType.value lsc:self.myCurrentSizeClass];
     }
     
     return retPath;
@@ -452,55 +452,56 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 
-/*
- 
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- 
- 
- CGContextRef ctx =  UIGraphicsGetCurrentContext();
- 
- CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
- 
- 
- NSArray *sbs = self.pathSubviews;
- 
- CGMutablePathRef path = CGPathCreateMutable();
- 
- 
- NSArray *pts = nil;
- if (sbs.count > 0)
- {
- if (self.spaceType.type != MyPathSpace_Fixed)
- {
- CGFloat totalLen = 0;
- NSArray *tempArray = [self calcPathPoints:path pTotalLen:&totalLen subviewCount:-1 pointIndexArray:nil viewSpacing:0];
- BOOL bClose = NO;
- if (tempArray.count > 1)
- {
- CGPoint p1 = [tempArray.firstObject CGPointValue];
- CGPoint p2 = [tempArray.lastObject CGPointValue];
- bClose = [self calcDistance:p1 with:p2] <=1;
- }
- 
- CGFloat viewSpacing = 0;
- NSInteger sbvcount = sbs.count;
- if (self.spaceType.type == MyPathSpace_Count)
- sbvcount = (NSInteger)self.spaceType.value;
- 
- if (sbvcount > 1)
- {
- viewSpacing = totalLen / (sbvcount - (bClose ? 0 : 1));
- }
- 
- pts = [self calcPathPoints:nil pTotalLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpacing:viewSpacing];
- 
- }
- else
- {
- pts = [self calcPathPoints:path pTotalLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpacing:self.spaceType.value];
- }
- }
+
+ /*
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+    
+    
+    CGContextRef ctx =  UIGraphicsGetCurrentContext();
+    
+    CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
+    
+    
+    NSArray *sbs = self.pathSubviews;
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    
+    MyPathLayout *lsc = self.myCurrentSizeClass;
+    
+    NSArray *pts = nil;
+    if (sbs.count > 0)
+    {
+        if (self.spaceType.type != MyPathSpace_Fixed)
+        {
+            CGFloat totalLen = 0;
+            NSArray *tempArray = [self myCalcPathPoints:path pPathLen:&totalLen subviewCount:-1 pointIndexArray:nil viewSpace:0 lsc:lsc];
+            BOOL bClose = NO;
+            if (tempArray.count > 1)
+            {
+                CGPoint p1 = [tempArray.firstObject CGPointValue];
+                CGPoint p2 = [tempArray.lastObject CGPointValue];
+                bClose = [self myCalcDistance:p1 with:p2] <=1;
+            }
+            
+            CGFloat viewSpacing = 0;
+            NSInteger sbvcount = sbs.count;
+            if (self.spaceType.type == MyPathSpace_Count)
+                sbvcount = (NSInteger)self.spaceType.value;
+            
+            if (sbvcount > 1)
+            {
+                viewSpacing = totalLen / (sbvcount - (bClose ? 0 : 1));
+            }
+            
+            pts = [self myCalcPathPoints:nil pPathLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpace:viewSpacing lsc:lsc];
+            
+        }
+        else
+        {
+            pts = [self myCalcPathPoints:path pPathLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpace:self.spaceType.value lsc:lsc];
+        }
+    }
  
  
  CGContextAddPath(ctx, path);
@@ -515,7 +516,7 @@
  
  }
  
- */
+*/
 
 
 
@@ -531,13 +532,13 @@
     
     for (UIView *sbv in sbs)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
-        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+       
         if (!isEstimate)
         {
-            sbvMyFrame.frame = sbv.bounds;
-            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvMyFrame:sbvMyFrame selfLayoutSize:selfSize];
+            sbvmyFrame.frame = sbv.bounds;
+            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame selfLayoutSize:selfSize];
         }
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
@@ -549,11 +550,11 @@
             
             if (isEstimate && (sbvsc.wrapContentWidth || sbvsc.wrapContentHeight))
             {
-                [(MyBaseLayout*)sbv estimateLayoutRect:sbvMyFrame.frame.size inSizeClass:sizeClass];
-                if (sbvMyFrame.multiple)
+                [(MyBaseLayout*)sbv estimateLayoutRect:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                if (sbvmyFrame.multiple)
                 {
-                    sbvMyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
-                    sbvsc = sbvMyFrame.sizeClass;
+                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    sbvsc = sbvmyFrame.sizeClass;
                 }
             }
         }
@@ -588,9 +589,9 @@
     {
         UIView *sbv = sbs[i];
         
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
-        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+       
         CGPoint pt = CGPointZero;
         if (pts.count > i)
         {
@@ -599,7 +600,7 @@
         
         //计算得到最大的高度和最大的宽度。
         
-        CGRect rect = sbvMyFrame.frame;
+        CGRect rect = sbvmyFrame.frame;
         
         if (sbvsc.widthSizeInner.dimeNumVal != nil)
             rect.size.width = sbvsc.widthSizeInner.measure;
@@ -667,7 +668,7 @@
         }
 
         
-        sbvMyFrame.frame = rect;
+        sbvmyFrame.frame = rect;
         
     }
     
@@ -675,10 +676,10 @@
     UIView *sbv = [self originView];
     if (sbv != nil)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
         
-        CGRect rect = sbvMyFrame.frame;
+        CGRect rect = sbvmyFrame.frame;
         
         if (sbvsc.widthSizeInner.dimeNumVal != nil)
             rect.size.width = sbvsc.widthSizeInner.measure;
@@ -731,8 +732,8 @@
         }
         
         //位置在原点位置。。
-        rect.origin.x = (selfSize.width - lsc.leftPadding - lsc.rightPadding)*self.coordinateSetting.origin.x  - rect.size.width / 2 + sbvsc.leftPosInner.absVal + lsc.leftPadding - sbvsc.rightPosInner.absVal;
-        rect.origin.y = (selfSize.height - lsc.topPadding - lsc.bottomPadding)*self.coordinateSetting.origin.y - rect.size.height / 2 + sbvsc.topPosInner.absVal + lsc.topPadding - sbvsc.bottomPosInner.absVal;
+        rect.origin.x = (selfSize.width - lsc.leftPadding - lsc.rightPadding)*self.coordinateSetting.origin.x  - rect.size.width *sbv.layer.anchorPoint.x + sbvsc.leftPosInner.absVal + lsc.leftPadding - sbvsc.rightPosInner.absVal;
+        rect.origin.y = (selfSize.height - lsc.topPadding - lsc.bottomPadding)*self.coordinateSetting.origin.y - rect.size.height * sbv.layer.anchorPoint.y + sbvsc.topPosInner.absVal + lsc.topPadding - sbvsc.bottomPosInner.absVal;
         
         if (CGRectGetMinY(rect) < minYPos)
         {
@@ -754,7 +755,7 @@
             maxXPos = CGRectGetMaxX(rect);
         }
         
-        sbvMyFrame.frame = rect;
+        sbvmyFrame.frame = rect;
         
     }
     
@@ -870,6 +871,7 @@
         }
         if (_myCGFloatLessOrEqual(step, 0.001))
         {
+            *pLastValidArg = arg;            
             break;
         }
     }
@@ -878,14 +880,15 @@
     
 }
 
--(void)myCalcPathPointsHelper:(NSMutableArray*)pointArray
+
+-(void)myCalcPathPointsHelper:(NSMutableArray*)pathPointArray
                    showPath:(CGMutablePathRef)showPath
-                  pTotalLen:(CGFloat*)pTotalLen
+                  pPathLen:(CGFloat*)pPathLen
                subviewCount:(NSInteger)subviewCount
             pointIndexArray:(NSMutableArray*)pointIndexArray
-                viewSpacing:(CGFloat)viewSpacing
-                   startArg:(CGFloat)startArg
-                     endArg:(CGFloat)endArg
+                viewSpace:(CGFloat)viewSpace
+                   startArg:(CGFloat)startArg    //定义域最小值
+                     endArg:(CGFloat)endArg      //定义域最大值
                        func:(CGPoint (^)(CGFloat))func
 {
     
@@ -899,13 +902,16 @@
     
     CGFloat arg = startArg;
     CGFloat lastValidArg = arg;
-    BOOL isStart = YES;
-    int startCount = 0;
+    
+    //曲线有可能不是连续的，因此这两个标志用来记录是否某段曲线的开始标志以及曲线的段数
+    BOOL isSegmentStart = YES;
+    int segmentCount = 0;
     while (true)
     {
         
         if (subviewCount < 0)
         {
+            //如果曲线变量超过了定义域则退出。
             if (arg - endArg > 0.1)  //这里不能用arg > endArg 的原因是有精度问题。
             {
                 break;
@@ -917,12 +923,12 @@
         }
         else
         {
-            if (isStart && startCount >= 1)
+            if (isSegmentStart && segmentCount >= 1)
             {
                 if (pointIndexArray != nil)
-                    [pointIndexArray addObject:@(pointArray.count)];
+                    [pointIndexArray addObject:@(pathPointArray.count)];
                 
-                [pointArray addObject:[NSValue valueWithCGPoint:lastXY]];
+                [pathPointArray addObject:[NSValue valueWithCGPoint:lastXY]];
                 
                 [self.argumentArray addObject:@(arg)];
                 
@@ -938,23 +944,23 @@
         CGPoint realXY = func(arg);
         if (!isnan(realXY.x) && !isnan(realXY.y))
         {
-            if (isStart)
+            if (isSegmentStart)
             {
                 
-                isStart = NO;
-                startCount += 1;
-                if (subviewCount > 0 && startCount == 1)
+                isSegmentStart = NO;
+                segmentCount += 1;
+                if (subviewCount > 0 && segmentCount == 1)
                 {
                     subviewCount -=1;
                     lastValidArg = arg;
                     
                     if (pointIndexArray != nil)
-                        [pointIndexArray addObject:@(pointArray.count)];
+                        [pointIndexArray addObject:@(pathPointArray.count)];
                     
                     [self.argumentArray addObject:@(arg)];
                 }
                 
-                [pointArray addObject:[NSValue valueWithCGPoint:realXY]];
+                [pathPointArray addObject:[NSValue valueWithCGPoint:realXY]];
                 
                 if (showPath != nil)
                 {
@@ -967,13 +973,14 @@
             {
                 if (subviewCount >= 0)
                 {
+                    //点的距离累加
                     CGFloat oldDistance = distance;
                     distance += [self myCalcDistance:realXY with:lastXY];
-                    if (_myCGFloatGreatOrEqual(distance, viewSpacing) )
-                    {
-                        if (_myCGFloatGreatOrEqual(distance - viewSpacing, self.distanceError) )
+                    if (_myCGFloatGreatOrEqual(distance, viewSpace) )
+                    {//如果距离超过间距。则需要缩小自变量步长。以便达到最小的间距误差
+                        if (_myCGFloatGreatOrEqual(distance - viewSpace, self.distanceError) )
                         {
-                            realXY = [self myGetNearestDistancePoint:arg lastXY:lastXY distance:oldDistance viewSpace:viewSpacing pLastValidArg:&lastValidArg func:func];
+                            realXY = [self myGetNearestDistancePoint:arg lastXY:lastXY distance:oldDistance viewSpace:viewSpace pLastValidArg:&lastValidArg func:func];
                         }
                         else
                         {
@@ -981,21 +988,21 @@
                         }
                         
                         if (pointIndexArray == nil)
-                            [pointArray addObject:[NSValue valueWithCGPoint:realXY]];
+                            [pathPointArray addObject:[NSValue valueWithCGPoint:realXY]];
                         else
-                            [pointIndexArray addObject:@(pointArray.count)];
+                            [pointIndexArray addObject:@(pathPointArray.count)];
                         
                         distance = 0;
                         subviewCount -=1;
                         [self.argumentArray addObject:@(lastValidArg)];
                         
                     }
-                    else if (distance - viewSpacing > -1 * self.distanceError)
-                    {
+                    else if (distance - viewSpace > -1 * self.distanceError)
+                    {//如果距离和间距小于误差则认为是一个视图可以存放的点。
                         if (pointIndexArray == nil)
-                            [pointArray addObject:[NSValue valueWithCGPoint:realXY]];
+                            [pathPointArray addObject:[NSValue valueWithCGPoint:realXY]];
                         else
-                            [pointIndexArray addObject:@(pointArray.count)];
+                            [pointIndexArray addObject:@(pathPointArray.count)];
                         
                         distance = 0;
                         subviewCount -=1;
@@ -1010,11 +1017,11 @@
                 else
                 {
                     if (pointIndexArray == nil)
-                        [pointArray addObject:[NSValue valueWithCGPoint:realXY]];
+                        [pathPointArray addObject:[NSValue valueWithCGPoint:realXY]];
                 }
                 
                 if (pointIndexArray != nil)
-                    [pointArray addObject:[NSValue valueWithCGPoint:realXY]];
+                    [pathPointArray addObject:[NSValue valueWithCGPoint:realXY]];
                 
                 
                 if (showPath != nil)
@@ -1022,17 +1029,17 @@
                     CGPathAddLineToPoint(showPath,NULL, realXY.x, realXY.y);
                 }
                 
-                if (pTotalLen != NULL)
+                if (pPathLen != NULL)
                 {
-                    *pTotalLen +=  [self myCalcDistance:realXY with:lastXY];
+                    *pPathLen +=  [self myCalcDistance:realXY with:lastXY];
                 }
             }
             
             lastXY = realXY;
         }
         else
-        {
-            isStart = YES;
+        {//只要自变量和因变量是无效值，则认为是一个新的段的开始。
+            isSegmentStart = YES;
         }
         arg += 1;
     }
@@ -1041,14 +1048,25 @@
 }
 
 
+/**
+ 计算曲线路径
+
+ @param showPath 将计算的路径保存到showPath中，可选参数
+ @param pPathLen 返回路径的总长度
+ @param subviewCount 子视图的数量，如果为-1则表示只计算路径的长度不会把每个子视图所在的路径点索引保存
+ @param pointIndexArray 返回所有子视图在路径点的索引
+ @param viewSpace 子视图之间的间距
+ @param lsc lsc
+ @return 返回所有路径点
+ */
 -(NSArray*)myCalcPathPoints:(CGMutablePathRef)showPath
-                pTotalLen:(CGFloat*)pTotalLen
+                pPathLen:(CGFloat*)pPathLen
              subviewCount:(NSInteger)subviewCount
           pointIndexArray:(NSMutableArray*)pointIndexArray
-              viewSpacing:(CGFloat)viewSpacing
+              viewSpace:(CGFloat)viewSpace
                         lsc:(MyPathLayout*)lsc
 {
-    NSMutableArray *pointArray = [NSMutableArray new];
+    NSMutableArray *pathPointArray = [NSMutableArray new];
     
     CGFloat selfWidth = CGRectGetWidth(self.bounds) - lsc.leftPadding - lsc.rightPadding;
     CGFloat selfHeight = CGRectGetHeight(self.bounds) - lsc.topPadding - lsc.bottomPadding;
@@ -1081,7 +1099,7 @@
         if (self.coordinateSetting.end != CGFLOAT_MAX)
             endArg = self.coordinateSetting.end;
         
-        [self myCalcPathPointsHelper:pointArray showPath:showPath pTotalLen:pTotalLen subviewCount:subviewCount pointIndexArray:pointIndexArray viewSpacing:viewSpacing startArg:startArg endArg:endArg func:^(CGFloat arg){
+        [self myCalcPathPointsHelper:pathPointArray showPath:showPath pPathLen:pPathLen subviewCount:subviewCount pointIndexArray:pointIndexArray viewSpace:viewSpace startArg:startArg endArg:endArg func:^(CGFloat arg){
             
             CGFloat val = self.rectangularEquation(arg);
             if (!isnan(val))
@@ -1128,7 +1146,7 @@
         if (self.coordinateSetting.end != CGFLOAT_MAX)
             endArg = self.coordinateSetting.end;
         
-        [self myCalcPathPointsHelper:pointArray showPath:showPath pTotalLen:pTotalLen subviewCount:subviewCount pointIndexArray:pointIndexArray  viewSpacing:viewSpacing startArg:startArg endArg:endArg func:^(CGFloat arg){
+        [self myCalcPathPointsHelper:pathPointArray showPath:showPath pPathLen:pPathLen subviewCount:subviewCount pointIndexArray:pointIndexArray  viewSpace:viewSpace startArg:startArg endArg:endArg func:^(CGFloat arg){
             
             CGPoint val = self.parametricEquation(arg);
             if (!isnan(val.x) && !isnan(val.y))
@@ -1163,7 +1181,7 @@
             endArg = self.coordinateSetting.end * 180.0 / M_PI;
         
         
-        [self myCalcPathPointsHelper:pointArray showPath:showPath pTotalLen:pTotalLen subviewCount:subviewCount pointIndexArray:pointIndexArray  viewSpacing:viewSpacing startArg:startArg endArg:endArg func:^(CGFloat arg){
+        [self myCalcPathPointsHelper:pathPointArray showPath:showPath pPathLen:pPathLen subviewCount:subviewCount pointIndexArray:pointIndexArray  viewSpace:viewSpace startArg:startArg endArg:endArg func:^(CGFloat arg){
             
             //计算用弧度
             CGFloat r = self.polarEquation(arg * M_PI / 180.0);
@@ -1193,7 +1211,7 @@
         
     }
     
-    return pointArray;
+    return pathPointArray;
 }
 
 -(NSArray*)myCalcPoints:(NSArray*)sbs path:(CGMutablePathRef)path pointIndexArray:(NSMutableArray*)pointIndexArray lsc:(MyPathLayout*)lsc
@@ -1202,10 +1220,12 @@
     {
         if (self.spaceType.type != MyPathSpace_Fixed)
         {
-            CGFloat totalLen = 0;
-            NSArray *tempArray = [self myCalcPathPoints:path pTotalLen:&totalLen subviewCount:-1 pointIndexArray:nil viewSpacing:0 lsc:lsc];
+            //如果间距不是固定的，那么要先算出路径的长度pathLen,以及是否是封闭曲线标志来算出每个子视图在曲线上的间距viewSpacing
             
+            CGFloat pathLen = 0;  //曲线的总长度
+            NSArray *tempArray = [self myCalcPathPoints:path pPathLen:&pathLen subviewCount:-1 pointIndexArray:nil viewSpace:0 lsc:lsc];
             
+            //判断是否是封闭路径，方法为第一个路径点和最后一个之间的距离差小于1
             BOOL bClose = NO;
             if (tempArray.count > 1)
             {
@@ -1216,22 +1236,24 @@
             }
             
             
-            CGFloat viewSpacing = 0;
+            CGFloat viewSpace = 0;  //每个视图之间的间距。
             NSInteger sbvcount = sbs.count;
-            if (self.spaceType.type == MyPathSpace_Count)
+            if (self.spaceType.type == MyPathSpace_Count)  //如果是固定数量则按固定数量来分配间距
                 sbvcount = (NSInteger)self.spaceType.value;
             
+            //总长度除视图数量得出子视图的间距。
             if (sbvcount > 1)
             {
-                viewSpacing = totalLen / (sbvcount - (bClose ? 0 : 1));
+                viewSpace = pathLen / (sbvcount - (bClose ? 0 : 1));
             }
             
-            return [self myCalcPathPoints:nil pTotalLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpacing:viewSpacing lsc:lsc];
+            //有间距后再重新计算一遍
+            return [self myCalcPathPoints:nil pPathLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpace:viewSpace lsc:lsc];
             
         }
         else
         {
-            return [self myCalcPathPoints:path pTotalLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpacing:self.spaceType.value lsc:lsc];
+            return [self myCalcPathPoints:path pPathLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpace:self.spaceType.value lsc:lsc];
         }
     }
     

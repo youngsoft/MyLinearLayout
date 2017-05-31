@@ -180,7 +180,7 @@
         _active = active;
         _lBoundVal.active = active;
         _uBoundVal.active = active;
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
 }
 
@@ -371,7 +371,7 @@
         }
         
         _dimeVal = val;
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
     else
     {
@@ -379,7 +379,7 @@
         if (val == nil && _dimeVal == nil && _dimeValType == MyLayoutValueType_LayoutDime)
         {
             _dimeValType = MyLayoutValueType_Nil;
-            [self setNeedLayout];
+            [self setNeedsLayout];
         }
     }
     
@@ -393,7 +393,7 @@
     if (_addVal != val)
     {
         _addVal = val;
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
     
     return self;
@@ -407,7 +407,7 @@
     if (_multiVal != val)
     {
         _multiVal = val;
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
     
     return self;
@@ -420,7 +420,7 @@
     if (self.lBoundVal.dimeNumVal.doubleValue != val)
     {
         [self.lBoundVal __equalTo:@(val)];
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
     
     return self;
@@ -433,7 +433,7 @@
         sizeVal = self.lBoundVal;
     
     [[[self.lBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
-    [self setNeedLayout];
+    [self setNeedsLayout];
     
     return self;
 }
@@ -444,7 +444,7 @@
     if (self.uBoundVal.dimeNumVal.doubleValue != val)
     {
         [self.uBoundVal __equalTo:@(val)];
-        [self setNeedLayout];
+        [self setNeedsLayout];
     }
     
     return self;
@@ -456,7 +456,7 @@
         sizeVal = self.uBoundVal;
     
     [[[self.uBoundVal __equalTo:sizeVal] __add:addVal] __multiply:multiVal];
-    [self setNeedLayout];
+    [self setNeedsLayout];
     
     return self;
 }
@@ -473,7 +473,7 @@
     _dimeVal = nil;
     _dimeValType = MyLayoutValueType_Nil;
     
-    [self setNeedLayout];
+    [self setNeedsLayout];
 }
 
 
@@ -492,7 +492,7 @@
 
 
 
--(void)setNeedLayout
+-(void)setNeedsLayout
 {
     if (_view != nil && _view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
     {

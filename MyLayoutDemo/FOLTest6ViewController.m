@@ -204,7 +204,7 @@
     {
         UILabel *menuLabel = [UILabel new];
         menuLabel.text = menus[i];
-        menuLabel.textColor = [CFTool color:20];
+        menuLabel.textColor = [CFTool color:2];
         menuLabel.font = [CFTool font:14];
         menuLabel.textAlignment = NSTextAlignmentCenter;
         menuLabel.adjustsFontSizeToFitWidth = YES;

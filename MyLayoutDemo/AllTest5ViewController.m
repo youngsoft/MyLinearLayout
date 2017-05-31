@@ -31,6 +31,7 @@
     rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyGravity_Horz_Fill;
     rootLayout.subviewSpace = 10;
+    rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
 
     
@@ -56,9 +57,9 @@
     [rootLayout addSubview:v3];
         
     //v3视图在其他任何iPhone设备横屏都不参与布局
-    [v3 fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact].hidden = YES;
+    [v3 fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact].myVisibility = MyVisibility_Gone;
     //只有iphone6Plus的横屏才参与布局
-    [v3 fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny].hidden = NO;
+    [v3 fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny].myVisibility = MyVisibility_Visible;
     
     //针对iPhone设备的所有横屏的高度都是Compact的，而宽度则是任意，因此下面的设置横屏情况下布局变为水平布局。
     //虽然fetchLayoutSizeClass方法真实返回的是MyLayoutSize或者其派生类，但是仍然可以用视图以及布局来设置其中的属性

@@ -34,7 +34,7 @@
 -(void)loadView
 {
     /*
-       这个例子用来介绍线性布局提供的均分尺寸和均分间距的功能。这可以通过线性布局里面的averageSubviews和averageMargin方法来实现。
+       这个例子用来介绍线性布局提供的均分尺寸和均分间距的功能。这可以通过线性布局里面的equalizeSubviews和equalizeSubviewsSpace方法来实现。
        需要注意的是这两个方法只能对当前已经加入了线性布局中的子视图有效。对后续再加入的子视图不会进行均分。因此要想后续加入的子视图也均分就需要再次调用者两个方法。
      */
     
@@ -44,6 +44,7 @@
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     rootLayout.wrapContentHeight = NO;
     rootLayout.wrapContentWidth = NO;
+    rootLayout.subviewVSpace = 5;
     self.view = rootLayout;
     
     //创建动作布局
@@ -60,7 +61,6 @@
     //创建动作布局
     MyLinearLayout *action2Layout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     action2Layout.wrapContentHeight = YES;
-    action2Layout.myTop = 5;
     [rootLayout addSubview:action2Layout];
     
     [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average size centered",@"") tag:400]];
@@ -77,7 +77,6 @@
     self.testLayout.weight = 1.0;
     self.testLayout.leftPadding = 10;
     self.testLayout.rightPadding = 10;
-    self.testLayout.myTop = 5;
     [rootLayout addSubview:self.testLayout];
     
     //这里用到了sizeclass的支持。您可以切换横竖屏看看效果。默认是垂直布局，横屏时是水平布局,并且垂直填充。

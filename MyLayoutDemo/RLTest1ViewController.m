@@ -36,6 +36,7 @@
     rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     self.view = rootLayout;
+
     
     //mylayout提供了类似Masonry的布局设置语法，你可以通过属性进行布局，也可以用makeLayout方式来进行设置。通过makeLayout方式设置时，子视图可以在任意时刻设置。
     //通过makeLayout方法设置布局不局限于在相对布局下，可以在任何布局下设置。

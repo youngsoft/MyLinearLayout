@@ -3,6 +3,35 @@
 
 ---
 
+## [V1.3.7](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.7)(2017/6/1)
+
+#### Added
+1. 对视图添加了属性`myVisibility`，这个属性是对视图的hidden属性的扩展，除了可以控制视图的隐藏和显示外还可以控制视图隐藏时是否仍然占位布局。（具体参见RLTest2ViewController）
+2. 对视图添加了属性`myAlignment`，这个属性只在线性布局、框架布局、表格布局、流式布局中起作用，它用来设置某个视图的停靠和对齐属性。当对某个布局视图设置`gravity`属性实现整体的停靠和对齐时，如果某个子视图想单独处理停靠则可以用这个属性来单独设置。（具体参见LLTest3ViewController）
+3. 添加了`MyDimeScale`的四个方法：`roundNumber,roundPoint,roundSize,roundRect`来分别实现入参为小数时的设备逻辑点值到最小可转化为物理像素的有效设备点值的转化。
+4. 添加了对carthage的支持。
+
+#### Changed
+1. 将布局视图的属性`hideSubviewReLayout`置为无效，布局视图不再提供对隐藏视图的是否占位的处理了，而是通过新增加的视图的扩展属性`myVisibility`来实现。
+2. 将相对布局视图的属性:`flexOtherViewWidthWhenSubviewHidden`和`flexOtherViewHeightWhenSubviewHidden`属性置为无效，布局视图不再提供对隐藏视图的是否占位的处理了，而是通过新增加的视图的扩展属性`myVisibility`来实现。
+3. 将原先线性布局、流式布局、浮动布局中的`gravity`属性提升到了布局基类中，目前线性布局、流式布局、浮动布局、和框架布局都支持`gravity`的设置。
+4. 进一步优化了布局视图的性能，表现为对KVO监听的延迟处理和优化。
+5. 进一步优化了布局视图的内存占用尺寸，将布局视图中对触摸事件处理的变量变为按需要才创建，以及布局视图的边界线对象也改为了按需要才建立，这两部分按需处理机制将有效的减少了布局视图的内存占用。
+6. 为了更进一步的优化和简化MyLayout对UITableviewCell高度自适应的处理，新版本中对实现的解决方案进行优化处理，具体详情请参考：[AllTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/AllTest1ViewController.m)中的介绍
+7. 优化工程目录结构。
+
+
+#### Fixed
+1. 修复了[#BUG37](https://github.com/youngsoft/MyLinearLayout/issues/37)。原因是对`UILabel`或者`UITextView`或者`UIButton`进行尺寸和位置计算时如果得到值并不是最小的有效的设备逻辑点，导致当逻辑点映射到像素显示时模糊不清晰，以及可能会在边缘多出黑色的线条。对于2倍像素的设备来说要求逻辑点的值必须是1/2的倍数。而对于3倍像素的设备来说要求逻辑点的值必须是1/3的倍数。
+2. 修复了路径布局`MyPathLayout`中的一个子视图位置可能显示不正确的BUG。原因就是在进行子视图之间的间距的长度逼近时有可能步长再小也无法满足条件时造成子视图显示重叠的问题。
+3. 修复了`UILabel`设置为`wrapContentWidth`时而没有指定高度时有可能不显示的BUG。原因是使用者可能没有指定高度，这次系统默认为他指定高度来解决这个问题。
+4. 修复了边界线`MyBorderline`的`thick`属性如果设置小于1而出现移动时不停闪烁的:[#BUG38](https://github.com/youngsoft/MyLinearLayout/issues/38)。同时修复了边界线在不同分辨率设备下的显示的粗细不同问题。原因是如果thick过小则因为设备逻辑点映射到物理像素的问题导致刷新闪烁的问题。
+5. 修复了iOS7系统中对`MyLayoutPos`的`equalTo`方法设置为`UILayoutSupport`类型值的BUG，导致无法正确的下移。原因是iOS7中对UIViewController中的topGuide和bottomGuide的实现默认的是一个UIView导致在判断时将他当做一个普通的视图来处理了。
+6. 修复了路径布局`MyPathLayout`的中心点子视图`originView`的`layer.anchorPoint`的设置不为默认值时的位置frame显示不正确的问题。
+7. 修复了当使用1.3.6版本中的`cacheEstimatedRect`属性来缓存UITableviewCell高度时的UITableviewCell的根布局视图的高度可能为0的BUG。
+8. 修复了iOS7的对横竖屏size class切换无效的BUG。
+
+
 ## [V1.3.6](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.6)(2017/5/5)
 
 #### Added

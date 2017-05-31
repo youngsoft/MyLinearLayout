@@ -92,6 +92,7 @@
     [super viewDidLoad];
     
     MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+    floatLayout.backgroundColor = [UIColor whiteColor];
     floatLayout.myMargin = 0;  //浮动布局和父视图四周的边界是0，也就是说浮动布局的宽度和高度和父视图相等。
     [self.view addSubview:floatLayout];
     self.floatLayout = floatLayout;
@@ -205,6 +206,7 @@
     titleLabel.weight =1;   //向左浮动，宽度和父视图保持一致。
     titleLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [itemLayout addSubview:titleLabel];
+    
     
     //来源部分
     UILabel *sourceLabel = [UILabel new];

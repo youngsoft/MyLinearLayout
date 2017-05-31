@@ -156,16 +156,10 @@ typedef enum : unsigned char{
 @property(nonatomic, assign) BOOL useFrame;
 @property(nonatomic, assign) BOOL noLayout;
 
+@property(nonatomic, assign) MyVisibility myVisibility;
+@property(nonatomic, assign) MyGravity myAlignment;
+
 @property(nonatomic, copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
-
-/*
- 隐藏不参与布局，这个属性是默认sizeClass外可以用来设置某个视图是否参与布局的标志，如果设置为YES则表示不参与布局。默认是NO。
- 对于默认的sizeClass来说，就可以直接使用子视图本身的hidden属性来设置。
- 不参与布局的意思是在这种sizeClass下的frame会被设置为CGRectZero。而不是不加入到视图体系中去。
- 如果视图真设置了隐藏属性则这个属性设置无效。
- */
-@property(nonatomic, assign, getter=isHidden) BOOL hidden;
-
 
 //线性布局和浮动布局子视图专用
 @property(nonatomic, assign) CGFloat weight;
@@ -196,7 +190,7 @@ typedef enum : unsigned char{
 @property(nonatomic, assign) CGFloat subviewHSpace;
 @property(nonatomic, assign) CGFloat subviewSpace;
 
-@property(nonatomic, assign) BOOL hideSubviewReLayout;
+@property(nonatomic, assign) MyGravity gravity;
 
 @property(nonatomic, assign) BOOL reverseLayout;   //逆序布局，子视图从后往前。
 
@@ -208,7 +202,6 @@ typedef enum : unsigned char{
 @interface MySequentLayoutViewSizeClass : MyLayoutViewSizeClass
 
 @property(nonatomic,assign) MyOrientation orientation;
-@property(nonatomic, assign) MyGravity gravity;
 
 
 
@@ -257,9 +250,6 @@ typedef enum : unsigned char{
 
 
 @interface MyRelativeLayoutViewSizeClass : MyLayoutViewSizeClass
-
-@property(nonatomic, assign) BOOL flexOtherViewWidthWhenSubviewHidden;
-@property(nonatomic, assign) BOOL flexOtherViewHeightWhenSubviewHidden;
 
 
 @end

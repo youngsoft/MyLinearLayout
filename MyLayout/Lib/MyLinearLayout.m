@@ -8,31 +8,6 @@
 
 #import "MyLinearLayout.h"
 #import "MyLayoutInner.h"
-#import <objc/runtime.h>
-
-@implementation UIView(MyLinearLayoutExt)
-
--(CGFloat)weight
-{
-    return self.myCurrentSizeClass.weight;
-}
-
--(void)setWeight:(CGFloat)weight
-{
-    UIView *sc = self.myCurrentSizeClass;
-    if (sc.weight != weight)
-    {
-        sc.weight = weight;
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
-    }
-}
-
-
-
-
-@end
-
 
 @implementation MyLinearLayout
 
@@ -78,23 +53,6 @@
     return self.myCurrentSizeClass.orientation;
 }
 
-
-
--(void)setGravity:(MyGravity)gravity
-{
-    
-    MyLinearLayout *lsc = self.myCurrentSizeClass;
-    if (lsc.gravity != gravity)
-    {
-        lsc.gravity = gravity;
-        [self setNeedsLayout];
-    }
-}
-
--(MyGravity)gravity
-{
-    return self.myCurrentSizeClass.gravity;
-}
 
 
 -(void)setShrinkType:(MySubviewsShrinkType)shrinkType
@@ -261,13 +219,13 @@
     
     for (UIView *sbv in sbs)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
         
         if (!isEstimate)
         {
-            sbvMyFrame.frame = sbv.bounds;
-            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvMyFrame:sbvMyFrame selfLayoutSize:selfSize];
+            sbvmyFrame.frame = sbv.bounds;
+            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame selfLayoutSize:selfSize];
         }
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
@@ -280,11 +238,11 @@
             
             if (isEstimate && isSbvWrap)
             {
-                [(MyBaseLayout*)sbv estimateLayoutRect:sbvMyFrame.frame.size inSizeClass:sizeClass];
-                if (sbvMyFrame.multiple)
+                [(MyBaseLayout*)sbv estimateLayoutRect:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                if (sbvmyFrame.multiple)
                 {
-                    sbvMyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
-                    sbvsc = sbvMyFrame.sizeClass;
+                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    sbvsc = sbvmyFrame.sizeClass;
                 }
             }
         }
@@ -462,13 +420,14 @@
     {
         for (UIView *sbv in sbs)
         {
-            UIView *sbvsc = sbv.myCurrentSizeClass;
-            
+            MyFrame *sbvmyFrame = sbv.myFrame;
+            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+           
             //只有宽度不依赖于父视图并且没有设置左右边距则参与最大包裹宽度计算。
             if (sbvsc.widthSizeInner.dimeRelaVal.view != self && (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
             {
                 
-                CGFloat subviewWidth = sbv.myFrame.width;
+                CGFloat subviewWidth = sbvmyFrame.width;
                 if (sbvsc.widthSizeInner.dimeNumVal != nil)
                     subviewWidth = sbvsc.widthSizeInner.measure;
                 
@@ -498,13 +457,7 @@
     CGFloat paddingTrailing = lsc.trailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
-    MyGravity horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    if (horzGravity == MyGravity_Horz_Left)
-        horzGravity = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
-    else if (horzGravity == MyGravity_Horz_Right)
-        horzGravity =  [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
-    else;
-
+    MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
     
     CGFloat fixedHeight = 0;   //计算固定部分的高度
     CGFloat totalWeight = 0;    //剩余部分的总比重
@@ -520,10 +473,10 @@
     for (UIView *sbv in sbs)
     {
         
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
-        
-        CGRect rect = sbvMyFrame.frame;
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+      
+        CGRect rect = sbvmyFrame.frame;
         
         [self myCalcLeadingTrailingRect:horzGravity
                                selfSize:selfSize
@@ -630,7 +583,7 @@
             }
         }
         
-        sbvMyFrame.frame = rect;
+        sbvmyFrame.frame = rect;
     }
     
     //在包裹宽度且总体比重不为0时则，则需要还原最小的宽度，这样就不会使得宽度在横竖屏或者多次计算后越来越宽。
@@ -712,14 +665,14 @@
         pos = paddingTop;
         for (UIView *sbv in sbs) {
             
-            UIView *sbvsc = sbv.myCurrentSizeClass;
-            MyFrame *sbvMyFrame = sbv.myFrame;
-            
+            MyFrame *sbvmyFrame = sbv.myFrame;
+            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+          
             
             CGFloat topSpace = sbvsc.topPosInner.posNumVal.doubleValue;
             CGFloat bottomSpace = sbvsc.bottomPosInner.posNumVal.doubleValue;
             CGFloat weight = sbvsc.weight;
-            CGRect rect =  sbvMyFrame.frame;
+            CGRect rect =  sbvmyFrame.frame;
             
             //分别处理相对顶部间距和绝对顶部间距
             if ([self myIsRelativePos:topSpace])
@@ -798,7 +751,7 @@
                 
             }
             
-            sbvMyFrame.frame = rect;
+            sbvmyFrame.frame = rect;
         }
         
     }
@@ -841,8 +794,9 @@
     CGFloat  fixedSpaceWidth = 0;  //固定间距的子视图的宽度。
     for (UIView *sbv in sbs)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+       
         if (sbvsc.leadingPosInner.isRelativePos)
         {
             totalWeight += sbvsc.leadingPosInner.posNumVal.doubleValue;
@@ -880,16 +834,15 @@
         }
         else
         {
-            MyFrame *sbvMyFrame = sbv.myFrame;
-            CGFloat vWidth = sbvMyFrame.width;
+            CGFloat vWidth = sbvmyFrame.width;
             if (sbvsc.widthSizeInner.dimeNumVal != nil)
                 vWidth = sbvsc.widthSizeInner.measure;
 
             if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == lsc.widthSizeInner)
                   vWidth = [sbvsc.widthSizeInner measureWith:selfSize.width - paddingHorz];
             
-            vWidth = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:vWidth sbvSize:sbvMyFrame.frame.size selfLayoutSize:selfSize];
-            sbvMyFrame.width = vWidth;
+            vWidth = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:vWidth sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
+            sbvmyFrame.width = vWidth;
             fixedWidth += vWidth;
             
             //如果最小宽度不为自身并且宽度不是包裹的则可以进行缩小。
@@ -1037,14 +990,14 @@
     CGFloat pos = paddingLeading;
     for (UIView *sbv in sbs) {
         
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
-        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+       
         CGFloat leadingSpace = sbvsc.leadingPosInner.posNumVal.doubleValue;
         CGFloat trailingSpace = sbvsc.trailingPosInner.posNumVal.doubleValue;
         CGFloat weight = sbvsc.weight;
         
-        CGRect rect =  sbvMyFrame.frame;
+        CGRect rect =  sbvmyFrame.frame;
         
         if (sbvsc.heightSizeInner.dimeNumVal != nil)
             rect.size.height = sbvsc.heightSizeInner.measure;
@@ -1166,7 +1119,7 @@
 
         }
         
-        sbvMyFrame.frame = rect;
+        sbvmyFrame.frame = rect;
     }
     
     pos +=  paddingTrailing;
@@ -1183,10 +1136,10 @@
         
         for (UIView *sbv in sbs)
         {
-            UIView *sbvsc = sbv.myCurrentSizeClass;
-            MyFrame *sbvMyFrame = sbv.myFrame;
-            
-            CGRect rect = sbvMyFrame.frame;
+            MyFrame *sbvmyFrame = sbv.myFrame;
+            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+          
+            CGRect rect = sbvmyFrame.frame;
             
             [self myCalcSubviewTopBottomRect:vertGravity
                                     selfSize:selfSize
@@ -1197,7 +1150,7 @@
                                        sbvsc:sbvsc
                                          lsc:lsc];
             
-            sbvMyFrame.frame = rect;
+            sbvmyFrame.frame = rect;
             
         }
 
@@ -1220,13 +1173,8 @@
     CGFloat paddingVert = paddingTop + paddingBottom;
     CGFloat subviewSpace = lsc.subviewVSpace;
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
-    MyGravity horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    if (horzGravity == MyGravity_Horz_Left)
-        horzGravity = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
-    else if (horzGravity == MyGravity_Horz_Right)
-        horzGravity =  [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
-    else;
-
+    MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
+    
     CGFloat totalHeight = 0;
     if (sbs.count > 1)
         totalHeight += (sbs.count - 1) * subviewSpace;
@@ -1241,11 +1189,11 @@
     NSMutableSet *noWrapsbsSet = [NSMutableSet new];
     for (UIView *sbv in sbs)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
-        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+       
         BOOL canAddToNoWrapSbs = YES;
-        CGRect rect = sbvMyFrame.frame;
+        CGRect rect = sbvmyFrame.frame;
         
         [self myCalcLeadingTrailingRect:horzGravity
                                selfSize:selfSize
@@ -1295,7 +1243,7 @@
         
         totalHeight += [self myValidMargin:sbvsc.bottomPosInner sbv:sbv calcPos:[sbvsc.bottomPosInner realPosIn:floatingHeight] selfLayoutSize:selfSize];
         
-        sbvMyFrame.frame = rect;
+        sbvmyFrame.frame = rect;
         
         //如果子布局视图是wrap属性则不进行扩展。
         if (vertGravity == MyGravity_Vert_Fill && [sbv isKindOfClass:[MyBaseLayout class]])
@@ -1363,18 +1311,18 @@
     for (UIView *sbv in sbs)
     {
         
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
-        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+       
         pos += [self myValidMargin:sbvsc.topPosInner sbv:sbv calcPos:[sbvsc.topPosInner realPosIn:floatingHeight] selfLayoutSize:selfSize];
         
-        sbvMyFrame.top = pos;
+        sbvmyFrame.top = pos;
         
         //加上扩充的宽度。
         if (fill != 0 && [noWrapsbsSet containsObject:sbv])
-            sbvMyFrame.height += fill;
+            sbvmyFrame.height += fill;
         
-        pos +=  sbvMyFrame.height;
+        pos +=  sbvmyFrame.height;
     
         
         pos += [self myValidMargin:sbvsc.bottomPosInner sbv:sbv calcPos:[sbvsc.bottomPosInner realPosIn:floatingHeight] selfLayoutSize:selfSize];
@@ -1401,13 +1349,8 @@
     CGFloat paddingVert = paddingTop + paddingBottom;
     CGFloat subviewSpace = lsc.subviewHSpace;
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
-    MyGravity horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    if (horzGravity == MyGravity_Horz_Left)
-        horzGravity = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
-    else if (horzGravity == MyGravity_Horz_Right)
-        horzGravity =  [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
-    else;
-
+    MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
+    
     
     CGFloat totalWidth = 0;
     if (sbs.count > 1)
@@ -1425,11 +1368,11 @@
     NSMutableSet *noWrapsbsSet = [NSMutableSet new];
     for (UIView *sbv in sbs)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
-        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+       
         BOOL canAddToNoWrapSbs = YES;
-        CGRect rect = sbvMyFrame.frame;
+        CGRect rect = sbvmyFrame.frame;
         
         if (sbvsc.widthSizeInner.dimeNumVal != nil)
             rect.size.width = sbvsc.widthSizeInner.measure;
@@ -1483,7 +1426,7 @@
         totalWidth += [self myValidMargin:sbvsc.trailingPosInner sbv:sbv calcPos:[sbvsc.trailingPosInner realPosIn:floatingWidth] selfLayoutSize:selfSize];
         
         
-        sbvMyFrame.frame = rect;
+        sbvmyFrame.frame = rect;
         
         //如果子视图是包裹属性则也不加入。
         if (horzGravity == MyGravity_Horz_Fill && [sbv isKindOfClass:[MyBaseLayout class]])
@@ -1562,13 +1505,13 @@
     
     for (UIView *sbv in sbs)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
-        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+       
         pos += [self myValidMargin:sbvsc.leadingPosInner sbv:sbv calcPos:[sbvsc.leadingPosInner realPosIn:floatingWidth] selfLayoutSize:selfSize];
         
         
-        CGRect rect = sbvMyFrame.frame;
+        CGRect rect = sbvmyFrame.frame;
         
         rect.origin.x = pos;
         
@@ -1583,7 +1526,7 @@
         
         pos += [self myValidMargin:sbvsc.trailingPosInner sbv:sbv calcPos:[sbvsc.trailingPosInner realPosIn:floatingWidth] selfLayoutSize:selfSize];
         
-        sbvMyFrame.frame = rect;
+        sbvmyFrame.frame = rect;
 
         
         if (sbv != sbs.lastObject)
@@ -1610,29 +1553,11 @@
     if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
         rect_p->size.width = selfSize.width - paddingLeading - paddingTrailing - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal;
     
-    
-    //优先以容器中的对齐方式为标准，否则以自己的停靠方式为标准
-    MyGravity sbvmghorz = MyGravity_Horz_Leading;
-    if ( horzGravity != MyGravity_None)
-    {
-        sbvmghorz = horzGravity;
-    }
-    else
-    {
-        if (sbvsc.centerXPosInner.posVal != nil)
-            sbvmghorz = MyGravity_Horz_Center;
-        else if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
-            sbvmghorz = MyGravity_Horz_Fill;
-        else if (sbvsc.leadingPosInner.posVal != nil)
-            sbvmghorz = MyGravity_Horz_Leading;
-        else if (sbvsc.trailingPosInner.posVal != nil)
-            sbvmghorz = MyGravity_Horz_Trailing;
-    }
-    
+
     rect_p->size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect_p->size.width sbvSize:rect_p->size selfLayoutSize:selfSize];
     
     
-    [self myHorzGravity:sbvmghorz sbv:sbv sbvsc:sbvsc paddingLeading:paddingLeading paddingTrailing:paddingTrailing selfSize:selfSize pRect:rect_p];
+    [self myCalcHorzGravity:[self myGetSubviewHorzGravity:sbv sbvsc:sbvsc horzGravity:horzGravity] sbv:sbv sbvsc:sbvsc paddingLeading:paddingLeading paddingTrailing:paddingTrailing selfSize:selfSize pRect:rect_p];
 }
 
 - (void)myCalcSubviewTopBottomRect:(MyGravity)vertGravity selfSize:(CGSize)selfSize rect_p:(CGRect *)rect_p sbv:(UIView *)sbv paddingBottom:(CGFloat)paddingBottom paddingTop:(CGFloat)paddingTop sbvsc:(UIView *)sbvsc lsc:(MyLinearLayout*)lsc
@@ -1647,24 +1572,10 @@
     if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
         rect_p->size.height = selfSize.height - paddingTop - paddingBottom - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal;
     
-    MyGravity sbvmgvert = MyGravity_Vert_Top;
-    if (vertGravity != MyGravity_None)
-        sbvmgvert = vertGravity;
-    else
-    {
-        if (sbvsc.centerYPosInner.posVal != nil)
-            sbvmgvert = MyGravity_Vert_Center;
-        else if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
-            sbvmgvert = MyGravity_Vert_Fill;
-        else if (sbvsc.topPosInner.posVal != nil)
-            sbvmgvert = MyGravity_Vert_Top;
-        else if (sbvsc.bottomPosInner.posVal != nil)
-            sbvmgvert = MyGravity_Vert_Bottom;
-    }
     
     rect_p->size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect_p->size.height sbvSize:rect_p->size selfLayoutSize:selfSize];
     
-    [self myVertGravity:sbvmgvert sbv:sbv sbvsc:sbvsc paddingTop:paddingTop paddingBottom:paddingBottom selfSize:selfSize pRect:rect_p];
+    [self myCalcVertGravity:[self myGetSubviewVertGravity:sbv sbvsc:sbvsc vertGravity:vertGravity] sbv:sbv sbvsc:sbvsc paddingTop:paddingTop paddingBottom:paddingBottom selfSize:selfSize pRect:rect_p];
 }
 
 -(CGFloat)myCalcSelfSize:(CGFloat)selfSize subviewSize:(CGFloat)subviewSize headPos:(MyLayoutPos*)headPos centerPos:(MyLayoutPos*)centerPos tailPos:(MyLayoutPos*)tailPos

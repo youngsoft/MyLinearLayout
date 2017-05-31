@@ -13,7 +13,8 @@
 @interface RLTest4ViewController ()<UIScrollViewDelegate>
 
 
-@property(nonatomic, strong) UIView *testTopDockView;
+@property(nonatomic, weak) UIView *testTopDockView;
+@property(nonatomic, weak) UIView *testView1;
 
 
 @end
@@ -45,6 +46,7 @@
     
     UIScrollView *scrollView = [UIScrollView new];
     scrollView.delegate = self;
+    scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
@@ -59,6 +61,7 @@
     v1.widthSize.equalTo(rootLayout.widthSize);
     v1.heightSize.equalTo(@80);
     [rootLayout addSubview:v1];
+    self.testView1 = v1;
     
     
     UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:2]];
@@ -118,9 +121,8 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     
-    //因为这里第一个视图的高度是80外加10的顶部padding，这样这里判断的偏移位置是90.
-    NSLog(@"%f",scrollView.contentOffset.y);
-    if (scrollView.contentOffset.y > 90)
+    //testTopDockView的上面视图是testView1。所以这里如果偏移超过testView1的最大则开始固定testTopDockView了
+    if (scrollView.contentOffset.y > CGRectGetMaxY(self.testView1.frame))
     {
         
         /*

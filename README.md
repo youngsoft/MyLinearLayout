@@ -1,4 +1,5 @@
 [![Version](https://img.shields.io/cocoapods/v/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
 [![Platform](https://img.shields.io/cocoapods/p/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
 [![Support](https://img.shields.io/badge/support-iOS%205%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
@@ -9,7 +10,7 @@
 
 ![Logo](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/MyLayout.png)
 
-## MyLayout(2017.05.05)
+## MyLayout
 
 MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayout provides some simple functions to build a variety of complex interface. It integrates the functions including: Autolayout and SizeClass of iOS, five layout classes of Android, float and flex-box and bootstrap of HTML/CSS. The MyLayout's Swift version are named: **[TangramKit](https://github.com/youngsoft/TangramKit)**
 
@@ -557,7 +558,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.3.6'
+pod 'MyLayout', '~> 1.3.7'
 ```
    
 Then, run the following command:
@@ -565,6 +566,28 @@ Then, run the following command:
 `$ pod install`
 
 
+### Use [Carthage](https://github.com/Carthage/Carthage)
+
+1. Create a `Cartfile` file.
+
+	```
+	github "youngsoft/MyLinearLayout"
+	```
+2. Run `carthage update`.
+ 
+3. On your application targets’ “General” settings tab, in the “Linked Frameworks and Libraries” section, drag and drop `MyLayout` framework from the Carthage/Build folder on disk.
+
+4. On your application targets’ “Build Phases” settings tab, click the “+” icon and choose “New Run Script Phase”. Create a Run Script in which you specify your shell (ex: bin/sh), add the following contents to the script area below the shell:
+
+	```
+	/usr/local/bin/carthage copy-frameworks
+	```
+
+	and add the path under “Input Files”, e.g.:
+
+	```
+	$(SRCROOT)/Carthage/Build/iOS/MyLayout.framework
+	```
 
 
 

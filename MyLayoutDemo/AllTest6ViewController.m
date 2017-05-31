@@ -29,6 +29,7 @@
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyGravity_Horz_Fill;
+    rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
     
     //创建顶部的菜单布局部分。

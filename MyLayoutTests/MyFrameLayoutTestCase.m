@@ -24,6 +24,36 @@
     [super tearDown];
 }
 
+-(void)testblurred
+{
+    MyFrameLayout *frameLayout = [[MyFrameLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667)];
+    frameLayout.backgroundColor = [UIColor whiteColor];
+    frameLayout.myMargin = 0;              //这个表示框架布局的尺寸和self.view保持一致,四周离父视图的边距都是0
+    frameLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
+
+    UILabel *label = [[UILabel alloc] init];
+    label.text = @"统计";
+    label.textColor = [UIColor blackColor];
+    label.font = [UIFont systemFontOfSize:17];
+    label.myCenterY = 0;
+    label.myLeft = 10;
+    [label sizeToFit];
+    label.wrapContentSize = YES;
+    
+    [frameLayout addSubview:label];
+    
+    label = [[UILabel alloc] init];
+    label.text = @"统计";
+    label.textColor = [UIColor blackColor];
+    label.font = [UIFont systemFontOfSize:17];
+    label.myTop = 200;
+    label.myLeft = 10;
+    [label sizeToFit];
+    label.wrapContentSize = YES;
+    [frameLayout addSubview:label];
+
+}
+
 //测试尺寸包裹。
 - (void)testWrapContent {
     // Use recording to get started writing UI tests.

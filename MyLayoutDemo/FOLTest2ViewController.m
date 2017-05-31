@@ -426,6 +426,7 @@ static NSInteger sBaseTag = 100000;
     
     //创建条目容器布局。
     MyFloatLayout *itemContainerLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+    itemContainerLayout.tag = 1122;
     itemContainerLayout.backgroundColor = [UIColor whiteColor];
     itemContainerLayout.wrapContentHeight = YES;
     itemContainerLayout.intelligentBorderline = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
@@ -476,7 +477,7 @@ static NSInteger sBaseTag = 100000;
     
     //建立上下浮动布局
     MyFloatLayout *itemLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
-    
+    itemLayout.tag = 1133;
     //向上浮动，左边顶部边距为5
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;

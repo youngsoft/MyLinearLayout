@@ -21,12 +21,111 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    self.counts = 200; //分别设置10,20,50,80,100,200,300
+    self.counts = 300; //分别设置10,20,50,80,100,200,300
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+-(void)testCenterBounds
+{
+    UIView *testView = [UIView new];
+    
+    [self measureMetrics:[[self class] defaultPerformanceMetrics] automaticallyStartMeasuring:NO forBlock:^{
+        
+        // Do setup work that needs to be done for every iteration but you don't want to measure before the call to -startMeasuring
+    
+        [self startMeasuring];
+
+        for (int i = 0; i < 10000; i++)
+        {
+            
+            CGRect rect = CGRectMake(arc4random_uniform(100), arc4random_uniform(100), arc4random_uniform(100), arc4random_uniform(100));
+            
+            
+            testView.center = CGPointMake(rect.origin.x + testView.layer.anchorPoint.x * rect.size.width, rect.origin.y + testView.layer.anchorPoint.y * rect.size.height);
+            testView.bounds = CGRectMake(0, 0, rect.size.width, rect.size.height);
+            
+            // Do that thing you want to measure.
+        }
+        
+        [self stopMeasuring];
+
+        // Do teardown work that needs to be done for every iteration but you don't want to measure after the call to -stopMeasuring
+    }];
+    
+}
+
+-(void)testFrame
+{
+    UIView *testView = [UIView new];
+    
+    
+    [self measureMetrics:[[self class] defaultPerformanceMetrics] automaticallyStartMeasuring:NO forBlock:^{
+        
+        // Do setup work that needs to be done for every iteration but you don't want to measure before the call to -startMeasuring
+        [self startMeasuring];
+
+        for (int  i = 0; i < 10000; i++)
+        {
+            
+            CGRect rect = CGRectMake(arc4random_uniform(100), arc4random_uniform(100), arc4random_uniform(100), arc4random_uniform(100));
+            
+            if (CGAffineTransformIsIdentity(testView.transform))
+                testView.frame = rect;
+            // Do that thing you want to measure.
+        }
+        
+        [self stopMeasuring];
+
+        // Do teardown work that needs to be done for every iteration but you don't want to measure after the call to -stopMeasuring
+    }];
+
+   
+}
+
+
+
+-(void)testFont
+{
+    //这里测试各种字体对sizeToFit的影响。
+    
+    UILabel *testLabel = [UILabel new];
+    testLabel.text = @"Hello 欧阳大哥，.-?？asd 水电费asdfasf 阿斯顿发安防";
+    testLabel.numberOfLines = 0;
+    CGSize sz = CGSizeMake(70, 0);
+    
+    for (NSString *familyName in [UIFont familyNames])
+    {
+        NSArray *arr1 = [UIFont fontNamesForFamilyName:familyName];
+        for (NSString *fontName in arr1)
+        {
+            UIFont *font = [UIFont fontWithName:fontName size:15];
+            testLabel.font = font;
+            [self startClock];
+            for (int i = 0; i < 1000; i++)
+            {
+                [testLabel sizeThatFits:sz];
+            }
+            
+            [self endClock:[NSString stringWithFormat:@"%@:%@",familyName, fontName]];
+        }
+    }
+    
+    
+    UIFont *font = [UIFont systemFontOfSize:15];
+    testLabel.font = font;
+    [self startClock];
+    for (int i = 0; i < 1000; i++)
+    {
+        [testLabel sizeThatFits:sz];
+    }
+    
+    [self endClock:[NSString stringWithFormat:@"%@:%@",@"system", @"system"]];
+  
+
 }
 
 /*

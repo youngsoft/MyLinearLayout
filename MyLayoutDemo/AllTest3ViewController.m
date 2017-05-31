@@ -20,9 +20,9 @@
 @property(nonatomic, strong) MyFlowLayout *popmenuItemLayout;
 
 
-//用来测试隐藏子视图时重新布局一些视图
-@property(nonatomic, strong) MyBaseLayout *hideSubviewRelayoutLayout;
-@property(nonatomic, strong) UIButton *hiddenTestButton;
+//视图的显示和隐藏
+@property(nonatomic, strong) UIButton *invisibleButton;
+@property(nonatomic, strong) UIButton *goneButton;
 
 //浮动文本的布局
 @property(nonatomic,strong) MyBaseLayout *flexedLayout;
@@ -101,7 +101,7 @@
     [self addFlexedWidthLayout:contentLayout];
     
     //添加，隐藏重新布局的布局。
-    [self addHideSubviewReLayoutLayout:contentLayout];
+    [self addVisibilityTestLayout:contentLayout];
    
     //添加，自动伸缩布局
     [self addShrinkLayout:contentLayout];
@@ -205,17 +205,9 @@
 }
 
 //添加隐藏重新布局的布局
--(void)addHideSubviewReLayoutLayout:(MyLinearLayout *)contentLayout
+-(void)addVisibilityTestLayout:(MyLinearLayout *)contentLayout
 {
-    //下面两个布局用来测试布局视图的hideSubviewReLayout属性。
-    MyLinearLayout *switchLayout = [self createSwitchLayout:NSLocalizedString(@"relayout switch when subview hidden&show", @"") action:@selector(handleReLayoutSwitch:)];
-    switchLayout.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
-    switchLayout.bottomBorderline.headIndent = 10;
-    switchLayout.bottomBorderline.tailIndent = 10;
-    switchLayout.myTop = 10;
-    [contentLayout addSubview:switchLayout];
-
-
+    
     MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     testLayout.backgroundColor = [UIColor whiteColor];
     testLayout.leftPadding = 10;
@@ -223,32 +215,37 @@
     testLayout.myHeight = 50;
     testLayout.gravity = MyGravity_Vert_Fill;
     testLayout.subviewHSpace = 10;
+    testLayout.myTop = 10;
     [contentLayout addSubview:testLayout];
-    self.hideSubviewRelayoutLayout = testLayout;
     
-    UIButton *leftButton = [UIButton new];
-    leftButton.myWidth = 50;
-    leftButton.backgroundColor = [CFTool color:5];
-    [testLayout addSubview:leftButton];
+    UIButton *showButton = [UIButton new];
+    [showButton setTitle:NSLocalizedString(@"reset show", @"") forState:UIControlStateNormal];
+    showButton.titleLabel.font = [CFTool font:14];
+    showButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+    [showButton addTarget:self action:@selector(handleResetShow:) forControlEvents:UIControlEventTouchUpInside];
+    showButton.myWidth = 50;
+    showButton.backgroundColor = [CFTool color:5];
+    [testLayout addSubview:showButton];
     
-    UIButton *centerButton = [UIButton new];
-    [centerButton setTitle:NSLocalizedString(@"touch hide me", @"") forState:UIControlStateNormal];
-    [centerButton addTarget:self action:@selector(handleHideSelf:) forControlEvents:UIControlEventTouchUpInside];
-    centerButton.backgroundColor = [CFTool color:6];
-    centerButton.titleLabel.font = [CFTool font:14];
-    [centerButton sizeToFit];
-    centerButton.weight = 1; //均分剩余的宽度。
-    [testLayout addSubview:centerButton];
-    self.hiddenTestButton = centerButton;
+    UIButton *invisibleButton = [UIButton new];
+    [invisibleButton setTitle:NSLocalizedString(@"invisible", @"") forState:UIControlStateNormal];
+    [invisibleButton addTarget:self action:@selector(handleInvisible:) forControlEvents:UIControlEventTouchUpInside];
+    invisibleButton.backgroundColor = [CFTool color:6];
+    invisibleButton.titleLabel.font = [CFTool font:14];
+    [invisibleButton sizeToFit];
+    invisibleButton.weight = 1; //均分剩余的宽度。
+    [testLayout addSubview:invisibleButton];
+    self.invisibleButton = invisibleButton;
     
-    UIButton *rightButton = [UIButton new];
-    [rightButton setTitle:NSLocalizedString(@"touch show me", @"") forState:UIControlStateNormal];
-    [rightButton addTarget:self action:@selector(handleShowBrother:) forControlEvents:UIControlEventTouchUpInside];
-    rightButton.backgroundColor = [CFTool color:7];
-    rightButton.titleLabel.font = [CFTool font:14];
-    [rightButton sizeToFit];
-    rightButton.weight = 1; //均分剩余的宽度。
-    [testLayout addSubview:rightButton];
+    UIButton *goneButton = [UIButton new];
+    [goneButton setTitle:NSLocalizedString(@"gone", @"") forState:UIControlStateNormal];
+    [goneButton addTarget:self action:@selector(handleGone:) forControlEvents:UIControlEventTouchUpInside];
+    goneButton.backgroundColor = [CFTool color:7];
+    goneButton.titleLabel.font = [CFTool font:14];
+    [goneButton sizeToFit];
+    goneButton.weight = 1; //均分剩余的宽度。
+    [testLayout addSubview:goneButton];
+    self.goneButton = goneButton;
     
 }
 
@@ -487,19 +484,20 @@
     NSLog(@"按下取消");
 }
 
--(void)handleReLayoutSwitch:(MyBaseLayout *)sender
+-(void)handleResetShow:(UIButton *)sender
 {
-    self.hideSubviewRelayoutLayout.hideSubviewReLayout = !self.hideSubviewRelayoutLayout.hideSubviewReLayout;
+    self.invisibleButton.myVisibility = MyVisibility_Visible;
+    self.goneButton.myVisibility = MyVisibility_Visible;
 }
 
--(void)handleHideSelf:(UIButton*)sender
+-(void)handleInvisible:(UIButton*)sender
 {
-    self.hiddenTestButton.hidden = YES;
+    sender.myVisibility = MyVisibility_Invisible;
 }
 
--(void)handleShowBrother:(UIButton*)sender
+-(void)handleGone:(UIButton*)sender
 {
-    self.hiddenTestButton.hidden = NO;
+    sender.myVisibility = MyVisibility_Gone;
 }
 
 -(void)handleLeftFlexed:(UISegmentedControl*)segmented

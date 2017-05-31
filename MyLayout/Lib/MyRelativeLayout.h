@@ -11,22 +11,23 @@
 
 
 /**
- *相对布局是一种里面的子视图通过相互之间的约束和依赖来进行布局和定位的布局视图。
- *相对布局里面的子视图的布局位置和添加的顺序无关，而是通过设置子视图的相对依赖关系来进行定位和布局的。
- *相对布局提供了和AutoLayout相似的能力。
+ 相对布局是一种里面的子视图通过相互之间的约束和依赖来进行布局和定位的布局视图。
+ 相对布局里面的子视图的布局位置和添加的顺序无关，而是通过设置子视图的相对依赖关系来进行定位和布局的。
+ 相对布局提供了和AutoLayout相似的能力。
  */
 @interface MyRelativeLayout : MyBaseLayout
 
 
 /**
- *子视图调用widthSize.equalTo(NSArray<MyLayoutSize*>均分宽度时当有子视图隐藏时是否参与宽度计算,这个属性只有在参与均分视图的子视图隐藏时才有效,默认是NO
+ *这个属性已经无效了，请使用子视图自身的扩展属性myVisibility属性来进行子视图的隐藏和显示的定制化处理。
  */
-@property(nonatomic, assign)  BOOL flexOtherViewWidthWhenSubviewHidden;
+@property(nonatomic, assign)  BOOL flexOtherViewWidthWhenSubviewHidden MYMETHODDEPRECATED("this property was invalid, please use subview's myVisibility to instead");
 
 /**
- *子视图调用heightSize.equalTo(NSArray<MyLayoutSize*>均分高度时当有子视图隐藏时是否参与高度计算,这个属性只有在参与均分视图的子视图隐藏时才有效，默认是NO
+ *这个属性已经无效了，请使用子视图自身的扩展属性myVisibility属性来进行子视图的隐藏和显示的定制化处理。
  */
-@property(nonatomic, assign)  BOOL flexOtherViewHeightWhenSubviewHidden;
+@property(nonatomic, assign)  BOOL flexOtherViewHeightWhenSubviewHidden MYMETHODDEPRECATED("this property was invalid, please use subview's myVisibility to instead");
+;
 
 
 @end

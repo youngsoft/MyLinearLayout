@@ -51,12 +51,22 @@
     
     self.textMessageLabel.text = model.textMessage;
     
-    self.imageMessageImageView.hidden = (model.imageMessage.length == 0);
-    if (model.imageMessage.length != 0)
+    if (model.imageMessage.length == 0)
+    {
+        self.imageMessageImageView.myVisibility = MyVisibility_Gone;
+    }
+    else
     {
         self.imageMessageImageView.image = [UIImage imageNamed:model.imageMessage];
         [self.imageMessageImageView sizeToFit];
-        self.imageMessageImageView.hidden = isImageMessageHidden;
+        if (isImageMessageHidden)
+        {
+            self.imageMessageImageView.myVisibility = MyVisibility_Gone;
+        }
+        else
+        {
+            self.imageMessageImageView.myVisibility = MyVisibility_Visible;
+        }
     }
 
     
@@ -74,6 +84,18 @@
 
     // Configure the view for the selected state
 }
+
+ //如果您的最低支持是iOS8，那么你可以重载这个方法来动态的评估cell的高度，Autolayout内部是通过这个方法来评估高度的，因此如果用MyLayout实现的话就不需要调用基类的方法，而是调用根布局视图的sizeThatFits来评估获取动态的高度。
+- (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority
+{
+    /*
+     通过布局视图的sizeThatFits方法能够评估出UITableViewCell的动态高度。sizeThatFits并不会进行布局而只是评估布局的尺寸。
+     因为cell的高度是自适应的，因此这里通过调用高度为wrap的布局视图的sizeThatFits来获取真实的高度。
+     */
+    return [self.rootLayout sizeThatFits:targetSize];  //如果使用系统自带的分割线，请记得将返回的高度height+1
+
+}
+
 
 #pragma mark -- Layout Construction
 

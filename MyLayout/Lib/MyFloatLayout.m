@@ -45,25 +45,6 @@
     return self.myCurrentSizeClass.clearFloat;
 }
 
-
--(CGFloat)weight
-{
-    return self.myCurrentSizeClass.weight;
-}
-
--(void)setWeight:(CGFloat)weight
-{
-    UIView *sc = self.myCurrentSizeClass;
-    if (sc.weight != weight)
-    {
-        sc.weight = weight;
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
-    }
-}
-
-
-
 @end
 
 
@@ -107,22 +88,6 @@
 -(MyOrientation)orientation
 {
     return self.myCurrentSizeClass.orientation;
-}
-
-
--(void)setGravity:(MyGravity)gravity
-{
-    MyFloatLayout *lsc = self.myCurrentSizeClass;
-    if (lsc.gravity != gravity)
-    {
-        lsc.gravity = gravity;
-        [self setNeedsLayout];
-    }
-}
-
--(MyGravity)gravity
-{
-    return self.myCurrentSizeClass.gravity;
 }
 
 
@@ -197,13 +162,13 @@
     
     for (UIView *sbv in sbs)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
         
         if (!isEstimate)
         {
-            sbvMyFrame.frame = sbv.bounds;
-            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvMyFrame:sbvMyFrame selfLayoutSize:selfSize];
+            sbvmyFrame.frame = sbv.bounds;
+            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame selfLayoutSize:selfSize];
         }
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
@@ -232,11 +197,11 @@
                         
             if (isEstimate && isSbvWrap)
             {
-                [(MyBaseLayout*)sbv estimateLayoutRect:sbvMyFrame.frame.size inSizeClass:sizeClass];
-                if (sbvMyFrame.multiple)
+                [(MyBaseLayout*)sbv estimateLayoutRect:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                if (sbvmyFrame.multiple)
                 {
-                    sbvMyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
-                    sbvsc = sbvMyFrame.sizeClass;
+                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    sbvsc = sbvmyFrame.sizeClass;
                 }
             }
         }
@@ -438,12 +403,12 @@
         CGFloat maxContentWidth = selfSize.width - paddingHorz;
         for (UIView *sbv in sbs)
         {
-            UIView *sbvsc = sbv.myCurrentSizeClass;
-            MyFrame *sbvMyFrame = sbv.myFrame;
-            
+            MyFrame *sbvmyFrame = sbv.myFrame;
+            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+           
             CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
             CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
-            CGRect rect = sbvMyFrame.frame;
+            CGRect rect = sbvmyFrame.frame;
             
             //因为这里是计算包裹宽度属性，所以只会计算那些设置了固定宽度的子视图
             
@@ -534,14 +499,14 @@
     
     for (UIView *sbv in sbs)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
         
         CGFloat topSpace = sbvsc.topPosInner.absVal;
         CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
         CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
         CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
-        CGRect rect = sbvMyFrame.frame;
+        CGRect rect = sbvmyFrame.frame;
         
         
         if (subviewSize != 0)
@@ -686,7 +651,6 @@
             
             //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
             CGRect cRect = CGRectMake(MAX((rect.origin.x - leadingSpace - horzSpace),paddingLeading), rect.origin.y - topSpace, MIN((rect.size.width + leadingSpace + trailingSpace),(selfSize.width - paddingHorz)), rect.size.height + topSpace + bottomSpace + vertSpace);
-            
             
             //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
             for (NSInteger i = trailingCandidateRects.count - 1; i >= 0; i--)
@@ -846,7 +810,7 @@
         if (rect.origin.x + rect.size.width + trailingSpace + horzSpace > maxWidth)
             maxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
         
-        sbvMyFrame.frame = rect;
+        sbvmyFrame.frame = rect;
         
     }
     
@@ -917,12 +881,12 @@
         CGFloat maxContentHeight = selfSize.height - paddingVert;
         for (UIView *sbv in sbs)
         {
-            UIView *sbvsc = sbv.myCurrentSizeClass;
-            MyFrame *sbvMyFrame = sbv.myFrame;
+            MyFrame *sbvmyFrame = sbv.myFrame;
+            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
             
             CGFloat topSpace = sbvsc.topPosInner.absVal;
             CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
-            CGRect rect = sbvMyFrame.frame;
+            CGRect rect = sbvmyFrame.frame;
             
             
             //这里有可能设置了固定的高度
@@ -1015,14 +979,14 @@
     
     for (UIView *sbv in sbs)
     {
-        UIView *sbvsc = sbv.myCurrentSizeClass;
-        MyFrame *sbvMyFrame = sbv.myFrame;
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
 
         CGFloat topSpace = sbvsc.topPosInner.absVal;
         CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
         CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
         CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
-        CGRect rect = sbvMyFrame.frame;
+        CGRect rect = sbvmyFrame.frame;
         
         if (sbvsc.widthSizeInner.dimeNumVal != nil)
             rect.size.width = sbvsc.widthSizeInner.measure;
@@ -1313,7 +1277,7 @@
         if (rect.origin.y + rect.size.height + bottomSpace + vertSpace > maxHeight)
             maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
         
-        sbvMyFrame.frame = rect;
+        sbvmyFrame.frame = rect;
         
     }
     
@@ -1334,22 +1298,13 @@
     else
     {
         CGFloat addXPos = 0;
-        MyGravity mghorz = lsc.gravity & MyGravity_Vert_Mask;
-        if (mghorz == MyGravity_Horz_Left)
-        {
-            mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Trailing : MyGravity_Horz_Leading;
-        }
-        else if (mghorz == MyGravity_Horz_Right)
-        {
-            mghorz = [MyBaseLayout isRTL] ? MyGravity_Horz_Leading : MyGravity_Horz_Trailing;
-        }
-        else;
+        MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
         
-        if (mghorz == MyGravity_Horz_Center)
+        if (horzGravity == MyGravity_Horz_Center)
         {
             addXPos = (selfSize.width - maxWidth) / 2;
         }
-        else if (mghorz == MyGravity_Horz_Trailing)
+        else if (horzGravity == MyGravity_Horz_Trailing)
         {
             addXPos = selfSize.width - maxWidth;
         }

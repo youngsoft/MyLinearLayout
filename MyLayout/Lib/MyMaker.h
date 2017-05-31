@@ -37,6 +37,9 @@
 -(MyMaker*)centerY;
 -(MyMaker*)center;
 
+-(MyMaker*)visibility;
+-(MyMaker*)alignment;
+
 -(MyMaker*)sizeToFit;
 
 

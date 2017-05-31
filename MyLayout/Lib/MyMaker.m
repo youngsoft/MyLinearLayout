@@ -230,6 +230,18 @@
     return [self addMethod:@"centerYPos"];
 }
 
+-(MyMaker*)visibility
+{
+    return [self addMethod:@"myVisibility"];
+}
+
+-(MyMaker*)alignment
+{
+    return [self addMethod:@"myAlignment"];
+}
+
+
+
 -(MyMaker*)sizeToFit
 {
     for (UIView *myView in _myViews)

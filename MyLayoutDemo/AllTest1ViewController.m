@@ -83,9 +83,26 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.navigationItem.titleView = [[YYFPSLabel alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
+
+    
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    self.navigationItem.titleView = [[YYFPSLabel alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // 注意这里。为了达到动态高度UITableviewCell的加载性能最高以及高性能，一定要设置estimatedRowHeight这个属性。这个属性用来评估
+    //UITableViewCell的高度。如果实现了这个方法，系统会根据数量重复调用这个方法，得出评估的总体高度。然后再根据显示的需要调用-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath方法来确定真实的高度。如果您不设置estimatedRowHeight，加载性能将非常的低下！！！！
+    //如果不同的cell有差异那么可以通过实现协议方法-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath来定制化
+    self.tableView.estimatedRowHeight = 60;
+    
+    //设置所有cell的高度为高度自适应，如果cell高度是动态的请这么设置。 如果不同的cell有差异那么可以通过实现协议方法-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+    //如果您最低要支持到iOS7那么请您实现-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath方法来代替这个属性的设置。
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    
+    
+    [self.tableView registerClass:[AllTest1TableViewCell class] forCellReuseIdentifier:@"alltest1_cell"];
+    
+    
     
     /**
         布局视图和UITableView的结合可以很简单的实现静态和动态高度的tableviewcell。以及tableview的section,tableheaderfooter部分使用布局视图的方法
@@ -124,7 +141,7 @@
     //这个例子用来构建一个动态高度的头部布局视图。
     MyLinearLayout *tableHeaderViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     tableHeaderViewLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    tableHeaderViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 0); //高度不确定可以设置为0。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用MyLayout的特性，减少常数的使用。
+    tableHeaderViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 0); //高度不确定可以设置为0。但是宽度一定要写明确的值。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用MyLayout的特性，减少常数的使用。
     tableHeaderViewLayout.myHorzMargin = 0; //这里注意设置宽度和父布局保持一致。
     tableHeaderViewLayout.backgroundImage = [UIImage imageNamed:@"bk1"];
     [tableHeaderViewLayout setTarget:self action:@selector(handleTableHeaderViewLayoutClick:)];
@@ -139,6 +156,7 @@
     [tableHeaderViewLayout addSubview:label1];
     
     
+    
     UILabel *label2 = [UILabel new];
     label2.text = NSLocalizedString(@" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", @"");
     label2.textColor = [CFTool color:4];
@@ -150,10 +168,25 @@
     [tableHeaderViewLayout addSubview:label2];
     
     
-    [tableHeaderViewLayout layoutIfNeeded];    //这里必须要在加入前执行这句！！！
+    [tableHeaderViewLayout layoutIfNeeded];    //因为高度是wrap的，所以这里必须要在加入前执行这句！！！ 原因是tableHeaderView必须要明确的指定frame。所以通过layoutIfNeeded来算出真实视图真实的frame值。因为tableHeaderViewLayout这时候并没有父视图，所以这里必须要明确的通过frame指定宽度，这样最终的计算结果才正确。
     self.tableView.tableHeaderView = tableHeaderViewLayout;
+    
+    
+    //因为tableHeaderViewLayout的高度是通过layoutIfNeed来确定的。因此在屏幕旋转时我们需要手动再次调整tableHeaderViewLayout的frame值。
+    //因此您需要实现这个block来实现当布局视图在横竖屏切换时的frame的动态更新。。。
+    //注意这个block不会只执行一次，而是长期存在，因此要注意block内对象的引用的问题。
+    __weak UITableView *weakTableview = self.tableView;
+    tableHeaderViewLayout.rotationToDeviceOrientationBlock = ^(MyBaseLayout *layout, BOOL isFirst, BOOL isPortrait)
+    {
+        if (!isFirst)
+        {
+            [weakTableview.tableHeaderView layoutIfNeeded];
+            weakTableview.tableHeaderView = weakTableview.tableHeaderView;
+        }
+    };
 
 }
+
 
 -(void)createTableFooterView
 {
@@ -182,7 +215,7 @@
     label4.adjustsFontSizeToFitWidth = YES;
     [label4 sizeToFit];
     [tableFooterViewLayout addSubview:label4];
-    self.tableView.tableFooterView = tableFooterViewLayout;  //这里尺寸固定因此不需要调用layoutIfNeeded
+    self.tableView.tableFooterView = tableFooterViewLayout;  //这里因为明确的设置了视图的frame值，因此不需要调用layoutIfNeeded来计算尺寸了。
     
 
 }
@@ -197,16 +230,26 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //如果使用了布局来评估cell高度的话，那么请不要使用- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath 这个方法，否则可能造成系统崩溃！！！
-    AllTest1TableViewCell *cell = (AllTest1TableViewCell*)[tableView dequeueReusableCellWithIdentifier:@"alltest1_cell"];
-    if (cell == nil)
-        cell = [[AllTest1TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"alltest1_cell"];
+
+    AllTest1TableViewCell *cell;
     
+    if ([UIDevice currentDevice].systemVersion.floatValue < 8)
+    {
+     //如果您的系统要求最低支持到iOS7那么需要通过-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 来评估高度，因此请不要使用- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath 这个方法来初始化UITableviewCell，否则可能造成系统崩溃！！！
+        cell = (AllTest1TableViewCell*)[tableView dequeueReusableCellWithIdentifier:@"alltest1_cell"];
+    }
+    else
+    {
+        //如果你最低支持到iOS8那么请用这个方法来初始化一个UITableviewCell,用这个方法要记得调用registerClass来注册UITableviewCell，否则可能会返回nil
+        cell = (AllTest1TableViewCell*)[tableView dequeueReusableCellWithIdentifier:@"alltest1_cell" forIndexPath:indexPath];
+    }
+    
+        
     AllTest1DataModel *model = [self.datas objectAtIndex:indexPath.row];
     BOOL isImageMessageHidden = [[self.imageHiddenFlags objectAtIndex:indexPath.row] boolValue];
     [cell setModel:model isImageMessageHidden:isImageMessageHidden];
     
-    //这里最后一行没有下划线
+    //这里设置其他位置有间隔线而最后一行没有下划线。我们可以借助布局视图本身所提供的边界线来代替掉系统默认的cell之间的间隔线，因为布局视图的边界线所提供的能力要大于默认的间隔线。
     if (indexPath.row  == self.datas.count - 1)
     {
         cell.rootLayout.bottomBorderline = nil;
@@ -251,29 +294,30 @@
 }
 
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // 注意这里。为了达到动态高度TableViewCell的加载性能最高以及高性能，一定要实现estimatedHeightForRowAtIndexPath这个方法。这个方法用来评估
-    //UITableViewCell的高度。如果实现了这个方法，系统会根据数量重复调用这个方法，得出评估的总体高度。然后再根据显示的需要调用heightForRowAtIndexPath方法来确定真实的高度。如果您不实现estimatedHeightForRowAtIndexPath这个方法，加载性能将非常的低下！！！！
-    return 40;  //这个评估尺寸你可以根据你的cell的一般高度来设置一个最合适的值。
-}
-
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //如果您的系统最低支持到iOS7那么需要实现这个方法来算出每个UITableviewCell的动态高度。如果最低支持到iOS8那么您可以直接返回UITableViewAutomaticDimension，或者不实现这个方法而通过设置UITableView的rowHeight为UITableViewAutomaticDimension就可以了。
     
-    AllTest1TableViewCell *cell = (AllTest1TableViewCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-
-    //通过布局视图的estimateLayoutRect函数能够评估出UITableViewCell的动态高度。estimateLayoutRect并不会进行布局
-    //而只是评估布局的尺寸，这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们
-    //传递了宽度为0的话则会按320的宽度来评估UITableViewCell的动态高度，这样当在375和414的宽度时评估出来的高度将不会正确，因此这里需要
-    //指定出真实的宽度尺寸；而高度设置为0的意思是表示高度不是固定值需要评估出来。
-    //UITableViewCell的动态高度评估不局限于线性布局，相对布局也是同样适用的。
-    CGRect rect = [cell.rootLayout estimateLayoutRect:CGSizeMake(tableView.frame.size.width, 0)];
-    return rect.size.height;  //如果使用系统自带的分割线，请返回rect.size.height+1
+    if ([UIDevice currentDevice].systemVersion.floatValue < 8)
+    {
+        //这里注意一下：不是调用tableview的cellForRowAtIndexPath方法！！！！，而是调用的UITableviewDataSource的方法。
+        AllTest1TableViewCell *cell = (AllTest1TableViewCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+        
+        //通过布局视图的sizeThatFits函数能够评估出UITableViewCell的动态高度。sizeThatFits并不会进行布局
+        //而只是评估布局的尺寸，这里的宽度不传0的原因是上面的UITableViewCell在建立时默认的宽度是320(不管任何尺寸都如此),因此如果我们
+        //传递了宽度为0的话则会按320的宽度来评估UITableViewCell的动态高度，这样当在375和414的宽度时评估出来的高度将不会正确，因此这里需要
+        //指定出真实的宽度尺寸；而高度设置为0的意思是表示高度不是固定值需要评估出来。
+        CGSize size = [cell.rootLayout sizeThatFits:CGSizeMake(tableView.frame.size.width, 0)];
+        return size.height;  //如果使用系统自带的分割线，请返回size.height+1
+    }
+    else
+    {
+        return UITableViewAutomaticDimension;
+    }
+    
 }
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -288,7 +332,11 @@
 -(void)handleTableHeaderViewLayoutClick:(MyBaseLayout*)sender
 {
     UILabel *label1 = [sender viewWithTag:1000];
-    label1.hidden = !label1.isHidden;
+    if (label1.myVisibility == MyVisibility_Visible)
+        label1.myVisibility = MyVisibility_Gone;
+    else
+        label1.myVisibility = MyVisibility_Visible;
+    
     
     [UIView animateWithDuration:0.3 animations:^{
         
