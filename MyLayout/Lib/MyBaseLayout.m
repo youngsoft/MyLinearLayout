@@ -2244,13 +2244,6 @@ void* _myObserverContextC = (void*)20175283;
             else
                 sbvmyFrame.height = [sbvsc.heightSizeInner measureWith:fitSize.height];
         }
-        else
-        {
-            if (sbvsc.heightSizeInner.dimeVal == nil)
-            {
-                sbvmyFrame.height = fitSize.height;
-            }
-        }
     }
 }
 

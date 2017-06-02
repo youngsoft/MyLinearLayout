@@ -3,6 +3,12 @@
 
 ---
 
+## [V1.3.8](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.8)(2017/6/2)
+
+#### Fixed
+1. 修复了1.3.7中对UILabel设置为`wrapContentWidth`时又同时在相对布局中同时设置了`topPos`和`bottomPos`时高度不正确的问题。这个问题在1.3.7中的Fixed#3条目中没有修复正确。
+
+
 ## [V1.3.7](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.7)(2017/6/1)
 
 #### Added
