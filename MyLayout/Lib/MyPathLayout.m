@@ -86,7 +86,7 @@
 
 -(void)setOrigin:(CGPoint)origin
 {
-    if (!CGPointEqualToPoint(_origin, origin))
+    if (!_myCGPointEqual(_origin, origin))
     {
         _origin = origin;
         [_pathLayout setNeedsLayout];

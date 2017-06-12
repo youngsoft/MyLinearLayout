@@ -31,26 +31,30 @@
     frameLayout.myMargin = 0;              //这个表示框架布局的尺寸和self.view保持一致,四周离父视图的边距都是0
     frameLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
 
-    UILabel *label = [[UILabel alloc] init];
-    label.text = @"统计";
-    label.textColor = [UIColor blackColor];
-    label.font = [UIFont systemFontOfSize:17];
-    label.myCenterY = 0;
-    label.myLeft = 10;
-    [label sizeToFit];
-    label.wrapContentSize = YES;
+    UILabel *label1 = [[UILabel alloc] init];
+    label1.text = @"统计";
+    label1.textColor = [UIColor blackColor];
+    label1.font = [UIFont systemFontOfSize:17];
+    label1.myCenterY = 0;
+    label1.myLeft = 10;
+    label1.wrapContentSize = YES;
     
-    [frameLayout addSubview:label];
+    [frameLayout addSubview:label1];
     
-    label = [[UILabel alloc] init];
-    label.text = @"统计";
-    label.textColor = [UIColor blackColor];
-    label.font = [UIFont systemFontOfSize:17];
-    label.myTop = 200;
-    label.myLeft = 10;
-    [label sizeToFit];
-    label.wrapContentSize = YES;
-    [frameLayout addSubview:label];
+    UILabel *label2 = [[UILabel alloc] init];
+    label2.text = @"统计";
+    label2.textColor = [UIColor blackColor];
+    label2.font = [UIFont systemFontOfSize:17];
+    label2.myTop = 200;
+    label2.myLeft = 10;
+    label2.wrapContentSize = YES;
+    [frameLayout addSubview:label2];
+    
+
+    [frameLayout layoutIfNeeded];
+    
+   // XCTAssertTrue(CGRectEqualToRect(label1, <#CGRect rect2#>)([frameLayout estimateLayoutRect:CGSizeZero].size, CGSizeMake(0, 0)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout estimateLayoutRect:CGSizeZero].size));
+    
 
 }
 

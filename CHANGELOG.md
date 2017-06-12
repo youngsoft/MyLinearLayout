@@ -3,6 +3,15 @@
 
 ---
 
+## [V1.3.9](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.9)(2017/6/12)
+
+#### Fixed
+1. 修复了[#BUG41](https://github.com/youngsoft/MyLinearLayout/issues/41)。原因是当左右两边的子视图尺寸有重合并且高度或者宽度相等时没有将两边的占用区域进行合并，从而影响了新加入的子视图的尺寸设置。
+2. 修复了[#BUG40](https://github.com/youngsoft/MyLinearLayout/issues/40)。原因是当UIScrollView的contentOffset值为负数时，如果修改视图的frame值将会把contentOffset的值重置为0.这个是一个系统的特性，因此解决的方案是不修改frame而是修改bounds和center两个属性。
+3. 修复了[#BUG39](https://github.com/youngsoft/MyLinearLayout/issues/39)。原因是当设置视图的frame的pt值时如果pt值无法转化为有效的设备的物理像素时将会出现：**文字模糊发虚、线发虚、以及文字无法多行显示、以及当使用layer的cornerRadius时无法绘制出正确的圆形的问题**。因此解决的方案是在布局完成后设置frame时会将pt值四舍五入转化为最小的可显示的物理像素值。
+
+
+
 ## [V1.3.8](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.8)(2017/6/2)
 
 #### Fixed

@@ -17,8 +17,16 @@ void* _myObserverContextA = (void*)20175281;
 void* _myObserverContextB = (void*)20175282;
 void* _myObserverContextC = (void*)20175283;
 
+CGFloat _myMyLayoutScale = 1.0;
+CGFloat _myMLayoutSizeError = 0.0;
 
 @implementation UIView(MyLayoutExt)
+
++(void)load
+{
+    _myMyLayoutScale = [UIScreen mainScreen].scale;
+    _myMLayoutSizeError = (1.0 / _myMyLayoutScale + 0.0001); //误差增量。
+}
 
 
 -(MyLayoutPos*)topPos
@@ -1257,7 +1265,7 @@ void* _myObserverContextC = (void*)20175283;
     if (self.cacheEstimatedRect)
         _useCacheRects = YES;
     
-    return CGRectMake(0, 0, selfSize.width, selfSize.height);
+    return CGRectMake(0, 0, _myRoundNumber(selfSize.width), _myRoundNumber(selfSize.height));
 }
 
 //只获取计算得到尺寸，不进行真正的布局。
@@ -1374,7 +1382,7 @@ void* _myObserverContextC = (void*)20175283;
         //只监控父视图的尺寸变换
         CGRect rcOld = [change[NSKeyValueChangeOldKey] CGRectValue];
         CGRect rcNew = [change[NSKeyValueChangeNewKey] CGRectValue];
-        if (!CGSizeEqualToSize(rcOld.size, rcNew.size))
+        if (!_myCGSizeEqual(rcOld.size, rcNew.size))
         {
             [self myUpdateLayoutRectInNoLayoutSuperview:object];
         }
@@ -1789,6 +1797,7 @@ void* _myObserverContextC = (void*)20175283;
         {
             newSelfSize = [self calcLayoutRect:[self myCalcSizeInNoLayoutSuperview:self.superview currentSize:oldSelfSize] isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass sbs:nil];
         }
+        newSelfSize = _myRoundSize(newSelfSize);
         _useCacheRects = NO;
 
         //设置子视图的frame并还原
@@ -1811,21 +1820,24 @@ void* _myObserverContextC = (void*)20175283;
                 }
                 
                 //这里的位置需要进行有效像素的舍入处理，否则可能出现文本框模糊，以及视图显示可能多出一条黑线的问题。
-                CGRect rc = sbvmyFrame.frame;
-                if (![sbv isKindOfClass:[MyBaseLayout class]])
+                //原因是当frame中的值不能有效的转化为最小可绘制的物理像素时就会出现模糊，虚化，多出黑线，以及layer处理圆角不圆的情况。
+                //所以这里要将frame中的点转化为有效的点。
+                //这里之所以讲布局子视图的转化方法和一般子视图的转化方法区分开来是因为。我们要保证布局子视图不能出现细微的重叠，因为布局子视图有边界线
+                //如果有边界线而又出现细微重叠的话，那么边界线将无法正常显示，因此这里做了一个特殊的处理。
+                CGRect rc;
+                if ([sbv isKindOfClass:[MyBaseLayout class]])
                 {
-                    rc = _myRoundRect(rc);
-                }
-                
-                if (CGAffineTransformIsIdentity(sbv.transform))
-                {
-                    sbv.frame = rc;
+                   rc  = _myRoundRectForLayout(sbvmyFrame.frame);
                 }
                 else
                 {
-                    sbv.center = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height);
-                    sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, rc.size.width, rc.size.height);
+                    rc = _myRoundRect(sbvmyFrame.frame);
                 }
+                
+                    
+                sbv.center = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height);
+                sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, rc.size.width, rc.size.height);
+                
 
             }
             
@@ -1846,9 +1858,15 @@ void* _myObserverContextC = (void*)20175283;
             [sbvmyFrame reset];
         }
         
-        //调整自身
-        if (!CGSizeEqualToSize(oldSelfSize,newSelfSize) && newSelfSize.width != CGFLOAT_MAX)
+        
+        if (newSelfSize.width != CGFLOAT_MAX && (lsc.wrapContentWidth || lsc.wrapContentHeight))
         {
+            
+            //因为布局子视图的新老尺寸计算在上面有两种不同的方法，因此这里需要考虑两种计算的误差值，而这两种计算的误差值是不超过1/屏幕精度的。
+            //因此我们认为当二者的值超过误差时我们才认为有尺寸变化。
+            BOOL isWidthAlter = fabs(newSelfSize.width - oldSelfSize.width) > _myMLayoutSizeError;
+            BOOL isHeightAlter = fabs(newSelfSize.height - oldSelfSize.height) > _myMLayoutSizeError;
+            
             //如果父视图也是布局视图，并且自己隐藏则不调整自身的尺寸和位置。
             BOOL isAdjustSelf = YES;
             if (self.superview != nil && [self.superview isKindOfClass:[MyBaseLayout class]])
@@ -1857,7 +1875,7 @@ void* _myObserverContextC = (void*)20175283;
                 if ([supl myIsNoLayoutSubview:self])
                     isAdjustSelf = NO;
             }
-            if (isAdjustSelf)
+            if (isAdjustSelf && (isWidthAlter || isHeightAlter))
             {
                 
                 if (newSelfSize.width < 0)
@@ -1872,13 +1890,36 @@ void* _myObserverContextC = (void*)20175283;
                 
                 if (CGAffineTransformIsIdentity(self.transform))
                 {
-                    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, newSelfSize.width, newSelfSize.height);
+                    CGRect currentFrame = self.frame;
+                    if (isWidthAlter && lsc.wrapContentWidth)
+                        currentFrame.size.width = newSelfSize.width;
+                    
+                    if (isHeightAlter && lsc.wrapContentHeight)
+                        currentFrame.size.height = newSelfSize.height;
+                    
+                    self.frame = currentFrame;
                 }
                 else
                 {
-                    self.bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, newSelfSize.width, newSelfSize.height);
-                    self.center = CGPointMake(self.center.x + (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x, self.center.y + (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y);
-                }
+                    CGRect currentBounds = self.bounds;
+                    CGPoint currentCenter = self.center;
+                    
+                    if (isWidthAlter && lsc.wrapContentWidth)
+                    {
+                        currentBounds.size.width = newSelfSize.width;
+                        currentCenter.x += (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x;
+                    }
+                    
+                    if (isHeightAlter && lsc.wrapContentHeight)
+                    {
+                        currentBounds.size.height = newSelfSize.height;
+                        currentCenter.y += (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y;
+                    }
+
+                    self.bounds = currentBounds;
+                    self.center = currentCenter;
+                    
+                 }
             }
         }
         
@@ -1933,7 +1974,7 @@ void* _myObserverContextC = (void*)20175283;
                         centerPonintSelf.x = rectSuper.size.width - centerPonintSelf.x;
                     
                     //如果有变化则只调整自己的center。而不变化
-                    if (!CGPointEqualToPoint(self.center, centerPonintSelf))
+                    if (!_myCGPointEqual(self.center, centerPonintSelf))
                     {
                         self.center = centerPonintSelf;
                     }
@@ -1963,7 +2004,7 @@ void* _myObserverContextC = (void*)20175283;
                         superCenter.x += (superBounds.size.width - supv.bounds.size.width) * supv.layer.anchorPoint.x;
                     }
                     
-                    if (!CGRectEqualToRect(supv.bounds, superBounds))
+                    if (!_myCGRectEqual(supv.bounds, superBounds))
                     {
                         supv.center = superCenter;
                         supv.bounds = superBounds;
@@ -2434,7 +2475,8 @@ void* _myObserverContextC = (void*)20175283;
     if ([MyBaseLayout isRTL])
         rectSelf.origin.x = rectSuper.size.width - rectSelf.origin.x - rectSelf.size.width;
     
-    if (!CGRectEqualToRect(rectSelf, oldRectSelf))
+    rectSelf = _myRoundRect(rectSelf);
+    if (!_myCGRectEqual(rectSelf, oldRectSelf))
     {
         if (rectSelf.size.width < 0)
         {
@@ -3339,6 +3381,7 @@ BOOL _hasBegin;
         layerRect = CGRectMake(self.bottomBorderline.headIndent, layoutSize.height - self.bottomBorderline.thick / scale - self.bottomBorderline.offset, layoutSize.width - self.bottomBorderline.headIndent - self.bottomBorderline.tailIndent, self.bottomBorderline.thick /scale);
         fromPoint = CGPointMake(0, 0);
         toPoint = CGPointMake(layerRect.size.width, 0);
+    
     }
     else
     {
@@ -3354,7 +3397,9 @@ BOOL _hasBegin;
     }
     
     //把动画效果取消。
-    if (!CGRectEqualToRect(layer.frame, layerRect))
+    
+    
+    if (!_myCGRectEqual(layer.frame, layerRect))
     {
         if (layer.lineDashPhase == 0)
         {
@@ -3500,28 +3545,76 @@ BOOL _myCGFloatGreatOrEqual(CGFloat f1, CGFloat f2)
 #endif
 }
 
+BOOL _myCGSizeEqual(CGSize sz1, CGSize sz2)
+{
+    return _myCGFloatEqual(sz1.width, sz2.width) && _myCGFloatEqual(sz1.height, sz2.height);
+}
+
+BOOL _myCGPointEqual(CGPoint pt1, CGPoint pt2)
+{
+    return _myCGFloatEqual(pt1.x, pt2.x) && _myCGFloatEqual(pt1.y, pt2.y);
+}
+
+BOOL _myCGRectEqual(CGRect rect1, CGRect rect2)
+{
+    return _myCGSizeEqual(rect1.size, rect2.size) && _myCGPointEqual(rect1.origin, rect2.origin);
+}
+
+
 CGFloat _myRoundNumber(CGFloat f)
 {
-    if (f == CGFLOAT_MAX)
+    if (f == 0 || f == CGFLOAT_MAX || f == -CGFLOAT_MAX)
         return f;
     
-    static CGFloat scale;
-    scale = [UIScreen mainScreen].scale;
-    static CGFloat inc;
-    inc = 0.5/scale;
+    int fi = (int)f;
+    if (f == fi)
+        return fi;
     
-    f += inc;
-    f *= scale;
-    return floor(f) / scale;
+    //按精度四舍五入
+    //正确的算法应该是。x = 0; y = 0;  0<x<0.5 y = 0;   x = 0.5 y = 0.5;  0.5<x<1 y = 0.5; x=1 y = 1;
+    
+    if (f < 0)
+    {
+        return ceil(f * _myMyLayoutScale) / _myMyLayoutScale;
+    }
+    else
+    {
+        return  floor(f *_myMyLayoutScale) / _myMyLayoutScale;
+    }
+
 }
+
+CGRect _myRoundRectForLayout(CGRect rect)
+{    
+    CGFloat x1 = rect.origin.x;
+    CGFloat y1 = rect.origin.y;
+    CGFloat w1 = rect.size.width;
+    CGFloat h1 = rect.size.height;
+    
+    rect.origin.x =  _myRoundNumber(x1);
+    rect.origin.y = _myRoundNumber(y1);
+    
+    CGFloat mx = _myRoundNumber(x1 + w1);
+    CGFloat my = _myRoundNumber(y1 + h1);
+    
+    rect.size.width = mx - rect.origin.x;
+    rect.size.height = my - rect.origin.y;
+    
+    return rect;
+    
+}
+
+
 
 CGRect _myRoundRect(CGRect rect)
 {
-    rect.origin.x = _myRoundNumber(rect.origin.x);
+    rect.origin.x =  _myRoundNumber(rect.origin.x);
     rect.origin.y = _myRoundNumber(rect.origin.y);
     rect.size.width = _myRoundNumber(rect.size.width);
     rect.size.height = _myRoundNumber(rect.size.height);
+    
     return rect;
+    
 }
 
 CGSize _myRoundSize(CGSize size)

@@ -666,10 +666,24 @@
             for (NSInteger i = leadingCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)leadingCandidateRects[i]).CGRectValue;
-                if (_myCGFloatLessOrEqual(CGRectGetMaxY(candidateRect), CGRectGetMinY(cRect)))
+                
+                CGFloat candidateMaxY = CGRectGetMaxY(candidateRect);
+                CGFloat candidateMaxX = CGRectGetMaxX(candidateRect);
+                CGFloat cMinx = CGRectGetMinX(cRect);
+                
+                if (_myCGFloatLessOrEqual(candidateMaxY, CGRectGetMinY(cRect)))
                 {
                   [leadingCandidateRects removeObjectAtIndex:i];
                 }
+                else if (_myCGFloatEqual(candidateMaxY, CGRectGetMaxY(cRect)) && _myCGFloatLessOrEqual(cMinx,candidateMaxX))
+                {
+                    [leadingCandidateRects removeObjectAtIndex:i];
+                    cRect = CGRectUnion(cRect, candidateRect);
+                    cRect.size.width += candidateMaxX - cMinx;
+                    
+                }
+
+                
             }
             
             
@@ -790,10 +804,19 @@
             for (NSInteger i = trailingCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)trailingCandidateRects[i]).CGRectValue;
-                if (_myCGFloatLessOrEqual(CGRectGetMaxY(candidateRect), CGRectGetMinY(cRect)))
+                CGFloat candidateMaxY = CGRectGetMaxY(candidateRect);
+                CGFloat candidateMinX = CGRectGetMinX(candidateRect);
+                CGFloat cMaxX = CGRectGetMaxX(cRect);
+                if (_myCGFloatLessOrEqual(candidateMaxY, CGRectGetMinY(cRect)))
                 {
                     [trailingCandidateRects removeObjectAtIndex:i];
                  }
+                else if ( _myCGFloatEqual(candidateMaxY, CGRectGetMaxY(cRect)) && _myCGFloatLessOrEqual(candidateMinX, cMaxX))
+                {//当右边的高度和cRect的高度相等，又有重合时表明二者可以合并为一个区域。
+                    [trailingCandidateRects removeObjectAtIndex:i];
+                    cRect = CGRectUnion(cRect, candidateRect);
+                    cRect.size.width += cMaxX - candidateMinX; //要加上重叠部分来增加宽度，否则会出现宽度不正确的问题。
+                }
             }
             
             [leadingCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
@@ -1142,10 +1165,21 @@
             {
                 CGRect candidateRect = ((NSValue*)topCandidateRects[i]).CGRectValue;
 
-                if (_myCGFloatLessOrEqual(CGRectGetMaxX(candidateRect), CGRectGetMinX(cRect)))
+                CGFloat candidateMaxX = CGRectGetMaxX(candidateRect);
+                CGFloat candidateMaxY = CGRectGetMaxY(candidateRect);
+                CGFloat cMinY = CGRectGetMinY(cRect);
+                
+                if (_myCGFloatLessOrEqual(candidateMaxX, CGRectGetMinX(cRect)))
                 {
                     [topCandidateRects removeObjectAtIndex:i];
                 }
+                else if (_myCGFloatEqual(candidateMaxX, CGRectGetMaxX(cRect)) && _myCGFloatLessOrEqual(cMinY,candidateMaxY))
+                {
+                    [topCandidateRects removeObjectAtIndex:i];
+                    cRect = CGRectUnion(cRect, candidateRect);
+                    cRect.size.height += candidateMaxY - cMinY;
+                }
+
             }
             
             [bottomCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
@@ -1256,10 +1290,22 @@
             for (NSInteger i = bottomCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)bottomCandidateRects[i]).CGRectValue;
-                if (_myCGFloatLessOrEqual(CGRectGetMaxX(candidateRect), CGRectGetMinX(cRect)))
+                
+                CGFloat candidateMaxX = CGRectGetMaxX(candidateRect);
+                CGFloat candidateMinY = CGRectGetMinY(candidateRect);
+                CGFloat cMaxY = CGRectGetMaxY(cRect);
+                if (_myCGFloatLessOrEqual(candidateMaxX, CGRectGetMinX(cRect)))
                 {
                     [bottomCandidateRects removeObjectAtIndex:i];
                 }
+                else if ( _myCGFloatEqual(candidateMaxX, CGRectGetMaxX(cRect)) && _myCGFloatLessOrEqual(candidateMinY, cMaxY))
+                {//当右边的宽度和cRect的宽度相等，又有重合时表明二者可以合并为一个区域。
+                    [bottomCandidateRects removeObjectAtIndex:i];
+                    cRect = CGRectUnion(cRect, candidateRect);
+                    cRect.size.height += cMaxY - candidateMinY; //要加上重叠部分来增加高度，否则会出现高度不正确的问题。
+                }
+
+                
             }
             
             

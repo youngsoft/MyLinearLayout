@@ -37,7 +37,7 @@
  */
 
 
-//Current version is 1.3.8, please open: https://github.com/youngsoft/MyLinearLayout/blob/master/CHANGELOG.md to show the changes.
+//Current version is 1.3.9, please open: https://github.com/youngsoft/MyLinearLayout/blob/master/CHANGELOG.md to show the changes.
 
 
 #ifndef MyLayout_MyLayout_h

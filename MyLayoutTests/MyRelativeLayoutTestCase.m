@@ -333,6 +333,52 @@
 
 }
 
+-(void)testWrapContentHeight3
+{
+    MyRelativeLayout * midView = [MyRelativeLayout new];
+    midView.wrapContentSize = YES;
+    
+    UILabel * cartypeLabel = [UILabel new];
+    cartypeLabel.mySize = CGSizeMake(90, 30);
+    cartypeLabel.centerXPos.equalTo(@0);
+    cartypeLabel.topPos.equalTo(@0);
+    [midView addSubview:cartypeLabel];  //90 30;
+    
+    UILabel * line = [UILabel new];
+    line.heightSize.equalTo(@2);
+    line.topPos.equalTo(cartypeLabel.bottomPos).offset(5);
+    line.widthSize.equalTo(cartypeLabel.widthSize).add(20); //110, 37
+    [midView addSubview:line];
+    
+    UIView * leftView = [[UIView alloc]init];
+    leftView.heightSize.equalTo(@8);
+    leftView.widthSize.equalTo(@8);
+    leftView.leftPos.equalTo(@0);
+    leftView.centerYPos.equalTo(line.centerYPos);  //118,37
+    [midView addSubview:leftView];
+    
+    line.leftPos.equalTo(leftView.rightPos);
+    
+    
+    UIView * rightView = [[UIView alloc]init];
+    rightView.heightSize.equalTo(@8);
+    rightView.widthSize.equalTo(@8);
+    rightView.leftPos.equalTo(line.rightPos);
+    rightView.centerYPos.equalTo(line.centerYPos);
+    [midView addSubview:rightView];    //126, 37
+    
+    UILabel * numLabel = [UILabel new];
+    numLabel.mySize = CGSizeMake(40, 20);
+    numLabel.topPos.equalTo(line.bottomPos).offset(5); //126,62
+    numLabel.centerXPos.equalTo(@0);
+    [midView addSubview:numLabel];
+    
+   CGRect sz =  [midView estimateLayoutRect:CGSizeZero];
+    
+    NSLog(@"%@",NSStringFromCGRect(sz));
+    
+}
+
 -(void)testWrapContentWidth1
 {
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
@@ -613,6 +659,188 @@
   //  XCTAssertTrue(CGRectEqualToRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)], CGRectMake(0,0,max*3, 0)), @"rect is:%@", NSStringFromCGRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)]));
 
     
+}
+
+-(void)testDemo1
+{
+    MyRelativeLayout *_layoutRoot = nil;
+    
+    MyRelativeLayout* relative = [MyRelativeLayout new];
+  //  relative.widthSize.equalTo(self.contentView.widthSize);
+    relative.wrapContentHeight = YES;
+    _layoutRoot = relative;
+    
+    
+    // 头像区域
+    MyLinearLayout* linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    linear.wrapContentSize = YES;
+    linear.padding = UIEdgeInsetsMake(12, 15, 12, 15);
+    linear.myLeading = 0.0f;
+    [_layoutRoot addSubview:linear];
+    MyLinearLayout *_layoutPortrait = linear;
+    
+    // 头像
+    CGFloat pWidth = 40.0f;
+    UIImageView* imgv = [UIImageView new];
+    [imgv setClipsToBounds:YES];
+    [imgv setContentMode:UIViewContentModeScaleAspectFit];
+    imgv.myWidth = pWidth;
+    imgv.myHeight = pWidth;
+    imgv.layer.masksToBounds = YES;
+    imgv.layer.cornerRadius = pWidth/2.0f;
+    [_layoutPortrait addSubview:imgv];
+    
+    CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
+    // 最右侧的附加区域
+    linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    linear.heightSize.equalTo(_layoutRoot.heightSize);
+    linear.widthSize.equalTo(@(screenWidth)).multiply(0.24).min(90.0f);
+    linear.myTrailing = 0.0f;
+    linear.trailingPadding = 15.0f;
+    linear.subviewVSpace = 8.0f;
+    linear.gravity = MyGravity_Horz_Right|MyGravity_Vert_Center;
+    [_layoutRoot addSubview:linear];
+    MyLinearLayout * _layoutAccessory = linear;
+    
+    // 时间
+    UILabel* lbl = [UILabel new];
+    lbl.text = @"2019-11-11";
+    [lbl setTextAlignment:NSTextAlignmentRight];
+    lbl.font = [UIFont systemFontOfSize:12];
+    [lbl setMinimumScaleFactor:10.0f];
+    [lbl setTextColor:[UIColor greenColor]];
+    lbl.wrapContentSize = YES;
+    lbl.widthSize.equalTo(lbl.widthSize).uBound(_layoutAccessory.widthSize,-2,1);
+    [lbl setNumberOfLines:1];
+    [_layoutAccessory addSubview:lbl];
+    
+    // 附加区域底部
+    linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    linear.gravity = MyGravity_Vert_Center|MyGravity_Horz_Right;
+    linear.wrapContentHeight = NO;
+    linear.widthSize.equalTo(_layoutAccessory.widthSize);
+    linear.myHeight = 20.0f;
+    linear.subviewHSpace = 4.0f;
+    [_layoutAccessory addSubview:linear];
+    MyLinearLayout *_layoutAccessoryBottom = linear;
+    
+    // 勿扰图标
+    UIImage* image = [UIImage imageNamed:@"edit"];
+    imgv = [[UIImageView alloc] initWithImage:image];
+    [imgv sizeToFit];
+    [imgv setHidden:YES];
+    [_layoutAccessoryBottom addSubview:imgv];
+    
+    // 勿扰状态下，有新消息时的小红点提示
+    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6.0f, 6.0f)];
+    [view setBackgroundColor:[UIColor greenColor]];
+    [view setHidden:YES];
+    view.layer.masksToBounds = YES;
+    view.layer.cornerRadius = 3.0f;
+    [_layoutAccessoryBottom addSubview:view];
+    
+    // 非勿扰状态下未读消息数
+    lbl = [UILabel new];
+    lbl.text = @"1";
+    [lbl setTextAlignment:NSTextAlignmentCenter];
+    [lbl setFont:[UIFont systemFontOfSize:10]];
+    [lbl setTextColor:[UIColor whiteColor]];
+    [lbl setBackgroundColor:[UIColor redColor]];
+    [_layoutAccessoryBottom addSubview:lbl];
+    [lbl setNumberOfLines:1];
+    lbl.heightSize.equalTo(lbl.heightSize).add(4.0f).lBound(@16,0,1);
+    lbl.widthSize.equalTo(lbl.widthSize).add(8.0f).lBound(@16,0,1).uBound(_layoutAccessory.widthSize,0,1);
+    lbl.layer.masksToBounds = YES;
+    lbl.layer.cornerRadius = 8.0f;
+    // [lbl setHidden:YES];
+    
+    // 中间区域
+    linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    linear.wrapContentWidth = NO;
+    linear.wrapContentHeight = YES;
+    linear.myVertMargin = 0.0f;
+    linear.heightSize.min(67.0f);
+    linear.leadingPos.equalTo(_layoutPortrait.trailingPos);
+    linear.trailingPos.equalTo(_layoutAccessory.leadingPos);
+    linear.gravity = MyGravity_Vert_Center;
+    linear.subviewVSpace = 8.0f;
+    [_layoutRoot addSubview:linear];
+    MyLinearLayout * _layoutContent = linear;
+    
+    // 标题区域
+    relative = [MyRelativeLayout new];
+    relative.widthSize.equalTo(_layoutContent.widthSize);
+    relative.wrapContentHeight = YES;
+    [_layoutContent addSubview:relative];
+    MyRelativeLayout * _layoutTitle = relative;
+    
+    // 会话名称
+    lbl = [UILabel new];
+    lbl.text = @"asdfklajdf爱的色放就爱";
+    lbl.myLeading = 0.0f;
+    lbl.wrapContentSize = YES;
+    [lbl setFont:[UIFont systemFontOfSize:17]];
+    [lbl setTextColor:[UIColor greenColor]];
+    lbl.numberOfLines = 1;
+    [_layoutTitle addSubview:lbl];
+    UILabel *_lblTitle = lbl;
+    
+    // 名称右侧的标记（例如，选题、部门等，作用是标记会话的类型）
+    lbl = [UILabel new];
+    lbl.text = @"选题";
+    [lbl setTextAlignment:NSTextAlignmentCenter];
+    [lbl setFont:[UIFont systemFontOfSize:10]];
+    lbl.widthSize.equalTo(lbl.widthSize);
+    lbl.heightSize.equalTo(lbl.heightSize).add(4.0f);
+    lbl.myTrailing = 4.0f;
+    lbl.centerYPos.equalTo(_lblTitle.centerYPos);
+    lbl.leadingPos.equalTo(_lblTitle.trailingPos).offset(4.0f);
+    [lbl setNumberOfLines:1];
+    [_layoutTitle addSubview:lbl];
+    UILabel *_lblMark = lbl;
+    
+    _lblTitle.trailingPos.uBound(_layoutTitle.rightPos,4.0+_lblMark.frame.size.width);
+    
+    // 摘要
+    linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    linear.widthSize.equalTo(_layoutContent.widthSize);
+    linear.wrapContentHeight = YES;
+    linear.subviewHSpace = 2.0f;
+    [_layoutContent addSubview:linear];
+    MyLinearLayout *_layoutSummary = linear;
+    
+    // 发送状态（例如：发送中，发送失败）
+    imgv = [UIImageView new];
+    [imgv setContentMode:UIViewContentModeScaleAspectFit];
+    imgv.wrapContentSize = YES;
+    [imgv setHidden:YES];
+    [_layoutSummary addSubview:imgv];
+    
+    // 勿扰状态下，在摘要显示的消息数
+    lbl = [UILabel new];
+    [lbl setTextAlignment:NSTextAlignmentCenter];
+    [lbl setFont:[UIFont systemFontOfSize:12]];
+    lbl.wrapContentSize = YES;
+    [lbl setNumberOfLines:1];
+    [lbl setHidden:YES];
+    [_layoutSummary addSubview:lbl];
+    
+    // 状态（包括：未读，已读，草稿，有人@）
+    lbl = [UILabel new];
+    [lbl setFont:[UIFont systemFontOfSize:12]];
+    lbl.wrapContentSize = YES;
+    [lbl setNumberOfLines:1];
+    [lbl setHidden:YES];
+    [_layoutSummary addSubview:lbl];
+    
+    // 摘要内容
+    lbl = [UILabel new];
+    [lbl setFont:[UIFont systemFontOfSize:12]];
+    lbl.weight = 1.0f;
+    lbl.wrapContentSize = YES;
+    [lbl setNumberOfLines:1];
+    [_layoutSummary addSubview:lbl];
+
 }
 
 - (void)testPerformanceExample {

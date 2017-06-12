@@ -1278,7 +1278,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.youngsoft.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = MyLayout;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyLayout.app/MyLayout";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyLayoutDemo.app/MyLayoutDemo";
 			};
 			name = Debug;
 		};
@@ -1295,7 +1295,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.youngsoft.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = MyLayout;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyLayout.app/MyLayout";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyLayoutDemo.app/MyLayoutDemo";
 			};
 			name = Release;
 		};
