@@ -1994,13 +1994,13 @@ CGFloat _myMLayoutSizeError = 0.0;
                     
                     if (supv.wrapContentHeight)
                     {
-                        superBounds.size.height = lsc.myTop + newSelfSize.height + lsc.myBottom;
+                        superBounds.size.height = [self myValidMeasure:supv.heightSizeInner sbv:supv calcSize:lsc.myTop + newSelfSize.height + lsc.myBottom sbvSize:superBounds.size selfLayoutSize:newSelfSize];
                         superCenter.y += (superBounds.size.height - supv.bounds.size.height) * supv.layer.anchorPoint.y;
                     }
                     
                     if (supv.wrapContentWidth)
                     {
-                        superBounds.size.width = lsc.myLeading + newSelfSize.width + lsc.myTrailing;
+                        superBounds.size.width = [self myValidMeasure:supv.widthSizeInner sbv:supv calcSize:lsc.myLeading + newSelfSize.width + lsc.myTrailing sbvSize:superBounds.size selfLayoutSize:newSelfSize];
                         superCenter.x += (superBounds.size.width - supv.bounds.size.width) * supv.layer.anchorPoint.x;
                     }
                     
@@ -3308,6 +3308,7 @@ BOOL _hasBegin;
         if ( *ppLayer == nil)
         {
             *ppLayer = [[CAShapeLayer alloc] init];
+            (*ppLayer).zPosition = 10000;
             (*ppLayer).delegate = self;
             [_layout.layer addSublayer:*ppLayer];
         }
