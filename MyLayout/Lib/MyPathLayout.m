@@ -647,22 +647,22 @@
         rect.origin.x = pt.x - rect.size.width * sbv.layer.anchorPoint.x - sbvsc.rightPosInner.absVal + sbvsc.leftPosInner.absVal;
         rect.origin.y = pt.y - rect.size.height * sbv.layer.anchorPoint.y - sbvsc.bottomPosInner.absVal + sbvsc.topPosInner.absVal;
         
-        if (CGRectGetMinY(rect) < minYPos)
+        if (_myCGFloatLess(CGRectGetMinY(rect), minYPos))
         {
             minYPos = CGRectGetMinY(rect);
         }
         
-        if (CGRectGetMaxY(rect) > maxYPos)
+        if (_myCGFloatGreat(CGRectGetMaxY(rect), maxYPos))
         {
             maxYPos = CGRectGetMaxY(rect);
         }
         
-        if (CGRectGetMinX(rect) < minXPos)
+        if (_myCGFloatLess(CGRectGetMinX(rect), minXPos))
         {
             minXPos = CGRectGetMinX(rect);
         }
         
-        if (CGRectGetMaxX(rect) > maxXPos)
+        if (_myCGFloatGreat(CGRectGetMaxX(rect), maxXPos))
         {
             maxXPos = CGRectGetMaxX(rect);
         }
@@ -735,22 +735,22 @@
         rect.origin.x = (selfSize.width - lsc.leftPadding - lsc.rightPadding)*self.coordinateSetting.origin.x  - rect.size.width *sbv.layer.anchorPoint.x + sbvsc.leftPosInner.absVal + lsc.leftPadding - sbvsc.rightPosInner.absVal;
         rect.origin.y = (selfSize.height - lsc.topPadding - lsc.bottomPadding)*self.coordinateSetting.origin.y - rect.size.height * sbv.layer.anchorPoint.y + sbvsc.topPosInner.absVal + lsc.topPadding - sbvsc.bottomPosInner.absVal;
         
-        if (CGRectGetMinY(rect) < minYPos)
+        if (_myCGFloatLess(CGRectGetMinY(rect), minYPos))
         {
             minYPos = CGRectGetMinY(rect);
         }
         
-        if (CGRectGetMaxY(rect) > maxYPos)
+        if (_myCGFloatGreat(CGRectGetMaxY(rect), maxYPos))
         {
             maxYPos = CGRectGetMaxY(rect);
         }
         
-        if (CGRectGetMinX(rect) < minXPos)
+        if (_myCGFloatLess(CGRectGetMinX(rect), minXPos))
         {
             minXPos = CGRectGetMinX(rect);
         }
         
-        if (CGRectGetMaxX(rect) > maxXPos)
+        if (_myCGFloatGreat(CGRectGetMaxX(rect), maxXPos))
         {
             maxXPos = CGRectGetMaxX(rect);
         }

@@ -415,7 +415,7 @@ CGFloat _myMLayoutSizeError = 0.0;
 -(CGRect)estimatedRect
 {
     CGRect rect = self.myFrame.frame;
-    if (rect.size.width == CGFLOAT_MAX || rect.size.width == CGFLOAT_MAX)
+    if (rect.size.width == CGFLOAT_MAX || rect.size.height == CGFLOAT_MAX)
         return self.frame;
     return rect;
 }
@@ -1085,6 +1085,11 @@ CGFloat _myMLayoutSizeError = 0.0;
 -(BOOL)hideSubviewReLayout
 {
     return NO;
+}
+
+-(void)removeAllSubviews
+{
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
 
@@ -2086,13 +2091,13 @@ CGFloat _myMLayoutSizeError = 0.0;
             sbvVertGravity = sbvVertAligement;
         }
         
-        if (sbvsc.centerYPosInner.posVal != nil)
-        {
-            sbvVertGravity = MyGravity_Vert_Center;
-        }
-        else if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
+        if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
         {
             sbvVertGravity = MyGravity_Vert_Fill;
+        }
+        else if (sbvsc.centerYPosInner.posVal != nil)
+        {
+            sbvVertGravity = MyGravity_Vert_Center;
         }
         else if (sbvsc.topPosInner.posVal != nil)
         {
@@ -2180,13 +2185,13 @@ CGFloat _myMLayoutSizeError = 0.0;
             sbvHorzGravity = sbvHorzAligement;
         }
         
-        if (sbvsc.centerXPosInner.posVal != nil)
-        {
-            sbvHorzGravity = MyGravity_Horz_Center;
-        }
-        else if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
+        if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
         {
             sbvHorzGravity = MyGravity_Horz_Fill;
+        }
+        else if (sbvsc.centerXPosInner.posVal != nil)
+        {
+            sbvHorzGravity = MyGravity_Horz_Center;
         }
         else if (sbvsc.leadingPosInner.posVal != nil)
         {
@@ -3210,7 +3215,7 @@ BOOL _hasBegin;
         _topBorderline = topBorderline;
         
         CAShapeLayer *borderLayer = _topBorderlineLayer;
-        [self myUpdateBorderLayer:&borderLayer withBorderline:_topBorderline];
+        [self updateBorderLayer:&borderLayer withBorderline:_topBorderline];
         _topBorderlineLayer = borderLayer;
         
     }
@@ -3223,7 +3228,7 @@ BOOL _hasBegin;
         _leadingBorderline = leadingBorderline;
         
         CAShapeLayer *borderLayer = _leadingBorderlineLayer;
-        [self myUpdateBorderLayer:&borderLayer withBorderline:_leadingBorderline];
+        [self updateBorderLayer:&borderLayer withBorderline:_leadingBorderline];
         _leadingBorderlineLayer = borderLayer;
     }
 }
@@ -3235,7 +3240,7 @@ BOOL _hasBegin;
         _bottomBorderline = bottomBorderline;
         
         CAShapeLayer *borderLayer = _bottomBorderlineLayer;
-        [self myUpdateBorderLayer:&borderLayer withBorderline:_bottomBorderline];
+        [self updateBorderLayer:&borderLayer withBorderline:_bottomBorderline];
         _bottomBorderlineLayer = borderLayer;
     }
 }
@@ -3248,7 +3253,7 @@ BOOL _hasBegin;
         _trailingBorderline = trailingBorderline;
         
         CAShapeLayer *borderLayer = _trailingBorderlineLayer;
-        [self myUpdateBorderLayer:&borderLayer withBorderline:_trailingBorderline];
+        [self updateBorderLayer:&borderLayer withBorderline:_trailingBorderline];
         _trailingBorderlineLayer = borderLayer;
     }
     
@@ -3289,7 +3294,7 @@ BOOL _hasBegin;
 
 
 
--(void)myUpdateBorderLayer:(CAShapeLayer**)ppLayer withBorderline:(MyBorderline*)borderline
+-(void)updateBorderLayer:(CAShapeLayer**)ppLayer withBorderline:(MyBorderline*)borderline
 {
     
     if (borderline == nil)
@@ -3526,6 +3531,24 @@ BOOL _myCGFloatNotEqual(CGFloat f1, CGFloat f2)
 #endif
 }
 
+BOOL _myCGFloatLess(CGFloat f1, CGFloat f2)
+{
+#if CGFLOAT_IS_DOUBLE == 1
+    return f2 - f1 > 1e-7;
+#else
+    return f2 - f1 > 1e-4;
+#endif
+
+}
+
+BOOL _myCGFloatGreat(CGFloat f1, CGFloat f2)
+{
+#if CGFLOAT_IS_DOUBLE == 1
+    return f1 - f2 > 1e-7;
+#else
+    return f1 - f2 > 1e-4;
+#endif
+}
 
 BOOL _myCGFloatLessOrEqual(CGFloat f1, CGFloat f2)
 {
@@ -3567,8 +3590,8 @@ CGFloat _myRoundNumber(CGFloat f)
     if (f == 0 || f == CGFLOAT_MAX || f == -CGFLOAT_MAX)
         return f;
     
-    int fi = (int)f;
-    if (f == fi)
+    int fi = round(f);
+    if (_myCGFloatEqual(f, fi))
         return fi;
     
     //按精度四舍五入

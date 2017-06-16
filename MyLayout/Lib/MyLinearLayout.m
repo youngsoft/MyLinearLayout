@@ -424,12 +424,16 @@
             UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
            
             //只有宽度不依赖于父视图并且没有设置左右边距则参与最大包裹宽度计算。
-            if (sbvsc.widthSizeInner.dimeRelaVal.view != self && (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
+            MyLayoutSize *relaSize = sbvsc.widthSizeInner.dimeRelaVal;
+            if (relaSize.view != self && (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
             {
                 
                 CGFloat subviewWidth = sbvmyFrame.width;
                 if (sbvsc.widthSizeInner.dimeNumVal != nil)
+                {
                     subviewWidth = sbvsc.widthSizeInner.measure;
+                }
+                sbvmyFrame.width = subviewWidth;
                 
                 //头部 + 中间偏移 + 宽度 + 尾部。 这里要进行计算的原因是有可能左边距或者右边距设置的是相对边距，因此这里要推导出布局视图的宽度。
                 maxWrapWidth = [self myCalcSelfSize:maxWrapWidth
@@ -925,15 +929,15 @@
                         CGFloat layoutWidth = floatingWidth + leadingWidth + trailingWidth;
                         CGFloat halfLayoutWidth = layoutWidth / 2;
                         
-                        if (leadingWidth > halfLayoutWidth && trailingWidth > halfLayoutWidth)
+                        if (_myCGFloatGreat(leadingWidth, halfLayoutWidth) && _myCGFloatGreat(trailingWidth,halfLayoutWidth))
                         {
                             leadingView.myFrame.width = halfLayoutWidth;
                             trailingView.myFrame.width = halfLayoutWidth;
                         }
-                        else if ((leadingWidth > halfLayoutWidth || trailingWidth > halfLayoutWidth) && (leadingWidth + trailingWidth > layoutWidth))
+                        else if ((_myCGFloatGreat(leadingWidth, halfLayoutWidth) || _myCGFloatGreat(trailingWidth, halfLayoutWidth)) && (_myCGFloatGreat(leadingWidth + trailingWidth, layoutWidth)))
                         {
                             
-                            if (leadingWidth > halfLayoutWidth)
+                            if (_myCGFloatGreat(leadingWidth, halfLayoutWidth))
                             {
                                 trailingView.myFrame.width = trailingWidth;
                                 leadingView.myFrame.width = layoutWidth - trailingWidth;
@@ -1624,7 +1628,7 @@
     CGFloat trailingMargin = [self myValidMargin:tailPos sbv:tailPos.view calcPos:[tailPos realPosIn:tempSize] selfLayoutSize:CGSizeZero];
     
     tempSize = subviewSize + leadingMargin + centerMargin + trailingMargin;
-    if (tempSize > selfSize)
+    if (_myCGFloatGreat(tempSize,selfSize))
     {
         selfSize = tempSize;
     }

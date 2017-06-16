@@ -205,7 +205,8 @@
 
 @end
 
-
+extern BOOL _myCGFloatLess(CGFloat f1, CGFloat f2);
+extern BOOL _myCGFloatGreat(CGFloat f1, CGFloat f2);
 extern BOOL _myCGFloatEqual(CGFloat f1, CGFloat f2);
 extern BOOL _myCGFloatNotEqual(CGFloat f1, CGFloat f2);
 extern BOOL _myCGFloatLessOrEqual(CGFloat f1, CGFloat f2);

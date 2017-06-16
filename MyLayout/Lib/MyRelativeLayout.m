@@ -284,7 +284,7 @@
         
         //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
         CGFloat intervalWidth = maxTrailing - minLeading;
-        if (intervalWidth < sbvmyFrame.width)
+        if (_myCGFloatLess(intervalWidth, sbvmyFrame.width))
         {
             sbvmyFrame.width = intervalWidth;
             sbvmyFrame.leading = minLeading;
@@ -304,7 +304,7 @@
         CGFloat   minLeading = [self myCalcSubView:lBoundPos.posRelaVal.view lsc:lsc gravity:lBoundPos.posRelaVal.pos selfSize:selfSize] + lBoundPos.offsetVal;
         
         
-        if (sbvmyFrame.leading < minLeading)
+        if (_myCGFloatLess(sbvmyFrame.leading, minLeading))
         {
             sbvmyFrame.leading = minLeading;
             sbvmyFrame.width = sbvmyFrame.trailing - sbvmyFrame.leading;
@@ -315,7 +315,7 @@
         //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
         CGFloat   maxTrailing = [self myCalcSubView:uBoundPos.posRelaVal.view lsc:lsc gravity:uBoundPos.posRelaVal.pos selfSize:selfSize] -  uBoundPos.offsetVal;
         
-        if (sbvmyFrame.trailing > maxTrailing)
+        if (_myCGFloatGreat(sbvmyFrame.trailing, maxTrailing))
         {
             sbvmyFrame.trailing = maxTrailing;
             sbvmyFrame.width = sbvmyFrame.trailing - sbvmyFrame.leading;
@@ -427,7 +427,7 @@
         CGFloat   maxBottom = [self myCalcSubView:sbvsc.bottomPosInner.uBoundValInner.posRelaVal.view lsc:lsc gravity:sbvsc.bottomPosInner.uBoundValInner.posRelaVal.pos selfSize:selfSize] - sbvsc.bottomPosInner.uBoundValInner.offsetVal;
         
         //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
-        if (maxBottom - minTop < sbvmyFrame.height)
+        if (_myCGFloatLess(maxBottom - minTop, sbvmyFrame.height))
         {
             sbvmyFrame.height = maxBottom - minTop;
             sbvmyFrame.top = minTop;
@@ -446,7 +446,7 @@
         //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
         CGFloat   minTop = [self myCalcSubView:sbvsc.topPosInner.lBoundValInner.posRelaVal.view lsc:lsc gravity:sbvsc.topPosInner.lBoundValInner.posRelaVal.pos selfSize:selfSize] + sbvsc.topPosInner.lBoundValInner.offsetVal;
         
-        if (sbvmyFrame.top < minTop)
+        if (_myCGFloatLess(sbvmyFrame.top, minTop))
         {
             sbvmyFrame.top = minTop;
             sbvmyFrame.height = sbvmyFrame.bottom - sbvmyFrame.top;
@@ -457,7 +457,7 @@
     {
         //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
         CGFloat   maxBottom = [self myCalcSubView:sbvsc.bottomPosInner.uBoundValInner.posRelaVal.view lsc:lsc gravity:sbvsc.bottomPosInner.uBoundValInner.posRelaVal.pos selfSize:selfSize] - sbvsc.bottomPosInner.uBoundValInner.offsetVal;
-        if (sbvmyFrame.bottom > maxBottom)
+        if (_myCGFloatGreat(sbvmyFrame.bottom, maxBottom))
         {
             sbvmyFrame.bottom = maxBottom;
             sbvmyFrame.height = sbvmyFrame.bottom - sbvmyFrame.top;
@@ -1102,7 +1102,7 @@
             }
             
             //宽度最小是任何一个子视图的左右偏移和外加内边距和。
-            if (maxWidth < sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + lsc.leadingPadding + lsc.trailingPadding)
+            if (_myCGFloatLess(maxWidth, sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + lsc.leadingPadding + lsc.trailingPadding))
             {
                 maxWidth = sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + lsc.leadingPadding + lsc.trailingPadding;
             }
@@ -1111,12 +1111,12 @@
             {
                 if (sbvsc.centerXPosInner.posVal != nil)
                 {
-                    if (maxWidth < sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + lsc.leadingPadding + lsc.trailingPadding)
+                    if (_myCGFloatLess(maxWidth, sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + lsc.leadingPadding + lsc.trailingPadding))
                         maxWidth = sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + lsc.leadingPadding + lsc.trailingPadding;
                 }
                 else if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
                 {
-                    if (maxWidth < fabs(sbvmyFrame.trailing) + sbvsc.leadingPosInner.absVal + lsc.leadingPadding)
+                    if (_myCGFloatLess(maxWidth, fabs(sbvmyFrame.trailing) + sbvsc.leadingPosInner.absVal + lsc.leadingPadding))
                     {
                         maxWidth = fabs(sbvmyFrame.trailing) + sbvsc.leadingPosInner.absVal + lsc.leadingPadding;
                     }
@@ -1124,17 +1124,17 @@
                 }
                 else if (sbvsc.trailingPosInner.posVal != nil)
                 {
-                    if (maxWidth < fabs(sbvmyFrame.leading) + lsc.leadingPadding)
+                    if (_myCGFloatLess(maxWidth, fabs(sbvmyFrame.leading) + lsc.leadingPadding))
                         maxWidth = fabs(sbvmyFrame.leading) + lsc.leadingPadding;
                 }
                 else
                 {
-                    if (maxWidth < fabs(sbvmyFrame.trailing) + lsc.trailingPadding)
+                    if (_myCGFloatLess(maxWidth, fabs(sbvmyFrame.trailing) + lsc.trailingPadding))
                         maxWidth = fabs(sbvmyFrame.trailing) + lsc.trailingPadding;
                 }
                 
                 
-                if (maxWidth < sbvmyFrame.trailing + sbvsc.trailingPosInner.absVal + lsc.trailingPadding)
+                if (_myCGFloatLess(maxWidth, sbvmyFrame.trailing + sbvsc.trailingPosInner.absVal + lsc.trailingPadding))
                     maxWidth = sbvmyFrame.trailing + sbvsc.trailingPosInner.absVal + lsc.trailingPadding;
             }
         }
@@ -1152,7 +1152,7 @@
                 *pRecalc = YES;
             }
             
-            if (maxHeight < sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + lsc.topPadding + lsc.bottomPadding)
+            if (_myCGFloatLess(maxHeight, sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + lsc.topPadding + lsc.bottomPadding))
             {
                 maxHeight = sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + lsc.topPadding + lsc.bottomPadding;
             }
@@ -1164,29 +1164,29 @@
                 
                 if (sbvsc.centerYPosInner.posVal != nil)
                 {
-                    if (maxHeight < sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + lsc.topPadding + lsc.bottomPadding)
+                    if (_myCGFloatLess(maxHeight, sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + lsc.topPadding + lsc.bottomPadding))
                         maxHeight = sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + lsc.topPadding + lsc.bottomPadding;
                 }
                 else if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
                 {
-                    if (maxHeight < fabs(sbvmyFrame.bottom) + sbvsc.topPosInner.absVal + lsc.topPadding)
+                    if (_myCGFloatLess(maxHeight, fabs(sbvmyFrame.bottom) + sbvsc.topPosInner.absVal + lsc.topPadding))
                     {
                         maxHeight = fabs(sbvmyFrame.bottom) + sbvsc.topPosInner.absVal + lsc.topPadding;
                     }
                 }
                 else if (sbvsc.bottomPosInner.posVal != nil)
                 {
-                    if (maxHeight < fabs(sbvmyFrame.top) + lsc.topPadding)
+                    if (_myCGFloatLess(maxHeight, fabs(sbvmyFrame.top) + lsc.topPadding))
                         maxHeight = fabs(sbvmyFrame.top) + lsc.topPadding;
                 }
                 else
                 {
-                    if (maxHeight < fabs(sbvmyFrame.bottom) + lsc.bottomPadding)
+                    if (_myCGFloatLess(maxHeight, fabs(sbvmyFrame.bottom) + lsc.bottomPadding))
                         maxHeight = fabs(sbvmyFrame.bottom) + lsc.bottomPadding;
                 }
                 
                 
-                if (maxHeight < sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + lsc.bottomPadding)
+                if (_myCGFloatLess(maxHeight, sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + lsc.bottomPadding))
                     maxHeight = sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + lsc.bottomPadding;
                 
             }

@@ -687,7 +687,7 @@
     {
         CGFloat s1 = [self myCalcSinglelineSize:calcArray space:space];
         CGFloat s2 = [self myCalcSinglelineSize:bestSinglelineArray space:space];
-        if (fabs(selfSize - s1) < fabs(selfSize - s2) && /*s1 <= selfSize*/ _myCGFloatLessOrEqual(s1, selfSize) )
+        if (_myCGFloatLess(fabs(selfSize - s1), fabs(selfSize - s2)) && _myCGFloatLessOrEqual(s1, selfSize) )
         {
             [bestSinglelineArray setArray:calcArray];
         }
@@ -706,7 +706,7 @@
         if (_myCGFloatLessOrEqual(s1, selfSize))
         {
             CGFloat s2 = [self myCalcSinglelineSize:bestSinglelineArray space:space];
-            if (fabs(selfSize - s1) < fabs(selfSize - s2))
+            if (_myCGFloatLess(fabs(selfSize - s1), fabs(selfSize - s2)))
             {
                 [bestSinglelineArray setArray:calcArray2];
             }
@@ -762,7 +762,7 @@
         if (rowCount > 1)
         {
             horzSpace = (selfSize.width - paddingHorz - subviewSize * rowCount)/(rowCount - 1);
-            if (horzSpace > maxSpace)
+            if (_myCGFloatGreat(horzSpace, maxSpace))
             {
                 horzSpace = maxSpace;
                 
@@ -799,7 +799,7 @@
             
             //暂时把宽度存放sbv.myFrame.trailing上。因为浮动布局来说这个属性无用。
             sbvmyFrame.trailing = leadingSpace + rect.size.width + trailingSpace;
-            if (sbvmyFrame.trailing > selfSize.width - paddingHorz)
+            if (_myCGFloatGreat(sbvmyFrame.trailing, selfSize.width - paddingHorz))
                 sbvmyFrame.trailing = selfSize.width - paddingHorz;
         }
         
@@ -889,7 +889,7 @@
             [self myCalcVertLayoutSinglelineAlignment:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
             
             //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
-            if (leadingSpace + trailingSpace + rect.size.width > selfSize.width - paddingHorz)
+            if (_myCGFloatGreat(leadingSpace + trailingSpace + rect.size.width, selfSize.width - paddingHorz))
             {
                 
                 rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:selfSize.width - paddingHorz - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
@@ -916,10 +916,10 @@
         rect.origin.y = yPos + topSpace;
         xPos += leadingSpace + rect.size.width + trailingSpace;
         
-        if (rowMaxHeight < topSpace + bottomSpace + rect.size.height)
+        if (_myCGFloatLess(rowMaxHeight, topSpace + bottomSpace + rect.size.height))
             rowMaxHeight = topSpace + bottomSpace + rect.size.height;
         
-        if (rowMaxWidth < (xPos - paddingLeading))
+        if (_myCGFloatLess(rowMaxWidth, (xPos - paddingLeading)))
             rowMaxWidth = (xPos - paddingLeading);
         
         
@@ -1235,13 +1235,13 @@
             xPos += horzSpace;
         
         
-        if (rowMaxHeight < topSpace + bottomSpace + rect.size.height)
+        if (_myCGFloatLess(rowMaxHeight, topSpace + bottomSpace + rect.size.height))
             rowMaxHeight = topSpace + bottomSpace + rect.size.height;
         
-        if (rowMaxWidth < (xPos - paddingLeading))
+        if (_myCGFloatLess(rowMaxWidth, (xPos - paddingLeading)))
             rowMaxWidth = (xPos - paddingLeading);
         
-        if (maxWidth < xPos)
+        if (_myCGFloatLess(maxWidth, xPos))
             maxWidth = xPos;
         
         
@@ -1264,7 +1264,7 @@
         {
             //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
             NSInteger totalPages = floor((sbs.count + lsc.pagedCount - 1.0 ) / lsc.pagedCount);
-            if (selfSize.height < totalPages * CGRectGetHeight(self.superview.bounds))
+            if (_myCGFloatLess(selfSize.height, totalPages * CGRectGetHeight(self.superview.bounds)))
                 selfSize.height = totalPages * CGRectGetHeight(self.superview.bounds);
         }
         
@@ -1327,7 +1327,7 @@
         {
             //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
             NSInteger totalPages = floor((sbs.count + lsc.pagedCount - 1.0 ) / lsc.pagedCount);
-            if (selfSize.width < totalPages * CGRectGetWidth(self.superview.bounds))
+            if (_myCGFloatLess(selfSize.width, totalPages * CGRectGetWidth(self.superview.bounds)))
                 selfSize.width = totalPages * CGRectGetWidth(self.superview.bounds);
         }
         
@@ -1372,7 +1372,7 @@
         if (rowCount > 1)
         {
             vertSpace = (selfSize.height - paddingVert - subviewSize * rowCount)/(rowCount - 1);
-            if (vertSpace > maxSpace)
+            if (_myCGFloatGreat(vertSpace, maxSpace))
             {
                 vertSpace = maxSpace;
                 
@@ -1427,7 +1427,7 @@
             
             //暂时把宽度存放sbv.myFrame.trailing上。因为浮动布局来说这个属性无用。
             sbvmyFrame.trailing = topSpace + rect.size.height + bottomSpace;
-            if (sbvmyFrame.trailing > selfSize.height - paddingVert)
+            if (_myCGFloatGreat(sbvmyFrame.trailing, selfSize.height - paddingVert))
                 sbvmyFrame.trailing = selfSize.height - paddingVert;
         }
         
@@ -1523,7 +1523,7 @@
             [self myCalcHorzLayoutSinglelineAlignment:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight vertGravity:vertGravity horzAlignment:horzAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
             
             //计算单独的sbv的高度是否大于整体的高度。如果大于则缩小高度。
-            if (topSpace + bottomSpace + rect.size.height > selfSize.height - paddingVert)
+            if (_myCGFloatGreat(topSpace + bottomSpace + rect.size.height, selfSize.height - paddingVert))
             {
                 rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:selfSize.height - paddingVert - topSpace - bottomSpace sbvSize:rect.size selfLayoutSize:selfSize];
             }
@@ -1542,10 +1542,10 @@
         rect.origin.y = yPos + topSpace;
         yPos += topSpace + rect.size.height + bottomSpace;
         
-        if (colMaxWidth < leadingSpace + trailingSpace + rect.size.width)
+        if (_myCGFloatLess(colMaxWidth, leadingSpace + trailingSpace + rect.size.width))
             colMaxWidth = leadingSpace + trailingSpace + rect.size.width;
         
-        if (colMaxHeight < (yPos - paddingTop))
+        if (_myCGFloatLess(colMaxHeight, (yPos - paddingTop)))
             colMaxHeight = (yPos - paddingTop);
         
         
@@ -1869,13 +1869,13 @@
             yPos += vertSpace;
         
         
-        if (colMaxWidth < leadingSpace + trailingSpace + rect.size.width)
+        if (_myCGFloatLess(colMaxWidth, leadingSpace + trailingSpace + rect.size.width))
             colMaxWidth = leadingSpace + trailingSpace + rect.size.width;
         
-        if (colMaxHeight < (yPos - paddingTop))
+        if (_myCGFloatLess(colMaxHeight, (yPos - paddingTop)))
             colMaxHeight = yPos - paddingTop;
         
-        if (maxHeight < yPos)
+        if (_myCGFloatLess(maxHeight, yPos))
             maxHeight = yPos;
         
         
@@ -1898,7 +1898,7 @@
         {
             //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
             NSInteger totalPages = floor((sbs.count + lsc.pagedCount - 1.0 ) / lsc.pagedCount);
-            if (selfSize.height < totalPages * CGRectGetHeight(self.superview.bounds))
+            if (_myCGFloatLess(selfSize.height, totalPages * CGRectGetHeight(self.superview.bounds)))
                 selfSize.height = totalPages * CGRectGetHeight(self.superview.bounds);
         }
         
@@ -1914,7 +1914,7 @@
         {
             //算出页数来。如果包裹计算出来的宽度小于指定页数的宽度，因为要分页滚动所以这里会扩充布局的宽度。
             NSInteger totalPages = floor((sbs.count + lsc.pagedCount - 1.0 ) / lsc.pagedCount);
-            if (selfSize.width < totalPages * CGRectGetWidth(self.superview.bounds))
+            if (_myCGFloatLess(selfSize.width, totalPages * CGRectGetWidth(self.superview.bounds)))
                 selfSize.width = totalPages * CGRectGetWidth(self.superview.bounds);
         }
         

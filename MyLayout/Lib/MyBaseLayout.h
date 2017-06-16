@@ -862,6 +862,11 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
 @property(nonatomic, assign) BOOL priorAutoresizingMask;
 
 
+/**
+ *设置是否选中状态。您可以用这个状态来记录布局的扩展属性。
+ */
+@property(nonatomic,getter=isSelected) BOOL selected;                                // default is NO may be used by some subclasses or by application
+
 
 
 /**
@@ -872,6 +877,14 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
  *设置布局视图在布局完成之后的处理块。系统会在每次布局完成后调用对应的处理块后将处理块清空为nil。您也可以在endLayoutBlock块内取到所有子视图真实布局后的frame值。系统会在调用layoutSubviews方法后执行endLayoutBlock。
  */
 @property(nonatomic,copy) void (^endLayoutBlock)();
+
+
+
+
+/**
+ 删除所有子视图的方便方法
+ */
+-(void)removeAllSubviews;
 
 
 /**

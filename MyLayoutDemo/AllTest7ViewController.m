@@ -733,20 +733,16 @@
     
     
     UILabel *A = [self createLabel:@"Objective-C" color:5];
-    [A sizeToFit];
    // A.myLeading = 80;   //您可以解注释这条语句，并将上面的shrinkType设置为MySubviewsShrink_Average或者MySubviewsShrink_Weight查看效果
     [contentLayout addSubview:A];
     
     UILabel *B = [self createLabel:@"Swift" color:6];
-    [B sizeToFit];
     [contentLayout addSubview:B];
     
     UILabel *C  = [self createLabel:@"C++" color:7];
-    [C sizeToFit];
     [contentLayout addSubview:C];
     
     UILabel *D = [self createLabel:@"JAVA" color:8];
-    [D sizeToFit];
     [contentLayout addSubview:D];
     
 }

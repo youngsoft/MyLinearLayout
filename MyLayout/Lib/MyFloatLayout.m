@@ -240,12 +240,21 @@
         CGRect trailingCandidateRect = ((NSValue*)trailingCandidateRects[i]).CGRectValue;
         
         //如果有比重则不能相等只能小于。
-        if ((hasWeight ? CGRectGetMaxX(leadingCandidateRect) + width < CGRectGetMinX(trailingCandidateRect) : _myCGFloatLessOrEqual(CGRectGetMaxX(leadingCandidateRect) + width, CGRectGetMinX(trailingCandidateRect))
+        if ((hasWeight ? _myCGFloatLess(CGRectGetMaxX(leadingCandidateRect) + width, CGRectGetMinX(trailingCandidateRect)) : _myCGFloatLessOrEqual(CGRectGetMaxX(leadingCandidateRect) + width, CGRectGetMinX(trailingCandidateRect))
              ) &&
-            CGRectGetMaxY(leadingCandidateRect) > lastHeight)
+            _myCGFloatGreat(CGRectGetMaxY(leadingCandidateRect), lastHeight))
         {
             retPoint.y = MAX(CGRectGetMinY(leadingCandidateRect),lastHeight);
             retPoint.x = CGRectGetMinX(trailingCandidateRect);
+            
+            if (hasWeight &&
+                CGRectGetHeight(leadingCandidateRect) == CGFLOAT_MAX &&
+                CGRectGetWidth(leadingCandidateRect) == 0 &&
+                _myCGFloatGreatOrEqual(CGRectGetMinY(leadingCandidateRect), CGRectGetMaxY(trailingCandidateRect)))
+            {
+                retPoint.x = trailingBoundary;
+            }
+            
             break;
         }
         
@@ -255,8 +264,8 @@
     
     if (retPoint.y == CGFLOAT_MAX)
     {
-        if ((hasWeight ? CGRectGetMaxX(leadingCandidateRect) + width < trailingBoundary :_myCGFloatLessOrEqual(CGRectGetMaxX(leadingCandidateRect) + width, trailingBoundary) ) &&
-            CGRectGetMaxY(leadingCandidateRect) > lastHeight)
+        if ((hasWeight ? _myCGFloatLess(CGRectGetMaxX(leadingCandidateRect) + width, trailingBoundary) :_myCGFloatLessOrEqual(CGRectGetMaxX(leadingCandidateRect) + width, trailingBoundary) ) &&
+            _myCGFloatGreat(CGRectGetMaxY(leadingCandidateRect), lastHeight))
         {
             retPoint.y =  MAX(CGRectGetMinY(leadingCandidateRect),lastHeight);
         }
@@ -276,12 +285,21 @@
         
         CGRect bottomCandidateRect = ((NSValue*)bottomCandidateRects[i]).CGRectValue;
 
-        if ((hasWeight ? CGRectGetMaxY(topCandidateRect) + height < CGRectGetMinY(bottomCandidateRect) :
+        if ((hasWeight ? _myCGFloatLess(CGRectGetMaxY(topCandidateRect) + height, CGRectGetMinY(bottomCandidateRect)) :
              _myCGFloatLessOrEqual(CGRectGetMaxY(topCandidateRect) + height, CGRectGetMinY(bottomCandidateRect))) &&
-            CGRectGetMaxX(topCandidateRect) > lastWidth)
+            _myCGFloatGreat(CGRectGetMaxX(topCandidateRect), lastWidth))
         {
             retPoint.x = MAX(CGRectGetMinX(topCandidateRect),lastWidth);
             retPoint.y = CGRectGetMinY(bottomCandidateRect);
+            
+            if (hasWeight &&
+                CGRectGetWidth(topCandidateRect) == CGFLOAT_MAX &&
+                CGRectGetHeight(topCandidateRect) == 0 &&
+                _myCGFloatGreatOrEqual(CGRectGetMinX(topCandidateRect), CGRectGetMaxX(bottomCandidateRect)))
+            {
+                retPoint.y = bottomBoundary;
+            }
+            
             break;
         }
         
@@ -291,8 +309,8 @@
     
     if (retPoint.x == CGFLOAT_MAX)
     {
-        if ((hasWeight ? CGRectGetMaxY(topCandidateRect) + height < bottomBoundary : _myCGFloatLessOrEqual(CGRectGetMaxY(topCandidateRect) + height, bottomBoundary) ) &&
-            CGRectGetMaxX(topCandidateRect) > lastWidth)
+        if ((hasWeight ? _myCGFloatLess(CGRectGetMaxY(topCandidateRect) + height, bottomBoundary) : _myCGFloatLessOrEqual(CGRectGetMaxY(topCandidateRect) + height, bottomBoundary) ) &&
+            _myCGFloatGreat(CGRectGetMaxX(topCandidateRect), lastWidth))
         {
             retPoint.x =  MAX(CGRectGetMinX(topCandidateRect),lastWidth);
         }
@@ -313,12 +331,21 @@
         
        CGRect leadingCandidateRect = ((NSValue*)leadingCandidateRects[i]).CGRectValue;
 
-        if ((hasWeight ? CGRectGetMinX(trailingCandidateRect) - width > CGRectGetMaxX(leadingCandidateRect) :
+        if ((hasWeight ? _myCGFloatGreat(CGRectGetMinX(trailingCandidateRect) - width, CGRectGetMaxX(leadingCandidateRect)) :
              _myCGFloatGreatOrEqual(CGRectGetMinX(trailingCandidateRect) - width, CGRectGetMaxX(leadingCandidateRect))) &&
-            CGRectGetMaxY(trailingCandidateRect) > lastHeight)
+            _myCGFloatGreat(CGRectGetMaxY(trailingCandidateRect), lastHeight))
         {
             retPoint.y = MAX(CGRectGetMinY(trailingCandidateRect),lastHeight);
             retPoint.x = CGRectGetMaxX(leadingCandidateRect);
+            
+            if (hasWeight &&
+                CGRectGetHeight(trailingCandidateRect) == CGFLOAT_MAX &&
+                CGRectGetWidth(trailingCandidateRect) == 0 &&
+                _myCGFloatGreatOrEqual(CGRectGetMinY(trailingCandidateRect), CGRectGetMaxY(leadingCandidateRect)))
+            {
+                retPoint.x = leadingBoundary;
+            }
+            
             break;
         }
         
@@ -328,9 +355,9 @@
     
     if (retPoint.y == CGFLOAT_MAX)
     {
-        if ((hasWeight ? CGRectGetMinX(trailingCandidateRect) - width > leadingBoundary :
+        if ((hasWeight ? _myCGFloatGreat(CGRectGetMinX(trailingCandidateRect) - width, leadingBoundary) :
              _myCGFloatGreatOrEqual(CGRectGetMinX(trailingCandidateRect) - width, leadingBoundary)) &&
-            CGRectGetMaxY(trailingCandidateRect) > lastHeight)
+            _myCGFloatGreat(CGRectGetMaxY(trailingCandidateRect),lastHeight))
         {
             retPoint.y =  MAX(CGRectGetMinY(trailingCandidateRect),lastHeight);
         }
@@ -350,12 +377,22 @@
         
         CGRect topCandidateRect = ((NSValue*)topCandidateRects[i]).CGRectValue;
 
-        if ((hasWeight ? CGRectGetMinY(bottomCandidateRect) - height > CGRectGetMaxY(topCandidateRect) :
+        if ((hasWeight ? _myCGFloatGreat(CGRectGetMinY(bottomCandidateRect) - height, CGRectGetMaxY(topCandidateRect)) :
              _myCGFloatGreatOrEqual(CGRectGetMinY(bottomCandidateRect) - height, CGRectGetMaxY(topCandidateRect))) &&
-            CGRectGetMaxX(bottomCandidateRect) > lastWidth)
+            _myCGFloatGreat(CGRectGetMaxX(bottomCandidateRect), lastWidth))
         {
             retPoint.x = MAX(CGRectGetMinX(bottomCandidateRect),lastWidth);
             retPoint.y = CGRectGetMaxY(topCandidateRect);
+            
+            if (hasWeight &&
+                CGRectGetWidth(bottomCandidateRect) == CGFLOAT_MAX &&
+                CGRectGetHeight(bottomCandidateRect) == 0 &&
+                _myCGFloatGreatOrEqual(CGRectGetMinX(bottomCandidateRect), CGRectGetMaxX(topCandidateRect)))
+            {
+                retPoint.y = topBoundary;
+            }
+
+            
             break;
         }
         
@@ -365,9 +402,9 @@
     
     if (retPoint.x == CGFLOAT_MAX)
     {
-        if ((hasWeight ? CGRectGetMinY(bottomCandidateRect) - height > topBoundary :
+        if ((hasWeight ? _myCGFloatGreat(CGRectGetMinY(bottomCandidateRect) - height, topBoundary) :
              _myCGFloatGreatOrEqual(CGRectGetMinY(bottomCandidateRect) - height, topBoundary)) &&
-            CGRectGetMaxX(bottomCandidateRect) > lastWidth)
+            _myCGFloatGreat(CGRectGetMaxX(bottomCandidateRect), lastWidth))
         {
             retPoint.x =  MAX(CGRectGetMinX(bottomCandidateRect),lastWidth);
         }
@@ -432,7 +469,7 @@
             
             rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
-            if (leadingSpace + rect.size.width + trailingSpace > maxContentWidth &&
+            if (_myCGFloatGreat(leadingSpace + rect.size.width + trailingSpace, maxContentWidth) &&
                 (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)  &&
                 sbvsc.weight == 0)
             {
@@ -465,7 +502,7 @@
             horzSpace = (selfSize.width - paddingHorz - subviewSize * rowCount)/(rowCount - 1);
             
             //如果超过最大间距则调整子视图的宽度。
-            if (horzSpace > maxSpace)
+            if (_myCGFloatGreat(horzSpace,maxSpace))
             {
                 horzSpace = maxSpace;
                 
@@ -566,7 +603,7 @@
             {
                 //找到最底部的位置。
                 nextPoint.y = MAX(trailingMaxHeight, leadingLastYOffset);
-                CGPoint leadingPoint = [self myFindLeadingCandidatePoint:CGRectMake(selfSize.width - paddingTrailing, nextPoint.y, 0, CGFLOAT_MAX) width:leadingSpace + (sbvsc.weight != 0 ? 0 : rect.size.width) + trailingSpace leadingBoundary:paddingLeading leadingCandidateRects:leadingCandidateRects hasWeight:NO paddingTop:paddingTop];
+                CGPoint leadingPoint = [self myFindLeadingCandidatePoint:CGRectMake(selfSize.width - paddingTrailing, nextPoint.y, 0, CGFLOAT_MAX) width:leadingSpace + (sbvsc.weight != 0 ? 0 : rect.size.width) + trailingSpace leadingBoundary:paddingLeading leadingCandidateRects:leadingCandidateRects hasWeight:sbvsc.weight != 0  paddingTop:paddingTop];
                 if (leadingPoint.y != CGFLOAT_MAX)
                 {
                     nextPoint.y = MAX(trailingMaxHeight, leadingPoint.y);
@@ -627,18 +664,18 @@
                         sbvl.leadingBorderline = nil;
                         
                         
-                        if (rect.origin.x + rect.size.width + trailingSpace < selfSize.width - paddingTrailing)
+                        if (_myCGFloatLess(rect.origin.x + rect.size.width + trailingSpace, selfSize.width - paddingTrailing))
                         {
                            
                             sbvl.trailingBorderline = self.intelligentBorderline;
                         }
                         
-                        if (rect.origin.y + rect.size.height + bottomSpace < selfSize.height - paddingBottom)
+                        if (_myCGFloatLess(rect.origin.y + rect.size.height + bottomSpace, selfSize.height - paddingBottom))
                         {
                             sbvl.bottomBorderline = self.intelligentBorderline;
                         }
                         
-                        if (rect.origin.x > leadingCandidateXBoundary && sbvl == sbs.lastObject)
+                        if (_myCGFloatGreat(rect.origin.x, leadingCandidateXBoundary) && sbvl == sbs.lastObject)
                         {
                             sbvl.leadingBorderline = self.intelligentBorderline;
                         }
@@ -656,7 +693,7 @@
             for (NSInteger i = trailingCandidateRects.count - 1; i >= 0; i--)
             {
                 CGRect candidateRect = ((NSValue*)trailingCandidateRects[i]).CGRectValue;
-                if (CGRectGetMaxY(candidateRect) <= CGRectGetMaxY(cRect))
+                if (_myCGFloatLessOrEqual(CGRectGetMaxY(candidateRect), CGRectGetMaxY(cRect)))
                 {
                     [trailingCandidateRects removeObjectAtIndex:i];
                 }
@@ -690,7 +727,7 @@
             [trailingCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             trailingLastYOffset = rect.origin.y - topSpace;
             
-            if (rect.origin.y + rect.size.height + bottomSpace + vertSpace > trailingMaxHeight)
+            if (_myCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, trailingMaxHeight))
                 trailingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
         }
         else
@@ -704,7 +741,7 @@
                 //找到最低点。
                 nextPoint.y = MAX(leadingMaxHeight, trailingLastYOffset);
                 
-                CGPoint trailingPoint = [self myFindTrailingCandidatePoint:CGRectMake(paddingLeading, nextPoint.y, 0, CGFLOAT_MAX) width:leadingSpace + (sbvsc.weight != 0 ? 0 : rect.size.width) + trailingSpace trailingBoundary:trailingCandidateXBoundary trailingCandidateRects:trailingCandidateRects hasWeight:NO paddingTop:paddingTop];
+                CGPoint trailingPoint = [self myFindTrailingCandidatePoint:CGRectMake(paddingLeading, nextPoint.y, 0, CGFLOAT_MAX) width:leadingSpace + (sbvsc.weight != 0 ? 0 : rect.size.width) + trailingSpace trailingBoundary:trailingCandidateXBoundary trailingCandidateRects:trailingCandidateRects hasWeight:sbvsc.weight != 0 paddingTop:paddingTop];
                 if (trailingPoint.y != CGFLOAT_MAX)
                 {
                     nextPoint.y = MAX(leadingMaxHeight, trailingPoint.y);
@@ -768,13 +805,13 @@
                         sbvl.trailingBorderline = nil;
                         sbvl.leadingBorderline = nil;
                         
-                        if (rect.origin.x + rect.size.width + trailingSpace < selfSize.width - paddingTrailing)
+                        if (_myCGFloatLess(rect.origin.x + rect.size.width + trailingSpace, selfSize.width - paddingTrailing))
                         {
                         
                             sbvl.trailingBorderline = self.intelligentBorderline;
                         }
                         
-                        if (rect.origin.y + rect.size.height + bottomSpace < selfSize.height - paddingBottom)
+                        if (_myCGFloatLess(rect.origin.y + rect.size.height + bottomSpace, selfSize.height - paddingBottom))
                         {
                             sbvl.bottomBorderline = self.intelligentBorderline;
                         }
@@ -822,15 +859,15 @@
             [leadingCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             leadingLastYOffset = rect.origin.y - topSpace;
             
-            if (rect.origin.y + rect.size.height + bottomSpace + vertSpace > leadingMaxHeight)
+            if (_myCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, leadingMaxHeight))
                 leadingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
             
         }
         
-        if (rect.origin.y + rect.size.height + bottomSpace + vertSpace > maxHeight)
+        if (_myCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, maxHeight))
             maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
         
-        if (rect.origin.x + rect.size.width + trailingSpace + horzSpace > maxWidth)
+        if (_myCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace, maxWidth))
             maxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
         
         sbvmyFrame.frame = rect;
@@ -938,7 +975,7 @@
             
             rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
             
-            if (topSpace + rect.size.height + bottomSpace > maxContentHeight &&
+            if (_myCGFloatGreat(topSpace + rect.size.height + bottomSpace, maxContentHeight) &&
                 (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
                 sbvsc.weight == 0)
             {
@@ -968,7 +1005,7 @@
         {
             vertSpace = (selfSize.height - paddingVert - subviewSize * rowCount)/(rowCount - 1);
             
-            if (vertSpace > maxSpace)
+            if (_myCGFloatGreat(vertSpace,maxSpace))
             {
                 vertSpace = maxSpace;
                 
@@ -1071,7 +1108,7 @@
             {
                 //找到最底部的位置。
                 nextPoint.x = MAX(bottomMaxWidth, topLastXOffset);
-                CGPoint topPoint = [self myFindTopCandidatePoint:CGRectMake(nextPoint.x, selfSize.height - paddingBottom, CGFLOAT_MAX, 0) height:topSpace + (sbvsc.weight != 0 ? 0 : rect.size.height) + bottomSpace topBoundary:topCandidateYBoundary topCandidateRects:topCandidateRects hasWeight:NO paddingLeading:paddingLeading];
+                CGPoint topPoint = [self myFindTopCandidatePoint:CGRectMake(nextPoint.x, selfSize.height - paddingBottom, CGFLOAT_MAX, 0) height:topSpace + (sbvsc.weight != 0 ? 0 : rect.size.height) + bottomSpace topBoundary:topCandidateYBoundary topCandidateRects:topCandidateRects hasWeight:sbvsc.weight != 0  paddingLeading:paddingLeading];
                 if (topPoint.x != CGFLOAT_MAX)
                 {
                     nextPoint.x = MAX(bottomMaxWidth, topPoint.x);
@@ -1126,17 +1163,17 @@
                         sbvl.leadingBorderline = nil;
                         
                         //如果自己的上边和左边有子视图。
-                        if (rect.origin.x + rect.size.width + trailingSpace < selfSize.width - paddingTrailing)
+                        if (_myCGFloatLess(rect.origin.x + rect.size.width + trailingSpace, selfSize.width - paddingTrailing))
                         {
                            sbvl.trailingBorderline = self.intelligentBorderline;
                         }
                         
-                        if (rect.origin.y + rect.size.height + bottomSpace < selfSize.height - paddingBottom)
+                        if (_myCGFloatLess(rect.origin.y + rect.size.height + bottomSpace, selfSize.height - paddingBottom))
                         {
                             sbvl.bottomBorderline = self.intelligentBorderline;
                         }
                         
-                        if (rect.origin.y > topCandidateYBoundary && sbvl == sbs.lastObject)
+                        if (_myCGFloatGreat(rect.origin.y, topCandidateYBoundary) && sbvl == sbs.lastObject)
                         {
                             sbvl.topBorderline = self.intelligentBorderline;
                         }
@@ -1185,7 +1222,7 @@
             [bottomCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             bottomLastXOffset = rect.origin.x - leadingSpace;
             
-            if (rect.origin.x + rect.size.width + trailingSpace + horzSpace > bottomMaxWidth)
+            if (_myCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace, bottomMaxWidth))
                 bottomMaxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
         }
         else
@@ -1198,7 +1235,7 @@
                 //找到最低点。
                 nextPoint.x = MAX(topMaxWidth, bottomLastXOffset);
                 
-                CGPoint bottomPoint = [self myFindBottomCandidatePoint:CGRectMake(nextPoint.x, paddingTop,CGFLOAT_MAX,0) height:topSpace + (sbvsc.weight != 0 ? 0: rect.size.height) + bottomSpace bottomBoundary:bottomCandidateYBoundary bottomCandidateRects:bottomCandidateRects hasWeight:NO paddingLeading:paddingLeading];
+                CGPoint bottomPoint = [self myFindBottomCandidatePoint:CGRectMake(nextPoint.x, paddingTop,CGFLOAT_MAX,0) height:topSpace + (sbvsc.weight != 0 ? 0: rect.size.height) + bottomSpace bottomBoundary:bottomCandidateYBoundary bottomCandidateRects:bottomCandidateRects hasWeight:sbvsc.weight != 0  paddingLeading:paddingLeading];
                 if (bottomPoint.x != CGFLOAT_MAX)
                 {
                     nextPoint.x = MAX(topMaxWidth, bottomPoint.x);
@@ -1257,12 +1294,12 @@
                         sbvl.leadingBorderline = nil;
                         
                         //如果自己的上边和左边有子视图。
-                        if (rect.origin.x + rect.size.width + trailingSpace < selfSize.width - paddingTrailing)
+                        if (_myCGFloatLess(rect.origin.x + rect.size.width + trailingSpace,selfSize.width - paddingTrailing))
                         {
                             sbvl.trailingBorderline = self.intelligentBorderline;
                         }
                         
-                        if (rect.origin.y + rect.size.height + bottomSpace <  selfSize.height - paddingBottom)
+                        if (_myCGFloatLess(rect.origin.y + rect.size.height + bottomSpace, selfSize.height - paddingBottom))
                         {
                             sbvl.bottomBorderline = self.intelligentBorderline;
                         }
@@ -1312,15 +1349,15 @@
             [topCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             topLastXOffset = rect.origin.x - leadingSpace;
             
-            if (rect.origin.x + rect.size.width + trailingSpace + horzSpace > topMaxWidth)
+            if (_myCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace,topMaxWidth))
                 topMaxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
             
         }
         
-        if (rect.origin.x + rect.size.width + trailingSpace + horzSpace > maxWidth)
+        if (_myCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace, maxWidth))
             maxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
         
-        if (rect.origin.y + rect.size.height + bottomSpace + vertSpace > maxHeight)
+        if (_myCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, maxHeight))
             maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
         
         sbvmyFrame.frame = rect;

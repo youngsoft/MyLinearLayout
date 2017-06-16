@@ -3,6 +3,21 @@
 
 ---
 
+## [V1.4.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.4.0)(2017/6/16)
+
+#### Added
+1. 添加了布局视图的新属性：`selected`,这个属性用来记录布局视图的选中和未选中状态
+2. 添加了布局视图删除所有子视图的快捷方法：`removeAllSubviews`。
+
+
+#### Fixed
+1. 修复子视图宽高铺满布局视图并设置背景色时边界线不显示的问题。
+2. 修复了浮动布局`MyFloatLayout`中当子视图同时设置了`clearFloat`和`weight`的时候有可能尺寸显示不正确的问题。修复了[#BUG42](https://github.com/youngsoft/MyLinearLayout/issues/42)
+3. 修复了线性布局`MyLinearLayout`和框架布局`MyFrameLayout`同时设置左右或者上下边距和居中时的尺寸不正确的问题。
+4. 优化了位置和尺寸计算时的精度问题，老版本中有可能会出现比如12.99999999999998的场景，新版本将会减少这种情况的发生而直接设置为13. 同时对所有的布局中的大小比较进行了精度限制的优化。
+
+
+
 ## [V1.3.9](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.3.9)(2017/6/12)
 
 #### Fixed

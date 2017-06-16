@@ -48,7 +48,6 @@
     MyFloatLayout *dectorInfoFloatLayout  = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     dectorInfoFloatLayout.padding = UIEdgeInsetsMake(10.f, 0.f, 10.f, 0.f);
     dectorInfoFloatLayout.subviewSpace = 10;
-  //  self.view = dectorInfoFloatLayout;
     
     
     UILabel *dectorInAttention = [UILabel new];
@@ -92,7 +91,58 @@
     dectorSpecialityLabel.myHeight = 75.f;
     dectorSpecialityLabel.weight = 1.f;
     dectorSpecialityLabel.text = @"666";
+    
+    [dectorInfoFloatLayout estimateLayoutRect:CGSizeMake(375, 667)];
+    
+    XCTAssert(CGRectEqualToRect(dectorSpecialityLabel.estimatedRect, CGRectMake(130, 62, 245, 75)), @"dectorSpecialityLabel' rect:%@", NSStringFromCGRect(dectorSpecialityLabel.estimatedRect));
 
+
+}
+
+-(void)testExample3
+{
+    MyFloatLayout *layout = [[MyFloatLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Vert];
+    layout.subviewSpace = 5.f;
+    layout.padding = UIEdgeInsetsMake(10.f, 0.f, 0.f, 0.f);
+    
+    UIImageView *mobileImageView = [UIImageView new];
+    [layout addSubview:mobileImageView];
+    mobileImageView.backgroundColor = [UIColor greenColor];
+    mobileImageView.myWidth = 30.f;
+    mobileImageView.myHeight = 30.f;
+    mobileImageView.myTop = 8.f;
+    mobileImageView.myRight = 10.f;
+    mobileImageView.reverseFloat = YES;
+    
+    UILabel *nameLabel = [UILabel new];
+    nameLabel.textColor = [UIColor blackColor];
+    nameLabel.backgroundColor = [UIColor blackColor];
+    [layout addSubview:nameLabel];
+    nameLabel.myHeight = 20.f;
+    nameLabel.weight = 1.f;
+    nameLabel.myLeft = 10.f;
+    
+    UILabel *addressLabel = [UILabel new];
+    addressLabel.textColor = [UIColor grayColor];
+    // addressLabel.font = kSystemFont10;
+    addressLabel.backgroundColor = [UIColor blueColor];
+    [layout addSubview:addressLabel];
+    addressLabel.myHeight = 20.f;
+    addressLabel.weight = 1.f;
+    addressLabel.myLeft = 10.f;
+    
+    
+    UIView *segmentedControl = [UIView new];
+    segmentedControl.backgroundColor = [UIColor redColor];
+    [layout addSubview:segmentedControl];
+    segmentedControl.clearFloat = YES;
+    segmentedControl.weight = 1.f;
+    segmentedControl.myHeight = 40.f;
+
+    [layout estimateLayoutRect:CGSizeMake(375, 667)];
+    
+    XCTAssert(CGRectEqualToRect(segmentedControl.estimatedRect, CGRectMake(0, 60, 375, 40)), @"segmentedControl' rect:%@", NSStringFromCGRect(segmentedControl.estimatedRect));
+    
 }
 
 - (void)testPerformanceExample {
