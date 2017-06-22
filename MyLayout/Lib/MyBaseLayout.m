@@ -1808,7 +1808,8 @@ CGFloat _myMLayoutSizeError = 0.0;
         //设置子视图的frame并还原
         for (UIView *sbv in self.subviews)
         {
-            CGPoint ptorigin = sbv.bounds.origin;
+            CGRect sbvOldBounds = sbv.bounds;
+            CGPoint sbvOldCenter = sbv.center;
 
             MyFrame *sbvmyFrame = sbv.myFrame;
             UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
@@ -1833,22 +1834,54 @@ CGFloat _myMLayoutSizeError = 0.0;
                 if ([sbv isKindOfClass:[MyBaseLayout class]])
                 {
                    rc  = _myRoundRectForLayout(sbvmyFrame.frame);
+                    
+                    
+                    CGRect sbvTempBounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, rc.size.width, rc.size.height);
+                    
+                    if (_myCGFloatErrorEqual(sbvTempBounds.size.width, sbvOldBounds.size.width, _myMLayoutSizeError))
+                        sbvTempBounds.size.width = sbvOldBounds.size.width;
+                    
+                    if (_myCGFloatErrorEqual(sbvTempBounds.size.height, sbvOldBounds.size.height, _myMLayoutSizeError))
+                        sbvTempBounds.size.height = sbvOldBounds.size.height;
+                    
+                    
+                    if (_myCGFloatErrorNotEqual(sbvTempBounds.size.width, sbvOldBounds.size.width, _myMLayoutSizeError)||
+                        _myCGFloatErrorNotEqual(sbvTempBounds.size.height, sbvOldBounds.size.height, _myMLayoutSizeError))
+                    {
+                        sbv.bounds = sbvTempBounds;
+                    }
+                    
+                    CGPoint sbvTempCenter = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * sbvTempBounds.size.width, rc.origin.y + sbv.layer.anchorPoint.y * sbvTempBounds.size.height);
+                    
+                    if (_myCGFloatErrorEqual(sbvTempCenter.x, sbvOldCenter.x, _myMLayoutSizeError))
+                        sbvTempCenter.x = sbvOldCenter.x;
+                    
+                    if (_myCGFloatErrorEqual(sbvTempCenter.y, sbvOldCenter.y, _myMLayoutSizeError))
+                        sbvTempCenter.y = sbvOldCenter.y;
+                    
+                    
+                    if (_myCGFloatErrorNotEqual(sbvTempCenter.x, sbvOldCenter.x, _myMLayoutSizeError)||
+                        _myCGFloatErrorNotEqual(sbvTempCenter.y, sbvOldCenter.y, _myMLayoutSizeError))
+                    {
+                        sbv.center = sbvTempCenter;
+                    }
+
+
                 }
                 else
                 {
                     rc = _myRoundRect(sbvmyFrame.frame);
+                    
+                    sbv.center = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height);
+                    sbv.bounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, rc.size.width, rc.size.height);
+                    
                 }
                 
-                    
-                sbv.center = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height);
-                sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, rc.size.width, rc.size.height);
-                
-
             }
             
             if (sbvsc.myVisibility == MyVisibility_Gone && !sbv.isHidden)
             {
-                sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, 0, 0);
+                sbv.bounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, 0, 0);
             }
             
             if (sbvmyFrame.sizeClass.viewLayoutCompleteBlock != nil)
@@ -1869,8 +1902,8 @@ CGFloat _myMLayoutSizeError = 0.0;
             
             //因为布局子视图的新老尺寸计算在上面有两种不同的方法，因此这里需要考虑两种计算的误差值，而这两种计算的误差值是不超过1/屏幕精度的。
             //因此我们认为当二者的值超过误差时我们才认为有尺寸变化。
-            BOOL isWidthAlter = fabs(newSelfSize.width - oldSelfSize.width) > _myMLayoutSizeError;
-            BOOL isHeightAlter = fabs(newSelfSize.height - oldSelfSize.height) > _myMLayoutSizeError;
+            BOOL isWidthAlter =  _myCGFloatErrorNotEqual(newSelfSize.width, oldSelfSize.width, _myMLayoutSizeError);
+            BOOL isHeightAlter = _myCGFloatErrorNotEqual(newSelfSize.height, oldSelfSize.height, _myMLayoutSizeError);
             
             //如果父视图也是布局视图，并且自己隐藏则不调整自身的尺寸和位置。
             BOOL isAdjustSelf = YES;
@@ -3513,6 +3546,24 @@ BOOL _hasBegin;
 @end
 
 
+BOOL _myCGFloatErrorEqual(CGFloat f1, CGFloat f2, CGFloat error)
+{
+#if CGFLOAT_IS_DOUBLE == 1
+    return fabs(f1 - f2) < error;
+#else
+    return fabsf(f1 - f2) < error;
+#endif
+}
+
+BOOL _myCGFloatErrorNotEqual(CGFloat f1, CGFloat f2, CGFloat error)
+{
+#if CGFLOAT_IS_DOUBLE == 1
+    return fabs(f1 - f2) > error;
+#else
+    return fabsf(f1 - f2) > error;
+#endif
+}
+
 BOOL _myCGFloatEqual(CGFloat f1, CGFloat f2)
 {
 #if CGFLOAT_IS_DOUBLE == 1
@@ -3590,7 +3641,7 @@ CGFloat _myRoundNumber(CGFloat f)
     if (f == 0 || f == CGFLOAT_MAX || f == -CGFLOAT_MAX)
         return f;
     
-    int fi = round(f);
+    int fi = rint(f);
     if (_myCGFloatEqual(f, fi))
         return fi;
     

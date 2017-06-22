@@ -558,7 +558,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.4.0'
+pod 'MyLayout', '~> 1.4.1'
 ```
    
 Then, run the following command:

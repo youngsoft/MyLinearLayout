@@ -3,6 +3,11 @@
 
 ---
 
+## [V1.4.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.4.1)(2017/6/22)
+#### Fixed
+1. 修复了布局视图套布局视图，然后都具有wrapContentWidth或者wrapContentHeight属性时界面有可能进入死循环的问题，尤其是iPhonePlus设备。
+
+
 ## [V1.4.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.4.0)(2017/6/16)
 
 #### Added
