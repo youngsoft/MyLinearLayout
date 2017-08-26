@@ -843,6 +843,40 @@
 
 }
 
+-(void)testBaseline
+{
+    MyRelativeLayout *relaLayout = [MyRelativeLayout new];
+ //   self.view = relaLayout;
+    
+    UIButton *lb1 = [UIButton new];
+    //lb1.text = @"ajbdg";
+    [lb1 setTitle:@"ajbdg" forState:UIControlStateNormal];
+    lb1.titleLabel.font = [UIFont systemFontOfSize:70];
+    // lb1.adjustsFontSizeToFitWidth = YES;
+    lb1.mySize = CGSizeMake(180, 100);
+    // lb1.font = [UIFont systemFontOfSize:70];
+    // [lb1 sizeToFit];
+    
+    UIFont *font1 = lb1.font;
+    
+    
+    
+    
+    lb1.backgroundColor = [UIColor greenColor];
+    lb1.baselinePos.equalTo(@200);
+    lb1.myLeft = 30;
+    [relaLayout addSubview:lb1];
+    
+    UILabel *lb2 = [UILabel new];
+    lb2.text = @"jjgiii";
+    lb2.mySize = CGSizeMake(200, 100);
+    lb2.leftPos.equalTo(lb1.rightPos);
+    lb2.baselinePos.equalTo(lb1.baselinePos);
+    lb2.backgroundColor =[UIColor redColor];
+    [relaLayout addSubview:lb2];
+
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

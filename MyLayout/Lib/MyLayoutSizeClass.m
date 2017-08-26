@@ -9,6 +9,7 @@
 #import "MyLayoutSizeClass.h"
 #import "MyLayoutPosInner.h"
 #import "MyLayoutSizeInner.h"
+#import "MyGridNode.h"
 
 @interface MyViewSizeClass()
 
@@ -81,6 +82,10 @@ BOOL _myisRTL = NO;
     return [MyViewSizeClass isRTL] ? self.leadingPosInner : self.trailingPosInner;
 }
 
+-(MyLayoutPos*)baselinePosInner
+{
+    return _baselinePos;
+}
 
 -(MyLayoutSize*)widthSizeInner
 {
@@ -189,6 +194,17 @@ BOOL _myisRTL = NO;
     return [MyViewSizeClass isRTL] ? self.leadingPos : self.trailingPos;
 }
 
+-(MyLayoutPos*)baselinePos
+{
+    if (_baselinePos == nil)
+    {
+        _baselinePos = [MyLayoutPos new];
+        _baselinePos.view = self.view;
+        _baselinePos.pos = MyGravity_Baseline;
+    }
+    
+    return _baselinePos;
+}
 
 
 
@@ -505,6 +521,7 @@ BOOL _myisRTL = NO;
     lsc->_trailingPos = [self.trailingPosInner copy];
     lsc->_centerXPos = [self.centerXPosInner copy];
     lsc->_centerYPos = [self.centerYPosInner copy];
+    lsc->_baselinePos = [self.baselinePos copy];
     lsc->_widthSize = [self.widthSizeInner copy];
     lsc->_heightSize = [self.heightSizeInner copy];
     lsc->_wrapWidth = self.wrapWidth;
@@ -801,5 +818,215 @@ BOOL _myisRTL = NO;
 @end
 
 @implementation MyPathLayoutViewSizeClass
+
+@end
+
+
+@interface MyGridLayoutViewSizeClass()<MyGridNode>
+
+@property(nonatomic, strong) MyGridNode *rootGrid;
+
+@end
+
+
+@implementation MyGridLayoutViewSizeClass
+
+
+-(MyGridNode*)rootGrid
+{
+    if (_rootGrid == nil)
+    {
+        _rootGrid = [[MyGridNode alloc] initWithMeasure:0 superGrid:nil];
+    }
+    return _rootGrid;
+}
+
+//添加行栅格，返回新的栅格。
+-(id<MyGrid>)addRow:(CGFloat)measure
+{
+    id<MyGridNode> node = (id<MyGridNode>)[self.rootGrid addRow:measure];
+    node.superGrid = self;
+    return node;
+}
+
+//添加列栅格，返回新的栅格。
+-(id<MyGrid>)addCol:(CGFloat)measure
+{
+    id<MyGridNode> node = (id<MyGridNode>)[self.rootGrid addCol:measure];
+    node.superGrid = self;
+    return node;
+}
+
+//添加栅格，返回被添加的栅格。这个方法和下面的cloneGrid配合使用可以用来构建那些需要重复添加栅格的场景。
+-(id<MyGrid>)addRowGrid:(id<MyGrid>)grid
+{
+    id<MyGridNode> node = (id<MyGridNode>)[self.rootGrid addRowGrid:grid];
+    node.superGrid = self;
+    return node;
+}
+
+-(id<MyGrid>)addColGrid:(id<MyGrid>)grid
+{
+    id<MyGridNode> node = (id<MyGridNode>)[self.rootGrid addColGrid:grid];
+    node.superGrid = self;
+    return node;
+}
+
+//克隆出一个新栅格以及其下的所有子栅格。
+-(id<MyGrid>)cloneGrid
+{
+    return nil;
+}
+
+//从父栅格中删除。
+-(void)removeFromSuperGrid
+{
+}
+
+//得到父栅格。
+-(id<MyGrid>)superGrid
+{
+    return nil;
+}
+
+-(void)setSuperGrid:(id<MyGridNode>)superGrid
+{
+    
+}
+
+//得到所有子栅格
+-(NSArray<id<MyGrid>> *)subGrids
+{
+    return self.rootGrid.subGrids;
+}
+
+
+-(void)setSubGrids:(NSMutableArray *)subGrids
+{
+    self.rootGrid.subGrids = subGrids;
+}
+
+-(MySubGridsType)subGridsType
+{
+    return self.rootGrid.subGridsType;
+}
+
+-(void)setSubGridsType:(MySubGridsType)subGridsType
+{
+    self.rootGrid.subGridsType = subGridsType;
+}
+
+
+-(MyBorderline*)topBorderline
+{
+    return nil;
+}
+
+-(void)setTopBorderline:(MyBorderline *)topBorderline
+{
+}
+
+
+-(MyBorderline*)bottomBorderline
+{
+    return nil;
+}
+
+-(void)setBottomBorderline:(MyBorderline *)bottomBorderline
+{
+}
+
+
+-(MyBorderline*)leftBorderline
+{
+    return nil;
+}
+
+-(void)setLeftBorderline:(MyBorderline *)leftBorderline
+{
+}
+
+
+-(MyBorderline*)rightBorderline
+{
+    return nil;
+}
+
+-(void)setRightBorderline:(MyBorderline *)rightBorderline
+{
+}
+
+-(MyBorderline*)leadingBorderline
+{
+    return nil;
+}
+
+-(void)setLeadingBorderline:(MyBorderline *)leadingBorderline
+{
+    
+}
+
+-(MyBorderline*)trailingBorderline
+{
+    return nil;
+}
+
+-(void)setTrailingBorderline:(MyBorderline *)trailingBorderline
+{
+    
+}
+
+
+-(CGFloat)gridMeasure
+{
+    return self.rootGrid.gridMeasure;
+}
+
+-(void)setGridMeasure:(CGFloat)gridMeasure
+{
+    self.rootGrid.gridMeasure = gridMeasure;
+}
+
+-(CGSize)gridSize
+{
+    return self.rootGrid.gridSize;
+}
+
+-(void)setGridSize:(CGSize)gridSize
+{
+    self.rootGrid.gridSize = gridSize;
+}
+
+//更新格子尺寸。
+-(CGFloat)updateGridSize:(CGSize)superSize superGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure
+{
+    return [self.rootGrid updateGridSize:superSize superGrid:superGrid withMeasure:measure];
+}
+
+-(CALayer*)gridLayoutLayer
+{
+    return self.view.layer;
+}
+
+-(void)setBorderlineNeedLayoutIn:(CGRect)rect
+{
+    [self.rootGrid setBorderlineNeedLayoutIn:rect];
+}
+
+-(void)showBorderline:(BOOL)show
+{
+    [self.rootGrid showBorderline:show];
+}
+
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyGridLayoutViewSizeClass *lsc = [super copyWithZone:zone];
+    lsc->_rootGrid = (MyGridNode*)[self.rootGrid cloneGrid];
+    
+    
+    return lsc;
+}
+
 
 @end

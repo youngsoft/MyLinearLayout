@@ -333,11 +333,52 @@
         return;
     
     
-    //先检测宽度,如果宽度是父亲的宽度则宽度和左右都确定
+    //先检测高度,如果高度是父亲的高度则高度和上下都确定
     if ([self myCalcHeight:sbv sbvsc:sbvsc lsc:lsc sbvmyFrame:sbvmyFrame selfSize:selfSize])
         return;
     
-    if (sbvsc.centerYPosInner.posRelaVal != nil)
+    if (sbvsc.baselinePosInner.posRelaVal != nil)
+    {
+        //得到基线的位置。基线的位置等于top + (子视图的高度 - 字体的高度) / 2 + 字体基线以上的高度。
+        UIFont *sbvFont = [self myGetSubviewFont:sbv];
+        
+        if (sbvFont != nil)
+        {
+            //得到基线的位置。
+            UIView *relaView = sbvsc.baselinePosInner.posRelaVal.view;
+            sbvmyFrame.top = [self myCalcSubView:relaView lsc:lsc gravity:sbvsc.baselinePosInner.posRelaVal.pos selfSize:selfSize] - sbvFont.ascender - (sbvmyFrame.height - sbvFont.lineHeight) / 2 + sbvsc.baselinePosInner.absVal;
+            
+            if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
+            {
+                sbvmyFrame.top -= sbvsc.baselinePosInner.absVal;
+            }
+        }
+        else
+        {
+            sbvmyFrame.top =  lsc.topPadding + sbvsc.baselinePosInner.absVal;
+        }
+        
+        sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
+    
+    }
+    else if (sbvsc.baselinePosInner.posNumVal != nil)
+    {
+        UIFont *sbvFont = [self myGetSubviewFont:sbv];
+        
+        if (sbvFont != nil)
+        {
+            //根据基线位置反退顶部位置。
+            sbvmyFrame.top = lsc.topPadding + sbvsc.baselinePosInner.absVal - sbvFont.ascender - (sbvmyFrame.height - sbvFont.lineHeight) / 2;
+        }
+        else
+        {
+            sbvmyFrame.top = lsc.topPadding + sbvsc.baselinePosInner.absVal;
+        }
+        
+        sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
+
+    }
+    else if (sbvsc.centerYPosInner.posRelaVal != nil)
     {
         UIView *relaView = sbvsc.centerYPosInner.posRelaVal.view;
         
@@ -532,6 +573,33 @@
             [self myCalcSubViewTopBottom:sbv sbvsc:sbvsc lsc:lsc sbvmyFrame:sbvmyFrame selfSize:selfSize];
             
             return sbvmyFrame.bottom;
+        }
+            break;
+        case MyGravity_Baseline:
+        {
+            if (sbv == self || sbv == nil)
+                return lsc.topPadding;
+            
+            UIFont *sbvFont = [self myGetSubviewFont:sbv];
+            if (sbvFont != nil)
+            {
+                if (sbvmyFrame.top == CGFLOAT_MAX || sbvmyFrame.height == CGFLOAT_MAX)
+                    [self myCalcSubViewTopBottom:sbv sbvsc:sbvsc lsc:lsc sbvmyFrame:sbvmyFrame selfSize:selfSize];
+                
+                //得到基线的位置。
+                return sbvmyFrame.top + (sbvmyFrame.height - sbvFont.lineHeight)/2.0 + sbvFont.ascender;
+                
+            }
+            else
+            {
+                if (sbvmyFrame.top != CGFLOAT_MAX)
+                    return sbvmyFrame.top;
+                
+                [self myCalcSubViewTopBottom:sbv sbvsc:sbvsc lsc:lsc sbvmyFrame:sbvmyFrame selfSize:selfSize];
+                
+                return sbvmyFrame.top;
+            }
+            
         }
             break;
         case MyGravity_Horz_Fill:

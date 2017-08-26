@@ -147,6 +147,16 @@
 @property(nonatomic, assign) MySubviewsShrinkType shrinkType;
 
 
+
+/**
+ 设置水平线性布局里面的基线对齐基准视图，所有其他子视图的基线都以这个为准。
+ 这个属性要和gravity属性设置为MyGravity_Baseline配合使用。并且要求这个属性所指定的视图，必须具有font属性。
+ 目前支持具有font属性的有UILabel，UITextField,UITextView, UIButton几个系统控件。
+ */
+@property(nonatomic, assign) UIView *baselineBaseView;
+
+
+
 /**
  均分子视图的尺寸和间距。布局会根据里面的子视图的数量来平均分配子视图的高度或者宽度以及间距。
  

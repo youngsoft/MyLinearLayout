@@ -10,6 +10,7 @@
 #import "MyLayoutDef.h"
 #import "MyLayoutPos.h"
 #import "MyLayoutSize.h"
+#import "MyGrid.h"
 
 @class MyBaseLayout;
 
@@ -87,6 +88,7 @@ typedef enum : unsigned char{
     MySizeClass_hCompact = 1 << 2,   //高度压缩尺寸,这个属性在iOS8以下不支持
     MySizeClass_hRegular = 2 << 2,   //高度常规尺寸,这个属性在iOS8以下不支持
 
+    MySizeClass_Any = 0x0,     //所有设备，等价于MySizeClass_wAny|MySizeClass_hAny
     MySizeClass_Portrait = 0x40,  //竖屏
     MySizeClass_Landscape = 0x80,  //横屏,注意横屏和竖屏不支持 | 运算操作，只能指定一个。
 }MySizeClass;
@@ -119,6 +121,7 @@ typedef enum : unsigned char{
 @property(nonatomic, strong,readonly)  MyLayoutPos *leftPos;
 @property(nonatomic, strong,readonly)  MyLayoutPos *rightPos;
 
+@property(nonatomic, strong)  MyLayoutPos *baselinePos;
 
 
 @property(nonatomic, assign) CGFloat myTop;
@@ -262,6 +265,11 @@ typedef enum : unsigned char{
 
 @interface MyPathLayoutViewSizeClass  : MyLayoutViewSizeClass
 
+
+@end
+
+
+@interface MyGridLayoutViewSizeClass : MyLayoutViewSizeClass<MyGrid>
 
 @end
 

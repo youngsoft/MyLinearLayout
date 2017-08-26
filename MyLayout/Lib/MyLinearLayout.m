@@ -201,6 +201,16 @@
     [super willMoveToSuperview:newSuperview];
 }
 
+- (void)willRemoveSubview:(UIView *)subview
+{
+    [super willRemoveSubview:subview];
+    if (subview == self.baselineBaseView)
+    {
+        self.baselineBaseView = nil;
+    }
+}
+
+
 
 
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray *)sbs
@@ -990,6 +1000,7 @@
         floatingWidth = 0;
     }
     
+    CGFloat baselinePos = CGFLOAT_MAX;  //保存基线的值。
     //调整所有子视图的宽度
     CGFloat pos = paddingLeading;
     for (UIView *sbv in sbs) {
@@ -1118,8 +1129,21 @@
                                          sbv:sbv
                                paddingBottom:paddingBottom
                                   paddingTop:paddingTop
+                                 baselinePos:baselinePos
                                        sbvsc:sbvsc
                                          lsc:lsc];
+            
+            
+            //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
+            if (vertGravity == MyGravity_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
+            {
+                UIFont *sbvFont = [sbv valueForKey:@"font"];
+                //这里要求baselineBaseView必须要具有font属性。
+                //得到基线位置。
+                baselinePos = rect.origin.y + (rect.size.height - sbvFont.lineHeight) / 2.0 + sbvFont.ascender;
+                
+            }
+
 
         }
         
@@ -1137,6 +1161,7 @@
     if (lsc.wrapContentHeight)
     {
         selfSize.height = maxSubviewHeight + paddingVert;
+        baselinePos = CGFLOAT_MAX;
         
         for (UIView *sbv in sbs)
         {
@@ -1151,10 +1176,22 @@
                                          sbv:sbv
                                paddingBottom:paddingBottom
                                   paddingTop:paddingTop
+                                 baselinePos:baselinePos
                                        sbvsc:sbvsc
                                          lsc:lsc];
             
             sbvmyFrame.frame = rect;
+            
+            //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
+            if (vertGravity == MyGravity_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
+            {
+                UIFont *sbvFont = [sbv valueForKey:@"font"];
+                //这里要求baselineBaseView必须要具有font属性。
+                //得到基线位置。
+                baselinePos = rect.origin.y + (rect.size.height - sbvFont.lineHeight) / 2.0 + sbvFont.ascender;
+                
+            }
+
             
         }
 
@@ -1506,7 +1543,7 @@
         pos = paddingLeading;
     }
 
-    
+    CGFloat baselinePos = CGFLOAT_MAX;  //保存基线的值。
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
@@ -1519,7 +1556,7 @@
         
         rect.origin.x = pos;
         
-        [self myCalcSubviewTopBottomRect:vertGravity selfSize:selfSize rect_p:&rect sbv:sbv paddingBottom:paddingBottom paddingTop:paddingTop sbvsc:sbvsc lsc:lsc];
+        [self myCalcSubviewTopBottomRect:vertGravity selfSize:selfSize rect_p:&rect sbv:sbv paddingBottom:paddingBottom paddingTop:paddingTop baselinePos:baselinePos sbvsc:sbvsc lsc:lsc];
         
         if (fill != 0 &&  [noWrapsbsSet containsObject:sbv])
             rect.size.width += fill;
@@ -1538,6 +1575,15 @@
         
         pos += between;  //只有mghorz为between才加这个间距拉伸。
 
+        //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
+        if (vertGravity == MyGravity_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
+        {
+            UIFont *sbvFont = [sbv valueForKey:@"font"];
+            //这里要求baselineBaseView必须要具有font属性。
+            //得到基线位置。
+            baselinePos = rect.origin.y + (rect.size.height - sbvFont.lineHeight) / 2.0 + sbvFont.ascender;
+            
+        }
     }
     
     return selfSize;
@@ -1564,7 +1610,7 @@
     [self myCalcHorzGravity:[self myGetSubviewHorzGravity:sbv sbvsc:sbvsc horzGravity:horzGravity] sbv:sbv sbvsc:sbvsc paddingLeading:paddingLeading paddingTrailing:paddingTrailing selfSize:selfSize pRect:rect_p];
 }
 
-- (void)myCalcSubviewTopBottomRect:(MyGravity)vertGravity selfSize:(CGSize)selfSize rect_p:(CGRect *)rect_p sbv:(UIView *)sbv paddingBottom:(CGFloat)paddingBottom paddingTop:(CGFloat)paddingTop sbvsc:(UIView *)sbvsc lsc:(MyLinearLayout*)lsc
+- (void)myCalcSubviewTopBottomRect:(MyGravity)vertGravity selfSize:(CGSize)selfSize rect_p:(CGRect *)rect_p sbv:(UIView *)sbv paddingBottom:(CGFloat)paddingBottom paddingTop:(CGFloat)paddingTop baselinePos:(CGFloat)baselinePos sbvsc:(UIView *)sbvsc lsc:(MyLinearLayout*)lsc
 {
     //计算高度
     if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == lsc.heightSizeInner)
@@ -1579,7 +1625,7 @@
     
     rect_p->size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect_p->size.height sbvSize:rect_p->size selfLayoutSize:selfSize];
     
-    [self myCalcVertGravity:[self myGetSubviewVertGravity:sbv sbvsc:sbvsc vertGravity:vertGravity] sbv:sbv sbvsc:sbvsc paddingTop:paddingTop paddingBottom:paddingBottom selfSize:selfSize pRect:rect_p];
+    [self myCalcVertGravity:[self myGetSubviewVertGravity:sbv sbvsc:sbvsc vertGravity:vertGravity] sbv:sbv sbvsc:sbvsc paddingTop:paddingTop paddingBottom:paddingBottom  baselinePos:baselinePos selfSize:selfSize pRect:rect_p];
 }
 
 -(CGFloat)myCalcSelfSize:(CGFloat)selfSize subviewSize:(CGFloat)subviewSize headPos:(MyLayoutPos*)headPos centerPos:(MyLayoutPos*)centerPos tailPos:(MyLayoutPos*)tailPos

@@ -7,53 +7,37 @@
 //
 
 #import "MyBaseLayout.h"
-
-//固定尺寸。
-//百分比尺寸。 (剩余的百分比还是整体百分比)
-//剩余尺寸。
-//包裹尺寸。
-//填充尺寸。
-
-@protocol MyGrid <NSObject>
-
-//格子内子栅格的间距
-@property(nonatomic, assign) CGFloat subviewSpace;
-
-//添加行。返回新的栅格。
--(id<MyGrid>)addRow:(CGFloat)size;
-
-//添加列。返回新的栅格。
--(id<MyGrid>)addCol:(CGFloat)size;
-
-//从父栅格中删除。
--(void)removeFromSuperGrid;
-
-//支持边界线。
-
-//格子的内间距
-@property(nonatomic, assign) UIEdgeInsets padding;
-
-@end
-
+#import "MyGrid.h"
 
 
 
 /**
- 栅格布局，布局默认情况下就是一个栅格。
+ 栅格布局，布局默认情况下就是一个行栅格。
  */
 @interface MyGridLayout : MyBaseLayout<MyGrid>
 
 
-//为某中size class设定
--(id<MyGrid>)gridIn:(MySizeClass)sizeClass;
+//删除布局下所有的子栅格
+-(void)removeGrids;
+-(void)removeGridsIn:(MySizeClass)sizeClass;
 
-//删除栅格
--(void)removeGrid;
 
--(void)removeGridIn:(MySizeClass)sizeClass;
-
-//栅格的描述。
-@property(nonatomic, strong) NSDictionary *gridDesc;
+/*
+ 栅格的描述。你可以用格子描述语言来建立格子
+ 
+ @code
+ 
+    {rows:[
+ 
+ {size:100, size:"100%", size:"-20%",size:"wrap", size:"fill", padding:"{10,10,10,10}", space:10.0, gravity:@"top|bottom|left|right|centerX|centerY|width|height","top-borderline":{"color":"#AAA",thick:1.0, head:1.0, tail:1.0, offset:1} },
+ {},
+ ]
+ }
+ 
+ @endcode
+ 
+ */
+@property(nonatomic, strong) NSDictionary *gridDictionary;
 
 
 @end

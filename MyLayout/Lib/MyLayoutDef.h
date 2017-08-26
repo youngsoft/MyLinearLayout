@@ -170,6 +170,13 @@ typedef enum : NSUInteger {
 } MySubviewsShrinkType;
 
 
+//定义特殊的行列尺寸。主要用于表格布局和栅格布局中。
+#define MTLSIZE_AVERAGE 0
+#define MTLSIZE_WRAPCONTENT -1
+#define MTLSIZE_MATCHPARENT -2
+
+
+
 //内部使用
 typedef enum : unsigned char
 {

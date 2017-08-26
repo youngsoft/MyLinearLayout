@@ -54,36 +54,8 @@
 @end
 
 
-/**绘制线条层委托实现类**/
-#ifdef MAC_OS_X_VERSION_10_12
-@interface MyBorderlineLayerDelegate : NSObject<CALayerDelegate>
-#else
-@interface MyBorderlineLayerDelegate : NSObject
-#endif
-
-@property(nonatomic, strong) MyBorderline *topBorderline; /**顶部边界线*/
-@property(nonatomic, strong) MyBorderline *leadingBorderline; /**头部边界线*/
-@property(nonatomic, strong) MyBorderline *bottomBorderline;  /**底部边界线*/
-@property(nonatomic, strong) MyBorderline *trailingBorderline;  /**尾部边界线*/
-@property(nonatomic, strong) MyBorderline *leftBorderline;   /**左边边界线*/
-@property(nonatomic, strong) MyBorderline *rightBorderline;   /**左边边界线*/
-
-
-@property(nonatomic ,weak) CAShapeLayer *topBorderlineLayer;
-@property(nonatomic ,weak) CAShapeLayer *leadingBorderlineLayer;
-@property(nonatomic ,weak) CAShapeLayer *bottomBorderlineLayer;
-@property(nonatomic ,weak) CAShapeLayer *trailingBorderlineLayer;
-
-
--(instancetype)initWithLayout:(MyBaseLayout*)layout;
-
--(void)setNeedsLayout;
-
-@end
-
 
 @interface MyBaseLayout()
-
 
 
 //派生类重载这个函数进行布局
@@ -99,23 +71,24 @@
 
 
 -(void)myCalcVertGravity:(MyGravity)vert
-                 sbv:(UIView *)sbv
-               sbvsc:(UIView*)sbvsc
-          paddingTop:(CGFloat)paddingTop
-       paddingBottom:(CGFloat)paddingBottom
-            selfSize:(CGSize)selfSize
-               pRect:(CGRect*)pRect;
+                     sbv:(UIView *)sbv
+                   sbvsc:(UIView*)sbvsc
+              paddingTop:(CGFloat)paddingTop
+           paddingBottom:(CGFloat)paddingBottom
+             baselinePos:(CGFloat)baselinePos
+                selfSize:(CGSize)selfSize
+                   pRect:(CGRect*)pRect;
 
 -(MyGravity)myGetSubviewHorzGravity:(UIView*)sbv sbvsc:(UIView*)sbvsc horzGravity:(MyGravity)horzGravity;
 
 
 -(void)myCalcHorzGravity:(MyGravity)horz
-                 sbv:(UIView *)sbv
-               sbvsc:(UIView*)sbvsc
-      paddingLeading:(CGFloat)paddingLeading
-     paddingTrailing:(CGFloat)paddingTrailing
-            selfSize:(CGSize)selfSize
-               pRect:(CGRect*)pRect;
+                     sbv:(UIView *)sbv
+                   sbvsc:(UIView*)sbvsc
+          paddingLeading:(CGFloat)paddingLeading
+         paddingTrailing:(CGFloat)paddingTrailing
+                selfSize:(CGSize)selfSize
+                   pRect:(CGRect*)pRect;
 
 -(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvmyFrame:(MyFrame*)sbvmyFrame selfLayoutSize:(CGSize)selfLayoutSize;
 
@@ -141,6 +114,25 @@
 
 -(MyGravity)myConvertLeftRightGravityToLeadingTrailing:(MyGravity)horzGravity;
 
+
+-(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout;
+
+
+-(void)myCalcSubViewRect:(UIView*)sbv
+                   sbvsc:(UIView*)sbvsc
+              sbvmyFrame:(MyFrame*)sbvmyFrame
+                     lsc:(MyBaseLayout*)lsc
+             vertGravity:(MyGravity)vertGravity
+             horzGravity:(MyGravity)horzGravity
+              inSelfSize:(CGSize)selfSize
+              paddingTop:(CGFloat)paddingTop
+          paddingLeading:(CGFloat)paddingLeading
+           paddingBottom:(CGFloat)paddingBottom
+         paddingTrailing:(CGFloat)paddingTrailing
+            pMaxWrapSize:(CGSize*)pMaxWrapSize;
+
+-(UIFont*)myGetSubviewFont:(UIView*)sbv;
+
 @end
 
 
@@ -158,6 +150,8 @@
 
 @property(nonatomic, strong,readonly)  MyLayoutPos *leftPosInner;
 @property(nonatomic, strong,readonly)  MyLayoutPos *rightPosInner;
+
+@property(nonatomic, strong,readonly)  MyLayoutPos *baselinePosInner;
 
 
 #if UIKIT_DEFINE_AS_PROPERTIES
@@ -201,6 +195,7 @@
 @property(nonatomic, readonly)  MyLayoutPos *leftPosInner;
 @property(nonatomic, readonly)  MyLayoutPos *rightPosInner;
 
+@property(nonatomic, readonly)  MyLayoutPos *baselinePosInner;
 
 
 @end

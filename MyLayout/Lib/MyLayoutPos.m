@@ -348,6 +348,9 @@
                 case MyGravity_Vert_Bottom:
                     val = rview.bottomPos;
                     break;
+                case MyGravity_Baseline:
+                    val = rview.baselinePos;
+                    break;
                 default:
                     NSAssert(0, @"oops!");
                     break;
@@ -537,6 +540,9 @@
             break;
         case MyGravity_Vert_Bottom:
             posStr = @"bottomPos";
+            break;
+        case MyGravity_Baseline:
+            posStr = @"baselinePos";
             break;
         default:
             break;

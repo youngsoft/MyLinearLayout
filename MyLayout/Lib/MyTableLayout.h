@@ -28,10 +28,6 @@
 
 @end
 
-//定义特殊的表格行列尺寸,参考下面addRow方法中的描述。
-#define MTLSIZE_AVERAGE 0
-#define MTLSIZE_WRAPCONTENT -1
-#define MTLSIZE_MATCHPARENT -2
 
 
 /**
@@ -60,7 +56,7 @@
  
  @note 行能设置的值：
  
- 1. MTLSIZE_WRAPCONTENT表示由列子视图决定本行尺寸(垂直表格为行高，水平表格为行宽)，每个列子视图都需要自己设置尺寸(垂直表格为高度，水平表格为宽度)
+ 1. MTLSIZE_WRAPCONTENT 表示由列子视图决定本行尺寸(垂直表格为行高，水平表格为行宽)，每个列子视图都需要自己设置尺寸(垂直表格为高度，水平表格为宽度)
  
  2. MTLSIZE_AVERAGE表示均分尺寸(垂直表格为行高 = 总行高/行数，水平表格为行宽 = 总行宽/行数)，列子视图不需要设置尺寸(垂直表格为高度，水平表格为宽度)
  

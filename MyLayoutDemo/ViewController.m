@@ -62,6 +62,10 @@
 #import "PLTest4ViewController.h"
 #import "PLTest5ViewController.h"
 
+#import "GLTest1ViewController.h"
+#import "GLTest2ViewController.h"
+
+
 @interface ViewController ()
 
 @property(nonatomic, strong) NSArray *demoVCLists;
@@ -176,6 +180,12 @@
                            },
                          @{@"title":NSLocalizedString(@"5.PathLayout - Roulette", @""),
                            @"class":[PLTest5ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"1.GridLayout - Test1", @""),
+                           @"class":[GLTest1ViewController class]
+                           },
+                         @{@"title":NSLocalizedString(@"2.GridLayout - Test2", @""),
+                           @"class":[GLTest2ViewController class]
                            },
                          @{@"title":NSLocalizedString(@"1.UITableView - Dynamic height", @""),
                            @"class":[AllTest1ViewController class]

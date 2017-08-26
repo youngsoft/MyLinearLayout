@@ -136,6 +136,14 @@
 		18D3C9DE1EDF0AB500D3DE43 /* rl.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D3C9CD1EDF0AB500D3DE43 /* rl.png */; };
 		18D3C9DF1EDF0AB500D3DE43 /* tl.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D3C9CE1EDF0AB500D3DE43 /* tl.png */; };
 		18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684551C4F423400A48BB4 /* MyLayoutTests.m */; };
+		205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */ = {isa = PBXBuildFile; fileRef = 205642841F4CFF9B00E8BDDE /* MyBorderline.h */; };
+		205642871F4CFF9B00E8BDDE /* MyBorderline.m in Sources */ = {isa = PBXBuildFile; fileRef = 205642851F4CFF9B00E8BDDE /* MyBorderline.m */; };
+		205642881F4CFFB600E8BDDE /* MyBorderline.m in Sources */ = {isa = PBXBuildFile; fileRef = 205642851F4CFF9B00E8BDDE /* MyBorderline.m */; };
+		2056430A1F4E53CD00E8BDDE /* MyGridNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 205643081F4E53CD00E8BDDE /* MyGridNode.h */; };
+		2056430B1F4E53CD00E8BDDE /* MyGridNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643091F4E53CD00E8BDDE /* MyGridNode.m */; };
+		2056430C1F4E8B1E00E8BDDE /* MyGridNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643091F4E53CD00E8BDDE /* MyGridNode.m */; };
+		205643131F51C7EB00E8BDDE /* GLTest2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643121F51C7EB00E8BDDE /* GLTest2ViewController.m */; };
+		205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -336,6 +344,15 @@
 		18D684001C4F421400A48BB4 /* MyLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayout.h; sourceTree = "<group>"; };
 		18D684541C4F423400A48BB4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D684551C4F423400A48BB4 /* MyLayoutTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutTests.m; sourceTree = "<group>"; };
+		205642841F4CFF9B00E8BDDE /* MyBorderline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyBorderline.h; sourceTree = "<group>"; };
+		205642851F4CFF9B00E8BDDE /* MyBorderline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBorderline.m; sourceTree = "<group>"; };
+		205642891F4D013D00E8BDDE /* MyGrid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyGrid.h; sourceTree = "<group>"; };
+		205643081F4E53CD00E8BDDE /* MyGridNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyGridNode.h; sourceTree = "<group>"; };
+		205643091F4E53CD00E8BDDE /* MyGridNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGridNode.m; sourceTree = "<group>"; };
+		205643111F51C7DF00E8BDDE /* GLTest2ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLTest2ViewController.h; sourceTree = "<group>"; };
+		205643121F51C7EB00E8BDDE /* GLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest2ViewController.m; sourceTree = "<group>"; };
+		205CFA8C1F49BD1C00355489 /* GLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest1ViewController.h; sourceTree = "<group>"; };
+		205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest1ViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -421,6 +438,7 @@
 				18D3C9001EDF056900D3DE43 /* TableLayoutDemo */,
 				18D3C8FD1EDF053D00D3DE43 /* FlowLayoutDemo */,
 				18D3C8FF1EDF055C00D3DE43 /* FloatLayoutDemo */,
+				205CFA8B1F49BCAF00355489 /* GridLayoutDemo */,
 				18D3C8FE1EDF055000D3DE43 /* PathLayoutDemo */,
 				18D3C9011EDF059600D3DE43 /* IntegratedDemo */,
 			);
@@ -683,8 +701,13 @@
 				182225C41E77E5930081AA4B /* MyDimeScale.m */,
 				182225B81E77E5930081AA4B /* MyLayoutInner.h */,
 				182225B31E77E5930081AA4B /* MyLayoutDef.h */,
+				205642891F4D013D00E8BDDE /* MyGrid.h */,
 				182DB6401EF7876200E2D65D /* MyGridLayout.h */,
 				182DB6411EF7876200E2D65D /* MyGridLayout.m */,
+				205642841F4CFF9B00E8BDDE /* MyBorderline.h */,
+				205642851F4CFF9B00E8BDDE /* MyBorderline.m */,
+				205643081F4E53CD00E8BDDE /* MyGridNode.h */,
+				205643091F4E53CD00E8BDDE /* MyGridNode.m */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -706,6 +729,17 @@
 			path = MyLayoutTests;
 			sourceTree = "<group>";
 		};
+		205CFA8B1F49BCAF00355489 /* GridLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				205CFA8C1F49BD1C00355489 /* GLTest1ViewController.h */,
+				205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */,
+				205643111F51C7DF00E8BDDE /* GLTest2ViewController.h */,
+				205643121F51C7EB00E8BDDE /* GLTest2ViewController.m */,
+			);
+			name = GridLayoutDemo;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -713,6 +747,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2056430A1F4E53CD00E8BDDE /* MyGridNode.h in Headers */,
 				18C15AEC1EDF13D700AADEAC /* MyLayout.h in Headers */,
 				18C15AED1EDF13DE00AADEAC /* MyFlowLayout.h in Headers */,
 				18C15AEE1EDF13E500AADEAC /* MyLinearLayout.h in Headers */,
@@ -727,6 +762,7 @@
 				18C15AF71EDF141600AADEAC /* MyLayoutSizeClass.h in Headers */,
 				18C15AF81EDF141A00AADEAC /* MyMaker.h in Headers */,
 				18C15AF91EDF142000AADEAC /* MyDimeScale.h in Headers */,
+				205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */,
 				182DB6421EF7876200E2D65D /* MyGridLayout.h in Headers */,
 				18C15AFA1EDF142300AADEAC /* MyLayoutDef.h in Headers */,
 			);
@@ -918,9 +954,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				18C15AFB1EDF144B00AADEAC /* MyFlowLayout.m in Sources */,
+				205642871F4CFF9B00E8BDDE /* MyBorderline.m in Sources */,
 				18C15AFC1EDF144B00AADEAC /* MyLinearLayout.m in Sources */,
 				18C15AFD1EDF144B00AADEAC /* MyFloatLayout.m in Sources */,
 				18C15AFE1EDF144B00AADEAC /* MyTableLayout.m in Sources */,
+				2056430B1F4E53CD00E8BDDE /* MyGridNode.m in Sources */,
 				18C15AFF1EDF144B00AADEAC /* MyRelativeLayout.m in Sources */,
 				182DB6441EF7876200E2D65D /* MyGridLayout.m in Sources */,
 				18C15B001EDF144B00AADEAC /* MyPathLayout.m in Sources */,
@@ -938,6 +976,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				205643131F51C7EB00E8BDDE /* GLTest2ViewController.m in Sources */,
 				18D3C9B81EDF0A5A00D3DE43 /* main.m in Sources */,
 				18D3C94B1EDF07E700D3DE43 /* PLTest3ViewController.m in Sources */,
 				18D3C9391EDF07C000D3DE43 /* FLLTest1ViewController.m in Sources */,
@@ -971,6 +1010,7 @@
 				18D3C91D1EDF078200D3DE43 /* FLTest2ViewController.m in Sources */,
 				18D3C9661EDF080800D3DE43 /* TLTest1ViewController.m in Sources */,
 				18D3C94A1EDF07E700D3DE43 /* PLTest2ViewController.m in Sources */,
+				205642881F4CFFB600E8BDDE /* MyBorderline.m in Sources */,
 				18D3C93C1EDF07C000D3DE43 /* FLLTest4ViewController.m in Sources */,
 				18D3C98C1EDF084000D3DE43 /* AllTest8ViewController.m in Sources */,
 				18D3C93D1EDF07C000D3DE43 /* FLLTest5ViewController.m in Sources */,
@@ -981,8 +1021,10 @@
 				18D3C9891EDF084000D3DE43 /* AllTest5ViewController.m in Sources */,
 				182225CC1E77E5930081AA4B /* MyRelativeLayout.m in Sources */,
 				18D3C94C1EDF07E700D3DE43 /* PLTest4ViewController.m in Sources */,
+				2056430C1F4E8B1E00E8BDDE /* MyGridNode.m in Sources */,
 				182225D11E77E5930081AA4B /* MyLayoutSizeClass.m in Sources */,
 				18D3C9741EDF082800D3DE43 /* AllTestDataModel.m in Sources */,
+				205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */,
 				18D3C9171EDF074900D3DE43 /* LLTest7ViewController.m in Sources */,
 				18D3C98A1EDF084000D3DE43 /* AllTest6ViewController.m in Sources */,
 				18D3C9111EDF074900D3DE43 /* LLTest1ViewController.m in Sources */,

@@ -76,6 +76,10 @@ CGFloat _myMLayoutSizeError = 0.0;
     return self.myCurrentSizeClass.rightPos;
 }
 
+-(MyLayoutPos*)baselinePos
+{
+    return self.myCurrentSizeClass.baselinePos;
+}
 
 
 
@@ -766,6 +770,11 @@ CGFloat _myMLayoutSizeError = 0.0;
 }
 
 
+-(MyLayoutPos*)baselinePosInner
+{
+    return self.myCurrentSizeClass.baselinePosInner;
+}
+
 
 -(MyLayoutSize*)widthSizeInner
 {
@@ -778,57 +787,8 @@ CGFloat _myMLayoutSizeError = 0.0;
    return self.myCurrentSizeClass.heightSizeInner;
 }
 
-
-
-
-
-
-
-
 @end
 
-
-
-@implementation MyBorderline
-
-
--(id)init
-{
-    self = [super init];
-    if (self != nil)
-    {
-        _color = [UIColor blackColor];
-        _thick = 1;
-        _headIndent = 0;
-        _tailIndent = 0;
-        _dash  = 0;
-    }
-    
-    return self;
-}
-
--(id)initWithColor:(UIColor *)color
-{
-    self = [self init];
-    if (self != nil)
-    {
-        _color = color;
-    }
-    
-    return self;
-}
-
--(void)setThick:(CGFloat)thick
-{
-    if (thick < 1)
-        thick = 1;
-    if (_thick != thick)
-    {
-        _thick = thick;
-    }
-}
-
-@end
 
 
 @implementation MyBaseLayout
@@ -1116,7 +1076,7 @@ CGFloat _myMLayoutSizeError = 0.0;
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayout:self];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:self.layer];
     }
     
     _borderlineLayerDelegate.topBorderline = topBorderline;
@@ -1131,7 +1091,7 @@ CGFloat _myMLayoutSizeError = 0.0;
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayout:self];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:self.layer];
     }
     
     _borderlineLayerDelegate.leadingBorderline = leadingBorderline;
@@ -1146,7 +1106,7 @@ CGFloat _myMLayoutSizeError = 0.0;
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayout:self];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:self.layer];
     }
     
     _borderlineLayerDelegate.bottomBorderline = bottomBorderline;
@@ -1162,7 +1122,7 @@ CGFloat _myMLayoutSizeError = 0.0;
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayout:self];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:self.layer];
     }
     
     _borderlineLayerDelegate.trailingBorderline = trailingBorderline;
@@ -1179,7 +1139,7 @@ CGFloat _myMLayoutSizeError = 0.0;
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayout:self];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:self.layer];
     }
     
     _borderlineLayerDelegate.leftBorderline = leftBorderline;
@@ -1195,7 +1155,7 @@ CGFloat _myMLayoutSizeError = 0.0;
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayout:self];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:self.layer];
     }
     
     _borderlineLayerDelegate.rightBorderline = rightBorderline;
@@ -1510,7 +1470,7 @@ CGFloat _myMLayoutSizeError = 0.0;
     if (hidden == NO)
     {
        
-        [_borderlineLayerDelegate setNeedsLayout];
+        [_borderlineLayerDelegate setNeedsLayoutIn:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
         
         if ([self.superview isKindOfClass:[MyBaseLayout class]])
         {
@@ -1928,7 +1888,7 @@ CGFloat _myMLayoutSizeError = 0.0;
             }
         }
         
-        [_borderlineLayerDelegate setNeedsLayout];
+        [_borderlineLayerDelegate setNeedsLayoutIn:CGRectMake(0, 0, newSelfSize.width, newSelfSize.height)];
                 
         //这里只用width判断的原因是如果newSelfSize被计算成功则size中的所有值都不是CGFLOAT_MAX，所以这里选width只是其中一个代表。
         if (newSelfSize.width != CGFLOAT_MAX)
@@ -2114,12 +2074,13 @@ CGFloat _myMLayoutSizeError = 0.0;
 
 
 -(void)myCalcVertGravity:(MyGravity)vertGravity
-               sbv:(UIView *)sbv
-               sbvsc:(UIView*)sbvsc
-      paddingTop:(CGFloat)paddingTop
-     paddingBottom:(CGFloat)paddingBottom
-            selfSize:(CGSize)selfSize
-               pRect:(CGRect*)pRect
+                     sbv:(UIView *)sbv
+                   sbvsc:(UIView*)sbvsc
+              paddingTop:(CGFloat)paddingTop
+           paddingBottom:(CGFloat)paddingBottom
+             baselinePos:(CGFloat)baselinePos
+                selfSize:(CGSize)selfSize
+                   pRect:(CGRect*)pRect
 {
     
     
@@ -2129,6 +2090,19 @@ CGFloat _myMLayoutSizeError = 0.0;
     
    CGFloat  bottomMargin = [self myValidMargin:sbvsc.bottomPosInner sbv:sbv calcPos:[sbvsc.bottomPosInner realPosIn:selfSize.height - paddingTop - paddingBottom] selfLayoutSize:selfSize];
 
+    //确保设置基线对齐的视图都是UILabel,UITextField,UITextView
+    if (baselinePos == CGFLOAT_MAX && vertGravity == MyGravity_Baseline)
+        vertGravity = MyGravity_Vert_Top;
+    
+    UIFont *sbvFont = nil;
+    if (vertGravity == MyGravity_Baseline)
+    {
+        sbvFont = [self myGetSubviewFont:sbv];
+    }
+    
+    if (sbvFont == nil && vertGravity == MyGravity_Baseline)
+        vertGravity = MyGravity_Vert_Top;
+    
     
     if (vertGravity == MyGravity_Vert_Top)
     {
@@ -2138,7 +2112,13 @@ CGFloat _myMLayoutSizeError = 0.0;
     {
         pRect->origin.y = selfSize.height - paddingBottom - bottomMargin - pRect->size.height;
     }
-    if (vertGravity == MyGravity_Vert_Fill)
+    else if (vertGravity == MyGravity_Baseline)
+    {
+        //得到基线位置。
+        pRect->origin.y = baselinePos - sbvFont.ascender - (pRect->size.height - sbvFont.lineHeight) / 2;
+
+    }
+    else if (vertGravity == MyGravity_Vert_Fill)
     {
         pRect->origin.y = paddingTop + topMargin;
         pRect->size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:selfSize.height - paddingTop - paddingBottom - topMargin - bottomMargin  sbvSize:pRect->size selfLayoutSize:selfSize];
@@ -2307,7 +2287,11 @@ CGFloat _myMLayoutSizeError = 0.0;
     {
         if (lsc.widthSizeInner.dimeRelaVal.view == newSuperview)
         {
-            size.width = [lsc.widthSizeInner measureWith:rectSuper.size.width];
+            if (lsc.widthSizeInner.dimeRelaVal.dime == MyGravity_Horz_Fill)
+                size.width = [lsc.widthSizeInner measureWith:rectSuper.size.width];
+            else
+                size.width = [lsc.widthSizeInner measureWith:rectSuper.size.height];
+            
             size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:size.width sbvSize:size selfLayoutSize:rectSuper.size];
         }
         
@@ -2330,8 +2314,11 @@ CGFloat _myMLayoutSizeError = 0.0;
     {
         if (lsc.heightSizeInner.dimeRelaVal.view == newSuperview)
         {
-            
-            size.height = [lsc.heightSizeInner measureWith:rectSuper.size.height];
+            if (lsc.heightSizeInner.dimeRelaVal.dime == MyGravity_Vert_Fill)
+                size.height = [lsc.heightSizeInner measureWith:rectSuper.size.height];
+            else
+                size.height = [lsc.heightSizeInner measureWith:rectSuper.size.width];
+
             size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:size.height sbvSize:size selfLayoutSize:rectSuper.size];
             
         }
@@ -2384,7 +2371,11 @@ CGFloat _myMLayoutSizeError = 0.0;
         {
             if (lsc.widthSizeInner.dimeRelaVal.view == newSuperview)
             {
-                rectSelf.size.width = [lsc.widthSizeInner measureWith:rectSuper.size.width];
+                if (lsc.widthSizeInner.dimeRelaVal.dime == MyGravity_Horz_Fill)
+                    rectSelf.size.width = [lsc.widthSizeInner measureWith:rectSuper.size.width];
+                else
+                    rectSelf.size.width = [lsc.widthSizeInner measureWith:rectSuper.size.height];
+
             }
             else
             {
@@ -2438,7 +2429,10 @@ CGFloat _myMLayoutSizeError = 0.0;
         {
             if (lsc.heightSizeInner.dimeRelaVal.view == newSuperview)
             {
-                rectSelf.size.height = [lsc.heightSizeInner measureWith:rectSuper.size.height];
+                if (lsc.heightSizeInner.dimeRelaVal.dime == MyGravity_Vert_Fill)
+                    rectSelf.size.height = [lsc.heightSizeInner measureWith:rectSuper.size.height];
+                else
+                    rectSelf.size.height = [lsc.heightSizeInner measureWith:rectSuper.size.width];
             }
             else
             {
@@ -2846,6 +2840,20 @@ CGFloat _myMLayoutSizeError = 0.0;
     
 }
 
+-(UIFont*)myGetSubviewFont:(UIView*)sbv
+{
+    UIFont *sbvFont = nil;
+    if ([sbv isKindOfClass:[UILabel class]] ||
+        [sbv isKindOfClass:[UITextField class]] ||
+        [sbv isKindOfClass:[UITextView class]] ||
+        [sbv isKindOfClass:[UIButton class]])
+    {
+        sbvFont = [sbv valueForKey:@"font"];
+    }
+    
+    return sbvFont;
+}
+
 
 
 - (void)myAlterScrollViewContentSize:(CGSize)newSize lsc:(MyBaseLayout*)lsc
@@ -2961,6 +2969,187 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 
 
+-(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout
+{
+    if (!isEstimate)
+    {
+        sbvmyFrame.frame = sbv.bounds;
+        [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame selfLayoutSize:selfSize];
+    }
+    
+    if ([sbv isKindOfClass:[MyBaseLayout class]])
+    {
+        
+        if (sbvsc.wrapContentHeight && (sbvsc.heightSizeInner.dimeVal != nil || (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)))
+        {
+            sbvsc.wrapContentHeight = NO;
+        }
+        
+        if (sbvsc.wrapContentWidth && (sbvsc.widthSizeInner.dimeVal != nil || (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)))
+        {
+            sbvsc.wrapContentWidth = NO;
+        }
+        
+        
+        if (pHasSubLayout != nil && (sbvsc.wrapContentHeight || sbvsc.wrapContentWidth))
+            *pHasSubLayout = YES;
+        
+        if (isEstimate && (sbvsc.wrapContentHeight || sbvsc.wrapContentWidth))
+        {
+            [(MyBaseLayout*)sbv estimateLayoutRect:sbvmyFrame.frame.size inSizeClass:sizeClass];
+            if (sbvmyFrame.multiple)
+            {
+                sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                sbvsc = sbvmyFrame.sizeClass;
+            }
+        }
+    }
+    
+}
+
+
+
+-(void)myCalcSubViewRect:(UIView*)sbv
+                   sbvsc:(UIView*)sbvsc
+              sbvmyFrame:(MyFrame*)sbvmyFrame
+                     lsc:(MyBaseLayout*)lsc
+             vertGravity:(MyGravity)vertGravity
+             horzGravity:(MyGravity)horzGravity
+              inSelfSize:(CGSize)selfSize
+              paddingTop:(CGFloat)paddingTop
+          paddingLeading:(CGFloat)paddingLeading
+           paddingBottom:(CGFloat)paddingBottom
+         paddingTrailing:(CGFloat)paddingTrailing
+            pMaxWrapSize:(CGSize*)pMaxWrapSize
+{
+    
+    
+    CGRect rect = sbvmyFrame.frame;
+    
+    if (sbvsc.widthSizeInner.dimeNumVal != nil)
+    {//宽度等于固定的值。
+        
+        rect.size.width = sbvsc.widthSizeInner.measure;
+    }
+    else if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal.view != sbv)
+    {//宽度等于其他的依赖的视图。
+        
+        if (sbvsc.widthSizeInner.dimeRelaVal == self.widthSizeInner)
+            rect.size.width = [sbvsc.widthSizeInner measureWith:selfSize.width - paddingLeading - paddingTrailing];
+        else if (sbvsc.widthSizeInner.dimeRelaVal == self.heightSizeInner)
+        {
+            rect.size.width = [sbvsc.widthSizeInner measureWith:selfSize.height - paddingTop - paddingBottom];
+        }
+        else
+            rect.size.width = [sbvsc.widthSizeInner measureWith:sbvsc.widthSizeInner.dimeRelaVal.view.estimatedRect.size.width];
+    }
+    
+    rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+    [self myCalcHorzGravity:[self myGetSubviewHorzGravity:sbv sbvsc:sbvsc horzGravity:horzGravity] sbv:sbv sbvsc:sbvsc paddingLeading:paddingLeading paddingTrailing:paddingTrailing selfSize:selfSize pRect:&rect];
+    
+    
+    
+    if (sbvsc.heightSizeInner.dimeNumVal != nil)
+    {//高度等于固定的值。
+        rect.size.height = sbvsc.heightSizeInner.measure;
+    }
+    else if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal.view != sbv)
+    {//高度等于其他依赖的视图
+        if (sbvsc.heightSizeInner.dimeRelaVal == self.heightSizeInner)
+            rect.size.height = [sbvsc.heightSizeInner measureWith:selfSize.height - paddingTop - paddingBottom];
+        else if (sbvsc.heightSizeInner.dimeRelaVal == self.widthSizeInner)
+            rect.size.height = [sbvsc.heightSizeInner measureWith:selfSize.width - paddingLeading - paddingTrailing];
+        else
+            rect.size.height = [sbvsc.heightSizeInner measureWith:sbvsc.heightSizeInner.dimeRelaVal.view.estimatedRect.size.height];
+    }
+    
+    if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+    {//高度等于内容的高度
+        rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
+    }
+    
+    rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+    [self myCalcVertGravity:[self myGetSubviewVertGravity:sbv sbvsc:sbvsc vertGravity:vertGravity] sbv:sbv sbvsc:sbvsc paddingTop:paddingTop paddingBottom:paddingBottom baselinePos:CGFLOAT_MAX selfSize:selfSize pRect:&rect];
+    
+    
+    //特殊处理宽度等于高度
+    if (sbvsc.widthSizeInner.dimeRelaVal.view == sbv && sbvsc.widthSizeInner.dimeRelaVal.dime == MyGravity_Vert_Fill)
+    {
+        rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
+        rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        [self myCalcHorzGravity:[self myGetSubviewHorzGravity:sbv sbvsc:sbvsc horzGravity:horzGravity] sbv:sbv sbvsc:sbvsc paddingLeading:paddingLeading paddingTrailing:paddingTrailing selfSize:selfSize pRect:&rect];
+    }
+    
+    //特殊处理高度等于宽度。
+    if (sbvsc.heightSizeInner.dimeRelaVal.view == sbv && sbvsc.heightSizeInner.dimeRelaVal.dime == MyGravity_Horz_Fill)
+    {
+        rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
+        
+        if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+        {
+            rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
+        }
+        
+        rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        [self myCalcVertGravity:[self myGetSubviewVertGravity:sbv sbvsc:sbvsc vertGravity:vertGravity] sbv:sbv sbvsc:sbvsc paddingTop:paddingTop paddingBottom:paddingBottom baselinePos:CGFLOAT_MAX selfSize:selfSize pRect:&rect];
+        
+    }
+    
+    sbvmyFrame.frame = rect;
+    
+    if (pMaxWrapSize != NULL)
+    {
+        if (lsc.wrapContentWidth)
+        {
+            //如果同时设置左右边界则左右边界为最小的宽度
+            if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
+            {
+                if (_myCGFloatLess(pMaxWrapSize->width, sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing))
+                    pMaxWrapSize->width = sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing;
+            }
+            
+            //宽度不依赖布局并且没有同时设置左右边距则参与最大宽度计算。
+            if ((sbvsc.widthSizeInner.dimeRelaVal.view != self) &&
+                (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
+            {
+                
+                if (_myCGFloatLess(pMaxWrapSize->width, sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing))
+                    pMaxWrapSize->width = sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing;
+                
+                if (_myCGFloatLess(pMaxWrapSize->width,sbvmyFrame.trailing + sbvsc.trailingPosInner.absVal + paddingTrailing))
+                    pMaxWrapSize->width = sbvmyFrame.trailing + sbvsc.trailingPosInner.absVal + paddingTrailing;
+                
+            }
+        }
+        
+        if (lsc.wrapContentHeight)
+        {
+            //如果同时设置上下边界则上下边界为最小的高度
+            if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
+            {
+                if (_myCGFloatLess(pMaxWrapSize->height, sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom))
+                    pMaxWrapSize->height = sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom;
+            }
+            
+            //高度不依赖布局并且没有同时设置上下边距则参与最大高度计算。
+            if ((sbvsc.heightSizeInner.dimeRelaVal.view != self) &&
+                (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil))
+            {
+                if (_myCGFloatLess(pMaxWrapSize->height, sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom))
+                    pMaxWrapSize->height = sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom;
+                
+                if (_myCGFloatLess(pMaxWrapSize->height, sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + paddingBottom))
+                    pMaxWrapSize->height = sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + paddingBottom;
+            }
+        }
+    }
+    
+    
+}
+
+
 
 @end
 
@@ -2991,6 +3180,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 
 BOOL _hasBegin;
+__weak MyBaseLayout * _currentLayout;
 
 -(instancetype)initWithLayout:(MyBaseLayout *)layout
 {
@@ -2998,6 +3188,8 @@ BOOL _hasBegin;
     if (self != nil)
     {
         _layout = layout;
+        _oldAlpha = 1;
+        _currentLayout = nil;
     }
     
     return self;
@@ -3010,6 +3202,7 @@ BOOL _hasBegin;
     if (_layout != nil && _target != nil && !_forbidTouch && touch.tapCount == 1 && !_hasBegin)
     {
         _hasBegin = YES;
+        _currentLayout = _layout;
         _canCallAction = YES;
         _beginPoint = [touch locationInView:_layout];
         
@@ -3022,7 +3215,7 @@ BOOL _hasBegin;
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (_layout != nil && _target != nil && _hasBegin)
+    if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
     {
         if (_canCallAction)
         {
@@ -3074,7 +3267,7 @@ BOOL _hasBegin;
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     
-    if (_layout != nil && _target != nil && _hasBegin)
+    if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
     {
         //设置一个延时.
         _forbidTouch = YES;
@@ -3084,17 +3277,19 @@ BOOL _hasBegin;
 #pragma clang diagnostic pop
         
         _hasBegin = NO;
+        _currentLayout = nil;
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     
-    if (_layout != nil && _target != nil && _hasBegin)
+    if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
     {
         [self myResetTouchHighlighted];
         
         _hasBegin = NO;
+        _currentLayout = nil;
         
         if (!_hasDoCancel)
         {
@@ -3184,269 +3379,6 @@ BOOL _hasBegin;
     _touchCancelTarget = target;
     _touchCancelAction = action;
     
-}
-
-
-@end
-
-
-
-@implementation MyBorderlineLayerDelegate
-{
-    __weak MyBaseLayout *_layout;
-}
-
--(id)initWithLayout:(MyBaseLayout*)layout
-{
-    self = [self init];
-    if (self != nil)
-    {
-        _layout = layout;
-    }
-    
-    return self;
-}
-
-
--(void)setTopBorderline:(MyBorderline *)topBorderline
-{
-    if (_topBorderline != topBorderline)
-    {
-        _topBorderline = topBorderline;
-        
-        CAShapeLayer *borderLayer = _topBorderlineLayer;
-        [self updateBorderLayer:&borderLayer withBorderline:_topBorderline];
-        _topBorderlineLayer = borderLayer;
-        
-    }
-}
-
--(void)setLeadingBorderline:(MyBorderline *)leadingBorderline
-{
-    if (_leadingBorderline != leadingBorderline)
-    {
-        _leadingBorderline = leadingBorderline;
-        
-        CAShapeLayer *borderLayer = _leadingBorderlineLayer;
-        [self updateBorderLayer:&borderLayer withBorderline:_leadingBorderline];
-        _leadingBorderlineLayer = borderLayer;
-    }
-}
-
--(void)setBottomBorderline:(MyBorderline *)bottomBorderline
-{
-    if (_bottomBorderline != bottomBorderline)
-    {
-        _bottomBorderline = bottomBorderline;
-        
-        CAShapeLayer *borderLayer = _bottomBorderlineLayer;
-        [self updateBorderLayer:&borderLayer withBorderline:_bottomBorderline];
-        _bottomBorderlineLayer = borderLayer;
-    }
-}
-
-
--(void)setTrailingBorderline:(MyBorderline *)trailingBorderline
-{
-    if (_trailingBorderline != trailingBorderline)
-    {
-        _trailingBorderline = trailingBorderline;
-        
-        CAShapeLayer *borderLayer = _trailingBorderlineLayer;
-        [self updateBorderLayer:&borderLayer withBorderline:_trailingBorderline];
-        _trailingBorderlineLayer = borderLayer;
-    }
-    
-}
-
--(MyBorderline*)leftBorderline
-{
-    if ([MyBaseLayout isRTL])
-        return self.trailingBorderline;
-    else
-        return self.leadingBorderline;
-}
-
--(void)setLeftBorderline:(MyBorderline *)leftBorderline
-{
-    if ([MyBaseLayout isRTL])
-        self.trailingBorderline = leftBorderline;
-    else
-        self.leadingBorderline = leftBorderline;
-}
-
-
--(MyBorderline*)rightBorderline
-{
-    if ([MyBaseLayout isRTL])
-        return self.leadingBorderline;
-    else
-        return self.trailingBorderline;
-}
-
--(void)setRightBorderline:(MyBorderline *)rightBorderline
-{
-    if ([MyBaseLayout isRTL])
-        self.leadingBorderline = rightBorderline;
-    else
-        self.trailingBorderline = rightBorderline;
-}
-
-
-
--(void)updateBorderLayer:(CAShapeLayer**)ppLayer withBorderline:(MyBorderline*)borderline
-{
-    
-    if (borderline == nil)
-    {
-        
-        if (*ppLayer != nil)
-        {
-            [(*ppLayer) removeFromSuperlayer];
-            (*ppLayer).delegate = nil;
-            *ppLayer = nil;
-        }
-    }
-    else
-    {
-        
-        if ( *ppLayer == nil)
-        {
-            *ppLayer = [[CAShapeLayer alloc] init];
-            (*ppLayer).zPosition = 10000;
-            (*ppLayer).delegate = self;
-            [_layout.layer addSublayer:*ppLayer];
-        }
-        
-        //如果是点线则是用path，否则就用背景色
-        if (borderline.dash != 0)
-        {
-            (*ppLayer).lineDashPhase = borderline.dash / 2;
-            NSNumber *num = @(borderline.dash);
-            (*ppLayer).lineDashPattern = @[num,num];
-            
-            (*ppLayer).strokeColor = borderline.color.CGColor;
-            (*ppLayer).lineWidth = borderline.thick;
-            (*ppLayer).backgroundColor = nil;
-            
-        }
-        else
-        {
-            (*ppLayer).lineDashPhase = 0;
-            (*ppLayer).lineDashPattern = nil;
-            
-            (*ppLayer).strokeColor = nil;
-            (*ppLayer).lineWidth = 0;
-            (*ppLayer).backgroundColor = borderline.color.CGColor;
-            
-        }
-        
-        [(*ppLayer) setNeedsLayout];
-        
-    }
-}
-
-
--(void)layoutSublayersOfLayer:(CAShapeLayer *)layer
-{
-    if (_layout == nil)
-        return;
-    
-    CGSize layoutSize = _layout.layer.bounds.size;
-    
-    if (layoutSize.width == 0 || layoutSize.height == 0)
-        return;
-    
-    CGRect layerRect;
-    CGPoint fromPoint;
-    CGPoint toPoint;
-    CGFloat scale = [UIScreen mainScreen].scale;
-    
-    if (layer == self.leadingBorderlineLayer)
-    {
-        layerRect = CGRectMake(self.leadingBorderline.offset, self.leadingBorderline.headIndent, self.leadingBorderline.thick/scale, layoutSize.height - self.leadingBorderline.headIndent - self.leadingBorderline.tailIndent);
-        fromPoint = CGPointMake(0, 0);
-        toPoint = CGPointMake(0, layerRect.size.height);
-        
-    }
-    else if (layer == self.trailingBorderlineLayer)
-    {
-        layerRect = CGRectMake(layoutSize.width - self.trailingBorderline.thick / scale - self.trailingBorderline.offset, self.trailingBorderline.headIndent, self.trailingBorderline.thick / scale, layoutSize.height - self.trailingBorderline.headIndent - self.trailingBorderline.tailIndent);
-        fromPoint = CGPointMake(0, 0);
-        toPoint = CGPointMake(0, layerRect.size.height);
-        
-    }
-    else if (layer == self.topBorderlineLayer)
-    {
-        layerRect = CGRectMake(self.topBorderline.headIndent, self.topBorderline.offset, layoutSize.width - self.topBorderline.headIndent - self.topBorderline.tailIndent, self.topBorderline.thick/scale);
-        fromPoint = CGPointMake(0, 0);
-        toPoint = CGPointMake(layerRect.size.width, 0);
-    }
-    else if (layer == self.bottomBorderlineLayer)
-    {
-        layerRect = CGRectMake(self.bottomBorderline.headIndent, layoutSize.height - self.bottomBorderline.thick / scale - self.bottomBorderline.offset, layoutSize.width - self.bottomBorderline.headIndent - self.bottomBorderline.tailIndent, self.bottomBorderline.thick /scale);
-        fromPoint = CGPointMake(0, 0);
-        toPoint = CGPointMake(layerRect.size.width, 0);
-    
-    }
-    else
-    {
-        layerRect = CGRectZero;
-        fromPoint = CGPointZero;
-        toPoint = CGPointZero;
-        NSAssert(0, @"oops!");
-    }
-    
-    if ([MyBaseLayout isRTL])
-    {
-        layerRect.origin.x = layoutSize.width - layerRect.origin.x - layerRect.size.width;
-    }
-    
-    //把动画效果取消。
-    
-    
-    if (!_myCGRectEqual(layer.frame, layerRect))
-    {
-        if (layer.lineDashPhase == 0)
-        {
-            layer.path = nil;
-        }
-        else
-        {
-            CGMutablePathRef path = CGPathCreateMutable();
-            CGPathMoveToPoint(path, nil, fromPoint.x, fromPoint.y);
-            CGPathAddLineToPoint(path, nil, toPoint.x,toPoint.y);
-            layer.path = path;
-            CGPathRelease(path);
-        }
-        layer.frame = layerRect;
-        
-    }
-    
-}
-
-
-- (nullable id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event
-{
-    return [NSNull null];
-}
-
-
--(void)setNeedsLayout
-{
-    if (_topBorderlineLayer != nil)
-        [_topBorderlineLayer setNeedsLayout];
-    
-    if (_bottomBorderlineLayer != nil)
-        [_bottomBorderlineLayer setNeedsLayout];
-    
-    
-    if (_leadingBorderlineLayer != nil)
-        [_leadingBorderlineLayer setNeedsLayout];
-    
-    if (_trailingBorderlineLayer != nil)
-        [_trailingBorderlineLayer setNeedsLayout];
-
 }
 
 

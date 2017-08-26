@@ -10,6 +10,7 @@
 #import "MyLayoutPos.h"
 #import "MyLayoutSize.h"
 #import "MyLayoutSizeClass.h"
+#import "MyBorderline.h"
 
 /*
  几种视图类型的定义：
@@ -134,6 +135,10 @@
 
 
 
+/**
+ *视图的基线位置对象。目前只支持相对布局里面的视图的设置并且调用视图或者被调用视图都只能是UILabel和UITextField和UITextView三个只支持单行文本的视图。
+ */
+@property(nonatomic, readonly) MyLayoutPos *baselinePos;
 
 
 /*
@@ -672,51 +677,6 @@
 
 
 /**
- *布局的边界画线类，用于实现绘制布局的四周的边界线的功能。一个布局视图中提供了上下左右4个方向的边界画线类对象。
- */
-@interface MyBorderline : NSObject
-
-
-/**
- *边界线的颜色
- */
-@property(nonatomic,strong) UIColor *color;
-
-/**
- *边界线的厚度，默认是1,设置的值不能小于1. 单位是像素。
- */
-@property(nonatomic,assign) CGFloat thick;
-
-/**
- *边界线的头部缩进单位。比如某个布局视图宽度是100，头部缩进单位是20，那么边界线将从20的位置开始绘制。
- */
-@property(nonatomic,assign) CGFloat headIndent;
-
-/**
- *边界线的尾部缩进单位。比如某个布局视图宽度是100，尾部缩进单位是20，那么边界线将绘制到80的位置结束。
- */
-@property(nonatomic, assign) CGFloat tailIndent;
-
-/**
- *设置边界线为点划线,如果是0则边界线是实线
- */
-@property(nonatomic, assign) CGFloat dash;
-
-/**
- *边界线绘制时的偏移量
- */
-@property(nonatomic, assign) CGFloat offset;
-
--(id)initWithColor:(UIColor*)color;
-
-
-@end
-
-//兼容老版本的类名命名不规则的问题，这样老版本仍然可以用MyBorderLineDraw这个类名。
-typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to instead");
-
-
-/**
  布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
  布局视图通过重载layoutSubviews方法来完成子视图的布局和排列的工作。对于每个加入到布局视图中的子视图，都会在加入时通过KVO机制监控子视图的center和bounds以及frame值的变化，每当子视图的这些属性一变化时就又会重新引发布局视图的布局动作。同时对每个视图的布局扩展属性的设置以及对布局视图的布局属性的设置都会引发布局视图的布局动作。布局视图在添加到非布局父视图时也会通过KVO机制来监控非布局父视图的frame值和bounds值，这样每当非布局父视图的尺寸变更时也会引发布局视图的布局动作。前面说的引起变动的方法就是会在KVO处理逻辑以及布局扩展属性和布局属性设置完毕后通过调用setNeedLayout来实现的，当布局视图收到setNeedLayout的请求后，会在下一个runloop中对布局视图进行重新布局而这就是通过调用layoutSubviews方法来实现的。布局视图基类只提供了更新所有子视图的位置和尺寸以及一些基础的设置，而至于如何排列和布局这些子视图则要根据应用的场景和需求来确定，因此布局基类视图提供了一个：
    -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
@@ -840,6 +800,7 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
  5. MyGravity_Vert_Fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
  
  6. MyGravity_Horz_Fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
+ 7. MyGravity_Baseline 表示布局里面的子视图都基线对齐，目前只支持水平线性布局。
  */
 @property(nonatomic, assign) IBInspectable MyGravity gravity;
 
