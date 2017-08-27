@@ -40,9 +40,8 @@ typedef enum : unsigned char {
 //更新栅格尺寸。
 -(CGFloat)updateGridSize:(CGSize)superSize superGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure;
 
-@optional
 
--(void)setBorderlineNeedLayoutIn:(CGRect)rect;
+-(void)setBorderlineNeedLayoutIn:(CGRect)rect withLayer:(CALayer*)layer;
 
 -(void)showBorderline:(BOOL)show;
 

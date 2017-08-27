@@ -28,10 +28,10 @@
     rootLayout.subviewSpace = 10;
     rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
     
-    id<MyGrid> g1 = [rootLayout addCol:MTLSIZE_MATCHPARENT];
+    id<MyGrid> g1 = [rootLayout addCol:MyLayoutSize.fill];
     id<MyGrid> g2 = [rootLayout addCol:0.5];
-    id<MyGrid> g3 = [rootLayout addCol:MTLSIZE_MATCHPARENT];
-    id<MyGrid> g4 = [g2 addRow:MTLSIZE_MATCHPARENT];
+    id<MyGrid> g3 = [rootLayout addCol:MyLayoutSize.fill];
+    id<MyGrid> g4 = [g2 addRow:MyLayoutSize.fill];
     
     g4.subviewSpace = 40;
     id<MyGrid> g5 = [g4 addRow:100];

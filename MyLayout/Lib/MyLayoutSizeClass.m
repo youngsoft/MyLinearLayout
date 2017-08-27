@@ -1008,9 +1008,9 @@ BOOL _myisRTL = NO;
     return self.view.layer;
 }
 
--(void)setBorderlineNeedLayoutIn:(CGRect)rect
+-(void)setBorderlineNeedLayoutIn:(CGRect)rect withLayer:(CALayer *)layer
 {
-    [self.rootGrid setBorderlineNeedLayoutIn:rect];
+    [self.rootGrid setBorderlineNeedLayoutIn:rect withLayer:layer];
 }
 
 -(void)showBorderline:(BOOL)show

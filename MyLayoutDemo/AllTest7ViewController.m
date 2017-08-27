@@ -411,7 +411,7 @@
     if (tableLayout.countOfRow == 0)
     {
         //这里设置shrinkType的作用是当子视图的尺寸不被容纳时自动缩小子视图的宽度
-        [tableLayout addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_MATCHPARENT].shrinkType = MySubviewsShrink_Average;
+        [tableLayout addRow:MyLayoutSize.wrap colSize:MyLayoutSize.fill].shrinkType = MySubviewsShrink_Average;
     }
     
     /*
@@ -430,7 +430,7 @@
         if (CGRectGetWidth(lastView.bounds) <= 60)
         {
             //这里设置shrinkType的作用是当子视图的尺寸不被容纳时自动缩小子视图的宽度
-            [tableLayout addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_MATCHPARENT].shrinkType = MySubviewsShrink_Average;
+            [tableLayout addRow:MyLayoutSize.wrap colSize:MyLayoutSize.fill].shrinkType = MySubviewsShrink_Average;
         }
         else
         {

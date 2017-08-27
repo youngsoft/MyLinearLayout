@@ -149,7 +149,10 @@ typedef struct  _MyGridOptionalProperties1
     //拷贝分割线。。
     if (self->_borderlineLayerDelegate != nil)
     {
-        
+        grid.topBorderline = self.topBorderline;
+        grid.bottomBorderline = self.bottomBorderline;
+        grid.leadingBorderline = self.leadingBorderline;
+        grid.trailingBorderline = self.trailingBorderline;
     }
     
     //克隆子节点。
@@ -257,9 +260,9 @@ typedef struct  _MyGridOptionalProperties1
 }
 
 
--(void)setBorderlineNeedLayoutIn:(CGRect)rect
+-(void)setBorderlineNeedLayoutIn:(CGRect)rect withLayer:(CALayer*)layer
 {
-    [_borderlineLayerDelegate setNeedsLayoutIn:rect];
+    [_borderlineLayerDelegate setNeedsLayoutIn:rect withLayer:layer];
 }
 
 -(void)showBorderline:(BOOL)show

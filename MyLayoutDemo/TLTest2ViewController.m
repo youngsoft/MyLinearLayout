@@ -42,9 +42,9 @@
     self.rootLayout = rootLayout;
     
     //为瀑布流建立3个平均分配的行，每行的列的尺寸由内容决定。
-    [rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
-    [rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
-    [rootLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_WRAPCONTENT];
+    [rootLayout addRow:MyLayoutSize.average colSize:MyLayoutSize.wrap];
+    [rootLayout addRow:MyLayoutSize.average colSize:MyLayoutSize.wrap];
+    [rootLayout addRow:MyLayoutSize.average colSize:MyLayoutSize.wrap];
     
 }
 

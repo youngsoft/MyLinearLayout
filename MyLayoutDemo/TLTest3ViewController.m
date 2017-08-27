@@ -52,7 +52,7 @@
 
 
     //添加第一行。行高为50，每列宽由自己确定。
-   MyLinearLayout *firstRow = [self.tableLayout addRow:50 colSize:MTLSIZE_MATCHPARENT];
+   MyLinearLayout *firstRow = [self.tableLayout addRow:50 colSize:MyLayoutSize.fill];
    firstRow.notUseIntelligentBorderline = YES;  //因为智能边界线会影响到里面的所有子布局，包括每行，但是这里我们希望这行不受智能边界线的影响而想自己定义边界线，则将这个属性设置为YES。
    firstRow.bottomBorderline = [[MyBorderline alloc] initWithColor:[CFTool color:7]]; //我们自定义第一行的底部边界线为蓝色边界线。
     
@@ -75,7 +75,7 @@
     //建立10行的数据。
     for (int i = 0; i < 10; i++)
     {
-        [self.tableLayout addRow:40 colSize:MTLSIZE_MATCHPARENT]; //添加新的一行。
+        [self.tableLayout addRow:40 colSize:MyLayoutSize.fill]; //添加新的一行。
         
         for (int j = 0; j < firstRowTitles.count; j++)
         {
@@ -96,7 +96,7 @@
     }
     
     //最后一行：
-     MyLinearLayout *lastRow = [self.tableLayout addRow:60 colSize:MTLSIZE_MATCHPARENT];
+     MyLinearLayout *lastRow = [self.tableLayout addRow:60 colSize:MyLayoutSize.fill];
     lastRow.notUseIntelligentBorderline = YES;
     lastRow.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor redColor]];
     

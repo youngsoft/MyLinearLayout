@@ -175,7 +175,7 @@
 		182225AB1E77E5930081AA4B /* MyFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFlowLayout.h; sourceTree = "<group>"; };
 		182225AC1E77E5930081AA4B /* MyLinearLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLinearLayout.h; sourceTree = "<group>"; };
 		182225AD1E77E5930081AA4B /* MyFloatLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFloatLayout.h; sourceTree = "<group>"; };
-		182225AE1E77E5930081AA4B /* MyTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableLayout.h; sourceTree = "<group>"; };
+		182225AE1E77E5930081AA4B /* MyTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyTableLayout.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182225AF1E77E5930081AA4B /* MyBaseLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyBaseLayout.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182225B01E77E5930081AA4B /* MyLayoutPos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutPos.h; sourceTree = "<group>"; };
 		182225B11E77E5930081AA4B /* MyBaseLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBaseLayout.m; sourceTree = "<group>"; };
@@ -278,9 +278,9 @@
 		18D3C9581EDF07F800D3DE43 /* FOLTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest6ViewController.h; sourceTree = "<group>"; };
 		18D3C9591EDF07F800D3DE43 /* FOLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest6ViewController.m; sourceTree = "<group>"; };
 		18D3C9601EDF080800D3DE43 /* TLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLTest1ViewController.h; sourceTree = "<group>"; };
-		18D3C9611EDF080800D3DE43 /* TLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLTest1ViewController.m; sourceTree = "<group>"; };
+		18D3C9611EDF080800D3DE43 /* TLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TLTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D3C9621EDF080800D3DE43 /* TLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLTest2ViewController.h; sourceTree = "<group>"; };
-		18D3C9631EDF080800D3DE43 /* TLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLTest2ViewController.m; sourceTree = "<group>"; };
+		18D3C9631EDF080800D3DE43 /* TLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TLTest2ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D3C9641EDF080800D3DE43 /* TLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLTest3ViewController.h; sourceTree = "<group>"; };
 		18D3C9651EDF080800D3DE43 /* TLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TLTest3ViewController.m; sourceTree = "<group>"; };
 		18D3C9691EDF082800D3DE43 /* AllTest1TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewCell.h; sourceTree = "<group>"; };
@@ -304,7 +304,7 @@
 		18D3C97F1EDF084000D3DE43 /* AllTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest6ViewController.h; sourceTree = "<group>"; };
 		18D3C9801EDF084000D3DE43 /* AllTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest6ViewController.m; sourceTree = "<group>"; };
 		18D3C9811EDF084000D3DE43 /* AllTest7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest7ViewController.h; sourceTree = "<group>"; };
-		18D3C9821EDF084000D3DE43 /* AllTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest7ViewController.m; sourceTree = "<group>"; };
+		18D3C9821EDF084000D3DE43 /* AllTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest7ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D3C9831EDF084000D3DE43 /* AllTest8ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest8ViewController.h; sourceTree = "<group>"; };
 		18D3C9841EDF084000D3DE43 /* AllTest8ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest8ViewController.m; sourceTree = "<group>"; };
 		18D3C98D1EDF08F800D3DE43 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -350,9 +350,9 @@
 		205643081F4E53CD00E8BDDE /* MyGridNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyGridNode.h; sourceTree = "<group>"; };
 		205643091F4E53CD00E8BDDE /* MyGridNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGridNode.m; sourceTree = "<group>"; };
 		205643111F51C7DF00E8BDDE /* GLTest2ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLTest2ViewController.h; sourceTree = "<group>"; };
-		205643121F51C7EB00E8BDDE /* GLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest2ViewController.m; sourceTree = "<group>"; };
+		205643121F51C7EB00E8BDDE /* GLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GLTest2ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		205CFA8C1F49BD1C00355489 /* GLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest1ViewController.h; sourceTree = "<group>"; };
-		205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest1ViewController.m; sourceTree = "<group>"; };
+		205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GLTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

@@ -65,7 +65,7 @@
     
     
     //第二行固定高度，均分宽度
-    [tableLayout addRow:40 colSize:MTLSIZE_AVERAGE];
+    [tableLayout addRow:40 colSize:MyLayoutSize.average];
 
     colView = [self createLabel:@"Cell10" backgroundColor:[CFTool color:1]];
     [tableLayout addCol:colView atRow:1];
@@ -81,7 +81,7 @@
     
     
     //第三行固定高度，子视图自己决定宽度。
-    [tableLayout addRow:30 colSize:MTLSIZE_WRAPCONTENT];
+    [tableLayout addRow:30 colSize:MyLayoutSize.wrap];
     colView = [self createLabel:@"Cell20" backgroundColor:[CFTool color:1]];
     colView.myWidth = 100;
     [tableLayout addCol:colView atRow:2];
@@ -91,7 +91,7 @@
     [tableLayout addCol:colView atRow:2];
     
     //第四行固定高度，子视图自己决定宽度。
-    [tableLayout addRow:30 colSize:MTLSIZE_MATCHPARENT];
+    [tableLayout addRow:30 colSize:MyLayoutSize.fill];
     colView = [self createLabel:@"Cell30" backgroundColor:[CFTool color:1]];
     colView.myWidth = 80;
     [tableLayout addCol:colView atRow:3];
@@ -102,7 +102,7 @@
     
     
     //第五行高度均分.这里设置为0表示剩余高度再均分。宽度均分,
-    [tableLayout addRow:MTLSIZE_AVERAGE colSize:MTLSIZE_AVERAGE];
+    [tableLayout addRow:MyLayoutSize.average colSize:MyLayoutSize.average];
     MyLinearLayout *row4 = [tableLayout viewAtRowIndex:4];
     //可以设置行的属性.比如padding, 线条颜色，
     row4.padding = UIEdgeInsetsMake(3, 3, 3, 3);
@@ -117,7 +117,7 @@
     
     
     //第六行高度由子视图决定，均分宽度
-    [tableLayout addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_AVERAGE];
+    [tableLayout addRow:MyLayoutSize.wrap colSize:MyLayoutSize.average];
     
     colView = [self createLabel:@"Cell50" backgroundColor:[CFTool color:1]];
     colView.myHeight = 80;

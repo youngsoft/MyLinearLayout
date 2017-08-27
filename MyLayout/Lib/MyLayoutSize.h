@@ -41,6 +41,23 @@
 #else
 
 
+#if UIKIT_DEFINE_AS_PROPERTIES
+
+/**特殊的尺寸，表示尺寸由子视图决定或者由内容决定。目前只用在表格布局MyTableLayout和栅格布局MyGridLayout中。*/
+@property(class, nonatomic, assign,readonly) CGFloat wrap;
+/**特殊的尺寸，表示尺寸会填充满父视图的剩余空间。目前只用在表格布局MyTableLayout和栅格布局MyGridLayout中。*/
+@property(class, nonatomic, assign,readonly) CGFloat fill;
+/**特殊的尺寸，表示尺寸会均分父视图的剩余空间。目前只用在表格布局MyTableLayout */
+@property(class, nonatomic, assign,readonly) CGFloat average;
+
+#else
+
++(CGFloat)wrap;
++(CGFloat)fill;
++(CGFloat)average;
+
+#endif
+
 
 /**
  设置尺寸的具体值，这个具体值可以设置为NSNumber, MyLayoutSize以及NSArray<MyLayoutSize*>数组,UIView和nil值。

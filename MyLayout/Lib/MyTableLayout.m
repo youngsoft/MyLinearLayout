@@ -37,7 +37,7 @@
         
         UIView *lsc = self.myCurrentSizeClass;
         
-        if (rowSize == MTLSIZE_AVERAGE)
+        if (rowSize == MyLayoutSize.average)
             lsc.weight = 1;
         else if (rowSize > 0)
         {
@@ -46,7 +46,7 @@
             else
                 lsc.myWidth = rowSize;
         }
-        else if (rowSize == MTLSIZE_WRAPCONTENT)
+        else if (rowSize == MyLayoutSize.wrap)
         {
             if (orientation == MyOrientation_Horz)
                 lsc.wrapContentHeight = YES;
@@ -55,10 +55,10 @@
         }
         else
         {
-            NSCAssert(0, @"Constraint exception !! rowSize can not set to MTLSIZE_MATCHPARENT");
+            NSCAssert(0, @"Constraint exception !! rowSize can not set to MyLayoutSize.fill");
         }
         
-        if (colSize == MTLSIZE_AVERAGE)
+        if (colSize == MyLayoutSize.average)
         {
             if (orientation == MyOrientation_Horz)
             {
@@ -72,7 +72,7 @@
             }
             
         }
-        else if (colSize == MTLSIZE_MATCHPARENT)
+        else if (colSize == MyLayoutSize.fill)
         {
             if (orientation == MyOrientation_Horz)
             {
@@ -185,7 +185,7 @@
     UIView *colsc = colView.myCurrentSizeClass;
     
     //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
-    if (rowView.colSize == MTLSIZE_AVERAGE)
+    if (rowView.colSize == MyLayoutSize.average)
         colsc.weight = 1;
     else if (rowView.colSize > 0)
     {

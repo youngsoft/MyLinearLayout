@@ -1470,7 +1470,7 @@ CGFloat _myMLayoutSizeError = 0.0;
     if (hidden == NO)
     {
        
-        [_borderlineLayerDelegate setNeedsLayoutIn:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+        [_borderlineLayerDelegate setNeedsLayoutIn:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height) withLayer:self.layer];
         
         if ([self.superview isKindOfClass:[MyBaseLayout class]])
         {
@@ -1888,7 +1888,7 @@ CGFloat _myMLayoutSizeError = 0.0;
             }
         }
         
-        [_borderlineLayerDelegate setNeedsLayoutIn:CGRectMake(0, 0, newSelfSize.width, newSelfSize.height)];
+        [_borderlineLayerDelegate setNeedsLayoutIn:CGRectMake(0, 0, newSelfSize.width, newSelfSize.height) withLayer:self.layer];
                 
         //这里只用width判断的原因是如果newSelfSize被计算成功则size中的所有值都不是CGFLOAT_MAX，所以这里选width只是其中一个代表。
         if (newSelfSize.width != CGFLOAT_MAX)

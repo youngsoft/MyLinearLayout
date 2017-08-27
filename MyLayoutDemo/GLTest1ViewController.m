@@ -28,15 +28,17 @@
     rootLayout.subviewSpace = 10;
     rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
     
-    id<MyGrid> g1 = [rootLayout addCol:MTLSIZE_MATCHPARENT];
+    id<MyGrid> g1 = [rootLayout addCol:MyLayoutSize.fill];
     id<MyGrid> g2 = [rootLayout addCol:0.5];
-    id<MyGrid> g3 = [rootLayout addCol:MTLSIZE_MATCHPARENT];
-    id<MyGrid> g4 = [g2 addRow:MTLSIZE_MATCHPARENT];
+    id<MyGrid> g3 = [rootLayout addCol:MyLayoutSize.fill];
+    id<MyGrid> g4 = [g2 addRow:MyLayoutSize.fill];
     
     g4.subviewSpace = 40;
     id<MyGrid> g5 = [g4 addRow:100];
     
     id<MyGrid> g6 = [g4 addRow:200];
+    
+    
     
 
     //[g1 addGrid:g4.cloneGrid];
@@ -49,7 +51,7 @@
    id<MyGrid> g4 = [rootLayout addColGrid:g1.cloneGrid];
   */
     
-    g1.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
+    g1.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
     g2.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
     g6.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
     g4.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];

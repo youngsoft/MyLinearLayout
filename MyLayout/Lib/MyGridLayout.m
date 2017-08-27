@@ -205,10 +205,10 @@
 }
 
 
--(void)setBorderlineNeedLayoutIn:(CGRect)rect
+-(void)setBorderlineNeedLayoutIn:(CGRect)rect withLayer:(CALayer *)layer
 {
     MyGridLayout *lsc = self.myCurrentSizeClass;
-    [lsc setBorderlineNeedLayoutIn:rect];
+    [lsc setBorderlineNeedLayoutIn:rect withLayer:layer];
 
 }
 
@@ -287,7 +287,7 @@
     //绘制边界线。。
     if (!isEstimate)
     {
-        [grid setBorderlineNeedLayoutIn:CGRectMake(gridOrigin.x, gridOrigin.y, grid.gridSize.width, grid.gridSize.height)];
+        [grid setBorderlineNeedLayoutIn:CGRectMake(gridOrigin.x, gridOrigin.y, grid.gridSize.width, grid.gridSize.height) withLayer:self.layer];
     }
     
     //处理叶子节点。
@@ -397,7 +397,7 @@
     
     for (id<MyGridNode> sbvGrid in subGrids)
     {
-        if (sbvGrid.gridMeasure == MTLSIZE_WRAPCONTENT)
+        if (sbvGrid.gridMeasure == MyLayoutSize.wrap)
         {
             //包裹尺寸先遍历所有子格子
             CGFloat gridMeasure = [self myTraversalGridSize:sbvGrid gridSize:gridSize];
@@ -424,7 +424,7 @@
         {
             [weightSubGrids addObject:sbvGrid];
         }
-        else if (sbvGrid.gridMeasure == MTLSIZE_MATCHPARENT)
+        else if (sbvGrid.gridMeasure == MyLayoutSize.fill)
         {
             [fillSubGrids addObject:sbvGrid];
         }

@@ -77,15 +77,15 @@ typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to in
 @property(nonatomic, strong) MyBorderline *rightBorderline;   /**左边边界线*/
 
 
-@property(nonatomic ,weak) CAShapeLayer *topBorderlineLayer;
-@property(nonatomic ,weak) CAShapeLayer *leadingBorderlineLayer;
-@property(nonatomic ,weak) CAShapeLayer *bottomBorderlineLayer;
-@property(nonatomic ,weak) CAShapeLayer *trailingBorderlineLayer;
+@property(nonatomic ,strong) CAShapeLayer *topBorderlineLayer;
+@property(nonatomic ,strong) CAShapeLayer *leadingBorderlineLayer;
+@property(nonatomic ,strong) CAShapeLayer *bottomBorderlineLayer;
+@property(nonatomic ,strong) CAShapeLayer *trailingBorderlineLayer;
 
 
 -(instancetype)initWithLayoutLayer:(CALayer*)layoutLayer;
 
--(void)setNeedsLayoutIn:(CGRect)rect;
+-(void)setNeedsLayoutIn:(CGRect)rect withLayer:(CALayer*)layer;
 
 @end
 

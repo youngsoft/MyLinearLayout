@@ -216,7 +216,8 @@
             *ppLayer = [[CAShapeLayer alloc] init];
             (*ppLayer).zPosition = 10000;
             (*ppLayer).delegate = self;
-            [_layoutLayer addSublayer:*ppLayer];
+            if (_layoutLayer != nil)
+                [_layoutLayer addSublayer:*ppLayer];
         }
         
         //如果是点线则是用path，否则就用背景色
@@ -346,11 +347,15 @@
 }
 
 
--(void)setNeedsLayoutIn:(CGRect)rect
+-(void)setNeedsLayoutIn:(CGRect)rect withLayer:(CALayer*)layer
 {
+    _layoutLayer = layer;
     _layoutRect = rect;
     if (_topBorderlineLayer != nil)
     {
+        if (_topBorderlineLayer.superlayer == nil)
+            [layer addSublayer:_topBorderlineLayer];
+        
         if (_topBorderlineLayer.isHidden)
             _topBorderlineLayer.hidden = NO;
         [_topBorderlineLayer setNeedsLayout];
@@ -358,6 +363,9 @@
     
     if (_bottomBorderlineLayer != nil)
     {
+        if (_bottomBorderlineLayer.superlayer == nil)
+            [layer addSublayer:_bottomBorderlineLayer];
+        
         if (_bottomBorderlineLayer.isHidden)
             _bottomBorderlineLayer.hidden = NO;
         [_bottomBorderlineLayer setNeedsLayout];
@@ -365,6 +373,9 @@
     
     if (_leadingBorderlineLayer != nil)
     {
+        if (_leadingBorderlineLayer.superlayer == nil)
+            [layer addSublayer:_leadingBorderlineLayer];
+        
         if (_leadingBorderlineLayer.isHidden)
             _leadingBorderlineLayer.hidden = NO;
         [_leadingBorderlineLayer setNeedsLayout];
@@ -372,6 +383,9 @@
     
     if (_trailingBorderlineLayer != nil)
     {
+        if (_trailingBorderlineLayer.superlayer == nil)
+            [layer addSublayer:_trailingBorderlineLayer];
+        
         if (_trailingBorderlineLayer.isHidden)
             _trailingBorderlineLayer.hidden = NO;
         [_trailingBorderlineLayer setNeedsLayout];

@@ -43,12 +43,6 @@ extern NSString * const vMyGridGravityHeightFill;
 
 
 
-//固定尺寸。0或者大于1
-//整体的百分比。大于0小于1
-//剩余的百分比。 小于0大于-1
-//剩余尺寸。
-//包裹尺寸
-
 
 
 /**
@@ -57,7 +51,14 @@ extern NSString * const vMyGridGravityHeightFill;
 @protocol MyGrid <NSObject>
 
 
-//添加行栅格，返回新的栅格。
+/**
+ 添加行栅格，返回新的栅格。其中的measure可以设置如下的值：
+ 1.大于等于1的常数，表示固定尺寸。
+ 2.大于0小于1的常数，表示占用整体尺寸的比例
+ 3.小于0大于-1的常数，表示占用剩余尺寸的比例
+ 4.MyLayoutSize.wrap 表示尺寸由子栅格包裹
+ 5.MyLayoutSize.fill 表示占用栅格剩余的尺寸
+ */
 -(id<MyGrid>)addRow:(CGFloat)measure;
 
 //添加列栅格，返回新的栅格。

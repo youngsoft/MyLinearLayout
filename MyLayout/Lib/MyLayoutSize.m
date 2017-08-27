@@ -20,6 +20,23 @@
     MyLayoutSize *_uBoundVal;
 }
 
+
++(CGFloat)wrap
+{
+    return -1;
+}
+
++(CGFloat)fill
+{
+    return -2;
+}
+
++(CGFloat)average
+{
+    return -3;
+}
+
+
 -(id)init
 {
     self= [super init];
