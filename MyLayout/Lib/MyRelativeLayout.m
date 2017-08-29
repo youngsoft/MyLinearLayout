@@ -925,13 +925,18 @@
                 
             }
             
-            CGFloat floatWidth = selfSize.width - lsc.leadingPadding - lsc.trailingPadding + totalAdd;
-            if ( _myCGFloatLessOrEqual(floatWidth, 0))
-                floatWidth = 0;
+            CGFloat floatingWidth = selfSize.width - lsc.leadingPadding - lsc.trailingPadding + totalAdd;
+            if ( _myCGFloatLessOrEqual(floatingWidth, 0))
+                floatingWidth = 0;
             
             if (totalMulti != 0)
             {
-                sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:floatWidth * (sbvsc.widthSizeInner.multiVal / totalMulti) sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
+                CGFloat tempWidth = _myCGFloatRound(floatingWidth * (sbvsc.widthSizeInner.multiVal / totalMulti));
+                
+                sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:tempWidth sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
+                
+                floatingWidth -= tempWidth;
+                totalMulti -= sbvsc.widthSizeInner.multiVal;
                 
                 if ([self myIsNoLayoutSubview:sbv])
                     sbvmyFrame.width = 0;
@@ -941,7 +946,13 @@
                     if (dime.isActive)
                     {
                         if (dime.dimeNumVal == nil)
-                            dime.view.myFrame.width = floatWidth * (dime.multiVal / totalMulti);
+                        {
+                            tempWidth = _myCGFloatRound(floatingWidth * (dime.multiVal / totalMulti));
+                            floatingWidth -= tempWidth;
+                            totalMulti -= dime.multiVal;
+                            dime.view.myFrame.width = tempWidth;
+
+                        }
                         else
                             dime.view.myFrame.width = dime.dimeNumVal.doubleValue;
                         
@@ -986,13 +997,17 @@
                 }
             }
             
-            CGFloat floatHeight = selfSize.height - lsc.topPadding - lsc.bottomPadding + totalAdd;
-            if (_myCGFloatLessOrEqual(floatHeight, 0))
-                floatHeight = 0;
+            CGFloat floatingHeight = selfSize.height - lsc.topPadding - lsc.bottomPadding + totalAdd;
+            if (_myCGFloatLessOrEqual(floatingHeight, 0))
+                floatingHeight = 0;
             
             if (totalMulti != 0)
             {
-                sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:floatHeight * (sbvsc.heightSizeInner.multiVal / totalMulti) sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
+                CGFloat tempHeight = _myCGFloatRound(floatingHeight * (sbvsc.heightSizeInner.multiVal / totalMulti));
+                floatingHeight -= tempHeight;
+                totalMulti -= sbvsc.heightSizeInner.multiVal;
+                
+                sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:tempHeight sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
                 
                 if ([self myIsNoLayoutSubview:sbv])
                     sbvmyFrame.height = 0;
@@ -1002,7 +1017,12 @@
                     if (dime.isActive)
                     {
                         if (dime.dimeNumVal == nil)
-                            dime.view.myFrame.height = floatHeight * (dime.multiVal / totalMulti);
+                        {
+                            tempHeight = _myCGFloatRound(floatingHeight * (dime.multiVal / totalMulti));
+                            floatingHeight -= tempHeight;
+                            totalMulti -= dime.multiVal;
+                            dime.view.myFrame.height = tempHeight;
+                        }
                         else
                             dime.view.myFrame.height = dime.dimeNumVal.doubleValue;
                         

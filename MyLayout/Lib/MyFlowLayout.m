@@ -279,9 +279,12 @@
         
         if (sbvsc.weight != 0)
         {
-            CGFloat tempWidth = (totalFloatWidth * sbvsc.weight / totalWeight);
+            CGFloat tempWidth = _myCGFloatRound((totalFloatWidth * sbvsc.weight / totalWeight));
             if (sbvsc.widthSizeInner != nil)
                 tempWidth = [sbvsc.widthSizeInner measureWith:tempWidth];
+            
+            totalFloatWidth -= tempWidth;
+            totalWeight -= sbvsc.weight;
             
             sbvmyFrame.width =  [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:tempWidth sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
@@ -299,9 +302,12 @@
         
         if (sbvsc.weight != 0)
         {
-            CGFloat tempHeight = (totalFloatHeight * sbvsc.weight / totalWeight);
+            CGFloat tempHeight = _myCGFloatRound((totalFloatHeight * sbvsc.weight / totalWeight));
             if (sbvsc.heightSizeInner != nil)
                 tempHeight = [sbvsc.heightSizeInner measureWith:tempHeight];
+            
+            totalFloatHeight -= tempHeight;
+            totalWeight -= sbvsc.weight;
             
             sbvmyFrame.height =  [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:tempHeight sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;

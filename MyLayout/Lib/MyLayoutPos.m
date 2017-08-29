@@ -9,6 +9,7 @@
 #import "MyLayoutPos.h"
 #import "MyLayoutPosInner.h"
 #import "MyBaseLayout.h"
+#import "MyLayoutMath.h"
 
 
 
@@ -451,10 +452,10 @@
             retVal +=self.posNumVal.doubleValue;
         
         if (_uBoundVal != nil)
-            retVal = MIN(_uBoundVal.posNumVal.doubleValue, retVal);
+            retVal = _myCGFloatMin(_uBoundVal.posNumVal.doubleValue, retVal);
         
         if (_lBoundVal != nil)
-            retVal = MAX(_lBoundVal.posNumVal.doubleValue, retVal);
+            retVal = _myCGFloatMax(_lBoundVal.posNumVal.doubleValue, retVal);
         
         return retVal;
     }
@@ -485,10 +486,10 @@
         realPos += _offsetVal;
         
         if (_uBoundVal != nil)
-            realPos = MIN(_uBoundVal.posNumVal.doubleValue, realPos);
+            realPos = _myCGFloatMin(_uBoundVal.posNumVal.doubleValue, realPos);
         
         if (_lBoundVal != nil)
-            realPos = MAX(_lBoundVal.posNumVal.doubleValue, realPos);
+            realPos = _myCGFloatMax(_lBoundVal.posNumVal.doubleValue, realPos);
 
         return realPos;
     }

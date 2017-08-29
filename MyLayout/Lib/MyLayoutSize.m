@@ -9,6 +9,7 @@
 #import "MyLayoutSize.h"
 #import "MyLayoutSizeInner.h"
 #import "MyBaseLayout.h"
+#import "MyLayoutMath.h"
 
 
 @implementation MyLayoutSize
@@ -495,16 +496,14 @@
 
 
 
-
-
 -(CGFloat) measure
 {
-    return self.isActive ? self.dimeNumVal.doubleValue * _multiVal + _addVal : 0;
+    return self.isActive ? _myCGFloatFma(self.dimeNumVal.doubleValue,  _multiVal,  _addVal) : 0;
 }
 
 -(CGFloat)measureWith:(CGFloat)size
 {
-    return self.isActive ?  size * _multiVal + _addVal : size;
+    return self.isActive ?  _myCGFloatFma(size, _multiVal , _addVal) : size;
 }
 
 

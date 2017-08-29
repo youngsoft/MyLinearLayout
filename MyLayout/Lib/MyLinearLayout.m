@@ -691,9 +691,13 @@
             //分别处理相对顶部间距和绝对顶部间距
             if ([self myIsRelativePos:topSpace])
             {
-                topSpace = (topSpace / totalWeight) * floatingHeight;
+                CGFloat topSpaceWeight = topSpace;
+                topSpace = _myCGFloatRound((topSpace / totalWeight) * floatingHeight);
                 if (_myCGFloatLessOrEqual(topSpace, 0))
                     topSpace = 0;
+                
+                floatingHeight -= topSpace;
+                totalWeight -= topSpaceWeight;
             }
             else
             {
@@ -715,9 +719,12 @@
             //分别处理相对高度和绝对高度
             if (weight > 0)
             {
-                CGFloat h = (weight / totalWeight) * floatingHeight;
+                CGFloat h = _myCGFloatRound((weight / totalWeight) * floatingHeight);
                 if (_myCGFloatLessOrEqual(h, 0))
                     h = 0;
+                
+                floatingHeight -= h;
+                totalWeight -= weight;
                 
                 rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:h sbvSize:rect.size selfLayoutSize:selfSize];
             }
@@ -727,9 +734,13 @@
             //分别处理相对底部间距和绝对底部间距
             if ([self myIsRelativePos:bottomSpace])
             {
-                bottomSpace = (bottomSpace / totalWeight) * floatingHeight;
+                CGFloat bottomSpaceWeight = bottomSpace;
+                bottomSpace = _myCGFloatRound((bottomSpace / totalWeight) * floatingHeight);
                 if ( _myCGFloatLessOrEqual(bottomSpace, 0))
                     bottomSpace = 0;
+                
+                floatingHeight -= bottomSpace;
+                totalWeight -= bottomSpaceWeight;
                 
             }
             else
@@ -1024,9 +1035,13 @@
         //计算出先对左边边距和绝对左边边距
         if ([self myIsRelativePos:leadingSpace])
         {
-            leadingSpace = (leadingSpace / totalWeight) * floatingWidth;
+            CGFloat leadingSpaceWeight = leadingSpace;
+            leadingSpace = _myCGFloatRound((leadingSpace / totalWeight) * floatingWidth);
             if (_myCGFloatLessOrEqual(leadingSpace, 0))
                 leadingSpace = 0;
+            
+            floatingWidth -= leadingSpace;
+            totalWeight -= leadingSpaceWeight;
             
         }
         else
@@ -1050,9 +1065,12 @@
         
         if (weight > 0)
         {
-            CGFloat w = (weight / totalWeight) * floatingWidth;
+            CGFloat w = _myCGFloatRound((weight / totalWeight) * floatingWidth);
             if (_myCGFloatLessOrEqual(w, 0))
                 w = 0;
+            
+            floatingWidth -= w;
+            totalWeight -= weight;
             
             rect.size.width = w;
             
@@ -1064,9 +1082,13 @@
         //计算相对的右边边距和绝对的右边边距
         if ([self myIsRelativePos:trailingSpace])
         {
-            trailingSpace = (trailingSpace / totalWeight) * floatingWidth;
+            CGFloat trailingSpaceWeight = trailingSpace;
+            trailingSpace = _myCGFloatRound((trailingSpace / totalWeight) * floatingWidth);
             if (_myCGFloatLessOrEqual(trailingSpace, 0))
                 trailingSpace = 0;
+            
+            floatingWidth -= trailingSpace;
+            totalWeight -= trailingSpaceWeight;
         }
         else
         {

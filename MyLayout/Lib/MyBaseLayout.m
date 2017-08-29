@@ -17,17 +17,8 @@ void* _myObserverContextA = (void*)20175281;
 void* _myObserverContextB = (void*)20175282;
 void* _myObserverContextC = (void*)20175283;
 
-CGFloat _myMyLayoutScale = 1.0;
-CGFloat _myMLayoutSizeError = 0.0;
 
 @implementation UIView(MyLayoutExt)
-
-+(void)load
-{
-    _myMyLayoutScale = [UIScreen mainScreen].scale;
-    _myMLayoutSizeError = (1.0 / _myMyLayoutScale + 0.0001); //误差增量。
-}
-
 
 -(MyLayoutPos*)topPos
 {
@@ -1230,7 +1221,7 @@ CGFloat _myMLayoutSizeError = 0.0;
     if (self.cacheEstimatedRect)
         _useCacheRects = YES;
     
-    return CGRectMake(0, 0, _myRoundNumber(selfSize.width), _myRoundNumber(selfSize.height));
+    return CGRectMake(0, 0, _myCGFloatRound(selfSize.width), _myCGFloatRound(selfSize.height));
 }
 
 //只获取计算得到尺寸，不进行真正的布局。
@@ -1762,7 +1753,7 @@ CGFloat _myMLayoutSizeError = 0.0;
         {
             newSelfSize = [self calcLayoutRect:[self myCalcSizeInNoLayoutSuperview:self.superview currentSize:oldSelfSize] isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass sbs:nil];
         }
-        newSelfSize = _myRoundSize(newSelfSize);
+        newSelfSize = _myCGSizeRound(newSelfSize);
         _useCacheRects = NO;
 
         //设置子视图的frame并还原
@@ -1792,11 +1783,11 @@ CGFloat _myMLayoutSizeError = 0.0;
                 CGRect rc;
                 if ([sbv isKindOfClass:[MyBaseLayout class]])
                 {
-                   rc  = _myRoundRectForLayout(sbvmyFrame.frame);
+                   rc  = _myLayoutCGRectRound(sbvmyFrame.frame);
                 }
                 else
                 {
-                    rc = _myRoundRect(sbvmyFrame.frame);
+                    rc = _myCGRectRound(sbvmyFrame.frame);
                 }
                 
                     
@@ -1827,10 +1818,15 @@ CGFloat _myMLayoutSizeError = 0.0;
         if (newSelfSize.width != CGFLOAT_MAX && (lsc.wrapContentWidth || lsc.wrapContentHeight))
         {
             
+            
+            static CGFloat sSizeError = 0;
+            if (sSizeError == 0)
+                sSizeError = 1 / [UIScreen mainScreen].scale + 0.0001;  //误差量。
+            
             //因为布局子视图的新老尺寸计算在上面有两种不同的方法，因此这里需要考虑两种计算的误差值，而这两种计算的误差值是不超过1/屏幕精度的。
             //因此我们认为当二者的值超过误差时我们才认为有尺寸变化。
-            BOOL isWidthAlter = fabs(newSelfSize.width - oldSelfSize.width) > _myMLayoutSizeError;
-            BOOL isHeightAlter = fabs(newSelfSize.height - oldSelfSize.height) > _myMLayoutSizeError;
+            BOOL isWidthAlter = fabs(newSelfSize.width - oldSelfSize.width) > sSizeError;
+            BOOL isHeightAlter = fabs(newSelfSize.height - oldSelfSize.height) > sSizeError;
             
             //如果父视图也是布局视图，并且自己隐藏则不调整自身的尺寸和位置。
             BOOL isAdjustSelf = YES;
@@ -2474,7 +2470,7 @@ CGFloat _myMLayoutSizeError = 0.0;
     if ([MyBaseLayout isRTL])
         rectSelf.origin.x = rectSuper.size.width - rectSelf.origin.x - rectSelf.size.width;
     
-    rectSelf = _myRoundRect(rectSelf);
+    rectSelf = _myCGRectRound(rectSelf);
     if (!_myCGRectEqual(rectSelf, oldRectSelf))
     {
         if (rectSelf.size.width < 0)
@@ -2622,8 +2618,8 @@ CGFloat _myMLayoutSizeError = 0.0;
     CGFloat min = dime.isActive? [self myGetBoundLimitMeasure:dime.lBoundValInner sbv:sbv dimeType:dime.dime sbvSize:sbvSize selfLayoutSize:selfLayoutSize isUBound:NO] : -CGFLOAT_MAX;
     CGFloat max = dime.isActive ?  [self myGetBoundLimitMeasure:dime.uBoundValInner sbv:sbv dimeType:dime.dime sbvSize:sbvSize selfLayoutSize:selfLayoutSize isUBound:YES] : CGFLOAT_MAX;
     
-    calcSize = MAX(min, calcSize);
-    calcSize = MIN(max, calcSize);
+    calcSize = _myCGFloatMax(min, calcSize);
+    calcSize = _myCGFloatMin(max, calcSize);
     
     return calcSize;
 }
@@ -2693,8 +2689,8 @@ CGFloat _myMLayoutSizeError = 0.0;
     CGFloat min = (pos.isActive && pos.lBoundValInner != nil) ? [self myGetBoundLimitMargin:pos.lBoundValInner sbv:sbv selfLayoutSize:selfLayoutSize] : -CGFLOAT_MAX;
     CGFloat max = (pos.isActive && pos.uBoundValInner != nil) ? [self myGetBoundLimitMargin:pos.uBoundValInner sbv:sbv selfLayoutSize:selfLayoutSize] : CGFLOAT_MAX;
     
-    calcPos = MAX(min, calcPos);
-    calcPos = MIN(max, calcPos);
+    calcPos = _myCGFloatMax(min, calcPos);
+    calcPos = _myCGFloatMin(max, calcPos);
     return calcPos;
 }
 
@@ -3443,147 +3439,4 @@ __weak MyBaseLayout * _currentLayout;
 
 
 @end
-
-
-BOOL _myCGFloatEqual(CGFloat f1, CGFloat f2)
-{
-#if CGFLOAT_IS_DOUBLE == 1
-    return fabs(f1 - f2) < 1e-7;
-#else
-    return fabsf(f1 - f2) < 1e-4;
-#endif
-}
-
-BOOL _myCGFloatNotEqual(CGFloat f1, CGFloat f2)
-{
-#if CGFLOAT_IS_DOUBLE == 1
-    return fabs(f1 - f2) > 1e-7;
-#else
-    return fabsf(f1 - f2) > 1e-4;
-#endif
-}
-
-BOOL _myCGFloatLess(CGFloat f1, CGFloat f2)
-{
-#if CGFLOAT_IS_DOUBLE == 1
-    return f2 - f1 > 1e-7;
-#else
-    return f2 - f1 > 1e-4;
-#endif
-
-}
-
-BOOL _myCGFloatGreat(CGFloat f1, CGFloat f2)
-{
-#if CGFLOAT_IS_DOUBLE == 1
-    return f1 - f2 > 1e-7;
-#else
-    return f1 - f2 > 1e-4;
-#endif
-}
-
-BOOL _myCGFloatLessOrEqual(CGFloat f1, CGFloat f2)
-{
-    
-#if CGFLOAT_IS_DOUBLE == 1
-    return f1 < f2 || fabs(f1 - f2) < 1e-7;
-#else
-    return f1 < f2 || fabsf(f1 - f2) < 1e-4;
-#endif
-}
-
-BOOL _myCGFloatGreatOrEqual(CGFloat f1, CGFloat f2)
-{
-#if CGFLOAT_IS_DOUBLE == 1
-    return f1 > f2 || fabs(f1 - f2) < 1e-7;
-#else
-    return f1 > f2 || fabsf(f1 - f2) < 1e-4;
-#endif
-}
-
-BOOL _myCGSizeEqual(CGSize sz1, CGSize sz2)
-{
-    return _myCGFloatEqual(sz1.width, sz2.width) && _myCGFloatEqual(sz1.height, sz2.height);
-}
-
-BOOL _myCGPointEqual(CGPoint pt1, CGPoint pt2)
-{
-    return _myCGFloatEqual(pt1.x, pt2.x) && _myCGFloatEqual(pt1.y, pt2.y);
-}
-
-BOOL _myCGRectEqual(CGRect rect1, CGRect rect2)
-{
-    return _myCGSizeEqual(rect1.size, rect2.size) && _myCGPointEqual(rect1.origin, rect2.origin);
-}
-
-
-CGFloat _myRoundNumber(CGFloat f)
-{
-    if (f == 0 || f == CGFLOAT_MAX || f == -CGFLOAT_MAX)
-        return f;
-    
-    int fi = round(f);
-    if (_myCGFloatEqual(f, fi))
-        return fi;
-    
-    //按精度四舍五入
-    //正确的算法应该是。x = 0; y = 0;  0<x<0.5 y = 0;   x = 0.5 y = 0.5;  0.5<x<1 y = 0.5; x=1 y = 1;
-    
-    if (f < 0)
-    {
-        return ceil(f * _myMyLayoutScale) / _myMyLayoutScale;
-    }
-    else
-    {
-        return  floor(f *_myMyLayoutScale) / _myMyLayoutScale;
-    }
-
-}
-
-CGRect _myRoundRectForLayout(CGRect rect)
-{    
-    CGFloat x1 = rect.origin.x;
-    CGFloat y1 = rect.origin.y;
-    CGFloat w1 = rect.size.width;
-    CGFloat h1 = rect.size.height;
-    
-    rect.origin.x =  _myRoundNumber(x1);
-    rect.origin.y = _myRoundNumber(y1);
-    
-    CGFloat mx = _myRoundNumber(x1 + w1);
-    CGFloat my = _myRoundNumber(y1 + h1);
-    
-    rect.size.width = mx - rect.origin.x;
-    rect.size.height = my - rect.origin.y;
-    
-    return rect;
-    
-}
-
-
-
-CGRect _myRoundRect(CGRect rect)
-{
-    rect.origin.x =  _myRoundNumber(rect.origin.x);
-    rect.origin.y = _myRoundNumber(rect.origin.y);
-    rect.size.width = _myRoundNumber(rect.size.width);
-    rect.size.height = _myRoundNumber(rect.size.height);
-    
-    return rect;
-    
-}
-
-CGSize _myRoundSize(CGSize size)
-{
-    size.width = _myRoundNumber(size.width);
-    size.height = _myRoundNumber(size.height);
-    return size;
-}
-
-CGPoint _myRoundPoint(CGPoint point)
-{
-    point.x = _myRoundNumber(point.x);
-    point.y = _myRoundNumber(point.y);
-    return point;
-}
 

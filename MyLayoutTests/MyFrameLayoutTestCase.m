@@ -26,6 +26,7 @@
 
 -(void)testblurred
 {
+    //测试位置偏移不正确或者尺寸不正确将会产生模糊显示的效果。
     MyFrameLayout *frameLayout = [[MyFrameLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667)];
     frameLayout.backgroundColor = [UIColor whiteColor];
     frameLayout.myMargin = 0;              //这个表示框架布局的尺寸和self.view保持一致,四周离父视图的边距都是0
@@ -53,8 +54,17 @@
 
     [frameLayout layoutIfNeeded];
     
-   // XCTAssertTrue(CGRectEqualToRect(label1, <#CGRect rect2#>)([frameLayout estimateLayoutRect:CGSizeZero].size, CGSizeMake(0, 0)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout estimateLayoutRect:CGSizeZero].size));
+    if ([UIScreen mainScreen].bounds.size.width == 414)
+    {
     
+    XCTAssertTrue(CGRectEqualToRect(label1.frame, CGRectMake(29.999999999999996, 323.333333333333331, 34.666666666666664, 20.333333333333332)), @"the label1.frame = %@",NSStringFromCGRect(label1.frame));
+    
+    }
+    else
+    {
+        XCTAssertTrue(CGRectEqualToRect(label1.frame, CGRectMake(30, 323.5, 35, 20.5)), @"the label1.frame = %@",NSStringFromCGRect(label1.frame));
+        
+    }
 
 }
 

@@ -458,11 +458,13 @@
     
     if (fillSubGrids.count > 0)
     {
-       CGFloat averageMeasure = remainedMeasure / fillSubGrids.count;
+      // CGFloat averageMeasure = remainedMeasure / fillSubGrids.count;
+        NSInteger fillSubGridsCount = fillSubGrids.count;
         
         for (id<MyGridNode> sbvGrid in fillSubGrids)
         {
-            [sbvGrid updateGridSize:gridSize superGrid:grid withMeasure:averageMeasure];
+           remainedMeasure -= [sbvGrid updateGridSize:gridSize superGrid:grid withMeasure:_myCGFloatRound(remainedMeasure * (1.0/fillSubGridsCount))];
+            fillSubGridsCount -= 1;
             [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridSize];
         }
     }

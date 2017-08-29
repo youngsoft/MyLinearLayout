@@ -10,10 +10,10 @@
 
 #if TARGET_OS_IPHONE
 
-extern CGFloat _myRoundNumber(CGFloat);
-extern CGPoint _myRoundPoint(CGPoint);
-extern CGSize _myRoundSize(CGSize);
-extern CGRect _myRoundRect(CGRect);
+extern CGFloat _myCGFloatRound(CGFloat);
+extern CGPoint _myCGPointRound(CGPoint);
+extern CGSize _myCGSizeRound(CGSize);
+extern CGRect _myCGRectRound(CGRect);
 
 
 @implementation MyDimeScale
@@ -34,37 +34,37 @@ CGFloat _hrate = 1;
 
 +(CGFloat)scale:(CGFloat)val
 {
-    return _myRoundNumber(val * _rate);
+    return _myCGFloatRound(val * _rate);
 }
 
 +(CGFloat)scaleW:(CGFloat)val
 {
-    return _myRoundNumber(val * _wrate);
+    return _myCGFloatRound(val * _wrate);
 }
 
 +(CGFloat)scaleH:(CGFloat)val
 {
-    return _myRoundNumber(val * _hrate);
+    return _myCGFloatRound(val * _hrate);
 }
 
 +(CGFloat)roundNumber:(CGFloat)number
 {
-    return _myRoundNumber(number);
+    return _myCGFloatRound(number);
 }
 
 +(CGPoint)roundPoint:(CGPoint)point
 {
-    return _myRoundPoint(point);
+    return _myCGPointRound(point);
 }
 
 +(CGSize)roundSize:(CGSize)size
 {
-    return _myRoundSize(size);
+    return _myCGSizeRound(size);
 }
 
 +(CGRect)roundRect:(CGRect)rect
 {
-    return _myRoundRect(rect);
+    return _myCGRectRound(rect);
 }
 
 
