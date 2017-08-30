@@ -935,15 +935,19 @@
                 
                 sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:tempWidth sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
                 
-                floatingWidth -= tempWidth;
-                totalMulti -= sbvsc.widthSizeInner.multiVal;
-                
                 if ([self myIsNoLayoutSubview:sbv])
+                {
                     sbvmyFrame.width = 0;
+                }
+                else
+                {
+                    floatingWidth -= tempWidth;
+                    totalMulti -= sbvsc.widthSizeInner.multiVal;
+                }
                 
                 for (MyLayoutSize *dime in dimeArray)
                 {
-                    if (dime.isActive)
+                    if (dime.isActive && ![self myIsNoLayoutSubview:dime.view])
                     {
                         if (dime.dimeNumVal == nil)
                         {
@@ -957,9 +961,10 @@
                             dime.view.myFrame.width = dime.dimeNumVal.doubleValue;
                         
                         dime.view.myFrame.width = [self myValidMeasure:dime.view.widthSize sbv:dime.view calcSize:dime.view.myFrame.width sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
-                        
-                        if ([self myIsNoLayoutSubview:dime.view])
-                            dime.view.myFrame.width = 0;
+                    }
+                    else
+                    {
+                        dime.view.myFrame.width = 0;
                     }
                 }
             }
@@ -1004,17 +1009,21 @@
             if (totalMulti != 0)
             {
                 CGFloat tempHeight = _myCGFloatRound(floatingHeight * (sbvsc.heightSizeInner.multiVal / totalMulti));
-                floatingHeight -= tempHeight;
-                totalMulti -= sbvsc.heightSizeInner.multiVal;
-                
                 sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:tempHeight sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
                 
                 if ([self myIsNoLayoutSubview:sbv])
+                {
                     sbvmyFrame.height = 0;
+                }
+                else
+                {
+                    floatingHeight -= tempHeight;
+                    totalMulti -= sbvsc.heightSizeInner.multiVal;
+                }
                 
                 for (MyLayoutSize *dime in dimeArray)
                 {
-                    if (dime.isActive)
+                    if (dime.isActive && ![self myIsNoLayoutSubview:dime.view])
                     {
                         if (dime.dimeNumVal == nil)
                         {
@@ -1028,8 +1037,10 @@
                         
                         dime.view.myFrame.height = [self myValidMeasure:dime.view.heightSize sbv:dime.view calcSize:dime.view.myFrame.height sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
                         
-                        if ([self myIsNoLayoutSubview:dime.view])
-                            dime.view.myFrame.height = 0;
+                    }
+                    else
+                    {
+                        dime.view.myFrame.height = 0;
                     }
                 }
             }
