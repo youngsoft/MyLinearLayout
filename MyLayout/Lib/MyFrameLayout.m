@@ -173,6 +173,8 @@
         
         if (sbvsc.widthSizeInner.dimeRelaVal == self.widthSizeInner)
             rect.size.width = [sbvsc.widthSizeInner measureWith:selfSize.width - paddingLeading - paddingTrailing];
+        else if (sbvsc.widthSizeInner.dimeRelaVal == self.heightSizeInner)
+            rect.size.width = [sbvsc.widthSizeInner measureWith:selfSize.height - paddingTop - paddingBottom];
         else
             rect.size.width = [sbvsc.widthSizeInner measureWith:sbvsc.widthSizeInner.dimeRelaVal.view.estimatedRect.size.width];
     }
@@ -190,6 +192,8 @@
     {//高度等于其他依赖的视图
         if (sbvsc.heightSizeInner.dimeRelaVal == self.heightSizeInner)
             rect.size.height = [sbvsc.heightSizeInner measureWith:selfSize.height - paddingTop - paddingBottom];
+        else if (sbvsc.heightSizeInner.dimeRelaVal == self.widthSizeInner)
+            rect.size.height = [sbvsc.heightSizeInner measureWith:selfSize.width - paddingLeading - paddingTrailing];
         else
             rect.size.height = [sbvsc.heightSizeInner measureWith:sbvsc.heightSizeInner.dimeRelaVal.view.estimatedRect.size.height];
     }

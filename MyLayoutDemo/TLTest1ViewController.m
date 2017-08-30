@@ -115,24 +115,35 @@
     colView = [self createLabel:@"Cell41" backgroundColor:[CFTool color:2]];
     [tableLayout addCol:colView atRow:4];
     
-    
-    //第六行高度由子视图决定，均分宽度
-    [tableLayout addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_AVERAGE];
+    //第六行高度固定为0, 列数固定为4。这里只添加了3列，可见列宽是固定的。
+    [tableLayout addRow:30 colCount:4];
     
     colView = [self createLabel:@"Cell50" backgroundColor:[CFTool color:1]];
-    colView.myHeight = 80;
     [tableLayout addCol:colView atRow:5];
     
     colView = [self createLabel:@"Cell51" backgroundColor:[CFTool color:2]];
-    colView.myHeight = 120;
     [tableLayout addCol:colView atRow:5];
     
     colView = [self createLabel:@"Cell52" backgroundColor:[CFTool color:3]];
-    colView.myHeight = 70;
     [tableLayout addCol:colView atRow:5];
+    
+    //第七行高度由子视图决定，均分宽度
+    [tableLayout addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_AVERAGE];
+    
+    colView = [self createLabel:@"Cell60" backgroundColor:[CFTool color:1]];
+    colView.myHeight = 80;
+    [tableLayout addCol:colView atRow:6];
+    
+    colView = [self createLabel:@"Cell61" backgroundColor:[CFTool color:2]];
+    colView.myHeight = 120;
+    [tableLayout addCol:colView atRow:6];
+    
+    colView = [self createLabel:@"Cell62" backgroundColor:[CFTool color:3]];
+    colView.myHeight = 70;
+    [tableLayout addCol:colView atRow:6];
 
 
-
+    
 
 
     

@@ -2417,7 +2417,10 @@ CGFloat _myMLayoutSizeError = 0.0;
         {
             if (lsc.widthSizeInner.dimeRelaVal.view == newSuperview)
             {
-                rectSelf.size.width = [lsc.widthSizeInner measureWith:rectSuper.size.width];
+                if (lsc.widthSizeInner.dimeRelaVal.dime == MyGravity_Horz_Fill)
+                    rectSelf.size.width = [lsc.widthSizeInner measureWith:rectSuper.size.width];
+                else
+                    rectSelf.size.width = [lsc.widthSizeInner measureWith:rectSuper.size.height];
             }
             else
             {
@@ -2471,7 +2474,10 @@ CGFloat _myMLayoutSizeError = 0.0;
         {
             if (lsc.heightSizeInner.dimeRelaVal.view == newSuperview)
             {
-                rectSelf.size.height = [lsc.heightSizeInner measureWith:rectSuper.size.height];
+                if (lsc.heightSizeInner.dimeRelaVal.dime == MyGravity_Vert_Fill)
+                    rectSelf.size.height = [lsc.heightSizeInner measureWith:rectSuper.size.height];
+                else
+                    rectSelf.size.height = [lsc.heightSizeInner measureWith:rectSuper.size.width];
             }
             else
             {
@@ -3024,6 +3030,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 
 BOOL _hasBegin;
+__weak MyBaseLayout * _currentLayout;
 
 -(instancetype)initWithLayout:(MyBaseLayout *)layout
 {
@@ -3031,6 +3038,8 @@ BOOL _hasBegin;
     if (self != nil)
     {
         _layout = layout;
+        _oldAlpha = 1;
+        _currentLayout = nil;
     }
     
     return self;
@@ -3039,10 +3048,11 @@ BOOL _hasBegin;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
-
+    
     if (_layout != nil && _target != nil && !_forbidTouch && touch.tapCount == 1 && !_hasBegin)
     {
         _hasBegin = YES;
+        _currentLayout = _layout;
         _canCallAction = YES;
         _beginPoint = [touch locationInView:_layout];
         
@@ -3055,7 +3065,7 @@ BOOL _hasBegin;
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (_layout != nil && _target != nil && _hasBegin)
+    if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
     {
         if (_canCallAction)
         {
@@ -3107,7 +3117,7 @@ BOOL _hasBegin;
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     
-    if (_layout != nil && _target != nil && _hasBegin)
+    if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
     {
         //设置一个延时.
         _forbidTouch = YES;
@@ -3117,17 +3127,19 @@ BOOL _hasBegin;
 #pragma clang diagnostic pop
         
         _hasBegin = NO;
+        _currentLayout = nil;
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     
-    if (_layout != nil && _target != nil && _hasBegin)
+    if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
     {
         [self myResetTouchHighlighted];
         
         _hasBegin = NO;
+        _currentLayout = nil;
         
         if (!_hasDoCancel)
         {
@@ -3641,22 +3653,10 @@ CGFloat _myRoundNumber(CGFloat f)
     if (f == 0 || f == CGFLOAT_MAX || f == -CGFLOAT_MAX)
         return f;
     
-    int fi = rint(f);
-    if (_myCGFloatEqual(f, fi))
-        return fi;
-    
-    //按精度四舍五入
-    //正确的算法应该是。x = 0; y = 0;  0<x<0.5 y = 0;   x = 0.5 y = 0.5;  0.5<x<1 y = 0.5; x=1 y = 1;
-    
     if (f < 0)
-    {
-        return ceil(f * _myMyLayoutScale) / _myMyLayoutScale;
-    }
+        return ceil(fma(f, _myMyLayoutScale, -0.5)) / _myMyLayoutScale;
     else
-    {
-        return  floor(f *_myMyLayoutScale) / _myMyLayoutScale;
-    }
-
+        return floor(fma(f, _myMyLayoutScale, 0.5)) / _myMyLayoutScale;
 }
 
 CGRect _myRoundRectForLayout(CGRect rect)
