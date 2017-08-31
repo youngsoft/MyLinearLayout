@@ -115,6 +115,8 @@
     colView = [self createLabel:@"Cell41" backgroundColor:[CFTool color:2]];
     [tableLayout addCol:colView atRow:4];
     
+    //第六行高度固定为0, 列数固定为4。这里只添加了3列，可见列宽是固定的。
+    [tableLayout addRow:30 colCount:4];
     
     //第六行高度由子视图决定，均分宽度
     [tableLayout addRow:MyLayoutSize.wrap colSize:MyLayoutSize.average];
@@ -129,7 +131,7 @@
     [tableLayout addCol:colView atRow:5];
     
     //第七行高度由子视图决定，均分宽度
-    [tableLayout addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_AVERAGE];
+    [tableLayout addRow:MyLayoutSize.wrap colSize:MyLayoutSize.average];
     
     colView = [self createLabel:@"Cell60" backgroundColor:[CFTool color:1]];
     colView.myHeight = 80;

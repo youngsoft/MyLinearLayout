@@ -10,6 +10,26 @@
 #import <math.h>
 
 
+BOOL _myCGFloatErrorEqual(CGFloat f1, CGFloat f2, CGFloat error)
+{
+#if CGFLOAT_IS_DOUBLE == 1
+    return fabs(f1 - f2) < error;
+#else
+    return fabsf(f1 - f2) < error;
+#endif
+}
+
+BOOL _myCGFloatErrorNotEqual(CGFloat f1, CGFloat f2, CGFloat error)
+{
+#if CGFLOAT_IS_DOUBLE == 1
+    return fabs(f1 - f2) > error;
+#else
+    return fabsf(f1 - f2) > error;
+#endif
+}
+
+
+
 
 BOOL _myCGFloatEqual(CGFloat f1, CGFloat f2)
 {

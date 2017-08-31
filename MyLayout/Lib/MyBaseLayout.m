@@ -1755,6 +1755,10 @@ void* _myObserverContextC = (void*)20175283;
         }
         newSelfSize = _myCGSizeRound(newSelfSize);
         _useCacheRects = NO;
+        
+        static CGFloat sSizeError = 0;
+        if (sSizeError == 0)
+            sSizeError = 1 / [UIScreen mainScreen].scale + 0.0001;  //误差量。
 
         //设置子视图的frame并还原
         for (UIView *sbv in self.subviews)
@@ -1785,12 +1789,43 @@ void* _myObserverContextC = (void*)20175283;
                 if ([sbv isKindOfClass:[MyBaseLayout class]])
                 {
                    rc  = _myLayoutCGRectRound(sbvmyFrame.frame);
+                    
+                    
+                    CGRect sbvTempBounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, rc.size.width, rc.size.height);
+                    
+                    if (_myCGFloatErrorEqual(sbvTempBounds.size.width, sbvOldBounds.size.width, sSizeError))
+                        sbvTempBounds.size.width = sbvOldBounds.size.width;
+                    
+                    if (_myCGFloatErrorEqual(sbvTempBounds.size.height, sbvOldBounds.size.height, sSizeError))
+                        sbvTempBounds.size.height = sbvOldBounds.size.height;
+                    
+                    
+                    if (_myCGFloatErrorNotEqual(sbvTempBounds.size.width, sbvOldBounds.size.width, sSizeError)||
+                        _myCGFloatErrorNotEqual(sbvTempBounds.size.height, sbvOldBounds.size.height, sSizeError))
+                    {
+                        sbv.bounds = sbvTempBounds;
+                    }
+                    
+                    CGPoint sbvTempCenter = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * sbvTempBounds.size.width, rc.origin.y + sbv.layer.anchorPoint.y * sbvTempBounds.size.height);
+                    
+                    if (_myCGFloatErrorEqual(sbvTempCenter.x, sbvOldCenter.x, sSizeError))
+                        sbvTempCenter.x = sbvOldCenter.x;
+                    
+                    if (_myCGFloatErrorEqual(sbvTempCenter.y, sbvOldCenter.y, sSizeError))
+                        sbvTempCenter.y = sbvOldCenter.y;
+                    
+                    
+                    if (_myCGFloatErrorNotEqual(sbvTempCenter.x, sbvOldCenter.x, sSizeError)||
+                        _myCGFloatErrorNotEqual(sbvTempCenter.y, sbvOldCenter.y, sSizeError))
+                    {
+                        sbv.center = sbvTempCenter;
+                    }
+
+
                 }
                 else
                 {
                     rc = _myCGRectRound(sbvmyFrame.frame);
-                }
-                
                     
                     sbv.center = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height);
                     sbv.bounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, rc.size.width, rc.size.height);
@@ -1821,14 +1856,10 @@ void* _myObserverContextC = (void*)20175283;
         {
             
             
-            static CGFloat sSizeError = 0;
-            if (sSizeError == 0)
-                sSizeError = 1 / [UIScreen mainScreen].scale + 0.0001;  //误差量。
-            
             //因为布局子视图的新老尺寸计算在上面有两种不同的方法，因此这里需要考虑两种计算的误差值，而这两种计算的误差值是不超过1/屏幕精度的。
             //因此我们认为当二者的值超过误差时我们才认为有尺寸变化。
-            BOOL isWidthAlter = fabs(newSelfSize.width - oldSelfSize.width) > sSizeError;
-            BOOL isHeightAlter = fabs(newSelfSize.height - oldSelfSize.height) > sSizeError;
+            BOOL isWidthAlter =  _myCGFloatErrorNotEqual(newSelfSize.width, oldSelfSize.width, sSizeError);
+            BOOL isHeightAlter = _myCGFloatErrorNotEqual(newSelfSize.height, oldSelfSize.height, sSizeError);
             
             //如果父视图也是布局视图，并且自己隐藏则不调整自身的尺寸和位置。
             BOOL isAdjustSelf = YES;

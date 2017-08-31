@@ -59,7 +59,7 @@ static CGFloat sColCountTag = -100000;
             NSCAssert(0, @"Constraint exception !! rowSize can not set to MyLayoutSize.fill");
         }
         
-        if (colSize == MyLayoutSize.average)
+        if (colSize == MyLayoutSize.average || colSize == MyLayoutSize.fill || colSize < sColCountTag)
         {
             if (orientation == MyOrientation_Horz)
             {
@@ -72,19 +72,6 @@ static CGFloat sColCountTag = -100000;
                 lsc.myVertMargin = 0;
             }
             
-        }
-        else if (colSize == MyLayoutSize.fill)
-        {
-            if (orientation == MyOrientation_Horz)
-            {
-                lsc.wrapContentWidth = NO;
-                lsc.myHorzMargin = 0;
-            }
-            else
-            {
-                lsc.wrapContentHeight = NO;
-                lsc.myVertMargin = 0;
-            }
         }
     }
     
@@ -199,6 +186,7 @@ static CGFloat sColCountTag = -100000;
     
     //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
     if (rowView.colSize == MyLayoutSize.average)
+    {
         colsc.weight = 1;
     }
     else if (rowView.colSize < sColCountTag)

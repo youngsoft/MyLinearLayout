@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 
 
+extern BOOL _myCGFloatErrorEqual(CGFloat f1, CGFloat f2, CGFloat error);
+extern BOOL _myCGFloatErrorNotEqual(CGFloat f1, CGFloat f2, CGFloat error);
+
+
 extern BOOL _myCGFloatLess(CGFloat f1, CGFloat f2);
 extern BOOL _myCGFloatGreat(CGFloat f1, CGFloat f2);
 extern BOOL _myCGFloatEqual(CGFloat f1, CGFloat f2);

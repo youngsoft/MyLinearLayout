@@ -692,12 +692,11 @@
             if ([self myIsRelativePos:topSpace])
             {
                 CGFloat topSpaceWeight = topSpace;
-                topSpace = _myCGFloatRound((topSpace / totalWeight) * floatingHeight);
-                if (_myCGFloatLessOrEqual(topSpace, 0))
-                    topSpace = 0;
-                
+                topSpace = _myCGFloatRound((topSpaceWeight / totalWeight) * floatingHeight);
                 floatingHeight -= topSpace;
                 totalWeight -= topSpaceWeight;
+                if (_myCGFloatLessOrEqual(topSpace, 0))
+                    topSpace = 0;
             }
             else
             {
@@ -720,11 +719,10 @@
             if (weight > 0)
             {
                 CGFloat h = _myCGFloatRound((weight / totalWeight) * floatingHeight);
-                if (_myCGFloatLessOrEqual(h, 0))
-                    h = 0;
-                
                 floatingHeight -= h;
                 totalWeight -= weight;
+                if (_myCGFloatLessOrEqual(h, 0))
+                    h = 0;
                 
                 rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:h sbvSize:rect.size selfLayoutSize:selfSize];
             }
@@ -735,12 +733,11 @@
             if ([self myIsRelativePos:bottomSpace])
             {
                 CGFloat bottomSpaceWeight = bottomSpace;
-                bottomSpace = _myCGFloatRound((bottomSpace / totalWeight) * floatingHeight);
-                if ( _myCGFloatLessOrEqual(bottomSpace, 0))
-                    bottomSpace = 0;
-                
+                bottomSpace = _myCGFloatRound((bottomSpaceWeight / totalWeight) * floatingHeight);
                 floatingHeight -= bottomSpace;
                 totalWeight -= bottomSpaceWeight;
+                if ( _myCGFloatLessOrEqual(bottomSpace, 0))
+                    bottomSpace = 0;
                 
             }
             else
@@ -1036,12 +1033,11 @@
         if ([self myIsRelativePos:leadingSpace])
         {
             CGFloat leadingSpaceWeight = leadingSpace;
-            leadingSpace = _myCGFloatRound((leadingSpace / totalWeight) * floatingWidth);
-            if (_myCGFloatLessOrEqual(leadingSpace, 0))
-                leadingSpace = 0;
-            
+            leadingSpace = _myCGFloatRound((leadingSpaceWeight / totalWeight) * floatingWidth);
             floatingWidth -= leadingSpace;
             totalWeight -= leadingSpaceWeight;
+            if (_myCGFloatLessOrEqual(leadingSpace, 0))
+                leadingSpace = 0;
             
         }
         else
@@ -1066,11 +1062,11 @@
         if (weight > 0)
         {
             CGFloat w = _myCGFloatRound((weight / totalWeight) * floatingWidth);
-            if (_myCGFloatLessOrEqual(w, 0))
-                w = 0;
-            
             floatingWidth -= w;
             totalWeight -= weight;
+            
+            if (_myCGFloatLessOrEqual(w, 0))
+                w = 0;
             
             rect.size.width = w;
             
@@ -1083,12 +1079,11 @@
         if ([self myIsRelativePos:trailingSpace])
         {
             CGFloat trailingSpaceWeight = trailingSpace;
-            trailingSpace = _myCGFloatRound((trailingSpace / totalWeight) * floatingWidth);
-            if (_myCGFloatLessOrEqual(trailingSpace, 0))
-                trailingSpace = 0;
-            
+            trailingSpace = _myCGFloatRound((trailingSpaceWeight / totalWeight) * floatingWidth);
             floatingWidth -= trailingSpace;
             totalWeight -= trailingSpaceWeight;
+            if (_myCGFloatLessOrEqual(trailingSpace, 0))
+                trailingSpace = 0;
         }
         else
         {
