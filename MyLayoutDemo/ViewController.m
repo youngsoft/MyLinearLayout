@@ -10,6 +10,7 @@
 #import "DetailViewController.h"
 #import "CFTool.h"
 #import "MyLayout.h"
+
 #import "LLTest1ViewController.h"
 #import "LLTest2ViewController.h"
 #import "LLTest3ViewController.h"
@@ -69,170 +70,198 @@
 
 @interface ViewController ()
 
-@property(nonatomic, strong) NSArray *demoVCTypeLists;
+@property(nonatomic, strong) NSArray *demoTypeList;
 
 @end
 
 
 @implementation ViewController
 
--(NSArray*)demoVCTypeLists
+-(NSArray*)demoTypeList
 {
-    if (_demoVCTypeLists == nil)
+    if (_demoTypeList == nil)
     {
-        _demoVCTypeLists = @[@{@"type_title":@"线性布局",
-                               @"type_desc":@"线性布局介绍",
-                               @"vclist":@[@{@"title":NSLocalizedString(@"1.LinearLayout - Vert&Horz", @""),
-                                             @"class":[LLTest1ViewController class]},
-                                           @{@"title":NSLocalizedString(@"2.LinearLayout - Combine with UIScrollView", @""),
-                                             @"class":[LLTest2ViewController class]},
-                                           @{@"title":NSLocalizedString(@"3.LinearLayout - Gravity&Fill", @""),
-                                             @"class":[LLTest3ViewController class]},
-                                           @{@"title":NSLocalizedString(@"4.LinearLayout - Wrap content", @""),
-                                             @"class":[LLTest4ViewController class]},
-                                           @{@"title":NSLocalizedString(@"5.LinearLayout - Weight & Relative margin", @""),
-                                             @"class":[LLTest5ViewController class]},
-                                           @{@"title":NSLocalizedString(@"6.LinearLayout - Size limit & Flexed margin", @""),
-                                             @"class":[LLTest6ViewController class]},
-                                           @{@"title":NSLocalizedString(@"7.LinearLayout - Average size&space", @""),
-                                             @"class":[LLTest7ViewController class]}
-                                           ]
-                               },
-                             @{@"type_title":@"框架布局",
-                               @"type_desc":@"框架布局介绍",
-                               @"vclist":@[@{@"title":NSLocalizedString(@"1.FrameLayout - Gravity&Fill", @""),
-                                             @"class":[FLTest1ViewController class],
-                                             },
-                                           @{@"title":NSLocalizedString(@"2.FrameLayout - Complex UI", @""),
-                                             @"class":[FLTest2ViewController class]
-                                             }]},
-                             @{@"type_title":@"相对布局",
-                               @"type_desc":@"相对布局介绍",
-                               @"vclist":@[@{@"title":NSLocalizedString(@"1.RelativeLayout - Constraint&Dependence", @""),
-                                             @"class":[RLTest1ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"2.RelativeLayout - Prorate size", @""),
-                                             @"class":[RLTest2ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"3.RelativeLayout - Centered", @""),
-                                             @"class":[RLTest3ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"4.RelativeLayout - Scroll&Dock", @""),
-                                             @"class":[RLTest4ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"5.RelativeLayout - Boundary limit", @""),
-                                             @"class":[RLTest5ViewController class]
-                                             }]},
-                             @{@"type_title":@"表格布局",
-                               @"type_desc":@"表格布局介绍",
-                               @"vclist":@[@{@"title":NSLocalizedString(@"1.TableLayout - Vert", @""),
-                                             @"class":[TLTest1ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"2.TableLayout - Waterfall(Horz)", @""),
-                                             @"class":[TLTest2ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"3.TableLayout - Intelligent Borderline", @""),
-                                             @"class":[TLTest3ViewController class]
-                                             }]},
-                             @{@"type_title":@"流式布局",
-                               @"type_desc":@"流式布局介绍",
-                               @"vclist":@[@{@"title":NSLocalizedString(@"1.FlowLayout - Regular arrangement", @""),
-                                             @"class":[FLLTest1ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"2.FlowLayout - Tag cloud", @""),
-                                             @"class":[FLLTest2ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"3.FlowLayout - Drag", @""),
-                                             @"class":[FLLTest3ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"4.FlowLayout - Weight", @""),
-                                             @"class":[FLLTest4ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"5.FlowLayout - Paging", @""),
-                                             @"class":[FLLTest5ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"6.FlowLayout - Scroll", @""),
-                                             @"class":[FLLTest6ViewController class]
-                                             }]},
-                             @{@"type_title":@"浮动布局",
-                               @"type_desc":@"浮动布局介绍",
-                               @"vclist":@[@{@"title":NSLocalizedString(@"1.FloatLayout - Float", @""),
-                                             @"class":[FOLTest1ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"2.FloatLayout - Jagged", @""),
-                                             @"class":[FOLTest2ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"3.FloatLayout - Card news", @""),
-                                             @"class":[FOLTest3ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"4.FloatLayout - Tag cloud", @""),
-                                             @"class":[FOLTest4ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"5.FloatLayout - Title & Description", @""),
-                                             @"class":[FOLTest5ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"6.FloatLayout - User Profiles", @""),
-                                             @"class":[FOLTest6ViewController class]
-                                             }]},
-                             @{@"type_title":@"路径布局",
-                               @"type_desc":@"路径布局介绍",
-                               @"vclist":@[@{@"title":NSLocalizedString(@"1.PathLayout - Animations", @""),
-                                             @"class":[PLTest1ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"2.PathLayout - Curves", @""),
-                                             @"class":[PLTest2ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"3.PathLayout - Menu in Circle", @""),
-                                             @"class":[PLTest3ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"4.PathLayout - Fan", @""),
-                                             @"class":[PLTest4ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"5.PathLayout - Roulette", @""),
-                                             @"class":[PLTest5ViewController class]
-                                             }]},
-                             @{@"type_title":@"栅格布局",
-                               @"type_desc":@"栅格布局介绍",
-                               @"vclist":@[@{@"title":NSLocalizedString(@"1.GridLayout - Test1", @""),
-                                             @"class":[GLTest1ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"2.GridLayout - Test2", @""),
-                                             @"class":[GLTest2ViewController class]
-                                             }]},
-                             @{@"type_title":@"综合布局",
-                               @"type_desc":@"综合布局介绍",
-                               @"vclist":@[@{@"title":NSLocalizedString(@"1.UITableView - Dynamic height", @""),
-                                             @"class":[AllTest1ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"2.UITableView - Static height", @""),
-                                             @"class":[AllTest2ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"3.Replacement of UITableView", @""),
-                                             @"class":[AllTest3ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"4.Replacement of UICollectionView", @""),
-                                             @"class":[AllTest4ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"1.SizeClass - Demo1", @""),
-                                             @"class":[AllTest5ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"2.SizeClass - Demo2", @""),
-                                             @"class":[AllTest6ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"❁1.Screen perfect fit - Demo1", @""),
-                                             @"class":[AllTest7ViewController class]
-                                             },
-                                           @{@"title":NSLocalizedString(@"❁2.Screen perfect fit - Demo2", @""),
-                                             @"class":[AllTest8ViewController class]
-                                             }]}
-                             ];
-        
-        
-        
+        _demoTypeList = @[@{@"type_title":@"线性布局",
+                            @"type_desc":@"线性布局介绍",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.LinearLayout - Vert&Horz", @""),
+                                               @"class":[LLTest1ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.LinearLayout - Combine with UIScrollView", @""),
+                                               @"class":[LLTest2ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"3.LinearLayout - Gravity&Fill", @""),
+                                               @"class":[LLTest3ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"4.LinearLayout - Wrap content", @""),
+                                               @"class":[LLTest4ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"5.LinearLayout - Weight & Relative margin", @""),
+                                               @"class":[LLTest5ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"6.LinearLayout - Size limit & Flexed margin", @""),
+                                               @"class":[LLTest6ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"7.LinearLayout - Average size&space", @""),
+                                               @"class":[LLTest7ViewController class]
+                                               }
+                                             ]
+                            },
+                          
+                          @{@"type_title":@"框架布局",
+                            @"type_desc":@"框架布局介绍",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FrameLayout - Gravity&Fill", @""),
+                                               @"class":[FLTest1ViewController class],
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.FrameLayout - Complex UI", @""),
+                                               @"class":[FLTest2ViewController class]
+                                               }
+                                             ]
+                            },
+                          
+                          @{@"type_title":@"相对布局",
+                            @"type_desc":@"相对布局介绍",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.RelativeLayout - Constraint&Dependence", @""),
+                                               @"class":[RLTest1ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.RelativeLayout - Prorate size", @""),
+                                               @"class":[RLTest2ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"3.RelativeLayout - Centered", @""),
+                                               @"class":[RLTest3ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"4.RelativeLayout - Scroll&Dock", @""),
+                                               @"class":[RLTest4ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"5.RelativeLayout - Boundary limit", @""),
+                                               @"class":[RLTest5ViewController class]
+                                               }
+                                             ]
+                            },
+                          
+                          @{@"type_title":@"表格布局",
+                            @"type_desc":@"表格布局介绍",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.TableLayout - Vert", @""),
+                                               @"class":[TLTest1ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.TableLayout - Waterfall(Horz)", @""),
+                                               @"class":[TLTest2ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"3.TableLayout - Intelligent Borderline", @""),
+                                               @"class":[TLTest3ViewController class]
+                                               }
+                                             ]
+                            },
+                          
+                          @{@"type_title":@"流式布局",
+                            @"type_desc":@"流式布局介绍",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FlowLayout - Regular arrangement", @""),
+                                               @"class":[FLLTest1ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.FlowLayout - Tag cloud", @""),
+                                               @"class":[FLLTest2ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"3.FlowLayout - Drag", @""),
+                                               @"class":[FLLTest3ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"4.FlowLayout - Weight", @""),
+                                               @"class":[FLLTest4ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"5.FlowLayout - Paging", @""),
+                                               @"class":[FLLTest5ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"6.FlowLayout - Scroll", @""),
+                                               @"class":[FLLTest6ViewController class]
+                                               }
+                                             ]
+                            },
+                          
+                          @{@"type_title":@"浮动布局",
+                            @"type_desc":@"浮动布局介绍",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FloatLayout - Float", @""),
+                                               @"class":[FOLTest1ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.FloatLayout - Jagged", @""),
+                                               @"class":[FOLTest2ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"3.FloatLayout - Card news", @""),
+                                               @"class":[FOLTest3ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"4.FloatLayout - Tag cloud", @""),
+                                               @"class":[FOLTest4ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"5.FloatLayout - Title & Description", @""),
+                                               @"class":[FOLTest5ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"6.FloatLayout - User Profiles", @""),
+                                               @"class":[FOLTest6ViewController class]
+                                               }
+                                             ]
+                            },
+                          
+                          @{@"type_title":@"路径布局",
+                            @"type_desc":@"路径布局介绍",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.PathLayout - Animations", @""),
+                                               @"class":[PLTest1ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.PathLayout - Curves", @""),
+                                               @"class":[PLTest2ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"3.PathLayout - Menu in Circle", @""),
+                                               @"class":[PLTest3ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"4.PathLayout - Fan", @""),
+                                               @"class":[PLTest4ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"5.PathLayout - Roulette", @""),
+                                               @"class":[PLTest5ViewController class]
+                                               }
+                                             ]
+                            },
+                          
+                          @{@"type_title":@"栅格布局",
+                            @"type_desc":@"栅格布局介绍",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.GridLayout - Test1", @""),
+                                               @"class":[GLTest1ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.GridLayout - Test2", @""),
+                                               @"class":[GLTest2ViewController class]
+                                               }
+                                             ]
+                            },
+                          
+                          @{@"type_title":@"综合布局",
+                            @"type_desc":@"综合布局介绍",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.UITableView - Dynamic height", @""),
+                                               @"class":[AllTest1ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.UITableView - Static height", @""),
+                                               @"class":[AllTest2ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"3.Replacement of UITableView", @""),
+                                               @"class":[AllTest3ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"4.Replacement of UICollectionView", @""),
+                                               @"class":[AllTest4ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"1.SizeClass - Demo1", @""),
+                                               @"class":[AllTest5ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"2.SizeClass - Demo2", @""),
+                                               @"class":[AllTest6ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"❁1.Screen perfect fit - Demo1", @""),
+                                               @"class":[AllTest7ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"❁2.Screen perfect fit - Demo2", @""),
+                                               @"class":[AllTest8ViewController class]
+                                               }
+                                             ]
+                            }
+                          ];
         
     }
     
-    return _demoVCTypeLists;
+    return _demoTypeList;
 }
 
 - (void)viewDidLoad {
@@ -290,7 +319,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.demoVCTypeLists.count;
+    return self.demoTypeList.count;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -305,7 +334,7 @@
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [CFTool font:15];
     cell.textLabel.textColor = [CFTool color:4];
-    cell.textLabel.text = self.demoVCTypeLists[indexPath.row][@"type_title"];
+    cell.textLabel.text = self.demoTypeList[indexPath.row][@"type_title"];
     cell.textLabel.textAlignment = [MyBaseLayout isRTL] ? NSTextAlignmentRight : NSTextAlignmentLeft;
     return cell;
     
@@ -316,8 +345,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    DetailViewController *detailVC = [[DetailViewController alloc] initWithVCList:self.demoVCTypeLists[indexPath.row][@"vclist"]];
-    detailVC.title = self.demoVCTypeLists[indexPath.row][@"type_title"];
+    DetailViewController *detailVC = [[DetailViewController alloc] initWithDemoVCList:self.demoTypeList[indexPath.row][@"type_vclist"]];
+    detailVC.title = self.demoTypeList[indexPath.row][@"type_title"];
     [self.navigationController pushViewController:detailVC animated:YES];
 
 }

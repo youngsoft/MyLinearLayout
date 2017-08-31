@@ -12,19 +12,19 @@
 
 @interface DetailViewController ()
 
-@property(nonatomic, strong) NSArray *demoVCLists;
+@property(nonatomic, strong) NSArray *demoVCList;
 
 @end
 
 
 @implementation DetailViewController
 
--(instancetype)initWithVCList:(NSArray*)vcList
+-(instancetype)initWithDemoVCList:(NSArray*)vcList
 {
     self = [super init];
     if (self != nil)
     {
-        self.demoVCLists = vcList;
+        self.demoVCList = vcList;
     }
     
     return self;
@@ -57,7 +57,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.demoVCLists.count;
+    return self.demoVCList.count;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -72,7 +72,7 @@
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [CFTool font:15];
     cell.textLabel.textColor = [CFTool color:4];
-    cell.textLabel.text = self.demoVCLists[indexPath.row][@"title"];
+    cell.textLabel.text = self.demoVCList[indexPath.row][@"title"];
     cell.textLabel.textAlignment = [MyBaseLayout isRTL] ? NSTextAlignmentRight : NSTextAlignmentLeft;
     return cell;
     
@@ -83,8 +83,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    UIViewController *demoVC = [[self.demoVCLists[indexPath.row][@"class"] alloc] init];
-    demoVC.title = self.demoVCLists[indexPath.row][@"title"];
+    UIViewController *demoVC = [[self.demoVCList[indexPath.row][@"class"] alloc] init];
+    demoVC.title = self.demoVCList[indexPath.row][@"title"];
     [self.navigationController pushViewController:demoVC animated:YES];
 
 }

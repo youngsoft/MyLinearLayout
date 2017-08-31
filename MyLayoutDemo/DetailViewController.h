@@ -10,7 +10,7 @@
 
 @interface DetailViewController : UITableViewController
 
--(instancetype)initWithVCList:(NSArray*)vcList;
+-(instancetype)initWithDemoVCList:(NSArray*)vcList;
 
 @end
 
