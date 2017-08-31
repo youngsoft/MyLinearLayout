@@ -147,6 +147,7 @@
 		205643171F55A03000E8BDDE /* MyLayoutMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643151F55A03000E8BDDE /* MyLayoutMath.m */; };
 		205643181F55A16400E8BDDE /* MyLayoutMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643151F55A03000E8BDDE /* MyLayoutMath.m */; };
 		205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */; };
+		208157BD1F586AA700E945B6 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157BC1F586AA700E945B6 /* DetailViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -358,6 +359,8 @@
 		205643151F55A03000E8BDDE /* MyLayoutMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutMath.m; sourceTree = "<group>"; };
 		205CFA8C1F49BD1C00355489 /* GLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest1ViewController.h; sourceTree = "<group>"; };
 		205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GLTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		208157BB1F586A9900E945B6 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		208157BC1F586AA700E945B6 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -430,6 +433,8 @@
 				18D3C9981EDF09BE00D3DE43 /* AppDelegate.m */,
 				18D3C98D1EDF08F800D3DE43 /* ViewController.h */,
 				18D3C98E1EDF08F800D3DE43 /* ViewController.m */,
+				208157BB1F586A9900E945B6 /* DetailViewController.h */,
+				208157BC1F586AA700E945B6 /* DetailViewController.m */,
 				18D3C9991EDF09BE00D3DE43 /* CFTool.h */,
 				18D3C99A1EDF09BE00D3DE43 /* CFTool.m */,
 				18D3C98F1EDF08F800D3DE43 /* YYFPSLabel.h */,
@@ -995,6 +1000,7 @@
 				18D3C9121EDF074900D3DE43 /* LLTest2ViewController.m in Sources */,
 				182225D41E77E5930081AA4B /* MyDimeScale.m in Sources */,
 				18D3C92A1EDF07A700D3DE43 /* RLTest3ViewController.m in Sources */,
+				208157BD1F586AA700E945B6 /* DetailViewController.m in Sources */,
 				18D3C9861EDF084000D3DE43 /* AllTest2ViewController.m in Sources */,
 				18D3C9731EDF082800D3DE43 /* AllTest2TableViewCell.m in Sources */,
 				18D3C95F1EDF07F800D3DE43 /* FOLTest6ViewController.m in Sources */,
