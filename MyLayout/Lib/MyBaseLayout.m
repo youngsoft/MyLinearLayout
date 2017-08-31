@@ -1759,7 +1759,8 @@ void* _myObserverContextC = (void*)20175283;
         //设置子视图的frame并还原
         for (UIView *sbv in self.subviews)
         {
-            CGPoint ptorigin = sbv.bounds.origin;
+            CGRect sbvOldBounds = sbv.bounds;
+            CGPoint sbvOldCenter = sbv.center;
 
             MyFrame *sbvmyFrame = sbv.myFrame;
             UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
@@ -1791,15 +1792,16 @@ void* _myObserverContextC = (void*)20175283;
                 }
                 
                     
-                sbv.center = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height);
-                sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, rc.size.width, rc.size.height);
+                    sbv.center = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height);
+                    sbv.bounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, rc.size.width, rc.size.height);
+                    
+                }
                 
-
             }
             
             if (sbvsc.myVisibility == MyVisibility_Gone && !sbv.isHidden)
             {
-                sbv.bounds = CGRectMake(ptorigin.x, ptorigin.y, 0, 0);
+                sbv.bounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, 0, 0);
             }
             
             if (sbvmyFrame.sizeClass.viewLayoutCompleteBlock != nil)
@@ -3194,7 +3196,7 @@ __weak MyBaseLayout * _currentLayout;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
-
+    
     if (_layout != nil && _target != nil && !_forbidTouch && touch.tapCount == 1 && !_hasBegin)
     {
         _hasBegin = YES;

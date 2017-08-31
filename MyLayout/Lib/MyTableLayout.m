@@ -9,7 +9,7 @@
 #import "MyTableLayout.h"
 #import "MyLayoutInner.h"
 
-
+static CGFloat sColCountTag = -100000;
 
 @interface MyTableRowLayout : MyLinearLayout
 
@@ -26,6 +26,7 @@
    CGFloat _rowSize;
    CGFloat _colSize;
 }
+
 
 -(id)initWith:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
 {
@@ -127,6 +128,18 @@
     return [self insertRow:rowSize colSize:colSize atIndex:self.countOfRow];
 }
 
+-(MyLinearLayout*)addRow:(CGFloat)rowSize colCount:(NSUInteger)colCount
+{
+    return [self insertRow:rowSize colCount:colCount atIndex:self.countOfRow];
+}
+
+-(MyLinearLayout*)insertRow:(CGFloat)rowSize colCount:(NSUInteger)colCount atIndex:(NSInteger)rowIndex
+{
+    //这里特殊处理用-100000 - colCount 来表示一个特殊的列尺寸。其实是数量。
+    return [self  insertRow:rowSize colSize:sColCountTag - colCount atIndex:rowIndex];
+}
+
+
 -(MyLinearLayout*)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex
 {
     MyTableLayout *lsc = self.myCurrentSizeClass;
@@ -187,6 +200,15 @@
     //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
     if (rowView.colSize == MyLayoutSize.average)
         colsc.weight = 1;
+    }
+    else if (rowView.colSize < sColCountTag)
+    {
+        NSUInteger colCount = sColCountTag - rowView.colSize;
+        if (rowsc.orientation == MyOrientation_Horz)
+            colsc.widthSize.equalTo(rowView.widthSize).multiply(1.0 / colCount).add(-1 * rowView.subviewHSpace * (colCount - 1.0)/ colCount);
+        else
+            colsc.heightSize.equalTo(rowView.heightSize).multiply(1.0 / colCount).add(-1 * rowView.subviewVSpace * (colCount - 1.0)/ colCount);
+    }
     else if (rowView.colSize > 0)
     {
         if (rowsc.orientation == MyOrientation_Horz)

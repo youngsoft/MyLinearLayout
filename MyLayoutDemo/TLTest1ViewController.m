@@ -120,19 +120,31 @@
     [tableLayout addRow:MyLayoutSize.wrap colSize:MyLayoutSize.average];
     
     colView = [self createLabel:@"Cell50" backgroundColor:[CFTool color:1]];
-    colView.myHeight = 80;
     [tableLayout addCol:colView atRow:5];
     
     colView = [self createLabel:@"Cell51" backgroundColor:[CFTool color:2]];
-    colView.myHeight = 120;
     [tableLayout addCol:colView atRow:5];
     
     colView = [self createLabel:@"Cell52" backgroundColor:[CFTool color:3]];
-    colView.myHeight = 70;
     [tableLayout addCol:colView atRow:5];
+    
+    //第七行高度由子视图决定，均分宽度
+    [tableLayout addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_AVERAGE];
+    
+    colView = [self createLabel:@"Cell60" backgroundColor:[CFTool color:1]];
+    colView.myHeight = 80;
+    [tableLayout addCol:colView atRow:6];
+    
+    colView = [self createLabel:@"Cell61" backgroundColor:[CFTool color:2]];
+    colView.myHeight = 120;
+    [tableLayout addCol:colView atRow:6];
+    
+    colView = [self createLabel:@"Cell62" backgroundColor:[CFTool color:3]];
+    colView.myHeight = 70;
+    [tableLayout addCol:colView atRow:6];
 
 
-
+    
 
 
     

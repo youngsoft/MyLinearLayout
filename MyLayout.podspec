@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MyLayout"
-  s.version      = "1.4.0"
+  s.version      = "1.4.2"
   s.summary      = "MyLayout is an iOS UI framework integrates the functions with Android,AutoLayout,SizeClass,HTML CSS float and flexbox,UIView UITableView."
 
   s.description  = <<-DESC
@@ -52,7 +52,7 @@ Pod::Spec.new do |s|
   s.author             = { "欧阳大哥" => "obq0387_cn@sina.com" }
   # Or just: s.author    = "欧阳大哥"
   # s.authors            = { "欧阳大哥" => "obq0387_cn@sina.com" }
-  # s.social_media_url   = "http://blog.csdn.net/yangtiang"
+  # s.social_media_url   = "http://www.jianshu.com/u/3c9287519f58"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -75,7 +75,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.4.0" }
+  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => s.version }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

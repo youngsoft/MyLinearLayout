@@ -83,10 +83,23 @@
  */
 -(MyLinearLayout*)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize;
 
+
+/**
+ 添加行并指定列的数量，这样每列将会平分行的宽度或者高度。
+
+ @param rowSize 参考上面addRow方法的定义
+ @param colCount 指定行里面列的数量，必须大于0
+ @return 返回行布局视图对象。
+ */
+-(MyLinearLayout*)addRow:(CGFloat)rowSize colCount:(NSUInteger)colCount;
+
+
 /**
  * 在指定的位置插入一个新行
  */
 -(MyLinearLayout*)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex;
+-(MyLinearLayout*)insertRow:(CGFloat)rowSize colCount:(NSUInteger)colCount atIndex:(NSInteger)rowIndex;
+
 
 /**
  * 删除一行

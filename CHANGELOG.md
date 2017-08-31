@@ -3,6 +3,24 @@
 
 ---
 
+## [V1.4.2](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.4.2)(2017/8/31)
+
+#### Added
+1. 表格布局MyTableLayout添加了`addRow:colCount:`方法，目的是为了支持那些列数固定并且宽度固定的需求，具体例子见DEMO：[TLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/TLTest1ViewController.m)中的第五行的代码。
+2. 添加了布局视图的高度等于非布局父视图宽度以及布局视图宽度等于非布局父视图高度的支持，目的是为了支持对布局视图进行旋转`transform`的支持。
+3. 添加了框架布局MyFrameLayout中子视图的高度等于另外视图宽度以及宽度等于另外视图高度的支持。
+4. 下一个版本将会有重大功能的添加：栅格布局的支持、基线对齐的支持、均分的再次优化等等功能，敬请期待吧。。
+
+#### Fixed
+1. 修复了线性布局中的子视图设置为weight=1来均分布局视图的尺寸时，有可能导致产生中间缝隙的BUG。以及子视图的总尺寸和布局视图尺寸不相等的BUG。
+2. 修复了当对布局视图进行多点触摸且设置了布局视图的触摸事件时，有可能会对对应的触摸动作不调用而产生触摸状态无法被恢复的问题。
+3. 调整了将原始逻辑点转化为可显示逻辑点的算法，老算法计算可能不精确。
+
+## [V1.4.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.4.1)(2017/6/22)
+#### Fixed
+1. 修复了布局视图套布局视图，然后都具有wrapContentWidth或者wrapContentHeight属性时界面有可能进入死循环的问题，尤其是iPhonePlus设备。
+
+
 ## [V1.4.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.4.0)(2017/6/16)
 
 #### Added
@@ -224,7 +242,7 @@ MyTableLayout|colSpacing|subviewHSpace
 #### Added
 1. 布局视图添加了新方法`-(CGRect)subview:(UIView*)subview estimatedRectInLayoutSize:(CGSize)size`用来评估一个将要加入布局视图的子视图的frame值。这个方法通常用来实现一些子视图在布局视图之间移动的动画效果的能力。具体例子参见（DEMO:AllTest4ViewController）
 
-####Changed
+#### Changed
 1. 优化了当将一个布局视图作为视图控制器的根视图时(self.view)的一些属性设置可能导致约束冲突，和可能导致将控制器中的视图加入到一个滚动视图时无法滚动的问题。
 2. 将线性布局`MyLinearLayout`中的shrinkType属性的默认值由原来的`MySubviewsShrink_Average`改为了`MySubviewsShrink_None`，也就是默认是不压缩的。
 3. 修正了相对布局中的子视图设置`useFrame`为YES时，子视图无法自由控制自己的frame的问题。
@@ -350,7 +368,7 @@ MyTableLayout|colSpacing|subviewHSpace
 #### Fixed
 1. 优化代码，修复一个设置布局尺寸**MyLayoutDime**的`uBound,lBound`方法时可以指定其他任意视图的问题。
 
-##[V1.2.5](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.2.5)(2016/10/8)
+## [V1.2.5](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.2.5)(2016/10/8)
 
 #### Updated
 1. 优化了`beginLayoutBlock`和`endLayoutBlock`的调用时机，以及解决了可能这两个block块会出现循环引用的问题，同时优化了`viewLayoutCompleteBlock`可能会出现循环引用的问题
@@ -409,7 +427,7 @@ MyTableLayout|colSpacing|subviewHSpace
 1. 修正了相对布局中子视图隐藏时，相关子视图重新排列布局可能导致不正确的问题。相对布局中子视图隐藏时其他视图重新排列布局的算法是：隐藏的子视图的尺寸设置为0，所以依赖隐藏的子视图的边距依赖无效，变为依赖隐藏子视图所依赖的边距。
 
 
-##[V1.2.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.2.0)(2016/6/13)
+## [V1.2.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.2.0)(2016/6/13)
 
 #### Fixed
 1. 修复了垂直线性布局中同时设置`myLeftMargin,myRightMargin`并且设置了`gravity=MyMarginGravity_Horz_Center`时前者设置失效的问题。水平线性布局亦然。
@@ -456,7 +474,7 @@ MyTableLayout|colSpacing|subviewHSpace
 2. 修正了相对布局嵌套其他布局时，高度评估方法可能不正确的问题。
 3. 修正了线性布局在计算高度和宽度时的一个问题。
 
-##[V1.1.6](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.1.6)(2016/5/3)
+## [V1.1.6](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.1.6)(2016/5/3)
 
 1.  **MyLayoutDime**类的`equalTo`方法添加可以等于自身的功能。比如`a.widthDime.equalTo(a.widthDime).add(10);` 表示视图a的最终宽度等于其本身内容的宽度再加上10. 这种设置方法不会造成循环引用，主要用于那些需要在自身内容尺寸基础上再扩展尺寸的场景，(具体见： FLLTest2ViewController).
 2.  流式布局**MyFlowLayout**中的内容填充布局为了解决每行内容的填充空隙问题，增加了拉伸间距，拉伸尺寸，以及自动排列三种功能。拉伸间距需要设置属性`gravity`的值为`MyMarginGravity_Horz_Fill`或者`MyMarginGravity_Vert_Fill`；拉伸尺寸需要设置属性`averageArrange`的值为YES；自动排列则需要设置属性`autoArrange`的值为YES。（具体见*FLLTest2ViewController）。
@@ -477,16 +495,16 @@ MyTableLayout|colSpacing|subviewHSpace
 6. 优化了速度和性能的问题。
 
 
-##[V1.1.4](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.1.4)(2016/3/10)
+## [V1.1.4](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.1.4)(2016/3/10)
 1. 修正了尺寸评估函数`estimateLayoutRect`的一个多层嵌套是无法正确评估尺寸的BUG。
 2. 添加了属性`myMargin`用来简单快速的设置myLeftMarign,myTopMargin,myRightMargin,myBottomMargin都是相等的值。
 3. 增加了`MyDimeScale`这个工具类，用来实现不同屏幕的尺寸和位置的缩放的功能，加入我们的UI给我们的是iPhone6的设计图，并指定了某个视图的高度为100但又同时希望在iPhone5上高度缩小，而在iPhone6Plus上高度增加，则可以通过`[MyDimeScale scale:100]`得到各种屏幕的缩放后的值了。
 
 
-##[V1.1.3](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.1.3)(2016/2/22)
+## [V1.1.3](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.1.3)(2016/2/22)
 1.  对SizeClass支持和竖屏`MySizeClass_Portrait`和横屏`MySizeClass_Landscape`。以便支持单独的横屏和竖屏的界面适配，尤其是对iPad设备的横竖屏进行区分适配。
 
-##[V1.1.2](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.1.2)(2016/2/18)
+## [V1.1.2](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.1.2)(2016/2/18)
 1.  全面升级，新增加了对**SizeClass**的支持，通过**SizeClass**的功能可以为苹果的不同尺寸的设备提供完美的适配功能，对**SizeClass**的支持，是在苹果的**SizeClass**能力上支持的，因此只有iOS8以上的版本才支持SizeClass.
 2.  流式布局**MyFlowLayout**增加了按内容填充约束的方式的布局，当`arrangedCount`设置为0时则表示按内容约束方式进行布局。
 3.  添加了一个新的视图扩展属性`mySize`，以便为了简化同时设置myWidth,myHeight的能力。
