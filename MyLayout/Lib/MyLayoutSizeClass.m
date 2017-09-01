@@ -894,6 +894,16 @@ BOOL _myisRTL = NO;
     
 }
 
+-(BOOL)placeholder
+{
+    return NO;
+}
+
+-(void)setPlaceholder:(BOOL)placeholder
+{
+}
+
+
 //得到所有子栅格
 -(NSArray<id<MyGrid>> *)subGrids
 {

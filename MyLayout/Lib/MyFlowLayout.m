@@ -192,7 +192,7 @@
         if (!isEstimate)
         {
             sbvmyFrame.frame = sbv.bounds;
-            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame selfLayoutSize:selfSize];
+            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
         }
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])

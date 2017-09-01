@@ -835,7 +835,7 @@
         UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
         
         
-        [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame selfLayoutSize:selfSize];
+        [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
         
         if (sbvmyFrame.width != CGFLOAT_MAX)
         {

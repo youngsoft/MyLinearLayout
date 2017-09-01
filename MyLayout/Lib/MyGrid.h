@@ -16,6 +16,7 @@ extern NSString * const kMyGridSize;
 extern NSString * const kMyGridPadding;
 extern NSString * const kMyGridSpace;
 extern NSString * const kMyGridGravity;
+extern NSString * const kMyGridPlaceholder;
 extern NSString * const kMyGridTopBorderline;
 extern NSString * const kMyGridBottomBorderline;
 extern NSString * const kMyGridLeftBorderline;
@@ -90,6 +91,8 @@ extern NSString * const vMyGridGravityHeightFill;
 //栅格内子视图的对齐停靠方式，只有叶子栅格设置才有意义。要想设置的gravity生效，叶子栅格内填充的子视图必须要设置明确的尺寸。
 @property(nonatomic, assign) MyGravity gravity;
 
+//占位标志，只用叶子栅格，当设置为YES时则表示这个格子只用于占位，子视图不能填充到这个栅格中。
+@property(nonatomic, assign) BOOL placeholder;
 
 /**顶部边界线*/
 @property(nonatomic, strong) MyBorderline *topBorderline;

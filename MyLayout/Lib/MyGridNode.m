@@ -20,6 +20,8 @@ typedef struct  _MyGridOptionalProperties1
     UIEdgeInsets padding;
     //格子内子视图的对齐停靠方式。
     MyGravity gravity;
+    //占位标志
+    BOOL placeholder;
 }MyGridOptionalProperties1;
 
 
@@ -235,6 +237,21 @@ typedef struct  _MyGridOptionalProperties1
 {
     self.optionalProperties1->gravity = gravity;
 }
+
+-(BOOL)placeholder
+{
+    if (_optionalProperties1 == NULL)
+        return NO;
+    else
+        return _optionalProperties1->placeholder;
+}
+
+-(void)setPlaceholder:(BOOL)placeholder
+{
+    self.optionalProperties1->placeholder = placeholder;
+}
+
+
 
 -(CGFloat)updateGridSize:(CGSize)superSize superGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure
 {

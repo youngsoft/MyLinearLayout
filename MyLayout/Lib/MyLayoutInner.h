@@ -91,7 +91,7 @@
                 selfSize:(CGSize)selfSize
                    pRect:(CGRect*)pRect;
 
--(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvmyFrame:(MyFrame*)sbvmyFrame selfLayoutSize:(CGSize)selfLayoutSize;
+-(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvmyFrame:(MyFrame*)sbvmyFrame;
 
 -(CGFloat)myHeightFromFlexedHeightView:(UIView*)sbv sbvsc:(UIView*)sbvsc inWidth:(CGFloat)width;
 

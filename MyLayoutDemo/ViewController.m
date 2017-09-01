@@ -82,7 +82,7 @@
     if (_demoTypeList == nil)
     {
         _demoTypeList = @[@{@"type_title":@"线性布局",
-                            @"type_desc":@"线性布局介绍",
+                            @"type_desc":@"ll.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.LinearLayout - Vert&Horz", @""),
                                                @"class":[LLTest1ViewController class]
                                                },
@@ -108,7 +108,7 @@
                             },
                           
                           @{@"type_title":@"框架布局",
-                            @"type_desc":@"框架布局介绍",
+                            @"type_desc":@"fl.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FrameLayout - Gravity&Fill", @""),
                                                @"class":[FLTest1ViewController class],
                                                },
@@ -119,7 +119,7 @@
                             },
                           
                           @{@"type_title":@"相对布局",
-                            @"type_desc":@"相对布局介绍",
+                            @"type_desc":@"rl.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.RelativeLayout - Constraint&Dependence", @""),
                                                @"class":[RLTest1ViewController class]
                                                },
@@ -139,7 +139,7 @@
                             },
                           
                           @{@"type_title":@"表格布局",
-                            @"type_desc":@"表格布局介绍",
+                            @"type_desc":@"tl.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.TableLayout - Vert", @""),
                                                @"class":[TLTest1ViewController class]
                                                },
@@ -153,7 +153,7 @@
                             },
                           
                           @{@"type_title":@"流式布局",
-                            @"type_desc":@"流式布局介绍",
+                            @"type_desc":@"fll.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FlowLayout - Regular arrangement", @""),
                                                @"class":[FLLTest1ViewController class]
                                                },
@@ -176,7 +176,7 @@
                             },
                           
                           @{@"type_title":@"浮动布局",
-                            @"type_desc":@"浮动布局介绍",
+                            @"type_desc":@"flo.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FloatLayout - Float", @""),
                                                @"class":[FOLTest1ViewController class]
                                                },
@@ -199,7 +199,7 @@
                             },
                           
                           @{@"type_title":@"路径布局",
-                            @"type_desc":@"路径布局介绍",
+                            @"type_desc":@"pl.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.PathLayout - Animations", @""),
                                                @"class":[PLTest1ViewController class]
                                                },
@@ -336,6 +336,8 @@
     cell.textLabel.textColor = [CFTool color:4];
     cell.textLabel.text = self.demoTypeList[indexPath.row][@"type_title"];
     cell.textLabel.textAlignment = [MyBaseLayout isRTL] ? NSTextAlignmentRight : NSTextAlignmentLeft;
+    
+    cell.imageView.image = [UIImage imageNamed:self.demoTypeList[indexPath.row][@"type_desc"]];
     return cell;
     
 }

@@ -28,15 +28,18 @@
     rootLayout.subviewSpace = 10;
     rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
     
-    id<MyGrid> g1 = [rootLayout addCol:MyLayoutSize.fill];
-    id<MyGrid> g2 = [rootLayout addCol:0.5];
-    id<MyGrid> g3 = [rootLayout addCol:MyLayoutSize.fill];
-    id<MyGrid> g4 = [g2 addRow:MyLayoutSize.fill];
+    id<MyGrid> g1 = [rootLayout addRow:MyLayoutSize.fill];
+    id<MyGrid> g2 = [rootLayout addRow:MyLayoutSize.wrap];
+    id<MyGrid> g3 = [rootLayout addRow:MyLayoutSize.fill];
+    id<MyGrid> g4 = [rootLayout addRow:MyLayoutSize.wrap];
+
     
-    g4.subviewSpace = 40;
-    id<MyGrid> g5 = [g4 addRow:100];
+   // id<MyGrid> g4 = [g2 addRow:MyLayoutSize.fill];
     
-    id<MyGrid> g6 = [g4 addRow:200];
+   // g4.subviewSpace = 40;
+   // id<MyGrid> g5 = [g4 addRow:100];
+    
+   // id<MyGrid> g6 = [g4 addRow:200];
     
     
     
@@ -51,18 +54,18 @@
    id<MyGrid> g4 = [rootLayout addColGrid:g1.cloneGrid];
   */
     
-    g1.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
-    g2.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
-    g6.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
-    g4.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
+  //  g1.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
+  //  g2.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
+  //  g6.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
+   // g4.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
 
     
-   id<MyGrid> rootGrid = [rootLayout fetchLayoutSizeClass:MySizeClass_Landscape];
-    rootGrid.subviewSpace = 10;
-    [rootGrid addRowGrid:g1.cloneGrid];
-    [rootGrid addRowGrid:g1.cloneGrid];
-    [rootGrid addRowGrid:g1.cloneGrid];
-    [rootGrid addRowGrid:g1.cloneGrid];
+//   id<MyGrid> rootGrid = [rootLayout fetchLayoutSizeClass:MySizeClass_Landscape];
+//    rootGrid.subviewSpace = 10;
+//    [rootGrid addRowGrid:g1.cloneGrid];
+//    [rootGrid addRowGrid:g1.cloneGrid];
+//    [rootGrid addRowGrid:g1.cloneGrid];
+//    [rootGrid addRowGrid:g1.cloneGrid];
 
     
     
@@ -75,6 +78,7 @@
     UIView *v2 = [UIView new];
     v2.backgroundColor = [UIColor greenColor];
     [rootLayout addSubview:v2];
+    v2.mySize = CGSizeMake(100, 100);
     
     UIView *v3 = [UIView new];
     v3.backgroundColor = [UIColor blueColor];
@@ -83,6 +87,7 @@
     UIView *v4 = [UIView new];
     v4.backgroundColor = [UIColor orangeColor];
     [rootLayout addSubview:v4];
+    v4.mySize = CGSizeMake(200, 200);
 
     
 }

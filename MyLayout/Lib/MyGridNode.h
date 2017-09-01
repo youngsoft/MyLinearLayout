@@ -67,6 +67,8 @@ typedef enum : unsigned char {
 //格子内子视图的对齐停靠方式。
 @property(nonatomic, assign) MyGravity gravity;
 
+@property(nonatomic, assign) BOOL placeholder;
+
 
 @property(nonatomic, assign) CGFloat gridMeasure;
 @property(nonatomic) CGSize gridSize;

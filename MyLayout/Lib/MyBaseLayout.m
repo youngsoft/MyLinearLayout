@@ -2274,7 +2274,7 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
--(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvmyFrame:(MyFrame*)sbvmyFrame selfLayoutSize:(CGSize)selfLayoutSize
+-(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvmyFrame:(MyFrame*)sbvmyFrame
 {
     BOOL isLayoutView = [sbv isKindOfClass:[MyBaseLayout class]];
     BOOL isWrapWidth = (sbvsc.widthSizeInner.dimeSelfVal != nil) || (!isLayoutView && sbvsc.wrapContentWidth); //宽度包裹特殊处理
@@ -3003,7 +3003,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     if (!isEstimate)
     {
         sbvmyFrame.frame = sbv.bounds;
-        [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame selfLayoutSize:selfSize];
+        [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
     }
     
     if ([sbv isKindOfClass:[MyBaseLayout class]])
