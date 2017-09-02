@@ -410,6 +410,9 @@ typedef struct  _MyGridOptionalProperties1
     _borderlineLayerDelegate.leadingBorderlineLayer.hidden = !show;
     _borderlineLayerDelegate.trailingBorderlineLayer.hidden = !show;
     
+    //销毁高亮。。 按理来说不应该出现在这里的。。。。
+    [_touchEventDelegate myResetTouchHighlighted];
+    
     for (MyGridNode *subGrid in self.subGrids)
     {
         [subGrid showBorderline:show];

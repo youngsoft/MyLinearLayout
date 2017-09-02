@@ -257,7 +257,12 @@
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
     
-    id<MyGridNode> grid = [self gridhitTest:&point];
+    MySizeClass sizeClass = [self myGetGlobalSizeClass];
+
+    id<MyGridNode> bestSC = (id<MyGridNode>)[self myBestSizeClass:sizeClass];
+
+    
+    id<MyGridNode> grid = [bestSC gridhitTest:&point];
     if (grid != nil)
     {
         [grid touchesBegan:touches withEvent:event];
@@ -273,7 +278,12 @@
     
     CGPoint point = [touch locationInView:self];
     
-    id<MyGridNode> grid = [self gridhitTest:&point];
+    MySizeClass sizeClass = [self myGetGlobalSizeClass];
+    
+    id<MyGridNode> bestSC = (id<MyGridNode>)[self myBestSizeClass:sizeClass];
+
+    
+    id<MyGridNode> grid = [bestSC gridhitTest:&point];
     if (grid != nil)
     {
         [grid touchesMoved:touches withEvent:event];
@@ -289,7 +299,12 @@
     
     CGPoint point = [touch locationInView:self];
     
-    id<MyGridNode> grid = [self gridhitTest:&point];
+    MySizeClass sizeClass = [self myGetGlobalSizeClass];
+    
+    id<MyGridNode> bestSC = (id<MyGridNode>)[self myBestSizeClass:sizeClass];
+
+    
+    id<MyGridNode> grid = [bestSC gridhitTest:&point];
     if (grid != nil)
     {
         [grid touchesEnded:touches withEvent:event];
@@ -304,7 +319,12 @@
     
     CGPoint point = [touch locationInView:self];
     
-    id<MyGridNode> grid = [self gridhitTest:&point];
+    MySizeClass sizeClass = [self myGetGlobalSizeClass];
+    
+    id<MyGridNode> bestSC = (id<MyGridNode>)[self myBestSizeClass:sizeClass];
+
+    
+    id<MyGridNode> grid = [bestSC gridhitTest:&point];
     if (grid != nil)
     {
         [grid touchesCancelled:touches withEvent:event];

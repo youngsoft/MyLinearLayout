@@ -64,19 +64,19 @@
    id<MyGrid> g4 = [rootLayout addColGrid:g1.cloneGrid];
   */
     
- /*   g1.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
+    g1.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
     g2.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
     g6.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
     g4.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
-*/
+
     
- /*  id<MyGrid> rootGrid = [rootLayout fetchLayoutSizeClass:MySizeClass_Landscape];
+   id<MyGrid> rootGrid = [rootLayout fetchLayoutSizeClass:MySizeClass_Landscape];
     rootGrid.subviewSpace = 10;
     [rootGrid addRowGrid:g1.cloneGrid];
     [rootGrid addRowGrid:g1.cloneGrid];
     [rootGrid addRowGrid:g1.cloneGrid];
     [rootGrid addRowGrid:g1.cloneGrid];
-*/
+
     
     
 

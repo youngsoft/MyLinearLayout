@@ -2355,7 +2355,7 @@ void* _myObserverContextC = (void*)20175283;
         return size;
     
     CGRect rectSuper = newSuperview.bounds;
-    UIView *ssc = newSuperview.myCurrentSizeClass;
+    UIView *ssc = newSuperview.myCurrentSizeClassInner;
     UIView *lsc = self.myCurrentSizeClass;
     
     if (!ssc.wrapContentWidth)

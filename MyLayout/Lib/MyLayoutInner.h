@@ -117,6 +117,9 @@
 
 -(UIFont*)myGetSubviewFont:(UIView*)sbv;
 
+-(MySizeClass)myGetGlobalSizeClass;
+
+
 @end
 
 
