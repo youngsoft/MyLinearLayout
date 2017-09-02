@@ -8,6 +8,7 @@
 
 #import "MyBaseLayout.h"
 #import "MyLayoutInner.h"
+#import "MyLayoutDelegate.h"
 #import <objc/runtime.h>
 
 
@@ -784,7 +785,7 @@ void* _myObserverContextC = (void*)20175283;
 
 @implementation MyBaseLayout
 {
-    MyTouchEventDelegate *_touchEventDelegate;
+    MyLayoutTouchEventDelegate *_touchEventDelegate;
     
     MyBorderlineLayerDelegate *_borderlineLayerDelegate;
     
@@ -1257,12 +1258,57 @@ void* _myObserverContextC = (void*)20175283;
 
 
 
+-(void)setHighlightedOpacity:(CGFloat)highlightedOpacity
+{
+    if (_touchEventDelegate == nil)
+    {
+        _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
+    }
+    
+    _touchEventDelegate.highlightedOpacity = highlightedOpacity;
+}
+
+-(CGFloat)highlightedOpacity
+{
+    return _touchEventDelegate.highlightedOpacity;
+}
+
+-(void)setHighlightedBackgroundColor:(UIColor *)highlightedBackgroundColor
+{
+    if (_touchEventDelegate == nil)
+    {
+        _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
+    }
+    
+    _touchEventDelegate.highlightedBackgroundColor = highlightedBackgroundColor;
+}
+
+-(UIColor*)highlightedBackgroundColor
+{
+    return _touchEventDelegate.highlightedBackgroundColor;
+}
+
+-(void)setHighlightedBackgroundImage:(UIImage *)highlightedBackgroundImage
+{
+    if (_touchEventDelegate == nil)
+    {
+        _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
+    }
+    
+    _touchEventDelegate.highlightedBackgroundImage = highlightedBackgroundImage;
+}
+
+-(UIImage*)highlightedBackgroundImage
+{
+    return _touchEventDelegate.highlightedBackgroundImage;
+}
+
 
 -(void)setTarget:(id)target action:(SEL)action
 {
     if (_touchEventDelegate == nil)
     {
-        _touchEventDelegate = [[MyTouchEventDelegate alloc] initWithLayout:self];
+        _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
     }
     
     [_touchEventDelegate setTarget:target action:action];
@@ -1273,7 +1319,7 @@ void* _myObserverContextC = (void*)20175283;
 {
     if (_touchEventDelegate == nil)
     {
-        _touchEventDelegate = [[MyTouchEventDelegate alloc] initWithLayout:self];
+        _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
     }
 
     [_touchEventDelegate setTouchDownTarget:target action:action];
@@ -1283,7 +1329,7 @@ void* _myObserverContextC = (void*)20175283;
 {
     if (_touchEventDelegate == nil)
     {
-        _touchEventDelegate = [[MyTouchEventDelegate alloc] initWithLayout:self];
+        _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
     }
     
     [_touchEventDelegate setTouchCancelTarget:target action:action];
@@ -3181,239 +3227,6 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 
 
 @end
-
-//布局的事件处理委托对象
-@implementation MyTouchEventDelegate
-{
-    __weak MyBaseLayout *_layout;
-    __weak id _target;
-    SEL   _action;
-    
-    __weak id _touchDownTarget;
-    SEL  _touchDownAction;
-    
-    __weak id _touchCancelTarget;
-    SEL _touchCancelAction;
-    BOOL _hasDoCancel;
-    
-    
-    UIColor *_oldBackgroundColor;
-    UIImage *_oldBackgroundImage;
-    
-    CGFloat _oldAlpha;
-    
-    BOOL _forbidTouch;
-    BOOL _canCallAction;
-    CGPoint _beginPoint;
-    
-}
-
-BOOL _hasBegin;
-__weak MyBaseLayout * _currentLayout;
-
--(instancetype)initWithLayout:(MyBaseLayout *)layout
-{
-    self = [self init];
-    if (self != nil)
-    {
-        _layout = layout;
-        _oldAlpha = 1;
-        _currentLayout = nil;
-    }
-    
-    return self;
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [touches anyObject];
-    
-    if (_layout != nil && _target != nil && !_forbidTouch && touch.tapCount == 1 && !_hasBegin)
-    {
-        _hasBegin = YES;
-        _currentLayout = _layout;
-        _canCallAction = YES;
-        _beginPoint = [touch locationInView:_layout];
-        
-        [self mySetTouchHighlighted];
-        
-        _hasDoCancel = NO;
-        [self myPerformTouch:_touchDownTarget withAction:_touchDownAction];
-    }
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
-    {
-        if (_canCallAction)
-        {
-            CGPoint pt = [((UITouch*)[touches anyObject]) locationInView:_layout];
-            if (fabs(pt.x - _beginPoint.x) > 2 || fabs(pt.y - _beginPoint.y) > 2)
-            {
-                _canCallAction = NO;
-                
-                if (!_hasDoCancel)
-                {
-                    [self myPerformTouch:_touchCancelTarget withAction:_touchCancelAction];
-                    
-                    _hasDoCancel = YES;
-                    
-                }
-                
-            }
-        }
-    }
-}
-
--(void)doTargetAction:(UITouch*)touch
-{
-    
-    [self myResetTouchHighlighted];
-    
-    //距离太远则不会处理
-    CGPoint pt = [touch locationInView:_layout];
-    if (CGRectContainsPoint(_layout.bounds, pt) && _action != nil && _canCallAction)
-    {
-        [self myPerformTouch:_target withAction:_action];
-        
-    }
-    else
-    {
-        if (!_hasDoCancel)
-        {
-            [self myPerformTouch:_touchCancelTarget withAction:_touchCancelAction];
-            _hasDoCancel = YES;
-        }
-        
-    }
-    
-    _forbidTouch = NO;
-    
-}
-
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    
-    if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
-    {
-        //设置一个延时.
-        _forbidTouch = YES;
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        [self performSelector:@selector(doTargetAction:) withObject:[touches anyObject] afterDelay:0.12];
-#pragma clang diagnostic pop
-        
-        _hasBegin = NO;
-        _currentLayout = nil;
-    }
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    
-    if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
-    {
-        [self myResetTouchHighlighted];
-        
-        _hasBegin = NO;
-        _currentLayout = nil;
-        
-        if (!_hasDoCancel)
-        {
-            [self myPerformTouch:_touchCancelTarget withAction:_touchCancelAction];
-            
-            _hasDoCancel = YES;
-        }
-        
-    }
-}
-
-
-///设置触摸时的高亮
--(void)mySetTouchHighlighted
-{
-    if (_layout.highlightedOpacity != 0)
-    {
-        _oldAlpha = _layout.alpha;
-        _layout.alpha = 1 - _layout.highlightedOpacity;
-    }
-    
-    if (_layout.highlightedBackgroundColor != nil)
-    {
-        _oldBackgroundColor = _layout.backgroundColor;
-        _layout.backgroundColor = _layout.highlightedBackgroundColor;
-    }
-    
-    if (_layout.highlightedBackgroundImage != nil)
-    {
-        _oldBackgroundImage = _layout.backgroundImage;
-        _layout.backgroundImage = _layout.highlightedBackgroundImage;
-    }
-    
-}
-
-//恢复触摸时的高亮。
--(void)myResetTouchHighlighted
-{
-    if (_layout.highlightedOpacity != 0)
-    {
-        _layout.alpha = _oldAlpha;
-        _oldAlpha = 1;
-    }
-    
-    if (_layout.highlightedBackgroundColor != nil)
-    {
-        _layout.backgroundColor = _oldBackgroundColor;
-        _oldBackgroundColor = nil;
-    }
-    
-    
-    if (_layout.highlightedBackgroundImage != nil)
-    {
-        _layout.backgroundImage = _oldBackgroundImage;
-        _oldBackgroundImage = nil;
-    }
-    
-}
-
--(void)myPerformTouch:(id)target withAction:(SEL)action
-{
-    if (_layout != nil && target != nil && action != nil)
-    {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        [target performSelector:action withObject:_layout];
-#pragma clang diagnostic pop
-        
-    }
-}
-
--(void)setTarget:(id)target action:(SEL)action
-{
-    _target = target;
-    _action = action;
-}
-
-
--(void)setTouchDownTarget:(id)target action:(SEL)action
-{
-    _touchDownTarget = target;
-    _touchDownAction = action;
-}
-
--(void)setTouchCancelTarget:(id)target action:(SEL)action
-{
-    _touchCancelTarget = target;
-    _touchCancelAction = action;
-    
-}
-
-
-@end
-
-
 
 
 @implementation MyFrame

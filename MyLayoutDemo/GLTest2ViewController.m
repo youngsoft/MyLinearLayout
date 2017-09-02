@@ -17,24 +17,39 @@
 
 @implementation GLTest2ViewController
 
+-(void)handleTest1:(id<MyGrid>)sender
+{
+    NSLog(@"tag:%d", sender.tag);
+}
+
 -(void)loadView
 {
     self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
+    
+    rootLayout.highlightedBackgroundColor = [UIColor blackColor];
+    
     self.view = rootLayout;
     
     rootLayout.subviewSpace = 10;
     rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
     
     id<MyGrid> g1 = [rootLayout addCol:MyLayoutSize.fill];
+    
+    g1.tag = 100;
+    [g1 setTarget:self action:@selector(handleTest1:)];
+    
     id<MyGrid> g2 = [rootLayout addCol:0.5];
     id<MyGrid> g3 = [rootLayout addCol:MyLayoutSize.fill];
     id<MyGrid> g4 = [g2 addRow:MyLayoutSize.fill];
     
     g4.subviewSpace = 40;
     id<MyGrid> g5 = [g4 addRow:100];
+    
+    g5.tag = 200;
+    [g5 setTarget:self action:@selector(handleTest1:)];
     
     id<MyGrid> g6 = [g4 addRow:200];
     
@@ -49,25 +64,27 @@
    id<MyGrid> g4 = [rootLayout addColGrid:g1.cloneGrid];
   */
     
-    g1.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
+ /*   g1.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
     g2.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
     g6.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
     g4.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
-
+*/
     
-   id<MyGrid> rootGrid = [rootLayout fetchLayoutSizeClass:MySizeClass_Landscape];
+ /*  id<MyGrid> rootGrid = [rootLayout fetchLayoutSizeClass:MySizeClass_Landscape];
     rootGrid.subviewSpace = 10;
     [rootGrid addRowGrid:g1.cloneGrid];
     [rootGrid addRowGrid:g1.cloneGrid];
     [rootGrid addRowGrid:g1.cloneGrid];
     [rootGrid addRowGrid:g1.cloneGrid];
-
+*/
     
     
 
     
-    UIView *v1 = [UIView new];
-    v1.backgroundColor = [UIColor redColor];
+    UILabel *v1 = [UILabel new];
+  //  v1.backgroundColor = [UIColor redColor];
+    v1.text = @"你好";
+    v1.textColor = [UIColor yellowColor];
     [rootLayout addSubview:v1];
     
     UIView *v2 = [UIView new];

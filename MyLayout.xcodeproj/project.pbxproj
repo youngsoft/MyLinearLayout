@@ -148,6 +148,9 @@
 		205643181F55A16400E8BDDE /* MyLayoutMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643151F55A03000E8BDDE /* MyLayoutMath.m */; };
 		205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */; };
 		208157BD1F586AA700E945B6 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157BC1F586AA700E945B6 /* DetailViewController.m */; };
+		208157C21F5A886300E945B6 /* MyLayoutDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 208157C01F5A886300E945B6 /* MyLayoutDelegate.h */; };
+		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
+		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -361,6 +364,8 @@
 		205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GLTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		208157BB1F586A9900E945B6 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		208157BC1F586AA700E945B6 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		208157C01F5A886300E945B6 /* MyLayoutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDelegate.h; sourceTree = "<group>"; };
+		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -720,6 +725,8 @@
 				205643091F4E53CD00E8BDDE /* MyGridNode.m */,
 				205643141F55A03000E8BDDE /* MyLayoutMath.h */,
 				205643151F55A03000E8BDDE /* MyLayoutMath.m */,
+				208157C01F5A886300E945B6 /* MyLayoutDelegate.h */,
+				208157C11F5A886300E945B6 /* MyLayoutDelegate.m */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -762,6 +769,7 @@
 				2056430A1F4E53CD00E8BDDE /* MyGridNode.h in Headers */,
 				18C15AEC1EDF13D700AADEAC /* MyLayout.h in Headers */,
 				18C15AED1EDF13DE00AADEAC /* MyFlowLayout.h in Headers */,
+				208157C21F5A886300E945B6 /* MyLayoutDelegate.h in Headers */,
 				18C15AEE1EDF13E500AADEAC /* MyLinearLayout.h in Headers */,
 				18C15AEF1EDF13E900AADEAC /* MyFloatLayout.h in Headers */,
 				18C15AF01EDF13EF00AADEAC /* MyTableLayout.h in Headers */,
@@ -979,6 +987,7 @@
 				18C15B021EDF144B00AADEAC /* MyBaseLayout.m in Sources */,
 				18C15B031EDF144B00AADEAC /* MyLayoutPos.m in Sources */,
 				18C15B041EDF144B00AADEAC /* MyLayoutSize.m in Sources */,
+				208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */,
 				18C15B051EDF144B00AADEAC /* MyLayoutSizeClass.m in Sources */,
 				18C15B061EDF144B00AADEAC /* MyMaker.m in Sources */,
 				18C15B071EDF144B00AADEAC /* MyDimeScale.m in Sources */,
@@ -1056,6 +1065,7 @@
 				18D3C9871EDF084000D3DE43 /* AllTest3ViewController.m in Sources */,
 				18D3C9161EDF074900D3DE43 /* LLTest6ViewController.m in Sources */,
 				18D3C9721EDF082800D3DE43 /* AllTest1TableViewHeaderFooterView.m in Sources */,
+				208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */,
 				18D3C94D1EDF07E700D3DE43 /* PLTest5ViewController.m in Sources */,
 				18D3C9851EDF084000D3DE43 /* AllTest1ViewController.m in Sources */,
 				182225D21E77E5930081AA4B /* MyMaker.m in Sources */,

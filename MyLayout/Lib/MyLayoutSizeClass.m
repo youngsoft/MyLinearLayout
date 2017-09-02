@@ -903,6 +903,20 @@ BOOL _myisRTL = NO;
 {
 }
 
+-(NSInteger)tag
+{
+    return self.view.tag;
+}
+
+-(void)setTag:(NSInteger)tag
+{
+    self.view.tag = tag;
+}
+
+-(void)setTarget:(id)target action:(SEL)action
+{
+    //do nothing.
+}
 
 //得到所有子栅格
 -(NSArray<id<MyGrid>> *)subGrids
@@ -986,6 +1000,15 @@ BOOL _myisRTL = NO;
     
 }
 
+-(NSDictionary*)gridDictionary
+{
+    return self.rootGrid.gridDictionary;
+}
+
+-(void)setGridDictionary:(NSDictionary *)gridDictionary
+{
+    self.rootGrid.gridDictionary = gridDictionary;
+}
 
 -(CGFloat)gridMeasure
 {
@@ -997,14 +1020,14 @@ BOOL _myisRTL = NO;
     self.rootGrid.gridMeasure = gridMeasure;
 }
 
--(CGSize)gridSize
+-(CGRect)gridRect
 {
-    return self.rootGrid.gridSize;
+    return self.rootGrid.gridRect;
 }
 
--(void)setGridSize:(CGSize)gridSize
+-(void)setGridRect:(CGRect)gridRect
 {
-    self.rootGrid.gridSize = gridSize;
+    self.rootGrid.gridRect = gridRect;
 }
 
 //更新格子尺寸。
@@ -1013,10 +1036,17 @@ BOOL _myisRTL = NO;
     return [self.rootGrid updateGridSize:superSize superGrid:superGrid withMeasure:measure];
 }
 
--(CALayer*)gridLayoutLayer
+-(CGFloat)updateGridOrigin:(CGPoint)superOrigin superGrid:(id<MyGridNode>)superGrid withOffset:(CGFloat)offset
 {
-    return self.view.layer;
+    return [self.rootGrid updateGridOrigin:superOrigin superGrid:superGrid withOffset:offset];
 }
+
+
+-(UIView*)gridLayoutView
+{
+    return self.view;
+}
+
 
 -(void)setBorderlineNeedLayoutIn:(CGRect)rect withLayer:(CALayer *)layer
 {
@@ -1027,6 +1057,34 @@ BOOL _myisRTL = NO;
 {
     [self.rootGrid showBorderline:show];
 }
+
+-(id<MyGridNode>)gridhitTest:(CGPoint *)pt
+{
+    return [self.rootGrid gridhitTest:pt];
+}
+
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    //do nothing;
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    //do nothing;
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    //do nothing;
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    //do nothing;
+}
+
+
 
 
 - (id)copyWithZone:(NSZone *)zone

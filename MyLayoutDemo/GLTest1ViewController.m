@@ -26,12 +26,13 @@
     self.view = rootLayout;
     
     rootLayout.subviewSpace = 10;
-    rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
+    rootLayout.padding = UIEdgeInsetsMake(50, 10, 10, 10);
+    rootLayout.gravity = MyGravity_Vert_Bottom;
     
-    id<MyGrid> g1 = [rootLayout addRow:MyLayoutSize.fill];
-    id<MyGrid> g2 = [rootLayout addRow:MyLayoutSize.wrap];
-    id<MyGrid> g3 = [rootLayout addRow:MyLayoutSize.fill];
-    id<MyGrid> g4 = [rootLayout addRow:MyLayoutSize.wrap];
+  //  [rootLayout addRow:MyLayoutSize.fill].placeholder = YES;
+    [rootLayout addRow:MyLayoutSize.wrap];
+    [rootLayout addRow:MyLayoutSize.wrap];
+   // [rootLayout addRow:MyLayoutSize.fill].placeholder = YES;
 
     
    // id<MyGrid> g4 = [g2 addRow:MyLayoutSize.fill];
@@ -69,9 +70,18 @@
 
     
     
+    UILabel *lb1 = [UILabel new];
+    lb1.text = @"习近平要大局观习近平要大局观习近平要大局观习近平要大局观习近平要大局观习近平要大局观";
+    lb1.wrapContentHeight = YES;
+    [rootLayout addSubview:lb1];
+    
+    UILabel *lb2 = [UILabel new];
+    lb2.text = @"新闻报道";
+    [lb2 sizeToFit];
+    [rootLayout addSubview:lb2];
 
     
-    UIView *v1 = [UIView new];
+   /* UIView *v1 = [UIView new];
     v1.backgroundColor = [UIColor redColor];
     [rootLayout addSubview:v1];
     
@@ -88,7 +98,7 @@
     v4.backgroundColor = [UIColor orangeColor];
     [rootLayout addSubview:v4];
     v4.mySize = CGSizeMake(200, 200);
-
+*/
     
 }
 

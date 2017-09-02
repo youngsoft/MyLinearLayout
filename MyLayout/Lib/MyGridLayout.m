@@ -195,16 +195,16 @@
     lsc.gridMeasure = gridMeasure;
 }
 
--(CGSize)gridSize
+-(CGRect)gridRect
 {
     MyGridLayout *lsc = self.myCurrentSizeClass;
-    return lsc.gridSize;
+    return lsc.gridRect;
 }
 
--(void)setGridSize:(CGSize)gridSize
+-(void)setGridRect:(CGRect)gridRect
 {
     MyGridLayout *lsc = self.myCurrentSizeClass;
-    lsc.gridSize = gridSize;
+    lsc.gridRect = gridRect;
 }
 
 //更新格子尺寸。
@@ -214,9 +214,18 @@
     return [lsc updateGridSize:superSize superGrid:superGrid withMeasure:measure];
 }
 
--(CALayer*)gridLayoutLayer
+-(CGFloat)updateGridOrigin:(CGPoint)superOrigin superGrid:(id<MyGridNode>)superGrid withOffset:(CGFloat)offset
 {
-    return self.layer;
+    MyGridLayout *lsc = self.myCurrentSizeClass;
+
+    return [lsc updateGridOrigin:superOrigin superGrid:superGrid withOffset:offset];
+}
+
+
+
+-(UIView*)gridLayoutView
+{
+    return self;
 }
 
 
@@ -234,8 +243,80 @@
 
 }
 
+-(id<MyGridNode>)gridhitTest:(CGPoint *)pt
+{
+    MyGridLayout *lsc = self.myCurrentSizeClass;
+    return [lsc gridhitTest:pt];
+}
+
+
+#pragma mark -- Touches Event
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInView:self];
+    
+    id<MyGridNode> grid = [self gridhitTest:&point];
+    if (grid != nil)
+    {
+        [grid touchesBegan:touches withEvent:event];
+    }
+    
+    [super touchesBegan:touches withEvent:event];
+    
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    
+    CGPoint point = [touch locationInView:self];
+    
+    id<MyGridNode> grid = [self gridhitTest:&point];
+    if (grid != nil)
+    {
+        [grid touchesMoved:touches withEvent:event];
+    }
+
+    [super touchesMoved:touches withEvent:event];
+}
+
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    
+    CGPoint point = [touch locationInView:self];
+    
+    id<MyGridNode> grid = [self gridhitTest:&point];
+    if (grid != nil)
+    {
+        [grid touchesEnded:touches withEvent:event];
+    }
+
+    [super touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    
+    CGPoint point = [touch locationInView:self];
+    
+    id<MyGridNode> grid = [self gridhitTest:&point];
+    if (grid != nil)
+    {
+        [grid touchesCancelled:touches withEvent:event];
+    }
+    
+    [super touchesCancelled:touches withEvent:event];
+}
+
+
 
 #pragma mark -- Override Method
+
 
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
@@ -261,7 +342,7 @@
     
     
     //设置根格子的rect为布局视图的大小。
-    lsc.gridSize = selfSize;
+    lsc.gridRect = CGRectMake(0, 0, selfSize.width, selfSize.height);
     
     //遍历尺寸
     NSInteger index = 0;
@@ -310,7 +391,7 @@
     //绘制边界线。。
     if (!isEstimate)
     {
-        [grid setBorderlineNeedLayoutIn:CGRectMake(gridOrigin.x, gridOrigin.y, grid.gridSize.width, grid.gridSize.height) withLayer:self.layer];
+        [grid setBorderlineNeedLayoutIn:grid.gridRect withLayer:self.layer];
     }
     
     //处理叶子节点。
@@ -338,10 +419,10 @@
             CGFloat paddingBottom = grid.padding.bottom;
             CGFloat paddingTrailing = [MyBaseLayout isRTL] ? grid.padding.left : grid.padding.right;
             
-            [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:grid.gridSize sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
+            [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:grid.gridRect.size sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
             
             
-            [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:vertGravity horzGravity:horzGravity inSelfSize:grid.gridSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
+            [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:vertGravity horzGravity:horzGravity inSelfSize:grid.gridRect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
             
             sbvmyFrame.leading += gridOrigin.x;
             sbvmyFrame.top += gridOrigin.y;
@@ -355,36 +436,75 @@
     
     CGFloat offset = 0;
     if (grid.subGridsType == MySubGridsType_Col)
+    {
         offset = gridOrigin.x + grid.padding.left;
+        
+        MyGravity horzGravity = grid.gravity & MyGravity_Vert_Mask;
+        if (horzGravity == MyGravity_Horz_Center || horzGravity == MyGravity_Horz_Right)
+        {
+            //得出所有子栅格的宽度综合
+            CGFloat subGridsWidth = 0;
+            for (id<MyGridNode> sbvGrid in subGrids)
+            {
+                subGridsWidth += sbvGrid.gridRect.size.width;
+            }
+            
+            if (subGrids.count > 1)
+                subGridsWidth += grid.subviewSpace * (subGrids.count - 1);
+
+            
+            if (horzGravity == MyGravity_Horz_Center)
+            {
+                offset += (grid.gridRect.size.width - grid.padding.left - grid.padding.right - subGridsWidth)/2;
+            }
+            else
+            {
+                offset += grid.gridRect.size.width - grid.padding.left - grid.padding.right - subGridsWidth;
+            }
+        }
+        
+        
+    }
     else if (grid.subGridsType == MySubGridsType_Row)
+    {
         offset = gridOrigin.y + grid.padding.top;
-    else;
+        
+        MyGravity vertGravity = grid.gravity & MyGravity_Horz_Mask;
+        if (vertGravity == MyGravity_Vert_Center || vertGravity == MyGravity_Vert_Bottom)
+        {
+            //得出所有子栅格的宽度综合
+            CGFloat subGridsHeight = 0;
+            for (id<MyGridNode> sbvGrid in subGrids)
+            {
+                subGridsHeight += sbvGrid.gridRect.size.height;
+            }
+            
+            if (subGrids.count > 1)
+                subGridsHeight += grid.subviewSpace * (subGrids.count - 1);
+            
+            if (vertGravity == MyGravity_Vert_Center)
+            {
+                offset += (grid.gridRect.size.height - grid.padding.top - grid.padding.bottom - subGridsHeight)/2;
+            }
+            else
+            {
+                offset += grid.gridRect.size.height - grid.padding.top - grid.padding.bottom - subGridsHeight;
+            }
+        }
+        
+    }
+    else
+    {
+        
+    }
+    
+    
 
     for (id<MyGridNode> sbvGrid in subGrids)
     {
-     
-        CGPoint sbvGridOrigin;
-        if (grid.subGridsType == MySubGridsType_Col)
-        {
-            sbvGridOrigin.x = offset;
-            sbvGridOrigin.y = gridOrigin.y + grid.padding.top;
-            offset += sbvGrid.gridSize.width;
-        }
-        else if (grid.subGridsType == MySubGridsType_Row)
-        {
-            sbvGridOrigin.x = gridOrigin.x + grid.padding.left;
-            sbvGridOrigin.y = offset;
-            
-            offset += sbvGrid.gridSize.height;
-        }
-        else
-        {
-            sbvGridOrigin = CGPointZero;
-        }
-        
+        offset += [sbvGrid updateGridOrigin:gridOrigin superGrid:grid withOffset:offset];
         offset += grid.subviewSpace;
-        
-        [self myTraversalGridOrigin:sbvGrid gridOrigin:sbvGridOrigin lsc:lsc sbvEnumerator:sbvEnumerator isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
+        [self myTraversalGridOrigin:sbvGrid gridOrigin:sbvGrid.gridRect.origin lsc:lsc sbvEnumerator:sbvEnumerator isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
     }
 }
 
@@ -420,12 +540,12 @@
     if (grid.subGridsType == MySubGridsType_Col)
     {
         fixedMeasure += grid.padding.left + grid.padding.right;
-        validMeasure = grid.gridSize.width - fixedMeasure;
+        validMeasure = grid.gridRect.size.width - fixedMeasure;
     }
     else if(grid.subGridsType == MySubGridsType_Row)
     {
         fixedMeasure += grid.padding.top + grid.padding.bottom;
-        validMeasure = grid.gridSize.height - fixedMeasure;
+        validMeasure = grid.gridRect.size.height - fixedMeasure;
     }
     else;
     
@@ -448,7 +568,7 @@
                     
                     UIEdgeInsets padding = grid.padding;
                     
-                    [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridSize paddingTop:padding.top paddingLeading:padding.left paddingBottom:padding.bottom paddingTrailing:padding.right pMaxWrapSize:NULL];
+                    [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridRect.size paddingTop:padding.top paddingLeading:padding.left paddingBottom:padding.bottom paddingTrailing:padding.right pMaxWrapSize:NULL];
 
                     if (grid.superGrid.subGridsType == MySubGridsType_Row)
                     {
@@ -487,7 +607,7 @@
             fixedMeasure += [sbvGrid updateGridSize:gridSize superGrid:grid withMeasure:sbvGrid.gridMeasure];
             
             //遍历儿子节点。。
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridSize lsc:lsc sbs:sbs pIndex:pIndex];
+            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex];
             
         }
         else if (sbvGrid.gridMeasure > 0 && sbvGrid.gridMeasure < 1)
@@ -495,7 +615,7 @@
             fixedMeasure += [sbvGrid updateGridSize:gridSize superGrid:grid withMeasure:validMeasure * sbvGrid.gridMeasure];
             
             //遍历儿子节点。。
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridSize lsc:lsc sbs:sbs pIndex:pIndex];
+            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex];
 
         }
         else if (sbvGrid.gridMeasure < 0 && sbvGrid.gridMeasure > -1)
@@ -528,11 +648,11 @@
     CGFloat remainedMeasure = 0;
     if (grid.subGridsType == MySubGridsType_Col)
     {
-        remainedMeasure = grid.gridSize.width - fixedMeasure;
+        remainedMeasure = grid.gridRect.size.width - fixedMeasure;
     }
     else if (grid.subGridsType == MySubGridsType_Row)
     {
-        remainedMeasure = grid.gridSize.height - fixedMeasure;
+        remainedMeasure = grid.gridRect.size.height - fixedMeasure;
     }
     else;
     
@@ -545,7 +665,7 @@
             remainedMeasure -= [sbvGrid updateGridSize:gridSize superGrid:grid withMeasure:-1 * remainedMeasure * sbvGrid.gridMeasure];
             
             NSInteger index = weightSubGridsIndexs[i].integerValue;
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridSize lsc:lsc sbs:sbs pIndex:&index];
+            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index];
         }
     }
     
@@ -560,7 +680,7 @@
             totalCount -= 1;
             
             NSInteger index = fillSubGridsIndexs[i].integerValue;
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridSize lsc:lsc sbs:sbs pIndex:&index];
+            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index];
         }
     }
     

@@ -5,8 +5,9 @@
 //  Created by oubaiquan on 2017/8/23.
 //  Copyright © 2017年 YoungSoft. All rights reserved.
 //
-
+#import <UIKit/UIKit.h>
 #import "MyLayoutDef.h"
+
 
 /**
  *布局的边界画线类，用于实现绘制布局的四周的边界线的功能。一个布局视图中提供了上下左右4个方向的边界画线类对象。
@@ -60,32 +61,4 @@
 //兼容老版本的类名命名不规则的问题，这样老版本仍然可以用MyBorderLineDraw这个类名。
 typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to instead");
 
-
-
-/**绘制线条层委托实现类**/
-#ifdef MAC_OS_X_VERSION_10_12
-@interface MyBorderlineLayerDelegate : NSObject<CALayerDelegate>
-#else
-@interface MyBorderlineLayerDelegate : NSObject
-#endif
-
-@property(nonatomic, strong) MyBorderline *topBorderline; /**顶部边界线*/
-@property(nonatomic, strong) MyBorderline *leadingBorderline; /**头部边界线*/
-@property(nonatomic, strong) MyBorderline *bottomBorderline;  /**底部边界线*/
-@property(nonatomic, strong) MyBorderline *trailingBorderline;  /**尾部边界线*/
-@property(nonatomic, strong) MyBorderline *leftBorderline;   /**左边边界线*/
-@property(nonatomic, strong) MyBorderline *rightBorderline;   /**左边边界线*/
-
-
-@property(nonatomic ,strong) CAShapeLayer *topBorderlineLayer;
-@property(nonatomic ,strong) CAShapeLayer *leadingBorderlineLayer;
-@property(nonatomic ,strong) CAShapeLayer *bottomBorderlineLayer;
-@property(nonatomic ,strong) CAShapeLayer *trailingBorderlineLayer;
-
-
--(instancetype)initWithLayoutLayer:(CALayer*)layoutLayer;
-
--(void)setNeedsLayoutIn:(CGRect)rect withLayer:(CALayer*)layer;
-
-@end
 

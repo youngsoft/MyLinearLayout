@@ -39,23 +39,6 @@
 
 
 
-@interface MyTouchEventDelegate : NSObject
-
--(instancetype)initWithLayout:(MyBaseLayout*)layout;
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
-
--(void)setTarget:(id)target action:(SEL)action;
--(void)setTouchDownTarget:(id)target action:(SEL)action;
--(void)setTouchCancelTarget:(id)target action:(SEL)action;
-
-@end
-
-
-
 @interface MyBaseLayout()
 
 

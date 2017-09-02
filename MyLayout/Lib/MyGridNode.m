@@ -7,6 +7,80 @@
 //
 
 #import "MyGridNode.h"
+#import "MyLayoutDelegate.h"
+#import "MyBaseLayout.h"
+
+
+
+/**
+ 为支持栅格触摸而建立的触摸委托派生类。
+ */
+@interface MyGridNodeTouchEventDelegate : MyTouchEventDelegate
+
+@property(nonatomic, weak) id<MyGridNode> grid;
+@property(nonatomic, weak) CALayer *gridLayer;
+
+-(instancetype)initWithLayout:(MyBaseLayout*)layout grid:(id<MyGridNode>)grid;
+
+@end
+
+
+@implementation MyGridNodeTouchEventDelegate
+
+-(instancetype)initWithLayout:(MyBaseLayout*)layout grid:(id<MyGridNode>)grid
+{
+    self = [super initWithLayout:layout];
+    if (self != nil)
+    {
+        _grid = grid;
+    }
+    
+    return self;
+}
+
+
+-(void)mySetTouchHighlighted
+{
+    //如果有高亮则建立一个高亮子层。
+    if (self.layout.highlightedBackgroundColor != nil)
+    {
+        if (self.gridLayer == nil)
+        {
+            CALayer *layer = [[CALayer alloc] init];
+            layer.zPosition = -1;
+            [self.layout.layer addSublayer:layer];
+            self.gridLayer = layer;
+        }
+        self.gridLayer.frame = self.grid.gridRect;
+        self.gridLayer.backgroundColor = self.layout.highlightedBackgroundColor.CGColor;
+    }
+}
+
+-(void)myResetTouchHighlighted
+{
+    //恢复高亮，删除子图层
+    if (self.gridLayer != nil)
+    {
+        [self.gridLayer removeFromSuperlayer];
+    }
+    self.gridLayer = nil;
+}
+
+-(id)myActionSender
+{
+    return _grid;
+}
+
+-(void)dealloc
+{
+    [self myResetTouchHighlighted];
+}
+
+
+@end
+
+
+
 
 
 /**
@@ -29,6 +103,7 @@ typedef struct  _MyGridOptionalProperties1
 
 @property(nonatomic, assign) MyGridOptionalProperties1 *optionalProperties1;
 @property(nonatomic, strong) MyBorderlineLayerDelegate *borderlineLayerDelegate;
+@property(nonatomic, strong) MyTouchEventDelegate *touchEventDelegate;
 
 
 @end
@@ -44,7 +119,7 @@ typedef struct  _MyGridOptionalProperties1
         _gridMeasure = measure;
         _subGridsType  = MySubGridsType_Unknown;
         _subGrids = nil;
-        _gridSize = CGSizeZero;
+        _gridRect = CGRectZero;
         _superGrid = superGrid;
         _optionalProperties1 = NULL;
         _borderlineLayerDelegate = nil;
@@ -71,8 +146,23 @@ typedef struct  _MyGridOptionalProperties1
     _optionalProperties1 = NULL;
 }
 
+#pragma mark -- MyGridAction
+
+-(void)setTarget:(id)target action:(SEL)action
+{
+    if (_touchEventDelegate == nil && target != nil)
+    {
+        _touchEventDelegate = [[MyGridNodeTouchEventDelegate alloc] initWithLayout:(MyBaseLayout*)[self gridLayoutView] grid:self];
+    }
+    
+    [_touchEventDelegate setTarget:target action:action];
+    
+    if (target == nil)
+        _touchEventDelegate = nil;
+}
 
 #pragma mark -- MyGrid
+
 
 -(id<MyGrid>)addRow:(CGFloat)measure
 {
@@ -141,6 +231,7 @@ typedef struct  _MyGridOptionalProperties1
     MyGridNode *grid = [[MyGridNode alloc] initWithMeasure:self.gridMeasure superGrid:nil];
     //克隆各种属性。
     grid.subGridsType = self.subGridsType;
+    grid.tag = self.tag;
     if (self->_optionalProperties1 != NULL)
     {
         grid.subviewSpace = self.subviewSpace;
@@ -148,13 +239,19 @@ typedef struct  _MyGridOptionalProperties1
         grid.padding = self.padding;
     }
     
-    //拷贝分割线。。
+    //拷贝分割线。
     if (self->_borderlineLayerDelegate != nil)
     {
         grid.topBorderline = self.topBorderline;
         grid.bottomBorderline = self.bottomBorderline;
         grid.leadingBorderline = self.leadingBorderline;
         grid.trailingBorderline = self.trailingBorderline;
+    }
+    
+    //拷贝事件处理。
+    if (self->_touchEventDelegate != nil)
+    {
+        [grid setTarget:self->_touchEventDelegate.target action:self->_touchEventDelegate.action];
     }
     
     //克隆子节点。
@@ -181,6 +278,9 @@ typedef struct  _MyGridOptionalProperties1
     {
         self.superGrid.subGridsType = MySubGridsType_Unknown;
     }
+    
+    //如果可能销毁高亮层。
+    [_touchEventDelegate myResetTouchHighlighted];
     self.superGrid = nil;
 }
 
@@ -252,28 +352,49 @@ typedef struct  _MyGridOptionalProperties1
 }
 
 
-
 -(CGFloat)updateGridSize:(CGSize)superSize superGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure
 {
     if (superGrid.subGridsType == MySubGridsType_Col)
     {
-        _gridSize.width = measure;
-        _gridSize.height = superSize.height - superGrid.padding.top - superGrid.padding.bottom;
+        _gridRect.size.width = measure;
+        _gridRect.size.height = superSize.height - superGrid.padding.top - superGrid.padding.bottom;
     }
     else
     {
-        _gridSize.width = superSize.width - superGrid.padding.left - superGrid.padding.right;
-        _gridSize.height = measure;
+        _gridRect.size.width = superSize.width - superGrid.padding.left - superGrid.padding.right;
+        _gridRect.size.height = measure;
         
     }
     
     return measure;
 }
 
--(CALayer*)gridLayoutLayer
+-(CGFloat)updateGridOrigin:(CGPoint)superOrigin superGrid:(id<MyGridNode>)superGrid withOffset:(CGFloat)offset
 {
-    //找到根
-    return [[self superGrid] gridLayoutLayer];
+    if (superGrid.subGridsType == MySubGridsType_Col)
+    {
+        _gridRect.origin.x = offset;
+        _gridRect.origin.y = superOrigin.y + superGrid.padding.top;
+        return _gridRect.size.width;
+    }
+    else if (superGrid.subGridsType == MySubGridsType_Row)
+    {
+        _gridRect.origin.x = superOrigin.x + superGrid.padding.left;
+        _gridRect.origin.y = offset;
+        
+        return _gridRect.size.height;
+    }
+    else
+    {
+        return 0;
+    }
+
+}
+
+
+-(UIView*)gridLayoutView
+{
+    return [[self superGrid] gridLayoutView];
 }
 
 
@@ -305,7 +426,7 @@ typedef struct  _MyGridOptionalProperties1
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutLayer]];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutView].layer];
     }
     
     _borderlineLayerDelegate.topBorderline = topBorderline;
@@ -321,7 +442,7 @@ typedef struct  _MyGridOptionalProperties1
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutLayer]];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutView].layer];
     }
     
     _borderlineLayerDelegate.bottomBorderline = bottomBorderline;
@@ -337,7 +458,7 @@ typedef struct  _MyGridOptionalProperties1
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutLayer]];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutView].layer];
     }
     
     _borderlineLayerDelegate.leftBorderline = leftBorderline;
@@ -353,7 +474,7 @@ typedef struct  _MyGridOptionalProperties1
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutLayer]];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutView].layer];
     }
     
     _borderlineLayerDelegate.rightBorderline = rightBorderline;
@@ -369,7 +490,7 @@ typedef struct  _MyGridOptionalProperties1
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutLayer]];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutView].layer];
     }
     
     _borderlineLayerDelegate.leadingBorderline = leadingBorderline;
@@ -386,13 +507,78 @@ typedef struct  _MyGridOptionalProperties1
 {
     if (_borderlineLayerDelegate == nil)
     {
-        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutLayer]];
+        _borderlineLayerDelegate = [[MyBorderlineLayerDelegate alloc] initWithLayoutLayer:[self gridLayoutView].layer];
     }
     
     _borderlineLayerDelegate.trailingBorderline = trailingBorderline;
 }
 
 
+-(id<MyGridNode>)gridhitTest:(CGPoint *)pt
+{
+    
+    //如果不在范围内点击则直接返回
+    if (!CGRectContainsPoint(self.gridRect, *pt))
+        return nil;
+    
+    
+    //优先测试子视图。。然后再自己。。
+    NSArray<id<MyGridNode>> * subGrids = nil;
+    if (self.subGridsType != MySubGridsType_Unknown)
+        subGrids = self.subGrids;
+        
+    
+    for (id<MyGridNode> sbvGrid in subGrids)
+    {
+        id<MyGridNode> testGrid =  [sbvGrid gridhitTest:pt];
+        if (testGrid != nil)
+            return testGrid;
+    }
+    
+    if (_touchEventDelegate != nil)
+        return self;
+    
+    return nil;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if (_touchEventDelegate != nil && _touchEventDelegate.layout == nil)
+    {
+        _touchEventDelegate.layout = (MyBaseLayout*)[self gridLayoutView];
+    }
+    [_touchEventDelegate touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if (_touchEventDelegate != nil && _touchEventDelegate.layout == nil)
+    {
+        _touchEventDelegate.layout = (MyBaseLayout*)[self gridLayoutView];
+    }
+    [_touchEventDelegate touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if (_touchEventDelegate != nil && _touchEventDelegate.layout == nil)
+    {
+        _touchEventDelegate.layout = (MyBaseLayout*)[self gridLayoutView];
+    }
+    [_touchEventDelegate touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if (_touchEventDelegate != nil && _touchEventDelegate.layout == nil)
+    {
+        _touchEventDelegate.layout = (MyBaseLayout*)[self gridLayoutView];
+    }
+    [_touchEventDelegate touchesCancelled:touches withEvent:event];
+}
+
+
 
 @end
+
 

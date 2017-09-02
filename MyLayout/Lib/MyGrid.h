@@ -44,12 +44,89 @@ extern NSString * const vMyGridGravityHeightFill;
 
 
 
+/**
+ 栅格动作接口，您可以触摸栅格来执行特定的动作和事件。
+ */
+@protocol MyGridAction<NSObject>
 
 
 /**
- 栅格协议。用来描述栅格块，以及栅格的添加和删除。
+ 栅格的标识，用于在事件中区分栅格。
  */
-@protocol MyGrid <NSObject>
+@property(nonatomic)  NSInteger tag;
+
+
+/**
+ 设置栅格的事件,如果取消栅格事件则设置target为nil
+
+ @param target action事件的调用者
+ @param action action事件，格式为：-(void)handle:(id<MyGrid>)sender
+ */
+-(void)setTarget:(id)target action:(SEL)action;
+
+@end
+
+
+
+
+/**
+ 栅格协议。用来描述栅格块，以及栅格的添加和删除。栅格可以按某个方向拆分为众多子栅格，而且这个过程可以递归进行。
+ 所有栅格布局中的子视图都将依次放入叶子栅格的区域中。
+ */
+@protocol MyGrid <MyGridAction>
+
+
+//得到父栅格。根栅格的父栅格为nil
+@property(nonatomic, weak, readonly) id<MyGrid> superGrid;
+
+
+//得到所有子栅格
+@property(nonatomic, strong, readonly) NSArray<id<MyGrid>> *subGrids;
+
+
+//克隆出一个新栅格以及其下的所有子栅格。
+-(id<MyGrid>)cloneGrid;
+
+
+/**
+ 栅格内子栅格之间的间距。
+ */
+@property(nonatomic, assign) CGFloat subviewSpace;
+
+/**
+ 栅格内子栅格或者叶子栅格内视图的四周内边距。
+ */
+@property(nonatomic, assign) UIEdgeInsets padding;
+
+
+/**
+ 栅格内子栅格或者叶子栅格内视图的对齐停靠方式.
+ 
+ 1.对于非叶子栅格来说只能设置一个方向的停靠。具体只能设置左中右或者上中下
+ 2.对于叶子栅格来说，如果设置了gravity 则填充的子视图必须要设置明确的尺寸。
+ */
+@property(nonatomic, assign) MyGravity gravity;
+
+/**
+ 占位标志，只用叶子栅格，当设置为YES时则表示这个格子只用于占位，子视图不能填充到这个栅格中。
+ */
+@property(nonatomic, assign) BOOL placeholder;
+
+
+/**顶部边界线*/
+@property(nonatomic, strong) MyBorderline *topBorderline;
+/**头部边界线*/
+@property(nonatomic, strong) MyBorderline *leadingBorderline;
+/**底部边界线*/
+@property(nonatomic, strong) MyBorderline *bottomBorderline;
+/**尾部边界线*/
+@property(nonatomic, strong) MyBorderline *trailingBorderline;
+
+/**如果您不需要考虑国际化的问题则请用这个属性设置左边边界线，否则用leadingBorderline*/
+@property(nonatomic, strong) MyBorderline *leftBorderline;
+/**如果您不需要考虑国际化的问题则请用这个属性设置右边边界线，否则用trailingBorderline*/
+@property(nonatomic, strong) MyBorderline *rightBorderline;
+
 
 
 /**
@@ -69,54 +146,12 @@ extern NSString * const vMyGridGravityHeightFill;
 -(id<MyGrid>)addRowGrid:(id<MyGrid>)grid;
 -(id<MyGrid>)addColGrid:(id<MyGrid>)grid;
 
-//克隆出一个新栅格以及其下的所有子栅格。
--(id<MyGrid>)cloneGrid;
 
 //从父栅格中删除。
 -(void)removeFromSuperGrid;
 
-//得到父栅格。
--(id<MyGrid>)superGrid;
 
-//得到所有子栅格
--(NSArray<id<MyGrid>> *)subGrids;
-
-
-//栅格内子栅格之间的间距
-@property(nonatomic, assign) CGFloat subviewSpace;
-
-//栅格内子栅格或者叶子栅格内视图的四周内边距。
-@property(nonatomic, assign) UIEdgeInsets padding;
-
-//栅格内子视图的对齐停靠方式，只有叶子栅格设置才有意义。要想设置的gravity生效，叶子栅格内填充的子视图必须要设置明确的尺寸。
-@property(nonatomic, assign) MyGravity gravity;
-
-//占位标志，只用叶子栅格，当设置为YES时则表示这个格子只用于占位，子视图不能填充到这个栅格中。
-@property(nonatomic, assign) BOOL placeholder;
-
-/**顶部边界线*/
-@property(nonatomic, strong) MyBorderline *topBorderline;
-/**头部边界线*/
-@property(nonatomic, strong) MyBorderline *leadingBorderline;
-/**底部边界线*/
-@property(nonatomic, strong) MyBorderline *bottomBorderline;
-/**尾部边界线*/
-@property(nonatomic, strong) MyBorderline *trailingBorderline;
-
-
-/**
- *如果您不需要考虑国际化的问题则请用这个属性设置左边边界线，否则用leadingBorderline
- */
-@property(nonatomic, strong) MyBorderline *leftBorderline;
-/**
- *如果您不需要考虑国际化的问题则请用这个属性设置右边边界线，否则用trailingBorderline
- */
-@property(nonatomic, strong) MyBorderline *rightBorderline;
-
-
-
-
-//用字典的方式来构造格子。
+//用字典的方式来构造栅格。
 @property(nonatomic, strong) NSDictionary *gridDictionary;
 
 
