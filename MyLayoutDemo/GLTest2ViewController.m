@@ -104,6 +104,7 @@
     //建立第一行栅格
     id<MyGrid> g1 = [rootLayout addRow:1.0/5];
     g1.gravity = MyGravity_Vert_Center;
+    g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
     g1.subviewSpace = 10;
     
     //第1行栅格内2个子栅格内容包裹。
@@ -114,16 +115,18 @@
     //建立第二行图片栅格
     id<MyGrid>g2 = [rootLayout addRow:2.0/5];
     g2.anchor = YES;
-    [g2 addRow:MyLayoutSize.wrap];  //内容包裹
+    g2.topBorderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+    [g2 addRow:MyLayoutSize.fill].placeholder = YES;
+    [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
     
 
     //建立第三行栅格
     id<MyGrid>g3 = [rootLayout addRow:1.0/5];
-   [g3 addColGrid:[g3 addColGrid:g1.cloneGrid measure:MyLayoutSize.fill].cloneGrid];
+   [g3 addColGrid:[g3 addColGrid:g1.cloneGrid measure:MyLayoutSize.fill].cloneGrid].leftBorderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
     
     
     //建立第4行栅格，第4行和第三行一致，所以拷贝。
-    [rootLayout addRowGrid:g3.cloneGrid];
+    [rootLayout addRowGrid:g3.cloneGrid].topBorderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
     
     
 
