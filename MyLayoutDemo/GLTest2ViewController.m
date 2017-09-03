@@ -86,7 +86,10 @@
 
 -(void)handleTest1:(id<MyGrid>)sender
 {
-  //  NSLog(@"tag:%d", sender.tag);
+    NSString *message = [NSString stringWithFormat:@"您单击了:%ld", (long)sender.tag];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+
 }
 
 -(void)loadView
@@ -107,6 +110,8 @@
     g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
     g1.subviewSpace = 10;
     
+    [g1 setTarget:self  action:@selector(handleTest1:)];
+    
     //第1行栅格内2个子栅格内容包裹。
     [g1 addRow:MyLayoutSize.wrap];
     [g1 addRow:MyLayoutSize.wrap];
@@ -119,6 +124,8 @@
     [g2 addRow:MyLayoutSize.fill].placeholder = YES;
     [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
     
+    [g2 setTarget:self  action:@selector(handleTest1:)];
+
 
     //建立第三行栅格
     id<MyGrid>g3 = [rootLayout addRow:1.0/5];
