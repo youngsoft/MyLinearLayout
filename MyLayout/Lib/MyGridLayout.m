@@ -72,6 +72,11 @@
     lsc.subGridsType = MySubGridsType_Unknown;
 }
 
+-(id<MyGrid>) gridIncludesSubview:(UIView*)subview
+{
+    return [self gridHitTest:subview.center];
+}
+
 
 #pragma mark -- MyGrid
 
@@ -292,10 +297,10 @@
 
 }
 
--(id<MyGridNode>)gridhitTest:(CGPoint *)pt
+-(id<MyGrid>)gridHitTest:(CGPoint)point
 {
     MyGridLayout *lsc = self.myCurrentSizeClass;
-    return [lsc gridhitTest:pt];
+    return [lsc gridHitTest:point];
 }
 
 
@@ -308,7 +313,7 @@
     
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
-    return  [bestSC gridhitTest:&point];
+    return  [bestSC gridHitTest:point];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

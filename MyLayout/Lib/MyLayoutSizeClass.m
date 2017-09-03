@@ -1096,9 +1096,9 @@ BOOL _myisRTL = NO;
     [self.rootGrid showBorderline:show];
 }
 
--(id<MyGridNode>)gridhitTest:(CGPoint *)pt
+-(id<MyGridNode>)gridHitTest:(CGPoint)point
 {
-    return [self.rootGrid gridhitTest:pt];
+    return [self.rootGrid gridHitTest:point];
 }
 
 

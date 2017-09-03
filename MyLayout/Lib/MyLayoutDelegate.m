@@ -29,6 +29,39 @@
     return self;
 }
 
+-(void)dealloc
+{
+    if (_topBorderlineLayer != nil)
+    {
+        _topBorderlineLayer.delegate = nil;
+        [_topBorderlineLayer removeFromSuperlayer];
+        _topBorderlineLayer = nil;
+    }
+    
+    if (_bottomBorderlineLayer != nil)
+    {
+        _bottomBorderlineLayer.delegate = nil;
+        [_bottomBorderlineLayer removeFromSuperlayer];
+        _bottomBorderlineLayer = nil;
+    }
+    
+    if (_leadingBorderlineLayer != nil)
+    {
+        _leadingBorderlineLayer.delegate = nil;
+        [_leadingBorderlineLayer removeFromSuperlayer];
+        _leadingBorderlineLayer = nil;
+    }
+    
+    if (_trailingBorderlineLayer != nil)
+    {
+        _trailingBorderlineLayer.delegate = nil;
+        [_trailingBorderlineLayer removeFromSuperlayer];
+        _trailingBorderlineLayer = nil;
+    }
+        
+    
+    
+}
 
 -(void)setTopBorderline:(MyBorderline *)topBorderline
 {

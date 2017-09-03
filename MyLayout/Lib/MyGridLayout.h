@@ -22,6 +22,25 @@
 -(void)removeGridsIn:(MySizeClass)sizeClass;
 
 
+/**
+ 返回布局视图某个点所在的栅格
+
+ @param point 点坐标
+ @return 返回点所在的栅格。
+ */
+-(id<MyGrid>) gridHitTest:(CGPoint)point;
+
+
+/**
+ 得到子视图所在的栅格
+
+ @param subview 子视图
+ @return 返回包含子视图的最顶部栅格。
+ */
+-(id<MyGrid>) gridIncludesSubview:(UIView*)subview;
+
+
+
 /*
  栅格的描述。你可以用格子描述语言来建立格子
  

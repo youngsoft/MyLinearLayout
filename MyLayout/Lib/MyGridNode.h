@@ -54,7 +54,7 @@ typedef enum : unsigned char {
 //栅格触摸事件的支持。
 
 //栅格点击测试，返回最佳的响应事件的子栅格或者自己。
--(id<MyGridNode>)gridhitTest:(CGPoint *)pt;
+-(id<MyGridNode>)gridHitTest:(CGPoint)point;
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event;
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event;

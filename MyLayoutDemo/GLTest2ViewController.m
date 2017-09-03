@@ -95,13 +95,12 @@
 -(void)loadView
 {
     self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
-
+    
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
-    
-   // rootLayout.highlightedBackgroundColor = [UIColor blackColor];
-    
     self.view = rootLayout;
+    
+    MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
     
     
     //建立第一行栅格
@@ -109,7 +108,6 @@
     g1.gravity = MyGravity_Vert_Center;
     g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
     g1.subviewSpace = 10;
-    
     [g1 setTarget:self  action:@selector(handleTest1:)];
     
     //第1行栅格内2个子栅格内容包裹。
@@ -120,23 +118,27 @@
     //建立第二行图片栅格
     id<MyGrid>g2 = [rootLayout addRow:2.0/5];
     g2.anchor = YES;
-    g2.topBorderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+    g2.topBorderline = borderline;
+    [g2 setTarget:self  action:@selector(handleTest1:)];
+    
     [g2 addRow:MyLayoutSize.fill].placeholder = YES;
     [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
     
-    [g2 setTarget:self  action:@selector(handleTest1:)];
 
 
     //建立第三行栅格
     id<MyGrid>g3 = [rootLayout addRow:1.0/5];
-   [g3 addColGrid:[g3 addColGrid:g1.cloneGrid measure:MyLayoutSize.fill].cloneGrid].leftBorderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+    
+    id<MyGrid> g31 = [g3 addColGrid:g1.cloneGrid measure:MyLayoutSize.fill];
+    id<MyGrid> g32 = [g3 addColGrid:g31.cloneGrid];
+    g32.leftBorderline = borderline;
     
     
     //建立第4行栅格，第4行和第三行一致，所以拷贝。
-    [rootLayout addRowGrid:g3.cloneGrid].topBorderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+    id<MyGrid> g4 = [rootLayout addRowGrid:g3.cloneGrid];
+    g4.topBorderline = borderline;
     
     
-
     //添加子视图序列。
     for (GLTest1DataModel *dataModel in self.datas)
     {

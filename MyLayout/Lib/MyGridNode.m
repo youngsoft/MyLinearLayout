@@ -383,6 +383,7 @@ typedef struct  _MyGridOptionalProperties2
     
     //如果可能销毁高亮层。
     [_touchEventDelegate myResetTouchHighlighted];
+    _borderlineLayerDelegate = nil;
     self.superGrid = nil;
 }
 
@@ -593,11 +594,11 @@ typedef struct  _MyGridOptionalProperties2
 }
 
 
--(id<MyGridNode>)gridhitTest:(CGPoint *)pt
+-(id<MyGridNode>)gridHitTest:(CGPoint)point
 {
     
     //如果不在范围内点击则直接返回
-    if (!CGRectContainsPoint(self.gridRect, *pt))
+    if (!CGRectContainsPoint(self.gridRect, point))
         return nil;
     
     
@@ -609,7 +610,7 @@ typedef struct  _MyGridOptionalProperties2
     
     for (id<MyGridNode> sbvGrid in subGrids)
     {
-        id<MyGridNode> testGrid =  [sbvGrid gridhitTest:pt];
+        id<MyGridNode> testGrid =  [sbvGrid gridHitTest:point];
         if (testGrid != nil)
             return testGrid;
     }
