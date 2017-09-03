@@ -11,15 +11,82 @@
 #import "CFTool.h"
 
 
+@interface GLTest1DataModel : NSObject
+
+@property(nonatomic, strong) NSString *imageName;    //图像的名称，如果为nil则没有图像
+@property(nonatomic, strong) NSString *title;        //标题
+@property(nonatomic, strong) NSString *source;       //来源
+
+@end
+
+@implementation GLTest1DataModel
+
+
+
+@end
+
+
 @interface GLTest2ViewController ()
+
+@property(nonatomic, strong) NSMutableArray<GLTest1DataModel*> *datas;
+
 
 @end
 
 @implementation GLTest2ViewController
 
+
+-(NSMutableArray*)datas
+{
+    if (_datas == nil)
+    {
+        _datas = [NSMutableArray new];
+        
+        NSArray *dataSource = @[@{
+                                    @"title":@"习近平发展中国经济两个大局观",
+                                    @"source":@"专题"
+                                    },
+                                @{
+                                    @"imageName":@"p1",
+                                    @"title":@"广西鱼塘现大坑 一夜”吃掉“五万斤鱼"
+                                    },
+                                @{
+                                    @"title":@"习近平抵达不拉格开始对捷克国事访问",
+                                    @"source":@"专题"
+                                    },
+                                @{
+                                    @"title":@"解读：为何数万在缅汉族要入籍缅族",
+                                    @"source":@"海外网"
+                                    },
+                                @{
+                                    @"title":@"消费贷仍可用于首付银行：不可能杜绝",
+                                    @"source":@"新闻晨报"
+                                    },
+                                @{
+                                    @"title":@"3代人接力29年养保姆至108岁",
+                                    @"source":@"人民日报"
+                                    }
+                                ];
+        
+        for (NSDictionary *dict in dataSource)
+        {
+            GLTest1DataModel *model = [GLTest1DataModel new];
+            [dict enumerateKeysAndObjectsUsingBlock:^(id key, id  obj, BOOL * stop) {
+                [model setValue:obj forKey:key];
+            }];
+            
+            [_datas addObject:model];
+        }
+        
+    }
+    
+    return _datas;
+}
+
+
 -(void)handleTest1:(id<MyGrid>)sender
 {
-    NSLog(@"tag:%d", sender.tag);
+  //  NSLog(@"tag:%d", sender.tag);
 }
 
 -(void)loadView
@@ -29,76 +96,65 @@
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
     
-    rootLayout.highlightedBackgroundColor = [UIColor blackColor];
+   // rootLayout.highlightedBackgroundColor = [UIColor blackColor];
     
     self.view = rootLayout;
     
-    rootLayout.subviewSpace = 10;
-    rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
     
-    id<MyGrid> g1 = [rootLayout addCol:MyLayoutSize.fill];
+    //建立第一行栅格
+    id<MyGrid> g1 = [rootLayout addRow:1.0/5];
+    g1.gravity = MyGravity_Vert_Center;
+    g1.subviewSpace = 10;
     
-    g1.tag = 100;
-    [g1 setTarget:self action:@selector(handleTest1:)];
+    //第1行栅格内2个子栅格内容包裹。
+    [g1 addRow:MyLayoutSize.wrap];
+    [g1 addRow:MyLayoutSize.wrap];
     
-    id<MyGrid> g2 = [rootLayout addCol:0.5];
-    id<MyGrid> g3 = [rootLayout addCol:MyLayoutSize.fill];
-    id<MyGrid> g4 = [g2 addRow:MyLayoutSize.fill];
     
-    g4.subviewSpace = 40;
-    id<MyGrid> g5 = [g4 addRow:100];
-    
-    g5.tag = 200;
-    [g5 setTarget:self action:@selector(handleTest1:)];
-    
-    id<MyGrid> g6 = [g4 addRow:200];
+    //建立第二行图片栅格
+    id<MyGrid>g2 = [rootLayout addRow:2.0/5];
+    g2.anchor = YES;
+    [g2 addRow:MyLayoutSize.wrap];  //内容包裹
     
 
-    //[g1 addGrid:g4.cloneGrid];
-  
-  
+    //建立第三行栅格
+    id<MyGrid>g3 = [rootLayout addRow:1.0/5];
+   [g3 addColGrid:[g3 addColGrid:g1.cloneGrid measure:MyLayoutSize.fill].cloneGrid];
     
-  /*  id<MyGrid> g1 = [rootLayout addCol:-0.25];
-   id<MyGrid> g2 =  [rootLayout addColGrid:g1.cloneGrid];
-   id<MyGrid> g3 = [rootLayout addColGrid:g1.cloneGrid];
-   id<MyGrid> g4 = [rootLayout addColGrid:g1.cloneGrid];
-  */
     
-    g1.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
-    g2.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
-    g6.topBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
-    g4.rightBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor] thick:2];
-
-    
-   id<MyGrid> rootGrid = [rootLayout fetchLayoutSizeClass:MySizeClass_Landscape];
-    rootGrid.subviewSpace = 10;
-    [rootGrid addRowGrid:g1.cloneGrid];
-    [rootGrid addRowGrid:g1.cloneGrid];
-    [rootGrid addRowGrid:g1.cloneGrid];
-    [rootGrid addRowGrid:g1.cloneGrid];
-
+    //建立第4行栅格，第4行和第三行一致，所以拷贝。
+    [rootLayout addRowGrid:g3.cloneGrid];
     
     
 
+    //添加子视图序列。
+    for (GLTest1DataModel *dataModel in self.datas)
+    {
+        if (dataModel.imageName != nil)
+        {
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageName]];
+            [rootLayout addSubview:imageView];
+            
+            UILabel *titleLabel = [UILabel new];
+            titleLabel.text = dataModel.title;
+            titleLabel.textColor = [UIColor whiteColor];
+            [rootLayout addSubview:titleLabel];
+        }
+        else
+        {
+            UILabel *titleLabel = [UILabel new];
+            titleLabel.text = dataModel.title;
+            titleLabel.numberOfLines = 0;
+            [rootLayout addSubview:titleLabel];
+            
+            UILabel *sourceLabel = [UILabel new];
+            sourceLabel.text = dataModel.source;
+            sourceLabel.font = [UIFont systemFontOfSize:11];
+            sourceLabel.textColor = [UIColor lightGrayColor];
+            [rootLayout addSubview:sourceLabel];
+        }
+    }
     
-    UILabel *v1 = [UILabel new];
-  //  v1.backgroundColor = [UIColor redColor];
-    v1.text = @"你好";
-    v1.textColor = [UIColor yellowColor];
-    [rootLayout addSubview:v1];
-    
-    UIView *v2 = [UIView new];
-    v2.backgroundColor = [UIColor greenColor];
-    [rootLayout addSubview:v2];
-    
-    UIView *v3 = [UIView new];
-    v3.backgroundColor = [UIColor blueColor];
-    [rootLayout addSubview:v3];
-    
-    UIView *v4 = [UIView new];
-    v4.backgroundColor = [UIColor orangeColor];
-    [rootLayout addSubview:v4];
-
     
 }
 

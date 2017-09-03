@@ -121,6 +121,25 @@
     return node;
 }
 
+-(id<MyGrid>)addRowGrid:(id<MyGrid>)grid measure:(CGFloat)measure
+{
+    MyGridLayout *lsc = self.myCurrentSizeClass;
+    id<MyGridNode> node = (id<MyGridNode>)[lsc addRowGrid:grid measure:measure];
+    node.superGrid = self;
+    return node;
+
+}
+
+-(id<MyGrid>)addColGrid:(id<MyGrid>)grid measure:(CGFloat)measure
+{
+    MyGridLayout *lsc = self.myCurrentSizeClass;
+    id<MyGridNode> node = (id<MyGridNode>)[lsc addColGrid:grid measure:measure];
+    node.superGrid = self;
+    return node;
+
+}
+
+
 
 -(id<MyGrid>)cloneGrid
 {

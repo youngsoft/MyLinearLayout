@@ -160,6 +160,9 @@ extern NSString * const vMyGridGravityHeightFill;
 -(id<MyGrid>)addRowGrid:(id<MyGrid>)grid;
 -(id<MyGrid>)addColGrid:(id<MyGrid>)grid;
 
+-(id<MyGrid>)addRowGrid:(id<MyGrid>)grid measure:(CGFloat)measure;
+-(id<MyGrid>)addColGrid:(id<MyGrid>)grid measure:(CGFloat)measure;
+
 
 //从父栅格中删除。
 -(void)removeFromSuperGrid;

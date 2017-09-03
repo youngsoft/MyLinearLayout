@@ -872,6 +872,23 @@ BOOL _myisRTL = NO;
     return node;
 }
 
+-(id<MyGrid>)addRowGrid:(id<MyGrid>)grid measure:(CGFloat)measure
+{
+    id<MyGridNode> node = (id<MyGridNode>)[self.rootGrid addRowGrid:grid measure:measure];
+    node.superGrid = self;
+    return node;
+    
+}
+
+-(id<MyGrid>)addColGrid:(id<MyGrid>)grid measure:(CGFloat)measure
+{
+    id<MyGridNode> node = (id<MyGridNode>)[self.rootGrid addColGrid:grid measure:measure];
+    node.superGrid = self;
+    return node;
+    
+}
+
+
 //克隆出一个新栅格以及其下的所有子栅格。
 -(id<MyGrid>)cloneGrid
 {

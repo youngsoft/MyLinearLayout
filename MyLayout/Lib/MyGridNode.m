@@ -309,6 +309,21 @@ typedef struct  _MyGridOptionalProperties2
     
 }
 
+-(id<MyGrid>)addRowGrid:(id<MyGrid>)grid measure:(CGFloat)measure
+{
+   id<MyGridNode> gridNode =  (id<MyGridNode>)[self addRowGrid:grid];
+    gridNode.gridMeasure = measure;
+    return gridNode;
+}
+
+-(id<MyGrid>)addColGrid:(id<MyGrid>)grid measure:(CGFloat)measure
+{
+    id<MyGridNode> gridNode =  (id<MyGridNode>)[self addColGrid:grid];
+    gridNode.gridMeasure = measure;
+    return gridNode;
+}
+
+
 
 -(id<MyGrid>)cloneGrid
 {
