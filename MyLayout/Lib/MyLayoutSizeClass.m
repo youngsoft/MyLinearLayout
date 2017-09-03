@@ -903,6 +903,17 @@ BOOL _myisRTL = NO;
 {
 }
 
+-(BOOL)anchor
+{
+    return NO;
+}
+
+-(void)setAnchor:(BOOL)anchor
+{
+    //do nothing
+}
+
+
 -(NSInteger)tag
 {
     return self.view.tag;
@@ -911,6 +922,16 @@ BOOL _myisRTL = NO;
 -(void)setTag:(NSInteger)tag
 {
     self.view.tag = tag;
+}
+
+-(id)actionData
+{
+    return nil;
+}
+
+-(void)setActionData:(id)actionData
+{
+    //do nothing;
 }
 
 -(void)setTarget:(id)target action:(SEL)action

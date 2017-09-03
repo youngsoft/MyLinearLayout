@@ -20,6 +20,9 @@
 @property(nonatomic, weak) id<MyGridNode> grid;
 @property(nonatomic, weak) CALayer *gridLayer;
 
+@property(nonatomic, assign) NSInteger tag;
+@property(nonatomic, strong) id actionData;
+
 -(instancetype)initWithLayout:(MyBaseLayout*)layout grid:(id<MyGridNode>)grid;
 
 @end
@@ -81,29 +84,35 @@
 
 
 
+typedef struct _MyGridOptionalProperties1
+{
+    uint32_t subGridType:2;
+    uint32_t gravity:16;
+    uint32_t placeholder:1;
+    uint32_t anchor:1;
+    
+}MyGridOptionalProperties1;
 
 
 /**
  为节省栅格的内存而构建的可选属性列表1:子栅格间距，栅格内边距，停靠方式。
  */
-typedef struct  _MyGridOptionalProperties1
+typedef struct  _MyGridOptionalProperties2
 {
     //格子内子栅格的间距
     CGFloat subviewSpace;
     //格子内视图的内边距。
     UIEdgeInsets padding;
     //格子内子视图的对齐停靠方式。
-    MyGravity gravity;
-    //占位标志
-    BOOL placeholder;
-}MyGridOptionalProperties1;
+}MyGridOptionalProperties2;
 
 
 @interface MyGridNode()
 
-@property(nonatomic, assign) MyGridOptionalProperties1 *optionalProperties1;
+@property(nonatomic, assign) MyGridOptionalProperties1 optionalProperties1;
+@property(nonatomic, assign) MyGridOptionalProperties2 *optionalProperties2;
 @property(nonatomic, strong) MyBorderlineLayerDelegate *borderlineLayerDelegate;
-@property(nonatomic, strong) MyTouchEventDelegate *touchEventDelegate;
+@property(nonatomic, strong) MyGridNodeTouchEventDelegate *touchEventDelegate;
 
 
 @end
@@ -117,36 +126,69 @@ typedef struct  _MyGridOptionalProperties1
     if (self != nil)
     {
         _gridMeasure = measure;
-        _subGridsType  = MySubGridsType_Unknown;
         _subGrids = nil;
         _gridRect = CGRectZero;
         _superGrid = superGrid;
-        _optionalProperties1 = NULL;
+        _optionalProperties2 = NULL;
         _borderlineLayerDelegate = nil;
+        _touchEventDelegate = nil;
+        memset(&_optionalProperties1, 0, sizeof(MyGridOptionalProperties1));
     }
     
     return self;
 }
 
--(MyGridOptionalProperties1*)optionalProperties1
+-(MyGridOptionalProperties2*)optionalProperties2
 {
-    if (_optionalProperties1 == NULL)
+    if (_optionalProperties2 == NULL)
     {
-        _optionalProperties1 = (MyGridOptionalProperties1*)malloc(sizeof(MyGridOptionalProperties1));
-        memset(_optionalProperties1, 0, sizeof(MyGridOptionalProperties1));
+        _optionalProperties2 = (MyGridOptionalProperties2*)malloc(sizeof(MyGridOptionalProperties2));
+        memset(_optionalProperties2, 0, sizeof(MyGridOptionalProperties2));
     }
     
-    return _optionalProperties1;
+    return _optionalProperties2;
 }
 
 -(void)dealloc
 {
-    if (_optionalProperties1 != NULL)
-        free(_optionalProperties1);
-    _optionalProperties1 = NULL;
+    if (_optionalProperties2 != NULL)
+        free(_optionalProperties2);
+    _optionalProperties2 = NULL;
 }
 
 #pragma mark -- MyGridAction
+
+-(NSInteger)tag
+{
+    return _touchEventDelegate.tag;
+}
+
+-(void)setTag:(NSInteger)tag
+{
+    
+    if (_touchEventDelegate == nil && tag != 0)
+    {
+        _touchEventDelegate =  [[MyGridNodeTouchEventDelegate alloc] initWithLayout:(MyBaseLayout*)[self gridLayoutView] grid:self];
+    }
+    
+    _touchEventDelegate.tag = tag;
+}
+
+-(id)actionData
+{
+    return _touchEventDelegate.actionData;
+}
+
+-(void)setActionData:(id)actionData
+{
+    if (_touchEventDelegate == nil && actionData != nil)
+    {
+        _touchEventDelegate =  [[MyGridNodeTouchEventDelegate alloc] initWithLayout:(MyBaseLayout*)[self gridLayoutView] grid:self];
+    }
+    
+    _touchEventDelegate.actionData = actionData;
+}
+
 
 -(void)setTarget:(id)target action:(SEL)action
 {
@@ -162,6 +204,48 @@ typedef struct  _MyGridOptionalProperties1
 }
 
 #pragma mark -- MyGrid
+
+-(MySubGridsType)subGridsType
+{
+    return (MySubGridsType)_optionalProperties1.subGridType;
+}
+
+-(void)setSubGridsType:(MySubGridsType)subGridsType
+{
+    _optionalProperties1.subGridType = subGridsType;
+}
+
+
+-(MyGravity)gravity
+{
+    return (MyGravity)_optionalProperties1.gravity;
+}
+
+-(void)setGravity:(MyGravity)gravity
+{
+    _optionalProperties1.gravity = gravity;
+}
+
+
+-(BOOL)placeholder
+{
+    return _optionalProperties1.placeholder == 1;
+}
+
+-(void)setPlaceholder:(BOOL)placeholder
+{
+    _optionalProperties1.placeholder = placeholder ? 1 : 0;
+}
+
+-(BOOL)anchor
+{
+    return _optionalProperties1.anchor;
+}
+
+-(void)setAnchor:(BOOL)anchor
+{
+    _optionalProperties1.anchor = anchor ? 1 : 0;
+}
 
 
 -(id<MyGrid>)addRow:(CGFloat)measure
@@ -231,11 +315,14 @@ typedef struct  _MyGridOptionalProperties1
     MyGridNode *grid = [[MyGridNode alloc] initWithMeasure:self.gridMeasure superGrid:nil];
     //克隆各种属性。
     grid.subGridsType = self.subGridsType;
+    grid.placeholder = self.placeholder;
+    grid.anchor = self.anchor;
+    grid.gravity = self.gravity;
     grid.tag = self.tag;
-    if (self->_optionalProperties1 != NULL)
+    grid.actionData = self.actionData;
+    if (self->_optionalProperties2 != NULL)
     {
         grid.subviewSpace = self.subviewSpace;
-        grid.gravity = self.gravity;
         grid.padding = self.padding;
     }
     
@@ -298,57 +385,30 @@ typedef struct  _MyGridOptionalProperties1
 //格子内子栅格的间距
 -(CGFloat)subviewSpace
 {
-    if (_optionalProperties1 == NULL)
+    if (_optionalProperties2 == NULL)
         return 0;
     else
-        return _optionalProperties1->subviewSpace;
+        return _optionalProperties2->subviewSpace;
 }
 
 -(void)setSubviewSpace:(CGFloat)subviewSpace
 {
-    self.optionalProperties1->subviewSpace = subviewSpace;
+    self.optionalProperties2->subviewSpace = subviewSpace;
 }
 
 //格子内视图的内边距。
 -(UIEdgeInsets)padding
 {
-    if (_optionalProperties1 == NULL)
+    if (_optionalProperties2 == NULL)
         return UIEdgeInsetsZero;
     else
-        return _optionalProperties1->padding;
+        return _optionalProperties2->padding;
     
 }
 
 -(void)setPadding:(UIEdgeInsets)padding
 {
-    self.optionalProperties1->padding = padding;
-}
-
-//格子内子视图的对齐停靠方式。
--(MyGravity)gravity
-{
-    if (_optionalProperties1 == NULL)
-        return MyGravity_None;
-    else
-        return _optionalProperties1->gravity;
-}
-
--(void)setGravity:(MyGravity)gravity
-{
-    self.optionalProperties1->gravity = gravity;
-}
-
--(BOOL)placeholder
-{
-    if (_optionalProperties1 == NULL)
-        return NO;
-    else
-        return _optionalProperties1->placeholder;
-}
-
--(void)setPlaceholder:(BOOL)placeholder
-{
-    self.optionalProperties1->placeholder = placeholder;
+    self.optionalProperties2->padding = padding;
 }
 
 
@@ -357,11 +417,11 @@ typedef struct  _MyGridOptionalProperties1
     if (superGrid.subGridsType == MySubGridsType_Col)
     {
         _gridRect.size.width = measure;
-        _gridRect.size.height = superSize.height - superGrid.padding.top - superGrid.padding.bottom;
+        _gridRect.size.height = superSize.height;
     }
     else
     {
-        _gridRect.size.width = superSize.width - superGrid.padding.left - superGrid.padding.right;
+        _gridRect.size.width = superSize.width;
         _gridRect.size.height = measure;
         
     }
@@ -411,7 +471,8 @@ typedef struct  _MyGridOptionalProperties1
     _borderlineLayerDelegate.trailingBorderlineLayer.hidden = !show;
     
     //销毁高亮。。 按理来说不应该出现在这里的。。。。
-    [_touchEventDelegate myResetTouchHighlighted];
+    if (!show)
+        [_touchEventDelegate myResetTouchHighlighted];
     
     for (MyGridNode *subGrid in self.subGrids)
     {

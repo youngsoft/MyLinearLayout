@@ -12,6 +12,7 @@
 
 extern NSString * const kMyGridTag;
 extern NSString * const kMyGridAction;
+extern NSString * const kMyGridActionData;
 extern NSString * const kMyGridRows;
 extern NSString * const kMyGridCols;
 extern NSString * const kMyGridSize;
@@ -19,6 +20,7 @@ extern NSString * const kMyGridPadding;
 extern NSString * const kMyGridSpace;
 extern NSString * const kMyGridGravity;
 extern NSString * const kMyGridPlaceholder;
+extern NSString * const kMyGridAnchor;
 extern NSString * const kMyGridTopBorderline;
 extern NSString * const kMyGridBottomBorderline;
 extern NSString * const kMyGridLeftBorderline;
@@ -56,6 +58,11 @@ extern NSString * const vMyGridGravityHeightFill;
  栅格的标识，用于在事件中区分栅格。
  */
 @property(nonatomic)  NSInteger tag;
+
+/**
+ 栅格的动作数据，这个数据是栅格的扩展数据，您可以在动作中使用这个附加的数据来进行一系列操作。他可以是一个数值，也可以是个字符串，甚至可以是一段JS脚本。
+ */
+@property(nonatomic, strong) id actionData;
 
 
 /**
@@ -114,6 +121,11 @@ extern NSString * const vMyGridGravityHeightFill;
  */
 @property(nonatomic, assign) BOOL placeholder;
 
+
+/**
+  锚点标志，表示这个栅格虽然是非叶子栅格，也可以用来填充视图。如果将非叶子栅格的锚点标志设置为YES，那么这个栅格也可以用来填充子视图，一般用来当做背景视图使用。
+ */
+@property(nonatomic, assign) BOOL anchor;
 
 /**顶部边界线*/
 @property(nonatomic, strong) MyBorderline *topBorderline;

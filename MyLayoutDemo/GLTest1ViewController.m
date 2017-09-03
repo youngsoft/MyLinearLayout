@@ -72,12 +72,12 @@
     
     UILabel *lb1 = [UILabel new];
     lb1.text = @"习近平要大局观习近平要大局观习近平要大局观习近平要大局观习近平要大局观习近平要大局观";
-    lb1.wrapContentHeight = YES;
+    lb1.numberOfLines = 0;
     [rootLayout addSubview:lb1];
     
     UILabel *lb2 = [UILabel new];
     lb2.text = @"新闻报道";
-    [lb2 sizeToFit];
+   // [lb2 sizeToFit];
     [rootLayout addSubview:lb2];
 
     

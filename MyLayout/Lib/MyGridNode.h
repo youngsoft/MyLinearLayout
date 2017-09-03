@@ -74,6 +74,8 @@ typedef enum : unsigned char {
 
 @property(nonatomic)    NSInteger tag;
 
+@property(nonatomic, strong) id actionData;
+
 
 @property(nonatomic, weak) id<MyGridNode> superGrid;
 
@@ -93,6 +95,9 @@ typedef enum : unsigned char {
 
 //是否占位标志。
 @property(nonatomic, assign) BOOL placeholder;
+
+//是否是锚点。
+@property(nonatomic, assign) BOOL anchor;
 
 
 @property(nonatomic, assign) CGFloat gridMeasure;
