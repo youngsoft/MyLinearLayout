@@ -72,9 +72,31 @@
     lsc.subGridsType = MySubGridsType_Unknown;
 }
 
--(id<MyGrid>) gridIncludesSubview:(UIView*)subview
+-(id<MyGrid>) gridContainsSubview:(UIView*)subview
 {
     return [self gridHitTest:subview.center];
+}
+
+-(NSArray<UIView*>*) subviewsContainedInGrid:(id<MyGrid>)grid
+{
+    
+    id<MyGridNode> gridNode = (id<MyGridNode>)grid;
+    
+#ifdef DEBUG
+    NSAssert([gridNode gridLayoutView] == self, @"oops! 非栅格布局中的栅格");
+#endif
+    
+    NSMutableArray *retSbs = [NSMutableArray new];
+    NSArray *sbs = [self myGetLayoutSubviews];
+    for (UIView *sbv in sbs)
+    {
+        if (CGRectContainsRect(gridNode.gridRect, sbv.frame))
+        {
+            [retSbs addObject:sbv];
+        }
+    }
+    
+    return retSbs;
 }
 
 

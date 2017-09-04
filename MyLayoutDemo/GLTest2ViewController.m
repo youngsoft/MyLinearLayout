@@ -121,7 +121,7 @@
     g2.topBorderline = borderline;
     [g2 setTarget:self  action:@selector(handleTest1:)];
     
-    [g2 addRow:MyLayoutSize.fill].placeholder = YES;
+    [g2 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
     [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
     
 

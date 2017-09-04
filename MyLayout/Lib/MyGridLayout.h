@@ -37,8 +37,16 @@
  @param subview 子视图
  @return 返回包含子视图的最顶部栅格。
  */
--(id<MyGrid>) gridIncludesSubview:(UIView*)subview;
+-(id<MyGrid>) gridContainsSubview:(UIView*)subview;
 
+
+/**
+ 返回某个栅格包含的所有子视图
+
+ @param grid 栅格
+ @return 返回包含的子视图，如果没有则返回空数组
+ */
+-(NSArray<UIView*>*) subviewsContainedInGrid:(id<MyGrid>)grid;
 
 
 /*
