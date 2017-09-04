@@ -99,6 +99,11 @@
     return retSbs;
 }
 
+-(void)bindViews:(NSArray<UIView*> *)views toGrid:(NSInteger)tag
+{
+    //...
+}
+
 
 #pragma mark -- MyGrid
 

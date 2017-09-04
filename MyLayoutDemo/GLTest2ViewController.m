@@ -16,6 +16,9 @@
 @property(nonatomic, strong) NSString *imageName;    //图像的名称，如果为nil则没有图像
 @property(nonatomic, strong) NSString *title;        //标题
 @property(nonatomic, strong) NSString *source;       //来源
+@property(nonatomic, assign) NSNumber *tag;          //使用的显示模板。
+
+
 
 @end
 
@@ -44,27 +47,33 @@
         
         NSArray *dataSource = @[@{
                                     @"title":@"习近平发展中国经济两个大局观",
-                                    @"source":@"专题"
+                                    @"source":@"专题",
+                                    @"tag":@(1)
                                     },
                                 @{
                                     @"imageName":@"p1",
-                                    @"title":@"广西鱼塘现大坑 一夜”吃掉“五万斤鱼"
+                                    @"title":@"广西鱼塘现大坑 一夜”吃掉“五万斤鱼",
+                                    @"tag":@(2)
                                     },
                                 @{
                                     @"title":@"习近平抵达不拉格开始对捷克国事访问",
-                                    @"source":@"专题"
+                                    @"source":@"专题",
+                                    @"tag":@(1)
                                     },
                                 @{
                                     @"title":@"解读：为何数万在缅汉族要入籍缅族",
-                                    @"source":@"海外网"
+                                    @"source":@"海外网",
+                                    @"tag":@(1)
                                     },
                                 @{
                                     @"title":@"消费贷仍可用于首付银行：不可能杜绝",
-                                    @"source":@"新闻晨报"
+                                    @"source":@"新闻晨报",
+                                    @"tag":@(1)
                                     },
                                 @{
                                     @"title":@"3代人接力29年养保姆至108岁",
-                                    @"source":@"人民日报"
+                                    @"source":@"人民日报",
+                                    @"tag":@(1)
                                     }
                                 ];
         
@@ -100,6 +109,7 @@
     rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
     
+    rootLayout.highlightedBackgroundColor = [UIColor blueColor];
     MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
     
     
@@ -109,6 +119,7 @@
     g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
     g1.subviewSpace = 10;
     [g1 setTarget:self  action:@selector(handleTest1:)];
+    g1.tag = 1;
     
     //第1行栅格内2个子栅格内容包裹。
     [g1 addRow:MyLayoutSize.wrap];
@@ -123,6 +134,7 @@
     
     [g2 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
     [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
+    g2.tag = 2;
     
 
 
@@ -142,29 +154,19 @@
     //添加子视图序列。
     for (GLTest1DataModel *dataModel in self.datas)
     {
+        NSArray *subviews = nil;
         if (dataModel.imageName != nil)
         {
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageName]];
-            [rootLayout addSubview:imageView];
-            
-            UILabel *titleLabel = [UILabel new];
-            titleLabel.text = dataModel.title;
-            titleLabel.textColor = [UIColor whiteColor];
-            [rootLayout addSubview:titleLabel];
+            subviews = [self createType1ViewsFromModel:dataModel];
         }
         else
         {
-            UILabel *titleLabel = [UILabel new];
-            titleLabel.text = dataModel.title;
-            titleLabel.numberOfLines = 0;
-            [rootLayout addSubview:titleLabel];
-            
-            UILabel *sourceLabel = [UILabel new];
-            sourceLabel.text = dataModel.source;
-            sourceLabel.font = [UIFont systemFontOfSize:11];
-            sourceLabel.textColor = [UIColor lightGrayColor];
-            [rootLayout addSubview:sourceLabel];
+            subviews = [self createType2ViewsFromModel:dataModel];
         }
+        
+        
+        [rootLayout bindViews:subviews toGrid:dataModel.tag.integerValue];
+        
     }
     
     
@@ -179,6 +181,33 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+-(NSArray*)createType1ViewsFromModel:(GLTest1DataModel*)dataModel
+{
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageName]];
+    
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = dataModel.title;
+    
+    return @[imageView, titleLabel];
+}
+
+-(NSArray*)createType2ViewsFromModel:(GLTest1DataModel*)dataModel
+{
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = dataModel.title;
+    titleLabel.numberOfLines = 0;
+    
+    UILabel *sourceLabel = [UILabel new];
+    sourceLabel.text = dataModel.source;
+    sourceLabel.font = [UIFont systemFontOfSize:11];
+    sourceLabel.textColor = [UIColor lightGrayColor];
+    
+    return @[titleLabel, sourceLabel];
+
+}
+
 
 /*
 #pragma mark - Navigation
