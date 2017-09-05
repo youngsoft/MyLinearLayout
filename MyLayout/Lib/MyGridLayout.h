@@ -49,11 +49,11 @@
 -(NSArray<UIView*>*) subviewsContainedInGrid:(id<MyGrid>)grid;
 
 
-//添加视图组到某个类型中去。
--(void)addSubviews:(NSArray<UIView*> *)subviews toForm:(unsigned char)form;
+//将某个视图组绑定添加到某类栅格中去。并将这部分子视图对应到栅格的actionData上去。
+-(void)addViewGroup:(NSArray<UIView*> *)viewGroup toTag:(NSInteger)tag withActionData:(id)actionData;
 
 
--(NSArray<NSArray<UIView*> *> *)subviewsArrayFrom:(unsigned char)form;
+-(NSArray<NSArray<UIView*> *> *)viewGroupArrayFromTag:(NSInteger)tag;
 
 
 /*

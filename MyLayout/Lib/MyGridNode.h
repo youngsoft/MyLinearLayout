@@ -76,7 +76,6 @@ typedef enum : unsigned char {
 
 @property(nonatomic, strong) id actionData;
 
-@property(nonatomic) unsigned char form;
 
 @property(nonatomic, weak) id<MyGridNode> superGrid;
 

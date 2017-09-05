@@ -943,12 +943,12 @@ BOOL _myisRTL = NO;
 
 -(id)actionData
 {
-    return nil;
+    return self.rootGrid.actionData;
 }
 
 -(void)setActionData:(id)actionData
 {
-    //do nothing;
+    self.rootGrid.actionData = actionData;
 }
 
 -(void)setTarget:(id)target action:(SEL)action
@@ -978,15 +978,6 @@ BOOL _myisRTL = NO;
     self.rootGrid.subGridsType = subGridsType;
 }
 
--(unsigned char)form
-{
-    return self.rootGrid.form;
-}
-
--(void)setForm:(unsigned char)form
-{
-    self.rootGrid.form = form;
-}
 
 -(MyBorderline*)topBorderline
 {

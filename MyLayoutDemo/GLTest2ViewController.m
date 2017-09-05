@@ -90,7 +90,7 @@
 
 -(void)handleTest1:(id<MyGrid>)sender
 {
-    NSString *message = [NSString stringWithFormat:@"您单击了:%ld", (long)sender.tag];
+    NSString *message = [NSString stringWithFormat:@"您单击了:%@", ((GLTest1DataModel*)[sender actionData]).title];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
 
@@ -108,21 +108,22 @@
     //添加子视图序列。
     for (GLTest1DataModel *dataModel in self.datas)
     {
-        NSArray *subviews = nil;
-        unsigned char form = 0;
+        NSArray *viewGroup = nil;
+        unsigned char tag = 0;
         if (dataModel.imageName != nil)
         {
-            form = 2;
-            subviews = [self createType1ViewsFromModel:dataModel];
+            tag = 2;
+            viewGroup = [self createType1ViewsFromModel:dataModel];
         }
         else
         {
-            form = 1;
-            subviews = [self createType2ViewsFromModel:dataModel];
+            tag = 1;
+            viewGroup = [self createType2ViewsFromModel:dataModel];
         }
         
         
-        [rootLayout addSubviews:subviews toForm:form];
+        //这里将视图组，和tag，以及数据进行关联。。
+        [rootLayout addViewGroup:viewGroup toTag:tag withActionData:dataModel];
         
     }
     
@@ -172,6 +173,7 @@
     int *pLayoutStyles = layoutStyless[arc4random_uniform(12)];
     
 
+    //切换栅格样式时，先将所有的栅格都删除掉。
     [self.rootLayout removeGrids];
     
     MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
@@ -181,19 +183,20 @@
         int layoutStyle = pLayoutStyles[i];
         if (layoutStyle == 1)  //全部宽度文字新闻布局
         {
-            
-            //建立第一行栅格
+         
+            //建立一个高度为1/5的栅格，里面的子栅格垂直居中，并且间隔为10
             id<MyGrid> g1 = [self.rootLayout addRow:1.0/5];
-            g1.form = 1;
+            g1.tag = 1;
             g1.gravity = MyGravity_Vert_Center;
             g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
             g1.subviewSpace = 10;
             
-            //第1行栅格内2个子栅格内容包裹。
+            //建立2个高度由内容包裹的行叶子栅格
             [g1 addRow:MyLayoutSize.wrap];
             [g1 addRow:MyLayoutSize.wrap];
             
             g1.bottomBorderline = borderline;
+            [g1 setTarget:self action:@selector(handleTest1:)];
 
 
             
@@ -201,18 +204,24 @@
         else if (layoutStyle == 2)  //半宽文字新闻布局
         {
             
+            //建立一个高度为1/5的栅格
             id<MyGrid>g2 = [self.rootLayout addRow:1.0/5];
             
+            //建立一个宽度均分的列子栅格，里面的子栅格间距为10并且垂直居中
             id<MyGrid> g21 = [g2 addCol:MyLayoutSize.fill];
-            g21.form = 1;
+            g21.tag = 1;
             g21.subviewSpace = 10;
             g21.gravity = MyGravity_Vert_Center;
             g21.padding = UIEdgeInsetsMake(0, 10, 0, 10);
+            [g21 setTarget:self action:@selector(handleTest1:)];
+
             
+            //建立2个高度由内容包裹的行叶子栅格
             [g21 addRow:MyLayoutSize.wrap];
             [g21 addRow:MyLayoutSize.wrap];
 
             
+            //建立一个新的列子栅格，其结构完全拷贝自g21.
             [g2 addColGrid:g21.cloneGrid];
             
             g21.rightBorderline = borderline;
@@ -222,14 +231,17 @@
         }
         else if (layoutStyle == 3)//图片新闻布局
         {
-            //建立第二行图片栅格
+            //建立一个高度为2/5的栅格
             id<MyGrid>g3 = [self.rootLayout addRow:2.0/5];
-            g3.form = 2;
-            g3.anchor = YES;
+            g3.tag = 2;
+            g3.anchor = YES;  //这个栅格是可以存放显示视图的。
             [g3 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
-            [g3 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
+            [g3 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);  //建立一个高度由内容包裹的叶子栅格并指定其内边距。
             
             g3.bottomBorderline = borderline;
+            
+            [g3 setTarget:self action:@selector(handleTest1:)];
+
 
         }
         else;

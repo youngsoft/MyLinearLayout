@@ -10,7 +10,6 @@
 #import "MyBorderline.h"
 
 
-extern NSString * const kMyGridForm;
 extern NSString * const kMyGridTag;
 extern NSString * const kMyGridAction;
 extern NSString * const kMyGridActionData;
@@ -58,7 +57,6 @@ extern NSString * const vMyGridGravityHeightFill;
 /**
  栅格的标识，用于在事件中区分栅格。
  */
-@property(nonatomic)  NSInteger tag;
 
 /**
  栅格的动作数据，这个数据是栅格的扩展数据，您可以在动作中使用这个附加的数据来进行一系列操作。他可以是一个数值，也可以是个字符串，甚至可以是一段JS脚本。
@@ -86,7 +84,7 @@ extern NSString * const vMyGridGravityHeightFill;
 @protocol MyGrid <MyGridAction>
 
 //栅格的外形标识，主要用于和数据模型进行绑定使用。
-@property(nonatomic) unsigned char form;
+@property(nonatomic)  NSInteger tag;
 
 //得到父栅格。根栅格的父栅格为nil
 @property(nonatomic, weak, readonly) id<MyGrid> superGrid;
