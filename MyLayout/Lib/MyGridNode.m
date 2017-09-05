@@ -342,6 +342,7 @@ typedef struct  _MyGridOptionalProperties2
     grid.subGridsType = self.subGridsType;
     grid.placeholder = self.placeholder;
     grid.anchor = self.anchor;
+    grid.form = self.form;
     grid.gravity = self.gravity;
     grid.tag = self.tag;
     grid.actionData = self.actionData;

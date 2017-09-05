@@ -30,6 +30,8 @@
 
 @interface GLTest2ViewController ()
 
+@property(nonatomic, weak) MyGridLayout *rootLayout;
+
 @property(nonatomic, strong) NSMutableArray<GLTest1DataModel*> *datas;
 
 
@@ -101,49 +103,7 @@
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
-    
-    rootLayout.highlightedBackgroundColor = [UIColor blueColor];
-    MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
-    
-    
-    
-    //建立第二行图片栅格
-    id<MyGrid>g2 = [rootLayout addRow:2.0/5];
-    g2.anchor = YES;
-    g2.topBorderline = borderline;
-    [g2 setTarget:self  action:@selector(handleTest1:)];
-    
-    [g2 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
-    [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
-    g2.form = 2;
-    
-
-    //建立第一行栅格
-    id<MyGrid> g1 = [rootLayout addRow:1.0/5];
-    g1.gravity = MyGravity_Vert_Center;
-    g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
-    g1.subviewSpace = 10;
-    [g1 setTarget:self  action:@selector(handleTest1:)];
-    g1.form = 1;
-    
-    //第1行栅格内2个子栅格内容包裹。
-    [g1 addRow:MyLayoutSize.wrap];
-    [g1 addRow:MyLayoutSize.wrap];
-    
-
-
-    //建立第三行栅格
-    id<MyGrid>g3 = [rootLayout addRow:1.0/5];
-    
-    id<MyGrid> g31 = [g3 addColGrid:g1.cloneGrid measure:MyLayoutSize.fill];
-    id<MyGrid> g32 = [g3 addColGrid:g31.cloneGrid];
-    g32.leftBorderline = borderline;
-    
-    
-    //建立第4行栅格，第4行和第三行一致，所以拷贝。
-    id<MyGrid> g4 = [rootLayout addRowGrid:g3.cloneGrid];
-    g4.topBorderline = borderline;
-    
+    self.rootLayout = rootLayout;
     
     //添加子视图序列。
     for (GLTest1DataModel *dataModel in self.datas)
@@ -172,6 +132,102 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"change style", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleStyleChange:)];
+    
+    [self handleStyleChange:nil];
+
+    
+}
+
+-(void)handleStyleChange:(id)sender
+{
+    /*
+     zaker的每页新闻中都有6条新闻，其中有1条图片新闻和5条文字新闻。在布局上则每页新闻高度分为5份，其中的图片新闻则占据了2/5，宽度则是全屏，其他的5条新闻则分为3行来均分剩余的高度，宽度则有4条是屏幕宽度的一半，一条全屏宽度。
+     
+     zaker内部的实现是通过配置好的模板来展示每个不同的页。我们的例子为了展现效果。我们将随机产生4条半屏和1条全屏文字新闻和一张图片新闻。
+     
+     我们将宽度为全屏宽度的文字新闻定义为1，而将半屏宽度的文字新闻定义为2，而将图片新闻的定义为3。这样就会形成1322,3122,1232,3212,1223,3221,2123,2321, 2132,2312, 2213,2231 一共12种布局。我们界面右上角的“布局变换”按钮每次将随机选择一种布局进行显示。
+     */
+    
+    //所有可能的布局样式数组。
+    int layoutStyless[12][4] =
+    {
+        {1,3,2,2},
+        {3,1,2,2},
+        {1,2,3,2},
+        {3,2,1,2},
+        {1,2,2,3},
+        {3,2,2,1},
+        {2,1,2,3},
+        {2,3,2,1},
+        {2,1,3,2},
+        {2,3,1,2},
+        {2,2,1,3},
+        {2,2,3,1}
+    };
+    
+    //随机取得一个布局样式
+    int *pLayoutStyles = layoutStyless[arc4random_uniform(12)];
+    
+
+    [self.rootLayout removeGrids];
+
+    for (NSInteger i = 0; i < 4; i++)
+    {
+        int layoutStyle = pLayoutStyles[i];
+        if (layoutStyle == 1)  //全部宽度文字新闻布局
+        {
+            
+            //建立第一行栅格
+            id<MyGrid> g1 = [self.rootLayout addRow:1.0/5];
+            g1.form = 1;
+            g1.gravity = MyGravity_Vert_Center;
+            g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
+            g1.subviewSpace = 10;
+            
+            //第1行栅格内2个子栅格内容包裹。
+            [g1 addRow:MyLayoutSize.wrap];
+            [g1 addRow:MyLayoutSize.wrap];
+            
+            
+        }
+        else if (layoutStyle == 2)  //半宽文字新闻布局
+        {
+            
+            id<MyGrid>g2 = [self.rootLayout addRow:1.0/5];
+            
+            id<MyGrid> g21 = [g2 addCol:MyLayoutSize.fill];
+            g21.form = 1;
+            g21.subviewSpace = 10;
+            g21.gravity = MyGravity_Vert_Center;
+            g21.padding = UIEdgeInsetsMake(0, 10, 0, 10);
+            
+            [g21 addRow:MyLayoutSize.wrap];
+            [g21 addRow:MyLayoutSize.wrap];
+
+            
+            [g2 addColGrid:g21.cloneGrid];
+            
+            
+        }
+        else if (layoutStyle == 3)//图片新闻布局
+        {
+            //建立第二行图片栅格
+            id<MyGrid>g3 = [self.rootLayout addRow:2.0/5];
+            g3.form = 2;
+            g3.anchor = YES;
+            [g3 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
+            [g3 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
+        }
+        else;
+        
+        
+    }
+
+    
+    [self.rootLayout setNeedsLayout];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -186,7 +242,8 @@
     
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = dataModel.title;
-    
+    titleLabel.textColor = [UIColor whiteColor];
+
     return @[imageView, titleLabel];
 }
 
