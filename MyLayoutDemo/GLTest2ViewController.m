@@ -173,6 +173,8 @@
     
 
     [self.rootLayout removeGrids];
+    
+    MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
 
     for (NSInteger i = 0; i < 4; i++)
     {
@@ -191,6 +193,9 @@
             [g1 addRow:MyLayoutSize.wrap];
             [g1 addRow:MyLayoutSize.wrap];
             
+            g1.bottomBorderline = borderline;
+
+
             
         }
         else if (layoutStyle == 2)  //半宽文字新闻布局
@@ -210,6 +215,9 @@
             
             [g2 addColGrid:g21.cloneGrid];
             
+            g21.rightBorderline = borderline;
+            g2.bottomBorderline = borderline;
+            
             
         }
         else if (layoutStyle == 3)//图片新闻布局
@@ -220,6 +228,9 @@
             g3.anchor = YES;
             [g3 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
             [g3 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
+            
+            g3.bottomBorderline = borderline;
+
         }
         else;
         
