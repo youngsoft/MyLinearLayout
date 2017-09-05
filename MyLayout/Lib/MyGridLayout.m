@@ -113,7 +113,7 @@
 }
 
 
--(void)bindSubviews:(NSArray<UIView*> *)subviews toForm:(unsigned char)form
+-(void)addSubviews:(NSArray<UIView*> *)subviews toForm:(unsigned char)form
 {
     //...
     NSNumber *key = @(form);
@@ -124,15 +124,28 @@
         [self.formDict setObject:subviewsArray forKey:key];
     }
     
-    [subviewsArray addObject:subviews];
+    NSMutableArray *mutableSubviews = [NSMutableArray arrayWithArray:subviews];
+    [subviewsArray addObject:mutableSubviews];
     
-    for (UIView *sbv in subviews)
+    for (UIView *sbv in mutableSubviews)
     {
         [self addSubview:sbv];
     }
     
-    
 }
+
+-(NSArray<NSArray<UIView*> *> *)subviewsArrayFrom:(unsigned char)form
+{
+    NSArray *retArray = nil;
+    if (_formDict != nil)
+    {
+        NSNumber *key = @(form);
+        retArray = [self.formDict objectForKey:key];
+    }
+    
+    return retArray;
+}
+
 
 
 #pragma mark -- MyGrid
@@ -416,6 +429,58 @@
 
 #pragma mark -- Override Method
 
+-(void)dealloc
+{
+    //这里提前释放所有的数据，防止willRemoveSubview中重复删除。。
+    _formDict = nil;
+}
+
+-(void)removeAllSubviews
+{
+    _formDict = nil;  //提前释放所有绑定的数据
+    [super removeAllSubviews];
+}
+
+-(void)willRemoveSubview:(UIView *)subview
+{
+    [super willRemoveSubview:subview];
+    
+    //如果子试图在样式里面则从样式里面删除
+    if (_formDict != nil)
+    {
+        [_formDict enumerateKeysAndObjectsUsingBlock:^(id   key, id   obj, BOOL *  stop) {
+            
+            NSMutableArray *subviewsArray = (NSMutableArray*)obj;
+            NSInteger sbsCount = subviewsArray.count;
+            for (NSInteger j = 0; j < sbsCount; j++)
+            {
+                NSMutableArray *subviews = subviewsArray[j];
+                NSInteger sbvCount = subviews.count;
+                for (NSInteger i = 0; i < sbvCount; i++)
+                {
+                    if (subviews[i] == subview)
+                    {
+                        [subviews removeObjectAtIndex:i];
+                        break;
+                        *stop = YES;
+                    }
+                }
+                
+                if (subviews.count == 0)
+                {
+                    [subviewsArray removeObjectAtIndex:j];
+                    break;
+                }
+                
+                if (*stop)
+                    break;
+            }
+            
+            
+        }];
+    }
+}
+
 
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
@@ -510,13 +575,15 @@
     
     if (grid.form != 0)
     {
-        NSMutableArray *subviewsArray = [self.formDict objectForKey:@(grid.form)];
-        NSNumber *subviewsArrayIndex = [formKeyIndexDict objectForKey:@(grid.form)];
-        if (subviewsArray != nil)
+        NSNumber *formKey = @(grid.form);
+
+        NSMutableArray *subviewsArray = [self.formDict objectForKey:formKey];
+        NSNumber *subviewsArrayIndex = [formKeyIndexDict objectForKey:formKey];
+        if (subviewsArray != nil && subviewsArrayIndex != nil)
         {
             formSbvEnumerator = ((NSArray*)subviewsArray[subviewsArrayIndex.integerValue]).objectEnumerator;
             
-            [formKeyIndexDict setObject:@(subviewsArrayIndex.integerValue + 1) forKey:@(grid.form)];
+            [formKeyIndexDict setObject:@(subviewsArrayIndex.integerValue + 1) forKey:formKey];
         }
     }
 
@@ -692,15 +759,16 @@
     //得到匹配的form
     if (grid.form != 0)
     {
-        NSMutableArray *subviewsArray = [self.formDict objectForKey:@(grid.form)];
-        NSNumber *subviewsArrayIndex = [formKeyIndexDict objectForKey:@(grid.form)];
-        if (subviewsArray != nil)
+        NSNumber *formKey = @(grid.form);
+        NSMutableArray *subviewsArray = [self.formDict objectForKey:formKey];
+        NSNumber *subviewsArrayIndex = [formKeyIndexDict objectForKey:formKey];
+        if (subviewsArray != nil && subviewsArrayIndex != nil)
         {
             formSbs = subviewsArray[subviewsArrayIndex.integerValue];
             NSInteger formIndex = 0;
             pFormIndex = &formIndex;
             
-            [formKeyIndexDict setObject:@(subviewsArrayIndex.integerValue + 1) forKey:@(grid.form)];
+            [formKeyIndexDict setObject:@(subviewsArrayIndex.integerValue + 1) forKey:formKey];
         }
     }
 
@@ -769,7 +837,7 @@
         }
         
         //索引加1跳转到下一个节点。
-        if (formSbs != nil)
+        if (formSbs != nil &&  pFormIndex != NULL)
         {
             *pTempIndex = *pTempIndex + 1;
         }
@@ -861,6 +929,7 @@
     
     
     //算出剩余的尺寸。
+    BOOL hasFormIndex = pFormIndex != NULL;
     CGFloat remainedMeasure = 0;
     if (grid.subGridsType == MySubGridsType_Col)
     {
@@ -881,14 +950,14 @@
             remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:-1 * remainedMeasure * sbvGrid.gridMeasure];
             
             NSInteger index = weightSubGridsIndexs[i].integerValue;
-            if (grid.form != 0)
+            if (hasFormIndex)
             {
                 NSInteger formIndex = weightSubGridsFormIndexs[i].integerValue;
                 pFormIndex = &formIndex;
             }
             else
             {
-                pFormIndex = nil;
+                pFormIndex = NULL;
             }
             
             [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index formKeyIndexDict:formKeyIndexDict formSbs:formSbs pFormIndex:pFormIndex];
@@ -907,7 +976,7 @@
             
             NSInteger index = fillSubGridsIndexs[i].integerValue;
             
-            if (grid.form != 0)
+            if (hasFormIndex)
             {
                 NSInteger formIndex = fillSubGridsFormIndexs[i].integerValue;
                 pFormIndex = &formIndex;

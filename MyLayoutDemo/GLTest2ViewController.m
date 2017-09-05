@@ -16,7 +16,6 @@
 @property(nonatomic, strong) NSString *imageName;    //图像的名称，如果为nil则没有图像
 @property(nonatomic, strong) NSString *title;        //标题
 @property(nonatomic, strong) NSString *source;       //来源
-@property(nonatomic, assign) NSNumber *tag;          //使用的显示模板。
 
 
 
@@ -47,33 +46,27 @@
         
         NSArray *dataSource = @[@{
                                     @"title":@"习近平发展中国经济两个大局观",
-                                    @"source":@"专题",
-                                    @"tag":@(1)
+                                    @"source":@"专题"
                                     },
                                 @{
                                     @"imageName":@"p1",
-                                    @"title":@"广西鱼塘现大坑 一夜”吃掉“五万斤鱼",
-                                    @"tag":@(2)
+                                    @"title":@"广西鱼塘现大坑 一夜”吃掉“五万斤鱼"
                                     },
                                 @{
                                     @"title":@"习近平抵达不拉格开始对捷克国事访问",
-                                    @"source":@"专题",
-                                    @"tag":@(1)
+                                    @"source":@"专题"
                                     },
                                 @{
                                     @"title":@"解读：为何数万在缅汉族要入籍缅族",
-                                    @"source":@"海外网",
-                                    @"tag":@(1)
+                                    @"source":@"海外网"
                                     },
                                 @{
                                     @"title":@"消费贷仍可用于首付银行：不可能杜绝",
-                                    @"source":@"新闻晨报",
-                                    @"tag":@(1)
+                                    @"source":@"新闻晨报"
                                     },
                                 @{
                                     @"title":@"3代人接力29年养保姆至108岁",
-                                    @"source":@"人民日报",
-                                    @"tag":@(1)
+                                    @"source":@"人民日报"
                                     }
                                 ];
         
@@ -113,6 +106,18 @@
     MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
     
     
+    
+    //建立第二行图片栅格
+    id<MyGrid>g2 = [rootLayout addRow:2.0/5];
+    g2.anchor = YES;
+    g2.topBorderline = borderline;
+    [g2 setTarget:self  action:@selector(handleTest1:)];
+    
+    [g2 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
+    [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
+    g2.form = 2;
+    
+
     //建立第一行栅格
     id<MyGrid> g1 = [rootLayout addRow:1.0/5];
     g1.gravity = MyGravity_Vert_Center;
@@ -124,17 +129,6 @@
     //第1行栅格内2个子栅格内容包裹。
     [g1 addRow:MyLayoutSize.wrap];
     [g1 addRow:MyLayoutSize.wrap];
-    
-    
-    //建立第二行图片栅格
-    id<MyGrid>g2 = [rootLayout addRow:2.0/5];
-    g2.anchor = YES;
-    g2.topBorderline = borderline;
-    [g2 setTarget:self  action:@selector(handleTest1:)];
-    
-    [g2 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
-    [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
-    g2.form = 2;
     
 
 
@@ -155,17 +149,20 @@
     for (GLTest1DataModel *dataModel in self.datas)
     {
         NSArray *subviews = nil;
+        unsigned char form = 0;
         if (dataModel.imageName != nil)
         {
+            form = 2;
             subviews = [self createType1ViewsFromModel:dataModel];
         }
         else
         {
+            form = 1;
             subviews = [self createType2ViewsFromModel:dataModel];
         }
         
         
-        [rootLayout bindSubviews:subviews toForm:dataModel.tag.unsignedCharValue];
+        [rootLayout addSubviews:subviews toForm:form];
         
     }
     

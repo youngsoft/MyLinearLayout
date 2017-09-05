@@ -49,8 +49,11 @@
 -(NSArray<UIView*>*) subviewsContainedInGrid:(id<MyGrid>)grid;
 
 
-//绑定视图到类型。
--(void)bindSubviews:(NSArray<UIView*> *)subviews toForm:(unsigned char)form;
+//添加视图组到某个类型中去。
+-(void)addSubviews:(NSArray<UIView*> *)subviews toForm:(unsigned char)form;
+
+
+-(NSArray<NSArray<UIView*> *> *)subviewsArrayFrom:(unsigned char)form;
 
 
 /*
