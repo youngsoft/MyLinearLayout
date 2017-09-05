@@ -119,7 +119,7 @@
     g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
     g1.subviewSpace = 10;
     [g1 setTarget:self  action:@selector(handleTest1:)];
-    g1.tag = 1;
+    g1.form = 1;
     
     //第1行栅格内2个子栅格内容包裹。
     [g1 addRow:MyLayoutSize.wrap];
@@ -134,7 +134,7 @@
     
     [g2 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
     [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
-    g2.tag = 2;
+    g2.form = 2;
     
 
 
@@ -165,7 +165,7 @@
         }
         
         
-        [rootLayout bindViews:subviews toGrid:dataModel.tag.integerValue];
+        [rootLayout bindSubviews:subviews toForm:dataModel.tag.unsignedCharValue];
         
     }
     

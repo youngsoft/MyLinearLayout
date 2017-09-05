@@ -51,10 +51,23 @@
 
 @property(nonatomic, weak) MyGridLayoutViewSizeClass *lastSizeClass;
 
+//key是NSNumber, value是一个NSMutableArray
+@property(nonatomic, strong) NSMutableDictionary *formDict;
+
 @end
 
 
 @implementation MyGridLayout
+
+-(NSMutableDictionary*)formDict
+{
+    if (_formDict == nil)
+    {
+        _formDict = [NSMutableDictionary new];
+    }
+    
+    return _formDict;
+}
 
 #pragma mark -- Public Method
 
@@ -99,9 +112,26 @@
     return retSbs;
 }
 
--(void)bindViews:(NSArray<UIView*> *)views toGrid:(NSInteger)tag
+
+-(void)bindSubviews:(NSArray<UIView*> *)subviews toForm:(unsigned char)form
 {
     //...
+    NSNumber *key = @(form);
+    NSMutableArray *subviewsArray = [self.formDict objectForKey:key];
+    if (subviewsArray == nil)
+    {
+        subviewsArray = [NSMutableArray new];
+        [self.formDict setObject:subviewsArray forKey:key];
+    }
+    
+    [subviewsArray addObject:subviews];
+    
+    for (UIView *sbv in subviews)
+    {
+        [self addSubview:sbv];
+    }
+    
+    
 }
 
 
@@ -264,6 +294,18 @@
     lsc.subGridsType = subGridsType;
 }
 
+-(unsigned char)form
+{
+     MyGridLayout *lsc = self.myCurrentSizeClass;
+    return lsc.form;
+}
+
+-(void)setForm:(unsigned char)form
+{
+    MyGridLayout *lsc = self.myCurrentSizeClass;
+    lsc.form = form;
+}
+
 -(CGFloat)gridMeasure
 {
     MyGridLayout *lsc = self.myCurrentSizeClass;
@@ -401,9 +443,16 @@
     //设置根格子的rect为布局视图的大小。
     lsc.gridRect = CGRectMake(0, 0, selfSize.width, selfSize.height);
     
+    
+    NSMutableDictionary *formKeyIndexDict = [NSMutableDictionary dictionaryWithCapacity:self.formDict.count];
+    for (NSNumber *key in self.formDict)
+    {
+        [formKeyIndexDict setObject:@(0) forKey:key];
+    }
+    
     //遍历尺寸
     NSInteger index = 0;
-    CGFloat selfMeasure = [self myTraversalGridSize:lsc gridSize:selfSize lsc:lsc sbs:sbs pIndex:&index];
+    CGFloat selfMeasure = [self myTraversalGridSize:lsc gridSize:selfSize lsc:lsc sbs:sbs pIndex:&index formKeyIndexDict:formKeyIndexDict formSbs:nil pFormIndex:nil];
     if (lsc.wrapContentHeight)
     {
         selfSize.height =  selfMeasure;
@@ -415,8 +464,13 @@
     }
     
     //遍历位置。
+    for (NSNumber *key in self.formDict)
+    {
+        [formKeyIndexDict setObject:@(0) forKey:key];
+    }
+    
     NSEnumerator<UIView*> *enumerator = sbs.objectEnumerator;
-    [self myTraversalGridOrigin:lsc gridOrigin:CGPointMake(0, 0) lsc:lsc sbvEnumerator:enumerator isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
+    [self myTraversalGridOrigin:lsc gridOrigin:CGPointMake(0, 0) lsc:lsc sbvEnumerator:enumerator formKeyIndexDict:formKeyIndexDict formSbvEnumerator:nil  isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
     
     
     //处理那些剩余没有放入格子的子视图的frame设置为0
@@ -440,7 +494,7 @@
 #pragma mark -- Private Method
 
 //遍历位置
--(void)myTraversalGridOrigin:(id<MyGridNode>)grid  gridOrigin:(CGPoint)gridOrigin lsc:(MyGridLayout*)lsc sbvEnumerator:(NSEnumerator<UIView*>*)sbvEnumerator isEstimate:(BOOL)isEstimate sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout
+-(void)myTraversalGridOrigin:(id<MyGridNode>)grid  gridOrigin:(CGPoint)gridOrigin lsc:(MyGridLayout*)lsc sbvEnumerator:(NSEnumerator<UIView*>*)sbvEnumerator formKeyIndexDict:(NSMutableDictionary*)formKeyIndexDict formSbvEnumerator:(NSEnumerator<UIView*>*)formSbvEnumerator isEstimate:(BOOL)isEstimate sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout
 {
     //这要优化减少不必要的空数组的建立。。
     NSArray<id<MyGridNode>> * subGrids = nil;
@@ -453,11 +507,31 @@
         [grid setBorderlineNeedLayoutIn:grid.gridRect withLayer:self.layer];
     }
     
+    
+    if (grid.form != 0)
+    {
+        NSMutableArray *subviewsArray = [self.formDict objectForKey:@(grid.form)];
+        NSNumber *subviewsArrayIndex = [formKeyIndexDict objectForKey:@(grid.form)];
+        if (subviewsArray != nil)
+        {
+            formSbvEnumerator = ((NSArray*)subviewsArray[subviewsArrayIndex.integerValue]).objectEnumerator;
+            
+            [formKeyIndexDict setObject:@(subviewsArrayIndex.integerValue + 1) forKey:@(grid.form)];
+        }
+    }
+
+    
+    
     //处理叶子节点。
     if (grid.anchor || (subGrids.count == 0 && !grid.placeholder))
     {
         //设置子视图的位置和尺寸。。
         UIView *sbv = sbvEnumerator.nextObject;
+        
+        UIView *formSbv = formSbvEnumerator.nextObject;
+        if (formSbv != nil)
+            sbv = formSbv;
+        
         if (sbv != nil)
         {
             //调整位置和尺寸。。。
@@ -563,11 +637,11 @@
     {
         offset += [sbvGrid updateGridOrigin:gridOrigin superGrid:grid withOffset:offset];
         offset += grid.subviewSpace;
-        [self myTraversalGridOrigin:sbvGrid gridOrigin:sbvGrid.gridRect.origin lsc:lsc sbvEnumerator:sbvEnumerator isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
+        [self myTraversalGridOrigin:sbvGrid gridOrigin:sbvGrid.gridRect.origin lsc:lsc sbvEnumerator:sbvEnumerator formKeyIndexDict:formKeyIndexDict formSbvEnumerator:formSbvEnumerator isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
     }
 }
 
--(void)myBlankTraverse:(id<MyGridNode>)grid sbs:(NSArray<UIView*>*)sbs pIndex:(NSInteger*)pIndex
+-(void)myBlankTraverse:(id<MyGridNode>)grid sbs:(NSArray<UIView*>*)sbs pIndex:(NSInteger*)pIndex formSbs:(NSArray<UIView*> *)formSbs pFormIndex:(NSInteger*)pFormIndex
 {
     NSArray<id<MyGridNode>> *subGrids = nil;
     if (grid.subGridsType != MySubGridsType_Unknown)
@@ -576,16 +650,21 @@
     if (grid.anchor || (subGrids.count == 0 && !grid.placeholder))
     {
         *pIndex = *pIndex + 1;
+        
+        if (grid.form == 0 && pFormIndex != NULL)
+        {
+            *pFormIndex = *pFormIndex + 1;
+        }
     }
     
     for (id<MyGridNode> sbvGrid in subGrids)
     {
-        [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex];
+        [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex formSbs:formSbs pFormIndex:(grid.form != 0)? NULL : pFormIndex];
     }
 }
 
 //遍历尺寸。
--(CGFloat)myTraversalGridSize:(id<MyGridNode>)grid gridSize:(CGSize)gridSize lsc:(MyGridLayout*)lsc sbs:(NSArray<UIView*>*)sbs pIndex:(NSInteger*)pIndex
+-(CGFloat)myTraversalGridSize:(id<MyGridNode>)grid gridSize:(CGSize)gridSize lsc:(MyGridLayout*)lsc sbs:(NSArray<UIView*>*)sbs pIndex:(NSInteger*)pIndex formKeyIndexDict:(NSMutableDictionary*)formKeyIndexDict  formSbs:(NSArray<UIView*>*)formSbs  pFormIndex:(NSInteger*)pFormIndex
 {
     NSArray<id<MyGridNode>> *subGrids = nil;
     if (grid.subGridsType != MySubGridsType_Unknown)
@@ -609,18 +688,44 @@
     }
     else;
     
+    
+    //得到匹配的form
+    if (grid.form != 0)
+    {
+        NSMutableArray *subviewsArray = [self.formDict objectForKey:@(grid.form)];
+        NSNumber *subviewsArrayIndex = [formKeyIndexDict objectForKey:@(grid.form)];
+        if (subviewsArray != nil)
+        {
+            formSbs = subviewsArray[subviewsArrayIndex.integerValue];
+            NSInteger formIndex = 0;
+            pFormIndex = &formIndex;
+            
+            [formKeyIndexDict setObject:@(subviewsArrayIndex.integerValue + 1) forKey:@(grid.form)];
+        }
+    }
+
+    
     //叶子节点
     if (grid.anchor || (subGrids.count == 0 && !grid.placeholder))
     {
+        NSArray *tempSbs = sbs;
+        NSInteger *pTempIndex = pIndex;
+        
+        if (formSbs != nil && pFormIndex != NULL)
+        {
+            tempSbs = formSbs;
+            pTempIndex = pFormIndex;
+        }
+        
         //如果尺寸是包裹
         if (grid.gridMeasure == MyLayoutSize.wrap)
         {
-            if (*pIndex < sbs.count)
+            if (*pTempIndex < tempSbs.count)
             {
                 //加这个条件是根栅格如果是叶子栅格的话不处理这种情况。
                 if (grid.superGrid != nil)
                 {
-                    UIView *sbv = sbs[*pIndex];
+                    UIView *sbv = tempSbs[*pTempIndex];
                     
                     MyFrame *sbvmyFrame = sbv.myFrame;
                     UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
@@ -664,15 +769,24 @@
         }
         
         //索引加1跳转到下一个节点。
+        if (formSbs != nil)
+        {
+            *pTempIndex = *pTempIndex + 1;
+        }
+        
         *pIndex = *pIndex + 1;
     }
 
     
     NSMutableArray<id<MyGridNode>> *weightSubGrids = [NSMutableArray new];  //比重尺寸子格子数组
     NSMutableArray<NSNumber*> *weightSubGridsIndexs = [NSMutableArray new]; //比重尺寸格子的开头子视图位置索引
+    NSMutableArray<NSNumber*> *weightSubGridsFormIndexs = [NSMutableArray new]; //比重尺寸格子的开头子视图位置索引
+
     
     NSMutableArray<id<MyGridNode>> *fillSubGrids = [NSMutableArray new];    //填充尺寸格子数组
     NSMutableArray<NSNumber*> *fillSubGridsIndexs = [NSMutableArray new];   //填充尺寸格子的开头子视图位置索引
+    NSMutableArray<NSNumber*> *fillSubGridsFormIndexs = [NSMutableArray new];   //填充尺寸格子的开头子视图位置索引
+
     
     //包裹尺寸先遍历所有子格子
     CGSize gridSize2 = gridSize;
@@ -690,7 +804,7 @@
         if (sbvGrid.gridMeasure == MyLayoutSize.wrap)
         {
             
-            CGFloat gridMeasure = [self myTraversalGridSize:sbvGrid gridSize:gridSize2 lsc:lsc sbs:sbs pIndex:pIndex];
+            CGFloat gridMeasure = [self myTraversalGridSize:sbvGrid gridSize:gridSize2 lsc:lsc sbs:sbs pIndex:pIndex formKeyIndexDict:formKeyIndexDict formSbs:formSbs pFormIndex:pFormIndex];
             fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid  withMeasure:gridMeasure];
             
         }
@@ -699,7 +813,7 @@
             fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:sbvGrid.gridMeasure];
             
             //遍历儿子节点。。
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex];
+            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex formKeyIndexDict:formKeyIndexDict formSbs:formSbs pFormIndex:pFormIndex];
             
         }
         else if (sbvGrid.gridMeasure > 0 && sbvGrid.gridMeasure < 1)
@@ -707,7 +821,7 @@
             fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:validMeasure * sbvGrid.gridMeasure];
             
             //遍历儿子节点。。
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex];
+            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex formKeyIndexDict:formKeyIndexDict formSbs:formSbs pFormIndex:pFormIndex];
 
         }
         else if (sbvGrid.gridMeasure < 0 && sbvGrid.gridMeasure > -1)
@@ -715,8 +829,13 @@
             [weightSubGrids addObject:sbvGrid];
             [weightSubGridsIndexs addObject:@(*pIndex)];
             
+            if (pFormIndex != NULL)
+            {
+                [weightSubGridsFormIndexs addObject:@(*pFormIndex)];
+            }
+            
             //这里面空转一下。
-            [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex];
+            [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex formSbs:formSbs pFormIndex:pFormIndex];
 
             
         }
@@ -726,8 +845,13 @@
             
             [fillSubGridsIndexs addObject:@(*pIndex)];
             
+            if (pFormIndex != NULL)
+            {
+                [fillSubGridsFormIndexs addObject:@(*pFormIndex)];
+            }
+            
             //这里面空转一下。
-            [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex];
+            [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex formSbs:formSbs pFormIndex:pFormIndex];
         }
         else
         {
@@ -757,7 +881,17 @@
             remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:-1 * remainedMeasure * sbvGrid.gridMeasure];
             
             NSInteger index = weightSubGridsIndexs[i].integerValue;
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index];
+            if (grid.form != 0)
+            {
+                NSInteger formIndex = weightSubGridsFormIndexs[i].integerValue;
+                pFormIndex = &formIndex;
+            }
+            else
+            {
+                pFormIndex = nil;
+            }
+            
+            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index formKeyIndexDict:formKeyIndexDict formSbs:formSbs pFormIndex:pFormIndex];
         }
     }
     
@@ -772,7 +906,18 @@
             totalCount -= 1;
             
             NSInteger index = fillSubGridsIndexs[i].integerValue;
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index];
+            
+            if (grid.form != 0)
+            {
+                NSInteger formIndex = fillSubGridsFormIndexs[i].integerValue;
+                pFormIndex = &formIndex;
+            }
+            else
+            {
+                pFormIndex = nil;
+            }
+
+            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index formKeyIndexDict:formKeyIndexDict formSbs:formSbs pFormIndex:pFormIndex];
         }
     }
     

@@ -84,6 +84,8 @@ extern NSString * const vMyGridGravityHeightFill;
  */
 @protocol MyGrid <MyGridAction>
 
+//栅格的外形标识，主要用于和数据模型进行绑定使用。
+@property(nonatomic) unsigned char form;
 
 //得到父栅格。根栅格的父栅格为nil
 @property(nonatomic, weak, readonly) id<MyGrid> superGrid;

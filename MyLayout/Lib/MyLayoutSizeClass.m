@@ -978,6 +978,15 @@ BOOL _myisRTL = NO;
     self.rootGrid.subGridsType = subGridsType;
 }
 
+-(unsigned char)form
+{
+    return self.rootGrid.form;
+}
+
+-(void)setForm:(unsigned char)form
+{
+    self.rootGrid.form = form;
+}
 
 -(MyBorderline*)topBorderline
 {

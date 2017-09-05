@@ -90,6 +90,7 @@ typedef struct _MyGridOptionalProperties1
     uint32_t gravity:16;
     uint32_t placeholder:1;
     uint32_t anchor:1;
+    uint32_t form:8;
     
 }MyGridOptionalProperties1;
 
@@ -247,6 +248,15 @@ typedef struct  _MyGridOptionalProperties2
     _optionalProperties1.anchor = anchor ? 1 : 0;
 }
 
+-(unsigned char) form
+{
+    return _optionalProperties1.form;
+}
+
+-(void)setForm:(unsigned char)form
+{
+    _optionalProperties1.form = form;
+}
 
 -(id<MyGrid>)addRow:(CGFloat)measure
 {

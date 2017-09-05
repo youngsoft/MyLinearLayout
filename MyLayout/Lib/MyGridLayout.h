@@ -49,7 +49,9 @@
 -(NSArray<UIView*>*) subviewsContainedInGrid:(id<MyGrid>)grid;
 
 
--(void)bindViews:(NSArray<UIView*> *)views toGrid:(NSInteger)tag;
+//绑定视图到类型。
+-(void)bindSubviews:(NSArray<UIView*> *)subviews toForm:(unsigned char)form;
+
 
 /*
  栅格的描述。你可以用格子描述语言来建立格子
