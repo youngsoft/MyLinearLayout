@@ -10,6 +10,7 @@
 #import "MyBorderline.h"
 
 
+extern NSString * const kMyGridForm;
 extern NSString * const kMyGridTag;
 extern NSString * const kMyGridAction;
 extern NSString * const kMyGridActionData;

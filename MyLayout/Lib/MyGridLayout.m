@@ -10,6 +10,7 @@
 #import "MyLayoutInner.h"
 #import "MyGridNode.h"
 
+ NSString * const kMyGridForm = @"form";
  NSString * const kMyGridTag = @"tag";
  NSString * const kMyGridAction = @"action";
  NSString * const kMyGridActionData = @"action-data";
