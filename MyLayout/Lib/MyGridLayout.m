@@ -82,8 +82,8 @@
 
 @property(nonatomic, weak) MyGridLayoutViewSizeClass *lastSizeClass;
 
-//key是NSNumber, value是一个NSMutableArray<MyViewGroupAndActionData*>
 @property(nonatomic, strong) NSMutableDictionary *tagsDict;
+@property(nonatomic, assign) BOOL tagsDictLock;
 
 @end
 
@@ -144,9 +144,14 @@
 }
 
 
--(void)addViewGroup:(NSArray<UIView*> *)viewGroup toTag:(NSInteger)tag withActionData:(id)actionData
+-(void)addViewGroup:(NSArray<UIView*> *)viewGroup withActionData:(id)actionData to:(NSInteger)gridTag
 {
-    if (tag == 0)
+    [self insertViewGroup:viewGroup withActionData:actionData atIndex:(NSUInteger)-1 to:gridTag];
+}
+
+-(void)insertViewGroup:(NSArray<UIView*> *)viewGroup withActionData:(id)actionData atIndex:(NSUInteger)index to:(NSInteger)gridTag
+{
+    if (gridTag == 0)
     {
         for (UIView *sbv in viewGroup)
         {
@@ -157,7 +162,7 @@
     }
     
     //...
-    NSNumber *key = @(tag);
+    NSNumber *key = @(gridTag);
     NSMutableArray *viewGroupArray = [self.tagsDict objectForKey:key];
     if (viewGroupArray == nil)
     {
@@ -166,26 +171,217 @@
     }
     
     MyViewGroupAndActionData *va = [MyViewGroupAndActionData viewGroup:viewGroup actionData:actionData];
-    [viewGroupArray addObject:va];
+    if (index == (NSUInteger)-1)
+    {
+        [viewGroupArray addObject:va];
+    }
+    else
+    {
+        [viewGroupArray insertObject:va atIndex:index];
+    }
     
     for (UIView *sbv in viewGroup)
     {
         [self addSubview:sbv];
     }
+
+}
+
+-(void)moveViewGroupAtIndex:(NSUInteger)index from:(NSInteger)origGridTag to:(NSInteger)destGridTag
+{
+    if (origGridTag == 0 || destGridTag == 0 || (origGridTag == destGridTag))
+        return;
+    
+    if (_tagsDict == nil)
+        return;
+    
+    NSNumber *origKey = @(origGridTag);
+    NSMutableArray<MyViewGroupAndActionData*> *origViewGroupArray = [self.tagsDict objectForKey:origKey];
+    
+    if (index < origViewGroupArray.count)
+    {
+        
+        NSNumber *destKey = @(destGridTag);
+        
+        NSMutableArray *destViewGroupArray = [self.tagsDict objectForKey:destKey];
+        if (destViewGroupArray == nil)
+        {
+            destViewGroupArray = [NSMutableArray new];
+            [self.tagsDict setObject:destViewGroupArray forKey:destKey];
+        }
+        
+        
+        MyViewGroupAndActionData *va = origViewGroupArray[index];
+        [origViewGroupArray removeObjectAtIndex:index];
+        if (origViewGroupArray.count == 0)
+        {
+            [self.tagsDict removeObjectForKey:origKey];
+        }
+        
+        [destViewGroupArray addObject:va];
+        
+        
+        
+    }
+    
+
+}
+
+
+
+
+-(void)removeViewGroupAtIndex:(NSUInteger)index from:(NSInteger)gridTag
+{
+    if (gridTag == 0)
+        return;
+    
+    if (_tagsDict == nil)
+        return;
+    
+    NSNumber *key = @(gridTag);
+    NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
+    if (index < viewGroupArray.count)
+    {
+        MyViewGroupAndActionData *va = viewGroupArray[index];
+        
+        self.tagsDictLock = YES;
+        for (UIView *sbv in va.viewGroup)
+        {
+            [sbv removeFromSuperview];
+        }
+        self.tagsDictLock = NO;
+        
+        
+        [viewGroupArray removeObjectAtIndex:index];
+        
+        if (viewGroupArray.count == 0)
+        {
+            [self.tagsDict removeObjectForKey:key];
+        }
+        
+    }
+
+}
+
+
+
+-(void)removeViewGroupFrom:(NSInteger)gridTag
+{
+    if (gridTag == 0)
+        return;
+    
+    if (_tagsDict == nil)
+        return;
+
+    NSNumber *key = @(gridTag);
+    NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
+    if (viewGroupArray != nil)
+    {
+        self.tagsDictLock = YES;
+        for (MyViewGroupAndActionData * va in viewGroupArray)
+        {
+            for (UIView *sbv in va.viewGroup)
+            {
+                [sbv removeFromSuperview];
+            }
+        }
+        
+        self.tagsDictLock = NO;
+        
+        [self.tagsDict removeObjectForKey:key];
+    }
     
 }
 
--(NSArray<NSArray<UIView*> *> *)viewGroupArrayFromTag:(NSInteger)tag
+
+
+-(void)exchangeViewGroupAtIndex:(NSUInteger)index1 from:(NSInteger)gridTag1  withViewGroupAtIndex:(NSUInteger)index2 from:(NSInteger)gridTag2
 {
-    NSArray *retViewGroupArray = nil;
-    if (tag != 0 && _tagsDict != nil)
+    if (gridTag1 == 0 || gridTag2 == 0)
+        return;
+    
+    NSNumber *key1 = @(gridTag1);
+    NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray1 = [self.tagsDict objectForKey:key1];
+    
+    NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray2 = nil;
+    
+    if (gridTag1 == gridTag2)
+        viewGroupArray2 = viewGroupArray1;
+    else
     {
-        NSNumber *key = @(tag);
-        retViewGroupArray = [self.tagsDict objectForKey:key];
+        NSNumber *key2 = @(gridTag2);
+        viewGroupArray2 = [self.tagsDict objectForKey:key2];
     }
     
-    return retViewGroupArray;
+    if (index1 < viewGroupArray1.count && index2 < viewGroupArray2.count)
+    {
+        self.tagsDictLock = YES;
+        
+        if (gridTag1 == gridTag2)
+        {
+            [viewGroupArray1 exchangeObjectAtIndex:index1 withObjectAtIndex:index2];
+        }
+        else
+        {
+            MyViewGroupAndActionData *va1 = viewGroupArray1[index1];
+            MyViewGroupAndActionData *va2 = viewGroupArray2[index2];
+            
+            [viewGroupArray1 removeObjectAtIndex:index1];
+            [viewGroupArray2 removeObjectAtIndex:index2];
+            
+            [viewGroupArray1 insertObject:va2 atIndex:index1];
+            [viewGroupArray2 insertObject:va1 atIndex:index2];
+        }
+        
+        
+        self.tagsDictLock = NO;
+        
+        
+    }
+
+    
 }
+
+
+-(NSUInteger)viewGroupCountOf:(NSInteger)gridTag
+{
+    if (gridTag == 0)
+        return 0;
+    
+    if (_tagsDict == nil)
+        return 0;
+    
+    NSNumber *key = @(gridTag);
+    NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
+
+    return viewGroupArray.count;
+}
+
+
+
+-(NSArray<UIView*> *)viewGroupAtIndex:(NSUInteger)index from:(NSInteger)gridTag
+{
+    if (gridTag == 0)
+        return nil;
+    
+    if (_tagsDict == nil)
+        return nil;
+
+    
+    NSNumber *key = @(gridTag);
+    NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
+    if (index < viewGroupArray.count)
+    {
+        return viewGroupArray[index].viewGroup;
+    }
+    
+    return nil;
+}
+
+
+
+
+
 
 
 
@@ -476,7 +672,7 @@
     [super willRemoveSubview:subview];
     
     //如果子试图在样式里面则从样式里面删除
-    if (_tagsDict != nil)
+    if (_tagsDict != nil && !self.tagsDictLock)
     {
         [_tagsDict enumerateKeysAndObjectsUsingBlock:^(id   key, id   obj, BOOL *  stop) {
             
@@ -612,7 +808,9 @@
         if (viewGroupArray != nil && viewGroupIndex != nil)
         {
             //这里将动作的数据和栅格进行关联。
-            grid.actionData = viewGroupArray[viewGroupIndex.integerValue].actionData;
+            if (viewGroupArray[viewGroupIndex.integerValue].actionData != nil)
+                grid.actionData = viewGroupArray[viewGroupIndex.integerValue].actionData;
+            
             tagSbvEnumerator =  viewGroupArray[viewGroupIndex.integerValue].viewGroup.objectEnumerator;
             [tagViewGroupIndexDict setObject:@(viewGroupIndex.integerValue + 1) forKey:key];
         }

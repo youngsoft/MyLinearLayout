@@ -109,21 +109,21 @@
     for (GLTest1DataModel *dataModel in self.datas)
     {
         NSArray *viewGroup = nil;
-        unsigned char tag = 0;
+        NSInteger gridTag = 0;
         if (dataModel.imageName != nil)
         {
-            tag = 2;
+            gridTag = 2;
             viewGroup = [self createType1ViewsFromModel:dataModel];
         }
         else
         {
-            tag = 1;
+            gridTag = 1;
             viewGroup = [self createType2ViewsFromModel:dataModel];
         }
         
         
         //这里将视图组，和tag，以及数据进行关联。。
-        [rootLayout addViewGroup:viewGroup toTag:tag withActionData:dataModel];
+        [rootLayout addViewGroup:viewGroup withActionData:dataModel to:gridTag];
         
     }
     
