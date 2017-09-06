@@ -17,6 +17,8 @@
 @interface MyGridLayout : MyBaseLayout<MyGrid>
 
 
++(id<MyGrid>)createTemplateGrid:(NSInteger)gridTag;
+
 //删除布局下所有的子栅格
 -(void)removeGrids;
 -(void)removeGridsIn:(MySizeClass)sizeClass;
@@ -70,6 +72,8 @@
  @param destGridTag 新视图组所在的标签
  */
 -(void)moveViewGroupAtIndex:(NSUInteger)index from:(NSInteger)origGridTag to:(NSInteger)destGridTag;
+
+-(void)moveViewGroupAtIndex:(NSUInteger)index1 from:(NSInteger)origGridTag  toIndex:(NSUInteger)index2 to:(NSInteger)destGridTag;
 
 
 /**

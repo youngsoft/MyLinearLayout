@@ -102,6 +102,14 @@
 
 #pragma mark -- Public Method
 
++(id<MyGrid>)createTemplateGrid:(NSInteger)gridTag
+{
+    id<MyGrid> grid  =  [[MyGridNode alloc] initWithMeasure:0 superGrid:nil];
+    grid.tag = gridTag;
+    
+    return grid;
+}
+
 
 //删除所有子栅格
 -(void)removeGrids
@@ -189,6 +197,11 @@
 
 -(void)moveViewGroupAtIndex:(NSUInteger)index from:(NSInteger)origGridTag to:(NSInteger)destGridTag
 {
+    [self moveViewGroupAtIndex:index from:origGridTag toIndex:-1 to:destGridTag];
+}
+
+-(void)moveViewGroupAtIndex:(NSUInteger)index1 from:(NSInteger)origGridTag  toIndex:(NSUInteger)index2 to:(NSInteger)destGridTag
+{
     if (origGridTag == 0 || destGridTag == 0 || (origGridTag == destGridTag))
         return;
     
@@ -198,7 +211,7 @@
     NSNumber *origKey = @(origGridTag);
     NSMutableArray<MyViewGroupAndActionData*> *origViewGroupArray = [self.tagsDict objectForKey:origKey];
     
-    if (index < origViewGroupArray.count)
+    if (index1 < origViewGroupArray.count)
     {
         
         NSNumber *destKey = @(destGridTag);
@@ -210,23 +223,24 @@
             [self.tagsDict setObject:destViewGroupArray forKey:destKey];
         }
         
+        if (index2 > destViewGroupArray.count)
+            index2 = destViewGroupArray.count;
         
-        MyViewGroupAndActionData *va = origViewGroupArray[index];
-        [origViewGroupArray removeObjectAtIndex:index];
+        
+        MyViewGroupAndActionData *va = origViewGroupArray[index1];
+        [origViewGroupArray removeObjectAtIndex:index1];
         if (origViewGroupArray.count == 0)
         {
             [self.tagsDict removeObjectForKey:origKey];
         }
         
-        [destViewGroupArray addObject:va];
-        
+        [destViewGroupArray insertObject:va atIndex:index2];
         
         
     }
     
-
+    
 }
-
 
 
 
@@ -933,7 +947,7 @@
     {
         offset += [sbvGrid updateGridOrigin:gridOrigin superGrid:grid withOffset:offset];
         offset += grid.subviewSpace;
-        [self myTraversalGridOrigin:sbvGrid gridOrigin:sbvGrid.gridRect.origin lsc:lsc sbvEnumerator:sbvEnumerator tagViewGroupIndexDict:tagViewGroupIndexDict tagSbvEnumerator:tagSbvEnumerator isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
+        [self myTraversalGridOrigin:sbvGrid gridOrigin:sbvGrid.gridRect.origin lsc:lsc sbvEnumerator:sbvEnumerator tagViewGroupIndexDict:tagViewGroupIndexDict tagSbvEnumerator:((sbvGrid.tag != 0)? nil: tagSbvEnumerator) isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
     }
 }
 
@@ -1075,150 +1089,153 @@
     }
 
     
-    NSMutableArray<id<MyGridNode>> *weightSubGrids = [NSMutableArray new];  //比重尺寸子格子数组
-    NSMutableArray<NSNumber*> *weightSubGridsIndexs = [NSMutableArray new]; //比重尺寸格子的开头子视图位置索引
-    NSMutableArray<NSNumber*> *weightSubGridsTagIndexs = [NSMutableArray new]; //比重尺寸格子的开头子视图位置索引
-
-    
-    NSMutableArray<id<MyGridNode>> *fillSubGrids = [NSMutableArray new];    //填充尺寸格子数组
-    NSMutableArray<NSNumber*> *fillSubGridsIndexs = [NSMutableArray new];   //填充尺寸格子的开头子视图位置索引
-    NSMutableArray<NSNumber*> *fillSubGridsTagIndexs = [NSMutableArray new];   //填充尺寸格子的开头子视图位置索引
-
-    
-    //包裹尺寸先遍历所有子格子
-    CGSize gridSize2 = gridSize;
-    if (grid.subGridsType == MySubGridsType_Row)
+    if (subGrids.count > 0)
     {
-        gridSize2.width -= (padding.left + padding.right);
-    }
-    else
-    {
-        gridSize2.height -= (padding.top + padding.bottom);
-    }
-
-    for (id<MyGridNode> sbvGrid in subGrids)
-    {
-        if (sbvGrid.gridMeasure == MyLayoutSize.wrap)
+        
+        NSMutableArray<id<MyGridNode>> *weightSubGrids = [NSMutableArray new];  //比重尺寸子格子数组
+        NSMutableArray<NSNumber*> *weightSubGridsIndexs = [NSMutableArray new]; //比重尺寸格子的开头子视图位置索引
+        NSMutableArray<NSNumber*> *weightSubGridsTagIndexs = [NSMutableArray new]; //比重尺寸格子的开头子视图位置索引
+        
+        
+        NSMutableArray<id<MyGridNode>> *fillSubGrids = [NSMutableArray new];    //填充尺寸格子数组
+        NSMutableArray<NSNumber*> *fillSubGridsIndexs = [NSMutableArray new];   //填充尺寸格子的开头子视图位置索引
+        NSMutableArray<NSNumber*> *fillSubGridsTagIndexs = [NSMutableArray new];   //填充尺寸格子的开头子视图位置索引
+        
+        
+        //包裹尺寸先遍历所有子格子
+        CGSize gridSize2 = gridSize;
+        if (grid.subGridsType == MySubGridsType_Row)
         {
-            
-            CGFloat gridMeasure = [self myTraversalGridSize:sbvGrid gridSize:gridSize2 lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
-            fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid  withMeasure:gridMeasure];
-            
-        }
-        else if (sbvGrid.gridMeasure >= 1)
-        {
-            fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:sbvGrid.gridMeasure];
-            
-            //遍历儿子节点。。
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
-            
-        }
-        else if (sbvGrid.gridMeasure > 0 && sbvGrid.gridMeasure < 1)
-        {
-            fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:validMeasure * sbvGrid.gridMeasure];
-            
-            //遍历儿子节点。。
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
-
-        }
-        else if (sbvGrid.gridMeasure < 0 && sbvGrid.gridMeasure > -1)
-        {
-            [weightSubGrids addObject:sbvGrid];
-            [weightSubGridsIndexs addObject:@(*pIndex)];
-            
-            if (pTagIndex != NULL)
-            {
-                [weightSubGridsTagIndexs addObject:@(*pTagIndex)];
-            }
-            
-            //这里面空转一下。
-            [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex tagSbs:tagViewGroup pTagIndex:pTagIndex];
-
-            
-        }
-        else if (sbvGrid.gridMeasure == MyLayoutSize.fill)
-        {
-            [fillSubGrids addObject:sbvGrid];
-            
-            [fillSubGridsIndexs addObject:@(*pIndex)];
-            
-            if (pTagIndex != NULL)
-            {
-                [fillSubGridsTagIndexs addObject:@(*pTagIndex)];
-            }
-            
-            //这里面空转一下。
-            [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex tagSbs:tagViewGroup pTagIndex:pTagIndex];
+            gridSize2.width -= (padding.left + padding.right);
         }
         else
         {
-            NSAssert(0, @"oops!");
+            gridSize2.height -= (padding.top + padding.bottom);
         }
-    }
-    
-    
-    //算出剩余的尺寸。
-    BOOL hasTagIndex = (pTagIndex != NULL);
-    CGFloat remainedMeasure = 0;
-    if (grid.subGridsType == MySubGridsType_Col)
-    {
-        remainedMeasure = grid.gridRect.size.width - fixedMeasure;
-    }
-    else if (grid.subGridsType == MySubGridsType_Row)
-    {
-        remainedMeasure = grid.gridRect.size.height - fixedMeasure;
-    }
-    else;
-    
-    NSInteger weightSubGridCount = weightSubGrids.count;
-    if (weightSubGridCount > 0)
-    {
-        for (NSInteger i = 0; i < weightSubGridCount; i++)
+        
+        for (id<MyGridNode> sbvGrid in subGrids)
         {
-            id<MyGridNode> sbvGrid = weightSubGrids[i];
-            remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:-1 * remainedMeasure * sbvGrid.gridMeasure];
-            
-            NSInteger index = weightSubGridsIndexs[i].integerValue;
-            if (hasTagIndex)
+            if (sbvGrid.gridMeasure == MyLayoutSize.wrap)
             {
-                NSInteger tagIndex = weightSubGridsTagIndexs[i].integerValue;
-                pTagIndex = &tagIndex;
+                
+                CGFloat gridMeasure = [self myTraversalGridSize:sbvGrid gridSize:gridSize2 lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
+                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid  withMeasure:gridMeasure];
+                
+            }
+            else if (sbvGrid.gridMeasure >= 1)
+            {
+                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:sbvGrid.gridMeasure];
+                
+                //遍历儿子节点。。
+                [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
+                
+            }
+            else if (sbvGrid.gridMeasure > 0 && sbvGrid.gridMeasure < 1)
+            {
+                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:validMeasure * sbvGrid.gridMeasure];
+                
+                //遍历儿子节点。。
+                [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
+                
+            }
+            else if (sbvGrid.gridMeasure < 0 && sbvGrid.gridMeasure > -1)
+            {
+                [weightSubGrids addObject:sbvGrid];
+                [weightSubGridsIndexs addObject:@(*pIndex)];
+                
+                if (pTagIndex != NULL)
+                {
+                    [weightSubGridsTagIndexs addObject:@(*pTagIndex)];
+                }
+                
+                //这里面空转一下。
+                [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex tagSbs:tagViewGroup pTagIndex:pTagIndex];
+                
+                
+            }
+            else if (sbvGrid.gridMeasure == MyLayoutSize.fill)
+            {
+                [fillSubGrids addObject:sbvGrid];
+                
+                [fillSubGridsIndexs addObject:@(*pIndex)];
+                
+                if (pTagIndex != NULL)
+                {
+                    [fillSubGridsTagIndexs addObject:@(*pTagIndex)];
+                }
+                
+                //这里面空转一下。
+                [self myBlankTraverse:sbvGrid sbs:sbs pIndex:pIndex tagSbs:tagViewGroup pTagIndex:pTagIndex];
             }
             else
             {
-                pTagIndex = NULL;
+                NSAssert(0, @"oops!");
             }
-            
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
         }
-    }
-    
-    NSInteger fillSubGridsCount = fillSubGrids.count;
-    if (fillSubGridsCount > 0)
-    {
-        NSInteger totalCount = fillSubGridsCount;
-        for (NSInteger i = 0; i < fillSubGridsCount; i++)
+        
+        
+        //算出剩余的尺寸。
+        BOOL hasTagIndex = (pTagIndex != NULL);
+        CGFloat remainedMeasure = 0;
+        if (grid.subGridsType == MySubGridsType_Col)
         {
-            id<MyGridNode> sbvGrid = fillSubGrids[i];
-           remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:_myCGFloatRound(remainedMeasure * (1.0/totalCount))];
-            totalCount -= 1;
-            
-            NSInteger index = fillSubGridsIndexs[i].integerValue;
-            
-            if (hasTagIndex)
+            remainedMeasure = grid.gridRect.size.width - fixedMeasure;
+        }
+        else if (grid.subGridsType == MySubGridsType_Row)
+        {
+            remainedMeasure = grid.gridRect.size.height - fixedMeasure;
+        }
+        else;
+        
+        NSInteger weightSubGridCount = weightSubGrids.count;
+        if (weightSubGridCount > 0)
+        {
+            for (NSInteger i = 0; i < weightSubGridCount; i++)
             {
-                NSInteger tagIndex = fillSubGridsTagIndexs[i].integerValue;
-                pTagIndex = &tagIndex;
+                id<MyGridNode> sbvGrid = weightSubGrids[i];
+                remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:-1 * remainedMeasure * sbvGrid.gridMeasure];
+                
+                NSInteger index = weightSubGridsIndexs[i].integerValue;
+                if (hasTagIndex)
+                {
+                    NSInteger tagIndex = weightSubGridsTagIndexs[i].integerValue;
+                    pTagIndex = &tagIndex;
+                }
+                else
+                {
+                    pTagIndex = NULL;
+                }
+                
+                [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
             }
-            else
+        }
+        
+        NSInteger fillSubGridsCount = fillSubGrids.count;
+        if (fillSubGridsCount > 0)
+        {
+            NSInteger totalCount = fillSubGridsCount;
+            for (NSInteger i = 0; i < fillSubGridsCount; i++)
             {
-                pTagIndex = nil;
+                id<MyGridNode> sbvGrid = fillSubGrids[i];
+                remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:_myCGFloatRound(remainedMeasure * (1.0/totalCount))];
+                totalCount -= 1;
+                
+                NSInteger index = fillSubGridsIndexs[i].integerValue;
+                
+                if (hasTagIndex)
+                {
+                    NSInteger tagIndex = fillSubGridsTagIndexs[i].integerValue;
+                    pTagIndex = &tagIndex;
+                }
+                else
+                {
+                    pTagIndex = nil;
+                }
+                
+                [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
             }
-
-            [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
         }
     }
-    
     return fixedMeasure;
 }
 

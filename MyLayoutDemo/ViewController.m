@@ -66,6 +66,7 @@
 
 #import "GLTest1ViewController.h"
 #import "GLTest2ViewController.h"
+#import "GLTest3ViewController.h"
 
 
 @interface ViewController ()
@@ -225,6 +226,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"2.GridLayout - Test2", @""),
                                                @"class":[GLTest2ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"3.GridLayout - Test3", @""),
+                                               @"class":[GLTest3ViewController class]
                                                }
                                              ]
                             },

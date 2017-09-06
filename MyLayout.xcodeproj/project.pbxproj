@@ -151,6 +151,7 @@
 		208157C21F5A886300E945B6 /* MyLayoutDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 208157C01F5A886300E945B6 /* MyLayoutDelegate.h */; };
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
+		20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F783551F60399700BE5B31 /* GLTest3ViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -366,6 +367,8 @@
 		208157BC1F586AA700E945B6 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		208157C01F5A886300E945B6 /* MyLayoutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDelegate.h; sourceTree = "<group>"; };
 		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
+		20F783541F60398C00BE5B31 /* GLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest3ViewController.h; sourceTree = "<group>"; };
+		20F783551F60399700BE5B31 /* GLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest3ViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -755,6 +758,8 @@
 				205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */,
 				205643111F51C7DF00E8BDDE /* GLTest2ViewController.h */,
 				205643121F51C7EB00E8BDDE /* GLTest2ViewController.m */,
+				20F783541F60398C00BE5B31 /* GLTest3ViewController.h */,
+				20F783551F60399700BE5B31 /* GLTest3ViewController.m */,
 			);
 			name = GridLayoutDemo;
 			sourceTree = "<group>";
@@ -1057,6 +1062,7 @@
 				182225CA1E77E5930081AA4B /* MyLinearLayout.m in Sources */,
 				18D3C91C1EDF078200D3DE43 /* FLTest1ViewController.m in Sources */,
 				18D3C9951EDF08F800D3DE43 /* YYWeakProxy.m in Sources */,
+				20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */,
 				18D3C9711EDF082800D3DE43 /* AllTest1TableViewCell.m in Sources */,
 				182225CF1E77E5930081AA4B /* MyFloatLayout.m in Sources */,
 				18D3C92B1EDF07A700D3DE43 /* RLTest4ViewController.m in Sources */,

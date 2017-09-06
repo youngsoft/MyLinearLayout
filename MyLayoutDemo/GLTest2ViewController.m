@@ -177,6 +177,16 @@
     [self.rootLayout removeGrids];
     
     MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+    
+    //创建一个样板栅格
+    id<MyGrid> templateGrid = [MyGridLayout createTemplateGrid:1];
+    templateGrid.gravity = MyGravity_Vert_Center;
+    templateGrid.padding = UIEdgeInsetsMake(0, 10, 0, 10);
+    templateGrid.subviewSpace = 10;
+    [templateGrid addRow:MyLayoutSize.wrap];
+    [templateGrid addRow:MyLayoutSize.wrap];
+    [templateGrid setTarget:self action:@selector(handleTest1:)];
+    
 
     for (NSInteger i = 0; i < 4; i++)
     {
@@ -185,20 +195,7 @@
         {
          
             //建立一个高度为1/5的栅格，里面的子栅格垂直居中，并且间隔为10
-            id<MyGrid> g1 = [self.rootLayout addRow:1.0/5];
-            g1.tag = 1;
-            g1.gravity = MyGravity_Vert_Center;
-            g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
-            g1.subviewSpace = 10;
-            
-            //建立2个高度由内容包裹的行叶子栅格
-            [g1 addRow:MyLayoutSize.wrap];
-            [g1 addRow:MyLayoutSize.wrap];
-            
-            g1.bottomBorderline = borderline;
-            [g1 setTarget:self action:@selector(handleTest1:)];
-
-
+            [self.rootLayout addRowGrid:templateGrid.cloneGrid measure:1.0/5].bottomBorderline = borderline;
             
         }
         else if (layoutStyle == 2)  //半宽文字新闻布局
@@ -208,23 +205,9 @@
             id<MyGrid>g2 = [self.rootLayout addRow:1.0/5];
             
             //建立一个宽度均分的列子栅格，里面的子栅格间距为10并且垂直居中
-            id<MyGrid> g21 = [g2 addCol:MyLayoutSize.fill];
-            g21.tag = 1;
-            g21.subviewSpace = 10;
-            g21.gravity = MyGravity_Vert_Center;
-            g21.padding = UIEdgeInsetsMake(0, 10, 0, 10);
-            [g21 setTarget:self action:@selector(handleTest1:)];
-
+            [g2 addColGrid:templateGrid.cloneGrid measure:MyLayoutSize.fill].rightBorderline = borderline;
+            [g2 addColGrid:templateGrid.cloneGrid measure:MyLayoutSize.fill];
             
-            //建立2个高度由内容包裹的行叶子栅格
-            [g21 addRow:MyLayoutSize.wrap];
-            [g21 addRow:MyLayoutSize.wrap];
-
-            
-            //建立一个新的列子栅格，其结构完全拷贝自g21.
-            [g2 addColGrid:g21.cloneGrid];
-            
-            g21.rightBorderline = borderline;
             g2.bottomBorderline = borderline;
             
             

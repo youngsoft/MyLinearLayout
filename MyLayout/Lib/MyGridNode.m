@@ -199,8 +199,8 @@ typedef struct  _MyGridOptionalProperties2
     
     [_touchEventDelegate setTarget:target action:action];
     
-    if (target == nil)
-        _touchEventDelegate = nil;
+  //  if (target == nil)
+    //    _touchEventDelegate = nil;
 }
 
 #pragma mark -- MyGrid
