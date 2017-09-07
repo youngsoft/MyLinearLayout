@@ -108,12 +108,11 @@
                                     @"imageNames":@[@"p5-4"],
                                     @"actionData":@"jj",
                                     },
-                               /* @{
+                                @{
                                     @"title":@"京东拍卖2",
                                     @"subTitle":@"尖货包经典表2",
                                     @"imageNames":@[@"p5-4"],
                                     },
-*/
 
                                 ];
         

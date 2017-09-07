@@ -778,6 +778,22 @@
     [self myTraversalGridOrigin:lsc gridOrigin:CGPointMake(0, 0) lsc:lsc sbvEnumerator:enumerator tagViewGroupIndexDict:tagKeyIndexDict tagSbvEnumerator:nil  isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
     
     
+    //遍历那些还剩余的然后设置为0.
+    [tagKeyIndexDict enumerateKeysAndObjectsUsingBlock:^(id key, NSNumber *viewGroupIndexNumber, BOOL *  stop) {
+        
+        NSArray<MyViewGroupAndActionData*> *viewGroupArray = self.tagsDict[key];
+        NSInteger viewGroupIndex = viewGroupIndexNumber.integerValue;
+        for (NSInteger i = viewGroupIndex; i < viewGroupArray.count; i++)
+        {
+            MyViewGroupAndActionData *va = viewGroupArray[i];
+            for (UIView *sbv in va.viewGroup)
+            {
+                sbv.myFrame.frame = CGRectZero;
+            }
+        }
+    }];
+    
+    
     //处理那些剩余没有放入格子的子视图的frame设置为0
   /*  for (UIView *sbv = enumerator.nextObject; sbv; sbv = enumerator.nextObject)
     {
