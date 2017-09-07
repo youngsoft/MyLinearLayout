@@ -1,0 +1,11 @@
+{
+    "rows": [
+        {
+            "size":"100",
+            "padding":"{10,10,10,10}",
+            "space":"10.0",
+            "gravity":"centerX",
+             "top-borderline":"{color:#AAA,thick:1.0, head:1.0, tail:1.0, offset:1}"
+        }
+    ]
+}

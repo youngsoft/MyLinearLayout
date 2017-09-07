@@ -152,6 +152,8 @@
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F783551F60399700BE5B31 /* GLTest3ViewController.m */; };
+		44EBDA8C1F619A6300B47CBD /* GLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EBDA8B1F619A6300B47CBD /* GLTest4ViewController.m */; };
+		44EBDA8E1F619C9000B47CBD /* GridLayoutDemo4.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.geojson */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -369,6 +371,9 @@
 		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
 		20F783541F60398C00BE5B31 /* GLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest3ViewController.h; sourceTree = "<group>"; };
 		20F783551F60399700BE5B31 /* GLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest3ViewController.m; sourceTree = "<group>"; };
+		44EBDA8A1F619A6300B47CBD /* GLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest4ViewController.h; sourceTree = "<group>"; };
+		44EBDA8B1F619A6300B47CBD /* GLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest4ViewController.m; sourceTree = "<group>"; };
+		44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GridLayoutDemo4.geojson; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -629,6 +634,7 @@
 				18D3C9A61EDF0A5A00D3DE43 /* Images.xcassets */,
 				18D3C9A71EDF0A5A00D3DE43 /* Info.plist */,
 				18D3C9A81EDF0A5A00D3DE43 /* main.m */,
+				44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.geojson */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -760,6 +766,8 @@
 				205643121F51C7EB00E8BDDE /* GLTest2ViewController.m */,
 				20F783541F60398C00BE5B31 /* GLTest3ViewController.h */,
 				20F783551F60399700BE5B31 /* GLTest3ViewController.m */,
+				44EBDA8A1F619A6300B47CBD /* GLTest4ViewController.h */,
+				44EBDA8B1F619A6300B47CBD /* GLTest4ViewController.m */,
 			);
 			name = GridLayoutDemo;
 			sourceTree = "<group>";
@@ -946,6 +954,7 @@
 				18D3C9BB1EDF0A5A00D3DE43 /* LaunchScreen.strings in Resources */,
 				18D3C9B51EDF0A5A00D3DE43 /* Localizable.strings in Resources */,
 				18D3C9DD1EDF0AB500D3DE43 /* pl.png in Resources */,
+				44EBDA8E1F619C9000B47CBD /* GridLayoutDemo4.geojson in Resources */,
 				18D3C9D71EDF0AB500D3DE43 /* layoutdemo6.gif in Resources */,
 				18D3C9D81EDF0AB500D3DE43 /* layoutdemo7.gif in Resources */,
 				18D3C9BC1EDF0A5A00D3DE43 /* Localizable.strings in Resources */,
@@ -1063,6 +1072,7 @@
 				18D3C91C1EDF078200D3DE43 /* FLTest1ViewController.m in Sources */,
 				18D3C9951EDF08F800D3DE43 /* YYWeakProxy.m in Sources */,
 				20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */,
+				44EBDA8C1F619A6300B47CBD /* GLTest4ViewController.m in Sources */,
 				18D3C9711EDF082800D3DE43 /* AllTest1TableViewCell.m in Sources */,
 				182225CF1E77E5930081AA4B /* MyFloatLayout.m in Sources */,
 				18D3C92B1EDF07A700D3DE43 /* RLTest4ViewController.m in Sources */,

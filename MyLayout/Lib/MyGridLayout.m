@@ -525,8 +525,41 @@
     return nil;
 }
 
+
+/*
+ 栅格的描述。你可以用格子描述语言来建立格子
+ 
+ @code
+ 
+ {rows:[
+ 
+ {size:100, size:"100%", size:"-20%",size:"wrap", size:"fill", padding:"{10,10,10,10}", space:10.0, gravity:@"top|bottom|left|right|centerX|centerY|width|height","top-borderline":{"color":"#AAA",thick:1.0, head:1.0, tail:1.0, offset:1} },
+ {},
+ ]
+ }
+ 
+ @endcode
+ 
+ */
 -(void)setGridDictionary:(NSDictionary *)gridDictionary
 {
+    if (gridDictionary == nil || gridDictionary.count <= 0) return;
+    
+    if ([gridDictionary objectForKey:kMyGridRows]) {
+        
+        [self removeGrids];
+    
+        id temp = [gridDictionary objectForKey:kMyGridRows];
+        if ([temp isKindOfClass:[NSArray<NSDictionary *> class]]) {
+            
+            for (NSDictionary *dic in temp) {
+                
+                
+            }
+            
+        }
+        
+    }
     
 }
 

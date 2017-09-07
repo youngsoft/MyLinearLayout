@@ -203,6 +203,21 @@ typedef struct  _MyGridOptionalProperties2
     //    _touchEventDelegate = nil;
 }
 
+//gridDictionary
+
+
+
+
+- (void)setGridDictionary:(NSDictionary *)gridDictionary
+{
+    if (gridDictionary == nil || gridDictionary.count <= 0) return;
+    
+    _gridDictionary = gridDictionary;
+    
+    
+}
+
+
 #pragma mark -- MyGrid
 
 -(MySubGridsType)subGridsType
