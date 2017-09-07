@@ -779,10 +779,11 @@
     
     
     //处理那些剩余没有放入格子的子视图的frame设置为0
-    for (UIView *sbv = enumerator.nextObject; sbv; sbv = enumerator.nextObject)
+  /*  for (UIView *sbv = enumerator.nextObject; sbv; sbv = enumerator.nextObject)
     {
         sbv.myFrame.frame = CGRectZero;
     }
+    */
     
     [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
     
@@ -819,14 +820,20 @@
 
         NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
         NSNumber *viewGroupIndex = [tagViewGroupIndexDict objectForKey:key];
-        if (viewGroupArray != nil && viewGroupIndex != nil)
+        if (viewGroupArray != nil && viewGroupIndex != nil && viewGroupIndex.integerValue < viewGroupArray.count)
         {
             //这里将动作的数据和栅格进行关联。
             if (viewGroupArray[viewGroupIndex.integerValue].actionData != nil)
                 grid.actionData = viewGroupArray[viewGroupIndex.integerValue].actionData;
             
             tagSbvEnumerator =  viewGroupArray[viewGroupIndex.integerValue].viewGroup.objectEnumerator;
+            sbvEnumerator = nil;  //因为这里要遍历标签的视图组，所以所有子视图的枚举将被置空
             [tagViewGroupIndexDict setObject:@(viewGroupIndex.integerValue + 1) forKey:key];
+        }
+        else
+        {
+            tagSbvEnumerator = nil;
+            NSLog(@"0");
         }
     }
 
@@ -949,6 +956,15 @@
         offset += grid.subviewSpace;
         [self myTraversalGridOrigin:sbvGrid gridOrigin:sbvGrid.gridRect.origin lsc:lsc sbvEnumerator:sbvEnumerator tagViewGroupIndexDict:tagViewGroupIndexDict tagSbvEnumerator:((sbvGrid.tag != 0)? nil: tagSbvEnumerator) isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
     }
+    
+  /*  if (grid.tag != 0)
+    {
+        for (UIView *sbv = tagSbvEnumerator.nextObject; sbv; sbv = tagSbvEnumerator.nextObject)
+        {
+            sbv.myFrame.frame = CGRectZero;
+        }
+    }
+    */
 }
 
 -(void)myBlankTraverse:(id<MyGridNode>)grid sbs:(NSArray<UIView*>*)sbs pIndex:(NSInteger*)pIndex tagSbs:(NSArray<UIView*> *)tagSbs pTagIndex:(NSInteger*)pTagIndex
@@ -1005,13 +1021,18 @@
         NSNumber *key = @(grid.tag);
         NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
         NSNumber *viewGroupIndex = [tagViewGroupIndexDict objectForKey:key];
-        if (viewGroupArray != nil && viewGroupIndex != nil)
+        if (viewGroupArray != nil && viewGroupIndex != nil && viewGroupIndex.integerValue < viewGroupArray.count)
         {
             tagViewGroup = viewGroupArray[viewGroupIndex.integerValue].viewGroup;
             NSInteger tagIndex = 0;
             pTagIndex = &tagIndex;
             
             [tagViewGroupIndexDict setObject:@(viewGroupIndex.integerValue + 1) forKey:key];
+        }
+        else
+        {
+            tagViewGroup = nil;
+            pTagIndex = NULL;
         }
     }
 

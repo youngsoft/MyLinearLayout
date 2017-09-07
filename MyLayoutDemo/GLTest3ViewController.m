@@ -51,52 +51,69 @@
                                     @"title":@"智能生活",
                                     @"subTitle":@"黑科技智能装备1元抢",
                                     @"imageNames":@[@"p1-31",@"p1-32"],
+                                    @"actionData":@"aa",
                                     },
                                 @{
                                     @"title":@"白条商城",
                                     @"subTitle":@"iPhone7低至每期324元",
                                     @"imageNames":@[@"p1-33",@"p1-34"],
+                                    @"actionData":@"bb",
                                     },
                                 @{
                                     @"title":@"京东众筹",
                                     @"subTitle":@"猛追科技前沿",
                                     @"imageNames":@[@"p3-21"],
+                                    @"actionData":@"cc",
                                     },
                                 @{
                                     @"title":@"生活娱乐",
                                     @"subTitle":@"疯狂大扫除",
-                                    @"imageNames":@[@"p3-21"],
+                                    @"imageNames":@[@"p3-22"],
+                                    @"actionData":@"dd",
                                     },
                                 @{
                                     @"title":@"特产.扶贫",
                                     @"subTitle":@"湖北牛肉罐头",
-                                    @"imageNames":@[@"p3-21"],
+                                    @"imageNames":@[@"p3-23"],
+                                    @"actionData":@"ee",
                                     },
                                 @{
                                     @"title":@"爱车生活",
                                     @"subTitle":@"低至9.9元",
-                                    @"imageNames":@[@"p3-21"],
+                                    @"imageNames":@[@"p3-24"],
+                                    @"actionData":@"ff",
                                     },
                                 @{
                                     @"title":@"大药房",
                                     @"subTitle":@"每盒减20元",
-                                    @"imageNames":@[@"p3-21"],
+                                    @"imageNames":@[@"p5-1"],
+                                    @"actionData":@"gg",
                                     },
                                 @{
                                     @"title":@"设计师",
                                     @"subTitle":@"潮流设计精选",
-                                    @"imageNames":@[@"p3-21"],
+                                    @"imageNames":@[@"p5-2"],
+                                    @"actionData":@"hh",
+
                                     },
                                 @{
                                     @"title":@"陪伴宝宝",
                                     @"subTitle":@"1元抢好品",
-                                    @"imageNames":@[@"p3-21"],
+                                    @"imageNames":@[@"p5-3"],
+                                    @"actionData":@"ii",
                                     },
                                 @{
                                     @"title":@"京东拍卖",
                                     @"subTitle":@"尖货包经典表",
-                                    @"imageNames":@[@"p3-21"],
+                                    @"imageNames":@[@"p5-4"],
+                                    @"actionData":@"jj",
                                     },
+                               /* @{
+                                    @"title":@"京东拍卖2",
+                                    @"subTitle":@"尖货包经典表2",
+                                    @"imageNames":@[@"p5-4"],
+                                    },
+*/
 
                                 ];
         
@@ -123,52 +140,59 @@
     
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
-    rootLayout.padding = UIEdgeInsetsMake(10, 0, 10, 0);
+    rootLayout.padding = UIEdgeInsetsMake(0, 0, 10, 0);
     self.view = rootLayout;
     self.rootLayout = rootLayout;
     
-    //定义栅格样式。。
+    MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+
     
+    //定义整体的栅格样式为1000
     rootLayout.tag = 1000;
     
-    [rootLayout addRow:40];   //顶部图片
-    id<MyGrid> gg1 = [rootLayout addRow:50];  //文字和图片。
+    //整个栅格布局分为上中下三部分。中间部分的数据是动态从服务器下发的
+    
+    //第一行
+    [rootLayout addRow:60];   //顶部栅格
+    
+    //第二行
+    id<MyGrid> gg1 = [rootLayout addRow:30];  //文字和图片。
     gg1.anchor = YES;
     [gg1 addRow:MyLayoutSize.fill];
     
     
-    
     //建立栅格模板1
     id<MyGrid> templateGrid1 = [MyGridLayout createTemplateGrid:1];
-    templateGrid1.subviewSpace = 5;
     templateGrid1.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [templateGrid1 addRow:MyLayoutSize.wrap];
     [templateGrid1 addRow:MyLayoutSize.wrap];
-   id<MyGrid> tg1 = [templateGrid1 addRow:MyLayoutSize.fill];
+    templateGrid1.rightBorderline = borderline;
+    [templateGrid1 setTarget:self action:@selector(handleTap:)];
+    id<MyGrid> tg1 = [templateGrid1 addRow:MyLayoutSize.fill];
 
-    tg1.subviewSpace = 10;
-    [tg1 addCol:MyLayoutSize.fill];
-    [tg1 addCol:MyLayoutSize.fill];
+    tg1.subviewSpace = 5;
+    [tg1 addCol:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    [tg1 addCol:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
 
     
     //建立栅格模板2
     id<MyGrid> templateGrid2 = [MyGridLayout createTemplateGrid:2];
-    templateGrid2.subviewSpace = 5;
     templateGrid2.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [templateGrid2 addRow:MyLayoutSize.wrap];
     [templateGrid2 addRow:MyLayoutSize.wrap];
-    [templateGrid2 addRow:MyLayoutSize.fill];
+    [templateGrid2 addRow:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    templateGrid2.rightBorderline = borderline;
+    [templateGrid2 setTarget:self action:@selector(handleTap:)];
     
     
+    //定义中间部分。
     
-    
-    
-
     //第一行
    id<MyGrid> line1 = [rootLayout addRow:MyLayoutSize.fill];
     [line1 addColGrid:templateGrid1.cloneGrid measure:0.5];
     [line1 addColGrid:templateGrid2.cloneGrid measure:0.25];
     [line1 addColGrid:templateGrid2.cloneGrid measure:0.25];
+    line1.bottomBorderline = borderline;
     
     //第二行
     [rootLayout addRowGrid:line1.cloneGrid measure:MyLayoutSize.fill];
@@ -180,194 +204,128 @@
     [line3 addColGrid:templateGrid2.cloneGrid measure:MyLayoutSize.fill];
     [line3 addColGrid:templateGrid2.cloneGrid measure:MyLayoutSize.fill];
     [line3 addColGrid:templateGrid2.cloneGrid measure:MyLayoutSize.fill];
+    line3.bottomBorderline = borderline;
 
     
     
 
-    //底部图片
+    //底部部分
     [rootLayout addRow:80];
     [rootLayout addRow:20];
 
+    
+    //.......
+    //上面定义了栅格的样式，下面填充头部和尾部的栅格部分的视图。
 
+
+    UIImageView *headImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p2-4"]];
     
-    //加载头尾视图。。。
-    UIImageView *headImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk1"]];
-    
-    UIImageView *backgroudImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk2"]];
-    
+    UIImageView *backgroudImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk1"]];
     UILabel *label = [UILabel new];
     label.text = @"特色推荐";
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [CFTool font:18];
+    label.textColor = [CFTool color:3];
     
     
     //底部
     UIScrollView *scrollView =[UIScrollView new];
+    scrollView.pagingEnabled = YES;
+    MyFlowLayout *scrollFlowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:1];
+    scrollFlowLayout.pagedCount = 1; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
+    scrollFlowLayout.wrapContentWidth = YES; //设置布局视图的宽度由子视图包裹，当水平流式布局的这个属性设置为YES，并和pagedCount搭配使用会产生分页从左到右滚动的效果。
+    scrollFlowLayout.heightSize.equalTo(scrollView.heightSize); //因为是分页从左到右滚动，因此布局视图的高度必须设置为和父滚动视图相等。
     
-    //
+    [scrollView addSubview:scrollFlowLayout];
+    
+    //添加三个广告
+    UIImageView *advImageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk3"]];
+    [scrollFlowLayout addSubview:advImageView1];
+    UIImageView *advImageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk2"]];
+    [scrollFlowLayout addSubview:advImageView2];
+    UIImageView *advImageView3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk1"]];
+    [scrollFlowLayout addSubview:advImageView3];
+
+    
+    
+    //最后一行的分页控制器
     UIPageControl *pageCtrl = [UIPageControl new];
     pageCtrl.numberOfPages = 5;
     pageCtrl.currentPage = 0;
     pageCtrl.pageIndicatorTintColor = [UIColor redColor];
     
     
+    //将头尾部分的视图组和栅格标签1000绑定
     [rootLayout addViewGroup:@[headImageView,backgroudImageView,label,scrollView,pageCtrl] withActionData:nil to:1000];
     
     
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-    //假设这里发送网络请求数据。
+-(void)loadDataFromServer
+{
+    //删除原先绑定的数据视图。
+    [self.rootLayout removeViewGroupFrom:1];
+    [self.rootLayout removeViewGroupFrom:2];
     
     for (GLTest3DataModel *dataModel in self.datas)
     {
         
         UILabel *titleLabel = [UILabel new];
         titleLabel.text = dataModel.title;
+        titleLabel.font = [CFTool font:16];
+        titleLabel.textColor = [CFTool color:4];
+        titleLabel.adjustsFontSizeToFitWidth = YES;
         
         UILabel *subTitleLabel = [UILabel new];
         subTitleLabel.text = dataModel.subTitle;
+        subTitleLabel.font = [CFTool font:13];
+        subTitleLabel.textColor = [CFTool color:5];
+        subTitleLabel.adjustsFontSizeToFitWidth = YES;
         
         if (dataModel.imageNames.count == 1)
         {
             UIImageView *imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[0]]];
             
+            //视图组绑定标签2
             [self.rootLayout addViewGroup:@[titleLabel, subTitleLabel, imageView1] withActionData:dataModel.actionData to:2];
             
         }
         else
         {
-         
+            
             UIImageView *imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[0]]];
-
+            
             UIImageView *imageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[1]]];
-
+            
             [self.rootLayout addViewGroup:@[titleLabel, subTitleLabel, imageView1, imageView2] withActionData:dataModel.actionData to:1];
-
+            
         }
         
     }
-    
-    
+
 }
 
--(void)handleStyleChange:(id)sender
-{
-    /*
-     zaker的每页新闻中都有6条新闻，其中有1条图片新闻和5条文字新闻。在布局上则每页新闻高度分为5份，其中的图片新闻则占据了2/5，宽度则是全屏，其他的5条新闻则分为3行来均分剩余的高度，宽度则有4条是屏幕宽度的一半，一条全屏宽度。
-     
-     zaker内部的实现是通过配置好的模板来展示每个不同的页。我们的例子为了展现效果。我们将随机产生4条半屏和1条全屏文字新闻和一张图片新闻。
-     
-     我们将宽度为全屏宽度的文字新闻定义为1，而将半屏宽度的文字新闻定义为2，而将图片新闻的定义为3。这样就会形成1322,3122,1232,3212,1223,3221,2123,2321, 2132,2312, 2213,2231 一共12种布局。我们界面右上角的“布局变换”按钮每次将随机选择一种布局进行显示。
-     */
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
     
-    //所有可能的布局样式数组。
-    int layoutStyless[12][4] =
-    {
-        {1,3,2,2},
-        {3,1,2,2},
-        {1,2,3,2},
-        {3,2,1,2},
-        {1,2,2,3},
-        {3,2,2,1},
-        {2,1,2,3},
-        {2,3,2,1},
-        {2,1,3,2},
-        {2,3,1,2},
-        {2,2,1,3},
-        {2,2,3,1}
-    };
-    
-    //随机取得一个布局样式
-    int *pLayoutStyles = layoutStyless[arc4random_uniform(12)];
-    
-
-    //切换栅格样式时，先将所有的栅格都删除掉。
-    [self.rootLayout removeGrids];
-    
-    MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
-
-    for (NSInteger i = 0; i < 4; i++)
-    {
-        int layoutStyle = pLayoutStyles[i];
-        if (layoutStyle == 1)  //全部宽度文字新闻布局
-        {
-         
-            //建立一个高度为1/5的栅格，里面的子栅格垂直居中，并且间隔为10
-            id<MyGrid> g1 = [self.rootLayout addRow:1.0/5];
-            g1.tag = 1;
-            g1.gravity = MyGravity_Vert_Center;
-            g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
-            g1.subviewSpace = 10;
-            
-            //建立2个高度由内容包裹的行叶子栅格
-            [g1 addRow:MyLayoutSize.wrap];
-            [g1 addRow:MyLayoutSize.wrap];
-            
-            g1.bottomBorderline = borderline;
-            [g1 setTarget:self action:@selector(handleTest1:)];
-
-
-            
-        }
-        else if (layoutStyle == 2)  //半宽文字新闻布局
-        {
-            
-            //建立一个高度为1/5的栅格
-            id<MyGrid>g2 = [self.rootLayout addRow:1.0/5];
-            
-            //建立一个宽度均分的列子栅格，里面的子栅格间距为10并且垂直居中
-            id<MyGrid> g21 = [g2 addCol:MyLayoutSize.fill];
-            g21.tag = 1;
-            g21.subviewSpace = 10;
-            g21.gravity = MyGravity_Vert_Center;
-            g21.padding = UIEdgeInsetsMake(0, 10, 0, 10);
-            [g21 setTarget:self action:@selector(handleTest1:)];
-
-            
-            //建立2个高度由内容包裹的行叶子栅格
-            [g21 addRow:MyLayoutSize.wrap];
-            [g21 addRow:MyLayoutSize.wrap];
-
-            
-            //建立一个新的列子栅格，其结构完全拷贝自g21.
-            [g2 addColGrid:g21.cloneGrid];
-            
-            g21.rightBorderline = borderline;
-            g2.bottomBorderline = borderline;
-            
-            
-        }
-        else if (layoutStyle == 3)//图片新闻布局
-        {
-            //建立一个高度为2/5的栅格
-            id<MyGrid>g3 = [self.rootLayout addRow:2.0/5];
-            g3.tag = 2;
-            g3.anchor = YES;  //这个栅格是可以存放显示视图的。
-            [g3 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
-            [g3 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);  //建立一个高度由内容包裹的叶子栅格并指定其内边距。
-            
-            g3.bottomBorderline = borderline;
-            
-            [g3 setTarget:self action:@selector(handleTest1:)];
-
-
-        }
-        else;
-        
-        
-    }
-
-    
-    [self.rootLayout setNeedsLayout];
+    //假设这里发送网络请求并返回数据。
+    [self loadDataFromServer];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+-(void)handleTap:(id<MyGrid>)sender
+{
+    NSString *message = [NSString stringWithFormat:@"您单击了:%@", sender.actionData];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+
+}
 
 /*
 #pragma mark - Navigation
