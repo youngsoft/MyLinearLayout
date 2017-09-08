@@ -51,9 +51,6 @@
     
     
     rootLayout.gridDictionary = temp;
-    
-    
-    
 }
 
 

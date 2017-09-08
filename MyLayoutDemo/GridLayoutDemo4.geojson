@@ -1,7 +1,7 @@
 {
     "rows": [
         {
-            "size":"100",
+            "size":"30%",
             "padding":"{10,10,10,10}",
             "space":"10.0",
             "gravity":"centerX",
