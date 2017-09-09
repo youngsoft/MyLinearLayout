@@ -163,7 +163,8 @@
     {
         for (UIView *sbv in viewGroup)
         {
-            [self addSubview:sbv];
+            if (sbv != (UIView*)[NSNull null])
+                [self addSubview:sbv];
         }
         
         return;
@@ -190,10 +191,73 @@
     
     for (UIView *sbv in viewGroup)
     {
-        [self addSubview:sbv];
+        if (sbv != (UIView*)[NSNull null])
+            [self addSubview:sbv];
     }
 
+    [self setNeedsLayout];
 }
+
+-(void)replaceViewGroup:(NSArray<UIView*> *)viewGroup withActionData:(id)actionData atIndex:(NSUInteger)index to:(NSInteger)gridTag
+{
+    if (gridTag == 0)
+    {
+        return;
+    }
+    
+    //...
+    NSNumber *key = @(gridTag);
+    NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
+    if (viewGroupArray == nil || (index > viewGroupArray.count))
+    {
+        [self addViewGroup:viewGroup withActionData:actionData to:gridTag];
+        return;
+    }
+    
+    
+    //这里面有可能有存在的视图， 有可能存在于子视图数组里面，有可能存在于其他视图组里面。
+    //如果存在于其他标签则要从其他标签删除。。。
+    //而且多余的还要删除。。。这个好复杂啊。。
+    //先不考虑这么复杂的情况，只认为替换掉当前索引的视图即可，如果视图本来就在子视图里面则不删除，否则就添加。而被替换掉的则需要删除。
+    //每个视图都在老的里面查找，如果找到则处理，如果没有找到
+    self.tagsDictLock = YES;
+    
+    MyViewGroupAndActionData *va = viewGroupArray[index];
+    
+    if (va.viewGroup != viewGroup)
+    {
+        for (UIView *sbv in viewGroup)
+        {
+            NSUInteger oldIndex = [va.viewGroup indexOfObject:sbv];
+            if (oldIndex == NSNotFound)
+            {
+                if (sbv != (UIView*)[NSNull null])
+                    [self addSubview:sbv];
+            }
+            else
+            {
+                [va.viewGroup removeObjectAtIndex:oldIndex];
+            }
+        }
+        
+        //原来多余的视图删除
+        for (UIView *sbv in va.viewGroup)
+        {
+            if (sbv != (UIView*)[NSNull null])
+                [sbv removeFromSuperview];
+        }
+        
+        //将新的视图组给替换掉。
+        [va.viewGroup setArray:viewGroup];
+    }
+    
+    self.tagsDictLock = NO;
+
+ 
+    [self setNeedsLayout];
+    
+}
+
 
 -(void)moveViewGroupAtIndex:(NSUInteger)index from:(NSInteger)origGridTag to:(NSInteger)destGridTag
 {
@@ -239,7 +303,8 @@
         
     }
     
-    
+    [self setNeedsLayout];
+
 }
 
 
@@ -261,7 +326,8 @@
         self.tagsDictLock = YES;
         for (UIView *sbv in va.viewGroup)
         {
-            [sbv removeFromSuperview];
+            if (sbv != (UIView*)[NSNull null])
+                [sbv removeFromSuperview];
         }
         self.tagsDictLock = NO;
         
@@ -275,6 +341,7 @@
         
     }
 
+    [self setNeedsLayout];
 }
 
 
@@ -296,7 +363,8 @@
         {
             for (UIView *sbv in va.viewGroup)
             {
-                [sbv removeFromSuperview];
+                if (sbv != (UIView*)[NSNull null])
+                    [sbv removeFromSuperview];
             }
         }
         
@@ -305,6 +373,8 @@
         [self.tagsDict removeObjectForKey:key];
     }
     
+    [self setNeedsLayout];
+
 }
 
 
@@ -353,6 +423,7 @@
         
     }
 
+    [self setNeedsLayout];
     
 }
 
@@ -821,18 +892,25 @@
             MyViewGroupAndActionData *va = viewGroupArray[i];
             for (UIView *sbv in va.viewGroup)
             {
-                sbv.myFrame.frame = CGRectZero;
+                if (sbv != (UIView*)[NSNull null])
+                {
+                    sbv.myFrame.frame = CGRectZero;
+                    
+                    //这里面让所有视图的枚举器也走一遍，解决下面的重复设置的问题。
+                    UIView *anyway = enumerator.nextObject;
+                    anyway = nil;  //防止有anyway编译告警而设置。
+                }
             }
         }
     }];
     
     
     //处理那些剩余没有放入格子的子视图的frame设置为0
-  /*  for (UIView *sbv = enumerator.nextObject; sbv; sbv = enumerator.nextObject)
+    for (UIView *sbv = enumerator.nextObject; sbv; sbv = enumerator.nextObject)
     {
         sbv.myFrame.frame = CGRectZero;
     }
-    */
+    
     
     [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
     
@@ -869,15 +947,23 @@
 
         NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
         NSNumber *viewGroupIndex = [tagViewGroupIndexDict objectForKey:key];
-        if (viewGroupArray != nil && viewGroupIndex != nil && viewGroupIndex.integerValue < viewGroupArray.count)
+        if (viewGroupArray != nil && viewGroupIndex != nil)
         {
-            //这里将动作的数据和栅格进行关联。
-            if (viewGroupArray[viewGroupIndex.integerValue].actionData != nil)
-                grid.actionData = viewGroupArray[viewGroupIndex.integerValue].actionData;
-            
-            tagSbvEnumerator =  viewGroupArray[viewGroupIndex.integerValue].viewGroup.objectEnumerator;
-            sbvEnumerator = nil;  //因为这里要遍历标签的视图组，所以所有子视图的枚举将被置空
-            [tagViewGroupIndexDict setObject:@(viewGroupIndex.integerValue + 1) forKey:key];
+            if (viewGroupIndex.integerValue < viewGroupArray.count)
+            {
+                //这里将动作的数据和栅格进行关联。
+                if (viewGroupArray[viewGroupIndex.integerValue].actionData != nil)
+                    grid.actionData = viewGroupArray[viewGroupIndex.integerValue].actionData;
+                
+                tagSbvEnumerator =  viewGroupArray[viewGroupIndex.integerValue].viewGroup.objectEnumerator;
+                [tagViewGroupIndexDict setObject:@(viewGroupIndex.integerValue + 1) forKey:key];
+            }
+            else
+            {
+                grid.actionData = nil;
+                tagSbvEnumerator = nil;
+                sbvEnumerator = nil;
+            }
         }
         else
         {
@@ -892,16 +978,20 @@
     if (grid.anchor || (subGrids.count == 0 && !grid.placeholder))
     {
         //设置子视图的位置和尺寸。。
-        UIView *sbv = sbvEnumerator.nextObject;
-        
+        UIView *sbv = nil;
         UIView *tagSbv = tagSbvEnumerator.nextObject;
-        if (tagSbv != nil)
+
+        if (tagSbv != (UIView*)[NSNull null])
+             sbv = sbvEnumerator.nextObject;
+        
+        if (tagSbv != nil && tagSbv != (UIView*)[NSNull null] && tagSbvEnumerator != nil)
             sbv = tagSbv;
         
         if (sbv != nil)
         {
             //调整位置和尺寸。。。
             MyFrame *sbvmyFrame = sbv.myFrame;
+            
             UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
             
             //取垂直和水平对齐
@@ -912,14 +1002,23 @@
             MyGravity horzGravity = grid.gravity & MyGravity_Vert_Mask;
             if (horzGravity == MyGravity_None)
                 horzGravity = MyGravity_Horz_Fill;
+            else
+                horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:horzGravity];
             
             CGFloat paddingTop = grid.padding.top;
             CGFloat paddingLeading = [MyBaseLayout isRTL] ? grid.padding.right : grid.padding.left;
             CGFloat paddingBottom = grid.padding.bottom;
             CGFloat paddingTrailing = [MyBaseLayout isRTL] ? grid.padding.left : grid.padding.right;
             
-            [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:grid.gridRect.size sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
-            
+            //如果尺寸是0则因为前面有算出尺寸，所以这里就不进行调整了。
+            if (grid.gridMeasure != 0)
+            {
+                [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:grid.gridRect.size sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
+            }
+            else
+            {
+                NSLog(@"AA");
+            }
             
             [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:vertGravity horzGravity:horzGravity inSelfSize:grid.gridRect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
             
@@ -1006,15 +1105,24 @@
         [self myTraversalGridOrigin:sbvGrid gridOrigin:sbvGrid.gridRect.origin lsc:lsc sbvEnumerator:sbvEnumerator tagViewGroupIndexDict:tagViewGroupIndexDict tagSbvEnumerator:((sbvGrid.tag != 0)? nil: tagSbvEnumerator) isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
     }
     
-  /*  if (grid.tag != 0)
+    //如果栅格中的tagSbvEnumerator还有剩余的视图没有地方可填，那么就将尺寸和位置设置为0
+    if (grid.tag != 0)
     {
+        //枚举那些剩余的
         for (UIView *sbv = tagSbvEnumerator.nextObject; sbv; sbv = tagSbvEnumerator.nextObject)
         {
-            sbv.myFrame.frame = CGRectZero;
+            if (sbv != (UIView*)[NSNull null])
+            {
+                sbv.myFrame.frame = CGRectZero;
+                
+                //所有子视图枚举器也要移动。
+                UIView *anyway = sbvEnumerator.nextObject;
+                anyway = nil;
+            }
         }
     }
-    */
-}
+    
+ }
 
 -(void)myBlankTraverse:(id<MyGridNode>)grid sbs:(NSArray<UIView*>*)sbs pIndex:(NSInteger*)pIndex tagSbs:(NSArray<UIView*> *)tagSbs pTagIndex:(NSInteger*)pTagIndex
 {
@@ -1024,12 +1132,18 @@
     
     if (grid.anchor || (subGrids.count == 0 && !grid.placeholder))
     {
-        *pIndex = *pIndex + 1;
-        
+        BOOL isNoNullSbv = YES;
         if (grid.tag == 0 && pTagIndex != NULL)
         {
             *pTagIndex = *pTagIndex + 1;
+            
+            if (tagSbs != nil && *pTagIndex < tagSbs.count && tagSbs[*pTagIndex] == (UIView*)[NSNull null])
+                isNoNullSbv = NO;
         }
+        
+        if (isNoNullSbv)
+            *pIndex = *pIndex + 1;
+
     }
     
     for (id<MyGridNode> sbvGrid in subGrids)
@@ -1070,13 +1184,21 @@
         NSNumber *key = @(grid.tag);
         NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
         NSNumber *viewGroupIndex = [tagViewGroupIndexDict objectForKey:key];
-        if (viewGroupArray != nil && viewGroupIndex != nil && viewGroupIndex.integerValue < viewGroupArray.count)
+        if (viewGroupArray != nil && viewGroupIndex != nil)
         {
-            tagViewGroup = viewGroupArray[viewGroupIndex.integerValue].viewGroup;
-            NSInteger tagIndex = 0;
-            pTagIndex = &tagIndex;
-            
-            [tagViewGroupIndexDict setObject:@(viewGroupIndex.integerValue + 1) forKey:key];
+            if (viewGroupIndex.integerValue < viewGroupArray.count)
+            {
+                tagViewGroup = viewGroupArray[viewGroupIndex.integerValue].viewGroup;
+                NSInteger tagIndex = 0;
+                pTagIndex = &tagIndex;
+                [tagViewGroupIndexDict setObject:@(viewGroupIndex.integerValue + 1) forKey:key];
+            }
+            else
+            {
+                tagViewGroup = nil;
+                pTagIndex = NULL;
+                sbs = nil;
+            }
         }
         else
         {
@@ -1089,6 +1211,7 @@
     //叶子节点
     if (grid.anchor || (subGrids.count == 0 && !grid.placeholder))
     {
+        BOOL isNotNullSbv = YES;
         NSArray *tempSbs = sbs;
         NSInteger *pTempIndex = pIndex;
         
@@ -1099,7 +1222,7 @@
         }
         
         //如果尺寸是包裹
-        if (grid.gridMeasure == MyLayoutSize.wrap)
+        if (grid.gridMeasure == MyLayoutSize.wrap || grid.gridMeasure == 0)
         {
             if (*pTempIndex < tempSbs.count)
             {
@@ -1107,44 +1230,49 @@
                 if (grid.superGrid != nil)
                 {
                     UIView *sbv = tempSbs[*pTempIndex];
-                    
-                    MyFrame *sbvmyFrame = sbv.myFrame;
-                    UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
-                    sbvmyFrame.frame = sbv.bounds;
-
-                    //如果子视图不设置任何约束但是又是包裹的则这里特殊处理。
-                    if (sbvsc.widthSizeInner == nil && sbvsc.heightSizeInner == nil && !sbvsc.wrapContentSize)
+                    if (sbv != (UIView*)[NSNull null])
                     {
-                        CGSize size = CGSizeZero;
-                        if (grid.superGrid.subGridsType == MySubGridsType_Row)
+                        
+                        MyFrame *sbvmyFrame = sbv.myFrame;
+                        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                        sbvmyFrame.frame = sbv.bounds;
+                        
+                        //如果子视图不设置任何约束但是又是包裹的则这里特殊处理。
+                        if (sbvsc.widthSizeInner == nil && sbvsc.heightSizeInner == nil && !sbvsc.wrapContentSize)
                         {
-                            size.width = gridSize.width - padding.left - padding.right;
+                            CGSize size = CGSizeZero;
+                            if (grid.superGrid.subGridsType == MySubGridsType_Row)
+                            {
+                                size.width = gridSize.width - padding.left - padding.right;
+                            }
+                            else
+                            {
+                                size.height = gridSize.height - padding.top - padding.bottom;
+                            }
+                            
+                            size = [sbv sizeThatFits:size];
+                            sbvmyFrame.width = size.width;
+                            sbvmyFrame.height = size.height;
                         }
                         else
                         {
-                            size.height = gridSize.height - padding.top - padding.bottom;
+                            
+                            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
+                            
+                            [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridRect.size paddingTop:padding.top paddingLeading:padding.left paddingBottom:padding.bottom paddingTrailing:padding.right pMaxWrapSize:NULL];
                         }
                         
-                        size = [sbv sizeThatFits:size];
-                        sbvmyFrame.width = size.width;
-                        sbvmyFrame.height = size.height;
+                        if (grid.superGrid.subGridsType == MySubGridsType_Row)
+                        {
+                            fixedMeasure = padding.top + padding.bottom + sbvmyFrame.height;
+                        }
+                        else
+                        {
+                            fixedMeasure = padding.left + padding.right + sbvmyFrame.width;
+                        }
                     }
                     else
-                    {
-                        
-                        [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
-                        
-                        [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridRect.size paddingTop:padding.top paddingLeading:padding.left paddingBottom:padding.bottom paddingTrailing:padding.right pMaxWrapSize:NULL];
-                    }
-
-                    if (grid.superGrid.subGridsType == MySubGridsType_Row)
-                    {
-                        fixedMeasure = padding.top + padding.bottom + sbvmyFrame.height;
-                    }
-                    else
-                    {
-                        fixedMeasure = padding.left + padding.right + sbvmyFrame.width;
-                    }
+                        isNotNullSbv = NO;
                 }
             }
         }
@@ -1155,7 +1283,8 @@
             *pTempIndex = *pTempIndex + 1;
         }
         
-        *pIndex = *pIndex + 1;
+        if (isNotNullSbv)
+            *pIndex = *pIndex + 1;
     }
 
     
@@ -1192,7 +1321,7 @@
                 fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid  withMeasure:gridMeasure];
                 
             }
-            else if (sbvGrid.gridMeasure >= 1)
+            else if (sbvGrid.gridMeasure >= 1 || sbvGrid.gridMeasure == 0)
             {
                 fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:sbvGrid.gridMeasure];
                 

@@ -63,6 +63,16 @@
 -(void)insertViewGroup:(NSArray<UIView*> *)viewGroup withActionData:(id)actionData atIndex:(NSUInteger)index to:(NSInteger)gridTag;
 
 
+/**
+ 替换指定标签下指定位置的视图组。如果没有指定的标签或者索引位置则会实现和addViewGroup相同的功能，
+
+ @param viewGroup 要替换的视图组
+ @param actionData 动作数据
+ @param index 要替换的索引位置
+ @param gridTag 标签
+ */
+-(void)replaceViewGroup:(NSArray<UIView*> *)viewGroup withActionData:(id)actionData atIndex:(NSUInteger)index to:(NSInteger)gridTag;
+
 
 /**
  移动视图组从一个标签到另外一个标签中

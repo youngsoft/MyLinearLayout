@@ -104,54 +104,24 @@
     rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
     self.rootLayout = rootLayout;
+}
 
-    rootLayout.highlightedBackgroundColor = [UIColor blueColor];
-    MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+-(void)loadDataFromServer
+{
+    //这里假设数据是从服务器请求并下发下来。实践中数据模型数组可能是网络请求后通过回调得到的。
+    //在实际中，除了从服务器下发数据还可能定期从服务器中进行数据的更新。一般情况下我们的做法如下：
+       // 1.是将视图组从栅格布局中删除
+       // 2.然后再建立视图组
+       // 3.然后再次将视图组添加到栅格布局中。
     
-
-    
-    
-    //建立第一行栅格
-    id<MyGrid> g1 = [rootLayout addRow:1.0/5];
-    g1.gravity = MyGravity_Vert_Center;
-    g1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
-    g1.subviewSpace = 10;
-    [g1 setTarget:self  action:@selector(handleTest1:)];
-
-    
-    //第1行栅格内2个子栅格内容包裹。
-    [g1 addRow:MyLayoutSize.wrap];
-    [g1 addRow:MyLayoutSize.wrap];
-    
-
-    //建立第二行图片栅格
-    id<MyGrid>g2 = [rootLayout addRow:2.0/5];
-    g2.anchor = YES;
-    g2.topBorderline = borderline;
-    [g2 setTarget:self  action:@selector(handleTest1:)];
-    
-    [g2 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
-    [g2 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);
-
-
-    //建立第三行栅格
-    id<MyGrid>g3 = [rootLayout addRow:1.0/5];
-    
-    id<MyGrid> g31 = [g3 addColGrid:g1.cloneGrid measure:MyLayoutSize.fill];
-    id<MyGrid> g32 = [g3 addColGrid:g31.cloneGrid];
-    g32.leftBorderline = borderline;
-    
-    
-    //建立第4行栅格，第4行和第三行一致，所以拷贝。
-    id<MyGrid> g4 = [rootLayout addRowGrid:g3.cloneGrid];
-    g4.topBorderline = borderline;
-    
+    //上面的方法会出现视图组的不停删除以及添加。而实际中我们是可以复用原先填充在栅格布局中的视图组
     
     //添加子视图序列。
     for (GLTest1DataModel *dataModel in self.datas)
     {
         NSArray *viewGroup = nil;
         NSInteger gridTag = 0;
+        //根据数据模型的不同而构建不同的视图组，并设定一种展现的样式标签。
         if (dataModel.imageName != nil)
         {
             gridTag = 2;
@@ -164,12 +134,11 @@
         }
         
         
-        //这里将视图组，和tag，以及数据进行关联。。
-        [rootLayout addViewGroup:viewGroup withActionData:dataModel to:gridTag];
+        //这里将视图组，和样式标签，以及数据进行关联。
+        [self.rootLayout addViewGroup:viewGroup withActionData:dataModel to:gridTag];
         
     }
-    
-    
+
 }
 
 - (void)viewDidLoad {
@@ -181,6 +150,9 @@
     
     [self handleStyleChange:nil];
 
+    
+    
+    [self loadDataFromServer];
     
 }
 
@@ -220,7 +192,7 @@
     
     MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
     
-    //创建一个样板栅格
+    //创建一个样板栅格并指定样式标签为1
     id<MyGrid> templateGrid = [MyGridLayout createTemplateGrid:1];
     templateGrid.gravity = MyGravity_Vert_Center;
     templateGrid.padding = UIEdgeInsetsMake(0, 10, 0, 10);
@@ -235,8 +207,7 @@
         int layoutStyle = pLayoutStyles[i];
         if (layoutStyle == 1)  //全部宽度文字新闻布局
         {
-         
-            //建立一个高度为1/5的栅格，里面的子栅格垂直居中，并且间隔为10
+            //建立一个高度为1/5的栅格，使用模板栅格，并指定一条尾部边界线
             [self.rootLayout addRowGrid:templateGrid.cloneGrid measure:1.0/5].bottomBorderline = borderline;
             
         }
@@ -245,12 +216,12 @@
             
             //建立一个高度为1/5的栅格
             id<MyGrid>g2 = [self.rootLayout addRow:1.0/5];
+            g2.bottomBorderline = borderline;
             
-            //建立一个宽度均分的列子栅格，里面的子栅格间距为10并且垂直居中
+            //建立一个宽度均分的列子栅格，使用模板栅格，第一列子栅格指定一条右边边界线
             [g2 addColGrid:templateGrid.cloneGrid measure:MyLayoutSize.fill].rightBorderline = borderline;
             [g2 addColGrid:templateGrid.cloneGrid measure:MyLayoutSize.fill];
             
-            g2.bottomBorderline = borderline;
             
             
         }
@@ -258,16 +229,23 @@
         {
             //建立一个高度为2/5的栅格
             id<MyGrid>g3 = [self.rootLayout addRow:2.0/5];
-            g3.tag = 2;
-            g3.anchor = YES;  //这个栅格是可以存放显示视图的。
-            [g3 addRow:MyLayoutSize.fill].placeholder = YES;   //这里建立一个占位栅格的目的是为了让下面的兄弟栅格保持在第二行栅格的底部。
-            [g3 addRow:MyLayoutSize.wrap].padding = UIEdgeInsetsMake(0, 10, 0, 0);  //建立一个高度由内容包裹的叶子栅格并指定其内边距。
-            
+            g3.tag = 2;  //指定栅格样式。
             g3.bottomBorderline = borderline;
-            
             [g3 setTarget:self action:@selector(handleTest1:)];
 
-
+            
+            [g3 addRow:MyLayoutSize.fill];   //建立一个子行栅格，高度为填充父栅格剩余空间，你会发现下面的栅格的高度为0，也就是这个栅格高度和父栅格高度保持一致。
+            
+            
+            /*
+             正常情况下子栅格是按一定的规则来切分父栅格的高度或者宽度并顺序排列的，因此不具有重叠或者覆盖的效果。而实际中我们可能希望某个子视图会覆盖另外一个子视图而显示，这时候的一个解决方案是让某个栅格的子栅格的高度或者宽度设置为0，并且设定其里面的子视图在这个0尺寸的栅格上的对齐停靠方式，因为高度是0所以就可以出现子视图覆盖其他栅格上的子视图的情况。
+             
+             我们这里的高度为0的子栅格是在父栅格的最后添加的，因此这个高度为0的子栅格里面的子视图将展现在父栅格的最下面。而这里面又设置了是底部对齐。所以呈现的效果就是这个栅格里面的视图覆盖住其兄弟栅格中的子视图的内容了。
+            */
+            id<MyGrid> g32 = [g3 addRow:0];  //建立一个0高度的栅格
+            g32.padding = UIEdgeInsetsMake(0, 10, 0, 0);
+            g32.gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left;  //指定栅格内视图对齐方式
+            
         }
         else;
         
@@ -283,9 +261,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+#pragma mark -- view From DataModel
+/*
+ 在实际中，服务器返回的数据模型可能具有不同的类型，不同类型的模型需要用不同类型的视图来描述，因此下面的两个方法就是根据数据模型的不同而构建的两类不同的视图.
+*/
+
 -(NSArray*)createType1ViewsFromModel:(GLTest1DataModel*)dataModel
 {
-    
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageName]];
     
     UILabel *titleLabel = [UILabel new];

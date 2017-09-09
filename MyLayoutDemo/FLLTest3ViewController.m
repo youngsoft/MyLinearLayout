@@ -106,8 +106,10 @@
     tagButton.heightSize.equalTo(@44);
     
     [tagButton addTarget:self action:@selector(handleTouchDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside]; //注册拖动事件。
+    [tagButton addTarget:self action:@selector(handleTouchDrag:withEvent:) forControlEvents:UIControlEventTouchDragOutside]; //注册外面拖动事件。
     [tagButton addTarget:self action:@selector(handleTouchDown:withEvent:) forControlEvents:UIControlEventTouchDown]; //注册按下事件
     [tagButton addTarget:self action:@selector(handleTouchUp:withEvent:) forControlEvents:UIControlEventTouchUpInside]; //注册抬起事件
+    [tagButton addTarget:self action:@selector(handleTouchUp:withEvent:) forControlEvents:UIControlEventTouchCancel]; //注册终止事件
     [tagButton addTarget:self action:@selector(handleTouchDownRepeat:withEvent:) forControlEvents:UIControlEventTouchDownRepeat]; //注册多次点击事件
 
     return tagButton;
@@ -175,6 +177,7 @@
     
     self.hasDrag = YES;
     
+    NSLog(@"AAA:%@", event);
     //取出拖动时当前的位置点。
     CGPoint pt = [[event touchesForView:sender].anyObject locationInView:self.flowLayout];
     

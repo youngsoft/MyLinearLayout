@@ -17,6 +17,7 @@
 @property(nonatomic, strong) NSString *title;        //标题
 @property(nonatomic, strong) NSString *subTitle;       //副标题
 @property(nonatomic, strong) NSMutableArray<NSString*> *imageNames;    //图像的名称，如果为nil则没有图像
+@property(nonatomic, strong) NSNumber *hasSales;          //促销标志
 @property(nonatomic, strong) NSString *actionData;     //执行的动作。
 
 
@@ -52,6 +53,7 @@
                                     @"subTitle":@"黑科技智能装备1元抢",
                                     @"imageNames":@[@"p1-31",@"p1-32"],
                                     @"actionData":@"aa",
+                                    @"hasSales":@(YES)
                                     },
                                 @{
                                     @"title":@"白条商城",
@@ -70,6 +72,7 @@
                                     @"subTitle":@"疯狂大扫除",
                                     @"imageNames":@[@"p3-22"],
                                     @"actionData":@"dd",
+                                    @"hasSales":@(YES)
                                     },
                                 @{
                                     @"title":@"特产.扶贫",
@@ -110,9 +113,11 @@
                                     },
                                 @{
                                     @"title":@"京东拍卖2",
-                                    @"subTitle":@"尖货包经典表2",
+                                    @"subTitle":@"尖货包经典表",
                                     @"imageNames":@[@"p5-4"],
+                                    @"actionData":@"jj",
                                     },
+
 
                                 ];
         
@@ -168,6 +173,8 @@
     templateGrid1.rightBorderline = borderline;
     [templateGrid1 setTarget:self action:@selector(handleTap:)];
     id<MyGrid> tg1 = [templateGrid1 addRow:MyLayoutSize.fill];
+    
+    [templateGrid1 addRow:0].gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left ;//用于存放下面的条。
 
     tg1.subviewSpace = 5;
     [tg1 addCol:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -180,6 +187,7 @@
     [templateGrid2 addRow:MyLayoutSize.wrap];
     [templateGrid2 addRow:MyLayoutSize.wrap];
     [templateGrid2 addRow:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    [templateGrid2 addRow:0].gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left;
     templateGrid2.rightBorderline = borderline;
     [templateGrid2 setTarget:self action:@selector(handleTap:)];
     
@@ -285,8 +293,15 @@
         {
             UIImageView *imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[0]]];
             
+          //  UIImageView *imageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[0]]];
+
+            UIView *vv = [NSNull null];
+            if (dataModel.hasSales.integerValue)
+            {
+                vv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
+            }
             //视图组绑定标签2
-            [self.rootLayout addViewGroup:@[titleLabel, subTitleLabel, imageView1] withActionData:dataModel.actionData to:2];
+            [self.rootLayout addViewGroup:@[titleLabel, subTitleLabel, imageView1, vv] withActionData:dataModel.actionData to:2];
             
         }
         else
@@ -296,7 +311,13 @@
             
             UIImageView *imageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[1]]];
             
-            [self.rootLayout addViewGroup:@[titleLabel, subTitleLabel, imageView1, imageView2] withActionData:dataModel.actionData to:1];
+            UIView *vv = [NSNull null];
+            if (dataModel.hasSales.integerValue)
+            {
+                vv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
+            }
+            
+            [self.rootLayout addViewGroup:@[titleLabel, subTitleLabel, imageView1, imageView2, vv] withActionData:dataModel.actionData to:1];
             
         }
         
