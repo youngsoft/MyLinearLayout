@@ -152,6 +152,8 @@
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F783551F60399700BE5B31 /* GLTest3ViewController.m */; };
+		445FE9671F639B0900A21B62 /* UIColor+MyLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 445FE9651F639B0900A21B62 /* UIColor+MyLayout.h */; };
+		445FE9681F639B0900A21B62 /* UIColor+MyLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 445FE9661F639B0900A21B62 /* UIColor+MyLayout.m */; };
 		44EBDA8C1F619A6300B47CBD /* GLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EBDA8B1F619A6300B47CBD /* GLTest4ViewController.m */; };
 		44EBDA8E1F619C9000B47CBD /* GridLayoutDemo4.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.geojson */; };
 /* End PBXBuildFile section */
@@ -371,6 +373,8 @@
 		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
 		20F783541F60398C00BE5B31 /* GLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest3ViewController.h; sourceTree = "<group>"; };
 		20F783551F60399700BE5B31 /* GLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest3ViewController.m; sourceTree = "<group>"; };
+		445FE9651F639B0900A21B62 /* UIColor+MyLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MyLayout.h"; sourceTree = "<group>"; };
+		445FE9661F639B0900A21B62 /* UIColor+MyLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MyLayout.m"; sourceTree = "<group>"; };
 		44EBDA8A1F619A6300B47CBD /* GLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest4ViewController.h; sourceTree = "<group>"; };
 		44EBDA8B1F619A6300B47CBD /* GLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest4ViewController.m; sourceTree = "<group>"; };
 		44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GridLayoutDemo4.geojson; sourceTree = "<group>"; };
@@ -736,6 +740,8 @@
 				205643151F55A03000E8BDDE /* MyLayoutMath.m */,
 				208157C01F5A886300E945B6 /* MyLayoutDelegate.h */,
 				208157C11F5A886300E945B6 /* MyLayoutDelegate.m */,
+				445FE9651F639B0900A21B62 /* UIColor+MyLayout.h */,
+				445FE9661F639B0900A21B62 /* UIColor+MyLayout.m */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -796,6 +802,7 @@
 				18C15AF71EDF141600AADEAC /* MyLayoutSizeClass.h in Headers */,
 				18C15AF81EDF141A00AADEAC /* MyMaker.h in Headers */,
 				18C15AF91EDF142000AADEAC /* MyDimeScale.h in Headers */,
+				445FE9671F639B0900A21B62 /* UIColor+MyLayout.h in Headers */,
 				205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */,
 				182DB6421EF7876200E2D65D /* MyGridLayout.h in Headers */,
 				18C15AFA1EDF142300AADEAC /* MyLayoutDef.h in Headers */,
@@ -998,6 +1005,7 @@
 				182DB6441EF7876200E2D65D /* MyGridLayout.m in Sources */,
 				18C15B001EDF144B00AADEAC /* MyPathLayout.m in Sources */,
 				18C15B011EDF144B00AADEAC /* MyFrameLayout.m in Sources */,
+				445FE9681F639B0900A21B62 /* UIColor+MyLayout.m in Sources */,
 				18C15B021EDF144B00AADEAC /* MyBaseLayout.m in Sources */,
 				18C15B031EDF144B00AADEAC /* MyLayoutPos.m in Sources */,
 				18C15B041EDF144B00AADEAC /* MyLayoutSize.m in Sources */,

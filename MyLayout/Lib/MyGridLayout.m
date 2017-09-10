@@ -616,27 +616,17 @@
 {
     if (gridDictionary == nil || gridDictionary.count <= 0) return;
     
-    
-    
-    if ([gridDictionary objectForKey:kMyGridRows]) {
+    id tempRows = [gridDictionary objectForKey:kMyGridRows];
+    if (tempRows != nil && [tempRows isKindOfClass:[NSArray<NSDictionary *> class]]) {
         
         [self removeGrids];
-    
-        id temp = [gridDictionary objectForKey:kMyGridRows];
-        if ([temp isKindOfClass:[NSArray<NSDictionary *> class]]) {
-            
-            for (NSDictionary *dictionary in temp) {
-                
-                if ([dictionary objectForKey:kMyGridSize]) {
-                    
-                    NSString *gridSize = [dictionary objectForKey:kMyGridSize];
-                    CGFloat measure = [self createLayoutSize:gridSize];
-                    id<MyGrid> tempGrid =  [self addRow:measure];
-                    tempGrid.gridDictionary = dictionary;
-                    
-                }
+        for (NSDictionary *dictionary in tempRows) {
+            if ([dictionary objectForKey:kMyGridSize]) {
+                NSString *gridSize = [dictionary objectForKey:kMyGridSize];
+                CGFloat measure = [self createLayoutSize:gridSize];
+                id<MyGrid> tempGrid =  [self addRow:measure];
+                tempGrid.gridDictionary = dictionary;
             }
-            
         }
         
     }
@@ -671,7 +661,6 @@
             return temp / 100.f;
         }
     }
-    
     return -1;
 }
 
