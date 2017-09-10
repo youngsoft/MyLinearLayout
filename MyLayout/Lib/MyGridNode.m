@@ -125,7 +125,7 @@ typedef struct  _MyGridOptionalProperties2
     self = [self init];
     if (self != nil)
     {
-        _gridMeasure = measure;
+        _measure = measure;
         _subGrids = nil;
         _gridRect = CGRectZero;
         _superGrid = superGrid;
@@ -327,14 +327,14 @@ typedef struct  _MyGridOptionalProperties2
 -(id<MyGrid>)addRowGrid:(id<MyGrid>)grid measure:(CGFloat)measure
 {
    id<MyGridNode> gridNode =  (id<MyGridNode>)[self addRowGrid:grid];
-    gridNode.gridMeasure = measure;
+    gridNode.measure = measure;
     return gridNode;
 }
 
 -(id<MyGrid>)addColGrid:(id<MyGrid>)grid measure:(CGFloat)measure
 {
     id<MyGridNode> gridNode =  (id<MyGridNode>)[self addColGrid:grid];
-    gridNode.gridMeasure = measure;
+    gridNode.measure = measure;
     return gridNode;
 }
 
@@ -342,7 +342,7 @@ typedef struct  _MyGridOptionalProperties2
 
 -(id<MyGrid>)cloneGrid
 {
-    MyGridNode *grid = [[MyGridNode alloc] initWithMeasure:self.gridMeasure superGrid:nil];
+    MyGridNode *grid = [[MyGridNode alloc] initWithMeasure:self.measure superGrid:nil];
     //克隆各种属性。
     grid.subGridsType = self.subGridsType;
     grid.placeholder = self.placeholder;

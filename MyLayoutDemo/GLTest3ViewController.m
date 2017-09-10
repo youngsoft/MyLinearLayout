@@ -174,7 +174,9 @@
     [templateGrid1 setTarget:self action:@selector(handleTap:)];
     id<MyGrid> tg1 = [templateGrid1 addRow:MyLayoutSize.fill];
     
-    [templateGrid1 addRow:0].gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left ;//用于存放下面的条。
+    id<MyGrid> tg2 = [templateGrid1 addRow:0];
+    tg2.anchor = YES;
+    tg2.gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left ;//用于存放下面的条。
 
     tg1.subviewSpace = 5;
     [tg1 addCol:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -187,7 +189,12 @@
     [templateGrid2 addRow:MyLayoutSize.wrap];
     [templateGrid2 addRow:MyLayoutSize.wrap];
     [templateGrid2 addRow:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    [templateGrid2 addRow:0].gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left;
+    
+    
+    tg2 = [templateGrid2 addRow:0];
+    tg2.anchor = YES;
+    tg2.gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left;
+    
     templateGrid2.rightBorderline = borderline;
     [templateGrid2 setTarget:self action:@selector(handleTap:)];
     

@@ -29,9 +29,6 @@ typedef enum : unsigned char {
 @property(nonatomic, assign) MySubGridsType subGridsType;
 
 
-//栅格的尺寸
-@property(nonatomic, assign) CGFloat gridMeasure;
-
 //栅格的rect
 @property(nonatomic) CGRect gridRect;
 
@@ -72,6 +69,9 @@ typedef enum : unsigned char {
 -(instancetype)initWithMeasure:(CGFloat)measure superGrid:(id<MyGridNode>)superGrid;
 
 
+@property(nonatomic, assign) CGFloat measure;
+
+
 @property(nonatomic)    NSInteger tag;
 
 @property(nonatomic, strong) id actionData;
@@ -100,7 +100,6 @@ typedef enum : unsigned char {
 @property(nonatomic, assign) BOOL anchor;
 
 
-@property(nonatomic, assign) CGFloat gridMeasure;
 @property(nonatomic) CGRect gridRect;
 
 

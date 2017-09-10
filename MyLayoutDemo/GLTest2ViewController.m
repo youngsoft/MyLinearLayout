@@ -243,6 +243,7 @@
              我们这里的高度为0的子栅格是在父栅格的最后添加的，因此这个高度为0的子栅格里面的子视图将展现在父栅格的最下面。而这里面又设置了是底部对齐。所以呈现的效果就是这个栅格里面的视图覆盖住其兄弟栅格中的子视图的内容了。
             */
             id<MyGrid> g32 = [g3 addRow:0];  //建立一个0高度的栅格
+            g32.anchor = YES;
             g32.padding = UIEdgeInsetsMake(0, 10, 0, 0);
             g32.gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left;  //指定栅格内视图对齐方式
             

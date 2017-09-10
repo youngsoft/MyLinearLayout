@@ -83,6 +83,10 @@ extern NSString * const vMyGridGravityHeightFill;
  */
 @protocol MyGrid <MyGridAction>
 
+
+//设置和获取栅格的尺寸
+@property(nonatomic, assign) CGFloat measure;
+
 //栅格的外形标识，主要用于和数据模型进行绑定使用。
 @property(nonatomic)  NSInteger tag;
 
@@ -127,6 +131,8 @@ extern NSString * const vMyGridGravityHeightFill;
   锚点标志，表示这个栅格虽然是非叶子栅格，也可以用来填充视图。如果将非叶子栅格的锚点标志设置为YES，那么这个栅格也可以用来填充子视图，一般用来当做背景视图使用。
  */
 @property(nonatomic, assign) BOOL anchor;
+
+
 
 /**顶部边界线*/
 @property(nonatomic, strong) MyBorderline *topBorderline;

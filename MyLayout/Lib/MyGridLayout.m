@@ -577,6 +577,7 @@
     lsc.placeholder = placeholder;
 }
 
+
 -(BOOL)anchor
 {
     
@@ -704,16 +705,16 @@
 }
 
 
--(CGFloat)gridMeasure
+-(CGFloat)measure
 {
     MyGridLayout *lsc = self.myCurrentSizeClass;
-    return lsc.gridMeasure;
+    return lsc.measure;
 }
 
--(void)setGridMeasure:(CGFloat)gridMeasure
+-(void)setMeasure:(CGFloat)measure
 {
     MyGridLayout *lsc = self.myCurrentSizeClass;
-    lsc.gridMeasure = gridMeasure;
+    lsc.measure = measure;
 }
 
 -(CGRect)gridRect
@@ -1016,7 +1017,7 @@
     
     
     //处理叶子节点。
-    if (grid.anchor || (subGrids.count == 0 && !grid.placeholder))
+    if ((grid.anchor || subGrids.count == 0) && !grid.placeholder)
     {
         //设置子视图的位置和尺寸。。
         UIView *sbv = nil;
@@ -1046,19 +1047,32 @@
             else
                 horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:horzGravity];
             
+            
             CGFloat paddingTop = grid.padding.top;
             CGFloat paddingLeading = [MyBaseLayout isRTL] ? grid.padding.right : grid.padding.left;
             CGFloat paddingBottom = grid.padding.bottom;
             CGFloat paddingTrailing = [MyBaseLayout isRTL] ? grid.padding.left : grid.padding.right;
             
+            //如果非叶子栅格设置为anchor则子视图的内容总是填充的
+            if (grid.anchor && subGrids.count > 0)
+            {
+                vertGravity = MyGravity_Vert_Fill;
+                horzGravity = MyGravity_Horz_Fill;
+                paddingTop = 0;
+                paddingLeading = 0;
+                paddingBottom = 0;
+                paddingTrailing = 0;
+            }
+
+            //如果是尺寸为0，并且设置为了anchor的话那么就根据自身
+            
             //如果尺寸是0则因为前面有算出尺寸，所以这里就不进行调整了。
-            if (grid.gridMeasure != 0)
+            if (grid.measure != 0 && [sbv isKindOfClass:[MyBaseLayout class]])
             {
                 [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:grid.gridRect.size sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
             }
             else
             {
-                NSLog(@"AA");
             }
             
             [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:vertGravity horzGravity:horzGravity inSelfSize:grid.gridRect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
@@ -1171,7 +1185,7 @@
     if (grid.subGridsType != MySubGridsType_Unknown)
         subGrids = grid.subGrids;
     
-    if (grid.anchor || (subGrids.count == 0 && !grid.placeholder))
+    if ((grid.anchor || subGrids.count == 0) && !grid.placeholder)
     {
         BOOL isNoNullSbv = YES;
         if (grid.tag == 0 && pTagIndex != NULL)
@@ -1250,7 +1264,7 @@
 
     
     //叶子节点
-    if (grid.anchor || (subGrids.count == 0 && !grid.placeholder))
+    if ((grid.anchor || subGrids.count == 0) && !grid.placeholder)
     {
         BOOL isNotNullSbv = YES;
         NSArray *tempSbs = sbs;
@@ -1263,7 +1277,7 @@
         }
         
         //如果尺寸是包裹
-        if (grid.gridMeasure == MyLayoutSize.wrap || grid.gridMeasure == 0)
+        if (grid.measure == MyLayoutSize.wrap ||  (grid.measure == 0 && grid.anchor))
         {
             if (*pTempIndex < tempSbs.count)
             {
@@ -1274,42 +1288,46 @@
                     if (sbv != (UIView*)[NSNull null])
                     {
                         
-                        MyFrame *sbvmyFrame = sbv.myFrame;
-                        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
-                        sbvmyFrame.frame = sbv.bounds;
-                        
-                        //如果子视图不设置任何约束但是又是包裹的则这里特殊处理。
-                        if (sbvsc.widthSizeInner == nil && sbvsc.heightSizeInner == nil && !sbvsc.wrapContentSize)
+                        //叶子节点
+                        if (!grid.anchor || (grid.measure == 0 && grid.anchor))
                         {
-                            CGSize size = CGSizeZero;
-                            if (grid.superGrid.subGridsType == MySubGridsType_Row)
+                            MyFrame *sbvmyFrame = sbv.myFrame;
+                            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                            sbvmyFrame.frame = sbv.bounds;
+                            
+                            //如果子视图不设置任何约束但是又是包裹的则这里特殊处理。
+                            if (sbvsc.widthSizeInner == nil && sbvsc.heightSizeInner == nil && !sbvsc.wrapContentSize)
                             {
-                                size.width = gridSize.width - padding.left - padding.right;
+                                CGSize size = CGSizeZero;
+                                if (grid.superGrid.subGridsType == MySubGridsType_Row)
+                                {
+                                    size.width = gridSize.width - padding.left - padding.right;
+                                }
+                                else
+                                {
+                                    size.height = gridSize.height - padding.top - padding.bottom;
+                                }
+                                
+                                size = [sbv sizeThatFits:size];
+                                sbvmyFrame.width = size.width;
+                                sbvmyFrame.height = size.height;
                             }
                             else
                             {
-                                size.height = gridSize.height - padding.top - padding.bottom;
+                                
+                                [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
+                                
+                                [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridRect.size paddingTop:padding.top paddingLeading:padding.left paddingBottom:padding.bottom paddingTrailing:padding.right pMaxWrapSize:NULL];
                             }
                             
-                            size = [sbv sizeThatFits:size];
-                            sbvmyFrame.width = size.width;
-                            sbvmyFrame.height = size.height;
-                        }
-                        else
-                        {
-                            
-                            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
-                            
-                            [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridRect.size paddingTop:padding.top paddingLeading:padding.left paddingBottom:padding.bottom paddingTrailing:padding.right pMaxWrapSize:NULL];
-                        }
-                        
-                        if (grid.superGrid.subGridsType == MySubGridsType_Row)
-                        {
-                            fixedMeasure = padding.top + padding.bottom + sbvmyFrame.height;
-                        }
-                        else
-                        {
-                            fixedMeasure = padding.left + padding.right + sbvmyFrame.width;
+                            if (grid.superGrid.subGridsType == MySubGridsType_Row)
+                            {
+                                fixedMeasure = padding.top + padding.bottom + sbvmyFrame.height;
+                            }
+                            else
+                            {
+                                fixedMeasure = padding.left + padding.right + sbvmyFrame.width;
+                            }
                         }
                     }
                     else
@@ -1355,30 +1373,30 @@
         
         for (id<MyGridNode> sbvGrid in subGrids)
         {
-            if (sbvGrid.gridMeasure == MyLayoutSize.wrap)
+            if (sbvGrid.measure == MyLayoutSize.wrap)
             {
                 
-                CGFloat gridMeasure = [self myTraversalGridSize:sbvGrid gridSize:gridSize2 lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
-                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid  withMeasure:gridMeasure];
+                CGFloat measure = [self myTraversalGridSize:sbvGrid gridSize:gridSize2 lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
+                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid  withMeasure:measure];
                 
             }
-            else if (sbvGrid.gridMeasure >= 1 || sbvGrid.gridMeasure == 0)
+            else if (sbvGrid.measure >= 1 || sbvGrid.measure == 0)
             {
-                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:sbvGrid.gridMeasure];
+                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:sbvGrid.measure];
                 
                 //遍历儿子节点。。
                 [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
                 
             }
-            else if (sbvGrid.gridMeasure > 0 && sbvGrid.gridMeasure < 1)
+            else if (sbvGrid.measure > 0 && sbvGrid.measure < 1)
             {
-                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:validMeasure * sbvGrid.gridMeasure];
+                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:validMeasure * sbvGrid.measure];
                 
                 //遍历儿子节点。。
                 [self myTraversalGridSize:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex];
                 
             }
-            else if (sbvGrid.gridMeasure < 0 && sbvGrid.gridMeasure > -1)
+            else if (sbvGrid.measure < 0 && sbvGrid.measure > -1)
             {
                 [weightSubGrids addObject:sbvGrid];
                 [weightSubGridsIndexs addObject:@(*pIndex)];
@@ -1393,7 +1411,7 @@
                 
                 
             }
-            else if (sbvGrid.gridMeasure == MyLayoutSize.fill)
+            else if (sbvGrid.measure == MyLayoutSize.fill)
             {
                 [fillSubGrids addObject:sbvGrid];
                 
@@ -1433,7 +1451,7 @@
             for (NSInteger i = 0; i < weightSubGridCount; i++)
             {
                 id<MyGridNode> sbvGrid = weightSubGrids[i];
-                remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:-1 * remainedMeasure * sbvGrid.gridMeasure];
+                remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:-1 * remainedMeasure * sbvGrid.measure];
                 
                 NSInteger index = weightSubGridsIndexs[i].integerValue;
                 if (hasTagIndex)

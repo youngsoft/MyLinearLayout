@@ -1038,6 +1038,7 @@ BOOL _myisRTL = NO;
     
 }
 
+
 -(NSDictionary*)gridDictionary
 {
     return self.rootGrid.gridDictionary;
@@ -1048,14 +1049,15 @@ BOOL _myisRTL = NO;
     self.rootGrid.gridDictionary = gridDictionary;
 }
 
--(CGFloat)gridMeasure
+-(CGFloat)measure
 {
-    return self.rootGrid.gridMeasure;
+    return MyLayoutSize.fill;
+    //return self.rootGrid.measure;
 }
 
--(void)setGridMeasure:(CGFloat)gridMeasure
+-(void)setMeasure:(CGFloat)measure
 {
-    self.rootGrid.gridMeasure = gridMeasure;
+    //self.rootGrid.measure = measure;
 }
 
 -(CGRect)gridRect
