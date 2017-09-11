@@ -202,7 +202,7 @@
     //定义中间部分。
     
     //第一行
-   id<MyGrid> line1 = [rootLayout addRow:MyLayoutSize.fill];
+    id<MyGrid> line1 = [rootLayout addRow:MyLayoutSize.fill];
     [line1 addColGrid:templateGrid1.cloneGrid measure:0.5];
     [line1 addColGrid:templateGrid2.cloneGrid measure:0.25];
     [line1 addColGrid:templateGrid2.cloneGrid measure:0.25];

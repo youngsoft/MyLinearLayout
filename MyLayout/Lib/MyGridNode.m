@@ -10,7 +10,7 @@
 #import "MyLayoutDelegate.h"
 #import "MyBaseLayout.h"
 #import "UIColor+MyLayout.h"
-
+#import "MyGridLayout.h"
 
 /**
  为支持栅格触摸而建立的触摸委托派生类。
@@ -249,38 +249,41 @@ typedef struct  _MyGridOptionalProperties2
 - (void)settingNodeAttributes:(NSDictionary *)gridDictionary
 {
     NSString *tag = [gridDictionary objectForKey:kMyGridTag];
-    if (tag.isNotBlank) {
+    if (tag.myIsNotBlank) {
         NSInteger tag = [[gridDictionary objectForKey:kMyGridTag] integerValue];
         self.tag = tag;
     }
     
     NSString *action = [gridDictionary objectForKey:kMyGridAction];
-    if (action.isNotBlank) {
-        [self setTarget:[self gridLayoutView] action:@selector(action)];
+    if (action.myIsNotBlank) {
+        MyGridLayout *layout = (MyGridLayout *)[self gridLayoutView];
+        if (layout.gridTarget != nil) {
+            [self setTarget:layout.gridTarget action:@selector(action)];
+        }
     }
     
     NSString *padding = [gridDictionary objectForKey:kMyGridPadding];
-    if (padding.isNotBlank) {
+    if (padding.myIsNotBlank) {
         [self createPadding:padding];
     }
     
     NSString *space = [gridDictionary objectForKey:kMyGridSpace];
-    if (space.isNotBlank) {
+    if (space.myIsNotBlank) {
         [self createSpace:space];
     }
     
     NSString *placeholder = [gridDictionary objectForKey:kMyGridPlaceholder];
-    if (placeholder.isNotBlank) {
+    if (placeholder.myIsNotBlank) {
         self.placeholder = [placeholder boolValue];
     }
     
     NSString *anchor = [gridDictionary objectForKey:kMyGridAnchor];;
-    if (anchor.isNotBlank) {
+    if (anchor.myIsNotBlank) {
         self.anchor = [anchor boolValue];
     }
     
     NSString *gravity = [gridDictionary objectForKey:kMyGridSpace];
-    if (gravity.isNotBlank) {
+    if (gravity.myIsNotBlank) {
         [self createGravity:gravity];
     }
     
@@ -310,48 +313,56 @@ typedef struct  _MyGridOptionalProperties2
 //padding:"{10,10,10,10}"
 - (void)createPadding:(NSString *)padding
 {
-    if (padding == nil || [padding stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0) return;
-    NSString *temp = [padding stringByReplacingOccurrencesOfString:@"{" withString:@""];
-    temp = [padding stringByReplacingOccurrencesOfString:@"}" withString:@""];
-    NSArray *pads = [temp componentsSeparatedByString:@","];
-    if (pads == nil || pads.count != 4) return;
-    CGFloat top = [[pads objectAtIndex:0] floatValue];
-    CGFloat let = [[pads objectAtIndex:1] floatValue];
-    CGFloat bottom = [[pads objectAtIndex:2] floatValue];
-    CGFloat right = [[pads objectAtIndex:3] floatValue];
-    self.padding = UIEdgeInsetsMake(top, let, bottom, right);
+    if (padding == nil || !padding.myIsNotBlank) return;
+    self.padding = UIEdgeInsetsFromString(padding);
 }
 
 //space:10.0
 - (void)createSpace:(NSString *)space
 {
-    if (space == nil || [space stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]) return;
-    CGFloat temp = [space floatValue];
+    if (space == nil || !space.myIsNotBlank) return;
+    CGFloat temp = [space doubleValue];
     self.subviewSpace = temp;
 }
 
 //gravity:@"top|bottom|left|right|centerX|centerY|width|height"
 - (void)createGravity:(NSString *)gravity
 {
-    if (gravity == nil || [gravity stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]) return;
-    if ([gravity isEqualToString:@"top"]) {
-        self.gravity = MyGravity_Vert_Top;
-    }else if ([gravity isEqualToString:@"bottom"]) {
-        self.gravity = MyGravity_Vert_Bottom;
-    }else if ([gravity isEqualToString:@"left"]) {
-        self.gravity = MyGravity_Horz_Left;
-    }else if ([gravity isEqualToString:@"right"]) {
-        self.gravity = MyGravity_Horz_Right;
-    }else if ([gravity isEqualToString:@"centerX"]) {
-        self.gravity = MyGravity_Horz_Center;
-    }else if ([gravity isEqualToString:@"centerY"]) {
-        self.gravity = MyGravity_Vert_Center;
-    }else if ([gravity isEqualToString:@"width"]) {
-        self.gravity = MyGravity_Horz_Fill;
-    }else if ([gravity isEqualToString:@"height"]) {
-        self.gravity = MyGravity_Vert_Fill;
+    if (gravity == nil || !gravity.myIsNotBlank) return;
+    
+    MyGravity tempGravity = MyGravity_None;
+    
+    if ([gravity containsString:@"|"]) {
+        NSArray *array = [gravity componentsSeparatedByString:@"|"];
+        for (NSString *temp in array) {
+            tempGravity += [self returnGravity:temp];
+        }
     }else{
-        self.gravity = MyGravity_None;
+        self.gravity = [self returnGravity:gravity];
+    }
+    
+}
+
+- (MyGravity)returnGravity:(NSString *)gravity
+{
+    if ([gravity isEqualToString:@"top"]) {
+        return  MyGravity_Vert_Top;
+    }else if ([gravity isEqualToString:@"bottom"]) {
+        return MyGravity_Vert_Bottom;
+    }else if ([gravity isEqualToString:@"left"]) {
+        return MyGravity_Horz_Left;
+    }else if ([gravity isEqualToString:@"right"]) {
+        return MyGravity_Horz_Right;
+    }else if ([gravity isEqualToString:@"centerX"]) {
+        return MyGravity_Horz_Center;
+    }else if ([gravity isEqualToString:@"centerY"]) {
+        return MyGravity_Vert_Center;
+    }else if ([gravity isEqualToString:@"width"]) {
+        return MyGravity_Horz_Fill;
+    }else if ([gravity isEqualToString:@"height"]) {
+        return MyGravity_Vert_Fill;
+    }else{
+        return MyGravity_None;
     }
 }
 
@@ -364,7 +375,7 @@ typedef struct  _MyGridOptionalProperties2
     MyBorderline *line = [MyBorderline new];
     if ([dictionary objectForKey:kMyGridBorderlineColor]) {
         NSString *color = [dictionary objectForKey:kMyGridBorderlineColor];
-        line.color = [UIColor layoutColorWithHexString:color];
+        line.color = [UIColor myColorWithHexString:color];
     }
     if ([dictionary objectForKey:kMyGridBorderlineThick]) {
         CGFloat thick = [[dictionary objectForKey:kMyGridBorderlineThick] floatValue];

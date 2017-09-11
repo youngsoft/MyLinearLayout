@@ -8,13 +8,13 @@
 
 #import "UIColor+MyLayout.h"
 
-static inline NSUInteger hexStrToInt(NSString *str) {
+static inline NSUInteger myHexStrToInt(NSString *str) {
     uint32_t result = 0;
     sscanf([str UTF8String], "%X", &result);
     return result;
 }
 
-static BOOL hexStrToRGBA(NSString *str,
+static BOOL myHexStrToRGBA(NSString *str,
                          CGFloat *r, CGFloat *g, CGFloat *b, CGFloat *a) {
     str = [[str stringByTrim] uppercaseString];
     if ([str hasPrefix:@"#"]) {
@@ -31,16 +31,16 @@ static BOOL hexStrToRGBA(NSString *str,
     
     //RGB,RGBA,RRGGBB,RRGGBBAA
     if (length < 5) {
-        *r = hexStrToInt([str substringWithRange:NSMakeRange(0, 1)]) / 255.0f;
-        *g = hexStrToInt([str substringWithRange:NSMakeRange(1, 1)]) / 255.0f;
-        *b = hexStrToInt([str substringWithRange:NSMakeRange(2, 1)]) / 255.0f;
+        *r = myHexStrToInt([str substringWithRange:NSMakeRange(0, 1)]) / 255.0f;
+        *g = myHexStrToInt([str substringWithRange:NSMakeRange(1, 1)]) / 255.0f;
+        *b = myHexStrToInt([str substringWithRange:NSMakeRange(2, 1)]) / 255.0f;
         if (length == 4)  *a = hexStrToInt([str substringWithRange:NSMakeRange(3, 1)]) / 255.0f;
         else *a = 1;
     } else {
-        *r = hexStrToInt([str substringWithRange:NSMakeRange(0, 2)]) / 255.0f;
-        *g = hexStrToInt([str substringWithRange:NSMakeRange(2, 2)]) / 255.0f;
-        *b = hexStrToInt([str substringWithRange:NSMakeRange(4, 2)]) / 255.0f;
-        if (length == 8) *a = hexStrToInt([str substringWithRange:NSMakeRange(6, 2)]) / 255.0f;
+        *r = myHexStrToInt([str substringWithRange:NSMakeRange(0, 2)]) / 255.0f;
+        *g = myHexStrToInt([str substringWithRange:NSMakeRange(2, 2)]) / 255.0f;
+        *b = myHexStrToInt([str substringWithRange:NSMakeRange(4, 2)]) / 255.0f;
+        if (length == 8) *a = myHexStrToInt([str substringWithRange:NSMakeRange(6, 2)]) / 255.0f;
         else *a = 1;
     }
     return YES;
@@ -49,7 +49,7 @@ static BOOL hexStrToRGBA(NSString *str,
 @implementation UIColor (MyLayout)
 
 
-+ (nullable UIColor *)layoutColorWithHexString:(NSString *)hexStr
++ (nullable UIColor *)myColorWithHexString:(NSString *)hexStr
 {
     static NSArray<NSDictionary *> *colors = @[@{@"black":UIColor.blackColor},
                                                @{@"darkgray":UIColor.darkGrayColor},
@@ -72,7 +72,7 @@ static BOOL hexStrToRGBA(NSString *str,
         }
     }
     CGFloat r, g, b, a;
-    if (hexStrToRGBA(temp, &r, &g, &b, &a)) {
+    if (myHexStrToRGBA(temp, &r, &g, &b, &a)) {
         return [UIColor colorWithRed:r green:g blue:b alpha:a];
     }
     return nil;
@@ -84,7 +84,7 @@ static BOOL hexStrToRGBA(NSString *str,
 
 @implementation NSString (MyLayout)
 
-- (BOOL)isNotBlank
+- (BOOL)myIsNotBlank
 {
     if ([self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) return NO;
     

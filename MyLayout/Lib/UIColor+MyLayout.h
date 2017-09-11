@@ -23,7 +23,7 @@
  
  @return        来自字符串的UIColor对象，如果发生错误，则为nil
  */
-+ (nullable UIColor *)layoutColorWithHexString:(NSString *_Nullable)hexStr;
++ (nullable UIColor *)myColorWithHexString:(NSString *_Nullable)hexStr;
 
 
 
@@ -31,6 +31,12 @@
 
 @interface NSString (MyLayout)
 
-- (BOOL)isNotBlank;
+
+/**
+ 判断是否是非空
+
+ @return YES 非空 NO 为空
+ */
+- (BOOL)myIsNotBlank;
 
 @end
