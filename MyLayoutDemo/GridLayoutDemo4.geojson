@@ -2,13 +2,14 @@
     "rows": [
          {
              "size":"fill",
-             "padding":"{5,5,5,5}",
              "bottom-borderline":
                  {"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
              "cols":[
                      {
                      "size":"50%",
+                     "padding":"{5,5,5,5}",
                      "right-borderline":{"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
+                     "action":"handleTap:",
                      "rows":[
                                 {
                                   "size":"wrap"
@@ -20,8 +21,8 @@
                                  "size":"fill"
                                 },
                                 {
-                                 "size":"0",
-                                 "anchor":"1",
+                                 "size":0,
+                                 "anchor":"true",
                                  "gravity":"left|bottom"
                                 }
                              ]
@@ -40,12 +41,13 @@
                                  "size":"fill"
                                  },
                                  {
-                                 "size":"0",
-                                 "anchor":"1",
+                                 "size":0,
+                                 "anchor":"true",
                                  "gravity":"left|bottom"
                                  }
                              ]
-                     },{
+                     },
+                     {
                      "size":"25%",
                      "right-borderline":{"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
                      "rows":[
@@ -59,8 +61,8 @@
                                  "size":"fill"
                                  },
                                  {
-                                 "size":"0",
-                                 "anchor":"1",
+                                 "size":0,
+                                 "anchor":"true",
                                  "gravity":"left|bottom"
                                  }
                              ]

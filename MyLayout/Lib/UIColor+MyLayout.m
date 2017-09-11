@@ -51,25 +51,26 @@ static BOOL myHexStrToRGBA(NSString *str,
 
 + (nullable UIColor *)myColorWithHexString:(NSString *)hexStr
 {
-    static NSArray<NSDictionary *> *colors = @[@{@"black":UIColor.blackColor},
-                                               @{@"darkgray":UIColor.darkGrayColor},
-                                               @{@"lightgray":UIColor.lightGrayColor},
-                                               @{@"white":UIColor.whiteColor},
-                                               @{@"gray":UIColor.grayColor},
-                                               @{@"red":UIColor.redColor},
-                                               @{@"green":UIColor.greenColor},
-                                               @{@"cyan":UIColor.cyanColor},
-                                               @{@"yellow":UIColor.yellowColor},
-                                               @{@"magenta":UIColor.magentaColor},
-                                               @{@"orange":UIColor.orangeColor},
-                                               @{@"purple":UIColor.purpleColor},
-                                               @{@"brown":UIColor.brownColor},
-                                               @{@"clear":UIColor.clearColor},];
+    static NSDictionary *colors = @{
+                                        @"black":UIColor.blackColor,
+                                        @"darkgray":UIColor.darkGrayColor,
+                                        @"lightgray":UIColor.lightGrayColor,
+                                        @"white":UIColor.whiteColor,
+                                        @"gray":UIColor.grayColor,
+                                        @"red":UIColor.redColor,
+                                        @"green":UIColor.greenColor,
+                                        @"cyan":UIColor.cyanColor,
+                                        @"yellow":UIColor.yellowColor,
+                                        @"magenta":UIColor.magentaColor,
+                                        @"orange":UIColor.orangeColor,
+                                        @"purple":UIColor.purpleColor,
+                                        @"brown":UIColor.brownColor,
+                                        @"clear":UIColor.clearColor
+                                    };
     NSString *temp = hexStr.lowercaseString;
-    for (NSDictionary *dictionary in colors) {
-        if ([dictionary objectForKey:temp])
-            return [dictionary objectForKey:temp]
-        }
+    UIColor *color = [colors objectForKey:temp];
+    if (color != nil) {
+        return  color;
     }
     CGFloat r, g, b, a;
     if (myHexStrToRGBA(temp, &r, &g, &b, &a)) {
