@@ -2,56 +2,72 @@
     "rows": [
          {
              "size":"fill",
+             "padding":"{5,5,5,5}",
              "bottom-borderline":
                  {"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
              "cols":[
+                     {
                      "size":"50%",
+                     "right-borderline":{"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
+                     "rows":[
+                                {
+                                  "size":"wrap"
+                                },
+                                {
+                                 "size":"wrap"
+                                },
+                                {
+                                 "size":"fill"
+                                },
+                                {
+                                 "size":"0",
+                                 "anchor":"1",
+                                 "gravity":"left|bottom"
+                                }
+                             ]
+                     },
+                     {
+                     "size":"25%",
+                     "right-borderline":{"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
                      "rows":[
                                  {
-                                 "size":"wrap",
-                                 "padding":"{5,5,5,5}",
-                                 "space":"10.0",
-                                 "right-borderline":{"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"}
+                                 "size":"wrap"
                                  },
                                  {
-                                 "size":"wrap",
-                                 "padding":"{5,5,5,5}",
-                                 "space":"10.0",
-                                 "right-borderline":{"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"}
+                                 "size":"wrap"
                                  },
                                  {
-                                 "size":"fill",
-                                 "padding":"{5,5,5,5}",
-                                 "space":"10.0",
-                                 "right-borderline":{"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"}
+                                 "size":"fill"
+                                 },
+                                 {
+                                 "size":"0",
+                                 "anchor":"1",
+                                 "gravity":"left|bottom"
                                  }
                              ]
-                     
-             ]
+                     },{
+                     "size":"25%",
+                     "right-borderline":{"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
+                     "rows":[
+                                 {
+                                 "size":"wrap"
+                                 },
+                                 {
+                                 "size":"wrap"
+                                 },
+                                 {
+                                 "size":"fill"
+                                 },
+                                 {
+                                 "size":"0",
+                                 "anchor":"1",
+                                 "gravity":"left|bottom"
+                                 }
+                             ]
+                     }
+                   ]
              
          }
     ]
 }
 
-
-
-//定义中间部分。
-
-//第一行
-id<MyGrid> line1 = [rootLayout addRow:MyLayoutSize.fill];
-[line1 addColGrid:templateGrid1.cloneGrid measure:0.5];
-[line1 addColGrid:templateGrid2.cloneGrid measure:0.25];
-[line1 addColGrid:templateGrid2.cloneGrid measure:0.25];
-line1.bottomBorderline = borderline;
-
-//第二行
-[rootLayout addRowGrid:line1.cloneGrid measure:MyLayoutSize.fill];
-
-
-//第三行
-id<MyGrid> line3 = [rootLayout addRow:MyLayoutSize.fill];
-[line3 addColGrid:templateGrid2.cloneGrid measure:MyLayoutSize.fill];
-[line3 addColGrid:templateGrid2.cloneGrid measure:MyLayoutSize.fill];
-[line3 addColGrid:templateGrid2.cloneGrid measure:MyLayoutSize.fill];
-[line3 addColGrid:templateGrid2.cloneGrid measure:MyLayoutSize.fill];
-line3.bottomBorderline = borderline;

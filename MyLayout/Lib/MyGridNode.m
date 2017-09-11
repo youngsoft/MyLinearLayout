@@ -345,21 +345,21 @@ typedef struct  _MyGridOptionalProperties2
 
 - (MyGravity)returnGravity:(NSString *)gravity
 {
-    if ([gravity isEqualToString:@"top"]) {
+    if ([gravity isEqualToString:vMyGridGravityTop]) {
         return  MyGravity_Vert_Top;
-    }else if ([gravity isEqualToString:@"bottom"]) {
+    }else if ([gravity isEqualToString:vMyGridGravityBottom]) {
         return MyGravity_Vert_Bottom;
-    }else if ([gravity isEqualToString:@"left"]) {
+    }else if ([gravity isEqualToString:vMyGridGravityLeft]) {
         return MyGravity_Horz_Left;
-    }else if ([gravity isEqualToString:@"right"]) {
+    }else if ([gravity isEqualToString:vMyGridGravityRight]) {
         return MyGravity_Horz_Right;
-    }else if ([gravity isEqualToString:@"centerX"]) {
+    }else if ([gravity isEqualToString:vMyGridGravityCenterX]) {
         return MyGravity_Horz_Center;
-    }else if ([gravity isEqualToString:@"centerY"]) {
+    }else if ([gravity isEqualToString:vMyGridGravityCenterY]) {
         return MyGravity_Vert_Center;
-    }else if ([gravity isEqualToString:@"width"]) {
+    }else if ([gravity isEqualToString:vMyGridGravityWidthFill]) {
         return MyGravity_Horz_Fill;
-    }else if ([gravity isEqualToString:@"height"]) {
+    }else if ([gravity isEqualToString:vMyGridGravityHeightFill]) {
         return MyGravity_Vert_Fill;
     }else{
         return MyGravity_None;
