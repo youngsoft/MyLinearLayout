@@ -8,17 +8,6 @@
 
 #import "UIColor+MyLayout.h"
 
-
-@interface UIColor_MyLayout : NSObject
-
-@end
-
-@implementation UIColor_MyLayout
-
-
-
-@end
-
 @implementation UIColor (MyLayout)
 
 static inline NSUInteger myHexStrToInt(NSString *str) {
@@ -29,7 +18,7 @@ static inline NSUInteger myHexStrToInt(NSString *str) {
 
 static BOOL myHexStrToRGBA(NSString *str,
                            CGFloat *r, CGFloat *g, CGFloat *b, CGFloat *a) {
-    str = [[str stringByTrim] uppercaseString];
+    str = [str uppercaseString];
     if ([str hasPrefix:@"#"]) {
         str = [str substringFromIndex:1];
     } else if ([str hasPrefix:@"0X"]) {
@@ -47,7 +36,7 @@ static BOOL myHexStrToRGBA(NSString *str,
         *r = myHexStrToInt([str substringWithRange:NSMakeRange(0, 1)]) / 255.0f;
         *g = myHexStrToInt([str substringWithRange:NSMakeRange(1, 1)]) / 255.0f;
         *b = myHexStrToInt([str substringWithRange:NSMakeRange(2, 1)]) / 255.0f;
-        if (length == 4)  *a = hexStrToInt([str substringWithRange:NSMakeRange(3, 1)]) / 255.0f;
+        if (length == 4)  *a = myHexStrToInt([str substringWithRange:NSMakeRange(3, 1)]) / 255.0f;
         else *a = 1;
     } else {
         *r = myHexStrToInt([str substringWithRange:NSMakeRange(0, 2)]) / 255.0f;
@@ -59,27 +48,35 @@ static BOOL myHexStrToRGBA(NSString *str,
     return YES;
 }
 
-static NSDictionary *colors = @{
-                                @"black":UIColor.blackColor,
-                                @"darkgray":UIColor.darkGrayColor,
-                                @"lightgray":UIColor.lightGrayColor,
-                                @"white":UIColor.whiteColor,
-                                @"gray":UIColor.grayColor,
-                                @"red":UIColor.redColor,
-                                @"green":UIColor.greenColor,
-                                @"cyan":UIColor.cyanColor,
-                                @"yellow":UIColor.yellowColor,
-                                @"magenta":UIColor.magentaColor,
-                                @"orange":UIColor.orangeColor,
-                                @"purple":UIColor.purpleColor,
-                                @"brown":UIColor.brownColor,
-                                @"clear":UIColor.clearColor
-                                };
+static NSDictionary*  createColors()
+{
+    NSDictionary *colors = @{
+                             @"black":UIColor.blackColor,
+                             @"darkgray":UIColor.darkGrayColor,
+                             @"lightgray":UIColor.lightGrayColor,
+                             @"white":UIColor.whiteColor,
+                             @"gray":UIColor.grayColor,
+                             @"red":UIColor.redColor,
+                             @"green":UIColor.greenColor,
+                             @"cyan":UIColor.cyanColor,
+                             @"yellow":UIColor.yellowColor,
+                             @"magenta":UIColor.magentaColor,
+                             @"orange":UIColor.orangeColor,
+                             @"purple":UIColor.purpleColor,
+                             @"brown":UIColor.brownColor,
+                             @"clear":UIColor.clearColor
+                             };
+    
+    return colors;
+}
+
+
 
 + (nullable UIColor *)myColorWithHexString:(NSString *_Nonnull)hexStr
 {
+    
     NSString *temp = hexStr.lowercaseString;
-    UIColor *color = [colors objectForKey:temp];
+    UIColor *color = [createColors() objectForKey:temp];
     if (color != nil) {
         return  color;
     }

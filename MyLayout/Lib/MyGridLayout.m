@@ -619,7 +619,6 @@
     
     id tempRows = [gridDictionary objectForKey:kMyGridRows];
     if (tempRows != nil && [tempRows isKindOfClass:[NSArray<NSDictionary *> class]]) {
-        
         [self removeGrids];
         for (NSDictionary *dictionary in tempRows) {
             if ([dictionary objectForKey:kMyGridSize]) {
