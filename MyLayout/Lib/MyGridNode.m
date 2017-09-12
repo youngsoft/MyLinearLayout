@@ -12,6 +12,8 @@
 #import "UIColor+MyLayout.h"
 #import "MyGridLayout.h"
 
+
+
 /**
  为支持栅格触摸而建立的触摸委托派生类。
  */
@@ -228,15 +230,6 @@ typedef struct  _MyGridOptionalProperties2
     
     _gridDictionary = gridDictionary;
     
-    if ([gridDictionary objectForKey:kMyGridCols]) {
-        
-        id tempRows = [gridDictionary objectForKey:kMyGridCols];
-        if ([tempRows isKindOfClass:[NSArray<NSDictionary *> class]]) {
-           
-        }
-        
-    }
-    
     [self settingNodeAttributes:gridDictionary];
 }
 
@@ -306,6 +299,17 @@ typedef struct  _MyGridOptionalProperties2
     if (dictionary != nil) {
         self.rightBorderline = [self createBorderline:dictionary];
     }
+    
+    id tempRows = [gridDictionary objectForKey:kMyGridCols];
+    if (tempRows != nil) {
+        if ([tempRows isKindOfClass:[NSArray<NSDictionary *> class]]) {
+            
+            for (NSDictionary *dic in tempRows) {
+                [self settingNodeAttributes:dic];
+            }
+        }
+        
+    }
 }
 
 #pragma mark private GridDictionary
@@ -373,28 +377,28 @@ typedef struct  _MyGridOptionalProperties2
     if (dictionary == nil || dictionary.count == 0) return nil;
     
     MyBorderline *line = [MyBorderline new];
-    if ([dictionary objectForKey:kMyGridBorderlineColor]) {
-        NSString *color = [dictionary objectForKey:kMyGridBorderlineColor];
+    NSString *color = [dictionary objectForKey:kMyGridBorderlineColor];
+    if (color != nil) {
         line.color = [UIColor myColorWithHexString:color];
     }
-    if ([dictionary objectForKey:kMyGridBorderlineThick]) {
-        CGFloat thick = [[dictionary objectForKey:kMyGridBorderlineThick] floatValue];
-        line.thick = thick;
+    NSString *thick = [dictionary objectForKey:kMyGridBorderlineThick];
+    if (thick.myIsNotBlank) {
+        line.thick = [thick doubleValue];
     }
     
-    if ([dictionary objectForKey:kMyGridBorderlineHeadIndent]) {
-        CGFloat head = [[dictionary objectForKey:kMyGridBorderlineHeadIndent] floatValue];
-        line.headIndent = head;
+    NSString *head = [dictionary objectForKey:kMyGridBorderlineHeadIndent];
+    if (head.myIsNotBlank) {
+        line.headIndent = [head doubleValue];
     }
     
-    if ([dictionary objectForKey:kMyGridBorderlineTailIndent]) {
-        CGFloat tail = [[dictionary objectForKey:kMyGridBorderlineTailIndent] floatValue];
-        line.tailIndent = tail;
+    NSString *tail = [dictionary objectForKey:kMyGridBorderlineTailIndent];
+    if (tail.myIsNotBlank) {
+        line.tailIndent = [tail doubleValue];
     }
     
-    if ([dictionary objectForKey:kMyGridBorderlineOffset]) {
-        CGFloat offset = [[dictionary objectForKey:kMyGridBorderlineOffset] floatValue];
-        line.offset = offset;
+    NSString *offset = [dictionary objectForKey:kMyGridBorderlineOffset];
+    if (offset.myIsNotBlank) {
+        line.offset = [offset doubleValue];
     }
     return line;
 }

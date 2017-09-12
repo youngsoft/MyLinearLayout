@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface UIColor (MyLayout)
 
 /**
@@ -23,7 +24,7 @@
  
  @return        来自字符串的UIColor对象，如果发生错误，则为nil
  */
-+ (nullable UIColor *)myColorWithHexString:(NSString *_Nullable)hexStr;
++ (nullable UIColor *)myColorWithHexString:(NSString *_Nonnull)hexStr;
 
 
 

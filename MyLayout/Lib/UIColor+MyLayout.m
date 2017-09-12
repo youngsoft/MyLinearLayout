@@ -8,6 +8,19 @@
 
 #import "UIColor+MyLayout.h"
 
+
+@interface UIColor_MyLayout : NSObject
+
+@end
+
+@implementation UIColor_MyLayout
+
+
+
+@end
+
+@implementation UIColor (MyLayout)
+
 static inline NSUInteger myHexStrToInt(NSString *str) {
     uint32_t result = 0;
     sscanf([str UTF8String], "%X", &result);
@@ -15,7 +28,7 @@ static inline NSUInteger myHexStrToInt(NSString *str) {
 }
 
 static BOOL myHexStrToRGBA(NSString *str,
-                         CGFloat *r, CGFloat *g, CGFloat *b, CGFloat *a) {
+                           CGFloat *r, CGFloat *g, CGFloat *b, CGFloat *a) {
     str = [[str stringByTrim] uppercaseString];
     if ([str hasPrefix:@"#"]) {
         str = [str substringFromIndex:1];
@@ -46,27 +59,25 @@ static BOOL myHexStrToRGBA(NSString *str,
     return YES;
 }
 
-@implementation UIColor (MyLayout)
+static NSDictionary *colors = @{
+                                @"black":UIColor.blackColor,
+                                @"darkgray":UIColor.darkGrayColor,
+                                @"lightgray":UIColor.lightGrayColor,
+                                @"white":UIColor.whiteColor,
+                                @"gray":UIColor.grayColor,
+                                @"red":UIColor.redColor,
+                                @"green":UIColor.greenColor,
+                                @"cyan":UIColor.cyanColor,
+                                @"yellow":UIColor.yellowColor,
+                                @"magenta":UIColor.magentaColor,
+                                @"orange":UIColor.orangeColor,
+                                @"purple":UIColor.purpleColor,
+                                @"brown":UIColor.brownColor,
+                                @"clear":UIColor.clearColor
+                                };
 
-
-+ (nullable UIColor *)myColorWithHexString:(NSString *)hexStr
++ (nullable UIColor *)myColorWithHexString:(NSString *_Nonnull)hexStr
 {
-    static NSDictionary *colors = @{
-                                        @"black":UIColor.blackColor,
-                                        @"darkgray":UIColor.darkGrayColor,
-                                        @"lightgray":UIColor.lightGrayColor,
-                                        @"white":UIColor.whiteColor,
-                                        @"gray":UIColor.grayColor,
-                                        @"red":UIColor.redColor,
-                                        @"green":UIColor.greenColor,
-                                        @"cyan":UIColor.cyanColor,
-                                        @"yellow":UIColor.yellowColor,
-                                        @"magenta":UIColor.magentaColor,
-                                        @"orange":UIColor.orangeColor,
-                                        @"purple":UIColor.purpleColor,
-                                        @"brown":UIColor.brownColor,
-                                        @"clear":UIColor.clearColor
-                                    };
     NSString *temp = hexStr.lowercaseString;
     UIColor *color = [colors objectForKey:temp];
     if (color != nil) {

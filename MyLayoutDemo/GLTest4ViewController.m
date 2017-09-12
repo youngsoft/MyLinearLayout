@@ -9,6 +9,8 @@
 #import "GLTest4ViewController.h"
 #import "MyLayout.h"
 #import "CFTool.h"
+#import "UIColor+MyLayout.h"
+#import <UIKit/UIKit.h>
 
 @interface GLTest4ViewController()
 
@@ -29,11 +31,7 @@
     // Do any additional setup after loading the view.
     
     [self test1];
-
     
-    
-    
-  
 }
 
 - (void)test1
