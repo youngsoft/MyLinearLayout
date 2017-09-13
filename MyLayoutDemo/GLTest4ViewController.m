@@ -163,8 +163,12 @@
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.padding = UIEdgeInsetsMake(0, 0, 10, 0);
+    rootLayout.gridTarget  = self;
     self.view = rootLayout;
     self.rootLayout = rootLayout;
+    
+    
+    rootLayout.tag = 1000;
     
     
     NSString *path =  [NSBundle.mainBundle pathForResource:@"GridLayoutDemo4.geojson" ofType:nil];
@@ -227,6 +231,59 @@
         }
         
     }
+    
+    
+    //.......
+    //上面定义了栅格的样式，下面填充头部和尾部的栅格部分的视图。
+    
+    
+    UIImageView *headImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p2-4"]];
+    
+    UIImageView *backgroudImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk1"]];
+    UILabel *label = [UILabel new];
+    label.text = @"特色推荐";
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [CFTool font:18];
+    label.textColor = [CFTool color:3];
+    
+    
+    //底部
+    UIScrollView *scrollView =[UIScrollView new];
+    scrollView.pagingEnabled = YES;
+    MyFlowLayout *scrollFlowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:1];
+    scrollFlowLayout.pagedCount = 1; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
+    scrollFlowLayout.wrapContentWidth = YES; //设置布局视图的宽度由子视图包裹，当水平流式布局的这个属性设置为YES，并和pagedCount搭配使用会产生分页从左到右滚动的效果。
+    scrollFlowLayout.heightSize.equalTo(scrollView.heightSize); //因为是分页从左到右滚动，因此布局视图的高度必须设置为和父滚动视图相等。
+    
+    [scrollView addSubview:scrollFlowLayout];
+    
+    //添加三个广告
+    UIImageView *advImageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk3"]];
+    [scrollFlowLayout addSubview:advImageView1];
+    UIImageView *advImageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk2"]];
+    [scrollFlowLayout addSubview:advImageView2];
+    UIImageView *advImageView3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk1"]];
+    [scrollFlowLayout addSubview:advImageView3];
+    
+    
+    
+    //最后一行的分页控制器
+    UIPageControl *pageCtrl = [UIPageControl new];
+    pageCtrl.numberOfPages = 5;
+    pageCtrl.currentPage = 0;
+    pageCtrl.pageIndicatorTintColor = [UIColor redColor];
+    
+    
+    //将头尾部分的视图组和栅格标签1000绑定
+    [_rootLayout addViewGroup:@[headImageView,backgroudImageView,label,scrollView,pageCtrl] withActionData:nil to:1000];
+}
+
+
+-(void)handleTap:(id<MyGrid>)sender
+{
+    NSString *message = [NSString stringWithFormat:@"您单击了:%@", sender.actionData];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
     
 }
 

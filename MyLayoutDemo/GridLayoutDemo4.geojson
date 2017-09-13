@@ -1,14 +1,26 @@
 {
     "rows": [
          {
+             "size":60
+         },
+         {
+             "size":30,
+             "anchor":"true",
+             "rows":[
+                {
+                    "size":"fill"
+                }
+             ]
+         },
+         {
              "size":"fill",
              "bottom-borderline":
-                 {"color":"#AAA","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
+                 {"color":"#EEEEEE","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
              "cols":[
                      {
                      "size":"50%",
                      "padding":"{5,5,5,5}",
-                     "right-borderline":{"color":"#AAA","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                     "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
                      "action":"handleTap:",
                      "tag":1,
                      "rows":[
@@ -41,7 +53,7 @@
                      },
                      {
                      "size":"25%",
-                     "right-borderline":{"color":"#AAA","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                     "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
                      "action":"handleTap:",
                      "tag":2,
                      "padding":"{5,5,5,5}",
@@ -65,7 +77,7 @@
                      },
                      {
                      "size":"25%",
-                     "right-borderline":{"color":"#AAA","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                     "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
                      "action":"handleTap:",
                      "tag":2,
                      "padding":"{5,5,5,5}",
@@ -87,8 +99,208 @@
                                  }
                              ]
                      }
-                   ]
+                ]
              
+         },
+         {
+         "size":"fill",
+         "bottom-borderline":
+         {"color":"#EEEEEE","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
+         "cols":[
+                 {
+                 "size":"50%",
+                 "padding":"{5,5,5,5}",
+                 "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                 "action":"handleTap:",
+                 "tag":1,
+                 "rows":[
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"fill",
+                         "space":5,
+                         "cols":[
+                                 {
+                                 "size":"fill",
+                                 "padding":"{5,5,5,5}"
+                                 },
+                                 {
+                                 "size":"fill",
+                                 "padding":"{5,5,5,5}"
+                                 }
+                                 ]
+                         },
+                         {
+                         "size":0,
+                         "anchor":"true",
+                         "gravity":"bottom|left"
+                         }
+                         ]
+                 },
+                 {
+                 "size":"25%",
+                 "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                 "action":"handleTap:",
+                 "tag":2,
+                 "padding":"{5,5,5,5}",
+                 "rows":[
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"fill",
+                         "padding":"{5,5,5,5}"
+                         },
+                         {
+                         "size":0,
+                         "anchor":"true",
+                         "gravity":"bottom|left"
+                         }
+                         ]
+                 },
+                 {
+                 "size":"25%",
+                 "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                 "action":"handleTap:",
+                 "tag":2,
+                 "padding":"{5,5,5,5}",
+                 "rows":[
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"fill",
+                         "padding":"{5,5,5,5}"
+                         },
+                         {
+                         "size":0,
+                         "anchor":"true",
+                         "gravity":"bottom|left"
+                         }
+                         ]
+                 }
+                 ]
+         
+         },
+         {
+         "size":"fill",
+         "bottom-borderline":
+         {"color":"#EEEEEE","thick":"1.0","head":"1.0","tail":"1.0","offset":"1"},
+         "cols":[
+                 {
+                 "size":"25%",
+                 "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                 "action":"handleTap:",
+                 "tag":2,
+                 "padding":"{5,5,5,5}",
+                 "rows":[
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"fill",
+                         "padding":"{5,5,5,5}"
+                         },
+                         {
+                         "size":0,
+                         "anchor":"true",
+                         "gravity":"bottom|left"
+                         }
+                         ]
+                 },
+                 {
+                 "size":"25%",
+                 "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                 "action":"handleTap:",
+                 "tag":2,
+                 "padding":"{5,5,5,5}",
+                 "rows":[
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"fill",
+                         "padding":"{5,5,5,5}"
+                         },
+                         {
+                         "size":0,
+                         "anchor":"true",
+                         "gravity":"bottom|left"
+                         }
+                         ]
+                 },
+                 {
+                 "size":"25%",
+                 "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                 "action":"handleTap:",
+                 "tag":2,
+                 "padding":"{5,5,5,5}",
+                 "rows":[
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"fill",
+                         "padding":"{5,5,5,5}"
+                         },
+                         {
+                         "size":0,
+                         "anchor":"true",
+                         "gravity":"bottom|left"
+                         }
+                         ]
+                 },
+                 {
+                 "size":"25%",
+                 "right-borderline":{"color":"#EEEEEE","thick":1.0,"head":1.0,"tail":1.0,"offset":1},
+                 "action":"handleTap:",
+                 "tag":2,
+                 "padding":"{5,5,5,5}",
+                 "rows":[
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"wrap"
+                         },
+                         {
+                         "size":"fill",
+                         "padding":"{5,5,5,5}"
+                         },
+                         {
+                         "size":0,
+                         "anchor":"true",
+                         "gravity":"bottom|left"
+                         }
+                         ]
+                 }
+             ]
+         
+         },
+         {
+             "size":80
+         },
+         {
+             "size":20
          }
     ]
 }

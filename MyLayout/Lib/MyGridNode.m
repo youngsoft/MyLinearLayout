@@ -242,85 +242,55 @@ typedef struct  _MyGridOptionalProperties2
 - (void)settingNodeAttributes:(NSDictionary *)gridDictionary gridNode:(MyGridNode *)gridNode
 {
     NSString *tag = [gridDictionary objectForKey:kMyGridTag];
-    if (tag) {
-        NSInteger tag = [[gridDictionary objectForKey:kMyGridTag] integerValue];
-        gridNode.tag = tag;
-    }
-    
+    [self createTag:tag gridNode:gridNode];
+
     NSString *action = [gridDictionary objectForKey:kMyGridAction];
-    if (action.myIsNotBlank) {
-        MyGridLayout *layout = (MyGridLayout *)[gridNode gridLayoutView];
-        if (layout.gridTarget != nil) {
-            [gridNode setTarget:layout.gridTarget action:@selector(action)];
-        }
-    }
+    [self createAction:action gridNode:gridNode];
     
     NSString *padding = [gridDictionary objectForKey:kMyGridPadding];
     [self createPadding:padding gridNode:gridNode];
     
     NSString *space = [gridDictionary objectForKey:kMyGridSpace];
     [self createSpace:space gridNode:gridNode];
-
     
     NSString *placeholder = [gridDictionary objectForKey:kMyGridPlaceholder];
     if (placeholder.myIsNotBlank) {
-        self.placeholder = [placeholder boolValue];
+        gridNode.placeholder = [placeholder boolValue];
     }
     
     NSString *anchor = [gridDictionary objectForKey:kMyGridAnchor];;
     if (anchor.myIsNotBlank) {
-        self.anchor = [anchor boolValue];
+        gridNode.anchor = [anchor boolValue];
     }
     
-    NSString *gravity = [gridDictionary objectForKey:kMyGridSpace];
-    if (gravity.myIsNotBlank) {
-        [self createGravity:gravity gridNode:gridNode];
-    }
+    NSString *gravity = [gridDictionary objectForKey:kMyGridGravity];
+    [self createGravity:gravity gridNode:gridNode];
     
     NSDictionary *dictionary = [gridDictionary objectForKey:kMyGridTopBorderline];
     if (dictionary != nil) {
-        self.topBorderline = [self createBorderline:dictionary];
+        gridNode.topBorderline = [self createBorderline:dictionary];
     }
     
     dictionary = [gridDictionary objectForKey:kMyGridBottomBorderline];
     if (dictionary != nil) {
-        self.bottomBorderline = [self createBorderline:dictionary];
+        gridNode.bottomBorderline = [self createBorderline:dictionary];
     }
     
     dictionary = [gridDictionary objectForKey:kMyGridLeftBorderline];
     if (dictionary != nil) {
-        self.leftBorderline = [self createBorderline:dictionary];
+        gridNode.leftBorderline = [self createBorderline:dictionary];
     }
     
     dictionary = [gridDictionary objectForKey:kMyGridRightBorderline];
     if (dictionary != nil) {
-        self.rightBorderline = [self createBorderline:dictionary];
+        gridNode.rightBorderline = [self createBorderline:dictionary];
     }
     
     id tempCols = [gridDictionary objectForKey:kMyGridCols];
-    if (tempCols != nil) {
-        if ([tempCols isKindOfClass:[NSArray<NSDictionary *> class]]) {
-            for (NSDictionary *dic in tempCols) {
-                NSString *gridSize = [dictionary objectForKey:kMyGridSize];
-                CGFloat measure = [self createLayoutSize:gridSize];
-                MyGridNode *temp = (MyGridNode *)[gridNode addCol:measure];
-                [self settingNodeAttributes:dic gridNode:temp];
-            }
-        }
-    }
-    
+    [self createCols:tempCols gridNode:gridNode];
     
     id tempRows = [gridDictionary objectForKey:kMyGridRows];
-    if (tempRows != nil) {
-        if ([tempRows isKindOfClass:[NSArray<NSDictionary *> class]]) {
-            for (NSDictionary *dic in tempRows) {
-                NSString *gridSize = [dictionary objectForKey:kMyGridSize];
-                CGFloat measure = [self createLayoutSize:gridSize];
-                MyGridNode *temp = (MyGridNode *)[gridNode addRow:measure];
-                [self settingNodeAttributes:dic gridNode:temp];
-            }
-        }
-    }
+    [self createRows:tempRows gridNode:gridNode];
 }
 
 #pragma mark private GridDictionary
@@ -355,6 +325,25 @@ typedef struct  _MyGridOptionalProperties2
     return -1;
 }
 
+//tag:1
+- (void)createTag:(NSString *)tag gridNode:(MyGridNode *)gridNode
+{
+    if (tag) {
+        gridNode.tag = [tag integerValue];
+    }
+}
+
+//action
+- (void)createAction:(NSString *)action gridNode:(MyGridNode *)gridNode
+{
+    if (action.myIsNotBlank) {
+        MyGridLayout *layout = (MyGridLayout *)[gridNode gridLayoutView];
+        if (layout.gridTarget != nil) {
+            [gridNode setTarget:layout.gridTarget action:NSSelectorFromString(action)];
+        }
+    }
+}
+
 //padding:"{10,10,10,10}"
 - (void)createPadding:(NSString *)padding gridNode:(MyGridNode *)gridNode
 {
@@ -366,7 +355,7 @@ typedef struct  _MyGridOptionalProperties2
 //space:10.0
 - (void)createSpace:(NSString *)space gridNode:(MyGridNode *)gridNode
 {
-    if (space.myIsNotBlank){
+    if (space){
         gridNode.subviewSpace = [space doubleValue];
     }
 }
@@ -374,20 +363,19 @@ typedef struct  _MyGridOptionalProperties2
 //gravity:@"top|bottom|left|right|centerX|centerY|width|height"
 - (void)createGravity:(NSString *)gravity gridNode:(MyGridNode *)gridNode
 {
-    if (gravity == nil || !gravity.myIsNotBlank) return;
-    
-    MyGravity tempGravity = MyGravity_None;
-    
-    if ([gravity containsString:@"|"]) {
-        NSArray *array = [gravity componentsSeparatedByString:@"|"];
-        for (NSString *temp in array) {
-            tempGravity += [self returnGravity:temp];
+    if (gravity.myIsNotBlank){
+        MyGravity tempGravity = MyGravity_None;
+        
+        if ([gravity containsString:@"|"]) {
+            NSArray *array = [gravity componentsSeparatedByString:@"|"];
+            for (NSString *temp in array) {
+                tempGravity += [self returnGravity:temp];
+            }
+            gridNode.gravity = tempGravity;
+        }else{
+            gridNode.gravity = [self returnGravity:gravity];
         }
-        gridNode.gravity = tempGravity;
-    }else{
-        gridNode.gravity = [self returnGravity:gravity];
     }
-    
 }
 
 - (MyGravity)returnGravity:(NSString *)gravity
@@ -421,7 +409,7 @@ typedef struct  _MyGridOptionalProperties2
     
     MyBorderline *line = [MyBorderline new];
     NSString *color = [dictionary objectForKey:kMyGridBorderlineColor];
-    if (color != nil) {
+    if (color) {
         line.color = [UIColor myColorWithHexString:color];
     }
     CGFloat thick = [[dictionary objectForKey:kMyGridBorderlineThick] doubleValue];
@@ -446,6 +434,35 @@ typedef struct  _MyGridOptionalProperties2
     return line;
 }
 
+//"cols":[{}]
+- (void)createCols:(id)cols gridNode:(MyGridNode *)gridNode
+{
+    if (cols != nil) {
+        if ([cols isKindOfClass:[NSArray<NSDictionary *> class]]) {
+            for (NSDictionary *dic in cols) {
+                NSString *gridSize = [dic objectForKey:kMyGridSize];
+                CGFloat measure = [self createLayoutSize:gridSize];
+                MyGridNode *temp = (MyGridNode *)[gridNode addCol:measure];
+                [self settingNodeAttributes:dic gridNode:temp];
+            }
+        }
+    }
+}
+
+//"rows":[{}]
+- (void)createRows:(id)rows gridNode:(MyGridNode *)gridNode
+{
+    if (rows != nil) {
+        if ([rows isKindOfClass:[NSArray<NSDictionary *> class]]) {
+            for (NSDictionary *dic in rows) {
+                NSString *gridSize = [dic objectForKey:kMyGridSize];
+                CGFloat measure = [self createLayoutSize:gridSize];
+                MyGridNode *temp = (MyGridNode *)[gridNode addRow:measure];
+                [self settingNodeAttributes:dic gridNode:temp];
+            }
+        }
+    }
+}
 
 #pragma mark -- MyGrid
 
