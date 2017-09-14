@@ -27,6 +27,19 @@
 + (nullable UIColor *)myColorWithHexString:(NSString *_Nonnull)hexStr;
 
 
+/**
+ 不透明
+ RGB 颜色值
+ @return 十六进制
+ */
+- (NSString *)hexString;
+
+/**
+ 透明
+ RGB 颜色值
+ @return 十六进制
+ */
+- (NSString *)hexStringWithAlpha;
 
 @end
 

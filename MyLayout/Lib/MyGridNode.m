@@ -13,6 +13,502 @@
 #import "MyGridLayout.h"
 
 
+//解析MyGrid
+@interface MYAnalyzeMyGrid()
+
+
+
+@end
+
+@implementation MYAnalyzeMyGrid
+
++(instancetype)shareInstance
+{
+    static MYAnalyzeMyGrid *instance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        instance = [self new];
+    });
+    return instance;
+}
+
+
+#pragma mark 设置节点属性
+
+/**
+ 设置节点属性
+ 
+ @param gridDictionary 数据
+ */
+- (void)settingNodeAttributes:(NSDictionary *)gridDictionary gridNode:(id<MyGrid>)gridNode
+{
+    id actionData = [gridDictionary objectForKey:kMyGridActionData];
+    [self createActionData:actionData gridNode:gridNode];
+    
+    NSString *tag = [gridDictionary objectForKey:kMyGridTag];
+    [self createTag:tag gridNode:gridNode];
+    
+    NSString *action = [gridDictionary objectForKey:kMyGridAction];
+    [self createAction:action gridNode:gridNode];
+    
+    NSString *padding = [gridDictionary objectForKey:kMyGridPadding];
+    [self createPadding:padding gridNode:gridNode];
+    
+    NSString *space = [gridDictionary objectForKey:kMyGridSpace];
+    [self createSpace:space gridNode:gridNode];
+    
+    NSString *placeholder = [gridDictionary objectForKey:kMyGridPlaceholder];
+    [self createPlaceholder:placeholder gridNode:gridNode];
+    
+    NSString *anchor = [gridDictionary objectForKey:kMyGridAnchor];;
+    [self createAnchor:anchor gridNode:gridNode];
+    
+    NSString *gravity = [gridDictionary objectForKey:kMyGridGravity];
+    [self createGravity:gravity gridNode:gridNode];
+    
+    NSDictionary *dictionary = [gridDictionary objectForKey:kMyGridTopBorderline];
+    [self createBorderline:dictionary gridNode:gridNode borderline:0];
+    
+    dictionary = [gridDictionary objectForKey:kMyGridLeftBorderline];
+    [self createBorderline:dictionary gridNode:gridNode borderline:1];
+    
+    dictionary = [gridDictionary objectForKey:kMyGridBottomBorderline];
+    [self createBorderline:dictionary gridNode:gridNode borderline:2];
+    
+    dictionary = [gridDictionary objectForKey:kMyGridRightBorderline];
+    [self createBorderline:dictionary gridNode:gridNode borderline:3];
+    
+    id tempCols = [gridDictionary objectForKey:kMyGridCols];
+    [self createCols:tempCols gridNode:gridNode];
+    
+    id tempRows = [gridDictionary objectForKey:kMyGridRows];
+    [self createRows:tempRows gridNode:gridNode];
+}
+
+#pragma mark private GridDictionary
+
+
+/**
+ 添加行栅格，返回新的栅格。其中的measure可以设置如下的值：
+ 1.大于等于1的常数，表示固定尺寸。
+ 2.大于0小于1的常数，表示占用整体尺寸的比例
+ 3.小于0大于-1的常数，表示占用剩余尺寸的比例
+ 4.MyLayoutSize.wrap 表示尺寸由子栅格包裹
+ 5.MyLayoutSize.fill 表示占用栅格剩余的尺寸
+ */
+- (CGFloat)createLayoutSize:(NSString *)gridSize
+{
+    if ([gridSize isKindOfClass:[NSNumber class]]) {
+        return [gridSize integerValue];
+    }else if ([gridSize isKindOfClass:[NSString class]]){
+        if ([gridSize isEqualToString:vMyGridSizeFill]) {
+            return MyLayoutSize.fill;
+        }else if ([gridSize isEqualToString:vMyGridSizeWrap]){
+            return MyLayoutSize.wrap;
+        }else if ([gridSize hasSuffix:@"%"]){
+            
+            if ([gridSize isEqualToString:@"100%"] ||
+                [gridSize isEqualToString:@"-100%"])return MyLayoutSize.fill;
+            
+            NSInteger temp = [gridSize integerValue];
+            return temp / 100.f;
+        }
+    }
+    return -1;
+}
+
+//action-data 数据
+- (void)createActionData:(id)actionData gridNode:(id<MyGrid>)gridNode
+{
+    if (actionData) {
+        gridNode.actionData = actionData;
+    }
+}
+
+//tag:1
+- (void)createTag:(NSString *)tag gridNode:(id<MyGrid>)gridNode
+{
+    if (tag) {
+        gridNode.tag = [tag integerValue];
+    }
+}
+
+//action
+- (void)createAction:(NSString *)action gridNode:(id<MyGrid>)gridNode
+{
+    if (action.myIsNotBlank) {
+        MyGridNode *temp =  (MyGridNode *)gridNode;
+        MyGridLayout *layout = (MyGridLayout *)[temp gridLayoutView];
+        if (layout.gridTarget != nil) {
+            [gridNode setTarget:layout.gridTarget action:NSSelectorFromString(action)];
+        }
+    }
+}
+
+//padding:"{10,10,10,10}"
+- (void)createPadding:(NSString *)padding gridNode:(id<MyGrid>)gridNode
+{
+    if (padding.myIsNotBlank){
+        gridNode.padding = UIEdgeInsetsFromString(padding);
+    }
+}
+
+//space:10.0
+- (void)createSpace:(NSString *)space gridNode:(id<MyGrid>)gridNode
+{
+    if (space){
+        gridNode.subviewSpace = [space doubleValue];
+    }
+}
+
+//palceholder:true/false
+- (void)createPlaceholder:(NSString *)placeholder gridNode:(id<MyGrid>)gridNode
+{
+    if (placeholder) {
+        BOOL temp = [placeholder isEqualToString:@"true"] ? true : false;
+        gridNode.placeholder = temp;
+    }
+}
+
+//anchor:true/false
+- (void)createAnchor:(NSString *)anchor gridNode:(id<MyGrid>)gridNode
+{
+    if (anchor) {
+        BOOL temp = [anchor isEqualToString:@"true"] ? true : false;
+        gridNode.anchor = temp;
+    }
+}
+
+//gravity:@"top|bottom|left|right|centerX|centerY|width|height"
+- (void)createGravity:(NSString *)gravity gridNode:(id<MyGrid>)gridNode
+{
+    if (gravity.myIsNotBlank){
+        MyGravity tempGravity = MyGravity_None;
+        
+        if ([gravity containsString:@"|"]) {
+            NSArray *array = [gravity componentsSeparatedByString:@"|"];
+            for (NSString *temp in array) {
+                tempGravity += [self returnGravity:temp];
+            }
+            gridNode.gravity = tempGravity;
+        }else{
+            gridNode.gravity = [self returnGravity:gravity];
+        }
+    }
+}
+
+- (MyGravity)returnGravity:(NSString *)gravity
+{
+    if ([gravity isEqualToString:vMyGridGravityTop]) {
+        return  MyGravity_Vert_Top;
+    }else if ([gravity isEqualToString:vMyGridGravityBottom]) {
+        return MyGravity_Vert_Bottom;
+    }else if ([gravity isEqualToString:vMyGridGravityLeft]) {
+        return MyGravity_Horz_Left;
+    }else if ([gravity isEqualToString:vMyGridGravityRight]) {
+        return MyGravity_Horz_Right;
+    }else if ([gravity isEqualToString:vMyGridGravityCenterX]) {
+        return MyGravity_Horz_Center;
+    }else if ([gravity isEqualToString:vMyGridGravityCenterY]) {
+        return MyGravity_Vert_Center;
+    }else if ([gravity isEqualToString:vMyGridGravityWidthFill]) {
+        return MyGravity_Horz_Fill;
+    }else if ([gravity isEqualToString:vMyGridGravityHeightFill]) {
+        return MyGravity_Vert_Fill;
+    }else{
+        return MyGravity_None;
+    }
+}
+
+
+//{"color":"#AAA",thick:1.0, head:1.0, tail:1.0, offset:1} borderline:{上,左,下,右}
+- (void)createBorderline:(NSDictionary *)dictionary gridNode:(id<MyGrid>)gridNode borderline:(NSInteger)borderline
+{
+    if (dictionary) {
+        MyBorderline *line = [MyBorderline new];
+        NSString *color = [dictionary objectForKey:kMyGridBorderlineColor];
+        if (color) {
+            line.color = [UIColor myColorWithHexString:color];
+        }
+        CGFloat thick = [[dictionary objectForKey:kMyGridBorderlineThick] doubleValue];
+        if (thick > 0.f) {
+            line.thick = thick;
+        }
+        
+        CGFloat head = [[dictionary objectForKey:kMyGridBorderlineHeadIndent] doubleValue];
+        if (head > 0.f) {
+            line.headIndent = head;
+        }
+        
+        CGFloat tail = [[dictionary objectForKey:kMyGridBorderlineTailIndent] doubleValue];
+        if (tail > 0.f) {
+            line.tailIndent = tail;
+        }
+        
+        CGFloat offset = [[dictionary objectForKey:kMyGridBorderlineOffset] doubleValue];
+        if (offset > 0.f) {
+            line.offset = offset;
+        }
+        
+        switch (borderline) {
+            case 0: gridNode.topBorderline = line; break;
+            case 1: gridNode.leftBorderline = line;break;
+            case 2: gridNode.bottomBorderline = line;break;
+            case 3: gridNode.rightBorderline = line;break;
+            default:
+                break;
+        }
+    }
+}
+
+//"cols":[{}]
+- (void)createCols:(id)cols gridNode:(id<MyGrid>)gridNode
+{
+    if (cols != nil) {
+        if ([cols isKindOfClass:[NSArray<NSDictionary *> class]]) {
+            for (NSDictionary *dic in cols) {
+                NSString *gridSize = [dic objectForKey:kMyGridSize];
+                CGFloat measure = [self createLayoutSize:gridSize];
+                MyGridNode *temp = (MyGridNode *)[gridNode addCol:measure];
+                temp.gridDictionary = dic;
+                [self settingNodeAttributes:dic gridNode:temp];
+            }
+        }
+    }
+}
+
+//"rows":[{}]
+- (void)createRows:(id)rows gridNode:(id<MyGrid>)gridNode
+{
+    if (rows != nil) {
+        if ([rows isKindOfClass:[NSArray<NSDictionary *> class]]) {
+            for (NSDictionary *dic in rows) {
+                NSString *gridSize = [dic objectForKey:kMyGridSize];
+                CGFloat measure = [self createLayoutSize:gridSize];
+                MyGridNode *temp = (MyGridNode *)[gridNode addRow:measure];
+                temp.gridDictionary = dic;
+                [self settingNodeAttributes:dic gridNode:temp];
+            }
+        }
+    }
+}
+
+
+#pragma mark 节点转换字典
+
+/**
+ 节点转换字典
+ 
+ @param gridNode 节点
+ @return 字典
+ */
+- (NSDictionary *)gridConvertDictionaryWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    if (gridNode == nil) return  nil;
+    
+    
+    [self returnActionDataWithGridNode:gridNode result:result];
+
+    [self returnTagWithGridNode:gridNode result:result];
+    
+    [self returnActionWithGridNode:gridNode result:result];
+    
+    [self returnPaddingWithGridNode:gridNode result:result];
+    
+    [self returnSpaceWithGridNode:gridNode result:result];
+
+    [self returnPlaceholderWithGridNode:gridNode result:result];
+    
+    [self returnAnchorWithGridNode:gridNode result:result];
+    
+    [self returnGravityWithGridNode:gridNode result:result];
+    
+    [self returnBorderlineWithGridNode:gridNode borderline:0 result:result];
+    
+    [self returnBorderlineWithGridNode:gridNode borderline:1 result:result];
+    
+    [self returnBorderlineWithGridNode:gridNode borderline:2 result:result];
+    
+    [self returnBorderlineWithGridNode:gridNode borderline:3 result:result];
+    
+    [self returnArrayColsRowsGridNode:gridNode result:result];
+
+    return result;
+}
+
+
+/**
+ 添加行栅格，返回新的栅格。其中的measure可以设置如下的值：
+ 1.大于等于1的常数，表示固定尺寸。
+ 2.大于0小于1的常数，表示占用整体尺寸的比例
+ 3.小于0大于-1的常数，表示占用剩余尺寸的比例
+ 4.MyLayoutSize.wrap 表示尺寸由子栅格包裹
+ 5.MyLayoutSize.fill 表示占用栅格剩余的尺寸
+ */
+- (void)returnLayoutSizeWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    [result setObject:[NSNumber numberWithDouble:gridNode.measure] forKey:kMyGridSize];
+}
+
+//action-data 数据
+- (void)returnActionDataWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    if (gridNode.actionData) {
+        [result setObject:gridNode.actionData forKey:kMyGridActionData];
+    }
+}
+
+//tag:1
+- (void)returnTagWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    if (gridNode.tag) {
+        [result setObject:[NSNumber numberWithInteger:gridNode.tag] forKey:kMyGridTag];
+    }
+}
+
+//action
+- (void)returnActionWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    if (gridNode.action) {
+         [result setObject:gridNode.action forKey:kMyGridAction];
+    }
+}
+
+//padding:"{10,10,10,10}"
+- (void)returnPaddingWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    NSString *temp = NSStringFromUIEdgeInsets(gridNode.padding);
+    if (temp) {
+        [result setObject:temp forKey:kMyGridPadding];
+    }
+}
+
+
+
+//space:10.0
+- (void)returnSpaceWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    if (gridNode.subviewSpace) {
+        [result setObject:[NSNumber numberWithDouble:gridNode.subviewSpace] forKey:kMyGridSpace];
+    }
+}
+
+//palceholder:true/false
+- (void)returnPlaceholderWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    if (gridNode.placeholder) {
+        NSString *temp = gridNode.placeholder ? @"true" : @"false";
+        [result setObject:temp forKey:kMyGridPlaceholder];
+    }
+}
+
+//anchor:true/false
+- (void)returnAnchorWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    if (gridNode.anchor) {
+        NSString *temp = gridNode.anchor ? @"true" : @"false";
+        [result setObject:temp forKey:kMyGridAnchor];
+    }
+}
+
+//gravity:@"top|bottom|left|right|centerX|centerY|width|height"
+- (void)returnGravityWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+//    if (gravity.myIsNotBlank){
+//        MyGravity tempGravity = MyGravity_None;
+//        
+//        if ([gravity containsString:@"|"]) {
+//            NSArray *array = [gravity componentsSeparatedByString:@"|"];
+//            for (NSString *temp in array) {
+//                tempGravity += [self returnGravity:temp];
+//            }
+//            gridNode.gravity = tempGravity;
+//        }else{
+//            gridNode.gravity = [self returnGravity:gravity];
+//        }
+//    }
+    
+    
+    [result setObject:@"" forKey:kMyGridGravity];
+}
+
+
+
+//{"color":"#AAA",thick:1.0, head:1.0, tail:1.0, offset:1} borderline:{上,左,下,右}
+- (void)returnBorderlineWithGridNode:(id<MyGrid>)gridNode borderline:(NSInteger)borderline result:(NSMutableDictionary *)result
+{
+    NSString *key = nil;
+    NSMutableDictionary *dictionary =  [NSMutableDictionary new];
+    MyBorderline *line = nil;
+    switch (borderline) {
+        case 0: key = kMyGridTopBorderline;line = gridNode.topBorderline; break;
+        case 1: key = kMyGridLeftBorderline;line = gridNode.leftBorderline;break;
+        case 2: key = kMyGridBottomBorderline;line = gridNode.bottomBorderline;break;
+        case 3: key = kMyGridRightBorderline;line = gridNode.rightBorderline;break;
+        default:
+            break;
+    }
+    if (line) {
+        if (line.color) {
+            [dictionary setObject:[line.color hexString] forKey:kMyGridBorderlineColor];
+        }
+        if (line.thick) {
+            [dictionary setObject:[NSNumber numberWithDouble:line.thick] forKey:kMyGridBorderlineThick];
+        }
+        if (line.headIndent) {
+            [dictionary setObject:[NSNumber numberWithDouble:line.headIndent] forKey:kMyGridBorderlineHeadIndent];
+        }
+        if (line.tailIndent) {
+            [dictionary setObject:[NSNumber numberWithDouble:line.tailIndent] forKey:kMyGridBorderlineTailIndent];
+        }
+        if (line.offset) {
+            [dictionary setObject:[NSNumber numberWithDouble:line.offset] forKey:kMyGridBorderlineOffset];
+        }
+        [result setObject:dictionary forKey:key];
+    }
+}
+
+//"cols":[{}] "rows":[{}]
+- (void)returnArrayColsRowsGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
+{
+    MyGridNode *myGrid = (MyGridNode *)gridNode;
+    if (myGrid.subGridsType) {
+        NSMutableArray<NSMutableDictionary *> *temp = [NSMutableArray<NSMutableDictionary *> new];
+        NSString *key = nil;
+        switch (myGrid.subGridsType) {
+            case MySubGridsType_Col:
+            {
+                key = kMyGridCols;
+                break;
+            }
+            case MySubGridsType_Row:
+            {
+                key = kMyGridRows;
+                break;
+            }
+            default:
+                break;
+        }
+        if (myGrid.subGrids) {
+            
+            for (id<MyGrid> node  in myGrid.subGrids) {
+                NSMutableDictionary *tempDic =  [NSMutableDictionary new];
+                [self gridConvertDictionaryWithGridNode:node result:tempDic];
+                [temp addObject:tempDic];
+            }
+        }
+        [result setObject:temp.description forKey:key];
+    }
+}
+
+
+@end
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 /**
  为支持栅格触摸而建立的触摸委托派生类。
@@ -181,6 +677,11 @@ typedef struct  _MyGridOptionalProperties2
     return _touchEventDelegate.actionData;
 }
 
+- (NSString *)action
+{
+    return NSStringFromSelector(_touchEventDelegate.action);
+}
+
 -(void)setActionData:(id)actionData
 {
     if (_touchEventDelegate == nil && actionData != nil)
@@ -205,264 +706,20 @@ typedef struct  _MyGridOptionalProperties2
     //    _touchEventDelegate = nil;
 }
 
-//gridDictionary
 
-
-
-/*
- 栅格的描述。你可以用格子描述语言来建立格子
- 
- @code
- 
- {rows:[
- 
- {size:100, size:"100%", size:"-20%",size:"wrap", size:"fill", padding:"{10,10,10,10}", space:10.0, gravity:@"top|bottom|left|right|centerX|centerY|width|height","top-borderline":{"color":"#AAA",thick:1.0, head:1.0, tail:1.0, offset:1} },
- {},
- ]
- }
- 
- @endcode
- 
- */
-- (void)setGridDictionary:(NSDictionary *)gridDictionary
+- (NSDictionary *)gridDictionary
 {
-    if (gridDictionary == nil || gridDictionary.count <= 0) return;
-    
-    _gridDictionary = gridDictionary;
-    
-    [self settingNodeAttributes:gridDictionary gridNode:self];
+    return nil;
 }
 
-
-/**
- 设置节点属性
-
- @param gridDictionary 数据
- */
-- (void)settingNodeAttributes:(NSDictionary *)gridDictionary gridNode:(MyGridNode *)gridNode
-{
-    NSString *tag = [gridDictionary objectForKey:kMyGridTag];
-    [self createTag:tag gridNode:gridNode];
-
-    NSString *action = [gridDictionary objectForKey:kMyGridAction];
-    [self createAction:action gridNode:gridNode];
-    
-    NSString *padding = [gridDictionary objectForKey:kMyGridPadding];
-    [self createPadding:padding gridNode:gridNode];
-    
-    NSString *space = [gridDictionary objectForKey:kMyGridSpace];
-    [self createSpace:space gridNode:gridNode];
-    
-    NSString *placeholder = [gridDictionary objectForKey:kMyGridPlaceholder];
-    if (placeholder.myIsNotBlank) {
-        gridNode.placeholder = [placeholder boolValue];
-    }
-    
-    NSString *anchor = [gridDictionary objectForKey:kMyGridAnchor];;
-    if (anchor.myIsNotBlank) {
-        gridNode.anchor = [anchor boolValue];
-    }
-    
-    NSString *gravity = [gridDictionary objectForKey:kMyGridGravity];
-    [self createGravity:gravity gridNode:gridNode];
-    
-    NSDictionary *dictionary = [gridDictionary objectForKey:kMyGridTopBorderline];
-    if (dictionary != nil) {
-        gridNode.topBorderline = [self createBorderline:dictionary];
-    }
-    
-    dictionary = [gridDictionary objectForKey:kMyGridBottomBorderline];
-    if (dictionary != nil) {
-        gridNode.bottomBorderline = [self createBorderline:dictionary];
-    }
-    
-    dictionary = [gridDictionary objectForKey:kMyGridLeftBorderline];
-    if (dictionary != nil) {
-        gridNode.leftBorderline = [self createBorderline:dictionary];
-    }
-    
-    dictionary = [gridDictionary objectForKey:kMyGridRightBorderline];
-    if (dictionary != nil) {
-        gridNode.rightBorderline = [self createBorderline:dictionary];
-    }
-    
-    id tempCols = [gridDictionary objectForKey:kMyGridCols];
-    [self createCols:tempCols gridNode:gridNode];
-    
-    id tempRows = [gridDictionary objectForKey:kMyGridRows];
-    [self createRows:tempRows gridNode:gridNode];
-}
-
-#pragma mark private GridDictionary
+//- (void)setGridDictionary:(NSDictionary *)gridDictionary
+//{
+////    if (gridDictionary == nil || gridDictionary.count <= 0) return;
+////    _gridDictionary = gridDictionary;
+//}
 
 
-/**
- 添加行栅格，返回新的栅格。其中的measure可以设置如下的值：
- 1.大于等于1的常数，表示固定尺寸。
- 2.大于0小于1的常数，表示占用整体尺寸的比例
- 3.小于0大于-1的常数，表示占用剩余尺寸的比例
- 4.MyLayoutSize.wrap 表示尺寸由子栅格包裹
- 5.MyLayoutSize.fill 表示占用栅格剩余的尺寸
- */
-- (CGFloat)createLayoutSize:(NSString *)gridSize
-{
-    if ([gridSize isKindOfClass:[NSNumber class]]) {
-        return [gridSize integerValue];
-    }else if ([gridSize isKindOfClass:[NSString class]]){
-        if ([gridSize isEqualToString:vMyGridSizeFill]) {
-            return MyLayoutSize.fill;
-        }else if ([gridSize isEqualToString:vMyGridSizeWrap]){
-            return MyLayoutSize.wrap;
-        }else if ([gridSize hasSuffix:@"%"]){
-            
-            if ([gridSize isEqualToString:@"100%"] ||
-                [gridSize isEqualToString:@"-100%"])return MyLayoutSize.fill;
-            
-            NSInteger temp = [gridSize integerValue];
-            return temp / 100.f;
-        }
-    }
-    return -1;
-}
 
-//tag:1
-- (void)createTag:(NSString *)tag gridNode:(MyGridNode *)gridNode
-{
-    if (tag) {
-        gridNode.tag = [tag integerValue];
-    }
-}
-
-//action
-- (void)createAction:(NSString *)action gridNode:(MyGridNode *)gridNode
-{
-    if (action.myIsNotBlank) {
-        MyGridLayout *layout = (MyGridLayout *)[gridNode gridLayoutView];
-        if (layout.gridTarget != nil) {
-            [gridNode setTarget:layout.gridTarget action:NSSelectorFromString(action)];
-        }
-    }
-}
-
-//padding:"{10,10,10,10}"
-- (void)createPadding:(NSString *)padding gridNode:(MyGridNode *)gridNode
-{
-    if (padding.myIsNotBlank){
-        gridNode.padding = UIEdgeInsetsFromString(padding);
-    }
-}
-
-//space:10.0
-- (void)createSpace:(NSString *)space gridNode:(MyGridNode *)gridNode
-{
-    if (space){
-        gridNode.subviewSpace = [space doubleValue];
-    }
-}
-
-//gravity:@"top|bottom|left|right|centerX|centerY|width|height"
-- (void)createGravity:(NSString *)gravity gridNode:(MyGridNode *)gridNode
-{
-    if (gravity.myIsNotBlank){
-        MyGravity tempGravity = MyGravity_None;
-        
-        if ([gravity containsString:@"|"]) {
-            NSArray *array = [gravity componentsSeparatedByString:@"|"];
-            for (NSString *temp in array) {
-                tempGravity += [self returnGravity:temp];
-            }
-            gridNode.gravity = tempGravity;
-        }else{
-            gridNode.gravity = [self returnGravity:gravity];
-        }
-    }
-}
-
-- (MyGravity)returnGravity:(NSString *)gravity
-{
-    if ([gravity isEqualToString:vMyGridGravityTop]) {
-        return  MyGravity_Vert_Top;
-    }else if ([gravity isEqualToString:vMyGridGravityBottom]) {
-        return MyGravity_Vert_Bottom;
-    }else if ([gravity isEqualToString:vMyGridGravityLeft]) {
-        return MyGravity_Horz_Left;
-    }else if ([gravity isEqualToString:vMyGridGravityRight]) {
-        return MyGravity_Horz_Right;
-    }else if ([gravity isEqualToString:vMyGridGravityCenterX]) {
-        return MyGravity_Horz_Center;
-    }else if ([gravity isEqualToString:vMyGridGravityCenterY]) {
-        return MyGravity_Vert_Center;
-    }else if ([gravity isEqualToString:vMyGridGravityWidthFill]) {
-        return MyGravity_Horz_Fill;
-    }else if ([gravity isEqualToString:vMyGridGravityHeightFill]) {
-        return MyGravity_Vert_Fill;
-    }else{
-        return MyGravity_None;
-    }
-}
-
-
-//{"color":"#AAA",thick:1.0, head:1.0, tail:1.0, offset:1}
-- (MyBorderline *)createBorderline:(NSDictionary *)dictionary
-{
-    if (dictionary == nil || dictionary.count == 0) return nil;
-    
-    MyBorderline *line = [MyBorderline new];
-    NSString *color = [dictionary objectForKey:kMyGridBorderlineColor];
-    if (color) {
-        line.color = [UIColor myColorWithHexString:color];
-    }
-    CGFloat thick = [[dictionary objectForKey:kMyGridBorderlineThick] doubleValue];
-    if (thick > 0.f) {
-        line.thick = thick;
-    }
-    
-    CGFloat head = [[dictionary objectForKey:kMyGridBorderlineHeadIndent] doubleValue];
-    if (head > 0.f) {
-        line.headIndent = head;
-    }
-    
-    CGFloat tail = [[dictionary objectForKey:kMyGridBorderlineTailIndent] doubleValue];
-    if (tail > 0.f) {
-        line.tailIndent = tail;
-    }
-    
-    CGFloat offset = [[dictionary objectForKey:kMyGridBorderlineOffset] doubleValue];
-    if (offset > 0.f) {
-        line.offset = offset;
-    }
-    return line;
-}
-
-//"cols":[{}]
-- (void)createCols:(id)cols gridNode:(MyGridNode *)gridNode
-{
-    if (cols != nil) {
-        if ([cols isKindOfClass:[NSArray<NSDictionary *> class]]) {
-            for (NSDictionary *dic in cols) {
-                NSString *gridSize = [dic objectForKey:kMyGridSize];
-                CGFloat measure = [self createLayoutSize:gridSize];
-                MyGridNode *temp = (MyGridNode *)[gridNode addCol:measure];
-                [self settingNodeAttributes:dic gridNode:temp];
-            }
-        }
-    }
-}
-
-//"rows":[{}]
-- (void)createRows:(id)rows gridNode:(MyGridNode *)gridNode
-{
-    if (rows != nil) {
-        if ([rows isKindOfClass:[NSArray<NSDictionary *> class]]) {
-            for (NSDictionary *dic in rows) {
-                NSString *gridSize = [dic objectForKey:kMyGridSize];
-                CGFloat measure = [self createLayoutSize:gridSize];
-                MyGridNode *temp = (MyGridNode *)[gridNode addRow:measure];
-                [self settingNodeAttributes:dic gridNode:temp];
-            }
-        }
-    }
-}
 
 #pragma mark -- MyGrid
 

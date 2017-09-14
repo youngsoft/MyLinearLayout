@@ -64,6 +64,13 @@ extern NSString * const vMyGridGravityHeightFill;
 @property(nonatomic, strong) id actionData;
 
 
+
+/**
+ 栅格的事件
+ */
+@property(nonatomic, copy) NSString *action;
+
+
 /**
  设置栅格的事件,如果取消栅格事件则设置target为nil
 

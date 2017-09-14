@@ -1,4 +1,5 @@
 {
+    "padding":"{10,10,10,10}",
     "rows": [
          {
              "size":60
@@ -48,6 +49,7 @@
                                  "size":0,
                                  "anchor":"true",
                                  "gravity":"bottom|left"
+
                                 }
                              ]
                      },

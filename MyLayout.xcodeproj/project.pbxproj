@@ -152,6 +152,8 @@
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F783551F60399700BE5B31 /* GLTest3ViewController.m */; };
+		4411977B1F6AE78E00C22557 /* GridLayoutDemo5.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 4411977A1F6AE78E00C22557 /* GridLayoutDemo5.geojson */; };
+		444B71911F6A3E3F00331872 /* GLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 444B71901F6A3E3F00331872 /* GLTest5ViewController.m */; };
 		44BEDD8B1F67BEC700ACD595 /* UIColor+MyLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 445FE9651F639B0900A21B62 /* UIColor+MyLayout.h */; };
 		44BEDD8C1F67BEC700ACD595 /* UIColor+MyLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 445FE9661F639B0900A21B62 /* UIColor+MyLayout.m */; };
 		44BEDD8D1F67BECC00ACD595 /* UIColor+MyLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 445FE9661F639B0900A21B62 /* UIColor+MyLayout.m */; };
@@ -374,6 +376,9 @@
 		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
 		20F783541F60398C00BE5B31 /* GLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest3ViewController.h; sourceTree = "<group>"; };
 		20F783551F60399700BE5B31 /* GLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest3ViewController.m; sourceTree = "<group>"; };
+		4411977A1F6AE78E00C22557 /* GridLayoutDemo5.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GridLayoutDemo5.geojson; sourceTree = "<group>"; };
+		444B718F1F6A3E3F00331872 /* GLTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest5ViewController.h; sourceTree = "<group>"; };
+		444B71901F6A3E3F00331872 /* GLTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest5ViewController.m; sourceTree = "<group>"; };
 		445FE9651F639B0900A21B62 /* UIColor+MyLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MyLayout.h"; sourceTree = "<group>"; };
 		445FE9661F639B0900A21B62 /* UIColor+MyLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MyLayout.m"; sourceTree = "<group>"; };
 		44EBDA8A1F619A6300B47CBD /* GLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest4ViewController.h; sourceTree = "<group>"; };
@@ -640,6 +645,7 @@
 				18D3C9A71EDF0A5A00D3DE43 /* Info.plist */,
 				18D3C9A81EDF0A5A00D3DE43 /* main.m */,
 				44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.geojson */,
+				4411977A1F6AE78E00C22557 /* GridLayoutDemo5.geojson */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -775,6 +781,8 @@
 				20F783551F60399700BE5B31 /* GLTest3ViewController.m */,
 				44EBDA8A1F619A6300B47CBD /* GLTest4ViewController.h */,
 				44EBDA8B1F619A6300B47CBD /* GLTest4ViewController.m */,
+				444B718F1F6A3E3F00331872 /* GLTest5ViewController.h */,
+				444B71901F6A3E3F00331872 /* GLTest5ViewController.m */,
 			);
 			name = GridLayoutDemo;
 			sourceTree = "<group>";
@@ -954,6 +962,7 @@
 				18D3C9D31EDF0AB500D3DE43 /* layoutdemo2.gif in Resources */,
 				18D3C9DF1EDF0AB500D3DE43 /* tl.png in Resources */,
 				18D3C9B61EDF0A5A00D3DE43 /* Images.xcassets in Resources */,
+				4411977B1F6AE78E00C22557 /* GridLayoutDemo5.geojson in Resources */,
 				18D3C9D91EDF0AB500D3DE43 /* ll.png in Resources */,
 				18D3C9D11EDF0AB500D3DE43 /* flo.png in Resources */,
 				18D3C9D41EDF0AB500D3DE43 /* layoutdemo3.gif in Resources */,
@@ -1070,6 +1079,7 @@
 				18D3C94C1EDF07E700D3DE43 /* PLTest4ViewController.m in Sources */,
 				2056430C1F4E8B1E00E8BDDE /* MyGridNode.m in Sources */,
 				182225D11E77E5930081AA4B /* MyLayoutSizeClass.m in Sources */,
+				444B71911F6A3E3F00331872 /* GLTest5ViewController.m in Sources */,
 				44BEDD8D1F67BECC00ACD595 /* UIColor+MyLayout.m in Sources */,
 				18D3C9741EDF082800D3DE43 /* AllTestDataModel.m in Sources */,
 				205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */,

@@ -594,9 +594,14 @@
 
 -(NSDictionary*)gridDictionary
 {
-    return nil;
+    return [[MYAnalyzeMyGrid shareInstance] gridConvertDictionaryWithGridNode:self result:
+            [NSMutableDictionary new]];
 }
 
+- (NSString *)action
+{
+    return nil;
+}
 
 /*
  栅格的描述。你可以用格子描述语言来建立格子
@@ -616,53 +621,12 @@
 -(void)setGridDictionary:(NSDictionary *)gridDictionary
 {
     if (gridDictionary == nil || gridDictionary.count <= 0) return;
+    [self removeGrids];
     
-    id tempRows = [gridDictionary objectForKey:kMyGridRows];
-    if (tempRows != nil && [tempRows isKindOfClass:[NSArray<NSDictionary *> class]]) {
-        [self removeGrids];
-        for (NSDictionary *dictionary in tempRows) {
-            if ([dictionary objectForKey:kMyGridSize]) {
-                NSString *gridSize = [dictionary objectForKey:kMyGridSize];
-                CGFloat measure = [self createLayoutSize:gridSize];
-                id<MyGrid> tempGrid =  [self addRow:measure];
-                tempGrid.gridDictionary = dictionary;
-            }
-        }
-        
-    }
+    [[MYAnalyzeMyGrid shareInstance] settingNodeAttributes:gridDictionary gridNode:self];
+
 }
 
-
-
-
-/**
- 添加行栅格，返回新的栅格。其中的measure可以设置如下的值：
- 1.大于等于1的常数，表示固定尺寸。
- 2.大于0小于1的常数，表示占用整体尺寸的比例
- 3.小于0大于-1的常数，表示占用剩余尺寸的比例
- 4.MyLayoutSize.wrap 表示尺寸由子栅格包裹
- 5.MyLayoutSize.fill 表示占用栅格剩余的尺寸
- */
-- (CGFloat)createLayoutSize:(NSString *)gridSize
-{
-    if ([gridSize isKindOfClass:[NSNumber class]]) {
-        return [gridSize integerValue];
-    }else if ([gridSize isKindOfClass:[NSString class]]){
-        if ([gridSize isEqualToString:vMyGridSizeFill]) {
-            return MyLayoutSize.fill;
-        }else if ([gridSize isEqualToString:vMyGridSizeWrap]){
-            return MyLayoutSize.wrap;
-        }else if ([gridSize hasSuffix:@"%"]){
-            
-            if ([gridSize isEqualToString:@"100%"] ||
-                [gridSize isEqualToString:@"-100%"])return MyLayoutSize.fill;
-            
-            NSInteger temp = [gridSize integerValue];
-            return temp / 100.f;
-        }
-    }
-    return -1;
-}
 
 #pragma mark -- MyGridNode
 

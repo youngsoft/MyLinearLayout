@@ -9,6 +9,36 @@
 #import <Foundation/Foundation.h>
 #import "MyGrid.h"
 
+//解析MyGrid
+
+@class MyGridNode;
+@interface MYAnalyzeMyGrid : NSObject
+
++(instancetype)shareInstance;
+
+/**
+ 设置节点属性
+
+ @param gridDictionary 数据
+ @param gridNode 节点
+ */
+- (void)settingNodeAttributes:(NSDictionary *)gridDictionary gridNode:(id<MyGrid>)gridNode;
+
+
+
+/**
+ 节点转换字典
+ 
+ @param gridNode 节点
+ @return 字典
+ */
+- (NSDictionary *)gridConvertDictionaryWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result;
+
+@end
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 
 //子栅格类型。
 typedef enum : unsigned char {
@@ -75,6 +105,8 @@ typedef enum : unsigned char {
 @property(nonatomic)    NSInteger tag;
 
 @property(nonatomic, strong) id actionData;
+
+@property(nonatomic,copy) NSString *action;
 
 
 @property(nonatomic, weak) id<MyGridNode> superGrid;

@@ -70,13 +70,36 @@
 -(void)addAllItemSubviews:(MyFlowLayout*)flowLayout
 {
     
-    for (int i = 0; i < 40; i++)
+    for (int i = 0; i < 5; i++)
     {
-        UILabel *label = [UILabel new];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.backgroundColor = [CFTool color:random() % 14 + 1];
-        label.text = [NSString stringWithFormat:@"%d",i];
-        [flowLayout addSubview:label];
+//        UILabel *label = [UILabel new];
+//        label.textAlignment = NSTextAlignmentCenter;
+//        label.backgroundColor = [CFTool color:random() % 14 + 1];
+//        label.text = [NSString stringWithFormat:@"%d",i];
+//        [flowLayout addSubview:label];
+        
+        
+        MyLinearLayout *layout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+        layout.subviewSpace = 5.f;
+        layout.wrapContentHeight = YES;
+        [flowLayout addSubview:layout];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-11"]];
+        imageView.userInteractionEnabled = YES;
+        imageView.centerXPos.equalTo(layout.centerXPos);
+        imageView.widthSize.equalTo(@40.f);
+        imageView.heightSize.equalTo(@40.f);
+        [layout addSubview:imageView];
+        
+        UILabel *descLabel = [UILabel new];
+        descLabel.userInteractionEnabled = YES;
+        descLabel.textAlignment = NSTextAlignmentCenter;
+        descLabel.textColor = [UIColor grayColor];
+        descLabel.font = [UIFont systemFontOfSize:15.f];
+        descLabel.text = @"华仔";
+        descLabel.centerXPos.equalTo(layout.centerXPos);
+        descLabel.heightSize.equalTo(@20.f);
+        [layout addSubview:descLabel];
         
     }
     

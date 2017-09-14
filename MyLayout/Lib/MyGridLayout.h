@@ -163,4 +163,6 @@
 //主要为那些动态下发事件来服务。。通过给栅格布局设置总的处理target，而动态下发的只有action
 @property(nonatomic, weak) id gridTarget;
 
+@property(nonatomic, copy) NSString *action;
+
 @end
