@@ -32,14 +32,14 @@
  RGB 颜色值
  @return 十六进制
  */
-- (NSString *)hexString;
+- (nullable NSString *)hexString;
 
 /**
  透明
  RGB 颜色值
  @return 十六进制
  */
-- (NSString *)hexStringWithAlpha;
+- (nullable NSString *)hexStringWithAlpha;
 
 @end
 
@@ -52,5 +52,14 @@
  @return YES 非空 NO 为空
  */
 - (BOOL)myIsNotBlank;
+
+
+
+/**
+ 去除两边空格
+
+ @return 过滤后的字符串
+ */
+- (NSString *)myRemoveStringByTrimSpace;
 
 @end

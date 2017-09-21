@@ -135,4 +135,9 @@ static NSDictionary*  createColors()
     return YES;
 }
 
+- (NSString *)myRemoveStringByTrimSpace
+{
+    return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
 @end

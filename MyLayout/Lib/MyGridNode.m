@@ -137,7 +137,7 @@
 //action
 - (void)createAction:(NSString *)action gridNode:(id<MyGrid>)gridNode
 {
-    if (action.myIsNotBlank) {
+    if (action.myRemoveStringByTrimSpace.myIsNotBlank) {
         MyGridNode *temp =  (MyGridNode *)gridNode;
         MyGridLayout *layout = (MyGridLayout *)[temp gridLayoutView];
         if (layout.gridTarget != nil) {
@@ -149,7 +149,7 @@
 //padding:"{10,10,10,10}"
 - (void)createPadding:(NSString *)padding gridNode:(id<MyGrid>)gridNode
 {
-    if (padding.myIsNotBlank){
+    if (padding.myRemoveStringByTrimSpace.myIsNotBlank){
         gridNode.padding = UIEdgeInsetsFromString(padding);
     }
 }
@@ -165,7 +165,7 @@
 //palceholder:true/false
 - (void)createPlaceholder:(NSString *)placeholder gridNode:(id<MyGrid>)gridNode
 {
-    if (placeholder) {
+    if (placeholder.myRemoveStringByTrimSpace.myIsNotBlank) {
         BOOL temp = [placeholder isEqualToString:@"true"] ? true : false;
         gridNode.placeholder = temp;
     }
@@ -174,7 +174,7 @@
 //anchor:true/false
 - (void)createAnchor:(NSString *)anchor gridNode:(id<MyGrid>)gridNode
 {
-    if (anchor) {
+    if (anchor.myRemoveStringByTrimSpace.myIsNotBlank) {
         BOOL temp = [anchor isEqualToString:@"true"] ? true : false;
         gridNode.anchor = temp;
     }
@@ -183,13 +183,15 @@
 //gravity:@"top|bottom|left|right|centerX|centerY|width|height"
 - (void)createGravity:(NSString *)gravity gridNode:(id<MyGrid>)gridNode
 {
-    if (gravity.myIsNotBlank){
+    if (gravity.myRemoveStringByTrimSpace.myIsNotBlank){
         MyGravity tempGravity = MyGravity_None;
         
         if ([gravity containsString:@"|"]) {
             NSArray *array = [gravity componentsSeparatedByString:@"|"];
             for (NSString *temp in array) {
-                tempGravity += [self returnGravity:temp];
+                if (temp.myIsNotBlank) {
+                    tempGravity |= [self returnGravity:temp];
+                }
             }
             gridNode.gravity = tempGravity;
         }else{
@@ -200,6 +202,7 @@
 
 - (MyGravity)returnGravity:(NSString *)gravity
 {
+    
     if ([gravity isEqualToString:vMyGridGravityTop]) {
         return  MyGravity_Vert_Top;
     }else if ([gravity isEqualToString:vMyGridGravityBottom]) {
@@ -274,6 +277,15 @@
                 temp.gridDictionary = dic;
                 [self settingNodeAttributes:dic gridNode:temp];
             }
+        }else if ([cols isKindOfClass:[NSString class]]){
+            
+            NSData *jsonData= [cols dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *error = nil;
+            id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                            options:NSJSONReadingMutableContainers error:&error];
+            if (error == nil) {
+                [self createRows:jsonObject gridNode:gridNode];
+            }
         }
     }
 }
@@ -289,6 +301,15 @@
                 MyGridNode *temp = (MyGridNode *)[gridNode addRow:measure];
                 temp.gridDictionary = dic;
                 [self settingNodeAttributes:dic gridNode:temp];
+            }
+        }else if ([rows isKindOfClass:[NSString class]]){
+            
+            NSData *jsonData= [rows dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *error = nil;
+            id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData
+                              options:NSJSONReadingMutableContainers error:&error];
+            if (error == nil) {
+                [self createRows:jsonObject gridNode:gridNode];
             }
         }
     }
@@ -307,6 +328,7 @@
 {
     if (gridNode == nil) return  nil;
     
+    [self returnLayoutSizeWithGridNode:gridNode result:result];
     
     [self returnActionDataWithGridNode:gridNode result:result];
 
@@ -348,7 +370,24 @@
  */
 - (void)returnLayoutSizeWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
 {
-    [result setObject:[NSNumber numberWithDouble:gridNode.measure] forKey:kMyGridSize];
+    id value = nil;
+    if (gridNode.measure == MyLayoutSize.wrap) {
+        value  = @"wrap";
+    }else if (gridNode.measure == MyLayoutSize.fill) {
+        value  = @"fill";
+    }else if (gridNode.measure == MyLayoutSize.average) {
+        value  = @"average";
+    }else{
+        if (gridNode.measure > 0 && gridNode.measure < 1) {
+            
+            value = [NSString stringWithFormat:@"%@%@",[NSNumber numberWithInteger:gridNode.measure * 100],@"%"];
+        }else if (gridNode.measure > -1 && gridNode.measure < 0) {
+            value = [NSString stringWithFormat:@"-%@%@",[NSNumber numberWithInteger:gridNode.measure * 100],@"%"];
+        }else{
+            value = [NSNumber numberWithDouble:gridNode.measure];
+        }
+    }
+    [result setObject:value forKey:kMyGridSize];
 }
 
 //action-data 数据
@@ -379,7 +418,7 @@
 - (void)returnPaddingWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
 {
     NSString *temp = NSStringFromUIEdgeInsets(gridNode.padding);
-    if (temp) {
+    if (temp && ![temp isEqualToString:@"{0, 0, 0, 0}"]) {
         [result setObject:temp forKey:kMyGridPadding];
     }
 }
@@ -415,22 +454,38 @@
 //gravity:@"top|bottom|left|right|centerX|centerY|width|height"
 - (void)returnGravityWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
 {
-//    if (gravity.myIsNotBlank){
-//        MyGravity tempGravity = MyGravity_None;
-//        
-//        if ([gravity containsString:@"|"]) {
-//            NSArray *array = [gravity componentsSeparatedByString:@"|"];
-//            for (NSString *temp in array) {
-//                tempGravity += [self returnGravity:temp];
-//            }
-//            gridNode.gravity = tempGravity;
-//        }else{
-//            gridNode.gravity = [self returnGravity:gravity];
-//        }
-//    }
-    
-    
-    [result setObject:@"" forKey:kMyGridGravity];
+
+    MyGravity gravity = gridNode.gravity;
+    NSMutableString *temp =  [[NSMutableString alloc] init];
+    if (gravity & MyGravity_Vert_Top) {
+        [temp appendString:@"top|"];
+    }
+    if (gravity & MyGravity_Vert_Bottom) {
+        [temp appendString:@"bottom|"];
+    }
+    if (gravity & MyGravity_Horz_Left) {
+        [temp appendString:@"left|"];
+    }
+    if (gravity & MyGravity_Horz_Right) {
+        [temp appendString:@"right|"];
+    }
+    if (gravity & MyGravity_Horz_Center) {
+        [temp appendString:@"centerX|"];
+    }
+    if (gravity & MyGravity_Vert_Center) {
+        [temp appendString:@"centerY|"];
+    }
+    if (gravity & MyGravity_Horz_Fill) {
+        [temp appendString:@"width|"];
+    }
+    if (gravity & MyGravity_Vert_Fill) {
+        [temp appendString:@"height|"];
+    }
+
+    if (temp.myIsNotBlank) {
+        [temp deleteCharactersInRange:NSMakeRange(temp.length - 1, 1)];
+        [result setObject:@"bottom|left" forKey:kMyGridGravity];
+    }
 }
 
 
@@ -498,7 +553,11 @@
                 [temp addObject:tempDic];
             }
         }
-        [result setObject:temp.description forKey:key];
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:temp
+                                                          options:NSJSONWritingPrettyPrinted error:nil];
+        NSString *text = [[NSString alloc] initWithData:jsonData
+                                              encoding:NSUTF8StringEncoding];
+        [result setObject:text forKey:key];
     }
 }
 
