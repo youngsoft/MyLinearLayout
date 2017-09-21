@@ -991,7 +991,35 @@ CGFloat _myMLayoutSizeError = 0.0;
     }
 }
 
+-(UIRectEdge)insetsPaddingFromSafeArea
+{
+    return self.myCurrentSizeClass.insetsPaddingFromSafeArea;
+}
 
+-(void)setInsetsPaddingFromSafeArea:(UIRectEdge)insetsPaddingFromSafeArea
+{
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.insetsPaddingFromSafeArea != insetsPaddingFromSafeArea)
+    {
+        lsc.insetsPaddingFromSafeArea = insetsPaddingFromSafeArea;
+        [self setNeedsLayout];
+    }
+}
+
+-(BOOL)insetLandscapeFringePadding
+{
+    return self.myCurrentSizeClass.insetLandscapeFringePadding;
+}
+
+-(void)setInsetLandscapeFringePadding:(BOOL)insetLandscapeFringePadding
+{
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.insetLandscapeFringePadding != insetLandscapeFringePadding)
+    {
+        lsc.insetLandscapeFringePadding = insetLandscapeFringePadding;
+        [self setNeedsLayout];
+    }
+}
 
 -(void)setSubviewHSpace:(CGFloat)subviewHSpace
 {
@@ -1226,7 +1254,7 @@ CGFloat _myMLayoutSizeError = 0.0;
 
 
 
--(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+-(CGSize)myEstimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
     MyFrame *selfMyFrame = self.myFrame;
     
@@ -1270,18 +1298,7 @@ CGFloat _myMLayoutSizeError = 0.0;
     if (self.cacheEstimatedRect)
         _useCacheRects = YES;
     
-    return CGRectMake(0, 0, _myRoundNumber(selfSize.width), _myRoundNumber(selfSize.height));
-}
-
-//只获取计算得到尺寸，不进行真正的布局。
--(CGRect)estimateLayoutRect:(CGSize)size
-{
-    return [self estimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny];
-}
-
--(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass
-{
-    return [self estimateLayoutRect:size inSizeClass:sizeClass sbs:nil];
+    return CGSizeMake(_myRoundNumber(selfSize.width), _myRoundNumber(selfSize.height));
 }
 
 -(void)setCacheEstimatedRect:(BOOL)cacheEstimatedRect
@@ -1299,7 +1316,7 @@ CGFloat _myMLayoutSizeError = 0.0;
     NSMutableArray *sbs = [self myGetLayoutSubviews];
     [sbs addObject:subview];
     
-    [self estimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny sbs:sbs];
+    [self myEstimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny sbs:sbs];
     
     return [subview estimatedRect];
 }
@@ -1498,8 +1515,14 @@ CGFloat _myMLayoutSizeError = 0.0;
 
 -(CGSize)sizeThatFits:(CGSize)size
 {
-    return [self estimateLayoutRect:size].size;
+    return [self sizeThatFits:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny];
 }
+
+-(CGSize)sizeThatFits:(CGSize)size inSizeClass:(MySizeClass)sizeClass
+{
+    return [self myEstimateLayoutRect:size inSizeClass:sizeClass sbs:nil];
+}
+
 
 -(void)setHidden:(BOOL)hidden
 {
@@ -1539,6 +1562,16 @@ CGFloat _myMLayoutSizeError = 0.0;
     [super willRemoveSubview:subview];  //删除后恢复其原来的实现。
 
     [self myRemoveSubviewObserver:subview];
+}
+
+-(void)willMoveToWindow:(UIWindow *)newWindow
+{
+    [super willMoveToWindow:newWindow];
+    if (newWindow == nil)
+    {
+        //这里处理可能因为触摸事件被强行终止而导致的背景色无法恢复的问题。
+        [_touchEventDelegate resetTouchHighligthed];
+    }
 }
 
 - (void)willMoveToSuperview:(UIView*)newSuperview
@@ -2092,6 +2125,20 @@ CGFloat _myMLayoutSizeError = 0.0;
 
 #pragma mark -- Deprecated Method
 
+-(CGRect)estimateLayoutRect:(CGSize)size
+{
+    CGRect rect = CGRectZero;
+    rect.size = [self sizeThatFits:size];
+    return rect;
+}
+
+-(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass
+{
+    CGRect rect = CGRectZero;
+    rect.size = [self sizeThatFits:size inSizeClass:sizeClass];
+    return rect;
+}
+
 
 #pragma mark -- Private Method
 
@@ -2604,9 +2651,9 @@ CGFloat _myMLayoutSizeError = 0.0;
         if (boundDime.dimeRelaVal.view == self)
         {
             if (boundDime.dimeRelaVal.dime == MyGravity_Horz_Fill)
-                value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.leadingPadding + self.trailingPadding) : 0);
+                value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.myLayoutLeadingPadding + self.myLayoutTrailingPadding) : 0);
             else
-                value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.topPadding + self.bottomPadding) :0);
+                value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.myLayoutTopPadding + self.myLayoutBottomPadding) :0);
         }
         else if (boundDime.dimeRelaVal.view == sbv)
         {
@@ -2803,9 +2850,9 @@ CGFloat _myMLayoutSizeError = 0.0;
     {
         
         if (dime.dimeRelaVal == lsc.widthSizeInner && !lsc.wrapContentWidth)
-            pRect->size.width = [dime measureWith:(selfSize.width - lsc.leadingPadding - lsc.trailingPadding)];
+            pRect->size.width = [dime measureWith:(selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding)];
         else if (dime.dimeRelaVal == lsc.heightSizeInner)
-            pRect->size.width = [dime measureWith:(selfSize.height - lsc.topPadding - lsc.bottomPadding)];
+            pRect->size.width = [dime measureWith:(selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding)];
         else if (dime.dimeRelaVal == dime.view.heightSizeInner)
             pRect->size.width = [dime measureWith:pRect->size.height];
         else if (dime.dimeRelaVal.dime == MyGravity_Horz_Fill)
@@ -2816,9 +2863,9 @@ CGFloat _myMLayoutSizeError = 0.0;
     else
     {
         if (dime.dimeRelaVal == lsc.heightSizeInner && !lsc.wrapContentHeight)
-            pRect->size.height = [dime measureWith:(selfSize.height - lsc.topPadding - lsc.bottomPadding)];
+            pRect->size.height = [dime measureWith:(selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding)];
         else if (dime.dimeRelaVal == lsc.widthSizeInner)
-            pRect->size.height = [dime measureWith:(selfSize.width - lsc.leadingPadding - lsc.trailingPadding)];
+            pRect->size.height = [dime measureWith:(selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding)];
         else if (dime.dimeRelaVal == dime.view.widthSizeInner)
             pRect->size.height = [dime measureWith:pRect->size.width];
         else if (dime.dimeRelaVal.dime == MyGravity_Horz_Fill)
@@ -2834,9 +2881,9 @@ CGFloat _myMLayoutSizeError = 0.0;
     if (sbs.count == 0 && !lsc.zeroPadding)
     {
         if (lsc.wrapContentWidth)
-            size.width -= (lsc.leadingPadding + lsc.trailingPadding);
+            size.width -= (lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding);
         if (lsc.wrapContentHeight)
-            size.height -= (lsc.topPadding + lsc.bottomPadding);
+            size.height -= (lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding);
     }
     
     return size;
@@ -2885,6 +2932,31 @@ CGFloat _myMLayoutSizeError = 0.0;
     
 }
 
+
+-(CGFloat)myLayoutTopPadding
+{
+    return self.myCurrentSizeClass.myLayoutTopPadding;
+}
+-(CGFloat)myLayoutBottomPadding
+{
+    return self.myCurrentSizeClass.myLayoutBottomPadding;
+}
+-(CGFloat)myLayoutLeftPadding
+{
+    return self.myCurrentSizeClass.myLayoutLeftPadding;
+}
+-(CGFloat)myLayoutRightPadding
+{
+    return self.myCurrentSizeClass.myLayoutRightPadding;
+}
+-(CGFloat)myLayoutLeadingPadding
+{
+    return self.myCurrentSizeClass.myLayoutLeadingPadding;
+}
+-(CGFloat)myLayoutTrailingPadding
+{
+    return self.myCurrentSizeClass.myLayoutTrailingPadding;
+}
 
 
 - (void)myAlterScrollViewContentSize:(CGSize)newSize lsc:(MyBaseLayout*)lsc
@@ -3197,6 +3269,27 @@ __weak MyBaseLayout * _currentLayout;
         _oldBackgroundImage = nil;
     }
     
+}
+
+-(void)resetTouchHighligthed
+{
+    if (_oldAlpha != 1)
+    {
+        _layout.alpha = _oldAlpha;
+        _oldAlpha = 1;
+    }
+    
+    if (_oldBackgroundColor != nil)
+    {
+        _layout.backgroundColor = _oldBackgroundColor;
+        _oldBackgroundColor = nil;
+    }
+    
+    if (_oldBackgroundImage != nil)
+    {
+        _layout.backgroundImage = _oldBackgroundImage;
+        _oldBackgroundImage = nil;
+    }
 }
 
 -(void)myPerformTouch:(id)target withAction:(SEL)action

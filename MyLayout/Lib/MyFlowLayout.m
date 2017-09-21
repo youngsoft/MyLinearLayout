@@ -200,7 +200,7 @@
             
             if (sbvsc.wrapContentWidth)
             {
-                if (sbvsc.widthSizeInner.dimeVal != nil ||
+                if (lsc.pagedCount > 0 || sbvsc.widthSizeInner.dimeVal != nil ||
                     (orientation == MyOrientation_Horz && (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill) ||
                     (orientation == MyOrientation_Vert && ((gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill || sbvsc.weight != 0)))
                 {
@@ -210,7 +210,7 @@
             
             if (sbvsc.wrapContentHeight)
             {
-                if (sbvsc.heightSizeInner.dimeVal != nil ||
+                if (lsc.pagedCount > 0 || sbvsc.heightSizeInner.dimeVal != nil ||
                     (orientation == MyOrientation_Vert && (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill) ||
                     (orientation == MyOrientation_Horz && ((gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill || sbvsc.weight != 0)))
                 {
@@ -226,10 +226,10 @@
             
             if (isEstimate && isSbvWrap)
             {
-                [(MyBaseLayout*)sbv estimateLayoutRect:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
                 if (sbvmyFrame.multiple)
                 {
-                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为sizeThatFits执行后会还原，所以这里要重新设置
                     sbvsc = sbvmyFrame.sizeClass;
                 }
             }
@@ -318,8 +318,8 @@
 - (void)myCalcVertLayoutSinglelineAlignment:(CGSize)selfSize rowMaxHeight:(CGFloat)rowMaxHeight rowMaxWidth:(CGFloat)rowMaxWidth horzGravity:(MyGravity)horzGravity vertAlignment:(MyGravity)vertAlignment sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count vertSpace:(CGFloat)vertSpace horzSpace:(CGFloat)horzSpace isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
     
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
  
     CGFloat addXPos = 0; //多出来的空隙区域，用于停靠处理。
@@ -475,8 +475,8 @@
 - (void)myCalcHorzLayoutSinglelineAlignment:(CGSize)selfSize colMaxWidth:(CGFloat)colMaxWidth colMaxHeight:(CGFloat)colMaxHeight vertGravity:(MyGravity)vertGravity  horzAlignment:(MyGravity)horzAlignment sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count vertSpace:(CGFloat)vertSpace horzSpace:(CGFloat)horzSpace isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
     
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
     CGFloat paddingVert = paddingTop + paddingBottom;
     
     CGFloat addYPos = 0;
@@ -733,10 +733,10 @@
 -(CGSize)myLayoutSubviewsForVertContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
     
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
 
     CGFloat xPos = paddingLeading;
@@ -1003,10 +1003,10 @@
 
 -(CGSize)myLayoutSubviewsForVert:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
     
@@ -1343,10 +1343,10 @@
 -(CGSize)myLayoutSubviewsForHorzContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
 
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingVert = paddingTop + paddingBottom;
 
     CGFloat xPos = paddingLeading;
@@ -1628,10 +1628,10 @@
 
 -(CGSize)myLayoutSubviewsForHorz:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
 

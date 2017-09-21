@@ -51,6 +51,8 @@
 -(void)setTouchDownTarget:(id)target action:(SEL)action;
 -(void)setTouchCancelTarget:(id)target action:(SEL)action;
 
+-(void)resetTouchHighligthed;
+
 @end
 
 
@@ -140,6 +142,15 @@
 -(void)myAdjustSubviewsRTLPos:(NSArray*)sbs selfWidth:(CGFloat)selfWidth;
 
 -(MyGravity)myConvertLeftRightGravityToLeadingTrailing:(MyGravity)horzGravity;
+
+//为支持iOS11的safeArea而进行的padding的转化
+-(CGFloat)myLayoutTopPadding;
+-(CGFloat)myLayoutBottomPadding;
+-(CGFloat)myLayoutLeftPadding;
+-(CGFloat)myLayoutRightPadding;
+-(CGFloat)myLayoutLeadingPadding;
+-(CGFloat)myLayoutTrailingPadding;
+
 
 @end
 

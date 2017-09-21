@@ -663,7 +663,7 @@ static NSInteger sBaseTag = 100000;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
     titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
-    titleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    titleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5).add(-2.5);
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
@@ -674,7 +674,7 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.myLeading = 5;
     subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
-    subTitleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    subTitleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5).add(-2.5);
     [itemLayout addSubview:subTitleLabel];
     
     //价格向下浮动
@@ -686,7 +686,7 @@ static NSInteger sBaseTag = 100000;
     priceLabel.myBottom = 5;
     [priceLabel sizeToFit];
     priceLabel.reverseFloat = YES;
-    priceLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    priceLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5).add(-2.5);
     [itemLayout addSubview:priceLabel];
     
     //描述向下浮动
@@ -697,12 +697,12 @@ static NSInteger sBaseTag = 100000;
     descLabel.myLeading = 5;
     [descLabel sizeToFit];
     descLabel.reverseFloat = YES;
-    descLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    descLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5).add(-2.5);
     [itemLayout addSubview:descLabel];
     
     //向上浮动，因为宽度无法再容纳，所以这里会换列继续向上浮动。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
-    imageView.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    imageView.widthSize.equalTo(itemLayout.widthSize).multiply(0.5).add(-2.5);
     imageView.heightSize.equalTo(itemLayout.heightSize);
     [itemLayout addSubview:imageView];
     
@@ -722,7 +722,7 @@ static NSInteger sBaseTag = 100000;
     titleLabel.font = [UIFont boldSystemFontOfSize:15];
     titleLabel.myLeading = 5;
     titleLabel.myTop = 5;
-    titleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    titleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5).add(-2.5);
     [titleLabel sizeToFit];
     [itemLayout addSubview:titleLabel];
     
@@ -733,12 +733,12 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.myLeading = 5;
     subTitleLabel.myTop = 5;
     [subTitleLabel sizeToFit];
-    subTitleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    subTitleLabel.widthSize.equalTo(itemLayout.widthSize).multiply(0.5).add(-2.5);
     [itemLayout addSubview:subTitleLabel];
     
     //继续向上浮动，这里因为高度和父布局高度一致，因此会换列浮动。
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.image]];
-    imageView.widthSize.equalTo(itemLayout.widthSize).multiply(0.5);
+    imageView.widthSize.equalTo(itemLayout.widthSize).multiply(0.5).add(-2.5);
     imageView.heightSize.equalTo(itemLayout.heightSize);
     [itemLayout addSubview:imageView];
     

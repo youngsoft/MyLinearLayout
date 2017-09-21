@@ -87,16 +87,16 @@
     [rootLayout addSubview:descLabel];
     
     
-   CGRect rect1 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect1, CGRectMake(0,0,320, 180)), @"rect1 is:%@", NSStringFromCGRect(rect1));
+   CGSize size1 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size1, CGSizeMake(320, 180)), @"size1 is:%@", NSStringFromCGSize(size1));
     XCTAssertTrue(CGRectEqualToRect(descLabel.estimatedRect, CGRectMake(120,135,100, 20)), @"descLabel rect is:%@", NSStringFromCGRect(descLabel.estimatedRect));
     
     
     numberLabel.hidden = YES;
     
-    CGRect rect2 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
+    CGSize size2 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
     
-    XCTAssertTrue(CGRectEqualToRect(rect2, CGRectMake(0,0,320, 180)), @"rect2 is:%@", NSStringFromCGRect(rect2));
+    XCTAssertTrue(CGSizeEqualToSize(size2, CGSizeMake(320, 180)), @"size2 is:%@", NSStringFromCGSize(size2));
     XCTAssertTrue(CGRectEqualToRect(descLabel.estimatedRect, CGRectMake(195,135,100, 20)), @"descLabel rect is:%@", NSStringFromCGRect(descLabel.estimatedRect));
     
 }
@@ -111,8 +111,8 @@
     rootLayout.trailingPadding = 10;
     
     
-    CGRect rect0 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect0, CGRectMake(0,0,320, 30)), @"rect0 is:%@", NSStringFromCGRect(rect0));
+    CGSize size0 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size0, CGSizeMake(320, 30)), @"size0 is:%@", NSStringFromCGSize(size0));
 
 
     UILabel *titleLabel = [UILabel new];
@@ -185,15 +185,15 @@
     [rootLayout addSubview:timeLabel];
     
   
-    CGRect rect1 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect1, CGRectMake(0,0,320, 160)), @"rect1 is:%@", NSStringFromCGRect(rect1));
+    CGSize size1 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size1, CGSizeMake(320, 160)), @"size1 is:%@", NSStringFromCGSize(size1));
     
     UILabel *noteLabel = [UILabel new];
     noteLabel.mySize = CGSizeMake(100, 30);
     [lineLayout addSubview:noteLabel];
     
-    CGRect rect2 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect2, CGRectMake(0,0,320, 190)), @"rect2 is:%@", NSStringFromCGRect(rect2));
+    CGSize size2 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size2, CGSizeMake(320, 190)), @"size2 is:%@", NSStringFromCGSize(size2));
     
     
     [noteLabel removeFromSuperview];
@@ -228,8 +228,8 @@
     
     timeLabel.hidden = YES;
     
-    CGRect rect3 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect3, CGRectMake(0,0,320, 220)), @"rect3 is:%@", NSStringFromCGRect(rect3));
+    CGSize size3 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size3, CGSizeMake(320, 220)), @"size3 is:%@", NSStringFromCGSize(size3));
     
     
     UIButton *orderbutton=[UIButton new];
@@ -250,17 +250,17 @@
     [rootLayout  addSubview:canclebutton];
     
     
-    CGRect rect4 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect4, CGRectMake(0,0,320, 290)), @"rect4 is:%@", NSStringFromCGRect(rect4));
+    CGSize size4 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size4, CGSizeMake(320, 290)), @"size4 is:%@", NSStringFromCGSize(size4));
     
     
     timeLabel.hidden = NO;
-    CGRect rect5 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect5, CGRectMake(0,0,320, 320)), @"rect5 is:%@", NSStringFromCGRect(rect5));
+    CGSize size5 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size5, CGSizeMake(320, 320)), @"size5 is:%@", NSStringFromCGSize(size5));
     
     orderbutton.hidden = YES;
-    CGRect rect6 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect6, CGRectMake(0,0,320, 280)), @"rect6 is:%@", NSStringFromCGRect(rect6));
+    CGSize size6 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size6, CGSizeMake(320, 280)), @"size6 is:%@", NSStringFromCGSize(size6));
     
     
     orderbutton.hidden = NO;
@@ -268,14 +268,14 @@
     {
         [sbv removeFromSuperview];
     }
-    CGRect rect7 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect7, CGRectMake(0,0,320, 230)), @"rect7 is:%@", NSStringFromCGRect(rect7));
+    CGSize size7 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size7, CGSizeMake(320, 230)), @"size7 is:%@", NSStringFromCGSize(size7));
     
     
     timeLabel.hidden = YES;
     orderbutton.hidden = YES;
-    CGRect rect8 = [rootLayout estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect8, CGRectMake(0,0,320, 160)), @"rect8 is:%@", NSStringFromCGRect(rect8));
+    CGSize size8 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size8, CGSizeMake(320, 160)), @"size8 is:%@", NSStringFromCGSize(size8));
 
     
 
@@ -314,22 +314,22 @@
     newsTitleLabel.bottomPos.equalTo(rootRelativeView.bottomPos).offset(8);
     [rootRelativeView addSubview:newsTitleLabel];
     
-    CGRect rect1 = [rootRelativeView estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect1, CGRectMake(0,0,320, 41)), @"rect1 is:%@", NSStringFromCGRect(rect1));
+    CGSize size1 = [rootRelativeView sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size1, CGSizeMake(320, 41)), @"size1 is:%@", NSStringFromCGSize(size1));
     
     
     newsTitleLabel.text = @"aaaaaaaaaaaa";
     
     
-    CGRect rect2 = [rootRelativeView estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect2, CGRectMake(0,0,320, 41 + [newsTitleLabel sizeThatFits:CGSizeMake(266, 0)].height)), @"rect2 is:%@", NSStringFromCGRect(rect2));
+    CGSize size2 = [rootRelativeView sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size2, CGSizeMake(320, 41 + [newsTitleLabel sizeThatFits:CGSizeMake(266, 0)].height)), @"size2 is:%@", NSStringFromCGSize(size2));
     
     
     newsTitleLabel.text = @"ajkhkahflkahfklahdflkajhdfalkjsdhflkajhdsflajsdhflaksdfhasdlhfjkashdfaasdfasdfasfd";
     
     
-    CGRect rect3 = [rootRelativeView estimateLayoutRect:CGSizeMake(320, 0)];
-    XCTAssertTrue(CGRectEqualToRect(rect3, CGRectMake(0,0,320, 41+[newsTitleLabel sizeThatFits:CGSizeMake(266, 0)].height)), @"rect3 is:%@", NSStringFromCGRect(rect3));
+    CGSize size3 = [rootRelativeView sizeThatFits:CGSizeMake(320, 0)];
+    XCTAssertTrue(CGSizeEqualToSize(size3, CGSizeMake(320, 41+[newsTitleLabel sizeThatFits:CGSizeMake(266, 0)].height)), @"size3 is:%@", NSStringFromCGSize(size3));
 
 }
 
@@ -373,9 +373,9 @@
     numLabel.centerXPos.equalTo(@0);
     [midView addSubview:numLabel];
     
-   CGRect sz =  [midView estimateLayoutRect:CGSizeZero];
+   CGSize sz =  [midView sizeThatFits:CGSizeZero];
     
-    NSLog(@"%@",NSStringFromCGRect(sz));
+    NSLog(@"%@",NSStringFromCGSize(sz));
     
 }
 
@@ -390,7 +390,7 @@
     rootLayout.trailingPadding = 10;
     
     
-    XCTAssertTrue(CGRectEqualToRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)], CGRectMake(0,0,20, 30)), @"rect is:%@", NSStringFromCGRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)]));
+    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(20, 30)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
     
     
     UILabel *titleLabel = [UILabel new];
@@ -409,7 +409,7 @@
     titleLabel.rightPos.equalTo(rightLabel.leftPos).offset(10);
     
     
-    XCTAssertTrue(CGRectEqualToRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)], CGRectMake(0,0,86, 50)), @"rect is:%@", NSStringFromCGRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)]));
+    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(86, 50)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
     
     
     UILabel *allMoneyLabel = [UILabel new];
@@ -446,7 +446,7 @@
     [rootLayout addSubview:orderLabel];
     
     
-    XCTAssertTrue(CGRectEqualToRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)], CGRectMake(0,0,86, 125)), @"rect is:%@", NSStringFromCGRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)]));
+    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(86, 125)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
     
 }
 
@@ -539,7 +539,7 @@
         }
     }
     
-    XCTAssertTrue(CGRectEqualToRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)], CGRectMake(0,0,max*2, 0)), @"rect is:%@", NSStringFromCGRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)]));
+    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(max*2, 0)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
     
 
     
@@ -559,7 +559,7 @@
         }
     }
     
-    XCTAssertTrue(CGRectEqualToRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)], CGRectMake(0,0,max*2, 0)), @"rect is:%@", NSStringFromCGRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)]));
+    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(max*2, 0)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
 
     
     //一次依赖其他子视图。
@@ -608,7 +608,7 @@
       }
     }
     
-    XCTAssertTrue(CGRectEqualToRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)], CGRectMake(0,0,max*3, 0)), @"rect is:%@", NSStringFromCGRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)]));
+    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(max*3, 0)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
 
     
 
@@ -624,7 +624,7 @@
     }
    
     
-    XCTAssertTrue(CGRectEqualToRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)], CGRectMake(0,0,max*3, 0)), @"rect is:%@", NSStringFromCGRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)]));
+    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(max*3, 0)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
     
     
     
@@ -656,7 +656,7 @@
     }
 
 
-  //  XCTAssertTrue(CGRectEqualToRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)], CGRectMake(0,0,max*3, 0)), @"rect is:%@", NSStringFromCGRect([rootLayout estimateLayoutRect:CGSizeMake(0, 0)]));
+  //  XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(max*3, 0)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
 
     
 }

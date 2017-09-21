@@ -197,10 +197,10 @@
                         
             if (isEstimate && isSbvWrap)
             {
-                [(MyBaseLayout*)sbv estimateLayoutRect:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
                 if (sbvmyFrame.multiple)
                 {
-                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为sizeThatFits执行后会还原，所以这里要重新设置
                     sbvsc = sbvmyFrame.sizeClass;
                 }
             }
@@ -419,10 +419,10 @@
 {
     //对于垂直浮动布局来说，默认是左浮动,当设置为RTL时则默认是右浮动，因此我们只需要改变一下sbv.reverseFloat的定义就好了。
     
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
     
@@ -920,10 +920,10 @@
 {
     //对于水平浮动布局来说，最终是从左到右排列，而对于RTL则是从右到左排列，因此这里先抽象定义头尾的概念，然后最后再计算时统一将抽象位置转化为CGRect的左边值。
 
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
     

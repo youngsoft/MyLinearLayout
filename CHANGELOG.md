@@ -3,6 +3,19 @@
 
 ---
 
+## [V1.4.3](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.4.3)(2017/9/22)
+
+#### Added
+1. 添加适配iOS11的能力以及**iPhoneX**的方法。基本不需要改动当前代码。如果需要改动只需要设置根布局视图的一些属性即可。
+  1. 新增布局视图属性：`insetsPaddingFromSafeArea`用来设置在哪个方向缩进对应方向的安全区域。
+  2. 新增布局视图属性：`insetLandscapeFringePadding`用来设置当支持横屏时，并且insetsPaddingFromSafeArea设置为左右缩进时，是否只缩进有刘海的那一边。这个属性默认设置为NO，表示两边都缩进。您可以在特殊需要时将这个属性设置为YES表示只缩进刘海那一边，非刘海那一边则不缩进。具体参考使用DEMO：[LLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/LLTest1ViewController.m)
+
+#### Changed
+1. 布局方法：`estimateLayoutRect`设置为过期，请用`sizeThatFits`方法来代替，方法换名字的原因是iOS的默认sizeThatFits本来就是用来进行尺寸评估的，所以没有必要用新方法。
+2. 修复了流式布局`MyFlowLayout`中当使用`pageCount`设置分页而里面的子视图是布局视图并设置了wrapContentHeight或wrapContentWidth方法时有可能会导致约束冲突而产生死循环的问题。
+3. 修复了当布局视图支持事件处理并设置了按下高亮和透明效果时，如果同时触摸多个地方则有可能导致布局视图的高亮和透明效果无法还原的问题。
+
+
 ## [V1.4.2](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.4.2)(2017/8/31)
 
 #### Added

@@ -53,7 +53,7 @@
 
     [frameLayout layoutIfNeeded];
     
-   // XCTAssertTrue(CGRectEqualToRect(label1, <#CGRect rect2#>)([frameLayout estimateLayoutRect:CGSizeZero].size, CGSizeMake(0, 0)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout estimateLayoutRect:CGSizeZero].size));
+   // XCTAssertTrue(CGRectEqualToRect(label1, <#CGRect rect2#>)([frameLayout sizeThatFits:CGSizeZero], CGSizeMake(0, 0)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout sizeThatFits:CGSizeZero]));
     
 
 }
@@ -70,10 +70,10 @@
     frameLayout.zeroPadding = NO;
     
     
-    XCTAssertTrue(CGSizeEqualToSize([frameLayout estimateLayoutRect:CGSizeZero].size, CGSizeMake(0, 0)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout estimateLayoutRect:CGSizeZero].size));
+    XCTAssertTrue(CGSizeEqualToSize([frameLayout sizeThatFits:CGSizeZero], CGSizeMake(0, 0)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout sizeThatFits:CGSizeZero]));
     
     frameLayout.zeroPadding = YES;
-    XCTAssertTrue(CGSizeEqualToSize([frameLayout estimateLayoutRect:CGSizeZero].size, CGSizeMake(16, 25)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout estimateLayoutRect:CGSizeZero].size));
+    XCTAssertTrue(CGSizeEqualToSize([frameLayout sizeThatFits:CGSizeZero], CGSizeMake(16, 25)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout sizeThatFits:CGSizeZero]));
     
     UIView *v0 = [UIView new];
     v0.myLeft = 10;
@@ -83,7 +83,7 @@
     [frameLayout addSubview:v0];
     
     
-    XCTAssertTrue(CGSizeEqualToSize([frameLayout estimateLayoutRect:CGSizeZero].size, CGSizeMake(16+10+12, 25+5+10)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout estimateLayoutRect:CGSizeZero].size));
+    XCTAssertTrue(CGSizeEqualToSize([frameLayout sizeThatFits:CGSizeZero], CGSizeMake(16+10+12, 25+5+10)), @"frameLayout size is:%@",NSStringFromCGSize([frameLayout sizeThatFits:CGSizeZero]));
     
     
     UIView *v1 = [UIView new];
@@ -109,7 +109,7 @@
     
     [self startClock];
     
-    [frameLayout estimateLayoutRect:CGSizeZero];
+    [frameLayout sizeThatFits:CGSizeZero];
     
     [self endClock:@"frameLayout1"];
 
@@ -144,7 +144,7 @@
     [frameLayout addSubview:v3];
 
     
-    [frameLayout estimateLayoutRect:CGSizeMake(200, 200)];
+    [frameLayout sizeThatFits:CGSizeMake(200, 200)];
     
     XCTAssertTrue(CGRectEqualToRect(v1.estimatedRect, CGRectMake(0,0,100, 100)), @"v1 rect is:%@", NSStringFromCGRect(v1.estimatedRect));
     XCTAssertTrue(CGRectEqualToRect(v2.estimatedRect, CGRectMake(0,0,50, 50)), @"v2 rect is:%@", NSStringFromCGRect(v2.estimatedRect));

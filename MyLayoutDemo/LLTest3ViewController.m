@@ -71,7 +71,7 @@
     
     [self handleNavigationTitleCentre:nil];
     
-    self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"centered title", <#comment#>) style:UIBarButtonItemStylePlain target:self action:@selector(handleNavigationTitleCentre:) ],[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"reset", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleNavigationTitleRestore:)]];
+    self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"centered title", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleNavigationTitleCentre:) ],[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"reset", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleNavigationTitleRestore:)]];
     
 }
 

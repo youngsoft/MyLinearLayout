@@ -24,6 +24,13 @@
     
     self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
+    //为了支持iPhoneX而设置附加的安全区缩进。否则根视图将延伸到工具栏下面去了。
+    if (@available(iOS 11.0, *)) {
+        self.additionalSafeAreaInsets = UIEdgeInsetsMake(0, 0, 44, 0);
+    } else {
+        // Fallback on earlier versions
+    }
+    
     
     MyPathLayout *pathLayout = [MyPathLayout new];
     

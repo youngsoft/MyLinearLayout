@@ -167,13 +167,13 @@
 		182225AE1E77E5930081AA4B /* MyTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTableLayout.h; sourceTree = "<group>"; };
 		182225AF1E77E5930081AA4B /* MyBaseLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyBaseLayout.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182225B01E77E5930081AA4B /* MyLayoutPos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutPos.h; sourceTree = "<group>"; };
-		182225B11E77E5930081AA4B /* MyBaseLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBaseLayout.m; sourceTree = "<group>"; };
+		182225B11E77E5930081AA4B /* MyBaseLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyBaseLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225B21E77E5930081AA4B /* MyLinearLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLinearLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225B31E77E5930081AA4B /* MyLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDef.h; sourceTree = "<group>"; };
 		182225B41E77E5930081AA4B /* MyFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyFlowLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		182225B51E77E5930081AA4B /* MyRelativeLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRelativeLayout.m; sourceTree = "<group>"; };
-		182225B61E77E5930081AA4B /* MyPathLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPathLayout.m; sourceTree = "<group>"; };
-		182225B71E77E5930081AA4B /* MyFrameLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFrameLayout.m; sourceTree = "<group>"; };
+		182225B51E77E5930081AA4B /* MyRelativeLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyRelativeLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		182225B61E77E5930081AA4B /* MyPathLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyPathLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		182225B71E77E5930081AA4B /* MyFrameLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyFrameLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225B81E77E5930081AA4B /* MyLayoutInner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutInner.h; sourceTree = "<group>"; };
 		182225B91E77E5930081AA4B /* MyFloatLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyFloatLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225BA1E77E5930081AA4B /* MyFrameLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFrameLayout.h; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 		182225BC1E77E5930081AA4B /* MyLayoutSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutSize.h; sourceTree = "<group>"; };
 		182225BD1E77E5930081AA4B /* MyPathLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPathLayout.h; sourceTree = "<group>"; };
 		182225BE1E77E5930081AA4B /* MyRelativeLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRelativeLayout.h; sourceTree = "<group>"; };
-		182225BF1E77E5930081AA4B /* MyLayoutSizeClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutSizeClass.m; sourceTree = "<group>"; };
+		182225BF1E77E5930081AA4B /* MyLayoutSizeClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLayoutSizeClass.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225C01E77E5930081AA4B /* MyLayoutSizeClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutSizeClass.h; sourceTree = "<group>"; };
 		182225C11E77E5930081AA4B /* MyMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMaker.m; sourceTree = "<group>"; };
 		182225C21E77E5930081AA4B /* MyMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMaker.h; sourceTree = "<group>"; };
@@ -215,7 +215,7 @@
 		18D3C90D1EDF074900D3DE43 /* LLTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest6ViewController.h; sourceTree = "<group>"; };
 		18D3C90E1EDF074900D3DE43 /* LLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest6ViewController.m; sourceTree = "<group>"; };
 		18D3C90F1EDF074900D3DE43 /* LLTest7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest7ViewController.h; sourceTree = "<group>"; };
-		18D3C9101EDF074900D3DE43 /* LLTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest7ViewController.m; sourceTree = "<group>"; };
+		18D3C9101EDF074900D3DE43 /* LLTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LLTest7ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D3C9181EDF078200D3DE43 /* FLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLTest1ViewController.h; sourceTree = "<group>"; };
 		18D3C9191EDF078200D3DE43 /* FLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLTest1ViewController.m; sourceTree = "<group>"; };
 		18D3C91A1EDF078200D3DE43 /* FLTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLTest2ViewController.h; sourceTree = "<group>"; };
@@ -249,7 +249,7 @@
 		18D3C9431EDF07E700D3DE43 /* PLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTest3ViewController.h; sourceTree = "<group>"; };
 		18D3C9441EDF07E700D3DE43 /* PLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTest3ViewController.m; sourceTree = "<group>"; };
 		18D3C9451EDF07E700D3DE43 /* PLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTest4ViewController.h; sourceTree = "<group>"; };
-		18D3C9461EDF07E700D3DE43 /* PLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTest4ViewController.m; sourceTree = "<group>"; };
+		18D3C9461EDF07E700D3DE43 /* PLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PLTest4ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D3C9471EDF07E700D3DE43 /* PLTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTest5ViewController.h; sourceTree = "<group>"; };
 		18D3C9481EDF07E700D3DE43 /* PLTest5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTest5ViewController.m; sourceTree = "<group>"; };
 		18D3C94E1EDF07F800D3DE43 /* FOLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest1ViewController.h; sourceTree = "<group>"; };
@@ -275,7 +275,7 @@
 		18D3C96B1EDF082800D3DE43 /* AllTest1TableViewHeaderFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewHeaderFooterView.h; sourceTree = "<group>"; };
 		18D3C96C1EDF082800D3DE43 /* AllTest1TableViewHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewHeaderFooterView.m; sourceTree = "<group>"; };
 		18D3C96D1EDF082800D3DE43 /* AllTest2TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest2TableViewCell.h; sourceTree = "<group>"; };
-		18D3C96E1EDF082800D3DE43 /* AllTest2TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest2TableViewCell.m; sourceTree = "<group>"; };
+		18D3C96E1EDF082800D3DE43 /* AllTest2TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest2TableViewCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D3C96F1EDF082800D3DE43 /* AllTestDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTestDataModel.h; sourceTree = "<group>"; };
 		18D3C9701EDF082800D3DE43 /* AllTestDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTestDataModel.m; sourceTree = "<group>"; };
 		18D3C9751EDF084000D3DE43 /* AllTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1ViewController.h; sourceTree = "<group>"; };
@@ -283,7 +283,7 @@
 		18D3C9771EDF084000D3DE43 /* AllTest2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest2ViewController.h; sourceTree = "<group>"; };
 		18D3C9781EDF084000D3DE43 /* AllTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest2ViewController.m; sourceTree = "<group>"; };
 		18D3C9791EDF084000D3DE43 /* AllTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest3ViewController.h; sourceTree = "<group>"; };
-		18D3C97A1EDF084000D3DE43 /* AllTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest3ViewController.m; sourceTree = "<group>"; };
+		18D3C97A1EDF084000D3DE43 /* AllTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllTest3ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		18D3C97B1EDF084000D3DE43 /* AllTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest4ViewController.h; sourceTree = "<group>"; };
 		18D3C97C1EDF084000D3DE43 /* AllTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest4ViewController.m; sourceTree = "<group>"; };
 		18D3C97D1EDF084000D3DE43 /* AllTest5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest5ViewController.h; sourceTree = "<group>"; };
@@ -1235,7 +1235,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayoutDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.bbae.anno.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.mylayout;
 				PRODUCT_NAME = MyLayoutDemo;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1253,7 +1253,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayoutDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.bbae.anno.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.mylayout;
 				PRODUCT_NAME = MyLayoutDemo;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";

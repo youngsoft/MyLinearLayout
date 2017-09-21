@@ -525,6 +525,7 @@ Read FAQ, or articles below:
 [http://blog.csdn.net/yangtiang/article/details/48011431](http://blog.csdn.net/yangtiang/article/details/48011431) 表格布局  
 [http://blog.csdn.net/yangtiang/article/details/50652946](http://blog.csdn.net/yangtiang/article/details/50652946) 流式布局  
 [http://www.jianshu.com/p/0c075f2fdab2](http://www.jianshu.com/p/0c075f2fdab2) 浮动布局
+[http://www.jianshu.com/p/4ac229057396](http://www.jianshu.com/p/4ac229057396) 路径布局
 
 
 Because my english is poor so I just only can support chinese articles，and I wish somebody can help me translate to english.
@@ -558,7 +559,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.4.2'
+pod 'MyLayout', '~> 1.4.3'
 ```
    
 Then, run the following command:

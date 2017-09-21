@@ -33,10 +33,10 @@
         sbs = [self myGetLayoutSubviews];
     
     MyFrameLayout *lsc = self.myCurrentSizeClass;
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
@@ -77,10 +77,10 @@
             
             if (isEstimate && (sbvsc.wrapContentHeight || sbvsc.wrapContentWidth))
             {
-                [(MyBaseLayout*)sbv estimateLayoutRect:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
                 if (sbvmyFrame.multiple)
                 {
-                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为sizeThatFits执行后会还原，所以这里要重新设置
                     sbvsc = sbvmyFrame.sizeClass;
                 }
             }
