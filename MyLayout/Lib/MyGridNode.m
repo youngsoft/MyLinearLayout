@@ -446,37 +446,30 @@
     }
 }
 
+
 //gravity:@"top|bottom|left|right|centerX|centerY|width|height"
 - (void)returnGravityWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
 {
+    NSArray *data = @[
+      @{[NSNumber numberWithUnsignedShort:MyGravity_Vert_Top]:vMyGridGravityTop},
+      @{[NSNumber numberWithUnsignedShort:MyGravity_Vert_Bottom]:vMyGridGravityBottom},
+      @{[NSNumber numberWithUnsignedShort:MyGravity_Horz_Left]:vMyGridGravityLeft},
+      @{[NSNumber numberWithUnsignedShort:MyGravity_Horz_Right]:vMyGridGravityRight},
+      @{[NSNumber numberWithUnsignedShort:MyGravity_Horz_Center]:vMyGridGravityCenterX},
+      @{[NSNumber numberWithUnsignedShort:MyGravity_Vert_Center]:vMyGridGravityCenterY},
+      @{[NSNumber numberWithUnsignedShort:MyGravity_Horz_Fill]:vMyGridGravityWidthFill},
+      @{[NSNumber numberWithUnsignedShort:MyGravity_Vert_Fill]:vMyGridGravityHeightFill}
+    ];
     MyGravity gravity = gridNode.gravity;
-    NSMutableString *temp =  [[NSMutableString alloc] init];
-    if (gravity & (gravity == MyGravity_Vert_Top)) {
-        [temp appendString:@"top|"];
+    NSMutableArray *gravitystrs = [NSMutableArray new];
+    for (NSDictionary  *dic in data) {
+        MyGravity temp = [dic.allKeys.firstObject  unsignedShortValue];
+        if ((gravity & temp) == temp) {
+            [gravitystrs addObject:dic.allValues.firstObject];
+        }
     }
-    if (gravity & (gravity == MyGravity_Vert_Bottom)) {
-        [temp appendString:@"bottom|"];
-    }
-    if (gravity & (gravity == MyGravity_Horz_Left)) {
-        [temp appendString:@"left|"];
-    }
-    if (gravity & (gravity == MyGravity_Horz_Right)) {
-        [temp appendString:@"right|"];
-    }
-    if (gravity & (gravity == MyGravity_Horz_Center)) {
-        [temp appendString:@"centerX|"];
-    }
-    if (gravity & (gravity == MyGravity_Vert_Center)) {
-        [temp appendString:@"centerY|"];
-    }
-    if (gravity & (gravity == MyGravity_Horz_Fill)) {
-        [temp appendString:@"width|"];
-    }
-    if (gravity & (gravity == MyGravity_Vert_Fill)) {
-        [temp appendString:@"height|"];
-    }
-    if (temp.myIsNotBlank) {
-        [temp deleteCharactersInRange:NSMakeRange(temp.length - 1, 1)];
+    NSString *temp = [gravitystrs componentsJoinedByString:@"|"];
+    if (temp.length) {
         [result setObject:temp forKey:kMyGridGravity];
     }
 }
