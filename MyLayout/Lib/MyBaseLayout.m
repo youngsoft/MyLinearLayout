@@ -1250,18 +1250,7 @@ void* _myObserverContextC = (void*)20175283;
     if (self.cacheEstimatedRect)
         _useCacheRects = YES;
     
-    return CGRectMake(0, 0, _myCGFloatRound(selfSize.width), _myCGFloatRound(selfSize.height));
-}
-
-//只获取计算得到尺寸，不进行真正的布局。
--(CGRect)estimateLayoutRect:(CGSize)size
-{
-    return [self estimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny];
-}
-
--(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass
-{
-    return [self estimateLayoutRect:size inSizeClass:sizeClass sbs:nil];
+    return CGSizeMake(_myCGFloatRound(selfSize.width), _myCGFloatRound(selfSize.height));
 }
 
 -(void)setCacheEstimatedRect:(BOOL)cacheEstimatedRect
@@ -1578,7 +1567,7 @@ void* _myObserverContextC = (void*)20175283;
     if (newWindow == nil)
     {
         //这里处理可能因为触摸事件被强行终止而导致的背景色无法恢复的问题。
-        [_touchEventDelegate resetTouchHighligthed];
+        [_touchEventDelegate myResetTouchHighlighted2];
     }
 }
 
@@ -2987,7 +2976,6 @@ void* _myObserverContextC = (void*)20175283;
     return sbvFont;
 }
 
-
 -(CGFloat)myLayoutTopPadding
 {
     return self.myCurrentSizeClass.myLayoutTopPadding;
@@ -3154,7 +3142,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         
         if (isEstimate && (sbvsc.wrapContentHeight || sbvsc.wrapContentWidth))
         {
-            [(MyBaseLayout*)sbv estimateLayoutRect:sbvmyFrame.frame.size inSizeClass:sizeClass];
+            [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
             if (sbvmyFrame.multiple)
             {
                 sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置

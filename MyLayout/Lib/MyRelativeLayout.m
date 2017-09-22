@@ -925,7 +925,7 @@
                 
             }
             
-            CGFloat floatingWidth = selfSize.width - lsc.leadingPadding - lsc.trailingPadding + totalAdd;
+            CGFloat floatingWidth = selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding + totalAdd;
             if ( _myCGFloatLessOrEqual(floatingWidth, 0))
                 floatingWidth = 0;
             
@@ -1002,7 +1002,7 @@
                 }
             }
             
-            CGFloat floatingHeight = selfSize.height - lsc.topPadding - lsc.bottomPadding + totalAdd;
+            CGFloat floatingHeight = selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding + totalAdd;
             if (_myCGFloatLessOrEqual(floatingHeight, 0))
                 floatingHeight = 0;
             

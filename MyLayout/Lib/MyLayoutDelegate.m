@@ -500,6 +500,12 @@ __weak MyBaseLayout * _currentLayout;
 {
 }
 
+-(void)myResetTouchHighlighted2
+{
+    
+}
+
+
 -(id)myActionSender
 {
     return _layout;
@@ -605,6 +611,28 @@ __weak MyBaseLayout * _currentLayout;
         _oldBackgroundImage = nil;
     }
     
+}
+
+-(void)myResetTouchHighlighted2
+{
+    if (self.highlightedOpacity != 0)
+    {
+        self.layout.alpha = _oldAlpha;
+        _oldAlpha = 1;
+    }
+    
+    if (self.highlightedBackgroundColor != nil)
+    {
+        self.layout.backgroundColor = _oldBackgroundColor;
+        _oldBackgroundColor = nil;
+    }
+    
+    
+    if (self.highlightedBackgroundImage != nil)
+    {
+        self.layout.backgroundImage = _oldBackgroundImage;
+        _oldBackgroundImage = nil;
+    }
 }
 
 @end

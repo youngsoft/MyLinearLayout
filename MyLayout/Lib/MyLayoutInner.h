@@ -98,6 +98,13 @@
 
 -(MyGravity)myConvertLeftRightGravityToLeadingTrailing:(MyGravity)horzGravity;
 
+//为支持iOS11的safeArea而进行的padding的转化
+-(CGFloat)myLayoutTopPadding;
+-(CGFloat)myLayoutBottomPadding;
+-(CGFloat)myLayoutLeftPadding;
+-(CGFloat)myLayoutRightPadding;
+-(CGFloat)myLayoutLeadingPadding;
+-(CGFloat)myLayoutTrailingPadding;
 
 -(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout;
 

@@ -63,6 +63,7 @@
 //subclass override this method
 -(void)mySetTouchHighlighted;
 -(void)myResetTouchHighlighted;
+-(void)myResetTouchHighlighted2;
 -(id)myActionSender;
 
 
