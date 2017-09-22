@@ -33,10 +33,10 @@
         sbs = [self myGetLayoutSubviews];
     
     MyFrameLayout *lsc = self.myCurrentSizeClass;
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;

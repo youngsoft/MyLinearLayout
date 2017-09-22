@@ -943,7 +943,35 @@ void* _myObserverContextC = (void*)20175283;
     }
 }
 
+-(UIRectEdge)insetsPaddingFromSafeArea
+{
+    return self.myCurrentSizeClass.insetsPaddingFromSafeArea;
+}
 
+-(void)setInsetsPaddingFromSafeArea:(UIRectEdge)insetsPaddingFromSafeArea
+{
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.insetsPaddingFromSafeArea != insetsPaddingFromSafeArea)
+    {
+        lsc.insetsPaddingFromSafeArea = insetsPaddingFromSafeArea;
+        [self setNeedsLayout];
+    }
+}
+
+-(BOOL)insetLandscapeFringePadding
+{
+    return self.myCurrentSizeClass.insetLandscapeFringePadding;
+}
+
+-(void)setInsetLandscapeFringePadding:(BOOL)insetLandscapeFringePadding
+{
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.insetLandscapeFringePadding != insetLandscapeFringePadding)
+    {
+        lsc.insetLandscapeFringePadding = insetLandscapeFringePadding;
+        [self setNeedsLayout];
+    }
+}
 
 -(void)setSubviewHSpace:(CGFloat)subviewHSpace
 {
@@ -1178,7 +1206,7 @@ void* _myObserverContextC = (void*)20175283;
 
 
 
--(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+-(CGSize)myEstimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
     MyFrame *selfMyFrame = self.myFrame;
     
@@ -1251,7 +1279,7 @@ void* _myObserverContextC = (void*)20175283;
     NSMutableArray *sbs = [self myGetLayoutSubviews];
     [sbs addObject:subview];
     
-    [self estimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny sbs:sbs];
+    [self myEstimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny sbs:sbs];
     
     return [subview estimatedRect];
 }
@@ -1495,8 +1523,14 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGSize)sizeThatFits:(CGSize)size
 {
-    return [self estimateLayoutRect:size].size;
+    return [self sizeThatFits:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny];
 }
+
+-(CGSize)sizeThatFits:(CGSize)size inSizeClass:(MySizeClass)sizeClass
+{
+    return [self myEstimateLayoutRect:size inSizeClass:sizeClass sbs:nil];
+}
+
 
 -(void)setHidden:(BOOL)hidden
 {
@@ -1536,6 +1570,16 @@ void* _myObserverContextC = (void*)20175283;
     [super willRemoveSubview:subview];  //删除后恢复其原来的实现。
 
     [self myRemoveSubviewObserver:subview];
+}
+
+-(void)willMoveToWindow:(UIWindow *)newWindow
+{
+    [super willMoveToWindow:newWindow];
+    if (newWindow == nil)
+    {
+        //这里处理可能因为触摸事件被强行终止而导致的背景色无法恢复的问题。
+        [_touchEventDelegate resetTouchHighligthed];
+    }
 }
 
 - (void)willMoveToSuperview:(UIView*)newSuperview
@@ -2094,6 +2138,20 @@ void* _myObserverContextC = (void*)20175283;
 
 #pragma mark -- Deprecated Method
 
+-(CGRect)estimateLayoutRect:(CGSize)size
+{
+    CGRect rect = CGRectZero;
+    rect.size = [self sizeThatFits:size];
+    return rect;
+}
+
+-(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass
+{
+    CGRect rect = CGRectZero;
+    rect.size = [self sizeThatFits:size inSizeClass:sizeClass];
+    return rect;
+}
+
 
 #pragma mark -- Private Method
 
@@ -2634,9 +2692,9 @@ void* _myObserverContextC = (void*)20175283;
         if (boundDime.dimeRelaVal.view == self)
         {
             if (boundDime.dimeRelaVal.dime == MyGravity_Horz_Fill)
-                value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.leadingPadding + self.trailingPadding) : 0);
+                value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.myLayoutLeadingPadding + self.myLayoutTrailingPadding) : 0);
             else
-                value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.topPadding + self.bottomPadding) :0);
+                value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.myLayoutTopPadding + self.myLayoutBottomPadding) :0);
         }
         else if (boundDime.dimeRelaVal.view == sbv)
         {
@@ -2833,9 +2891,9 @@ void* _myObserverContextC = (void*)20175283;
     {
         
         if (dime.dimeRelaVal == lsc.widthSizeInner && !lsc.wrapContentWidth)
-            pRect->size.width = [dime measureWith:(selfSize.width - lsc.leadingPadding - lsc.trailingPadding)];
+            pRect->size.width = [dime measureWith:(selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding)];
         else if (dime.dimeRelaVal == lsc.heightSizeInner)
-            pRect->size.width = [dime measureWith:(selfSize.height - lsc.topPadding - lsc.bottomPadding)];
+            pRect->size.width = [dime measureWith:(selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding)];
         else if (dime.dimeRelaVal == dime.view.heightSizeInner)
             pRect->size.width = [dime measureWith:pRect->size.height];
         else if (dime.dimeRelaVal.dime == MyGravity_Horz_Fill)
@@ -2846,9 +2904,9 @@ void* _myObserverContextC = (void*)20175283;
     else
     {
         if (dime.dimeRelaVal == lsc.heightSizeInner && !lsc.wrapContentHeight)
-            pRect->size.height = [dime measureWith:(selfSize.height - lsc.topPadding - lsc.bottomPadding)];
+            pRect->size.height = [dime measureWith:(selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding)];
         else if (dime.dimeRelaVal == lsc.widthSizeInner)
-            pRect->size.height = [dime measureWith:(selfSize.width - lsc.leadingPadding - lsc.trailingPadding)];
+            pRect->size.height = [dime measureWith:(selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding)];
         else if (dime.dimeRelaVal == dime.view.widthSizeInner)
             pRect->size.height = [dime measureWith:pRect->size.width];
         else if (dime.dimeRelaVal.dime == MyGravity_Horz_Fill)
@@ -2864,9 +2922,9 @@ void* _myObserverContextC = (void*)20175283;
     if (sbs.count == 0 && !lsc.zeroPadding)
     {
         if (lsc.wrapContentWidth)
-            size.width -= (lsc.leadingPadding + lsc.trailingPadding);
+            size.width -= (lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding);
         if (lsc.wrapContentHeight)
-            size.height -= (lsc.topPadding + lsc.bottomPadding);
+            size.height -= (lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding);
     }
     
     return size;
@@ -2929,6 +2987,31 @@ void* _myObserverContextC = (void*)20175283;
     return sbvFont;
 }
 
+
+-(CGFloat)myLayoutTopPadding
+{
+    return self.myCurrentSizeClass.myLayoutTopPadding;
+}
+-(CGFloat)myLayoutBottomPadding
+{
+    return self.myCurrentSizeClass.myLayoutBottomPadding;
+}
+-(CGFloat)myLayoutLeftPadding
+{
+    return self.myCurrentSizeClass.myLayoutLeftPadding;
+}
+-(CGFloat)myLayoutRightPadding
+{
+    return self.myCurrentSizeClass.myLayoutRightPadding;
+}
+-(CGFloat)myLayoutLeadingPadding
+{
+    return self.myCurrentSizeClass.myLayoutLeadingPadding;
+}
+-(CGFloat)myLayoutTrailingPadding
+{
+    return self.myCurrentSizeClass.myLayoutTrailingPadding;
+}
 
 
 - (void)myAlterScrollViewContentSize:(CGSize)newSize lsc:(MyBaseLayout*)lsc

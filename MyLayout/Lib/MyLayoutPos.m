@@ -235,7 +235,23 @@
     if (_posValType == MyLayoutValueType_NSNumber)
         return _posVal;
     else if (_posValType == MyLayoutValueType_UILayoutSupport)
+    {
+       //只有在11以后并且是设置了safearea缩进才忽略UILayoutSupport。
+        UIView *superview = self.view.superview;
+            if (superview != nil &&
+                [UIDevice currentDevice].systemVersion.doubleValue >= 11 &&
+                [superview isKindOfClass:[MyBaseLayout class]])
+            {
+                UIRectEdge edge = ((MyBaseLayout*)superview).insetsPaddingFromSafeArea;
+                if ((_pos == MyGravity_Vert_Top && (edge & UIRectEdgeTop) == UIRectEdgeTop) ||
+                    (_pos == MyGravity_Vert_Bottom && (edge & UIRectEdgeBottom) == UIRectEdgeBottom))
+                {
+                    return @(0);
+                }
+            }
+        
         return @([((id<UILayoutSupport>)_posVal) length]);
+    }
     
     
     return nil;

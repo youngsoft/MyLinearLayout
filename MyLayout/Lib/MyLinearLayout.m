@@ -248,10 +248,10 @@
             
             if (isEstimate && isSbvWrap)
             {
-                [(MyBaseLayout*)sbv estimateLayoutRect:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
                 if (sbvmyFrame.multiple)
                 {
-                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
+                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为sizeThatFits执行后会还原，所以这里要重新设置
                     sbvsc = sbvmyFrame.sizeClass;
                 }
             }
@@ -465,10 +465,10 @@
 -(CGSize)myLayoutSubviewsForVert:(CGSize)selfSize sbs:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
 {
     CGFloat subviewSpace = lsc.subviewVSpace;
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
@@ -792,10 +792,10 @@
 {
  
     CGFloat subviewSpace = lsc.subviewHSpace;
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
@@ -1223,10 +1223,10 @@
 -(CGSize)myLayoutSubviewsForVertGravity:(CGSize)selfSize sbs:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
 {
     
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
     CGFloat subviewSpace = lsc.subviewVSpace;
@@ -1399,10 +1399,10 @@
 
 -(CGSize)myLayoutSubviewsForHorzGravity:(CGSize)selfSize sbs:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
 {
-    CGFloat paddingTop = lsc.topPadding;
-    CGFloat paddingBottom = lsc.bottomPadding;
-    CGFloat paddingLeading = lsc.leadingPadding;
-    CGFloat paddingTrailing = lsc.trailingPadding;
+    CGFloat paddingTop = lsc.myLayoutTopPadding;
+    CGFloat paddingBottom = lsc.myLayoutBottomPadding;
+    CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
+    CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
     CGFloat subviewSpace = lsc.subviewHSpace;

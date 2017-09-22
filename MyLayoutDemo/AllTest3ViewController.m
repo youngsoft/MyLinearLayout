@@ -623,8 +623,8 @@
     }
     
     //评估出itemLayout的尺寸，注意这里要明确指定itemLayout的宽度，因为弹出菜单的宽度是sender的宽度-20，而itemLayout的父容器又有20的左右内边距，因此这里要减去40.
-    CGRect sz = [itemLayout estimateLayoutRect:CGSizeMake(CGRectGetWidth(rc) - 40, 0)];
-    scrollView.heightSize.equalTo(@(sz.size.height)).min(50).max(155);  //设置scrollView的高度，以及最大最小高度。正是这个实现了拉伸限制功能。
+    CGSize sz = [itemLayout sizeThatFits:CGSizeMake(CGRectGetWidth(rc) - 40, 0)];
+    scrollView.heightSize.equalTo(@(sz.height)).min(50).max(155);  //设置scrollView的高度，以及最大最小高度。正是这个实现了拉伸限制功能。
     
     UIButton *closeButton = [UIButton new];
     closeButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
@@ -671,8 +671,8 @@
     [self.popmenuItemLayout insertSubview:button belowSubview:sender];
     
     //重新评估popmenuItemLayout的高度，这里宽度是0的原因是因为宽度已经明确了，也就是在现有的宽度下评估。而前面是因为popmenuItemLayout的宽度还没有明确所以要指定宽度。
-    CGRect sz = [self.popmenuItemLayout estimateLayoutRect:CGSizeMake(0, 0)];
-    self.popmenuScrollView.heightSize.equalTo(@(sz.size.height));
+    CGSize sz = [self.popmenuItemLayout sizeThatFits:CGSizeMake(0, 0)];
+    self.popmenuScrollView.heightSize.equalTo(@(sz.height));
     
     //多个布局同时动画。
     [self.popmenuItemLayout layoutAnimationWithDuration:0.3];
@@ -684,8 +684,8 @@
 -(void)handleDelMe:(UIButton*)sender
 {
     [sender removeFromSuperview];
-    CGRect sz = [self.popmenuItemLayout estimateLayoutRect:CGSizeMake(0, 0)];
-    self.popmenuScrollView.heightSize.equalTo(@(sz.size.height));
+    CGSize sz = [self.popmenuItemLayout sizeThatFits:CGSizeMake(0, 0)];
+    self.popmenuScrollView.heightSize.equalTo(@(sz.height));
 
     [self.popmenuItemLayout layoutAnimationWithDuration:0.3];
     [self.popmenuLayout layoutAnimationWithDuration:0.3];

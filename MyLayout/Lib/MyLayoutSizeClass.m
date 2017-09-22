@@ -549,6 +549,8 @@ BOOL _myisRTL = NO;
     if (self != nil)
     {
         _zeroPadding = YES;
+        _insetsPaddingFromSafeArea = UIRectEdgeAll;
+        _insetLandscapeFringePadding = NO;
         
     }
     
@@ -623,6 +625,155 @@ BOOL _myisRTL = NO;
 }
 
 
+-(CGFloat)myLayoutTopPadding
+{
+    if ((self.insetsPaddingFromSafeArea & UIRectEdgeTop) == UIRectEdgeTop)
+    {
+#ifdef MAC_OS_X_VERSION_10_12
+        
+        if (@available(iOS 11.0, *)) {
+            return self.topPadding + self.view.safeAreaInsets.top;
+        } else {
+            return self.topPadding;
+        }
+#else
+        return self.topPadding;
+#endif
+    }
+    else
+        return self.topPadding;
+}
+
+-(CGFloat)myLayoutBottomPadding
+{
+    if ((self.insetsPaddingFromSafeArea & UIRectEdgeBottom) == UIRectEdgeBottom)
+    {
+#ifdef MAC_OS_X_VERSION_10_12
+        
+        if (@available(iOS 11.0, *)) {
+            return self.bottomPadding + self.view.safeAreaInsets.bottom;
+        } else {
+            return self.bottomPadding;
+        }
+#else
+        return self.bottomPadding;
+#endif
+    }
+    else
+    {
+        return self.bottomPadding;
+    }
+}
+
+-(CGFloat)myLayoutLeftPadding
+{
+    CGFloat inset = 0;
+    
+#ifdef MAC_OS_X_VERSION_10_12
+    
+    if (@available(iOS 11.0, *)) {
+        if ((self.insetsPaddingFromSafeArea & UIRectEdgeLeft) == UIRectEdgeLeft)
+        {
+            //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是右边那么就不缩进了。
+            if (self.insetLandscapeFringePadding &&
+                (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
+                [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight)
+            {
+                inset = 0;
+            }
+            else
+                inset = self.view.safeAreaInsets.left;
+        }
+    }
+#endif
+    
+    return self.leftPadding + inset;
+}
+-(CGFloat)myLayoutRightPadding
+{
+    CGFloat inset = 0;
+    
+#ifdef MAC_OS_X_VERSION_10_12
+    
+    if (@available(iOS 11.0, *)) {
+        if ((self.insetsPaddingFromSafeArea & UIRectEdgeRight) == UIRectEdgeRight)
+        {
+            //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是左边那么就不缩进了。
+            if (self.insetLandscapeFringePadding &&
+                (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
+                [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft)
+            {
+                inset = 0;
+            }
+            else
+            {
+                inset = self.view.safeAreaInsets.right;
+            }
+        }
+    }
+#endif
+    
+    return self.rightPadding + inset;
+}
+
+-(CGFloat)myLayoutLeadingPadding
+{
+    CGFloat inset = 0;
+    
+#ifdef MAC_OS_X_VERSION_10_12
+    
+    if (@available(iOS 11.0, *)) {
+        
+        UIRectEdge edge = [MyViewSizeClass isRTL]? UIRectEdgeRight:UIRectEdgeLeft;
+        UIDeviceOrientation devori = [MyViewSizeClass isRTL]? UIDeviceOrientationLandscapeLeft: UIDeviceOrientationLandscapeRight;
+        if ((self.insetsPaddingFromSafeArea & edge) == edge)
+        {
+            //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是尾部那么就不缩进了。
+            if (self.insetLandscapeFringePadding &&
+                (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
+                [UIDevice currentDevice].orientation == devori)
+            {
+                inset = 0;
+            }
+            else
+            {
+                inset = [MyViewSizeClass isRTL]? self.view.safeAreaInsets.right : self.view.safeAreaInsets.left;
+            }
+        }
+    }
+#endif
+    
+    return self.leadingPadding + inset;
+}
+
+-(CGFloat)myLayoutTrailingPadding
+{
+    CGFloat inset = 0;
+    
+#ifdef MAC_OS_X_VERSION_10_12
+    
+    if (@available(iOS 11.0, *)) {
+        UIRectEdge edge = [MyViewSizeClass isRTL]? UIRectEdgeLeft:UIRectEdgeRight;
+        UIDeviceOrientation devori = [MyViewSizeClass isRTL]? UIDeviceOrientationLandscapeRight: UIDeviceOrientationLandscapeLeft;
+        if ((self.insetsPaddingFromSafeArea & edge) == edge)
+        {
+            //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是头部那么就不缩进了。
+            if (self.insetLandscapeFringePadding &&
+                (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
+                [UIDevice currentDevice].orientation == devori)
+            {
+                inset = 0;
+            }
+            else
+            {
+                inset = [MyViewSizeClass isRTL]? self.view.safeAreaInsets.left : self.view.safeAreaInsets.right;
+            }
+        }
+    }
+#endif
+    
+    return self.trailingPadding + inset;
+}
 
 
 -(CGFloat)subviewSpace
@@ -645,6 +796,8 @@ BOOL _myisRTL = NO;
     lsc.bottomPadding = self.bottomPadding;
     lsc.trailingPadding = self.trailingPadding;
     lsc.zeroPadding = self.zeroPadding;
+    lsc.insetsPaddingFromSafeArea = self.insetsPaddingFromSafeArea;
+    lsc.insetLandscapeFringePadding = self.insetLandscapeFringePadding;
     lsc.gravity = self.gravity;
     lsc.reverseLayout = self.reverseLayout;
     lsc.subviewVSpace = self.subviewVSpace;

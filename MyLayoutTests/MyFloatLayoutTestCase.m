@@ -92,7 +92,7 @@
     dectorSpecialityLabel.weight = 1.f;
     dectorSpecialityLabel.text = @"666";
     
-    [dectorInfoFloatLayout estimateLayoutRect:CGSizeMake(375, 667)];
+    [dectorInfoFloatLayout sizeThatFits:CGSizeMake(375, 667)];
     
     XCTAssert(CGRectEqualToRect(dectorSpecialityLabel.estimatedRect, CGRectMake(130, 62, 245, 75)), @"dectorSpecialityLabel' rect:%@", NSStringFromCGRect(dectorSpecialityLabel.estimatedRect));
 
@@ -139,7 +139,7 @@
     segmentedControl.weight = 1.f;
     segmentedControl.myHeight = 40.f;
 
-    [layout estimateLayoutRect:CGSizeMake(375, 667)];
+    [layout sizeThatFits:CGSizeMake(375, 667)];
     
     XCTAssert(CGRectEqualToRect(segmentedControl.estimatedRect, CGRectMake(0, 60, 375, 40)), @"segmentedControl' rect:%@", NSStringFromCGRect(segmentedControl.estimatedRect));
     

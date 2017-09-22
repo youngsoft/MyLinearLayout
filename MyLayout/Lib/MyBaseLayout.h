@@ -577,7 +577,7 @@
 
 
 /**
- 视图的在父布局视图调用完评估尺寸的方法后，可以通过这个方法来获取评估的CGRect值。评估的CGRect值是在布局前评估计算的值，而frame则是视图真正完成布局后的真实的CGRect值。在调用这个方法前请先调用父布局视图的-(CGRect)estimateLayoutRect方法进行布局视图的尺寸评估，否则此方法返回的值未可知。这个方法主要用于在视图布局前而想得到其在父布局视图中的位置和尺寸的场景。
+ 视图的在父布局视图调用完评估尺寸的方法后，可以通过这个方法来获取评估的CGRect值。评估的CGRect值是在布局前评估计算的值，而frame则是视图真正完成布局后的真实的CGRect值。在调用这个方法前请先调用父布局视图的-(CGSize)sizeThatFits:方法进行布局视图的尺寸评估，否则此方法返回的值未可知。这个方法主要用于在视图布局前而想得到其在父布局视图中的位置和尺寸的场景。
  
  @return 返回被子视图的评估的CGRect值。
  */
@@ -767,6 +767,18 @@
  * 举例来说假设某个布局视图的高度是wrapContentHeight,并且设置了topPadding为10，bottomPadding为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为NO时，那么在没有任何子视图时布局视图的高度就是0，也就是说topPadding和bottomPadding不会参与高度的计算了。
  */
 @property(nonatomic, assign) BOOL zeroPadding;
+
+
+/**
+ 指定padding内边距的缩进是在SafeArea基础之上进行的。默认是UIRectEdgeAll表示四周都会缩进SafeArea所指定的区域。你也可以设置只缩进某一个或则几个方向，或者不缩进任何一个方向。这个属性是为了支持iPoneX而设置的。为了支持iPhoneX的全屏幕适配。我们只需要对根布局视图设置这个扩展属性，默认情况下是不需要进行特殊设置的，MyLayout自动会对iPhoneX进行适配。我们知道iOS11中引入了安全区域的概念，MyLayout中的根布局视图会自动将安全区域叠加到设置的padding中去。默认情况下四周的安全区域都会叠加到padding中去，因此您可以根据特殊情况来设置只需要叠加哪一个方向的安全区域。
+ */
+@property(nonatomic, assign) UIRectEdge insetsPaddingFromSafeArea;
+
+
+/**
+ *当insetsPaddingFromSafeArea同时设置有左右方向同时缩进并且在横屏时是否只缩进有刘海方向的内边距。默认是NO，表示两边都会缩进。如果你想让没有刘海的那一边延伸到屏幕的安全区外，请将这个属性设置为YES。iPhoneX设备中具有一个尺寸为44的刘海区域。当您横屏时为了对齐，左右两边的安全缩进区域都是44。但是有些时候我们希望没有刘海的那一边不需要缩进对齐而是延伸到安全区域以外。这时候您可以通过给根布局视图设置这个属性来达到效果。注意这个属性只有insetsPaddingFromSafeArea设置了左右都缩进时才有效。
+ */
+@property(nonatomic, assign) BOOL insetLandscapeFringePadding;
 
 
 /**
@@ -961,17 +973,17 @@
 /**
 评估布局视图的尺寸。这个方法并不会让布局视图进行真正的布局，只是对布局的尺寸进行评估，主要用于在布局完成前想预先知道布局尺寸的场景。通过对布局进行尺寸的评估，可以在不进行布局的情况下动态的计算出布局的位置和大小，但需要注意的是这个评估值有可能不是真实显示的实际位置和尺寸。
  @param size 指定期望的宽度或者高度，如果size中对应的值设置为0则根据布局自身的高度和宽度来进行评估，而设置为非0则固定指定的高度或者宽度来进行评估。比如下面的例子：
-  1.estimateLayoutRect:CGSizeMake(0,0) 表示按布局的位置和尺寸根据布局的子视图来进行动态评估。
-  2.estimateLayoutRect:CGSizeMake(320,0) 表示布局的宽度固定为320,而高度则根据布局的子视图来进行动态评估。这个情况非常适用于UITableViewCell的动态高度的计算评估。
-  3.estimateLayoutRect:CGSizeMake(0,100) 表示布局的高度固定为100,而宽度则根据布局的子视图来进行动态评估。
+  1.sizeThatFits:CGSizeMake(0,0) 表示按布局的位置和尺寸根据布局的子视图来进行动态评估。
+  2.sizeThatFits:CGSizeMake(320,0) 表示布局的宽度固定为320,而高度则根据布局的子视图来进行动态评估。这个情况非常适用于UITableViewCell的动态高度的计算评估。
+  3.sizeThatFits:CGSizeMake(0,100) 表示布局的高度固定为100,而宽度则根据布局的子视图来进行动态评估。
  @return 返回评估的尺寸。
  */
--(CGRect)estimateLayoutRect:(CGSize)size;
--(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass;
+-(CGSize)sizeThatFits:(CGSize)size;
+-(CGSize)sizeThatFits:(CGSize)size inSizeClass:(MySizeClass)sizeClass;
 
 
 /**
-  是否缓存经过estimateLayoutRect方法评估后的所有子视图的位置和尺寸一次!，默认设置为NO不缓存。当我们用estimateLayoutRect方法评估布局视图的尺寸后，所有子视图都会生成评估的位置和尺寸，因为此时并没有执行布局所以子视图并没有真实的更新frame值。而当布局视图要进行真实布局时又会重新计算所有子视图的位置和尺寸，因此为了优化性能当我们对布局进行评估后在下次真实布局时我们可以不再重新计算子视图的位置和尺寸而是用前面评估的值来设置位置和尺寸。这个属性设置为YES时则每次评估后到下一次布局时不会再重新计算子视图的布局了，而是用评估值来布局子视图的位置和尺寸。而当这个属性设置为NO时则每次布局都会重新计算子视图的位置和布局。
+  是否缓存经过sizeThatFits方法评估后的所有子视图的位置和尺寸一次!，默认设置为NO不缓存。当我们用sizeThatFits方法评估布局视图的尺寸后，所有子视图都会生成评估的位置和尺寸，因为此时并没有执行布局所以子视图并没有真实的更新frame值。而当布局视图要进行真实布局时又会重新计算所有子视图的位置和尺寸，因此为了优化性能当我们对布局进行评估后在下次真实布局时我们可以不再重新计算子视图的位置和尺寸而是用前面评估的值来设置位置和尺寸。这个属性设置为YES时则每次评估后到下一次布局时不会再重新计算子视图的布局了，而是用评估值来布局子视图的位置和尺寸。而当这个属性设置为NO时则每次布局都会重新计算子视图的位置和布局。
    这个属性一般用在那些动态高度UITableviewCell中进行配合使用，我们一般将布局视图作为UITableviewCell的contentView的子视图:
  
  @code
@@ -990,8 +1002,8 @@
  -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
  {
      UITableViewCellXXX *cell = (UITableViewCellXXX*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-     CGRect rect = [cell.rootLayout estimateLayoutRect:CGSizeMake(tableView.frame.size.width, 0)];
-     return rect.size.height;
+     CGSize size = [cell.rootLayout sizeThatFits:CGSizeMake(tableView.frame.size.width, 0)];
+     return size.height;
  }
  
  @endcode
@@ -1033,7 +1045,7 @@
  @endcode
  
  @param subview 一个未加入布局视图的子视图，如果子视图已经加入则直接返回子视图的frame值。
- @param size 指定布局视图期望的宽度或者高度，一般请将这个值设置为CGSizeZero。 具体请参考estimateLayoutRect方法中的size的说明。
+ @param size 指定布局视图期望的宽度或者高度，一般请将这个值设置为CGSizeZero。 具体请参考sizeThatFits方法中的size的说明。
  @return 子视图在布局视图最后一个位置(假如加入后)的frame值。
  */
 -(CGRect)subview:(UIView*)subview estimatedRectInLayoutSize:(CGSize)size;
@@ -1109,6 +1121,13 @@
  *这个属性在新版本将失效并且无任何意义了。如果想让子视图隐藏时是否继续占据位置则请参考使用子视图的myVisibility属性来进行单独设置。
  */
 @property(nonatomic, assign) BOOL hideSubviewReLayout  MYMETHODDEPRECATED("this property was invalid, please use subview's myVisibility to instead");
+
+
+/**
+ *过期方法。请用sizeThatFits方法来代替。
+ */
+-(CGRect)estimateLayoutRect:(CGSize)size MYMETHODDEPRECATED("this method was invalid, please use sizeThatFits: to instead");
+-(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass MYMETHODDEPRECATED("this method was invalid, please use sizeThatFits:inSizeClass: to instead");
 
 
 @end

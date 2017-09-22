@@ -189,6 +189,11 @@ typedef enum : unsigned char{
 
 @property(nonatomic, assign) BOOL zeroPadding;
 
+@property(nonatomic, assign) UIRectEdge insetsPaddingFromSafeArea;
+@property(nonatomic, assign) BOOL insetLandscapeFringePadding;
+
+
+
 @property(nonatomic ,assign) CGFloat subviewVSpace;
 @property(nonatomic, assign) CGFloat subviewHSpace;
 @property(nonatomic, assign) CGFloat subviewSpace;

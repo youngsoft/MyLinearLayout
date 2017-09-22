@@ -46,7 +46,7 @@
         
         NSArray *descs = @[@"只有一行文本",
                            @"这个例子是用于测试自动布局在UITableView中实现静态高度的解决方案。",
-                           @"通过布局视图的estimateLayoutRect函数能够评估出UITableViewCell的动态高度",
+                           @"通过布局视图的sizeThatFits函数能够评估出UITableViewCell的动态高度",
                            @"这是一段既有文本也有图片，文本在上面，图片在下面"
                            ];
         
