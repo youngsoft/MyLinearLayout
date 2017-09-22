@@ -185,23 +185,19 @@
 {
     if (gravity.myRemoveStringByTrimSpace.myIsNotBlank){
         MyGravity tempGravity = MyGravity_None;
-        
-        if ([gravity containsString:@"|"]) {
-            NSArray *array = [gravity componentsSeparatedByString:@"|"];
-            for (NSString *temp in array) {
-                if (temp.myIsNotBlank) {
-                    tempGravity |= [self returnGravity:temp];
-                }
+        NSArray *array = [gravity componentsSeparatedByString:@"|"];
+        for (NSString *temp in array) {
+            if (temp.myRemoveStringByTrimSpace.myIsNotBlank) {
+                tempGravity |= [self returnGravity:temp];
             }
-            gridNode.gravity = tempGravity;
-        }else{
-            gridNode.gravity = [self returnGravity:gravity];
         }
+        gridNode.gravity = tempGravity;
     }
 }
 
 - (MyGravity)returnGravity:(NSString *)gravity
 {
+    [gravity rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
     
     if ([gravity isEqualToString:vMyGridGravityTop]) {
         return  MyGravity_Vert_Top;
@@ -253,7 +249,6 @@
         if (offset > 0.f) {
             line.offset = offset;
         }
-        
         switch (borderline) {
             case 0: gridNode.topBorderline = line; break;
             case 1: gridNode.leftBorderline = line;break;
@@ -282,9 +277,9 @@
             NSData *jsonData= [cols dataUsingEncoding:NSUTF8StringEncoding];
             NSError *error = nil;
             id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                            options:NSJSONReadingMutableContainers error:&error];
+                               options:NSJSONReadingMutableContainers error:&error];
             if (error == nil) {
-                [self createRows:jsonObject gridNode:gridNode];
+                [self createCols:jsonObject gridNode:gridNode];
             }
         }
     }
@@ -454,37 +449,35 @@
 //gravity:@"top|bottom|left|right|centerX|centerY|width|height"
 - (void)returnGravityWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result
 {
-
     MyGravity gravity = gridNode.gravity;
     NSMutableString *temp =  [[NSMutableString alloc] init];
-    if (gravity & MyGravity_Vert_Top) {
+    if (gravity & (gravity == MyGravity_Vert_Top)) {
         [temp appendString:@"top|"];
     }
-    if (gravity & MyGravity_Vert_Bottom) {
+    if (gravity & (gravity == MyGravity_Vert_Bottom)) {
         [temp appendString:@"bottom|"];
     }
-    if (gravity & MyGravity_Horz_Left) {
+    if (gravity & (gravity == MyGravity_Horz_Left)) {
         [temp appendString:@"left|"];
     }
-    if (gravity & MyGravity_Horz_Right) {
+    if (gravity & (gravity == MyGravity_Horz_Right)) {
         [temp appendString:@"right|"];
     }
-    if (gravity & MyGravity_Horz_Center) {
+    if (gravity & (gravity == MyGravity_Horz_Center)) {
         [temp appendString:@"centerX|"];
     }
-    if (gravity & MyGravity_Vert_Center) {
+    if (gravity & (gravity == MyGravity_Vert_Center)) {
         [temp appendString:@"centerY|"];
     }
-    if (gravity & MyGravity_Horz_Fill) {
+    if (gravity & (gravity == MyGravity_Horz_Fill)) {
         [temp appendString:@"width|"];
     }
-    if (gravity & MyGravity_Vert_Fill) {
+    if (gravity & (gravity == MyGravity_Vert_Fill)) {
         [temp appendString:@"height|"];
     }
-
     if (temp.myIsNotBlank) {
         [temp deleteCharactersInRange:NSMakeRange(temp.length - 1, 1)];
-        [result setObject:@"bottom|left" forKey:kMyGridGravity];
+        [result setObject:temp forKey:kMyGridGravity];
     }
 }
 
@@ -768,7 +761,8 @@ typedef struct  _MyGridOptionalProperties2
 
 - (NSDictionary *)gridDictionary
 {
-    return nil;
+    return [[MYAnalyzeMyGrid shareInstance] gridConvertDictionaryWithGridNode:self result:
+            [NSMutableDictionary new]];
 }
 
 //- (void)setGridDictionary:(NSDictionary *)gridDictionary

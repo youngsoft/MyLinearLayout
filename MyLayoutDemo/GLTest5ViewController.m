@@ -38,6 +38,9 @@
 @end
 
 @implementation GLTest5ViewController
+{
+    BOOL flag;
+}
 
 -(NSMutableArray*)datas
 {
@@ -182,11 +185,38 @@
 {
     [super touchesEnded:touches withEvent:event];
     
-    [self gridLayoutJSON];
+    if (!flag) {
+        
+        [self gridLayoutJSON];
+        
+        [self loadDataFromServer];
+        
+    }else{
+
+        [self printMyGrid:self.rootLayout.subGrids];
+        
+    }
     
-    [self loadDataFromServer];
+    flag = !flag;
     
 }
+
+
+- (void)printMyGrid:(NSArray<id<MyGrid>> *)temp
+{
+
+    
+    NSLog(@"gird-------temp.count.................%zi",temp.count);
+    for (id<MyGrid> grid in temp) {
+
+        
+        if (grid.subGrids) {
+            
+            [self printMyGrid:grid.subGrids];
+        }
+    }
+}
+
 
 -(void)handleTap:(id<MyGrid>)sender
 {
@@ -199,10 +229,8 @@
 
 -(void)loadDataFromServer
 {
-    
     for (GLTest5DataModel *dataModel in self.datas)
     {
-        
         UILabel *titleLabel = [UILabel new];
         titleLabel.text = dataModel.title;
         titleLabel.font = [CFTool font:16];
@@ -244,9 +272,7 @@
             }
             
             [self.rootLayout addViewGroup:@[titleLabel, subTitleLabel, imageView1, imageView2, vv] withActionData:dataModel.actionData to:1];
-            
         }
-        
     }
     
     

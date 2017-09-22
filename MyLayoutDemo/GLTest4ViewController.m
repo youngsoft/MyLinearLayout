@@ -287,4 +287,28 @@
     
 }
 
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+    
+    [self printMyGrid:self.rootLayout.subGrids];
+    
+}
+
+- (void)printMyGrid:(NSArray<id<MyGrid>> *)temp
+{
+    
+    
+    NSLog(@"gird-------temp.count.................%zi",temp.count);
+    for (id<MyGrid> grid in temp) {
+        
+        
+        if (grid.subGrids) {
+            
+            [self printMyGrid:grid.subGrids];
+        }
+    }
+}
+
 @end
