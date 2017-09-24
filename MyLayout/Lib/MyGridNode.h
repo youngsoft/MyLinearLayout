@@ -66,6 +66,9 @@ typedef enum : unsigned char {
 //得到栅格布局视图
 -(UIView*)gridLayoutView;
 
+//得到栅格的动作
+-(SEL)gridAction;
+
 //更新栅格尺寸。返回对应方向的尺寸
 -(CGFloat)updateGridSize:(CGSize)superSize superGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure;
 
@@ -105,8 +108,6 @@ typedef enum : unsigned char {
 @property(nonatomic)    NSInteger tag;
 
 @property(nonatomic, strong) id actionData;
-
-@property(nonatomic,copy) NSString *action;
 
 
 @property(nonatomic, weak) id<MyGridNode> superGrid;

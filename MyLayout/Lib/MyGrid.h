@@ -9,43 +9,47 @@
 #import "MyLayoutDef.h"
 #import "MyBorderline.h"
 
+/**
+ *  定义格式化栅格描述语言的key和对应的value。这些值可以用来设置栅格布局的gridDictionary属性中字典的各种键值对。
+ */
+extern NSString * const kMyGridTag;      //NSNumber类型，设置栅格的标签，对应MyGrid的tag属性。 具体值为NSInteger
+extern NSString * const kMyGridAction;   //NSString类型，设置栅格的触摸动作，对应MyGrid的setTarget中的action参数。
+extern NSString * const kMyGridActionData;  //id类型， 设置栅格的动作数据，对应MyGrid的actionData属性。
+extern NSString * const kMyGridRows;    //NSArray<NSDictionary>类型，表示里面的值是行子栅格数组.数组的元素是一个个子栅格字典对象
+extern NSString * const kMyGridCols;    //NSArray<NSDictionary>类型，表示里面的值是列子栅格数组.数组的元素是一个个子栅格字典对象
+extern NSString * const kMyGridSize;    //NSString类型或者NSNumber类型。设置栅格的尺寸，可以为特定的值vMyGridSizeWrap或者vMyGridSizeFill，也可以为某个具体的数字比如20.0, 还可以为百分比数字比如：@"20%" 或者@"-20%"。
+extern NSString * const kMyGridPadding;  //NSString类型，设置栅格的内边距，对应MyGrid的padding属性，具体的值的格式为：@"{上,左,下,右}"
+extern NSString * const kMyGridSpace;    //NSNumber类型，栅格的内子栅格的间距，对应MyGrid的subviewSpace属性。
+extern NSString * const kMyGridGravity;   //NSString类型，栅格的停靠属性，对应MyGrid的gravity属性，具体的值请参考下面的定义，比如：@"top|left"
+extern NSString * const kMyGridPlaceholder;  //NSNumber类型，栅格的占位属性，对应MyGrid的placeholder 属性，具体的值设置为YES or NO
+extern NSString * const kMyGridAnchor;      //NSNumber类型，栅格的锚点属性，对应MyGrid的anchor属性，具体的值设置为YES or NO
+extern NSString * const kMyGridTopBorderline;   //NSDictionary类型 栅格的顶部边界线对象。
+extern NSString * const kMyGridBottomBorderline; //NSDictionary类型 栅格的底部边界线对象。
+extern NSString * const kMyGridLeftBorderline;   //NSDictionary类型 栅格的左边边界线对象。
+extern NSString * const kMyGridRightBorderline;  //NSDictionary类型 栅格的右边边界线对象。
 
-extern NSString * const kMyGridTag;
-extern NSString * const kMyGridAction;
-extern NSString * const kMyGridActionData;
-extern NSString * const kMyGridRows;
-extern NSString * const kMyGridCols;
-extern NSString * const kMyGridSize;
-extern NSString * const kMyGridPadding;
-extern NSString * const kMyGridSpace;
-extern NSString * const kMyGridGravity;
-extern NSString * const kMyGridPlaceholder;
-extern NSString * const kMyGridAnchor;
-extern NSString * const kMyGridTopBorderline;
-extern NSString * const kMyGridBottomBorderline;
-extern NSString * const kMyGridLeftBorderline;
-extern NSString * const kMyGridRightBorderline;
-
-extern NSString * const kMyGridBorderlineColor;
-extern NSString * const kMyGridBorderlineThick;
-extern NSString * const kMyGridBorderlineHeadIndent;
-extern NSString * const kMyGridBorderlineTailIndent;
-extern NSString * const kMyGridBorderlineOffset;
+//栅格的边界线对象所能设置的key
+extern NSString * const kMyGridBorderlineColor;  //NSString类型，用字符串格式描述的颜色值。具体为：@"#FF0000" 表示红色
+extern NSString * const kMyGridBorderlineThick;   //NSNumber类型， 边界线的粗细
+extern NSString * const kMyGridBorderlineHeadIndent;  //NSNumber类型，边界线的头部缩进值
+extern NSString * const kMyGridBorderlineTailIndent;   //NSNumber类型，边界线的尾部缩进值。
+extern NSString * const kMyGridBorderlineOffset;       //NSNumber类型，边界线的偏移值。
+extern NSString * const kMyGridBorderlineDash;       //NSNumber类型，边界线是虚线。
 
 
-extern NSString * const vMyGridSizeWrap;
-extern NSString * const vMyGridSizeFill;
+//kMyGridSize可以设置的特殊值
+extern NSString * const vMyGridSizeWrap;    //表示尺寸由子栅格决定。
+extern NSString * const vMyGridSizeFill;    //表示尺寸填充父栅格的剩余部分
 
-
-extern NSString * const vMyGridGravityTop;
-extern NSString * const vMyGridGravityBottom;
-extern NSString * const vMyGridGravityLeft;
-extern NSString * const vMyGridGravityRight;
-extern NSString * const vMyGridGravityCenterX;
-extern NSString * const vMyGridGravityCenterY;
-extern NSString * const vMyGridGravityWidthFill;
-extern NSString * const vMyGridGravityHeightFill;
-
+//kMyGridGravity可以设置的值
+extern NSString * const vMyGridGravityTop;     //对应MyGravity_Vert_Top
+extern NSString * const vMyGridGravityBottom;  //对应MyGravity_Vert_Bottom
+extern NSString * const vMyGridGravityLeft;    //对应MyGravity_Horz_Left
+extern NSString * const vMyGridGravityRight;   //对应MyGravity_Horz_Right
+extern NSString * const vMyGridGravityCenterX;  //对应MyGravity_Horz_CenterX
+extern NSString * const vMyGridGravityCenterY;  //对应MyGravity_Vert_CenterY
+extern NSString * const vMyGridGravityWidthFill;  //对应MyGravity_Horz_Fill
+extern NSString * const vMyGridGravityHeightFill;  //对应MyGravity_Vert_Fill
 
 
 /**
@@ -55,20 +59,16 @@ extern NSString * const vMyGridGravityHeightFill;
 
 
 /**
- 栅格的标识，用于在事件中区分栅格。
+ 栅格的标签标识，用于在事件中区分栅格。
  */
+@property(nonatomic)  NSInteger tag;
+
 
 /**
  栅格的动作数据，这个数据是栅格的扩展数据，您可以在动作中使用这个附加的数据来进行一系列操作。他可以是一个数值，也可以是个字符串，甚至可以是一段JS脚本。
  */
 @property(nonatomic, strong) id actionData;
 
-
-
-/**
- 栅格的事件
- */
-@property(nonatomic, copy) NSString *action;
 
 
 /**
@@ -94,8 +94,6 @@ extern NSString * const vMyGridGravityHeightFill;
 //设置和获取栅格的尺寸
 @property(nonatomic, assign) CGFloat measure;
 
-//栅格的外形标识，主要用于和数据模型进行绑定使用。
-@property(nonatomic)  NSInteger tag;
 
 //得到父栅格。根栅格的父栅格为nil
 @property(nonatomic, weak, readonly) id<MyGrid> superGrid;
@@ -167,7 +165,14 @@ extern NSString * const vMyGridGravityHeightFill;
  */
 -(id<MyGrid>)addRow:(CGFloat)measure;
 
-//添加列栅格，返回新的栅格。
+/**
+ 添加列栅格，返回新的栅格。其中的measure可以设置如下的值：
+ 1.大于等于1的常数，表示固定尺寸。
+ 2.大于0小于1的常数，表示占用整体尺寸的比例
+ 3.小于0大于-1的常数，表示占用剩余尺寸的比例
+ 4.MyLayoutSize.wrap 表示尺寸由子栅格包裹
+ 5.MyLayoutSize.fill 表示占用栅格剩余的尺寸
+ */
 -(id<MyGrid>)addCol:(CGFloat)measure;
 
 //添加栅格，返回被添加的栅格。这个方法和下面的cloneGrid配合使用可以用来构建那些需要重复添加栅格的场景。

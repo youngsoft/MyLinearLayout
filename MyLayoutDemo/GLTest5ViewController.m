@@ -156,7 +156,7 @@
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.padding = UIEdgeInsetsMake(0, 0, 10, 0);
-    rootLayout.gridTarget  = self;
+    rootLayout.gridActionTarget  = self;
     self.view = rootLayout;
     self.rootLayout = rootLayout;
     
@@ -249,7 +249,7 @@
             
             //  UIImageView *imageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[0]]];
             
-            UIView *vv = [NSNull null];
+            UIView *vv = (UIView*)[NSNull null];
             if (dataModel.hasSales.integerValue)
             {
                 vv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
@@ -265,7 +265,7 @@
             
             UIImageView *imageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[1]]];
             
-            UIView *vv = [NSNull null];
+            UIView *vv = (UIView*)[NSNull null];
             if (dataModel.hasSales.integerValue)
             {
                 vv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];

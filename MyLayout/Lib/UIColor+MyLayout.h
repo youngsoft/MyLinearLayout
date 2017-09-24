@@ -24,7 +24,7 @@
  
  @return        来自字符串的UIColor对象，如果发生错误，则为nil
  */
-+ (nullable UIColor *)myColorWithHexString:(NSString *_Nonnull)hexStr;
++ ( UIColor *)myColorWithHexString:(NSString *)hexStr;
 
 
 /**
@@ -32,14 +32,14 @@
  RGB 颜色值
  @return 十六进制
  */
-- (nullable NSString *)hexString;
+- ( NSString *)hexString;
 
 /**
  透明
  RGB 颜色值
  @return 十六进制
  */
-- (nullable NSString *)hexStringWithAlpha;
+- ( NSString *)hexStringWithAlpha;
 
 @end
 

@@ -31,6 +31,7 @@
  NSString * const kMyGridBorderlineHeadIndent = @"head";
  NSString * const kMyGridBorderlineTailIndent = @"tail";
  NSString * const kMyGridBorderlineOffset = @"offset";
+ NSString * const kMyGridBorderlineDash = @"dash";
 
 
  NSString * const vMyGridSizeWrap = @"wrap";
@@ -47,6 +48,7 @@
  NSString * const vMyGridGravityHeightFill = @"height";
 
 
+//视图组和动作数据
 @interface MyViewGroupAndActionData : NSObject
 
 @property(nonatomic, strong) NSMutableArray *viewGroup;
@@ -77,6 +79,10 @@
 
 
 @end
+
+
+
+
 
 @interface MyGridLayout()<MyGridNode>
 
@@ -115,6 +121,8 @@
 -(void)removeGrids
 {
     [self removeGridsIn:MySizeClass_hAny | MySizeClass_wAny];
+    
+    [self setNeedsLayout];
 }
 
 -(void)removeGridsIn:(MySizeClass)sizeClass
@@ -122,6 +130,8 @@
     id<MyGridNode> lsc = (id<MyGridNode>)[self fetchLayoutSizeClass:sizeClass];
     [lsc.subGrids removeAllObjects];
     lsc.subGridsType = MySubGridsType_Unknown;
+    
+    [self setNeedsLayout];
 }
 
 -(id<MyGrid>) gridContainsSubview:(UIView*)subview
@@ -594,37 +604,15 @@
 
 -(NSDictionary*)gridDictionary
 {
-    return [[MYAnalyzeMyGrid shareInstance] gridConvertDictionaryWithGridNode:self result:
-            [NSMutableDictionary new]];
+    MyGridLayout *lsc = self.myCurrentSizeClass;
+    return lsc.gridDictionary;
 }
 
-- (NSString *)action
-{
-    return nil;
-}
 
-/*
- 栅格的描述。你可以用格子描述语言来建立格子
- 
- @code
- 
- {rows:[
- 
- {size:100, size:"100%", size:"-20%",size:"wrap", size:"fill", padding:"{10,10,10,10}", space:10.0, gravity:@"top|bottom|left|right|centerX|centerY|width|height","top-borderline":{"color":"#AAA",thick:1.0, head:1.0, tail:1.0, offset:1} },
- {},
- ]
- }
- 
- @endcode
- 
- */
 -(void)setGridDictionary:(NSDictionary *)gridDictionary
 {
-    if (gridDictionary == nil || gridDictionary.count <= 0) return;
-    [self removeGrids];
-    
-    [[MYAnalyzeMyGrid shareInstance] settingNodeAttributes:gridDictionary gridNode:self];
-
+    MyGridLayout *lsc = self.myCurrentSizeClass;
+    lsc.gridDictionary = gridDictionary;
 }
 
 
@@ -702,6 +690,10 @@
     return self;
 }
 
+-(SEL)gridAction
+{
+    return nil;
+}
 
 -(void)setBorderlineNeedLayoutIn:(CGRect)rect withLayer:(CALayer *)layer
 {

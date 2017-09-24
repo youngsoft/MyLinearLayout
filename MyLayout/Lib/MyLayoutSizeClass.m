@@ -1194,12 +1194,21 @@ BOOL _myisRTL = NO;
 
 -(NSDictionary*)gridDictionary
 {
-    return self.rootGrid.gridDictionary;
+    return [[MYAnalyzeMyGrid shareInstance] gridConvertDictionaryWithGridNode:self result:[NSMutableDictionary new]];
 }
 
 -(void)setGridDictionary:(NSDictionary *)gridDictionary
 {
-    self.rootGrid.gridDictionary = gridDictionary;
+    MyGridNode *rootNode = self.rootGrid;
+    [rootNode.subGrids removeAllObjects];
+    rootNode.subGridsType = MySubGridsType_Unknown;
+    
+    [self.view setNeedsLayout];
+    
+    if (gridDictionary == nil)
+        return;
+    
+    [[MYAnalyzeMyGrid shareInstance] settingNodeAttributes:gridDictionary gridNode:self];
 }
 
 -(CGFloat)measure
@@ -1240,6 +1249,10 @@ BOOL _myisRTL = NO;
     return self.view;
 }
 
+-(SEL)gridAction
+{
+    return nil;
+}
 
 -(void)setBorderlineNeedLayoutIn:(CGRect)rect withLayer:(CALayer *)layer
 {
