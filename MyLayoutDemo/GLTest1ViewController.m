@@ -230,6 +230,62 @@
     [rootLayout addSubview:right1ImageView];
     
     
+    //建立一个高度为30的子栅格。
+    id<MyGrid> line8 = [rootLayout addRow:30];
+    line8.subviewSpace = 5;
+    
+    //分别建立一个宽度为20%，30%， 50%的列子栅格，如果measure的值是大于0并且小于1的话就是建立一个占用总体尺寸比例的子栅格
+    [line8 addCol:0.2];
+    [line8 addCol:0.3];
+    [line8 addCol:0.5];
+    
+    UILabel *redLabel = [UILabel new];
+    redLabel.text = @"red";
+    redLabel.textAlignment = NSTextAlignmentCenter;
+    redLabel.backgroundColor = [UIColor redColor];
+    [rootLayout addSubview:redLabel];
+    
+    UILabel *greenLabel = [UILabel new];
+    greenLabel.text = @"green";
+    greenLabel.textAlignment = NSTextAlignmentCenter;
+    greenLabel.backgroundColor = [UIColor greenColor];
+    [rootLayout addSubview:greenLabel];
+    
+    UILabel *blueLabel = [UILabel new];
+    blueLabel.text = @"blue";
+    blueLabel.textAlignment = NSTextAlignmentCenter;
+    blueLabel.backgroundColor = [UIColor blueColor];
+    [rootLayout addSubview:blueLabel];
+    
+    
+    //上面的栅格演示的是正数百分比，如果值是一个小于0并且大于-1的数则表示的是尺寸占用剩余空间的比例。
+    //这里需要记住的是当比例是负数时表示的是剩余空间的比例，而当比例是正数时则表示的是总体空间的比例。！！！！
+    id<MyGrid> line9 = [rootLayout addRow:30];
+    line9.subviewSpace = 5;
+    
+    [line9 addCol:-0.2];  //第一列占用剩余空间的20%
+    [line9 addCol:-0.375];  //第二列占用剩余空间的37.5%。这里不是30%的原因是因为第一列占用剩余20%后整体还剩余80%，所以要在80%里面占用37.5%才能达到整体占用30%的效果。
+    [line9 addCol:MyLayoutSize.fill];  //最后一列是占用剩余所有空间，也就是扣除前面两个占用的空间，最终是得到剩余的100%也就是整体的50%了。
+    
+    UILabel *redLabel2 = [UILabel new];
+    redLabel2.text = @"red";
+    redLabel2.textAlignment = NSTextAlignmentCenter;
+    redLabel2.backgroundColor = [UIColor redColor];
+    [rootLayout addSubview:redLabel2];
+    
+    UILabel *greenLabel2 = [UILabel new];
+    greenLabel2.text = @"green";
+    greenLabel2.textAlignment = NSTextAlignmentCenter;
+    greenLabel2.backgroundColor = [UIColor greenColor];
+    [rootLayout addSubview:greenLabel2];
+    
+    UILabel *blueLabel2 = [UILabel new];
+    blueLabel2.text = @"blue";
+    blueLabel2.textAlignment = NSTextAlignmentCenter;
+    blueLabel2.backgroundColor = [UIColor blueColor];
+    [rootLayout addSubview:blueLabel2];
+    
+    
     
     //建立一个高度由内容包裹并且里面填充的子视图右对齐的的叶子栅格。
     [rootLayout addRow:MyLayoutSize.wrap].gravity = MyGravity_Horz_Right;
@@ -239,13 +295,11 @@
     [button2 addTarget:self  action:@selector(handleHideAndShowMore:) forControlEvents:UIControlEventTouchUpInside];
     button2.titleLabel.font = [CFTool font:16];
     [rootLayout addSubview:button2];
-  
     
-    
-    
+
     
     //建立一个高度为0的叶子栅格，这里面实现高度的动态调整。
-   id<MyGrid> line8 = [rootLayout addRow:0];
+    [rootLayout addRow:0];
     
     //添加对应的视图
     UIView *hiddenView = [UIView new];

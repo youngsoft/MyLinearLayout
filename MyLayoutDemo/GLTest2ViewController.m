@@ -10,20 +10,20 @@
 #import "MyLayout.h"
 #import "CFTool.h"
 
+//定义两种不同的展示风格标签
+static NSInteger sImageStyleTag = 2;   //图片风格的标签
+static NSInteger sTextStyleTag = 1;    //文本风格的标签
 
-@interface GLTest1DataModel : NSObject
+//数据模型
+@interface GLTest2DataModel : NSObject
 
 @property(nonatomic, strong) NSString *imageName;    //图像的名称，如果为nil则没有图像
 @property(nonatomic, strong) NSString *title;        //标题
 @property(nonatomic, strong) NSString *source;       //来源
 
-
-
 @end
 
-@implementation GLTest1DataModel
-
-
+@implementation GLTest2DataModel
 
 @end
 
@@ -32,7 +32,7 @@
 
 @property(nonatomic, weak) MyGridLayout *rootLayout;
 
-@property(nonatomic, strong) NSMutableArray<GLTest1DataModel*> *datas;
+@property(nonatomic, strong) NSMutableArray<GLTest2DataModel*> *datas;
 
 
 @end
@@ -74,7 +74,7 @@
         
         for (NSDictionary *dict in dataSource)
         {
-            GLTest1DataModel *model = [GLTest1DataModel new];
+            GLTest2DataModel *model = [GLTest2DataModel new];
             [dict enumerateKeysAndObjectsUsingBlock:^(id key, id  obj, BOOL * stop) {
                 [model setValue:obj forKey:key];
             }];
@@ -90,7 +90,8 @@
 
 -(void)handleTest1:(id<MyGrid>)sender
 {
-    NSString *message = [NSString stringWithFormat:@"您单击了:%@", ((GLTest1DataModel*)[sender actionData]).title];
+   //这里面栅格的actionData保存的是对应的栅格的数据模型对象。因此您可以在栅格中用actionData来保存某个栅格所对应要处理的任何数据。
+    NSString *message = [NSString stringWithFormat:@"您单击了:%@", ((GLTest2DataModel*)[sender actionData]).title];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
 
@@ -106,54 +107,28 @@
     self.rootLayout = rootLayout;
 }
 
--(void)loadDataFromServer
-{
-    //这里假设数据是从服务器请求并下发下来。实践中数据模型数组可能是网络请求后通过回调得到的。
-    //在实际中，除了从服务器下发数据还可能定期从服务器中进行数据的更新。一般情况下我们的做法如下：
-       // 1.是将视图组从栅格布局中删除
-       // 2.然后再建立视图组
-       // 3.然后再次将视图组添加到栅格布局中。
-    
-    //上面的方法会出现视图组的不停删除以及添加。而实际中我们是可以复用原先填充在栅格布局中的视图组
-    
-    //添加子视图序列。
-    for (GLTest1DataModel *dataModel in self.datas)
-    {
-        NSArray *viewGroup = nil;
-        NSInteger gridTag = 0;
-        //根据数据模型的不同而构建不同的视图组，并设定一种展现的样式标签。
-        if (dataModel.imageName != nil)
-        {
-            gridTag = 2;
-            viewGroup = [self createType1ViewsFromModel:dataModel];
-        }
-        else
-        {
-            gridTag = 1;
-            viewGroup = [self createType2ViewsFromModel:dataModel];
-        }
-        
-        
-        //这里将视图组，和样式标签，以及数据进行关联。
-        [self.rootLayout addViewGroup:viewGroup withActionData:dataModel to:gridTag];
-        
-    }
-
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"change style", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleStyleChange:)];
+    self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"style", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleStyleChange:)],
+                                                [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"update", @"") style:UIBarButtonItemStylePlain target:self action:@selector(handleDataFromServer:)
+                                                ]];
     
+    //建立本地的栅格布局样式。
     [self handleStyleChange:nil];
 
     
+    //处理从服务器下载的数据并更新界面。
+    [self handleDataFromServer:nil];
     
-    [self loadDataFromServer];
-    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 -(void)handleStyleChange:(id)sender
@@ -186,29 +161,32 @@
     //随机取得一个布局样式
     int *pLayoutStyles = layoutStyless[arc4random_uniform(12)];
     
+    
+    //建立一个边界线模板
+    MyBorderline *borderlineTemplate = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
+    
+    //为了方便，可以创建一个样板栅格并指定风格标签为sTextStyleTag
+    id<MyGrid> gridTemplate = [MyGridLayout createTemplateGrid:sTextStyleTag];
+    gridTemplate.gravity = MyGravity_Vert_Center;
+    gridTemplate.padding = UIEdgeInsetsMake(0, 10, 0, 10);
+    gridTemplate.subviewSpace = 10;
+    [gridTemplate addRow:MyLayoutSize.wrap];
+    [gridTemplate addRow:MyLayoutSize.wrap];
+    [gridTemplate setTarget:self action:@selector(handleTest1:)];
 
-    //切换栅格样式时，先将所有的栅格都删除掉。
+
+    //切换栅格样式时，先将所有的栅格都删除掉。注意这里只是删除了栅格并没有删除子视图。
     [self.rootLayout removeGrids];
     
-    MyBorderline *borderline = [[MyBorderline alloc] initWithColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.2]];
-    
-    //创建一个样板栅格并指定样式标签为1
-    id<MyGrid> templateGrid = [MyGridLayout createTemplateGrid:1];
-    templateGrid.gravity = MyGravity_Vert_Center;
-    templateGrid.padding = UIEdgeInsetsMake(0, 10, 0, 10);
-    templateGrid.subviewSpace = 10;
-    [templateGrid addRow:MyLayoutSize.wrap];
-    [templateGrid addRow:MyLayoutSize.wrap];
-    [templateGrid setTarget:self action:@selector(handleTest1:)];
-    
-
     for (NSInteger i = 0; i < 4; i++)
     {
         int layoutStyle = pLayoutStyles[i];
         if (layoutStyle == 1)  //全部宽度文字新闻布局
         {
-            //建立一个高度为1/5的栅格，使用模板栅格，并指定一条尾部边界线
-            [self.rootLayout addRowGrid:templateGrid.cloneGrid measure:1.0/5].bottomBorderline = borderline;
+            //建立一个高度为1/5的栅格，使用模板栅格，并指定一条尾部边界线。如果measure的值是大于0小于1则表示的是整体高度的比例值。
+            //我们不能直接将一个模板栅格作为子栅格加入到父栅格中，但是我们可以对模板栅格使用clone来克隆复制一个和模板栅格一模一样的栅格结构。
+            //栅格的克隆处理可以很方便的为我们处理很多重复定义的栅格的构建。
+            [self.rootLayout addRowGrid:gridTemplate.cloneGrid measure:1.0/5].bottomBorderline = borderlineTemplate;
             
         }
         else if (layoutStyle == 2)  //半宽文字新闻布局
@@ -216,11 +194,11 @@
             
             //建立一个高度为1/5的栅格
             id<MyGrid>g2 = [self.rootLayout addRow:1.0/5];
-            g2.bottomBorderline = borderline;
+            g2.bottomBorderline = borderlineTemplate;
             
             //建立一个宽度均分的列子栅格，使用模板栅格，第一列子栅格指定一条右边边界线
-            [g2 addColGrid:templateGrid.cloneGrid measure:MyLayoutSize.fill].rightBorderline = borderline;
-            [g2 addColGrid:templateGrid.cloneGrid measure:MyLayoutSize.fill];
+            [g2 addColGrid:gridTemplate.cloneGrid measure:MyLayoutSize.fill].rightBorderline = borderlineTemplate;
+            [g2 addColGrid:gridTemplate.cloneGrid measure:MyLayoutSize.fill];
             
             
             
@@ -229,8 +207,8 @@
         {
             //建立一个高度为2/5的栅格
             id<MyGrid>g3 = [self.rootLayout addRow:2.0/5];
-            g3.tag = 2;  //指定栅格样式。
-            g3.bottomBorderline = borderline;
+            g3.tag = sImageStyleTag;  //指定栅格样式。我们可以通过栅格的tag来指定栅格的风格标签样式。
+            g3.bottomBorderline = borderlineTemplate;
             [g3 setTarget:self action:@selector(handleTest1:)];
 
             
@@ -257,42 +235,126 @@
     [self.rootLayout setNeedsLayout];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
-
-#pragma mark -- view From DataModel
-/*
- 在实际中，服务器返回的数据模型可能具有不同的类型，不同类型的模型需要用不同类型的视图来描述，因此下面的两个方法就是根据数据模型的不同而构建的两类不同的视图.
-*/
-
--(NSArray*)createType1ViewsFromModel:(GLTest1DataModel*)dataModel
+-(void)handleDataFromServer:(id)sender
 {
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageName]];
+    //这里假设数据是从服务器请求并下发下来。实践中数据模型数组可能是网络请求后通过回调得到的。
+    //在实际中，除了从服务器下发数据还可能定期从服务器中进行数据的更新。一般情况下我们的做法如下：
+    // 1.是将视图组从栅格布局中删除
+    // 2.然后再建立视图组
+    // 3.然后再次将视图组添加到栅格布局中。
     
-    UILabel *titleLabel = [UILabel new];
-    titleLabel.text = dataModel.title;
-    titleLabel.textColor = [UIColor whiteColor];
-
-    return @[imageView, titleLabel];
+    
+    //上面的方法会出现视图组和栅格的不停删除以及添加。而实际中我们是可以复用原先填充在栅格布局中的视图组的，下面的例子展示了这种复用的机制，下面的方法不会删除栅格和视图组
+    //而是做到尽量的复用，以便提升系统的性能：
+    
+    NSInteger textStyleTagIndex = 0;  //每种风格标签下的开始索引
+    NSInteger imageStyleTagIndex = 0;
+    
+    //假设这里的self.datas是每次从服务器下发下来的不同的数据模型。下面的代码是为了模拟self.datas的随机排列特性。
+    [self.datas sortUsingComparator:^NSComparisonResult(GLTest2DataModel  * obj1, GLTest2DataModel* obj2) {
+        
+        int  rand = (int)arc4random_uniform(10);
+        
+        return [obj1.title characterAtIndex:rand] - [obj2.title characterAtIndex:rand];
+    }];
+    
+    for (GLTest2DataModel *dataModel in self.datas)
+    {
+        NSInteger gridTag;
+        NSInteger index;
+        //根据数据模型的不同而构建不同的视图组，并设定一种展现的风格标签。这里是根据数据模型是否有图片来判断，实际中你可以在数据模型中添加一个标志来指定风格。
+        if (dataModel.imageName != nil)
+        {
+            index = imageStyleTagIndex++;
+            gridTag = sImageStyleTag;
+        }
+        else
+        {
+            index = textStyleTagIndex++;
+            gridTag = sTextStyleTag;
+        }
+        
+        //建立或者获取指定风格标签下的视图组。
+        NSArray *viewGroup = [self createOrGetViewGroupFrom:gridTag atIndex:index];
+        //更新视图组的内容。
+        [self updateViewGroup:viewGroup atIndex:index toTag:gridTag withDataModel:dataModel];
+    }
+    
 }
 
--(NSArray*)createType2ViewsFromModel:(GLTest1DataModel*)dataModel
+
+-(NSArray*)createOrGetViewGroupFrom:(NSInteger)tag atIndex:(NSInteger)index
 {
-    UILabel *titleLabel = [UILabel new];
-    titleLabel.text = dataModel.title;
-    titleLabel.numberOfLines = 0;
-    
-    UILabel *sourceLabel = [UILabel new];
-    sourceLabel.text = dataModel.source;
-    sourceLabel.font = [UIFont systemFontOfSize:11];
-    sourceLabel.textColor = [UIColor lightGrayColor];
-    
-    return @[titleLabel, sourceLabel];
+    /*
+     在实际中，服务器返回的数据模型可能具有不同的类型，不同类型的模型需要用不同风格类型的视图来描述，因此下面的两个方法就是根据数据模型的不同而构建的两类不同风格的视图.
+     */
 
+    NSArray *retViewGroup = nil;
+    
+    //先判断索引的值是否小于风格标签已经有了的视图组数。如果有则直接复用。没有就建立
+    if (index < [self.rootLayout viewGroupCountOf:tag])
+    {
+        //直接复用
+        retViewGroup = [self.rootLayout viewGroupAtIndex:index from:tag];
+    }
+    else
+    {
+        //不同的风格标签建立不同类型的视图组。
+        if (tag == sImageStyleTag)
+        {
+            UIImageView *imageView = [UIImageView new];
+            
+            UILabel *titleLabel = [UILabel new];
+            titleLabel.textColor = [UIColor whiteColor];
+            
+            retViewGroup =  @[imageView, titleLabel];
+        }
+        else if (tag == sTextStyleTag)
+        {
+            UILabel *titleLabel = [UILabel new];
+            titleLabel.numberOfLines = 0;
+            
+            UILabel *sourceLabel = [UILabel new];
+            sourceLabel.font = [UIFont systemFontOfSize:11];
+            sourceLabel.textColor = [UIColor lightGrayColor];
+            
+            retViewGroup = @[titleLabel, sourceLabel];
+        }
+        else
+        {
+            //..
+        }
+        
+    }
+    
+    return retViewGroup;
 }
+
+-(void)updateViewGroup:(NSArray*)viewGroup  atIndex:(NSInteger)index toTag:(NSInteger)tag withDataModel:(GLTest2DataModel*)dataModel
+{
+    if (tag == sImageStyleTag)
+    {
+        ((UIImageView*)(viewGroup.firstObject)).image = [UIImage imageNamed:dataModel.imageName];
+        ((UILabel*)(viewGroup.lastObject)).text = dataModel.title;
+    }
+    else if (tag == sTextStyleTag)
+    {
+        ((UILabel*)(viewGroup.firstObject)).text = dataModel.title;
+        ((UILabel*)(viewGroup.lastObject)).text = dataModel.source;
+    }
+    else
+    {
+         //...
+    }
+    
+    //这里将视图组，和风格标签，以及数据模型进行关联。
+    //视图组是一个子视图数组，通过如下方法我们可以让这个视图数组和某个对应的栅格标签建立联系。这样这个视图组里面的子视图将填充到对应标签的栅格下面的子栅格里面去。
+    //replaceViewGroup方法在执行时如果发现视图组要插入的索引大于标签的所有视图组时则内部执行addViewGroup方法。因此尽可能用这个方法来绑定视图组。
+    [self.rootLayout replaceViewGroup:viewGroup withActionData:dataModel atIndex:index to:tag];
+}
+
+
 
 
 /*

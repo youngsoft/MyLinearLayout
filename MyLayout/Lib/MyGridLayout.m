@@ -218,7 +218,7 @@
     //...
     NSNumber *key = @(gridTag);
     NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray = [self.tagsDict objectForKey:key];
-    if (viewGroupArray == nil || (index > viewGroupArray.count))
+    if (viewGroupArray == nil || (index >= viewGroupArray.count))
     {
         [self addViewGroup:viewGroup withActionData:actionData to:gridTag];
         return;
@@ -233,6 +233,7 @@
     self.tagsDictLock = YES;
     
     MyViewGroupAndActionData *va = viewGroupArray[index];
+    va.actionData = actionData;
     
     if (va.viewGroup != viewGroup)
     {
