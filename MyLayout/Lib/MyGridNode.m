@@ -224,13 +224,11 @@
         if (color) {
             line.color = [UIColor myColorWithHexString:color];
         }
-        
         line.thick  = [[dictionary objectForKey:kMyGridBorderlineThick] doubleValue];
         line.headIndent = [[dictionary objectForKey:kMyGridBorderlineHeadIndent] doubleValue];
         line.tailIndent = [[dictionary objectForKey:kMyGridBorderlineTailIndent] doubleValue];
         line.offset = [[dictionary objectForKey:kMyGridBorderlineOffset] doubleValue];
         line.dash = [[dictionary objectForKey:kMyGridBorderlineDash] doubleValue];
-        
         switch (borderline) {
             case 0: gridNode.topBorderline = line; break;
             case 1: gridNode.leftBorderline = line;break;
@@ -333,8 +331,6 @@
             value = [NSNumber numberWithDouble:gridNode.measure];
         }
     }
-    
-    
     [result setObject:value forKey:kMyGridSize];
 }
 
@@ -405,21 +401,17 @@
     MyGravity gravity = gridNode.gravity;
     if (gravity != MyGravity_None)
     {
-        
         NSDictionary *data = @{
-                               [NSNumber numberWithUnsignedShort:MyGravity_Vert_Top]:vMyGridGravityTop,
-                               [NSNumber numberWithUnsignedShort:MyGravity_Vert_Bottom]:vMyGridGravityBottom,
-                               [NSNumber numberWithUnsignedShort:MyGravity_Horz_Left]:vMyGridGravityLeft,
-                               [NSNumber numberWithUnsignedShort:MyGravity_Horz_Right]:vMyGridGravityRight,
-                               [NSNumber numberWithUnsignedShort:MyGravity_Horz_Center]:vMyGridGravityCenterX,
-                               [NSNumber numberWithUnsignedShort:MyGravity_Vert_Center]:vMyGridGravityCenterY,
-                               [NSNumber numberWithUnsignedShort:MyGravity_Horz_Fill]:vMyGridGravityWidthFill,
-                               [NSNumber numberWithUnsignedShort:MyGravity_Vert_Fill]:vMyGridGravityHeightFill
-                               };
-        
-        
+               [NSNumber numberWithUnsignedShort:MyGravity_Vert_Top]:vMyGridGravityTop,
+               [NSNumber numberWithUnsignedShort:MyGravity_Vert_Bottom]:vMyGridGravityBottom,
+               [NSNumber numberWithUnsignedShort:MyGravity_Horz_Left]:vMyGridGravityLeft,
+               [NSNumber numberWithUnsignedShort:MyGravity_Horz_Right]:vMyGridGravityRight,
+               [NSNumber numberWithUnsignedShort:MyGravity_Horz_Center]:vMyGridGravityCenterX,
+               [NSNumber numberWithUnsignedShort:MyGravity_Vert_Center]:vMyGridGravityCenterY,
+               [NSNumber numberWithUnsignedShort:MyGravity_Horz_Fill]:vMyGridGravityWidthFill,
+               [NSNumber numberWithUnsignedShort:MyGravity_Vert_Fill]:vMyGridGravityHeightFill
+        };
         NSMutableArray *gravitystrs = [NSMutableArray new];
-        
         MyGravity horzGravity = gravity & MyGravity_Vert_Mask;
         NSString *horzstr = data[@(horzGravity)];
         if (horzstr != nil)
@@ -453,7 +445,6 @@
             break;
     }
     if (line) {
-        
         NSMutableDictionary *dictionary =  [NSMutableDictionary new];
         if (line.color) {
             [dictionary setObject:[line.color hexString] forKey:kMyGridBorderlineColor];
@@ -498,7 +489,6 @@
             default:
                 break;
         }
-        
         for (id<MyGridNode> node  in gridNode.subGrids) {
                 [temp addObject:[self gridConvertDictionaryWithGridNode:node result:[NSMutableDictionary new]]];
         }

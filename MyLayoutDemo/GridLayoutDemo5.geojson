@@ -48,7 +48,7 @@
                              {
                              "size":0,
                              "anchor":"true",
-                             "gravity":"bottom|left"
+                             "gravity":"bottom|left|width|height"
                              
                              }
                              ]

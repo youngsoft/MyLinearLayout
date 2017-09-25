@@ -229,6 +229,7 @@
 
 -(void)loadDataFromServer
 {
+    [self.rootLayout removeAllSubviews];
     for (GLTest5DataModel *dataModel in self.datas)
     {
         UILabel *titleLabel = [UILabel new];
