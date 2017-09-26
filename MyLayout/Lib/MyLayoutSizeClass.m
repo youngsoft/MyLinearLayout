@@ -1194,7 +1194,7 @@ BOOL _myisRTL = NO;
 
 -(NSDictionary*)gridDictionary
 {
-    return [[MYAnalyzeMyGrid shareInstance] gridConvertDictionaryWithGridNode:self result:[NSMutableDictionary new]];
+    return [MyGridNode translateGridNode:self toGridDictionary:[NSMutableDictionary new]];
 }
 
 -(void)setGridDictionary:(NSDictionary *)gridDictionary
@@ -1208,7 +1208,7 @@ BOOL _myisRTL = NO;
     if (gridDictionary == nil)
         return;
     
-    [[MYAnalyzeMyGrid shareInstance] settingNodeAttributes:gridDictionary gridNode:self];
+    [MyGridNode translateGridDicionary:gridDictionary toGridNode:self];
 }
 
 -(CGFloat)measure

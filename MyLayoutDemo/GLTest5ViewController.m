@@ -9,7 +9,6 @@
 #import "GLTest5ViewController.h"
 #import "MyLayout.h"
 #import "CFTool.h"
-#import "UIColor+MyLayout.h"
 
 //从服务器下发下来的数据模型。
 @interface GLTest5DataModel : NSObject

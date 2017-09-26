@@ -190,7 +190,34 @@ extern NSString * const vMyGridGravityHeightFill;  //对应MyGravity_Vert_Fill
 //用字典的方式来构造栅格。
 @property(nonatomic, strong) NSDictionary *gridDictionary;
 
+@end
+
+
+@interface UIColor (MyGrid)
+
+/**
+ 从十六进制或者系统自带字符串创建并返回一个颜色对象
+ 
+ @discussion:
+ Valid format: #RRGGBB #RRGGBBAA red blue .....
+ 
+ 
+ Example: @"#66CCFF", @"#66CCFF88" , @"red" , @"blue"
+ 
+ @param hexString  颜色值
+ 
+ @return        来自字符串的UIColor对象，如果发生错误，则为nil
+ */
++ ( UIColor *)myColorWithHexString:(NSString *)hexString;
+
+
+/**
+ RGB 颜色值
+ @return 十六进制格式的字符串颜色，参考上面的hexStr入参。
+ */
+- (NSString *)myHexString;
 
 @end
+
 
 

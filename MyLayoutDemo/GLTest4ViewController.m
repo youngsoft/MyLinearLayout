@@ -9,7 +9,6 @@
 #import "GLTest4ViewController.h"
 #import "MyLayout.h"
 #import "CFTool.h"
-#import "UIColor+MyLayout.h"
 #import <UIKit/UIKit.h>
 
 

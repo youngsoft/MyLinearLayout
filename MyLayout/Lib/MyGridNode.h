@@ -9,37 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "MyGrid.h"
 
-//解析MyGrid
-
-@class MyGridNode;
-@interface MYAnalyzeMyGrid : NSObject
-
-+(instancetype)shareInstance;
-
-/**
- 设置节点属性
-
- @param gridDictionary 数据
- @param gridNode 节点
- */
-- (void)settingNodeAttributes:(NSDictionary *)gridDictionary gridNode:(id<MyGrid>)gridNode;
-
-
-
-/**
- 节点转换字典
- 
- @param gridNode 节点
- @return 字典
- */
-- (NSDictionary *)gridConvertDictionaryWithGridNode:(id<MyGrid>)gridNode result:(NSMutableDictionary *)result;
-
-@end
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-
 //子栅格类型。
 typedef enum : unsigned char {
     MySubGridsType_Unknown,
@@ -95,7 +64,7 @@ typedef enum : unsigned char {
 @end
 
 
-//普通节点。
+//普通节点。内部使用，外部不使用
 @interface MyGridNode : NSObject<MyGridNode>
 
 
@@ -138,9 +107,30 @@ typedef enum : unsigned char {
 
 @property(nonatomic, strong) NSDictionary* gridDictionary;
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//节点的报文解析部分。
+/**
+ 字典转节点。
+ 
+ @param gridDictionary 数据
+ @param gridNode 节点
+ */
++(void)translateGridDicionary:(NSDictionary *)gridDictionary toGridNode:(id<MyGrid>)gridNode;
+
+
+
+/**
+ 节点转换字典
+ 
+ @param gridNode 节点
+ @return 字典
+ */
++(NSDictionary *)translateGridNode:(id<MyGrid>)gridNode toGridDictionary:(NSMutableDictionary *)gridDictionary;
+
 @end
-
-
 
 
 
