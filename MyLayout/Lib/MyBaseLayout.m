@@ -2213,16 +2213,16 @@ void* _myObserverContextC = (void*)20175283;
    CGFloat  bottomMargin = [self myValidMargin:sbvsc.bottomPosInner sbv:sbv calcPos:[sbvsc.bottomPosInner realPosIn:selfSize.height - paddingTop - paddingBottom] selfLayoutSize:selfSize];
 
     //确保设置基线对齐的视图都是UILabel,UITextField,UITextView
-    if (baselinePos == CGFLOAT_MAX && vertGravity == MyGravity_Baseline)
+    if (baselinePos == CGFLOAT_MAX && vertGravity == MyGravity_Vert_Baseline)
         vertGravity = MyGravity_Vert_Top;
     
     UIFont *sbvFont = nil;
-    if (vertGravity == MyGravity_Baseline)
+    if (vertGravity == MyGravity_Vert_Baseline)
     {
         sbvFont = [self myGetSubviewFont:sbv];
     }
     
-    if (sbvFont == nil && vertGravity == MyGravity_Baseline)
+    if (sbvFont == nil && vertGravity == MyGravity_Vert_Baseline)
         vertGravity = MyGravity_Vert_Top;
     
     
@@ -2234,7 +2234,7 @@ void* _myObserverContextC = (void*)20175283;
     {
         pRect->origin.y = selfSize.height - paddingBottom - bottomMargin - pRect->size.height;
     }
-    else if (vertGravity == MyGravity_Baseline)
+    else if (vertGravity == MyGravity_Vert_Baseline)
     {
         //得到基线位置。
         pRect->origin.y = baselinePos - sbvFont.ascender - (pRect->size.height - sbvFont.lineHeight) / 2;

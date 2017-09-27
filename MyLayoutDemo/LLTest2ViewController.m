@@ -90,12 +90,15 @@
 
     //垂直线性布局套水平线性布局，水平线性布局利用相对边距实现左右布局
     [self createSection5:contentLayout];
+    
+    //水平线性布局中的基线对齐
+    [self createSection6:contentLayout];
 
     //对子视图的高度的缩放调整
-    [self createSection6:contentLayout];
+    [self createSection7:contentLayout];
     
     //子视图的显示和隐藏
-    [self createSection7:contentLayout];
+    [self createSection8:contentLayout];
     
 }
 
@@ -368,8 +371,46 @@
     
 }
 
-//线性布局片段6：实现子视图的缩放。
+//建立一个基线对齐的水平线性布局
 -(void)createSection6:(MyLinearLayout*)contentLayout
+{
+    //这个例子主要介绍基线对齐的使用方法，目前只有水平线性布局和相对布局是支持基线对齐的。水平线性布局里面要实现基线对齐，必须要设置一个基线对齐的标准视图。
+    //线性布局里面的baselineBaseView属性用来指定基线的标准视图，设置为baselineBaseView的子视图必须是一个UILabel或者UITextField或者UITextView，并且只能是一行。
+    //除了指定基线对齐的标准视图外，还需要为线性布局的gravity属性设置上MyGravity_Vert_Baseline才可以完成基线对齐的设置。所有其他的UILabel，UITextField，UITextView都将和标准视图的基线进行对齐，而其他类型的子视图则忽略。
+    //基线对齐对于中文来说基本没有什么效果，主要是针对英文以及具有基线的字符集。
+    
+    MyLinearLayout *baselineLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    baselineLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    baselineLayout.layer.borderWidth = 0.5;
+    baselineLayout.layer.cornerRadius = 4;
+    baselineLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    baselineLayout.myTop = 20;
+    baselineLayout.myLeading = baselineLayout.myTrailing = 0;
+    baselineLayout.myHeight = 50;
+    baselineLayout.gravity = MyGravity_Horz_Center | MyGravity_Vert_Baseline;  //整体水平居中，垂直方向则是基线对齐。
+    [contentLayout addSubview:baselineLayout];
+    
+    UILabel *baselineLabel = [UILabel new];
+    baselineLabel.text = @"Baseline view";
+    baselineLabel.wrapContentSize = YES;
+    baselineLabel.font = [CFTool font:20];
+    baselineLabel.backgroundColor = [CFTool color:5];
+    baselineLabel.myAlignment = MyGravity_Vert_Center;  //标准视图垂直居中。
+    [baselineLayout addSubview:baselineLabel];
+    
+    UILabel *rightLabel = [UILabel new];
+    rightLabel.text = @"Right view";
+    rightLabel.wrapContentSize = YES;
+    rightLabel.font = [CFTool font:32];
+    rightLabel.backgroundColor = [CFTool color:6];
+    [baselineLayout addSubview:rightLabel];
+    
+    baselineLayout.baselineBaseView = baselineLabel;  //这里将左边的视图设置为基线对齐的标准视图。
+    
+}
+
+//线性布局片段7：实现子视图的缩放。
+-(void)createSection7:(MyLinearLayout*)contentLayout
 {
     UILabel *shrinkLabel = [UILabel new];
     shrinkLabel.text = NSLocalizedString(@"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the wrapContentHeight to YES.You can try to switch different simulator or different orientation screen to see the effect.", @"");
@@ -396,14 +437,14 @@
     
 }
 
-//线性布局片段7：子视图的隐藏设置能够激发布局视图的重新布局。
--(void)createSection7:(MyLinearLayout*)contentLayout
+//线性布局片段8：子视图的隐藏设置能够激发布局视图的重新布局。
+-(void)createSection8:(MyLinearLayout*)contentLayout
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setTitle:NSLocalizedString(@"Show more》", @"") forState:UIControlStateNormal];
     button.titleLabel.font = [CFTool font:16];
     [button addTarget:self action:@selector(handleHideAndShowMore:) forControlEvents:UIControlEventTouchUpInside];
-    button.myTop = 50;
+    button.myTop = 30;
     button.myTrailing = 0;
     [button sizeToFit];
     [contentLayout addSubview:button];

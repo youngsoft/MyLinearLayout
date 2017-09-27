@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- *1.GridLayout - Animations
+ *3.GridLayout - ViewGroup
  */
 @interface GLTest3ViewController : UIViewController
 

@@ -365,7 +365,7 @@
                 case MyGravity_Vert_Bottom:
                     val = rview.bottomPos;
                     break;
-                case MyGravity_Baseline:
+                case MyGravity_Vert_Baseline:
                     val = rview.baselinePos;
                     break;
                 default:
@@ -558,7 +558,7 @@
         case MyGravity_Vert_Bottom:
             posStr = @"bottomPos";
             break;
-        case MyGravity_Baseline:
+        case MyGravity_Vert_Baseline:
             posStr = @"baselinePos";
             break;
         default:

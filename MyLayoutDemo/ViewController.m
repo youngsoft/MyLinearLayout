@@ -84,7 +84,7 @@
 {
     if (_demoTypeList == nil)
     {
-        _demoTypeList = @[@{@"type_title":@"线性布局",
+        _demoTypeList = @[@{@"type_title":@"线性布局(LinearLayout)",
                             @"type_desc":@"ll.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.LinearLayout - Vert&Horz", @""),
                                                @"class":[LLTest1ViewController class]
@@ -110,7 +110,7 @@
                                              ]
                             },
                           
-                          @{@"type_title":@"框架布局",
+                          @{@"type_title":@"框架布局(FrameLayout)",
                             @"type_desc":@"fl.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FrameLayout - Gravity&Fill", @""),
                                                @"class":[FLTest1ViewController class],
@@ -121,7 +121,7 @@
                                              ]
                             },
                           
-                          @{@"type_title":@"相对布局",
+                          @{@"type_title":@"相对布局(RelativeLayout)",
                             @"type_desc":@"rl.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.RelativeLayout - Constraint&Dependence", @""),
                                                @"class":[RLTest1ViewController class]
@@ -141,7 +141,7 @@
                                              ]
                             },
                           
-                          @{@"type_title":@"表格布局",
+                          @{@"type_title":@"表格布局(TableLayout)",
                             @"type_desc":@"tl.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.TableLayout - Vert", @""),
                                                @"class":[TLTest1ViewController class]
@@ -155,7 +155,7 @@
                                              ]
                             },
                           
-                          @{@"type_title":@"流式布局",
+                          @{@"type_title":@"流式布局(FlowLayout)",
                             @"type_desc":@"fll.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FlowLayout - Regular arrangement", @""),
                                                @"class":[FLLTest1ViewController class]
@@ -178,7 +178,7 @@
                                              ]
                             },
                           
-                          @{@"type_title":@"浮动布局",
+                          @{@"type_title":@"浮动布局(FloatLayout)",
                             @"type_desc":@"flo.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FloatLayout - Float", @""),
                                                @"class":[FOLTest1ViewController class]
@@ -201,7 +201,7 @@
                                              ]
                             },
                           
-                          @{@"type_title":@"路径布局",
+                          @{@"type_title":@"路径布局(PathLayout)",
                             @"type_desc":@"pl.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.PathLayout - Animations", @""),
                                                @"class":[PLTest1ViewController class]
@@ -221,18 +221,18 @@
                                              ]
                             },
                           
-                          @{@"type_title":@"栅格布局",
-                            @"type_desc":@"栅格布局介绍",
-                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.GridLayout - Test1", @""),
+                          @{@"type_title":@"栅格布局(GridLayout)",
+                            @"type_desc":@"gl.png",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.GridLayout - Row&Col gird", @""),
                                                @"class":[GLTest1ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"2.GridLayout - Test2", @""),
+                                             @{@"title":NSLocalizedString(@"2.GridLayout - Dynamic layout", @""),
                                                @"class":[GLTest2ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"3.GridLayout - Test3", @""),
+                                             @{@"title":NSLocalizedString(@"3.GridLayout - ViewGroup", @""),
                                                @"class":[GLTest3ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"4.GridLayout - Test4", @""),
+                                             @{@"title":NSLocalizedString(@"4.GridLayout - JSON", @""),
                                                @"class":[GLTest4ViewController class]
                                                },
                                              @{@"title":NSLocalizedString(@"5.GridLayout -JSON- Test5", @""),
@@ -241,8 +241,8 @@
                                              ]
                             },
                           
-                          @{@"type_title":@"综合布局",
-                            @"type_desc":@"综合布局介绍",
+                          @{@"type_title":@"综合布局(All Layout)",
+                            @"type_desc":@"all.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.UITableView - Dynamic height", @""),
                                                @"class":[AllTest1ViewController class]
                                                },

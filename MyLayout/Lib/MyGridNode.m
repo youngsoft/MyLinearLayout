@@ -979,9 +979,9 @@ typedef struct  _MyGridOptionalProperties2
         value  = vMyGridSizeFill;
     }else{
         if (gridNode.measure > 0 && gridNode.measure < 1) {
-            value = [NSString stringWithFormat:@"%f%%",gridNode.measure * 100];
+            value = [NSString stringWithFormat:@"%@%%",(@(gridNode.measure * 100)).stringValue];
         }else if (gridNode.measure > -1 && gridNode.measure < 0) {
-            value = [NSString stringWithFormat:@"%f%%",gridNode.measure * 100];
+            value = [NSString stringWithFormat:@"%@%%",(@(gridNode.measure * 100)).stringValue];
         }else{
             value = [NSNumber numberWithDouble:gridNode.measure];
         }

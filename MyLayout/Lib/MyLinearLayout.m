@@ -1152,7 +1152,7 @@
             
             
             //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
-            if (vertGravity == MyGravity_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
+            if (vertGravity == MyGravity_Vert_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
             {
                 UIFont *sbvFont = [sbv valueForKey:@"font"];
                 //这里要求baselineBaseView必须要具有font属性。
@@ -1200,7 +1200,7 @@
             sbvmyFrame.frame = rect;
             
             //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
-            if (vertGravity == MyGravity_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
+            if (vertGravity == MyGravity_Vert_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
             {
                 UIFont *sbvFont = [sbv valueForKey:@"font"];
                 //这里要求baselineBaseView必须要具有font属性。
@@ -1593,7 +1593,7 @@
         pos += between;  //只有mghorz为between才加这个间距拉伸。
 
         //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
-        if (vertGravity == MyGravity_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
+        if (vertGravity == MyGravity_Vert_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
         {
             UIFont *sbvFont = [sbv valueForKey:@"font"];
             //这里要求baselineBaseView必须要具有font属性。

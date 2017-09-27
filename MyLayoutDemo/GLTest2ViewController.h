@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- *1.GridLayout - Animations
+ *2.GridLayout - Dynamic layout
  */
 @interface GLTest2ViewController : UIViewController
 

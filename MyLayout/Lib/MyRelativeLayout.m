@@ -575,7 +575,7 @@
             return sbvmyFrame.bottom;
         }
             break;
-        case MyGravity_Baseline:
+        case MyGravity_Vert_Baseline:
         {
             if (sbv == self || sbv == nil)
                 return lsc.topPadding;
@@ -910,16 +910,20 @@
                     if (!isViewHidden)
                     {
                         if (dime.dimeNumVal != nil)
+                        {
                             totalAdd += -1 * dime.dimeNumVal.doubleValue;
+                        }
                         else if (dime.dimeSelfVal != nil)
                         {
                             totalAdd += -1 * dime.view.myFrame.width;
                         }
                         else
+                        {
                             totalMulti += dime.multiVal;
+                        }
                         
                         totalAdd += dime.addVal;
-                        
+
                     }
                 }
                 
@@ -949,7 +953,7 @@
                 {
                     if (dime.isActive && ![self myIsNoLayoutSubview:dime.view])
                     {
-                        if (dime.dimeNumVal == nil)
+                        if (dime.dimeVal == nil)
                         {
                             tempWidth = _myCGFloatRound(floatingWidth * (dime.multiVal / totalMulti));
                             floatingWidth -= tempWidth;
@@ -957,8 +961,8 @@
                             dime.view.myFrame.width = tempWidth;
 
                         }
-                        else
-                            dime.view.myFrame.width = dime.dimeNumVal.doubleValue;
+                        else if (dime.dimeNumVal != nil)
+                            dime.view.myFrame.width = dime.measure;
                         
                         dime.view.myFrame.width = [self myValidMeasure:dime.view.widthSize sbv:dime.view calcSize:dime.view.myFrame.width sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
                     }
@@ -1025,15 +1029,15 @@
                 {
                     if (dime.isActive && ![self myIsNoLayoutSubview:dime.view])
                     {
-                        if (dime.dimeNumVal == nil)
+                        if (dime.dimeVal == nil)
                         {
                             tempHeight = _myCGFloatRound(floatingHeight * (dime.multiVal / totalMulti));
                             floatingHeight -= tempHeight;
                             totalMulti -= dime.multiVal;
                             dime.view.myFrame.height = tempHeight;
                         }
-                        else
-                            dime.view.myFrame.height = dime.dimeNumVal.doubleValue;
+                        else if (dime.dimeNumVal != nil)
+                            dime.view.myFrame.height = dime.measure;
                         
                         dime.view.myFrame.height = [self myValidMeasure:dime.view.heightSize sbv:dime.view calcSize:dime.view.myFrame.height sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
                         

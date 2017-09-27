@@ -103,7 +103,8 @@ typedef enum : unsigned short {
     MyGravity_Between = MyGravity_Horz_Between | MyGravity_Vert_Between,  /**全部拉伸*/
     
     //基线对齐，只用在水平线性布局和垂直流式布局中，暂时不支持。
-    MyGravity_Baseline = 32 << 8,           //基线对齐，只支持水平线性布局和垂直流式布局，指定基线对齐必须要指定出一个基线标准的子视图，如果不指定默认是第一个。
+    //基线对齐，只支持水平线性布局和垂直流式布局，指定基线对齐必须要指定出一个基线标准的子视图，如果不指定默认是第一个。
+    MyGravity_Vert_Baseline = 32 << 8,  /**基线对齐*/
     
     
     //为了更正确的统一命名规范以及和TangramKit保持一致，下列属性定义设置为过期！！。您在更新版本后只需要统一将MyMarginGravity替换为MyGravity 即可

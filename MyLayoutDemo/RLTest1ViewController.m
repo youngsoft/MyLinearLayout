@@ -284,7 +284,7 @@
     */
     
     UILabel *walkLabel2 = [UILabel new];
-    walkLabel2.text = @"Walk";
+    walkLabel2.text = @"Weight";
     walkLabel2.font = [CFTool font:15];
     walkLabel2.textColor = [CFTool color:11];
     [walkLabel2 sizeToFit];
@@ -301,18 +301,18 @@
     */
      
     UILabel *walkLabel3 = [UILabel new];
-    walkLabel3.text = @"18 Min";
-    walkLabel3.font = [CFTool font:15];
+    walkLabel3.text = @"70 kg";
+    walkLabel3.font = [CFTool font:20];
     walkLabel3.textColor = [CFTool color:12];
     [walkLabel3 sizeToFit];
     walkLabel3.leadingPos.equalTo(walkLabel2.trailingPos).offset(5);
-    walkLabel3.centerYPos.equalTo(walkLabel2.centerYPos);
+    walkLabel3.baselinePos.equalTo(walkLabel2.baselinePos);  //walkLabel3的基线和walkLabel2的基线对齐。
     [rootLayout addSubview:walkLabel3];
     /*
     [walkLabel3 makeLayout:^(MyMaker *make) {
         
         make.leading.equalTo(walkLabel2.trailingPos).offset(5);
-        make.centerY.equalTo(walkLabel2);
+        make.baseline.equalTo(walkLabel2);
         make.sizeToFit;
         
     }];

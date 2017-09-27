@@ -229,6 +229,11 @@
     [self addMethod:@"centerXPos"];
     return [self addMethod:@"centerYPos"];
 }
+-(MyMaker*)baseline
+{
+    return [self addMethod:@"baselinePos"];
+}
+
 
 -(MyMaker*)visibility
 {

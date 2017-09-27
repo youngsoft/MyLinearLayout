@@ -200,7 +200,7 @@ BOOL _myisRTL = NO;
     {
         _baselinePos = [MyLayoutPos new];
         _baselinePos.view = self.view;
-        _baselinePos.pos = MyGravity_Baseline;
+        _baselinePos.pos = MyGravity_Vert_Baseline;
     }
     
     return _baselinePos;
@@ -629,7 +629,7 @@ BOOL _myisRTL = NO;
 {
     if ((self.insetsPaddingFromSafeArea & UIRectEdgeTop) == UIRectEdgeTop)
     {
-#ifdef MAC_OS_X_VERSION_10_12
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
         
         if (@available(iOS 11.0, *)) {
             return self.topPadding + self.view.safeAreaInsets.top;
@@ -648,8 +648,8 @@ BOOL _myisRTL = NO;
 {
     if ((self.insetsPaddingFromSafeArea & UIRectEdgeBottom) == UIRectEdgeBottom)
     {
-#ifdef MAC_OS_X_VERSION_10_12
-        
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+
         if (@available(iOS 11.0, *)) {
             return self.bottomPadding + self.view.safeAreaInsets.bottom;
         } else {
@@ -669,8 +669,8 @@ BOOL _myisRTL = NO;
 {
     CGFloat inset = 0;
     
-#ifdef MAC_OS_X_VERSION_10_12
-    
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+
     if (@available(iOS 11.0, *)) {
         if ((self.insetsPaddingFromSafeArea & UIRectEdgeLeft) == UIRectEdgeLeft)
         {
@@ -693,8 +693,8 @@ BOOL _myisRTL = NO;
 {
     CGFloat inset = 0;
     
-#ifdef MAC_OS_X_VERSION_10_12
-    
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+
     if (@available(iOS 11.0, *)) {
         if ((self.insetsPaddingFromSafeArea & UIRectEdgeRight) == UIRectEdgeRight)
         {
@@ -720,8 +720,8 @@ BOOL _myisRTL = NO;
 {
     CGFloat inset = 0;
     
-#ifdef MAC_OS_X_VERSION_10_12
-    
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+
     if (@available(iOS 11.0, *)) {
         
         UIRectEdge edge = [MyViewSizeClass isRTL]? UIRectEdgeRight:UIRectEdgeLeft;
@@ -750,8 +750,8 @@ BOOL _myisRTL = NO;
 {
     CGFloat inset = 0;
     
-#ifdef MAC_OS_X_VERSION_10_12
-    
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+
     if (@available(iOS 11.0, *)) {
         UIRectEdge edge = [MyViewSizeClass isRTL]? UIRectEdgeLeft:UIRectEdgeRight;
         UIDeviceOrientation devori = [MyViewSizeClass isRTL]? UIDeviceOrientationLandscapeRight: UIDeviceOrientationLandscapeLeft;

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- *1.GridLayout - Animations
+ *1.GridLayout - Row&Col gird
  */
 @interface GLTest1ViewController : UIViewController
 

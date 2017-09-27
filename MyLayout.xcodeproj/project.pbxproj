@@ -147,6 +147,8 @@
 		205643171F55A03000E8BDDE /* MyLayoutMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643151F55A03000E8BDDE /* MyLayoutMath.m */; };
 		205643181F55A16400E8BDDE /* MyLayoutMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643151F55A03000E8BDDE /* MyLayoutMath.m */; };
 		205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */; };
+		205F9EBA1F7AA5710034732C /* gl.png in Resources */ = {isa = PBXBuildFile; fileRef = 205F9EB91F7AA5710034732C /* gl.png */; };
+		205F9EBC1F7AA6510034732C /* all.png in Resources */ = {isa = PBXBuildFile; fileRef = 205F9EBB1F7AA6510034732C /* all.png */; };
 		208157BD1F586AA700E945B6 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157BC1F586AA700E945B6 /* DetailViewController.m */; };
 		208157C21F5A886300E945B6 /* MyLayoutDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 208157C01F5A886300E945B6 /* MyLayoutDelegate.h */; };
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
@@ -367,6 +369,8 @@
 		205643151F55A03000E8BDDE /* MyLayoutMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutMath.m; sourceTree = "<group>"; };
 		205CFA8C1F49BD1C00355489 /* GLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest1ViewController.h; sourceTree = "<group>"; };
 		205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GLTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		205F9EB91F7AA5710034732C /* gl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gl.png; sourceTree = "<group>"; };
+		205F9EBB1F7AA6510034732C /* all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = all.png; sourceTree = "<group>"; };
 		208157BB1F586A9900E945B6 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		208157BC1F586AA700E945B6 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		208157C01F5A886300E945B6 /* MyLayoutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDelegate.h; sourceTree = "<group>"; };
@@ -666,6 +670,8 @@
 		18D3C9BD1EDF0A7900D3DE43 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				205F9EBB1F7AA6510034732C /* all.png */,
+				205F9EB91F7AA5710034732C /* gl.png */,
 				18D3C9BE1EDF0AB500D3DE43 /* fl.png */,
 				18D3C9BF1EDF0AB500D3DE43 /* fll.png */,
 				18D3C9C01EDF0AB500D3DE43 /* flo.png */,
@@ -961,6 +967,7 @@
 				18D3C9DE1EDF0AB500D3DE43 /* rl.png in Resources */,
 				181A10AE1EDF123800996203 /* FOLTest1ViewController.xib in Resources */,
 				18D3C9BB1EDF0A5A00D3DE43 /* LaunchScreen.strings in Resources */,
+				205F9EBC1F7AA6510034732C /* all.png in Resources */,
 				18D3C9B51EDF0A5A00D3DE43 /* Localizable.strings in Resources */,
 				18D3C9DD1EDF0AB500D3DE43 /* pl.png in Resources */,
 				44EBDA8E1F619C9000B47CBD /* GridLayoutDemo4.geojson in Resources */,
@@ -972,6 +979,7 @@
 				18D3C9DA1EDF0AB500D3DE43 /* MyLayout.png in Resources */,
 				18D3C9B41EDF0A5A00D3DE43 /* LaunchScreen.xib in Resources */,
 				18D3C9D51EDF0AB500D3DE43 /* layoutdemo4.gif in Resources */,
+				205F9EBA1F7AA5710034732C /* gl.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1415,7 +1423,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				INFOPLIST_FILE = MyLayoutUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.MyLayoutUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1432,7 +1440,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				INFOPLIST_FILE = MyLayoutUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.MyLayoutUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
