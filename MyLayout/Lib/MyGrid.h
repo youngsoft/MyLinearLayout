@@ -46,6 +46,8 @@ extern NSString * const vMyGridGravityTop;     //对应MyGravity_Vert_Top
 extern NSString * const vMyGridGravityBottom;  //对应MyGravity_Vert_Bottom
 extern NSString * const vMyGridGravityLeft;    //对应MyGravity_Horz_Left
 extern NSString * const vMyGridGravityRight;   //对应MyGravity_Horz_Right
+extern NSString * const vMyGridGravityLeading;  //对应MyGravity_Horz_Leading
+extern NSString * const vMyGridGravityTrailing; //对应MyGravity_Horz_Trailing
 extern NSString * const vMyGridGravityCenterX;  //对应MyGravity_Horz_CenterX
 extern NSString * const vMyGridGravityCenterY;  //对应MyGravity_Vert_CenterY
 extern NSString * const vMyGridGravityWidthFill;  //对应MyGravity_Horz_Fill

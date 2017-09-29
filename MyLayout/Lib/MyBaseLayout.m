@@ -3039,7 +3039,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             sizeClass = MySizeClass_hAny | MySizeClass_wAny;
         else
             sizeClass = (MySizeClass)((self.traitCollection.verticalSizeClass << 2) | self.traitCollection.horizontalSizeClass);
-        
+#if TARGET_OS_IOS
         UIDeviceOrientation ori =   [UIDevice currentDevice].orientation;
         if (UIDeviceOrientationIsPortrait(ori))
         {
@@ -3050,7 +3050,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             sizeClass |= MySizeClass_Landscape;
         }
         else;
-        
+#endif
         _myGlobalSizeClass = sizeClass;
     }
     else

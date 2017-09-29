@@ -615,20 +615,19 @@ __weak MyBaseLayout * _currentLayout;
 
 -(void)myResetTouchHighlighted2
 {
-    if (self.highlightedOpacity != 0)
+    if (_oldAlpha != 1)
     {
         self.layout.alpha = _oldAlpha;
         _oldAlpha = 1;
     }
     
-    if (self.highlightedBackgroundColor != nil)
+    if (_oldBackgroundColor != nil)
     {
         self.layout.backgroundColor = _oldBackgroundColor;
         _oldBackgroundColor = nil;
     }
     
-    
-    if (self.highlightedBackgroundImage != nil)
+    if (_oldBackgroundImage != nil)
     {
         self.layout.backgroundImage = _oldBackgroundImage;
         _oldBackgroundImage = nil;

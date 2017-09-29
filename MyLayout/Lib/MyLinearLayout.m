@@ -1003,13 +1003,14 @@
             }
             
         }
+
         
         
         floatingWidth = 0;
     }
     
     CGFloat baselinePos = CGFLOAT_MAX;  //保存基线的值。
-    //调整所有子视图的宽度
+    //调整所有子视图的宽度和高度。
     CGFloat pos = paddingLeading;
     for (UIView *sbv in sbs) {
         

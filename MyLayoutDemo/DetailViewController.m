@@ -87,6 +87,7 @@
     demoVC.title = self.demoVCList[indexPath.row][@"title"];
     [self.navigationController pushViewController:demoVC animated:YES];
 
+  //  [self.navigationController presentViewController:demoVC animated:YES completion:nil];
 }
 
 

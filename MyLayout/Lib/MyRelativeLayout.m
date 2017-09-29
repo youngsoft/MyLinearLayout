@@ -909,12 +909,14 @@
                     isViewHidden = [self myIsNoLayoutSubview:dime.view];
                     if (!isViewHidden)
                     {
-                        if (dime.dimeNumVal != nil)
+                        if (dime.dimeVal != nil)
                         {
-                            totalAdd += -1 * dime.dimeNumVal.doubleValue;
-                        }
-                        else if (dime.dimeSelfVal != nil)
-                        {
+                            [self myCalcWidth:dime.view
+                                        sbvsc:dime.view.myCurrentSizeClass
+                                          lsc:lsc
+                                   sbvmyFrame:dime.view.myFrame
+                                     selfSize:selfSize];
+                            
                             totalAdd += -1 * dime.view.myFrame.width;
                         }
                         else
@@ -961,8 +963,6 @@
                             dime.view.myFrame.width = tempWidth;
 
                         }
-                        else if (dime.dimeNumVal != nil)
-                            dime.view.myFrame.width = dime.measure;
                         
                         dime.view.myFrame.width = [self myValidMeasure:dime.view.widthSize sbv:dime.view calcSize:dime.view.myFrame.width sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
                     }
@@ -992,11 +992,15 @@
                     isViewHidden = [self myIsNoLayoutSubview:dime.view];
                     if (!isViewHidden)
                     {
-                        if (dime.dimeNumVal != nil)
-                            totalAdd += -1 * dime.dimeNumVal.doubleValue;
-                        else if (dime.dimeSelfVal != nil)
+                        if (dime.dimeVal != nil)
                         {
-                            totalAdd += -1 *dime.view.myFrame.height;
+                            [self myCalcHeight:dime.view
+                                        sbvsc:dime.view.myCurrentSizeClass
+                                          lsc:lsc
+                                   sbvmyFrame:dime.view.myFrame
+                                     selfSize:selfSize];
+                            
+                            totalAdd += -1 * dime.view.myFrame.height;
                         }
                         else
                             totalMulti += dime.multiVal;
@@ -1036,8 +1040,6 @@
                             totalMulti -= dime.multiVal;
                             dime.view.myFrame.height = tempHeight;
                         }
-                        else if (dime.dimeNumVal != nil)
-                            dime.view.myFrame.height = dime.measure;
                         
                         dime.view.myFrame.height = [self myValidMeasure:dime.view.heightSize sbv:dime.view calcSize:dime.view.myFrame.height sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
                         

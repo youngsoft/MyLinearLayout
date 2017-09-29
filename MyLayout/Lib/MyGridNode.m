@@ -481,12 +481,12 @@ typedef struct  _MyGridOptionalProperties2
     if (superGrid.subGridsType == MySubGridsType_Col)
     {
         _gridRect.origin.x = offset;
-        _gridRect.origin.y = superOrigin.y + superGrid.padding.top;
+        _gridRect.origin.y = superOrigin.y;
         return _gridRect.size.width;
     }
     else if (superGrid.subGridsType == MySubGridsType_Row)
     {
-        _gridRect.origin.x = superOrigin.x + superGrid.padding.left;
+        _gridRect.origin.x = superOrigin.x;
         _gridRect.origin.y = offset;
         
         return _gridRect.size.height;
@@ -856,6 +856,10 @@ typedef struct  _MyGridOptionalProperties2
         return MyGravity_Horz_Left;
     }else if ([gravity rangeOfString:vMyGridGravityRight].location != NSNotFound) {
         return MyGravity_Horz_Right;
+    }else if ([gravity rangeOfString:vMyGridGravityLeading].location != NSNotFound) {
+        return MyGravity_Horz_Leading;
+    }else if ([gravity rangeOfString:vMyGridGravityTrailing].location != NSNotFound) {
+        return MyGravity_Horz_Trailing;
     }else if ([gravity rangeOfString:vMyGridGravityCenterX].location != NSNotFound) {
         return MyGravity_Horz_Center;
     }else if ([gravity rangeOfString:vMyGridGravityCenterY].location != NSNotFound) {
@@ -1064,6 +1068,8 @@ typedef struct  _MyGridOptionalProperties2
                      [NSNumber numberWithUnsignedShort:MyGravity_Vert_Bottom]:vMyGridGravityBottom,
                      [NSNumber numberWithUnsignedShort:MyGravity_Horz_Left]:vMyGridGravityLeft,
                      [NSNumber numberWithUnsignedShort:MyGravity_Horz_Right]:vMyGridGravityRight,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Horz_Leading]:vMyGridGravityLeading,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Horz_Trailing]:vMyGridGravityTrailing,
                      [NSNumber numberWithUnsignedShort:MyGravity_Horz_Center]:vMyGridGravityCenterX,
                      [NSNumber numberWithUnsignedShort:MyGravity_Vert_Center]:vMyGridGravityCenterY,
                      [NSNumber numberWithUnsignedShort:MyGravity_Horz_Fill]:vMyGridGravityWidthFill,

@@ -98,7 +98,7 @@
 
     
     /**某个视图宽度固定其他平分**/
-    UIButton *v4 = [self createButton:NSLocalizedString(@"width equal to 260", @"") backgroundColor:[CFTool color:5]];
+    UIButton *v4 = [self createButton:NSLocalizedString(@"width equal to 160", @"") backgroundColor:[CFTool color:5]];
     v4.topPos.equalTo(v1.bottomPos).offset(30);
     v4.leadingPos.equalTo(@10);
     v4.heightSize.equalTo(@40);

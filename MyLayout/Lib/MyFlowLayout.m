@@ -1031,10 +1031,14 @@
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
     
+#if TARGET_OS_IOS
     //判断父滚动视图是否分页滚动
     BOOL isPagingScroll = (self.superview != nil &&
-                           [self.superview isKindOfClass:[UIScrollView class]] &&
-                           ((UIScrollView*)self.superview).isPagingEnabled);
+                           [self.superview isKindOfClass:[UIScrollView class]] && ((UIScrollView*)self.superview).isPagingEnabled);
+#else
+    BOOL isPagingScroll = NO;
+#endif
+    
     CGFloat pagingItemHeight = 0;
     CGFloat pagingItemWidth = 0;
     BOOL isVertPaging = NO;
@@ -1657,9 +1661,13 @@
     CGFloat horzSpace = lsc.subviewHSpace;
     
     //父滚动视图是否分页滚动。
+#if TARGET_OS_IOS
+    //判断父滚动视图是否分页滚动
     BOOL isPagingScroll = (self.superview != nil &&
-                           [self.superview isKindOfClass:[UIScrollView class]] &&
-                           ((UIScrollView*)self.superview).isPagingEnabled);
+                           [self.superview isKindOfClass:[UIScrollView class]] && ((UIScrollView*)self.superview).isPagingEnabled);
+#else
+    BOOL isPagingScroll = NO;
+#endif
     
     CGFloat pagingItemHeight = 0;
     CGFloat pagingItemWidth = 0;

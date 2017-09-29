@@ -22,6 +22,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    //默认的布局视图的padding是会叠加安全区的值的，因此你可以在这里设置为UIRectEdgeNone，让所有布局视图的padding不叠加安全区。
+   //MyBaseLayout.appearance.insetsPaddingFromSafeArea = UIRectEdgeNone;
         
     //this place add the ui template size dime
     [MyDimeScale setUITemplateSize:CGSizeMake(375, 667)];

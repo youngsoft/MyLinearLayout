@@ -630,18 +630,14 @@ BOOL _myisRTL = NO;
     if ((self.insetsPaddingFromSafeArea & UIRectEdgeTop) == UIRectEdgeTop)
     {
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-        
+       
         if (@available(iOS 11.0, *)) {
             return self.topPadding + self.view.safeAreaInsets.top;
-        } else {
-            return self.topPadding;
         }
-#else
-        return self.topPadding;
 #endif
     }
-    else
-        return self.topPadding;
+    
+    return self.topPadding;
 }
 
 -(CGFloat)myLayoutBottomPadding
@@ -652,17 +648,11 @@ BOOL _myisRTL = NO;
 
         if (@available(iOS 11.0, *)) {
             return self.bottomPadding + self.view.safeAreaInsets.bottom;
-        } else {
-            return self.bottomPadding;
         }
-#else
-        return self.bottomPadding;
 #endif
     }
-    else
-    {
-        return self.bottomPadding;
-    }
+    
+    return self.bottomPadding;
 }
 
 -(CGFloat)myLayoutLeftPadding
@@ -675,6 +665,8 @@ BOOL _myisRTL = NO;
         if ((self.insetsPaddingFromSafeArea & UIRectEdgeLeft) == UIRectEdgeLeft)
         {
             //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是右边那么就不缩进了。
+#if TARGET_OS_IOS
+
             if (self.insetLandscapeFringePadding &&
                 (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
                 [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight)
@@ -682,6 +674,7 @@ BOOL _myisRTL = NO;
                 inset = 0;
             }
             else
+#endif
                 inset = self.view.safeAreaInsets.left;
         }
     }
@@ -698,6 +691,8 @@ BOOL _myisRTL = NO;
     if (@available(iOS 11.0, *)) {
         if ((self.insetsPaddingFromSafeArea & UIRectEdgeRight) == UIRectEdgeRight)
         {
+#if TARGET_OS_IOS
+
             //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是左边那么就不缩进了。
             if (self.insetLandscapeFringePadding &&
                 (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
@@ -706,9 +701,8 @@ BOOL _myisRTL = NO;
                 inset = 0;
             }
             else
-            {
+#endif
                 inset = self.view.safeAreaInsets.right;
-            }
         }
     }
 #endif
@@ -725,9 +719,13 @@ BOOL _myisRTL = NO;
     if (@available(iOS 11.0, *)) {
         
         UIRectEdge edge = [MyViewSizeClass isRTL]? UIRectEdgeRight:UIRectEdgeLeft;
+#if TARGET_OS_IOS
         UIDeviceOrientation devori = [MyViewSizeClass isRTL]? UIDeviceOrientationLandscapeLeft: UIDeviceOrientationLandscapeRight;
+#endif
         if ((self.insetsPaddingFromSafeArea & edge) == edge)
         {
+#if TARGET_OS_IOS
+
             //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是尾部那么就不缩进了。
             if (self.insetLandscapeFringePadding &&
                 (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
@@ -736,9 +734,8 @@ BOOL _myisRTL = NO;
                 inset = 0;
             }
             else
-            {
+#endif
                 inset = [MyViewSizeClass isRTL]? self.view.safeAreaInsets.right : self.view.safeAreaInsets.left;
-            }
         }
     }
 #endif
@@ -754,9 +751,12 @@ BOOL _myisRTL = NO;
 
     if (@available(iOS 11.0, *)) {
         UIRectEdge edge = [MyViewSizeClass isRTL]? UIRectEdgeLeft:UIRectEdgeRight;
+#if TARGET_OS_IOS
         UIDeviceOrientation devori = [MyViewSizeClass isRTL]? UIDeviceOrientationLandscapeRight: UIDeviceOrientationLandscapeLeft;
+#endif
         if ((self.insetsPaddingFromSafeArea & edge) == edge)
         {
+#if TARGET_OS_IOS
             //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是头部那么就不缩进了。
             if (self.insetLandscapeFringePadding &&
                 (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
@@ -765,9 +765,8 @@ BOOL _myisRTL = NO;
                 inset = 0;
             }
             else
-            {
+#endif
                 inset = [MyViewSizeClass isRTL]? self.view.safeAreaInsets.left : self.view.safeAreaInsets.right;
-            }
         }
     }
 #endif

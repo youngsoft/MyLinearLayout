@@ -42,6 +42,8 @@
  NSString * const vMyGridGravityBottom = @"bottom";
  NSString * const vMyGridGravityLeft = @"left";
  NSString * const vMyGridGravityRight = @"right";
+ NSString * const vMyGridGravityLeading = @"leading";
+ NSString * const vMyGridGravityTrailing = @"trailing";
  NSString * const vMyGridGravityCenterX = @"centerX";
  NSString * const vMyGridGravityCenterY = @"centerY";
  NSString * const vMyGridGravityWidthFill = @"width";
@@ -959,7 +961,25 @@
         }
     }
 
-    
+    CGFloat paddingTop;
+    CGFloat paddingLeading;
+    CGFloat paddingBottom;
+    CGFloat paddingTrailing;
+    if (grid == lsc)
+    {
+        paddingTop = lsc.myLayoutTopPadding;
+        paddingLeading = lsc.myLayoutLeadingPadding;
+        paddingBottom = lsc.myLayoutBottomPadding;
+        paddingTrailing = lsc.myLayoutTrailingPadding;
+    }
+    else
+    {
+        UIEdgeInsets gridPadding = grid.padding;
+        paddingTop = gridPadding.top;
+        paddingLeading = [MyBaseLayout isRTL] ? gridPadding.right : gridPadding.left;
+        paddingBottom = gridPadding.bottom;
+        paddingTrailing = [MyBaseLayout isRTL] ? gridPadding.left : gridPadding.right;
+    }
     
     //处理叶子节点。
     if ((grid.anchor || subGrids.count == 0) && !grid.placeholder)
@@ -993,20 +1013,20 @@
                 horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:horzGravity];
             
             
-            CGFloat paddingTop = grid.padding.top;
-            CGFloat paddingLeading = [MyBaseLayout isRTL] ? grid.padding.right : grid.padding.left;
-            CGFloat paddingBottom = grid.padding.bottom;
-            CGFloat paddingTrailing = [MyBaseLayout isRTL] ? grid.padding.left : grid.padding.right;
-            
             //如果非叶子栅格设置为anchor则子视图的内容总是填充的
+            CGFloat tempPaddingTop = paddingTop;
+            CGFloat tempPaddingLeading = paddingLeading;
+            CGFloat tempPaddingBottom = paddingBottom;
+            CGFloat tempPaddingTrailing = paddingTrailing;
+            
             if (grid.anchor && subGrids.count > 0)
             {
                 vertGravity = MyGravity_Vert_Fill;
                 horzGravity = MyGravity_Horz_Fill;
-                paddingTop = 0;
-                paddingLeading = 0;
-                paddingBottom = 0;
-                paddingTrailing = 0;
+                tempPaddingTop = 0;
+                tempPaddingLeading = 0;
+                tempPaddingBottom = 0;
+                tempPaddingTrailing = 0;
             }
 
             //如果是尺寸为0，并且设置为了anchor的话那么就根据自身
@@ -1020,7 +1040,7 @@
             {
             }
             
-            [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:vertGravity horzGravity:horzGravity inSelfSize:grid.gridRect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
+            [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:vertGravity horzGravity:horzGravity inSelfSize:grid.gridRect.size paddingTop:tempPaddingTop paddingLeading:tempPaddingLeading paddingBottom:tempPaddingBottom paddingTrailing:tempPaddingTrailing pMaxWrapSize:NULL];
             
             sbvmyFrame.leading += gridOrigin.x;
             sbvmyFrame.top += gridOrigin.y;
@@ -1035,10 +1055,10 @@
     CGFloat offset = 0;
     if (grid.subGridsType == MySubGridsType_Col)
     {
-        offset = gridOrigin.x + grid.padding.left;
+        offset = gridOrigin.x + paddingLeading;
         
-        MyGravity horzGravity = grid.gravity & MyGravity_Vert_Mask;
-        if (horzGravity == MyGravity_Horz_Center || horzGravity == MyGravity_Horz_Right)
+        MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:grid.gravity & MyGravity_Vert_Mask];
+        if (horzGravity == MyGravity_Horz_Center || horzGravity == MyGravity_Horz_Trailing)
         {
             //得出所有子栅格的宽度综合
             CGFloat subGridsWidth = 0;
@@ -1053,11 +1073,11 @@
             
             if (horzGravity == MyGravity_Horz_Center)
             {
-                offset += (grid.gridRect.size.width - grid.padding.left - grid.padding.right - subGridsWidth)/2;
+                offset += (grid.gridRect.size.width - paddingLeading - paddingTrailing - subGridsWidth)/2;
             }
             else
             {
-                offset += grid.gridRect.size.width - grid.padding.left - grid.padding.right - subGridsWidth;
+                offset += grid.gridRect.size.width - paddingLeading - paddingTrailing - subGridsWidth;
             }
         }
         
@@ -1065,7 +1085,7 @@
     }
     else if (grid.subGridsType == MySubGridsType_Row)
     {
-        offset = gridOrigin.y + grid.padding.top;
+        offset = gridOrigin.y + paddingTop;
         
         MyGravity vertGravity = grid.gravity & MyGravity_Horz_Mask;
         if (vertGravity == MyGravity_Vert_Center || vertGravity == MyGravity_Vert_Bottom)
@@ -1082,11 +1102,11 @@
             
             if (vertGravity == MyGravity_Vert_Center)
             {
-                offset += (grid.gridRect.size.height - grid.padding.top - grid.padding.bottom - subGridsHeight)/2;
+                offset += (grid.gridRect.size.height - paddingTop - paddingBottom - subGridsHeight)/2;
             }
             else
             {
-                offset += grid.gridRect.size.height - grid.padding.top - grid.padding.bottom - subGridsHeight;
+                offset += grid.gridRect.size.height - paddingTop - paddingBottom - subGridsHeight;
             }
         }
         
@@ -1098,9 +1118,10 @@
     
     
 
+    CGPoint paddingGridOrigin = CGPointMake(gridOrigin.x + paddingLeading, gridOrigin.y + paddingTop);
     for (id<MyGridNode> sbvGrid in subGrids)
     {
-        offset += [sbvGrid updateGridOrigin:gridOrigin superGrid:grid withOffset:offset];
+        offset += [sbvGrid updateGridOrigin:paddingGridOrigin superGrid:grid withOffset:offset];
         offset += grid.subviewSpace;
         [self myTraversalGridOrigin:sbvGrid gridOrigin:sbvGrid.gridRect.origin lsc:lsc sbvEnumerator:sbvEnumerator tagViewGroupIndexDict:tagViewGroupIndexDict tagSbvEnumerator:((sbvGrid.tag != 0)? nil: tagSbvEnumerator) isEstimate:isEstimate sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
     }
@@ -1158,8 +1179,28 @@
     NSArray<id<MyGridNode>> *subGrids = nil;
     if (grid.subGridsType != MySubGridsType_Unknown)
          subGrids = grid.subGrids;
+    
+    
+    CGFloat paddingTop;
+    CGFloat paddingLeading;
+    CGFloat paddingBottom;
+    CGFloat paddingTrailing;
+    if (grid == lsc)
+    {
+        paddingTop = lsc.myLayoutTopPadding;
+        paddingLeading = lsc.myLayoutLeadingPadding;
+        paddingBottom = lsc.myLayoutBottomPadding;
+        paddingTrailing = lsc.myLayoutTrailingPadding;
+    }
+    else
+    {
+        UIEdgeInsets gridPadding = grid.padding;
+        paddingTop = gridPadding.top;
+        paddingLeading = [MyBaseLayout isRTL] ? gridPadding.right : gridPadding.left;
+        paddingBottom = gridPadding.bottom;
+        paddingTrailing = [MyBaseLayout isRTL] ? gridPadding.left : gridPadding.right;
+    }
 
-    UIEdgeInsets padding = grid.padding;
     CGFloat fixedMeasure = 0;  //固定部分的尺寸
     CGFloat validMeasure = 0;  //整体有效的尺寸
     if (subGrids.count > 1)
@@ -1167,12 +1208,12 @@
     
     if (grid.subGridsType == MySubGridsType_Col)
     {
-        fixedMeasure += padding.left + padding.right;
+        fixedMeasure += paddingLeading + paddingTrailing;
         validMeasure = grid.gridRect.size.width - fixedMeasure;
     }
     else if(grid.subGridsType == MySubGridsType_Row)
     {
-        fixedMeasure += padding.top + padding.bottom;
+        fixedMeasure += paddingTop + paddingBottom;
         validMeasure = grid.gridRect.size.height - fixedMeasure;
     }
     else;
@@ -1246,11 +1287,11 @@
                                 CGSize size = CGSizeZero;
                                 if (grid.superGrid.subGridsType == MySubGridsType_Row)
                                 {
-                                    size.width = gridSize.width - padding.left - padding.right;
+                                    size.width = gridSize.width - paddingLeading - paddingTrailing;
                                 }
                                 else
                                 {
-                                    size.height = gridSize.height - padding.top - padding.bottom;
+                                    size.height = gridSize.height - paddingTop - paddingBottom;
                                 }
                                 
                                 size = [sbv sizeThatFits:size];
@@ -1262,16 +1303,16 @@
                                 
                                 [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
                                 
-                                [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridRect.size paddingTop:padding.top paddingLeading:padding.left paddingBottom:padding.bottom paddingTrailing:padding.right pMaxWrapSize:NULL];
+                                [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridRect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
                             }
                             
                             if (grid.superGrid.subGridsType == MySubGridsType_Row)
                             {
-                                fixedMeasure = padding.top + padding.bottom + sbvmyFrame.height;
+                                fixedMeasure = paddingTop + paddingBottom + sbvmyFrame.height;
                             }
                             else
                             {
-                                fixedMeasure = padding.left + padding.right + sbvmyFrame.width;
+                                fixedMeasure = paddingLeading + paddingTrailing + sbvmyFrame.width;
                             }
                         }
                     }
@@ -1309,11 +1350,11 @@
         CGSize gridSize2 = gridSize;
         if (grid.subGridsType == MySubGridsType_Row)
         {
-            gridSize2.width -= (padding.left + padding.right);
+            gridSize2.width -= (paddingLeading + paddingTrailing);
         }
         else
         {
-            gridSize2.height -= (padding.top + padding.bottom);
+            gridSize2.height -= (paddingTop + paddingBottom);
         }
         
         for (id<MyGridNode> sbvGrid in subGrids)
