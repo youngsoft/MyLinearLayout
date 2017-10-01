@@ -15,12 +15,16 @@
 //从服务器下发下来的数据模型。
 @interface GLTest4DataModel : NSObject
 
+@property(nonatomic, strong) NSMutableArray<NSString*> *categorysImages;    //分类图片
+@property(nonatomic, strong) NSMutableArray<NSString*> *categorysTitles;    //分类标题
+
 @property(nonatomic, strong) NSString *title;        //标题
 @property(nonatomic, strong) NSString *subTitle;       //副标题
+@property(nonatomic, strong) NSMutableArray<NSString*> *titleNames;    //标题的名称，如果为nil则没有标题
 @property(nonatomic, strong) NSMutableArray<NSString*> *imageNames;    //图像的名称，如果为nil则没有图像
+
 @property(nonatomic, strong) NSNumber *hasSales;          //促销标志
 @property(nonatomic, strong) NSString *actionData;     //执行的动作。
-
 
 @end
 
@@ -51,29 +55,43 @@
     {
         _datas = [NSMutableArray new];
         
-        NSArray *dataSource = @[@{
-                                    @"title":@"智能生活",
-                                    @"subTitle":@"黑科技智能装备1元抢",
+        NSArray *dataSource = @[
+                                @{
+                                    @"categorysImages":@[
+                                                          @"head2",@"head2",@"head2",@"head2",
+                                                          @"head2",@"head2",@"head2",@"head2",
+                                                          @"head2",@"head2"
+                                                        ],
+                                    @"categorysTitles":@[
+                                                          @"天猫",@"聚划算",@"天猫",@"外卖",
+                                                          @"天猫超市",@"充值中心",@"飞猪旅行",@"领金币",
+                                                          @"拍卖",@"分类"
+                                                        ]
+                                },
+                                @{
+                                    @"title":@"南京精选",
+                                    @"subTitle":@"天猫超市",
+                                    @"titleNames":@[@"周末疯狂趴",@"送5升菜籽油"],
                                     @"imageNames":@[@"p1-31",@"p1-32"],
                                     @"actionData":@"aa",
                                     @"hasSales":@(YES)
                                     },
                                 @{
-                                    @"title":@"白条商城",
-                                    @"subTitle":@"iPhone7低至每期324元",
+                                    @"title":@"海抢购",
+                                    @"subTitle":@"01:29:45",
                                     @"imageNames":@[@"p1-33",@"p1-34"],
                                     @"actionData":@"bb",
                                     },
                                 @{
-                                    @"title":@"京东众筹",
-                                    @"subTitle":@"猛追科技前沿",
-                                    @"imageNames":@[@"p3-21"],
+                                    @"title":@"有好货",
+                                    @"subTitle":@"高颜值美物",
+                                    @"imageNames":@[@"p1-33",@"p1-34"],
                                     @"actionData":@"cc",
                                     },
                                 @{
-                                    @"title":@"生活娱乐",
-                                    @"subTitle":@"疯狂大扫除",
-                                    @"imageNames":@[@"p3-22"],
+                                    @"title":@"必买清单",
+                                    @"subTitle":@"都整理好",
+                                    @"imageNames":@[@"p1-33",@"p1-34"],
                                     @"actionData":@"dd",
                                     @"hasSales":@(YES)
                                     },
@@ -82,46 +100,7 @@
                                     @"subTitle":@"湖北牛肉罐头",
                                     @"imageNames":@[@"p3-23"],
                                     @"actionData":@"ee",
-                                    },
-                                @{
-                                    @"title":@"爱车生活",
-                                    @"subTitle":@"低至9.9元",
-                                    @"imageNames":@[@"p3-24"],
-                                    @"actionData":@"ff",
-                                    },
-                                @{
-                                    @"title":@"大药房",
-                                    @"subTitle":@"每盒减20元",
-                                    @"imageNames":@[@"p5-1"],
-                                    @"actionData":@"gg",
-                                    },
-                                @{
-                                    @"title":@"设计师",
-                                    @"subTitle":@"潮流设计精选",
-                                    @"imageNames":@[@"p5-2"],
-                                    @"actionData":@"hh",
-                                    
-                                    },
-                                @{
-                                    @"title":@"陪伴宝宝",
-                                    @"subTitle":@"1元抢好品",
-                                    @"imageNames":@[@"p5-3"],
-                                    @"actionData":@"ii",
-                                    },
-                                @{
-                                    @"title":@"京东拍卖",
-                                    @"subTitle":@"尖货包经典表",
-                                    @"imageNames":@[@"p5-4"],
-                                    @"actionData":@"jj",
-                                    },
-                                @{
-                                    @"title":@"京东拍卖2",
-                                    @"subTitle":@"尖货包经典表",
-                                    @"imageNames":@[@"p5-4"],
-                                    @"actionData":@"jj",
-                                    },
-                                
-                                
+                                    }
                                 ];
         
         for (NSDictionary *dict in dataSource)
@@ -175,78 +154,121 @@
     
    id temp = [NSJSONSerialization JSONObjectWithData:[content dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
     
-    
     rootLayout.gridDictionary = temp;
 }
 
 -(void)loadDataFromServer
 {
-
     for (GLTest4DataModel *dataModel in self.datas)
     {
-        
-        UILabel *titleLabel = [UILabel new];
-        titleLabel.text = dataModel.title;
-        titleLabel.font = [CFTool font:16];
-        titleLabel.textColor = [CFTool color:4];
-        titleLabel.adjustsFontSizeToFitWidth = YES;
-        
-        UILabel *subTitleLabel = [UILabel new];
-        subTitleLabel.text = dataModel.subTitle;
-        subTitleLabel.font = [CFTool font:13];
-        subTitleLabel.textColor = [CFTool color:5];
-        subTitleLabel.adjustsFontSizeToFitWidth = YES;
-        
-        if (dataModel.imageNames.count == 1)
-        {
-            UIImageView *imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[0]]];
+        if (dataModel.categorysImages && dataModel.categorysTitles) {
+            //菜单
+            UIScrollView *scrollView =[UIScrollView new];
+            scrollView.pagingEnabled = YES;
+            MyFlowLayout *scrollFlowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:2];
+            scrollFlowLayout.pagedCount = 10; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
+            scrollFlowLayout.wrapContentWidth = YES; //设置布局视图的宽度由子视图包裹，当水平流式布局的这个属性设置为YES，并和pagedCount搭配使用会产生分页从左到右滚动的效果。
+            scrollFlowLayout.heightSize.equalTo(scrollView.heightSize); //因为是分页从左到右滚动，因此布局视图的高度必须设置为和父滚动视图相等。
             
-            //  UIImageView *imageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[0]]];
+            [scrollView addSubview:scrollFlowLayout];
             
-            UIView *vv = [NSNull null];
-            if (dataModel.hasSales.integerValue)
-            {
-                vv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
+            //添加十个菜单
+            for (int i = 0; i < dataModel.categorysImages.count; i++) {
+                
+                NSString *title = [dataModel.categorysTitles objectAtIndex:i];
+                NSString *imageName = [dataModel.categorysImages objectAtIndex:i];
+                
+                MyFloatLayout *layout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+                layout.myHorzMargin = 0.f;
+                layout.subviewVSpace = 5.f;
+                [scrollFlowLayout addSubview:layout];
+                
+                UIImageView *titleImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName] highlightedImage:[UIImage imageNamed:imageName]];
+                titleImageView.weight = 1.f;
+                titleImageView.myHeight = 50.f;
+                [layout addSubview:titleImageView];
+                
+                UILabel *titleLabel = [UILabel new];
+                titleLabel.textAlignment = NSTextAlignmentCenter;
+                titleLabel.text = title;
+                titleLabel.font = [CFTool font:12];
+                titleLabel.textColor = [CFTool color:4];
+                [layout addSubview:titleLabel];
+                titleLabel.weight = 1.f;
+                titleLabel.myHeight = 20.f;
+            }
+
+            //视图组绑定标签1
+            [self.rootLayout addViewGroup:@[scrollView] withActionData:dataModel.actionData to:1];
+        }else if (dataModel.titleNames){
+            
+            NSMutableArray *temp = [NSMutableArray array];
+            
+            UIImageView *backgroudImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk1"]];
+            [temp addObject:backgroudImageView];
+            
+            UILabel *titleLabel = [UILabel new];
+            titleLabel.text = dataModel.title;
+            titleLabel.font = [CFTool font:13];
+            titleLabel.textColor = UIColor.whiteColor;
+            titleLabel.textAlignment = NSTextAlignmentCenter;
+            titleLabel.adjustsFontSizeToFitWidth = YES;
+            [temp addObject:titleLabel];
+            
+            UILabel *subTitleLabel = [UILabel new];
+            subTitleLabel.text = dataModel.subTitle;
+            subTitleLabel.font = [CFTool font:11];
+            subTitleLabel.textColor = UIColor.whiteColor;
+            subTitleLabel.textAlignment = NSTextAlignmentCenter;
+            subTitleLabel.adjustsFontSizeToFitWidth = YES;
+            [temp addObject:subTitleLabel];
+            
+            for (int i = 0; i < dataModel.titleNames.count; i++) {
+                NSString *title = [dataModel.titleNames objectAtIndex:i];
+                UILabel *lb = [UILabel new];
+                lb.text = title;
+                lb.font = [CFTool font:12];
+                lb.textColor = UIColor.redColor;
+                lb.adjustsFontSizeToFitWidth = YES;
+                [temp addObject:lb];
+            }
+            
+            for (int i = 0; i < dataModel.imageNames.count; i++) {
+                NSString *imageName = [dataModel.imageNames objectAtIndex:i];
+                UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
+                [temp addObject:imageView];
             }
             //视图组绑定标签2
-            [self.rootLayout addViewGroup:@[titleLabel, subTitleLabel, imageView1, vv] withActionData:dataModel.actionData to:2];
+            [self.rootLayout addViewGroup:temp withActionData:dataModel.actionData to:2];
+        }else{
             
-        }
-        else
-        {
+            NSMutableArray *temp = [NSMutableArray array];
             
-            UIImageView *imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[0]]];
+            UILabel *titleLabel = [UILabel new];
+            titleLabel.text = dataModel.title;
+            titleLabel.font = [CFTool font:16];
+            titleLabel.textColor = [CFTool color:4];
+            titleLabel.adjustsFontSizeToFitWidth = YES;
+            [temp addObject:titleLabel];
             
-            UIImageView *imageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:dataModel.imageNames[1]]];
+            UILabel *subTitleLabel = [UILabel new];
+            subTitleLabel.text = dataModel.subTitle;
+            subTitleLabel.font = [CFTool font:13];
+            subTitleLabel.textColor = [CFTool color:5];
+            subTitleLabel.adjustsFontSizeToFitWidth = YES;
+            [temp addObject:subTitleLabel];
             
-            UIView *vv = [NSNull null];
-            if (dataModel.hasSales.integerValue)
-            {
-                vv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
+            for (int i = 0; i < dataModel.imageNames.count; i++) {
+                NSString *imageName = [dataModel.imageNames objectAtIndex:i];
+                UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
+                [temp addObject:imageView];
             }
-            
-            [self.rootLayout addViewGroup:@[titleLabel, subTitleLabel, imageView1, imageView2, vv] withActionData:dataModel.actionData to:1];
-            
+            //视图组绑定标签3
+            [self.rootLayout addViewGroup:temp withActionData:dataModel.actionData to:3];
         }
-        
     }
     
-    
-    //.......
-    //上面定义了栅格的样式，下面填充头部和尾部的栅格部分的视图。
-    
-    
-    UIImageView *headImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p2-4"]];
-    
-    UIImageView *backgroudImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk1"]];
-    UILabel *label = [UILabel new];
-    label.text = @"特色推荐";
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [CFTool font:18];
-    label.textColor = [CFTool color:3];
-    
-    
-    //底部
+    //顶部
     UIScrollView *scrollView =[UIScrollView new];
     scrollView.pagingEnabled = YES;
     MyFlowLayout *scrollFlowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:1];
@@ -272,9 +294,12 @@
     pageCtrl.currentPage = 0;
     pageCtrl.pageIndicatorTintColor = [UIColor redColor];
     
+    UIView *bottomLineView = [UIView new];
+    bottomLineView.backgroundColor = [UIColor.lightGrayColor colorWithAlphaComponent:0.5f];
+    
     
     //将头尾部分的视图组和栅格标签1000绑定
-    [_rootLayout addViewGroup:@[headImageView,backgroudImageView,label,scrollView,pageCtrl] withActionData:nil to:1000];
+    [_rootLayout addViewGroup:@[scrollView,pageCtrl,bottomLineView] withActionData:nil to:1000];
 }
 
 

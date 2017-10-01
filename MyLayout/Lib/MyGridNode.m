@@ -1207,7 +1207,7 @@ static NSDictionary*  myDefaultColors()
         return [myDefaultColors() objectForKey:hexString.lowercaseString];
     }
     
-    if (hexString.length != 7 || hexString.length != 9)
+    if (hexString.length != 7)
         return nil;
     
     NSScanner *scanner = [NSScanner scannerWithString:[hexString substringFromIndex:1]];
