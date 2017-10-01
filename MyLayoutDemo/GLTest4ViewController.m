@@ -94,12 +94,6 @@
                                     @"imageNames":@[@"p1-33",@"p1-34"],
                                     @"actionData":@"dd",
                                     @"hasSales":@(YES)
-                                    },
-                                @{
-                                    @"title":@"特产.扶贫",
-                                    @"subTitle":@"湖北牛肉罐头",
-                                    @"imageNames":@[@"p3-23"],
-                                    @"actionData":@"ee",
                                     }
                                 ];
         
@@ -162,26 +156,13 @@
     for (GLTest4DataModel *dataModel in self.datas)
     {
         if (dataModel.categorysImages && dataModel.categorysTitles) {
-            //菜单
-            UIScrollView *scrollView =[UIScrollView new];
-            scrollView.pagingEnabled = YES;
-            MyFlowLayout *scrollFlowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:2];
-            scrollFlowLayout.pagedCount = 10; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
-            scrollFlowLayout.wrapContentWidth = YES; //设置布局视图的宽度由子视图包裹，当水平流式布局的这个属性设置为YES，并和pagedCount搭配使用会产生分页从左到右滚动的效果。
-            scrollFlowLayout.heightSize.equalTo(scrollView.heightSize); //因为是分页从左到右滚动，因此布局视图的高度必须设置为和父滚动视图相等。
-            
-            [scrollView addSubview:scrollFlowLayout];
-            
-            //添加十个菜单
+            NSMutableArray *temp = [NSMutableArray arrayWithCapacity:dataModel.categorysImages.count];
             for (int i = 0; i < dataModel.categorysImages.count; i++) {
-                
                 NSString *title = [dataModel.categorysTitles objectAtIndex:i];
                 NSString *imageName = [dataModel.categorysImages objectAtIndex:i];
-                
                 MyFloatLayout *layout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
                 layout.myHorzMargin = 0.f;
-                layout.subviewVSpace = 5.f;
-                [scrollFlowLayout addSubview:layout];
+                [temp addObject:layout];
                 
                 UIImageView *titleImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName] highlightedImage:[UIImage imageNamed:imageName]];
                 titleImageView.weight = 1.f;
@@ -197,13 +178,10 @@
                 titleLabel.weight = 1.f;
                 titleLabel.myHeight = 20.f;
             }
-
             //视图组绑定标签1
-            [self.rootLayout addViewGroup:@[scrollView] withActionData:dataModel.actionData to:1];
+            [self.rootLayout addViewGroup:temp withActionData:dataModel.actionData to:1];
         }else if (dataModel.titleNames){
-            
             NSMutableArray *temp = [NSMutableArray array];
-            
             UIImageView *backgroudImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bk1"]];
             [temp addObject:backgroudImageView];
             
@@ -238,6 +216,11 @@
                 UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
                 [temp addObject:imageView];
             }
+            
+            if ([dataModel.hasSales boolValue]) {
+                UIImageView *optionalView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
+                [temp addObject:optionalView];
+            }
             //视图组绑定标签2
             [self.rootLayout addViewGroup:temp withActionData:dataModel.actionData to:2];
         }else{
@@ -262,6 +245,10 @@
                 NSString *imageName = [dataModel.imageNames objectAtIndex:i];
                 UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
                 [temp addObject:imageView];
+            }
+            if ([dataModel.hasSales boolValue]) {
+                UIImageView *optionalView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
+                [temp addObject:optionalView];
             }
             //视图组绑定标签3
             [self.rootLayout addViewGroup:temp withActionData:dataModel.actionData to:3];
@@ -316,23 +303,6 @@
 {
     [super touchesEnded:touches withEvent:event];
     
-    [self printMyGrid:self.rootLayout.subGrids];
-    
-}
-
-- (void)printMyGrid:(NSArray<id<MyGrid>> *)temp
-{
-    
-    
-    NSLog(@"gird-------temp.count.................%zi",temp.count);
-    for (id<MyGrid> grid in temp) {
-        
-        
-        if (grid.subGrids) {
-            
-            [self printMyGrid:grid.subGrids];
-        }
-    }
 }
 
 @end
