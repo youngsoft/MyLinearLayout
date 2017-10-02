@@ -87,7 +87,7 @@
                                "size": 40,
                                "cols": [
                                         {
-                                        "anchor": "true",
+                                        "anchor": true,
                                         "size": 80,
                                         "padding":"{5,5,5,5}",
                                         "space": 5,
@@ -133,7 +133,7 @@
                                },
                                {
                                "size":0,
-                               "anchor":"true",
+                               "anchor":true,
                                "gravity":"bottom|left",
                                "padding":"{0,0,5,0}"
                                }
@@ -283,7 +283,7 @@
                                },
                                {
                                "size":0,
-                               "anchor":"true",
+                               "anchor":true,
                                "gravity":"bottom|left",
                                "padding":"{0,0,5,0}"
                                }
