@@ -721,6 +721,9 @@ typedef struct  _MyGridOptionalProperties2
     NSNumber *anchor = [gridDictionary objectForKey:kMyGridAnchor];;
     [self createAnchor:anchor.boolValue gridNode:gridNode];
     
+    NSString *overlap = [gridDictionary objectForKey:kMyGridOverlap];
+    [self createOverlap:overlap gridNode:gridNode];
+
     NSString *gravity = [gridDictionary objectForKey:kMyGridGravity];
     [self createGravity:gravity gridNode:gridNode];
     
@@ -829,6 +832,22 @@ typedef struct  _MyGridOptionalProperties2
 {
     if (anchor) {
         gridNode.anchor = anchor;
+    }
+}
+
+//overlap:@"top|bottom|left|right|centerX|centerY|width|height"
++ (void)createOverlap:(NSString *)overlap gridNode:(id<MyGridNode>)gridNode
+{
+    MyGravity tempGravity = MyGravity_None;
+    NSArray *array = [overlap componentsSeparatedByString:@"|"];
+    for (NSString *temp in array) {
+        tempGravity |= [self returnGravity:temp];
+    }
+    if (tempGravity != MyGravity_None){
+        gridNode.anchor = true;
+        gridNode.measure = 0;
+        gridNode.gravity = tempGravity;
+        gridNode.overlap = tempGravity;
     }
 }
 
@@ -950,6 +969,8 @@ typedef struct  _MyGridOptionalProperties2
     
     [self returnAnchorWithGridNode:gridNode result:gridDictionary];
     
+    [self returnOverlapWithGridNode:gridNode result:gridDictionary];
+    
     [self returnGravityWithGridNode:gridNode result:gridDictionary];
     
     [self returnBorderlineWithGridNode:gridNode borderline:0 result:gridDictionary];
@@ -1053,6 +1074,46 @@ typedef struct  _MyGridOptionalProperties2
     }
 }
 
+//overlap:@"top|bottom|left|right|centerX|centerY|width|height"
++ (void)returnOverlapWithGridNode:(id<MyGridNode>)gridNode result:(NSMutableDictionary *)result
+{
+    MyGravity gravity = gridNode.overlap;
+    if (gravity != MyGravity_None)
+    {
+        static NSDictionary *data = nil;
+        if (data == nil)
+        {
+            data = @{
+                     [NSNumber numberWithUnsignedShort:MyGravity_Vert_Top]:vMyGridGravityTop,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Vert_Bottom]:vMyGridGravityBottom,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Horz_Left]:vMyGridGravityLeft,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Horz_Right]:vMyGridGravityRight,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Horz_Leading]:vMyGridGravityLeading,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Horz_Trailing]:vMyGridGravityTrailing,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Horz_Center]:vMyGridGravityCenterX,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Vert_Center]:vMyGridGravityCenterY,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Horz_Fill]:vMyGridGravityWidthFill,
+                     [NSNumber numberWithUnsignedShort:MyGravity_Vert_Fill]:vMyGridGravityHeightFill
+                     };
+        }
+        
+        NSMutableArray *gravitystrs = [NSMutableArray new];
+        MyGravity horzGravity = gravity & MyGravity_Vert_Mask;
+        NSString *horzstr = data[@(horzGravity)];
+        if (horzstr != nil)
+            [gravitystrs addObject:horzstr];
+        
+        MyGravity vertGravity = gravity & MyGravity_Horz_Mask;
+        NSString *vertstr = data[@(vertGravity)];
+        if (vertstr != nil)
+            [gravitystrs addObject:vertstr];
+        
+        NSString *temp = [gravitystrs componentsJoinedByString:@"|"];
+        if (temp.length) {
+            [result setObject:temp forKey:kMyGridOverlap];
+        }
+    }
+}
 
 //gravity:@"top|bottom|left|right|centerX|centerY|width|height"
 + (void)returnGravityWithGridNode:(id<MyGridNode>)gridNode result:(NSMutableDictionary *)result

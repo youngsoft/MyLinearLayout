@@ -12,7 +12,6 @@
 
 //从服务器下发下来的数据模型。
 @interface GLTest5DataModel : NSObject
-
 @property(nonatomic, strong) NSNumber *homeBackgroundView; //整个背景图片
 @property(nonatomic, strong) NSString *homeTitle;        //首页标题
 @property(nonatomic, strong) NSString *titleBackImageView;        //背景图片
@@ -23,8 +22,6 @@
 @property(nonatomic, strong) NSMutableArray<NSString*> *titles;    //标题的名称，如果为nil则没有标题
 @property(nonatomic, strong) NSNumber *hasSales;          //促销标志
 @property(nonatomic, strong) NSString *actionData;     //执行的动作。
-
-
 @end
 
 @implementation GLTest5DataModel
@@ -122,6 +119,7 @@
     [self test1];
     
     [self loadDataFromServer];
+    
 }
 
 

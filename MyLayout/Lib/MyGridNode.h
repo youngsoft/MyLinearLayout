@@ -102,6 +102,10 @@ typedef enum : unsigned char {
 @property(nonatomic, assign) BOOL anchor;
 
 
+//重叠视图的对齐停靠方式
+@property(nonatomic, assign) MyGravity overlap;
+
+
 @property(nonatomic) CGRect gridRect;
 
 

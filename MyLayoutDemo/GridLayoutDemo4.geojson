@@ -132,9 +132,7 @@
                                         ]
                                },
                                {
-                               "size":0,
-                               "anchor":true,
-                               "gravity":"bottom|left",
+                               "overlap":"bottom|left",
                                "padding":"{0,0,5,0}"
                                }
                                ]
@@ -282,9 +280,7 @@
                                         ]
                                },
                                {
-                               "size":0,
-                               "anchor":true,
-                               "gravity":"bottom|left",
+                               "overlap":"bottom|left",
                                "padding":"{0,0,5,0}"
                                }
                                ]

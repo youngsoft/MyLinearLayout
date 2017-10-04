@@ -21,6 +21,7 @@
  NSString * const kMyGridGravity = @"gravity";
  NSString * const kMyGridPlaceholder = @"placeholder";
  NSString * const kMyGridAnchor = @"anchor";
+ NSString * const kMyGridOverlap = @"overlap";
  NSString * const kMyGridTopBorderline = @"top-borderline";
  NSString * const kMyGridBottomBorderline = @"bottom-borderline";
  NSString * const kMyGridLeftBorderline = @"left-borderline";
