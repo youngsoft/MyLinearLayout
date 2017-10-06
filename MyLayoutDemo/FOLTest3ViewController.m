@@ -8,6 +8,7 @@
 
 #import "FOLTest3ViewController.h"
 #import "MyLayout.h"
+#import "CFTool.h"
 
 //数据模型
 @interface FOLTest3DataModel : NSObject
@@ -88,12 +89,15 @@
 - (void)viewDidLoad {
     
     self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+    self.view.backgroundColor = [CFTool color:0];
     
     [super viewDidLoad];
     
+    
     MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     floatLayout.backgroundColor = [UIColor whiteColor];
-    floatLayout.myMargin = 0;  //浮动布局和父视图四周的边界是0，也就是说浮动布局的宽度和高度和父视图相等。
+    floatLayout.myMargin = MyLayoutPos.safeAreaMargin;  //浮动布局和父视图四周的边界是安全区，也就是说浮动布局的宽度和高度和父视图的安全区相等。 您可以将myMargin设置为0并在iPhoneX上看看效果和区别。
+    
     [self.view addSubview:floatLayout];
     self.floatLayout = floatLayout;
     

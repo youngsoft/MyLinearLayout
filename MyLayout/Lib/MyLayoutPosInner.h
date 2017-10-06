@@ -47,5 +47,8 @@
 
 -(BOOL)isRelativePos;
 
+-(BOOL)isSafeAreaPos;
+
+
 
 @end

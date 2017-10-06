@@ -1582,12 +1582,22 @@ void* _myObserverContextC = (void*)20175283;
         
         if (newSuperview != nil)
         {
+            UIRectEdge defRectEdge = UIRectEdgeLeft | UIRectEdgeRight;
             id vc = [self valueForKey:@"viewDelegate"];
             if (vc != nil)
             {
                 lsc.wrapContentWidth = NO;
                 lsc.wrapContentHeight = NO;
+                if (lsc.insetsPaddingFromSafeArea == defRectEdge)
+                    lsc.insetsPaddingFromSafeArea = UIRectEdgeAll;
                 self.adjustScrollViewContentSizeMode = MyAdjustScrollViewContentSizeModeNo;
+            }
+            
+            //如果布局视图的父视图是滚动视图并且是非UITableView和UICollectionView的话。将默认叠加所有安全区域。
+            if ([newSuperview isKindOfClass:[UIScrollView class]] && ![newSuperview isKindOfClass:[UITableView class]] && ![newSuperview isKindOfClass:[UICollectionView class]])
+            {
+                if (lsc.insetsPaddingFromSafeArea == defRectEdge)
+                    lsc.insetsPaddingFromSafeArea = UIRectEdgeAll;
             }
         }
         
@@ -1671,7 +1681,7 @@ void* _myObserverContextC = (void*)20175283;
         }
         
 #endif
-
+        
         if ([self myUpdateLayoutRectInNoLayoutSuperview:newSuperview])
         {
             //有可能父视图不为空，所以这里先把以前父视图的KVO删除。否则会导致程序崩溃
@@ -1710,8 +1720,8 @@ void* _myObserverContextC = (void*)20175283;
             [newSuperview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:_myObserverContextC];
             _isAddSuperviewKVO = YES;
         }
-        
     }
+         
     
     if (_isAddSuperviewKVO && newSuperview == nil && self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
     {
@@ -1753,6 +1763,16 @@ void* _myObserverContextC = (void*)20175283;
         {
             if (self.adjustScrollViewContentSizeMode == MyAdjustScrollViewContentSizeModeAuto)
             {
+                //这里预先设置一下contentSize主要是为了解决contentOffset在后续计算contentSize的偏移错误的问题。
+                [UIView performWithoutAnimation:^{
+                    UIScrollView *scrollSuperView = (UIScrollView*)newSuperview;
+                    if (CGSizeEqualToSize(scrollSuperView.contentSize, CGSizeZero))
+                    {
+                        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+                        scrollSuperView.contentSize =  CGSizeMake(0, screenSize.height + 0.1);
+                    }
+                }];
+             
                 self.adjustScrollViewContentSizeMode = MyAdjustScrollViewContentSizeModeYes;
             }
         }
@@ -1773,6 +1793,27 @@ void* _myObserverContextC = (void*)20175283;
     
     if (self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]])
         [self myUpdateLayoutRectInNoLayoutSuperview:self.superview];
+}
+
+-(void)safeAreaInsetsDidChange
+{
+    [super safeAreaInsetsDidChange];
+    
+    
+    if (self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]] &&
+        (self.leadingPosInner.isSafeAreaPos ||
+         self.trailingPosInner.isSafeAreaPos ||
+         self.topPosInner.isSafeAreaPos ||
+         self.bottomPosInner.isSafeAreaPos)
+        )
+    {
+        if (!_isMyLayouting)
+        {
+            _isMyLayouting = YES;
+            [self myUpdateLayoutRectInNoLayoutSuperview:self.superview];
+            _isMyLayouting = NO;
+        }
+    }
 }
 
 -(void)layoutSubviews
@@ -2003,14 +2044,30 @@ void* _myObserverContextC = (void*)20175283;
         {
             UIView *supv = self.superview;
 
+
             //如果自己的父视图是非UIScrollView以及非布局视图。以及自己是wrapContentWidth或者wrapContentHeight时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
-            if (supv != nil && ![supv isKindOfClass:[MyBaseLayout class]] && ![supv isKindOfClass:[UIScrollView class]])
+            if (supv != nil && ![supv isKindOfClass:[MyBaseLayout class]])
             {
-                if (lsc.wrapContentWidth || lsc.wrapContentHeight)
+                CGPoint centerPonintSelf = self.center;
+                CGRect rectSelf = self.bounds;
+                CGRect rectSuper = supv.bounds;
+
+                //特殊处理低版本下的top和bottom的两种安全区域的场景。
+                if ((lsc.topPosInner.isSafeAreaPos || lsc.bottomPosInner.isSafeAreaPos) && [UIDevice currentDevice].systemVersion.doubleValue < 11 )
                 {
-                    CGRect rectSuper = supv.bounds;
-                    CGRect rectSelf = self.bounds;
-                    CGPoint centerPonintSelf = self.center;
+                    if (lsc.topPosInner.isSafeAreaPos)
+                    {
+                        centerPonintSelf.y = [lsc.topPosInner realPosIn:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
+                    }
+                    else
+                    {
+                        centerPonintSelf.y  = rectSuper.size.height - rectSelf.size.height - [lsc.bottomPosInner realPosIn:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
+                    }
+                }
+
+                //如果自己的父视图是非UIScrollView以及非布局视图。以及自己是wrapContentWidth或者wrapContentHeight时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
+                if (![supv isKindOfClass:[UIScrollView class]] && (lsc.wrapContentWidth || lsc.wrapContentHeight))
+                {
                     
                     if ([MyBaseLayout isRTL])
                         centerPonintSelf.x = rectSuper.size.width - centerPonintSelf.x;
@@ -2039,6 +2096,7 @@ void* _myObserverContextC = (void*)20175283;
                         }
                         else if (lsc.bottomPosInner.posVal != nil && lsc.topPosInner.posVal == nil)
                         {
+                            //这里可能有坑，在有安全区时。但是先不处理了。
                             centerPonintSelf.y  = rectSuper.size.height - rectSelf.size.height - [lsc.bottomPosInner realPosIn:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
                         }
                     }
@@ -2046,11 +2104,12 @@ void* _myObserverContextC = (void*)20175283;
                     if ([MyBaseLayout isRTL])
                         centerPonintSelf.x = rectSuper.size.width - centerPonintSelf.x;
                     
-                    //如果有变化则只调整自己的center。而不变化
-                    if (!_myCGPointEqual(self.center, centerPonintSelf))
-                    {
-                        self.center = centerPonintSelf;
-                    }
+                }
+                
+                //如果有变化则只调整自己的center。而不变化
+                if (!_myCGPointEqual(self.center, centerPonintSelf))
+                {
+                    self.center = centerPonintSelf;
                 }
                 
             }
@@ -2465,6 +2524,7 @@ void* _myObserverContextC = (void*)20175283;
     return size;
 }
 
+
 -(BOOL)myUpdateLayoutRectInNoLayoutSuperview:(UIView*)newSuperview
 {
     BOOL isAdjust = NO;
@@ -2523,6 +2583,22 @@ void* _myObserverContextC = (void*)20175283;
         rectSelf.size.width = rectSuper.size.width - leadingMargin - trailingMargin;
         rectSelf.size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
         
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        
+        if (@available(iOS 11.0, *)) {
+            
+            //在ios11后如果是滚动视图的contentInsetAdjustmentBehavior设置为UIScrollViewContentInsetAdjustmentAlways
+            //那么系统不管contentSize如何总是会将安全区域叠加到contentInsets所以这里的边距不应该是偏移的边距而是0
+            UIScrollView *scrollSuperView = nil;
+             if ([newSuperview isKindOfClass:[UIScrollView class]])
+               scrollSuperView = (UIScrollView*)newSuperview;
+            if (scrollSuperView != nil && lsc.leadingPosInner.isSafeAreaPos)
+            {
+                leadingMargin = lsc.leadingPosInner.offsetVal + ([MyBaseLayout isRTL] ? scrollSuperView.safeAreaInsets.right : scrollSuperView.safeAreaInsets.left) - ([MyBaseLayout isRTL] ? scrollSuperView.adjustedContentInset.right : scrollSuperView.adjustedContentInset.left);
+            }
+        }
+#endif
+        
         rectSelf.origin.x = leadingMargin;
     }
     else if (lsc.centerXPosInner.posVal != nil)
@@ -2533,6 +2609,20 @@ void* _myObserverContextC = (void*)20175283;
     }
     else if (lsc.leadingPosInner.posVal != nil)
     {
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        
+        if (@available(iOS 11.0, *)) {
+            
+            //iOS11中的滚动条的安全区会叠加到contentInset里面。因此这里要特殊处理，让x轴的开始位置不应该算偏移。
+            UIScrollView *scrollSuperView = nil;
+            if ([newSuperview isKindOfClass:[UIScrollView class]])
+                scrollSuperView = (UIScrollView*)newSuperview;
+            if (scrollSuperView != nil && lsc.leadingPosInner.isSafeAreaPos)
+            {
+                 leadingMargin = lsc.leadingPosInner.offsetVal + ([MyBaseLayout isRTL] ? scrollSuperView.safeAreaInsets.right : scrollSuperView.safeAreaInsets.left) - ([MyBaseLayout isRTL] ? scrollSuperView.adjustedContentInset.right : scrollSuperView.adjustedContentInset.left);
+            }
+        }
+#endif
         rectSelf.origin.x = leadingMargin;
     }
     else if (lsc.trailingPosInner.posVal != nil)
@@ -2575,6 +2665,22 @@ void* _myObserverContextC = (void*)20175283;
         rectSelf.size.height = rectSuper.size.height - topMargin - bottomMargin;
         rectSelf.size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
         
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        
+        if (@available(iOS 11.0, *)) {
+            
+            //在ios11后如果是滚动视图的contentInsetAdjustmentBehavior设置为UIScrollViewContentInsetAdjustmentAlways
+            //那么系统不管contentSize如何总是会将安全区域叠加到contentInsets所以这里的边距不应该是偏移的边距而是0
+            UIScrollView *scrollSuperView = nil;
+            if ([newSuperview isKindOfClass:[UIScrollView class]])
+                scrollSuperView = (UIScrollView*)newSuperview;
+            if (scrollSuperView != nil && lsc.topPosInner.isSafeAreaPos)
+            {
+                topMargin = lsc.topPosInner.offsetVal + scrollSuperView.safeAreaInsets.top - scrollSuperView.adjustedContentInset.top;
+            }
+        }
+#endif
+        
         rectSelf.origin.y = topMargin;
     }
     else if (lsc.centerYPosInner.posVal != nil)
@@ -2584,6 +2690,21 @@ void* _myObserverContextC = (void*)20175283;
     }
     else if (lsc.topPosInner.posVal != nil)
     {
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        
+        if (@available(iOS 11.0, *)) {
+            
+            //在ios11后如果是滚动视图的contentInsetAdjustmentBehavior设置为UIScrollViewContentInsetAdjustmentAlways
+            //那么系统不管contentSize如何总是会将安全区域叠加到contentInsets所以这里的边距不应该是偏移的边距而是0
+            UIScrollView *scrollSuperView = nil;
+            if ([newSuperview isKindOfClass:[UIScrollView class]])
+                scrollSuperView = (UIScrollView*)newSuperview;
+            if (scrollSuperView != nil && lsc.topPosInner.isSafeAreaPos)
+            {
+                topMargin = lsc.topPosInner.offsetVal + scrollSuperView.safeAreaInsets.top - scrollSuperView.adjustedContentInset.top;
+            }
+        }
+#endif
         rectSelf.origin.y = topMargin;
     }
     else if (lsc.bottomPosInner.posVal != nil)
@@ -2620,7 +2741,7 @@ void* _myObserverContextC = (void*)20175283;
     }
     else if (lsc.wrapContentWidth || lsc.wrapContentHeight)
     {
-        [self setNeedsLayout];
+            [self setNeedsLayout];
     }
     
     
@@ -3016,13 +3137,45 @@ void* _myObserverContextC = (void*)20175283;
         CGFloat topMargin = [lsc.topPosInner realPosIn:rectSuper.size.height];
         CGFloat bottomMargin = [lsc.bottomPosInner realPosIn:rectSuper.size.height];
         
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        if (@available(iOS 11.0, *)) {
+            if (/*scrolv.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentAlways*/ 1)
+            {
+                if (lsc.leadingPosInner.isSafeAreaPos)
+                    leadingMargin = lsc.leadingPosInner.offsetVal;// + scrolv.safeAreaInsets.left - scrolv.adjustedContentInset.left;
+                
+                if (lsc.trailingPosInner.isSafeAreaPos)
+                    trailingMargin = lsc.trailingPosInner.offsetVal;// + scrolv.safeAreaInsets.right - scrolv.adjustedContentInset.right;
+                
+                if (lsc.topPosInner.isSafeAreaPos)
+                    topMargin = lsc.topPosInner.offsetVal;
+                
+                if (lsc.bottomPosInner.isSafeAreaPos)
+                    bottomMargin = lsc.bottomPosInner.offsetVal;
+            }
+        }
+#endif
+ 
+        
+        
         if (contsize.height != newSize.height + topMargin + bottomMargin)
             contsize.height = newSize.height + topMargin + bottomMargin;
         if (contsize.width != newSize.width + leadingMargin + trailingMargin)
             contsize.width = newSize.width + leadingMargin + trailingMargin;
         
-        scrolv.contentSize =  contsize;
+        //因为调整contentsize可能会调整contentOffset，所以为了保持一致性这里要还原掉原来的contentOffset
+        CGPoint oldOffset = scrolv.contentOffset;
+        if (!CGSizeEqualToSize(scrolv.contentSize, contsize))
+            scrolv.contentSize =  contsize;
         
+        if ((oldOffset.x <= 0 || oldOffset.x <= contsize.width - rectSuper.size.width) &&
+            (oldOffset.y <= 0 || oldOffset.y <= contsize.height - rectSuper.size.height))
+        {
+            if (!CGPointEqualToPoint(scrolv.contentOffset, oldOffset))
+            {
+                scrolv.contentOffset = oldOffset;
+            }
+        }
     }
 }
 

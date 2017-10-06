@@ -25,18 +25,41 @@
       这个例子是将表格布局和智能边界线的应用结合，实现一个表格界面。
      
      */
-    [super loadView];
     
-    self.view.backgroundColor = [UIColor whiteColor];
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectInset(self.view.bounds, 10, 10)];
-    scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:scrollView];
+    UIScrollView *scrollView = [UIScrollView new];
+    scrollView.backgroundColor = [UIColor whiteColor];
+    self.view = scrollView;
+    
+    if (@available(iOS 11.0, *)) {
+    } else {
+        // Fallback on earlier versions
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+   
     
     //建立一个垂直表格
     MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
-    tableLayout.myLeading = tableLayout.myTrailing = 0;  //宽度和非布局父视图一样宽
+    //这里设置表格的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置MyLayoutPos.safeAreaMargin。
+    //MyLayoutPos.safeAreaMargin表示视图的边距不是一个固定的值而是所在的父视图的安全区域。这样布局视图就不会延伸到安全区域以外去了。
+    //MyLayoutPos.safeAreaMargin是同时支持iOS11和以下的版本的，对于iOS11以下的版本则顶部安全区域是状态栏以下的位置。
+    //因此只要你设置边距为MyLayoutPos.safeAreaMargin则可以同时兼容所有iOS的版本。。
+    tableLayout.leadingPos.equalTo(@(MyLayoutPos.safeAreaMargin)).offset(10);
+    tableLayout.trailingPos.equalTo(@(MyLayoutPos.safeAreaMargin)).offset(10);
+    tableLayout.topPos.equalTo(@(MyLayoutPos.safeAreaMargin)).offset(10);
+    
+
+    //如果你的左右边距都是安全区域，那么可以用下面的方法来简化设置。您可以注释掉这句代码看看效果。
+    // tableLayout.myLeading = tableLayout.myTrailing = MyLayoutPos.safeAreaMargin;
+    
     [scrollView addSubview:tableLayout];
+    
+    //如果你不想用MyLayout来设置安全区域作为边距，那你可以使用AutoLayout自带的如下方法来设置边距。
+    //tableLayout.translatesAutoresizingMaskIntoConstraints = NO;
+    //[tableLayout.leftAnchor constraintEqualToAnchor:scrollView.safeAreaLayoutGuide.leftAnchor].active =YES;
+    //[tableLayout.rightAnchor constraintEqualToAnchor:scrollView.safeAreaLayoutGuide.rightAnchor].active = YES;
+
+    
     self.tableLayout = tableLayout;
     
     //建立一个表格外边界的边界线。颜色为黑色，粗细为3.

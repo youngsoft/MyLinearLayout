@@ -85,9 +85,9 @@
     
     UIViewController *demoVC = [[self.demoVCList[indexPath.row][@"class"] alloc] init];
     demoVC.title = self.demoVCList[indexPath.row][@"title"];
-    [self.navigationController pushViewController:demoVC animated:YES];
+   [self.navigationController pushViewController:demoVC animated:YES];
 
-  //  [self.navigationController presentViewController:demoVC animated:YES completion:nil];
+   //[self.navigationController presentViewController:demoVC animated:YES completion:nil];
 }
 
 

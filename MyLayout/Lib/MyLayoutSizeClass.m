@@ -10,6 +10,7 @@
 #import "MyLayoutPosInner.h"
 #import "MyLayoutSizeInner.h"
 #import "MyGridNode.h"
+#import "MyBaseLayout.h"
 
 @interface MyViewSizeClass()
 
@@ -549,7 +550,7 @@ BOOL _myisRTL = NO;
     if (self != nil)
     {
         _zeroPadding = YES;
-        _insetsPaddingFromSafeArea = UIRectEdgeAll;
+        _insetsPaddingFromSafeArea = UIRectEdgeLeft | UIRectEdgeRight;
         _insetLandscapeFringePadding = NO;
         
     }
@@ -632,7 +633,8 @@ BOOL _myisRTL = NO;
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
        
         if (@available(iOS 11.0, *)) {
-            return self.topPadding + self.view.safeAreaInsets.top;
+             return self.topPadding + self.view.safeAreaInsets.top;
+            
         }
 #endif
     }
@@ -642,12 +644,13 @@ BOOL _myisRTL = NO;
 
 -(CGFloat)myLayoutBottomPadding
 {
-    if ((self.insetsPaddingFromSafeArea & UIRectEdgeBottom) == UIRectEdgeBottom)
+    if ((self.insetsPaddingFromSafeArea & UIRectEdgeBottom) == UIRectEdgeBottom )
     {
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
 
         if (@available(iOS 11.0, *)) {
-            return self.bottomPadding + self.view.safeAreaInsets.bottom;
+
+                return self.bottomPadding + self.view.safeAreaInsets.bottom;
         }
 #endif
     }

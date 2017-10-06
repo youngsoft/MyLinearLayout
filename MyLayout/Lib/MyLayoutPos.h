@@ -88,6 +88,36 @@
 
 #else
 
+
+#if UIKIT_DEFINE_AS_PROPERTIES
+
+/**
+ 特殊的位置。只用在布局视图和非布局父视图之间的位置约束上。
+ iOS11以后提出了安全区域的概念，因此对于iOS11以下的版本就需要兼容处理，尤其是在那些没有导航条的情况下。通过将布局视图的边距设置为这个特殊值就可以实现在任何版本中都能完美的实现位置的偏移而且各版本保持统一。比如下面的例子：
+ 
+ @code
+ 
+ //这里设置布局视图的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置MyLayoutPos.safeAreaMargin。
+ //MyLayoutPos.safeAreaMargin表示视图的边距不是一个固定的值而是所在的父视图的安全区域。这样布局视图就不会延伸到安全区域以外去了。
+ //MyLayoutPos.safeAreaMargin是同时支持iOS11和以下的版本的，对于iOS11以下的版本则顶部安全区域是状态栏以下的位置。
+ //因此只要你设置边距为MyLayoutPos.safeAreaMargin则可以同时兼容所有iOS的版本。。
+ layoutView.leadingPos.equalTo(@(MyLayoutPos.safeAreaMargin)).offset(10);
+ layoutView.trailingPos.equalTo(@(MyLayoutPos.safeAreaMargin)).offset(10);
+ layoutView.topPos.equalTo(@(MyLayoutPos.safeAreaMargin)).offset(10);
+ 
+ //如果你的左右边距都是安全区域，那么可以用下面的方法来简化设置。您可以注释掉这句代码看看效果。
+ // layoutView.myLeading = layoutView.myTrailing = MyLayoutPos.safeAreaMargin;
+ @endcode
+ 
+ */
+@property(class, nonatomic, assign,readonly) CGFloat safeAreaMargin;
+
+#else
+
++(CGFloat)safeAreaMargin;
+#endif
+
+
 /**
  设置布局位置的值。参数val可以接收下面六种类型的值：
  

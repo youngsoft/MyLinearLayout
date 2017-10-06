@@ -63,4 +63,19 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+-(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    
+    [super touchesEnded:touches withEvent:event];
+    
+    //为了测试使用。主要用于方便通过present出来的VC返回用。
+    CGPoint pt =  [touches.anyObject locationInView:self.window];
+    
+    if (pt.y < 20 && pt.x > 0 && pt.x < 100)
+    {
+        [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+    
+}
+
 @end

@@ -79,7 +79,7 @@
     
     MyFrameLayout *frameLayout = [MyFrameLayout new];
     frameLayout.backgroundColor = [UIColor whiteColor];
-    frameLayout.myMargin = 0;              //这个表示框架布局的尺寸和self.view保持一致,四周离父视图的边距都是0
+    frameLayout.myMargin = MyLayoutPos.safeAreaMargin;    //这个表示框架布局的尺寸和self.view的安全区域的尺寸保持一致,四周离父视图的边距都是安全区域的边距
     frameLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     [self.view addSubview:frameLayout];
     

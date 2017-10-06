@@ -33,7 +33,13 @@
      
      */
     
-    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+    
+    //在iOS11以后因为有安全区的概念，因此不需要设置edgesForExtendedLayout属性了。否则可能出现push一个视图时，出现从下往上移动的动画效果。
+    if (@available(iOS 11.0, *)) {
+    } else {
+        // Fallback on earlier versions
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     
     UIScrollView *scrollView = [UIScrollView new];
     scrollView.backgroundColor = [UIColor whiteColor];

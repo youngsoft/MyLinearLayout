@@ -181,5 +181,6 @@ typedef enum : unsigned char
     MyLayoutValueType_LayoutDime,
     MyLayoutValueType_LayoutPos,
     MyLayoutValueType_Array,
-    MyLayoutValueType_UILayoutSupport
+    MyLayoutValueType_UILayoutSupport,
+    MyLayoutValueType_SafeArea,
 }MyLayoutValueType;

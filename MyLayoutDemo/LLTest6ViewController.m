@@ -23,10 +23,8 @@
 
 -(void)loadView
 {
-    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
     [super loadView];
-    
     
     //注意这个DEMO进来慢的原因是其中使用了UITextView,和MyLayout无关。UITextView会在第一次使用时非常的慢，后续就快了。。
     
@@ -43,6 +41,20 @@
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:scrollView];
+    
+    //这里要的效果是在小屏幕上滚动但是在大屏幕上滚动。因此我们的scrollview不应该延伸到导航条下面，所以需要设置如下的属性：
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。
+    
+    /*
+      当上面设置了根视图的边不延伸到导航条下或者导航条的navigationBar.translucent = NO，也就是不透明时。在push时发现除了从右往左的动画外，还出现了从下往上的动画效果。这个从下往上的动画效果不是我们需要的，这是因为iOS11后的UIScrollView的contentInset默认是叠加安全区的，而这里又因为滚动视图不延伸到导航条下面，所以这里出现了contentInset不断缩小的效果而产生了动画效果。这个锅是iOS11的锅，也是一个BUG。为了解决这个问题可以有如下方案：
+     */
+    if (@available(iOS 11.0, *)) {
+        //滚动视图不把安全区叠加到滚动的缩进里面去。这个属性不是必须要这么设置的，只有当你出现了上面的情况时才这么设置。
+        //如果导航条是半透明的或者根视图可以延伸到导航条下面去，就不需要这么设置。
+        scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+    }
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.wrapContentHeight = NO;
