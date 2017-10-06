@@ -23,6 +23,7 @@ extern NSString * const kMyGridSpace;    //NSNumber类型，栅格的内子栅�
 extern NSString * const kMyGridGravity;   //NSString类型，栅格的停靠属性，对应MyGrid的gravity属性，具体的值请参考下面的定义，比如：@"top|left"
 extern NSString * const kMyGridPlaceholder;  //NSNumber类型，栅格的占位属性，对应MyGrid的placeholder 属性，具体的值设置为YES or NO
 extern NSString * const kMyGridAnchor;      //NSNumber类型，栅格的锚点属性，对应MyGrid的anchor属性，具体的值设置为YES or NO
+extern NSString * const kMyGridOverlap;    //NSString类型,重叠视图停靠属性，对应MyGrid的gravity属性，具体的值请参考下面的定义，比如：@"top|left"
 extern NSString * const kMyGridTopBorderline;   //NSDictionary类型 栅格的顶部边界线对象。
 extern NSString * const kMyGridBottomBorderline; //NSDictionary类型 栅格的底部边界线对象。
 extern NSString * const kMyGridLeftBorderline;   //NSDictionary类型 栅格的左边边界线对象。
@@ -139,6 +140,11 @@ extern NSString * const vMyGridGravityHeightFill;  //对应MyGravity_Vert_Fill
  */
 @property(nonatomic, assign) BOOL anchor;
 
+/**
+ 重叠视图的对齐停靠方式
+ 对于叶子栅格来说,如果设置了gravity 则填充的子视图必须要设置明确的尺寸
+ */
+@property(nonatomic, assign) MyGravity overlap;
 
 
 /**顶部边界线*/
