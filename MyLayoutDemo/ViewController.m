@@ -232,10 +232,10 @@
                                              @{@"title":NSLocalizedString(@"3.GridLayout - ViewGroup", @""),
                                                @"class":[GLTest3ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"4.GridLayout - JSON", @""),
+                                             @{@"title":NSLocalizedString(@"4.GridLayout - JSON1", @""),
                                                @"class":[GLTest4ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"5.GridLayout -JSON- Test5", @""),
+                                             @{@"title":NSLocalizedString(@"5.GridLayout - JSON2", @""),
                                                @"class":[GLTest5ViewController class]
                                                }
                                              ]

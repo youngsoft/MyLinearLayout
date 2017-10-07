@@ -28,6 +28,7 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 [http://www.jianshu.com/p/fbeb376584ed](http://www.jianshu.com/p/fbeb376584ed) 流式布局  
 [http://www.jianshu.com/p/0c075f2fdab2](http://www.jianshu.com/p/0c075f2fdab2) 浮动布局
 [http://www.jianshu.com/p/4ac229057396](http://www.jianshu.com/p/4ac229057396) 路径布局
+[http://bicyclering.com/2017/09/01/layout/](http://bicyclering.com/2017/09/01/layout/) 栅格布局
 
 ### MyLayout的优势
 * MyLayout的实现内核是基于frame的设置，而不是对AutoLayout的封装。因此在使用上不会受到任何操作系统版本的限制。
@@ -513,6 +514,60 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
  
  ```
    
+### 栅格布局MyGridLayout
+> 布局库独有
+
+栅格布局是一种将一个矩形的视图区域按行或者按列的方式划分为多个子区域，子区域根据布局的要求可以继续递归划分，栅格布局里面的子视图将按照添加的顺序依次填充到对应的叶子区域中去的布局机制。栅格布局通过一套自定义的布局体系来划分位置和尺寸，添加到栅格布局里面的子视图将不再需要指定位置和尺寸而是由栅格布局中的子栅格来完成，因此可以很很方便的调整布局结构，从而实现动态布局的能力。
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/gl.png)
+   
+   
+   示例代码:
+ 
+ ```objective-c
+   -(void)loadView
+{
+    [super loadView];
+    
+    MyGridLayout *S = [MyGridLayout new];
+    S.mySize = CGSizeMake(320,320);
+    S.backgroundColor = [UIColor redColor];
+    [self.view addSubview:S];
+
+    //add grids
+    [S addRow:50];
+    id<MyGrid> g2 = [S addRow:MyLayoutSize.fill];
+    [g2 addCol:0.2];
+    [g2 addCol:0.2];
+    id<MyGrid> g23 = [g2 addCol:0.6];
+    [g23 addRow:0.5];
+    [g23 addRow:0.5];
+    
+    
+    //add subviews
+    UIView *A = [UIView new];
+    A.backgroundColor = [UIColor greenColor];
+    [S addSubview:A];
+    
+    UIView *B = [UIView new];
+    B.backgroundColor = [UIColor blueColor];
+    [S addSubview:B];
+
+    UIView *C = [UIView new];
+    C.backgroundColor = [UIColor orangeColor];
+    [S addSubview:C];
+
+    UIView *D = [UIView new];
+    D.backgroundColor = [UIColor cyanColor];
+    [S addSubview:D];
+
+    UIView *E = [UIView new];
+    E.backgroundColor = [UIColor blackColor];
+    [S addSubview:E];    
+ }
+ 
+ ```
+
 
 ###  SizeClass的支持
 > 等价于iOS的Size Classes
@@ -566,7 +621,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.4.3'
+pod 'MyLayout', '~> 1.5.0'
 ```
    
 然后运行如下命令:

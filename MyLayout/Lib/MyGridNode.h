@@ -102,7 +102,19 @@ typedef enum : unsigned char {
 @property(nonatomic, assign) BOOL anchor;
 
 
-//重叠视图的对齐停靠方式
+/**
+ 指定栅格内的视图具有重叠属性，并指定重叠视图的对齐停靠方式。这个属性是一个计算属性他等价于
+ 
+ @code
+ self.measure = 0;
+ self.anchor = YES;
+ self.gravity = overlap
+ 
+ @endcode
+ 
+ 目的是为了方便设置具有重叠功能的栅格。
+ 
+*/
 @property(nonatomic, assign) MyGravity overlap;
 
 

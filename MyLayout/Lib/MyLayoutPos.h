@@ -92,7 +92,7 @@
 #if UIKIT_DEFINE_AS_PROPERTIES
 
 /**
- 特殊的位置。只用在布局视图和非布局父视图之间的位置约束上。
+ 特殊的位置。只用在布局视图和非布局父视图之间的位置约束和没有导航条时的布局视图内子视图的padding设置上。
  iOS11以后提出了安全区域的概念，因此对于iOS11以下的版本就需要兼容处理，尤其是在那些没有导航条的情况下。通过将布局视图的边距设置为这个特殊值就可以实现在任何版本中都能完美的实现位置的偏移而且各版本保持统一。比如下面的例子：
  
  @code
@@ -108,6 +108,21 @@
  //如果你的左右边距都是安全区域，那么可以用下面的方法来简化设置。您可以注释掉这句代码看看效果。
  // layoutView.myLeading = layoutView.myTrailing = MyLayoutPos.safeAreaMargin;
  @endcode
+ 
+ @code
+ 
+ //在一个没有导航条的界面中，因为iPhoneX和其他设备的状态栏的高度不一致。所以你可以让布局视图的topPadding设置如下：
+ layoutView.topPadding = MyLayoutPos.safeAreaMargin + 10;  //顶部内边距是安全区域外加10。那么这个和设置如下的：
+ layoutView.topPadding = CGRectGetHeight([UIApplication sharedApplication].statusBarFrame) + 10;
+ 
+ //这两者之间的区别后者是一个设置好的常数，一旦你的设备要支持横竖屏则不管横屏下是否有状态栏都会缩进固定的内边距，而前者则会根据当前是否状态栏而进行动态调整。
+ //当然如果你的顶部就是要固定缩进状态栏的高度的话那么你可以直接直接用后者。
+ 
+ 
+ @endcode
+ 
+ @note
+ 需要注意的是这个值并不是一个真值，只是一个特殊值，不能用于读取。而且只能用于在MyLayoutPos的equalTo方法和布局视图上的padding属性上使用，其他地方使用后果未可知。
  
  */
 @property(class, nonatomic, assign,readonly) CGFloat safeAreaMargin;

@@ -466,6 +466,61 @@ Sample code:
  
  ```
   
+  
+### MyGridLayout
+> Is unique characteristic layout view of iOS.
+
+Grid layout is a view to a rectangular area according to the row or column divided into multiple sub areas, sub area according to the requirements of layout can continue recursive partitioning, grid layout inside the child view will be in accordance with the sequence to add to the corresponding leaf area filling in the layout of the mechanism. Grid layout through a system of the layout of the custom to the position and size, added to the inside of the grid layout child view will no longer need to specify the location and size but by grid layout of the grid to complete, so can be very convenient to adjust the layout structure, so as to realize the ability of dynamic layout.
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/gl.png)
+   
+   
+   Sample code:
+ 
+ ```objective-c
+   -(void)loadView
+{
+    [super loadView];
+    
+    MyGridLayout *S = [MyGridLayout new];
+    S.mySize = CGSizeMake(320,320);
+    S.backgroundColor = [UIColor redColor];
+    [self.view addSubview:S];
+
+    //add grids
+    [S addRow:50];
+    id<MyGrid> g2 = [S addRow:MyLayoutSize.fill];
+    [g2 addCol:0.2];
+    [g2 addCol:0.2];
+    id<MyGrid> g23 = [g2 addCol:0.6];
+    [g23 addRow:0.5];
+    [g23 addRow:0.5];
+    
+    
+    //add subviews
+    UIView *A = [UIView new];
+    A.backgroundColor = [UIColor greenColor];
+    [S addSubview:A];
+    
+    UIView *B = [UIView new];
+    B.backgroundColor = [UIColor blueColor];
+    [S addSubview:B];
+
+    UIView *C = [UIView new];
+    C.backgroundColor = [UIColor orangeColor];
+    [S addSubview:C];
+
+    UIView *D = [UIView new];
+    D.backgroundColor = [UIColor cyanColor];
+    [S addSubview:D];
+
+    UIView *E = [UIView new];
+    E.backgroundColor = [UIColor blackColor];
+    [S addSubview:E];    
+ }
+ 
+ ```
+
  
  
 ###  MySizeClass
@@ -559,7 +614,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.4.3'
+pod 'MyLayout', '~> 1.5.0'
 ```
    
 Then, run the following command:

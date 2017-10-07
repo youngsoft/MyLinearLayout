@@ -8,6 +8,7 @@
 
 //Category
 "Category"="目录";
+"If you select \"Present\", than you can touch topleft corner of Status bar to dissmis the view controller" ="如果你选择了弹出则可以点击状态栏的左上角区域退出视图控制器";
 "1.LinearLayout - Vert&Horz" = "1.线性布局-垂直布局和水平布局";
 "2.LinearLayout - Combine with UIScrollView" = "2.线性布局-和UIScrollView的结合";
 "3.LinearLayout - Gravity&Fill" = "3.线性布局-子视图的停靠和填充";
@@ -45,8 +46,8 @@
 "1.GridLayout - Row&Col gird"="1.栅格布局-实现多层视图嵌套";
 "2.GridLayout - Dynamic layout"="2.栅格布局-仿今日头条实现动态更新";
 "3.GridLayout - ViewGroup"="3.栅格布局-用视图组实现仿京东首页";
-"4.GridLayout - JSON"="4.栅格布局-用JSON语言来描述布局";
-"5.GridLayout -JSON- Test5"="5.栅格布局-测试";
+"4.GridLayout - JSON1"="4.栅格布局-用JSON语言来描述布局1";
+"5.GridLayout - JSON2"="5.栅格布局-用JSON语言来描述布局2";
 "1.UITableView - Dynamic height" = "1.综合布局-布局和UITableView(动态高度)";
 "2.UITableView - Static height" = "2.综合布局-布局和UITableView(静态高度)";
 "3.Replacement of UITableView" = "3.综合布局-UITableView的替换方案";

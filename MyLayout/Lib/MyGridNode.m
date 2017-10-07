@@ -276,6 +276,19 @@ typedef struct  _MyGridOptionalProperties2
     _optionalProperties1.anchor = anchor ? 1 : 0;
 }
 
+-(MyGravity)overlap
+{
+    return self.gravity;
+}
+
+-(void)setOverlap:(MyGravity)overlap
+{
+    self.anchor = YES;
+    self.measure = 0;
+    self.gravity = overlap;
+}
+
+
 
 -(id<MyGrid>)addRow:(CGFloat)measure
 {
@@ -844,9 +857,6 @@ typedef struct  _MyGridOptionalProperties2
         tempGravity |= [self returnGravity:temp];
     }
     if (tempGravity != MyGravity_None){
-        gridNode.anchor = true;
-        gridNode.measure = 0;
-        gridNode.gravity = tempGravity;
         gridNode.overlap = tempGravity;
     }
 }
@@ -1268,7 +1278,7 @@ static NSDictionary*  myDefaultColors()
         return [myDefaultColors() objectForKey:hexString.lowercaseString];
     }
     
-    if (hexString.length != 7)
+    if (hexString.length != 7 && hexString.length != 9)
         return nil;
     
     NSScanner *scanner = [NSScanner scannerWithString:[hexString substringFromIndex:1]];

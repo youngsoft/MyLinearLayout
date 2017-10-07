@@ -199,9 +199,9 @@ static NSInteger sBottomStyleTag = 1003;
     [templateGrid1 addRow:MyLayoutSize.wrap];
     [templateGrid1 addRow:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
     
+    //tg14是一个可以存放重叠视图的栅格。
     id<MyGrid> tg14 = [templateGrid1 addRow:0];
-    tg14.anchor = YES;
-    tg14.gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left;
+    tg14.overlap =  MyGravity_Vert_Bottom | MyGravity_Horz_Left;
     
    
     
@@ -220,8 +220,7 @@ static NSInteger sBottomStyleTag = 1003;
     [tg23 addCol:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
 
     id<MyGrid> tg24 = [templateGrid2 addRow:0];
-    tg24.anchor = YES;
-    tg24.gravity = MyGravity_Vert_Bottom | MyGravity_Horz_Left ;//用于存放下面的条。
+    tg24.overlap = MyGravity_Vert_Bottom | MyGravity_Horz_Left ;//用于存放下面的条。
 
     
     

@@ -124,8 +124,6 @@
 -(void)removeGrids
 {
     [self removeGridsIn:MySizeClass_hAny | MySizeClass_wAny];
-    
-    [self setNeedsLayout];
 }
 
 -(void)removeGridsIn:(MySizeClass)sizeClass
@@ -294,7 +292,7 @@
         
         NSNumber *destKey = @(destGridTag);
         
-        NSMutableArray *destViewGroupArray = [self.tagsDict objectForKey:destKey];
+        NSMutableArray<MyViewGroupAndActionData*> *destViewGroupArray = [self.tagsDict objectForKey:destKey];
         if (destViewGroupArray == nil)
         {
             destViewGroupArray = [NSMutableArray new];
@@ -404,7 +402,11 @@
     NSMutableArray<MyViewGroupAndActionData*> *viewGroupArray2 = nil;
     
     if (gridTag1 == gridTag2)
+    {
         viewGroupArray2 = viewGroupArray1;
+        if (index1 == index2)
+            return;
+    }
     else
     {
         NSNumber *key2 = @(gridTag2);
@@ -604,6 +606,19 @@
 {
     MyGridLayout *lsc = self.myCurrentSizeClass;
     lsc.anchor = anchor;
+}
+
+-(MyGravity)overlap
+{
+    MyGridLayout *lsc = self.myCurrentSizeClass;
+    
+    return lsc.overlap;
+}
+
+-(void)setOverlap:(MyGravity)overlap
+{
+    MyGridLayout *lsc = self.myCurrentSizeClass;
+    lsc.overlap = overlap;
 }
 
 -(NSDictionary*)gridDictionary

@@ -43,11 +43,17 @@
     
     self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
 
-    
     UIScrollView *scrollView = [UIScrollView new];
     scrollView.delegate = self;
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
+    
+    if (@available(iOS 11.0, *)) {
+        scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+    }
+    
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
     rootLayout.widthSize.equalTo(scrollView.widthSize);

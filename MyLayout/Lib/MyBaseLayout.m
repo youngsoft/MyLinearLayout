@@ -1589,15 +1589,15 @@ void* _myObserverContextC = (void*)20175283;
                 lsc.wrapContentWidth = NO;
                 lsc.wrapContentHeight = NO;
                 if (lsc.insetsPaddingFromSafeArea == defRectEdge)
-                    lsc.insetsPaddingFromSafeArea = UIRectEdgeAll;
+                    lsc.insetsPaddingFromSafeArea = ~UIRectEdgeTop;
                 self.adjustScrollViewContentSizeMode = MyAdjustScrollViewContentSizeModeNo;
             }
             
-            //如果布局视图的父视图是滚动视图并且是非UITableView和UICollectionView的话。将默认叠加所有安全区域。
+            //如果布局视图的父视图是滚动视图并且是非UITableView和UICollectionView的话。将默认叠加除顶部外的安全区域。
             if ([newSuperview isKindOfClass:[UIScrollView class]] && ![newSuperview isKindOfClass:[UITableView class]] && ![newSuperview isKindOfClass:[UICollectionView class]])
             {
                 if (lsc.insetsPaddingFromSafeArea == defRectEdge)
-                    lsc.insetsPaddingFromSafeArea = UIRectEdgeAll;
+                    lsc.insetsPaddingFromSafeArea = ~UIRectEdgeTop;
             }
         }
         

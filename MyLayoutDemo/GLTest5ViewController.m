@@ -129,7 +129,7 @@
     
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
-    rootLayout.padding = UIEdgeInsetsMake(0, 0, 10, 0);
+ //   rootLayout.padding = UIEdgeInsetsMake(0, 0, 10, 0);
     rootLayout.gridActionTarget  = self;
     self.view = rootLayout;
     self.rootLayout = rootLayout;

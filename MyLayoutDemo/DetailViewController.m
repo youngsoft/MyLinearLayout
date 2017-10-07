@@ -14,6 +14,8 @@
 
 @property(nonatomic, strong) NSArray *demoVCList;
 
+@property(nonatomic, assign) BOOL isPresentVC;
+
 @end
 
 
@@ -25,6 +27,7 @@
     if (self != nil)
     {
         self.demoVCList = vcList;
+        self.isPresentVC = NO;
     }
     
     return self;
@@ -38,7 +41,7 @@
     
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[CFTool font:15],NSForegroundColorAttributeName:[CFTool color:4]};
     
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Present" style:UIBarButtonItemStylePlain target:self action:@selector(handlePushOrPresent:)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -85,13 +88,26 @@
     
     UIViewController *demoVC = [[self.demoVCList[indexPath.row][@"class"] alloc] init];
     demoVC.title = self.demoVCList[indexPath.row][@"title"];
-   [self.navigationController pushViewController:demoVC animated:YES];
-
-   //[self.navigationController presentViewController:demoVC animated:YES completion:nil];
+    
+    if (self.isPresentVC)
+        [self.navigationController presentViewController:demoVC animated:YES completion:nil];
+    else
+        [self.navigationController pushViewController:demoVC animated:YES];
 }
 
 
+#pragma mark -- Handle method
 
+-(void)handlePushOrPresent:(UIBarButtonItem*)sender
+{
+    self.isPresentVC = !self.isPresentVC;
+    sender.title = self.isPresentVC ? @"Push" : @"Present";
+    
+    if (self.isPresentVC)
+    {
+        [[[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString(@"If you select \"Present\", than you can touch topleft corner of Status bar to dissmis the view controller",@"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+    }
+}
 
 
 @end
