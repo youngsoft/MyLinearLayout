@@ -74,7 +74,7 @@ static NSInteger sPartTag4 = 1003;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self test1];
+    [self createLayout];
     
     [self bindView];
 }
@@ -175,18 +175,24 @@ static NSInteger sPartTag4 = 1003;
 
 
 
-- (void)test1
+- (void)createLayout
 {
+    /*
+       这个例子演示一个通过JSON格式描述的栅格来构建栅格布局的示例。
+     */
     self.edgesForExtendedLayout = UIRectEdgeNone;
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
-    rootLayout.gridActionTarget  = self;
-    self.view = rootLayout;
+    rootLayout.myMargin = MyLayoutPos.safeAreaMargin;
+    [self.view addSubview:rootLayout];
     self.rootLayout = rootLayout;
-    NSString *path =  [NSBundle.mainBundle pathForResource:@"GridLayoutDemo4.json" ofType:nil];
-    NSString *content = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-   id temp = [NSJSONSerialization JSONObjectWithData:[content dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
-    rootLayout.gridDictionary = temp;
+    
+    
+    rootLayout.gridActionTarget = self;  //因为JSON格式的栅格描述是无法指定事件的执行者的，因此栅格布局提供了这个属性来设置所有通过字典或者通过JSON来构建栅格布局时的事件执行者。
+    
+    //从JSON格式的文件中来构建栅格布局.
+    NSString *jsonFilePath =  [NSBundle.mainBundle pathForResource:@"GridLayoutDemo4.json" ofType:nil];
+    rootLayout.gridDictionary = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:jsonFilePath] options:NSJSONReadingAllowFragments error:nil];
 }
 
 
@@ -307,43 +313,6 @@ static NSInteger sPartTag4 = 1003;
             }
             [self.rootLayout addViewGroup:temp withActionData:model.actionDatas to:sPartTag4];
         }
-        
-//        NSArray *titles = @[@"海抢购",@"有好货",@"必买清单"];
-//        NSArray *subTitles = @[@"01:29:45",@"高颜值美物",@"都整理好"];
-//        NSArray *imageNames = @[@[@"p1-33",@"p1-34"],@[@"p1-33",@"p1-34"],@[@"p1-33",@"p1-34"]];
-//        NSArray *actionDatas = @[@"bb",@"cc",@"dd"];
-//        NSArray *hasSales = @[@(NO),@(NO),@(YES)];
-//        for(int i = 0 ; i < titles.count; i++) {
-//            NSString *title = [titles objectAtIndex:i];
-//            NSString *subTitle = [subTitles objectAtIndex:i];
-//            NSArray *tempImages = [imageNames objectAtIndex:i];
-//            NSString *actionData = [actionDatas objectAtIndex:i];
-//            NSString *hasSale = [hasSales objectAtIndex:i];
-//
-//            NSMutableArray *temp = [NSMutableArray array];
-//            UILabel *titleLabel = [UILabel new];
-//            titleLabel.text = title;
-//            titleLabel.font = [CFTool font:16];
-//            titleLabel.textColor = [CFTool color:4];
-//            titleLabel.adjustsFontSizeToFitWidth = YES;
-//            [temp addObject:titleLabel];
-//
-//            UILabel *subTitleLabel = [UILabel new];
-//            subTitleLabel.text = subTitle;
-//            subTitleLabel.font = [CFTool font:13];
-//            subTitleLabel.textColor = [CFTool color:5];
-//            subTitleLabel.adjustsFontSizeToFitWidth = YES;
-//            [temp addObject:subTitleLabel];
-//            for (NSString *imageName in tempImages) {
-//                UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-//                [temp addObject:imageView];
-//            }
-//            if ([hasSale boolValue]) {
-//                UIImageView *optionalView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
-//                [temp addObject:optionalView];
-//            }
-//            [self.rootLayout addViewGroup:temp withActionData:actionData to:sPartTag4];
-//        }
     }
 }
 
