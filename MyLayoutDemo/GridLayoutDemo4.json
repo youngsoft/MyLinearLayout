@@ -10,7 +10,7 @@
              },
              {
              "size":150,
-             "tag":1,
+             "tag":1001,
              "cols":[
                  {
                      "size":"fill",
@@ -80,7 +80,7 @@
                       "thick": 1,
                       "color": "#EEEEEE"
                       },
-                      "tag":2,
+                      "tag":1002,
                       "action":"handleTap:",
                       "rows": [
                                {
@@ -155,7 +155,7 @@
                       "color": "#EEEEEE"
                       },
                       "action":"handleTap:",
-                      "tag":3,
+                      "tag":1003,
                       "rows": [
                                {
                                "size": "fill",
@@ -206,7 +206,7 @@
                       "thick": 1,
                       "color": "#EEEEEE"
                       },
-                      "tag":3,
+                      "tag":1003,
                       "action":"handleTap:",
                       "rows": [
                                {
@@ -252,7 +252,7 @@
                       "thick": 1,
                       "color": "#EEEEEE"
                       },
-                      "tag":3,
+                      "tag":1003,
                       "action":"handleTap:",
                       "rows": [
                                {

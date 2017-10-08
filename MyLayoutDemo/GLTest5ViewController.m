@@ -60,7 +60,7 @@ static NSInteger sPartTag5 = 1004;
 -(void)bindView
 {
     [self.rootLayout removeAllSubviews];
-
+    
     //第一部分
     UIImageView *backImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image2"]];
     UILabel *headTitleLabel = [UILabel new];
@@ -104,7 +104,7 @@ static NSInteger sPartTag5 = 1004;
     titleLabel.font = [CFTool font:24];
     titleLabel.textColor = UIColor.blackColor;
     titleLabel.adjustsFontSizeToFitWidth = YES;
-
+    
     [self.rootLayout addViewGroup:@[titleLabel] withActionData:nil to:sPartTag3];
     
     
@@ -123,7 +123,7 @@ static NSInteger sPartTag5 = 1004;
         titleLabel.font = [CFTool font:13];
         titleLabel.textColor = UIColor.blackColor;
         titleLabel.numberOfLines = 2.f;
-
+        
         [self.rootLayout addViewGroup:@[backImageView,titleLabel] withActionData:nil to:sPartTag4];
     }
     
