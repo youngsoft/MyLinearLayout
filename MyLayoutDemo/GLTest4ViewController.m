@@ -16,10 +16,49 @@ static NSInteger sPartTag2 = 1001;
 static NSInteger sPartTag3 = 1002;
 static NSInteger sPartTag4 = 1003;
 
+// 第2部分模型
+@interface GLTest4Model2 : NSObject
 
+@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic, copy) NSString *imageName;
+
+@end
+
+@implementation  GLTest4Model2
+
+@end
+
+// 第4部分模型
+@interface GLTest4Model4 : NSObject
+
+@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic, copy) NSString *subTitle;
+
+@property (nonatomic, copy) NSArray *imageNames;
+
+@property (nonatomic, copy) NSString *actionDatas;
+
+@property (nonatomic, strong) NSNumber *hasSales;
+
+@end
+
+@implementation  GLTest4Model4
+
+@end
+
+
+
+
+//............................分割线.............................
 @interface GLTest4ViewController()
 
 @property(nonatomic, weak) MyGridLayout *rootLayout;
+
+@property (nonatomic, strong) NSMutableArray<GLTest4Model2 *> *part2Datas;
+
+@property (nonatomic, strong) NSMutableArray<GLTest4Model4 *> *part4Datas;
 
 @end
 
@@ -39,6 +78,102 @@ static NSInteger sPartTag4 = 1003;
     
     [self bindView];
 }
+
+- (NSMutableArray<GLTest4Model2 *> *)part2Datas
+{
+    if(_part2Datas == nil) {
+        _part2Datas = [NSMutableArray<GLTest4Model2 *> array];
+        NSArray *dataSource = @[
+                                @{
+                                    @"title":@"天猫",
+                                    @"imageName":@"head2"
+                                },
+                                @{
+                                    @"title":@"聚划算",
+                                    @"imageName":@"head2"
+                                },
+                                @{
+                                    @"title":@"天猫",
+                                    @"imageName":@"head2"
+                                },
+                                @{
+                                    @"title":@"外卖",
+                                    @"imageName":@"head2"
+                                },
+                                @{
+                                    @"title":@"天猫超市",
+                                    @"imageName":@"head2"
+                                },
+                                @{
+                                    @"title":@"充值中心",
+                                    @"imageName":@"head2"
+                                },
+                                @{
+                                    @"title":@"飞猪旅行",
+                                    @"imageName":@"head2"
+                                },
+                                @{
+                                    @"title":@"领金币",
+                                    @"imageName":@"head2"
+                                },
+                                @{
+                                    @"title":@"拍卖",
+                                    @"imageName":@"head2"
+                                },
+                                @{
+                                    @"title":@"分类",
+                                    @"imageName":@"head2"
+                                }
+                                ];
+        for(NSDictionary *dic in dataSource) {
+            GLTest4Model2 *model = [GLTest4Model2 new];
+            [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [model setValue:obj forKey:key];
+            }];
+            [_part2Datas addObject:model];
+        }
+    }
+    return _part2Datas;
+}
+
+- (NSMutableArray<GLTest4Model4 *> *)part4Datas
+{
+    if(_part4Datas == nil) {
+        _part4Datas = [NSMutableArray<GLTest4Model4 *> array];
+        NSArray *dataSource = @[
+                                    @{
+                                        @"title":@"海抢购",
+                                        @"subTitle":@"01:29:45",
+                                        @"imageNames":@[@"p1-33",@"p1-34"],
+                                        @"actionDatas":@"bb"
+                                     },
+                                    @{
+                                        @"title":@"有好货",
+                                        @"subTitle":@"高颜值美物",
+                                        @"imageNames":@[@"p1-33",@"p1-34"],
+                                        @"actionDatas":@"cc"
+                                    },
+                                    @{
+                                        @"title":@"必买清单",
+                                        @"subTitle":@"都整理好",
+                                        @"imageNames":@[@"p1-33",@"p1-34"],
+                                        @"actionDatas":@"dd",
+                                        @"hasSales":@(YES)
+                                    }
+                                ];
+        for(NSDictionary *dic in dataSource) {
+            GLTest4Model4 *model = [GLTest4Model4 new];
+            [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [model setValue:obj forKey:key];
+            }];
+            [_part4Datas addObject:model];
+        }
+    }
+    return _part4Datas;
+}
+
+
+
 
 - (void)test1
 {
@@ -82,31 +217,19 @@ static NSInteger sPartTag4 = 1003;
     }
     {
         //第二部分
-        NSArray *imageNames = @[
-                                @"head2",@"head2",@"head2",@"head2",
-                                @"head2",@"head2",@"head2",@"head2",
-                                @"head2",@"head2"
-                                ];
-        NSArray *titles = @[
-                            @"天猫",@"聚划算",@"天猫",@"外卖",
-                            @"天猫超市",@"充值中心",@"飞猪旅行",@"领金币",
-                            @"拍卖",@"分类"
-                            ];
-        NSMutableArray *temp = [NSMutableArray arrayWithCapacity:titles.count];
-        for (int i = 0; i < imageNames.count; i++) {
-            NSString *title = [titles objectAtIndex:i];
-            NSString *imageName = [imageNames objectAtIndex:i];
+        NSMutableArray *temp = [NSMutableArray arrayWithCapacity:self.part2Datas.count];
+        for (GLTest4Model2 *model in self.part2Datas) {
             MyFloatLayout *layout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
             layout.myHorzMargin = 0.f;
             [temp addObject:layout];
-            UIImageView *titleImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName] highlightedImage:[UIImage imageNamed:imageName]];
+            UIImageView *titleImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:model.imageName] highlightedImage:[UIImage imageNamed:model.imageName]];
             titleImageView.weight = 1.f;
             titleImageView.myHeight = 50.f;
             [layout addSubview:titleImageView];
             
             UILabel *titleLabel = [UILabel new];
             titleLabel.textAlignment = NSTextAlignmentCenter;
-            titleLabel.text = title;
+            titleLabel.text = model.title;
             titleLabel.font = [CFTool font:12];
             titleLabel.textColor = [CFTool color:4];
             [layout addSubview:titleLabel];
@@ -159,42 +282,68 @@ static NSInteger sPartTag4 = 1003;
     }
     {
         //第四部分
-        NSArray *titles = @[@"海抢购",@"有好货",@"必买清单"];
-        NSArray *subTitles = @[@"01:29:45",@"高颜值美物",@"都整理好"];
-        NSArray *imageNames = @[@[@"p1-33",@"p1-34"],@[@"p1-33",@"p1-34"],@[@"p1-33",@"p1-34"]];
-        NSArray *actionDatas = @[@"bb",@"cc",@"dd"];
-        NSArray *hasSales = @[@(NO),@(NO),@(YES)];
-        for(int i = 0 ; i < titles.count; i++) {
-            NSString *title = [titles objectAtIndex:i];
-            NSString *subTitle = [subTitles objectAtIndex:i];
-            NSArray *tempImages = [imageNames objectAtIndex:i];
-            NSString *actionData = [actionDatas objectAtIndex:i];
-            NSString *hasSale = [hasSales objectAtIndex:i];
-            
+        for(GLTest4Model4 *model in self.part4Datas) {
             NSMutableArray *temp = [NSMutableArray array];
             UILabel *titleLabel = [UILabel new];
-            titleLabel.text = title;
+            titleLabel.text = model.title;
             titleLabel.font = [CFTool font:16];
             titleLabel.textColor = [CFTool color:4];
             titleLabel.adjustsFontSizeToFitWidth = YES;
             [temp addObject:titleLabel];
             
             UILabel *subTitleLabel = [UILabel new];
-            subTitleLabel.text = subTitle;
+            subTitleLabel.text = model.subTitle;
             subTitleLabel.font = [CFTool font:13];
             subTitleLabel.textColor = [CFTool color:5];
             subTitleLabel.adjustsFontSizeToFitWidth = YES;
             [temp addObject:subTitleLabel];
-            for (NSString *imageName in tempImages) {
+            for (NSString *imageName in model.imageNames) {
                 UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
                 [temp addObject:imageView];
             }
-            if ([hasSale boolValue]) {
+            if ([model.hasSales boolValue]) {
                 UIImageView *optionalView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
                 [temp addObject:optionalView];
             }
-            [self.rootLayout addViewGroup:temp withActionData:actionData to:sPartTag4];
+            [self.rootLayout addViewGroup:temp withActionData:model.actionDatas to:sPartTag4];
         }
+        
+//        NSArray *titles = @[@"海抢购",@"有好货",@"必买清单"];
+//        NSArray *subTitles = @[@"01:29:45",@"高颜值美物",@"都整理好"];
+//        NSArray *imageNames = @[@[@"p1-33",@"p1-34"],@[@"p1-33",@"p1-34"],@[@"p1-33",@"p1-34"]];
+//        NSArray *actionDatas = @[@"bb",@"cc",@"dd"];
+//        NSArray *hasSales = @[@(NO),@(NO),@(YES)];
+//        for(int i = 0 ; i < titles.count; i++) {
+//            NSString *title = [titles objectAtIndex:i];
+//            NSString *subTitle = [subTitles objectAtIndex:i];
+//            NSArray *tempImages = [imageNames objectAtIndex:i];
+//            NSString *actionData = [actionDatas objectAtIndex:i];
+//            NSString *hasSale = [hasSales objectAtIndex:i];
+//
+//            NSMutableArray *temp = [NSMutableArray array];
+//            UILabel *titleLabel = [UILabel new];
+//            titleLabel.text = title;
+//            titleLabel.font = [CFTool font:16];
+//            titleLabel.textColor = [CFTool color:4];
+//            titleLabel.adjustsFontSizeToFitWidth = YES;
+//            [temp addObject:titleLabel];
+//
+//            UILabel *subTitleLabel = [UILabel new];
+//            subTitleLabel.text = subTitle;
+//            subTitleLabel.font = [CFTool font:13];
+//            subTitleLabel.textColor = [CFTool color:5];
+//            subTitleLabel.adjustsFontSizeToFitWidth = YES;
+//            [temp addObject:subTitleLabel];
+//            for (NSString *imageName in tempImages) {
+//                UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
+//                [temp addObject:imageView];
+//            }
+//            if ([hasSale boolValue]) {
+//                UIImageView *optionalView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
+//                [temp addObject:optionalView];
+//            }
+//            [self.rootLayout addViewGroup:temp withActionData:actionData to:sPartTag4];
+//        }
     }
 }
 
