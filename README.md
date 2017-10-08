@@ -626,24 +626,24 @@ Then, run the following command:
 
 1. Create a `Cartfile` file.
 
-	```
-	github "youngsoft/MyLinearLayout"
-	```
+    ```
+    github "youngsoft/MyLinearLayout"
+    ```
 2. Run `carthage update`.
  
 3. On your application targets’ “General” settings tab, in the “Linked Frameworks and Libraries” section, drag and drop `MyLayout` framework from the Carthage/Build folder on disk.
 
 4. On your application targets’ “Build Phases” settings tab, click the “+” icon and choose “New Run Script Phase”. Create a Run Script in which you specify your shell (ex: bin/sh), add the following contents to the script area below the shell:
 
-	```
-	/usr/local/bin/carthage copy-frameworks
-	```
+    ```
+    /usr/local/bin/carthage copy-frameworks
+    ```
 
-	and add the path under “Input Files”, e.g.:
+    and add the path under “Input Files”, e.g.:
 
-	```
-	$(SRCROOT)/Carthage/Build/iOS/MyLayout.framework
-	```
+    ```
+    $(SRCROOT)/Carthage/Build/iOS/MyLayout.framework
+    ```
 
 
 

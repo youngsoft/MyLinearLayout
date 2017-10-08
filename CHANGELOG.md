@@ -8,9 +8,9 @@
 #### Added
 1. 添加新的布局种类：**栅格布局(MyGridLayout)**。栅格布局是一种将矩形区域划分为多个子矩形区域，并将这个划分一直持续下去的机制，然后再将子视图填充到对应的栅格区域里面的一种布局视图。栅格布局特别适合于动态布局，布局样式可以从服务器动态下发，并且可以用JSON格式的语言来描述这种布局结构，具体请参考新增加的栅格布局和对应的DEMO。以及对应的说明文档：[栅格布局介绍](http://bicyclering.com/2017/09/01/layout/)
 2. 添加了对**基线对齐baseline**的支持[issue:#43](https://github.com/youngsoft/MyLinearLayout/issues/43)，目前只有**水平线性布局(MyLinearLayout)**和**相对布局(MyRelativeLayout)**支持基线对齐。
-	1. 在**MyGravity**中添加了`MyGravity_Vert_Baseline`的枚举定义来支持线性布局的基线对齐，并且在线性布局中添加了一个属性：`baselineBaseView`来指定某个基线基准视图。同时在布局视图的gravity属性中支持对`MyGravity_Vert_Baseline`的设置。具体例子参考：[LLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/LLTest1ViewController.m)
+    1. 在**MyGravity**中添加了`MyGravity_Vert_Baseline`的枚举定义来支持线性布局的基线对齐，并且在线性布局中添加了一个属性：`baselineBaseView`来指定某个基线基准视图。同时在布局视图的gravity属性中支持对`MyGravity_Vert_Baseline`的设置。具体例子参考：[LLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/LLTest1ViewController.m)
 
-	2. 在UIView的扩展属性中增加了一个扩展属性：`baselinePos`。你可以在相对布局中的子视图使用这个属性来进行基线对齐的设置。具体例子请参考：[RLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/RLTest1ViewController.m)
+    2. 在UIView的扩展属性中增加了一个扩展属性：`baselinePos`。你可以在相对布局中的子视图使用这个属性来进行基线对齐的设置。具体例子请参考：[RLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/RLTest1ViewController.m)
 
 3. 添加对Apple TV_OS 的支持，您可以用MyLayout来开发apple TV方面的应用。
 4. **MyLayoutPos**中增加了一个特殊的值`safeAreaMargin`用来支持对iOS11应用的适配。
@@ -137,7 +137,7 @@ MyBaseLayout|trailingBorderline|rightBorderline|leftBorderline
 MyGravity|MyGravity_Horz_Leading|MyGravity_Horz_Left|MyGravity_Horz_Right
 MyGravity|MyGravity_Horz_Trailing|MyGravity_Horz_Right|MyGravity_Horz_Left
 
-	如果您的界面布局不需要考虑RTL以及对阿拉伯国际的支持则不需要使用上述新添加的属性。
+    如果您的界面布局不需要考虑RTL以及对阿拉伯国际的支持则不需要使用上述新添加的属性。
 
 2. 添加了UIView扩展新属性`wrapContentSize`用来简化对`wrapContentHeight和wrapContentWidth`的设置。这个属性尤其对`UILabel`有用，表示视图的尺寸由内容自适用。
 3. 实现了对UILabel的`text`和`attributedText`进行设置后自动布局的功能，老版本的代码中每次设置完毕text值后要调用一下sizeToFit来激发布局，新版本自动添加了这个功能，使得不需要明确调用sizeToFit了。但是这样的前提是您必须对UILabel设置了wrapContentHeight或者wrapContentWidth。
@@ -163,10 +163,10 @@ MyAdjustScrollViewContentSizeMode|MyAdjustScrollViewContentSizeModeAuto|MyLayout
 MyAdjustScrollViewContentSizeMode|MyAdjustScrollViewContentSizeModeNo|MyLayoutAdjustScrollViewContentSizeModeNo
 MyAdjustScrollViewContentSizeMode|MyAdjustScrollViewContentSizeModeYes|MyLayoutAdjustScrollViewContentSizeModeYes
 
-	如果您要替换掉所有老方法和属性(建议替换)，则您可以按照如下步骤来完成代码的替换工作：
+    如果您要替换掉所有老方法和属性(建议替换)，则您可以按照如下步骤来完成代码的替换工作：
  
- 			1. 查找所有：MyLayoutViewOrientation_  并替换为MyOrientation_  (选择Containning, 查找后选择preview，然后把除MyLayout库之外的其他都替换掉）
- 			2. 查找所有：MyLayoutAdjustScrollViewContentSizeMode  并替换为MyAdjustScrollViewContentSizeMode  (选择Containning, 查找后选择preview，然后把除MyLayout库之外的其他都替换掉）
+             1. 查找所有：MyLayoutViewOrientation_  并替换为MyOrientation_  (选择Containning, 查找后选择preview，然后把除MyLayout库之外的其他都替换掉）
+             2. 查找所有：MyLayoutAdjustScrollViewContentSizeMode  并替换为MyAdjustScrollViewContentSizeMode  (选择Containning, 查找后选择preview，然后把除MyLayout库之外的其他都替换掉）
 
 
 2. 新版本优化了布局库的子视图构建性能和布局性能。下面表格是新旧版本各布局视图内单个子视图在iPhone6真机设备下的构建和布局时长值(单位是毫秒ms)
@@ -181,9 +181,9 @@ MyFloatLayout|0.148|0.147|-0.48%||0.055|0.117|113%
 MyTableLayout\*|||
 MyPathLayout\*|||
 
-	这里没有提供表格布局和路径布局数据是因为表格布局就是一种线性套线性的线性布局，路径布局则没有进行多少优化。下面的一个表格则是单个视图分别在MyLayout,frame,AutoLayout,Masonry,UIStackView5种布局体系下的构建和布局时长对比值。
-	
-create time|Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+    这里没有提供表格布局和路径布局数据是因为表格布局就是一种线性套线性的线性布局，路径布局则没有进行多少优化。下面的一个表格则是单个视图分别在MyLayout,frame,AutoLayout,Masonry,UIStackView5种布局体系下的构建和布局时长对比值。
+    
+create time|Frame|MyLayout|AutoLayout|Masonry|UIStackView    
 -------|-----|------|---------|----------|-----
 MyLinearLayout|0.08|0.164|0.219|0.304|0.131
 MyFrameLayout|0.05|0.149|0.209|0.273|0.131
@@ -193,7 +193,7 @@ MyFloatLayout|0.044|0.148|0.203|0.250|0.131
 
 
 
-layout time |Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+layout time |Frame|MyLayout|AutoLayout|Masonry|UIStackView    
 -------|-----|-------|--------|--------|-------
 MyLinearLayout|0|0.049|0.269|0.269|0.272
 MyFrameLayout|0|0.042|0.243|0.243|0.272
@@ -266,10 +266,10 @@ MyTableLayout|colSpacing|subviewHSpace
 
  如果您要替换掉所有老方法和属性(建议替换)，则您可以按照如下步骤来完成代码的替换工作：
  
- 	1. 查找所有：MyMarginGravity_   并替换为MyGravity_  (选择Containning, 查找后选择preview，然后把除MyLayout库之外的其他都替换掉）
- 	2. 把所有.myLeftMargin, .myRightMargin, .myTopMargin, .myBottomMargin,  .myCenterXOffset, .myCenterYOffset, .myCenterOffset 分别替换为.myLeft, .myRight, .myTop, .myBottom, .myCenterX, .myCenterY, .myCenter (选择Matching模式)
- 	3. 把所有.widthDime替换为.widthSize, .heightDime替换为.heightSize (选择Matching模式)
- 	4. 把所有.subviewMargin替换为.subviewSpace, .subviewVertMargin替换为.subviewVSpace, .subviewHorzMargin替换为.subviewHSpace  (选择Matching模式)
+     1. 查找所有：MyMarginGravity_   并替换为MyGravity_  (选择Containning, 查找后选择preview，然后把除MyLayout库之外的其他都替换掉）
+     2. 把所有.myLeftMargin, .myRightMargin, .myTopMargin, .myBottomMargin,  .myCenterXOffset, .myCenterYOffset, .myCenterOffset 分别替换为.myLeft, .myRight, .myTop, .myBottom, .myCenterX, .myCenterY, .myCenter (选择Matching模式)
+     3. 把所有.widthDime替换为.widthSize, .heightDime替换为.heightSize (选择Matching模式)
+     4. 把所有.subviewMargin替换为.subviewSpace, .subviewVertMargin替换为.subviewVSpace, .subviewHorzMargin替换为.subviewHSpace  (选择Matching模式)
     5. 把所有的MyBorderLineDraw替换为MyBorderline（选择Matching模式 并注意MyBaseLayout.h中的不要替换）
     6. 把.leftBorderLine替换为.leftBorderline,  .rightBorderLine替换为.rightBorderline,  .topBorderLine替换为.topBorderline,  .bottomBorderLine替换为.bottomBorderline,  .IntelligentBorderLine替换为.intelligentBorderline, .notUseIntelligentBorderLine替换为.notUseIntelligentBorderline（选择Matching模式）
     7. 把averageSubviews:方法替换为equalizeSubviews: 把averageMargin:替换为equalizeSubviewsSpace: (注意不要替换MyLinearLayout.h和MyLinearLayout.m中的部分)
@@ -553,15 +553,15 @@ MyTableLayout|colSpacing|subviewHSpace
 7.  修正了其他的BUG。
 
 ## [V1.1.1]
-1.	新增加了一个mySize属性可以设置布局的宽度和高度，相当于同时设置myWidth,myHeight
-2.	修正了和iOS的AutoLayout结合使用时可能出现的布局定位不正确的问题，这个版本可以同时和frame,AutoLayout布局进行混合使用。
-3.	修正了其他的小问题，以及注释进行了优化和完整。
-4.	将原来的leftMargin,rightMargin,topMargin,bottomMargin,width,height,centerXOffset,centerYOffset,centerOffset这几个方法进行了命名冲突兼容，新版本都在前面增加了my前缀，如果要保持老版本请定义宏：`  #define MY_USEOLDMETHODDEF 1 ` 和`  #define MY_USEOLDMETHODNOWARNING 1 `。
-5.	将原来的的MarginGravity枚举类型和LineViewOrientation枚举类型重新定义为：MyMarginGravity和MyLayoutViewOrientation。里面的枚举值也进行重新定义，但可以定义宏：`  #define MY_USEOLDENUMDEF 1 `和`  #define MY_USEOLDENUMNOWARNING 1 `来兼容老版本。
+1.    新增加了一个mySize属性可以设置布局的宽度和高度，相当于同时设置myWidth,myHeight
+2.    修正了和iOS的AutoLayout结合使用时可能出现的布局定位不正确的问题，这个版本可以同时和frame,AutoLayout布局进行混合使用。
+3.    修正了其他的小问题，以及注释进行了优化和完整。
+4.    将原来的leftMargin,rightMargin,topMargin,bottomMargin,width,height,centerXOffset,centerYOffset,centerOffset这几个方法进行了命名冲突兼容，新版本都在前面增加了my前缀，如果要保持老版本请定义宏：`  #define MY_USEOLDMETHODDEF 1 ` 和`  #define MY_USEOLDMETHODNOWARNING 1 `。
+5.    将原来的的MarginGravity枚举类型和LineViewOrientation枚举类型重新定义为：MyMarginGravity和MyLayoutViewOrientation。里面的枚举值也进行重新定义，但可以定义宏：`  #define MY_USEOLDENUMDEF 1 `和`  #define MY_USEOLDENUMNOWARNING 1 `来兼容老版本。
 
 
 ## [V1.1.0]
-1. 增加了新布局流式布局MyFlowLayout。	 
+1. 增加了新布局流式布局MyFlowLayout。     
 2. 线性布局添加了gravity停靠设置的屏幕水平居中和屏幕垂直居中的功能。  
 3. 添加了设置布局视图背景图片backgroundImage和高亮背景图片highlightedBackgroundImage的功能。
 4. 添加了视图偏移约束的最大max最小值min限制，以及尺寸约束时的最大max最小值min限制。

@@ -43,7 +43,7 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 
 下面两张表格分别列表每个子视图的建立消耗的时间和布局消耗时间，单位为：毫秒
 
-create time(ms)/per subview|Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+create time(ms)/per subview|Frame|MyLayout|AutoLayout|Masonry|UIStackView    
 -------|-----|-------|--------|--------|-------
 MyLinearLayout|0.08|0.164|0.219|0.304|0.131
 MyFrameLayout|0.05|0.149|0.209|0.273|0.131
@@ -53,7 +53,7 @@ MyFloatLayout|0.044|0.148|0.203|0.250|0.131
 
 
 
-layout time(ms)/per subview |Frame|MyLayout|AutoLayout|Masonry|UIStackView	
+layout time(ms)/per subview |Frame|MyLayout|AutoLayout|Masonry|UIStackView    
 -----|-------|--------|-------|---------|------
 MyLinearLayout|0|0.049|0.269|0.269|0.272
 MyFrameLayout|0|0.042|0.243|0.243|0.272
@@ -413,7 +413,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 ```
 
 
-	
+    
 ### 浮动布局MyFloatLayout
 > 等价于css中的float定位。
 
@@ -635,21 +635,21 @@ $ pod install
 
 1.创建一个 `Cartfile` 文件，内容如下：
 
-	github "youngsoft/MyLinearLayout"
-	
+    github "youngsoft/MyLinearLayout"
+    
 2.终端执行`carthage update`。
  
 3.点击“General”按钮，然后把`Carthage/Build/iOS/MyLayout.framework`拖拽到到“Linked Frameworks and Libraries”栏目里。
 
 4.点击“Build Phases”按钮, 然后点击左上角的加号 “+” 选择“New Run Script Phase”，在`Shell`下面填写下面内容:
 
-	/usr/local/bin/carthage copy-frameworks
-	
+    /usr/local/bin/carthage copy-frameworks
+    
   然后在 “Input Files”栏目加上：
 
-	
-	$(SRCROOT)/Carthage/Build/iOS/MyLayout.framework
-	
+    
+    $(SRCROOT)/Carthage/Build/iOS/MyLayout.framework
+    
 
 
 
