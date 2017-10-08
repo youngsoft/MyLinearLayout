@@ -8,24 +8,38 @@
                      {
                      "size":"40%",
                      "anchor":true,
-                     "tag":222,
+                     "tag":1000,
                      "padding":"{0,20,0,20}",
                      "rows":[
                              {
-                             "size":35,
-                             "anchor":"true",
-                             "rows":[
-                                     {
-                                     "size":"fill"
-                                     }
-                                     ]
+                             "size":35
                              },
                              {
                              "size":30,
-                             "anchor":"true",
+                             }
+                             ]
+                     },
+                     {
+                     "size":"30%",
+                     "space":5,
+                     "rows":[
+                             {
+                             "size":"fill",
+                             "tag":1001,
+                             "anchor":true,
                              "rows":[
                                      {
-                                     "size":"fill"
+                                     "size":30
+                                     }
+                                     ]
+                             },
+                             {
+                             "size":"fill",
+                             "anchor":true,
+                             "tag":1001,
+                             "rows":[
+                                     {
+                                     "size":30
                                      }
                                      ]
                              }
@@ -37,8 +51,8 @@
                      "rows":[
                              {
                              "size":"fill",
-                             "tag":333,
-                             "anchor":"true",
+                             "tag":1001,
+                             "anchor":true,
                              "rows":[
                                      {
                                      "size":30
@@ -47,34 +61,8 @@
                              },
                              {
                              "size":"fill",
-                             "anchor":"true",
-                             "tag":333,
-                             "rows":[
-                                     {
-                                     "size":30
-                                     }
-                                     ]
-                             }
-                             ]
-                     },
-                     {
-                     "size":"30%",
-                     "space":5,
-                     "rows":[
-                             {
-                             "size":"fill",
-                             "tag":333,
-                             "anchor":"true",
-                             "rows":[
-                                     {
-                                     "size":30
-                                     }
-                                     ]
-                             },
-                             {
-                             "size":"fill",
-                             "anchor":"true",
-                             "tag":333,
+                             "anchor":true,
+                             "tag":1001,
                              "rows":[
                                      {
                                      "size":30
@@ -87,8 +75,6 @@
              },
              {
              "size":"fill",
-             "anchor":true,
-             "tag":111,
              "top-borderline": {
              "thick": 10,
              "offset":5,
@@ -99,7 +85,7 @@
              "rows":[
                      {
                      "size":40,
-                     "tag":1
+                     "tag":1002
                      },
                      {
                      "size":"fill",
@@ -108,48 +94,28 @@
                              {
                              "size":"fill",
                              "anchor":true,
-                             "tag":2,
+                             "tag":1003,
                              "rows":[
                                      {
                                      "size":"fill",
                                      "placeholder":true
                                      },
                                      {
-                                     "size":50,
-                                     "anchor":true,
-                                     "cols":[
-                                             {
-                                             "placeholder":true,
-                                             "size":"50%"
-                                             },
-                                             {
-                                             "size":"50%"
-                                             }
-                                             ]
+                                     "size":50
                                      }
                                      ]
                              },
                              {
                              "size":"fill",
                              "anchor":true,
-                             "tag":2,
+                             "tag":1003,
                              "rows":[
                                      {
                                      "size":"fill",
                                      "placeholder":true
                                      },
                                      {
-                                     "size":50,
-                                     "anchor":true,
-                                     "cols":[
-                                             {
-                                             "placeholder":true,
-                                             "size":"50%"
-                                             },
-                                             {
-                                             "size":"50%"
-                                             }
-                                             ]
+                                     "size":50
                                      }
                                      ]
                              }
@@ -164,6 +130,7 @@
                      },
                      {
                      "size":40,
+                     "tag":1004,
                      "padding":"{10,5,10,5}",
                      "cols":[
                          {

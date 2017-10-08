@@ -139,7 +139,7 @@
     rootLayout.tag = 1000;
     
     
-    NSString *path =  [NSBundle.mainBundle pathForResource:@"GridLayoutDemo4.geojson" ofType:nil];
+    NSString *path =  [NSBundle.mainBundle pathForResource:@"GridLayoutDemo4.json" ofType:nil];
     NSString *content = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     
    id temp = [NSJSONSerialization JSONObjectWithData:[content dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];

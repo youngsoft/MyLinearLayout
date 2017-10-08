@@ -90,6 +90,7 @@ typedef enum : unsigned short {
     MyGravity_Vert_Bottom = 4 << 8,          /**下边停靠或者下边对齐*/
     MyGravity_Vert_Window_Center = 8 << 8,   /**窗口垂直中心停靠，表示在屏幕窗口的垂直中心停靠*/
     MyGravity_Vert_Between = 16 << 8,        /**垂直间距拉伸*/
+    MyGravity_Vert_Baseline = 32 << 8,  /**基线对齐,只支持水平线性布局，指定基线对齐必须要指定出一个基线标准的子视图*/
     MyGravity_Vert_Fill = MyGravity_Vert_Top | MyGravity_Vert_Center | MyGravity_Vert_Bottom,  /**垂直高度填充*/
     MyGravity_Vert_Mask = 0x00FF,            /**垂直掩码，用来获取垂直方向的枚举值*/
 
@@ -101,10 +102,6 @@ typedef enum : unsigned short {
     
     
     MyGravity_Between = MyGravity_Horz_Between | MyGravity_Vert_Between,  /**全部拉伸*/
-    
-    //基线对齐，只用在水平线性布局和垂直流式布局中，暂时不支持。
-    //基线对齐，只支持水平线性布局和垂直流式布局，指定基线对齐必须要指定出一个基线标准的子视图，如果不指定默认是第一个。
-    MyGravity_Vert_Baseline = 32 << 8,  /**基线对齐*/
     
     
     //为了更正确的统一命名规范以及和TangramKit保持一致，下列属性定义设置为过期！！。您在更新版本后只需要统一将MyMarginGravity替换为MyGravity 即可

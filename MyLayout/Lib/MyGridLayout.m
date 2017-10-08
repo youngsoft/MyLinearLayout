@@ -957,8 +957,7 @@
             if (viewGroupIndex.integerValue < viewGroupArray.count)
             {
                 //这里将动作的数据和栅格进行关联。
-                if (viewGroupArray[viewGroupIndex.integerValue].actionData != nil)
-                    grid.actionData = viewGroupArray[viewGroupIndex.integerValue].actionData;
+                grid.actionData = viewGroupArray[viewGroupIndex.integerValue].actionData;
                 
                 tagSbvEnumerator =  viewGroupArray[viewGroupIndex.integerValue].viewGroup.objectEnumerator;
                 [tagViewGroupIndexDict setObject:@(viewGroupIndex.integerValue + 1) forKey:key];
@@ -973,7 +972,6 @@
         else
         {
             tagSbvEnumerator = nil;
-            NSLog(@"0");
         }
     }
 
