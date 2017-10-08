@@ -180,7 +180,16 @@ static NSInteger sPartTag4 = 1003;
     /*
        这个例子演示一个通过JSON格式描述的栅格来构建栅格布局的示例。
      */
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+    
+     if (@available(iOS 11.0, *))
+     {
+     }
+     else
+     {
+         self.edgesForExtendedLayout = UIRectEdgeNone;
+     }
+    
+    
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.myMargin = MyLayoutPos.safeAreaMargin;
