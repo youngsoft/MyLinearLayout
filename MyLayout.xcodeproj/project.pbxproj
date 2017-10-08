@@ -153,6 +153,7 @@
 		208157C21F5A886300E945B6 /* MyLayoutDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 208157C01F5A886300E945B6 /* MyLayoutDelegate.h */; };
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
+		20B46A8D1F8A79C300826372 /* layoutdemo8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 20B46A8C1F8A79C300826372 /* layoutdemo8.gif */; };
 		20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F783551F60399700BE5B31 /* GLTest3ViewController.m */; };
 		4411977B1F6AE78E00C22557 /* GridLayoutDemo5.json in Resources */ = {isa = PBXBuildFile; fileRef = 4411977A1F6AE78E00C22557 /* GridLayoutDemo5.json */; };
 		444B71911F6A3E3F00331872 /* GLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 444B71901F6A3E3F00331872 /* GLTest5ViewController.m */; };
@@ -375,6 +376,7 @@
 		208157BC1F586AA700E945B6 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		208157C01F5A886300E945B6 /* MyLayoutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDelegate.h; sourceTree = "<group>"; };
 		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
+		20B46A8C1F8A79C300826372 /* layoutdemo8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo8.gif; sourceTree = "<group>"; };
 		20F783541F60398C00BE5B31 /* GLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest3ViewController.h; sourceTree = "<group>"; };
 		20F783551F60399700BE5B31 /* GLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest3ViewController.m; sourceTree = "<group>"; };
 		4411977A1F6AE78E00C22557 /* GridLayoutDemo5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayoutDemo5.json; sourceTree = "<group>"; };
@@ -682,6 +684,7 @@
 				18D3C9C51EDF0AB500D3DE43 /* layoutdemo5.gif */,
 				18D3C9C61EDF0AB500D3DE43 /* layoutdemo6.gif */,
 				18D3C9C71EDF0AB500D3DE43 /* layoutdemo7.gif */,
+				20B46A8C1F8A79C300826372 /* layoutdemo8.gif */,
 				18D3C9C81EDF0AB500D3DE43 /* ll.png */,
 				18D3C9C91EDF0AB500D3DE43 /* MyLayout.png */,
 				18D3C9CA1EDF0AB500D3DE43 /* MyLayoutClass.png */,
@@ -978,6 +981,7 @@
 				18D3C9D21EDF0AB500D3DE43 /* layoutdemo1.gif in Resources */,
 				18D3C9D61EDF0AB500D3DE43 /* layoutdemo5.gif in Resources */,
 				18D3C9DA1EDF0AB500D3DE43 /* MyLayout.png in Resources */,
+				20B46A8D1F8A79C300826372 /* layoutdemo8.gif in Resources */,
 				18D3C9B41EDF0A5A00D3DE43 /* LaunchScreen.xib in Resources */,
 				18D3C9D51EDF0AB500D3DE43 /* layoutdemo4.gif in Resources */,
 				205F9EBA1F7AA5710034732C /* gl.png in Resources */,
