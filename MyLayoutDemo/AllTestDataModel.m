@@ -17,3 +17,9 @@
 
 
 @end
+
+
+@implementation AllTest9DataModel
+
+
+@end

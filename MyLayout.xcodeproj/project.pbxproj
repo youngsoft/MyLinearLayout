@@ -136,6 +136,8 @@
 		18D3C9DE1EDF0AB500D3DE43 /* rl.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D3C9CD1EDF0AB500D3DE43 /* rl.png */; };
 		18D3C9DF1EDF0AB500D3DE43 /* tl.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D3C9CE1EDF0AB500D3DE43 /* tl.png */; };
 		18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D684551C4F423400A48BB4 /* MyLayoutTests.m */; };
+		200A26D91FA8A90300B06E7B /* AllTest9ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 200A26D81FA8A90300B06E7B /* AllTest9ViewController.m */; };
+		200A26DC1FA96B2400B06E7B /* AllTest9CollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 200A26DB1FA96B2400B06E7B /* AllTest9CollectionViewCell.m */; };
 		205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */ = {isa = PBXBuildFile; fileRef = 205642841F4CFF9B00E8BDDE /* MyBorderline.h */; };
 		205642871F4CFF9B00E8BDDE /* MyBorderline.m in Sources */ = {isa = PBXBuildFile; fileRef = 205642851F4CFF9B00E8BDDE /* MyBorderline.m */; };
 		205642881F4CFFB600E8BDDE /* MyBorderline.m in Sources */ = {isa = PBXBuildFile; fileRef = 205642851F4CFF9B00E8BDDE /* MyBorderline.m */; };
@@ -359,6 +361,10 @@
 		18D684001C4F421400A48BB4 /* MyLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayout.h; sourceTree = "<group>"; };
 		18D684541C4F423400A48BB4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D684551C4F423400A48BB4 /* MyLayoutTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutTests.m; sourceTree = "<group>"; };
+		200A26D71FA8A90300B06E7B /* AllTest9ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AllTest9ViewController.h; sourceTree = "<group>"; };
+		200A26D81FA8A90300B06E7B /* AllTest9ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AllTest9ViewController.m; sourceTree = "<group>"; };
+		200A26DA1FA96B2400B06E7B /* AllTest9CollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AllTest9CollectionViewCell.h; sourceTree = "<group>"; };
+		200A26DB1FA96B2400B06E7B /* AllTest9CollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AllTest9CollectionViewCell.m; sourceTree = "<group>"; };
 		205642841F4CFF9B00E8BDDE /* MyBorderline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyBorderline.h; sourceTree = "<group>"; };
 		205642851F4CFF9B00E8BDDE /* MyBorderline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyBorderline.m; sourceTree = "<group>"; };
 		205642891F4D013D00E8BDDE /* MyGrid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyGrid.h; sourceTree = "<group>"; };
@@ -617,6 +623,8 @@
 				18D3C9821EDF084000D3DE43 /* AllTest7ViewController.m */,
 				18D3C9831EDF084000D3DE43 /* AllTest8ViewController.h */,
 				18D3C9841EDF084000D3DE43 /* AllTest8ViewController.m */,
+				200A26D71FA8A90300B06E7B /* AllTest9ViewController.h */,
+				200A26D81FA8A90300B06E7B /* AllTest9ViewController.m */,
 				18D3C9021EDF068200D3DE43 /* AllTestModel&View */,
 			);
 			name = IntegratedDemo;
@@ -633,6 +641,8 @@
 				18D3C96E1EDF082800D3DE43 /* AllTest2TableViewCell.m */,
 				18D3C96F1EDF082800D3DE43 /* AllTestDataModel.h */,
 				18D3C9701EDF082800D3DE43 /* AllTestDataModel.m */,
+				200A26DA1FA96B2400B06E7B /* AllTest9CollectionViewCell.h */,
+				200A26DB1FA96B2400B06E7B /* AllTest9CollectionViewCell.m */,
 			);
 			name = "AllTestModel&View";
 			sourceTree = "<group>";
@@ -1054,6 +1064,7 @@
 				18D3C95A1EDF07F800D3DE43 /* FOLTest1ViewController.m in Sources */,
 				182225D01E77E5930081AA4B /* MyLayoutPos.m in Sources */,
 				18D3C98B1EDF084000D3DE43 /* AllTest7ViewController.m in Sources */,
+				200A26DC1FA96B2400B06E7B /* AllTest9CollectionViewCell.m in Sources */,
 				18D3C9881EDF084000D3DE43 /* AllTest4ViewController.m in Sources */,
 				18D3C9131EDF074900D3DE43 /* LLTest3ViewController.m in Sources */,
 				18D3C95E1EDF07F800D3DE43 /* FOLTest5ViewController.m in Sources */,
@@ -1090,6 +1101,7 @@
 				18D3C98A1EDF084000D3DE43 /* AllTest6ViewController.m in Sources */,
 				18D3C9111EDF074900D3DE43 /* LLTest1ViewController.m in Sources */,
 				18D3C93E1EDF07C000D3DE43 /* FLLTest6ViewController.m in Sources */,
+				200A26D91FA8A90300B06E7B /* AllTest9ViewController.m in Sources */,
 				18D3C9281EDF07A700D3DE43 /* RLTest1ViewController.m in Sources */,
 				182225CA1E77E5930081AA4B /* MyLinearLayout.m in Sources */,
 				18D3C91C1EDF078200D3DE43 /* FLTest1ViewController.m in Sources */,
@@ -1349,6 +1361,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_CODE_COVERAGE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = BGQ8WB468K;
@@ -1367,6 +1380,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_CODE_COVERAGE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = BGQ8WB468K;

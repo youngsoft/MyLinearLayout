@@ -49,6 +49,7 @@
 #import "AllTest6ViewController.h"
 #import "AllTest7ViewController.h"
 #import "AllTest8ViewController.h"
+#import "AllTest9ViewController.h"
 
 
 #import "FOLTest1ViewController.h"
@@ -266,6 +267,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"❁2.Screen perfect fit - Demo2", @""),
                                                @"class":[AllTest8ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"❁3.UICollectionView height self-adaption", @""),
+                                               @"class":[AllTest9ViewController class]
                                                }
                                              ]
                             }

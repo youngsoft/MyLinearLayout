@@ -29,3 +29,10 @@
 @end
 
 
+//动态尺寸cell数据模型
+@interface AllTest9DataModel : NSObject
+
+@property(nonatomic, strong) NSString *title;          //标题
+@property(nonatomic, strong) NSString *subtitle;         //子标题
+
+@end

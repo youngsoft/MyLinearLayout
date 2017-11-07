@@ -92,8 +92,14 @@
      通过布局视图的sizeThatFits方法能够评估出UITableViewCell的动态高度。sizeThatFits并不会进行布局而只是评估布局的尺寸。
      因为cell的高度是自适应的，因此这里通过调用高度为wrap的布局视图的sizeThatFits来获取真实的高度。
      */
-    return [self.rootLayout sizeThatFits:targetSize];  //如果使用系统自带的分割线，请记得将返回的高度height+1
-
+    
+    if (@available(iOS 11.0, *)) {
+        //如果你的界面要支持横屏的话，因为iPhoneX的横屏左右有44的安全区域，所以这里要减去左右的安全区域的值，来作为布局宽度尺寸的评估值。
+        //如果您的界面不需要支持横屏，或者延伸到安全区域外则不需要做这个特殊处理，而直接使用else部分的代码即可。
+       return [self.rootLayout sizeThatFits:CGSizeMake(targetSize.width - self.safeAreaInsets.left - self.safeAreaInsets.right, targetSize.height)];
+    } else {
+        return [self.rootLayout sizeThatFits:targetSize];  //如果使用系统自带的分割线，请记得将返回的高度height+1
+    }
 }
 
 
@@ -112,7 +118,8 @@
      _rootLayout.widthSize.equalTo(self.contentView.widthSize);
      _rootLayout.wrapContentHeight = YES;
      */
-    _rootLayout.widthSize.equalTo(self.contentView.widthSize);
+   // _rootLayout.widthSize.equalTo(self.contentView.widthSize);
+    _rootLayout.myHorzMargin = MyLayoutPos.safeAreaMargin;
     _rootLayout.wrapContentHeight = YES;
     _rootLayout.wrapContentWidth = NO;
     [self.contentView addSubview:_rootLayout];  //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时用了myLeft和myRight来做边界的话，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
