@@ -6,7 +6,7 @@
 ## [V1.5.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.0)(2017/10/9)
 
 #### Added
-1. 添加新的布局种类：**栅格布局(MyGridLayout)**。栅格布局是一种将矩形区域划分为多个子矩形区域，并将这个划分一直持续下去的机制，然后再将子视图填充到对应的栅格区域里面的一种布局视图。栅格布局特别适合于动态布局，布局样式可以从服务器动态下发，并且可以用JSON格式的语言来描述这种布局结构，具体请参考新增加的栅格布局和对应的DEMO。以及对应的说明文档：[栅格布局介绍](http://bicyclering.com/2017/09/01/IOS-UIViewLayout-MyLinearLayout/#more)
+1. 添加新的布局种类：**栅格布局(MyGridLayout)**。栅格布局是一种将矩形区域划分为多个子矩形区域，并将这个划分一直持续下去的机制，然后再将子视图填充到对应的栅格区域里面的一种布局视图。栅格布局特别适合于动态布局，布局样式可以从服务器动态下发，并且可以用JSON格式的语言来描述这种布局结构，具体请参考新增加的栅格布局和对应的DEMO。以及对应的说明文档：[栅格布局介绍](http://bicyclering.com/2017/09/01/IOS-UIViewLayout-%E5%B8%83%E5%B1%80-MyLinearLayout/#more)
 2. 添加了对 **基线对齐baseline**的支持[issue:#43](https://github.com/youngsoft/MyLinearLayout/issues/43)，目前只有**水平线性布局(MyLinearLayout)**和**相对布局(MyRelativeLayout)**支持基线对齐。
     1. 在**MyGravity**中添加了`MyGravity_Vert_Baseline`的枚举定义来支持线性布局的基线对齐，并且在线性布局中添加了一个属性：`baselineBaseView`来指定某个基线基准视图。同时在布局视图的gravity属性中支持对`MyGravity_Vert_Baseline`的设置。具体例子参考：[LLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/LLTest1ViewController.m)
 
