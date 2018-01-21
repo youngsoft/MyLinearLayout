@@ -28,7 +28,7 @@ MyLayout是一套iOS界面视图布局框架。MyLayout的内核是基于对UIVi
 [http://www.jianshu.com/p/fbeb376584ed](http://www.jianshu.com/p/fbeb376584ed) 流式布局  
 [http://www.jianshu.com/p/0c075f2fdab2](http://www.jianshu.com/p/0c075f2fdab2) 浮动布局
 [http://www.jianshu.com/p/4ac229057396](http://www.jianshu.com/p/4ac229057396) 路径布局
-[http://bicyclering.com/2017/09/01/IOS-UIViewLayout-MyLinearLayout/#more](http://bicyclering.com/2017/09/01/IOS-UIViewLayout-MyLinearLayout/#more) 栅格布局
+[http://bicyclering.com/2017/09/01/IOS-UIViewLayout-%E5%B8%83%E5%B1%80-MyLinearLayout/#more](http://bicyclering.com/2017/09/01/IOS-UIViewLayout-%E5%B8%83%E5%B1%80-MyLinearLayout/#more) 栅格布局
 
 ### MyLayout的优势
 * MyLayout的实现内核是基于frame的设置，而不是对AutoLayout的封装。因此在使用上不会受到任何操作系统版本的限制。
