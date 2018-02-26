@@ -193,9 +193,22 @@ static CGFloat sColCountTag = -100000;
     {
         NSUInteger colCount = sColCountTag - rowView.colSize;
         if (rowsc.orientation == MyOrientation_Horz)
+        {
+#ifdef MY_USEPREFIXMETHOD
+            colsc.widthSize.myEqualTo(rowView.widthSize).myMultiply(1.0 / colCount).myAdd(-1 * rowView.subviewHSpace * (colCount - 1.0)/ colCount);
+#else
             colsc.widthSize.equalTo(rowView.widthSize).multiply(1.0 / colCount).add(-1 * rowView.subviewHSpace * (colCount - 1.0)/ colCount);
+#endif
+        }
         else
+        {
+#ifdef MY_USEPREFIXMETHOD
+            colsc.heightSize.myEqualTo(rowView.heightSize).myMultiply(1.0 / colCount).myAdd(-1 * rowView.subviewVSpace * (colCount - 1.0)/ colCount);
+#else
             colsc.heightSize.equalTo(rowView.heightSize).multiply(1.0 / colCount).add(-1 * rowView.subviewVSpace * (colCount - 1.0)/ colCount);
+#endif
+        }
+
     }
     else if (rowView.colSize > 0)
     {
