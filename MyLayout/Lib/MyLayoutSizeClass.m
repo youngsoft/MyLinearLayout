@@ -38,10 +38,6 @@ BOOL _myisRTL = NO;
     return [super init];
 }
 
-
-
-
-
 -(MyLayoutPos*)topPosInner
 {
     return _topPos;
@@ -438,16 +434,26 @@ BOOL _myisRTL = NO;
         
         if (wrapContentWidth)
         {
+#ifdef MY_USEPREFIXMETHOD
+            self.widthSize.myEqualTo(self.widthSize);
+#else
             self.widthSize.equalTo(self.widthSize);
+#endif
         }
         else
         {
             if (self.widthSizeInner.dimeSelfVal != nil)
+            {
+#ifdef MY_USEPREFIXMETHOD
+                self.widthSizeInner.myEqualTo(nil);
+#else
                 self.widthSizeInner.equalTo(nil);
+#endif
+            }
         }
-
     }
 }
+
 
 -(void)setWrapContentHeight:(BOOL)wrapContentHeight
 {

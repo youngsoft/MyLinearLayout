@@ -24,23 +24,6 @@
  */
 @interface MyLayoutSize : NSObject<NSCopying>
 
-//because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
-//if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.
-#ifdef MY_USEPREFIXMETHOD
-
--(MyLayoutSize* (^)(id val))myEqualTo;
--(MyLayoutSize* (^)(CGFloat val))myAdd;
--(MyLayoutSize* (^)(CGFloat val))myMultiply;
--(MyLayoutSize* (^)(CGFloat val))myMin;
--(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myLBound;
--(MyLayoutSize* (^)(CGFloat val))myMax;
--(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myUBound;
--(void)myClear;
-
-
-#else
-
-
 #if UIKIT_DEFINE_AS_PROPERTIES
 
 /**特殊的尺寸，表示尺寸由子视图决定或者由内容决定。目前只用在表格布局MyTableLayout和栅格布局MyGridLayout中。*/
@@ -57,6 +40,22 @@
 +(CGFloat)average;
 
 #endif
+
+//because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
+//if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.
+#ifdef MY_USEPREFIXMETHOD
+
+-(MyLayoutSize* (^)(id val))myEqualTo;
+-(MyLayoutSize* (^)(CGFloat val))myAdd;
+-(MyLayoutSize* (^)(CGFloat val))myMultiply;
+-(MyLayoutSize* (^)(CGFloat val))myMin;
+-(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myLBound;
+-(MyLayoutSize* (^)(CGFloat val))myMax;
+-(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myUBound;
+-(void)myClear;
+
+
+#else
 
 
 /**

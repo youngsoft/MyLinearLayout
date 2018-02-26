@@ -75,20 +75,6 @@
  */
 @interface MyLayoutPos : NSObject<NSCopying>
 
-//because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
-//if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.
-#ifdef MY_USEPREFIXMETHOD
--(MyLayoutPos* (^)(id val))myEqualTo;
--(MyLayoutPos* (^)(CGFloat val))myOffset;
--(MyLayoutPos* (^)(CGFloat val))myMin;
--(MyLayoutPos* (^)(id posVal, CGFloat offset))myLBound;
--(MyLayoutPos* (^)(CGFloat val))myMax;
--(MyLayoutPos* (^)(id posVal, CGFloat offset))myUBound;
--(void)myClear;
-
-#else
-
-
 #if UIKIT_DEFINE_AS_PROPERTIES
 
 /**
@@ -132,6 +118,18 @@
 +(CGFloat)safeAreaMargin;
 #endif
 
+//because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
+//if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.
+#ifdef MY_USEPREFIXMETHOD
+-(MyLayoutPos* (^)(id val))myEqualTo;
+-(MyLayoutPos* (^)(CGFloat val))myOffset;
+-(MyLayoutPos* (^)(CGFloat val))myMin;
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myLBound;
+-(MyLayoutPos* (^)(CGFloat val))myMax;
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myUBound;
+-(void)myClear;
+
+#else
 
 /**
  设置布局位置的值。参数val可以接收下面六种类型的值：
