@@ -845,11 +845,11 @@
 /**
  *设置布局视图在布局开始之前的处理块。系统会在每次布局完成前调用对应的处理块后将处理块清空为nil。系统会在调用layoutSubviews方法前执行beginLayoutBlock。
  */
-@property(nonatomic,copy) void (^beginLayoutBlock)();
+@property(nonatomic,copy) void (^beginLayoutBlock)(void);
 /**
  *设置布局视图在布局完成之后的处理块。系统会在每次布局完成后调用对应的处理块后将处理块清空为nil。您也可以在endLayoutBlock块内取到所有子视图真实布局后的frame值。系统会在调用layoutSubviews方法后执行endLayoutBlock。
  */
-@property(nonatomic,copy) void (^endLayoutBlock)();
+@property(nonatomic,copy) void (^endLayoutBlock)(void);
 
 
 
