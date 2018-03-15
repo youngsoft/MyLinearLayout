@@ -1229,7 +1229,11 @@ typedef struct  _MyGridOptionalProperties2
         for (id<MyGridNode> node  in gridNode.subGrids) {
             [temp addObject:[self translateGridNode:node toGridDictionary:[NSMutableDictionary new]]];
         }
-        [result setObject:temp forKey:key];
+        
+        if (key) {
+            [result setObject:temp forKey:key];
+        }
+        
     }
 }
 
