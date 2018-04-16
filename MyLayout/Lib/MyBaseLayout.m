@@ -3202,7 +3202,10 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         {
             sizeClass |= MySizeClass_Landscape;
         }
-        else;
+        //如果 ori == UIDeviceOrientationUnknown 的话, 默认给竖屏设置
+        else {
+            sizeClass |= MySizeClass_Portrait;
+        };
 #endif
         _myGlobalSizeClass = sizeClass;
     }
