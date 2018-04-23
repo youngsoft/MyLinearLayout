@@ -140,12 +140,3 @@
 @end
 
 
-
-@interface MyFloatLayout(MyFloatLayoutDeprecated)
-
--(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin  MYMETHODDEPRECATED("use method: setSubviews:minSpace:maxSpace to replace");
--(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin inSizeClass:(MySizeClass)sizeClass  MYMETHODDEPRECATED("use method: setSubviews:minSpace:maxSpace:inSizeClass to replace");
-
-
-@end
-

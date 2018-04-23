@@ -17,17 +17,4 @@
  */
 @interface MyRelativeLayout : MyBaseLayout
 
-
-/**
- *这个属性已经无效了，请使用子视图自身的扩展属性myVisibility属性来进行子视图的隐藏和显示的定制化处理。
- */
-@property(nonatomic, assign)  BOOL flexOtherViewWidthWhenSubviewHidden MYMETHODDEPRECATED("this property was invalid, please use subview's myVisibility to instead");
-
-/**
- *这个属性已经无效了，请使用子视图自身的扩展属性myVisibility属性来进行子视图的隐藏和显示的定制化处理。
- */
-@property(nonatomic, assign)  BOOL flexOtherViewHeightWhenSubviewHidden MYMETHODDEPRECATED("this property was invalid, please use subview's myVisibility to instead");
-;
-
-
 @end

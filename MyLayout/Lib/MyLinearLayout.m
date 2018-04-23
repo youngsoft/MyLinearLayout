@@ -11,6 +11,8 @@
 
 @implementation MyLinearLayout
 
+#pragma mark -- Public Methods
+
 -(instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation
 {
     self = [super initWithFrame:frame];
@@ -138,43 +140,7 @@
 }
 
 
-#pragma mark -- Deprecated Method
-
--(void)averageSubviews:(BOOL)centered
-{
-    [self equalizeSubviews:centered];
-}
-
--(void)averageSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass
-{
-    [self equalizeSubviews:centered inSizeClass:sizeClass];
-}
-
-
--(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin
-{
-    [self equalizeSubviews:centered withSpace:margin];
-}
-
--(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin inSizeClass:(MySizeClass)sizeClass
-{
-    [self equalizeSubviews:centered withSpace:margin inSizeClass:sizeClass];
-}
-
-
-
--(void)averageMargin:(BOOL)centered
-{
-    [self equalizeSubviewsSpace:centered];
-}
-
--(void)averageMargin:(BOOL)centered inSizeClass:(MySizeClass)sizeClass
-{
-    [self equalizeSubviewsSpace:centered inSizeClass:sizeClass];
-}
-
-
-#pragma mark -- Override Method
+#pragma mark -- Override Methods
 
 - (void)willMoveToSuperview:(UIView*)newSuperview
 {
@@ -295,7 +261,7 @@
 }
 
 
-#pragma mark -- Private Method
+#pragma mark -- Private Methods
 
 //调整子视图的wrapContent设置
 - (void)myAdjustSubviewWrapContent:(UIView*)sbv sbvsc:(UIView*)sbvsc orientation:(MyOrientation)orientation  gravity:(MyGravity)gravity

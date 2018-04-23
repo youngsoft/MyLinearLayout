@@ -112,8 +112,7 @@ CGFloat _myCGFloatRound(CGFloat f)
     if (scale == 0)
          scale = [UIScreen mainScreen].scale;
     
-    //因为设备点转化为像素时，如果偏移了半个像素点就有可能会产生虚化的效果，因此这里要加上1/4个点的偏移来防止这种虚化现象的产生。
-    // floor((f + 0.5 / scale )* scale) 的目的是将设备逻辑点转化为有效的像素。再除以倍数则是转化为有效的设备逻辑点。
+    //因为设备点转化为像素时，如果偏移了半个像素点就有可能会产生虚化的效果，因此这里要将设备点先转化为像素点，然后再添加0.5个偏移取整后再除以倍数则是转化为有效的设备逻辑点。
 #if CGFLOAT_IS_DOUBLE == 1
     if (f < 0)
         return ceil(fma(f, scale, -0.5)) / scale;

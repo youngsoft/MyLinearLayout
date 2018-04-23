@@ -464,111 +464,6 @@ void* _myObserverContextC = (void*)20175283;
 
 @end
 
-@implementation UIView(MyLayoutExtDeprecated)
-
-
-
-
--(CGFloat)myLeftMargin
-{
-    return self.myLeft;
-}
-
--(void)setMyLeftMargin:(CGFloat)myLeftMargin
-{
-    self.myLeft = myLeftMargin;
-}
-
--(CGFloat)myTopMargin
-{
-    return self.myTop;
-}
-
--(void)setMyTopMargin:(CGFloat)myTopMargin
-{
-    self.myTop = myTopMargin;
-}
-
--(CGFloat)myRightMargin
-{
-    return self.myRight;
-}
-
--(void)setMyRightMargin:(CGFloat)myRightMargin
-{
-    self.myRight = myRightMargin;
-}
-
--(CGFloat)myBottomMargin
-{
-    return self.myBottom;
-}
-
--(void)setMyBottomMargin:(CGFloat)myBottomMargin
-{
-    self.myBottom = myBottomMargin;
-}
-
--(MyLayoutSize*)widthDime
-{
-    return self.widthSize;
-}
-
-
-
--(MyLayoutSize*)heightDime
-{
-    return self.heightSize;
-}
-
-
--(CGFloat)myCenterXOffset
-{
-    return self.myCenterX;
-}
-
--(void)setMyCenterXOffset:(CGFloat)myCenterXOffset
-{
-    self.myCenterX = myCenterXOffset;
-}
-
--(CGFloat)myCenterYOffset
-{
-    return self.myCenterY;
-}
-
--(void)setMyCenterYOffset:(CGFloat)myCenterYOffset
-{
-    self.myCenterY = myCenterYOffset;
-}
-
-
--(CGPoint)myCenterOffset
-{
-    return self.myCenter;
-}
-
--(void)setMyCenterOffset:(CGPoint)myCenterOffset
-{
-    self.myCenter = myCenterOffset;
-}
-
-
-
--(void)setFlexedHeight:(BOOL)flexedHeight
-{
-    self.wrapContentHeight = flexedHeight;
-}
-
--(BOOL)isFlexedHeight
-{
-    return self.wrapContentHeight;
-}
-
-
-
-@end
-
 
 @implementation UIView(MyLayoutExtInner)
 
@@ -805,6 +700,9 @@ void* _myObserverContextC = (void*)20175283;
     _rotationToDeviceOrientationBlock = nil;
 }
 
+#pragma  mark -- Public Methods
+
+
 +(BOOL)isRTL
 {
     return [MyViewSizeClass isRTL];
@@ -815,7 +713,6 @@ void* _myObserverContextC = (void*)20175283;
     [MyViewSizeClass setIsRTL:isRTL];
 }
 
-#pragma  mark -- Public Method
 
 
 -(CGFloat)topPadding
@@ -1444,7 +1341,7 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
-#pragma mark -- Override Method
+#pragma mark -- Override Methods
 
 
 
@@ -2184,24 +2081,7 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
-#pragma mark -- Deprecated Method
-
--(CGRect)estimateLayoutRect:(CGSize)size
-{
-    CGRect rect = CGRectZero;
-    rect.size = [self sizeThatFits:size];
-    return rect;
-}
-
--(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass
-{
-    CGRect rect = CGRectZero;
-    rect.size = [self sizeThatFits:size inSizeClass:sizeClass];
-    return rect;
-}
-
-
-#pragma mark -- Private Method
+#pragma mark -- Private Methods
 
 
 

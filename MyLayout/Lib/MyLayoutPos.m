@@ -230,7 +230,7 @@
 }
 
 
-#pragma mark -- Private Method
+#pragma mark -- Private Methods
 
 
 -(NSNumber*)posNumVal

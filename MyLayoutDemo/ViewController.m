@@ -58,6 +58,8 @@
 #import "FOLTest4ViewController.h"
 #import "FOLTest5ViewController.h"
 #import "FOLTest6ViewController.h"
+#import "FOLTest7ViewController.h"
+
 
 #import "PLTest1ViewController.h"
 #import "PLTest2ViewController.h"
@@ -198,6 +200,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"6.FloatLayout - User Profiles", @""),
                                                @"class":[FOLTest6ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"7.FloatLayout - Alignment", @""),
+                                               @"class":[FOLTest7ViewController class]
                                                }
                                              ]
                             },

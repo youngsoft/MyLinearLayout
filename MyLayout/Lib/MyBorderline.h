@@ -58,7 +58,5 @@
 
 @end
 
-//兼容老版本的类名命名不规则的问题，这样老版本仍然可以用MyBorderLineDraw这个类名。
-typedef MyBorderline MyBorderLineDraw MYMETHODDEPRECATED("use MyBorderline to instead");
 
 

@@ -104,6 +104,8 @@ static CGFloat sColCountTag = -100000;
 
 @implementation MyTableLayout
 
+#pragma mark -- Public Methods
+
 +(instancetype)tableLayoutWithOrientation:(MyOrientation)orientation
 {
     return [self linearLayoutWithOrientation:orientation];
@@ -282,8 +284,7 @@ static CGFloat sColCountTag = -100000;
     return [self viewAtRowIndex:rowIndex].subviews.count;
 }
 
-#pragma mark -- Override Method
-
+#pragma mark -- Override Methods
 
 
 -(void)setSubviewVSpace:(CGFloat)subviewVSpace
@@ -342,8 +343,6 @@ static CGFloat sColCountTag = -100000;
 {
     return [MyTableLayoutViewSizeClass new];
 }
-
-#pragma mark -- Deprecated Method
 
 
 @end

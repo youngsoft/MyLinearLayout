@@ -140,10 +140,12 @@
 
 @implementation MyPathLayout
 {
-    MyCoordinateSetting  *_coordinateSetting;
     BOOL _hasOriginView;
+    MyCoordinateSetting  *_coordinateSetting;
     MyPathSpace *_spaceType;
 }
+
+#pragma mark -- Public Methods
 
 /*
 +(Class)layerClass
@@ -402,7 +404,7 @@
     
 }
 
-#pragma mark -- Override Method
+#pragma mark -- Override Methods
 
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index
 {
@@ -807,7 +809,7 @@
 
 
 
-#pragma mark -- Private Method
+#pragma mark -- Private Methods
 
 
 -(CGFloat)myCalcDistance:(CGPoint)pt1 with:(CGPoint)pt2

@@ -185,7 +185,7 @@
 
 
 /**
- *设置流式布局中每排内所有子视图的对齐停靠方式。具体的对齐停靠方式依赖于布局视图的方向：
+ 设置流式布局中每排内所有子视图的对齐停靠方式。具体的对齐停靠方式依赖于布局视图的方向：
  
  1. 如果是垂直流式布局则表示每排内子视图的上中下对齐方式，这里的对齐基础是以每排中的最高的子视图为基准。这个属性只支持：
    @code
@@ -224,20 +224,6 @@
  */
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
-
-
-@end
-
-
-@interface MyFlowLayout(MyFlowLayoutDeprecated)
-
-/**
- 指定是否均分布局方向上的子视图的宽度或者高度，或者拉伸子视图的尺寸，默认是NO。
- 如果是MyOrientation_Vert则表示每行的子视图的宽度会被均分，这样子视图不需要指定宽度，但是布局视图必须要指定一个明确的宽度值，如果设置为YES则wrapContentWidth会失效。
- 如果是MyOrientation_Horz则表示每列的子视图的高度会被均分，这样子视图不需要指定高度，但是布局视图必须要指定一个明确的高度值，如果设置为YES则wrapContentHeight会失效。
- 内容填充约束流式布局下averageArrange设置为YES时表示拉伸子视图的宽度或者高度以便填充满整个布局视图。
- */
-@property(nonatomic,assign)  BOOL averageArrange MYMETHODDEPRECATED("use gravity = MyGravity_Horz_Fill or gravity = MyGravity_Vert_Fill to instead");
 
 
 @end

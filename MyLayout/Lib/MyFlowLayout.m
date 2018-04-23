@@ -12,6 +12,7 @@
 
 @implementation MyFlowLayout
 
+#pragma mark -- Public Methods
 
 -(instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount
 {
@@ -134,42 +135,8 @@
     [self setNeedsLayout];
 }
 
-#pragma mark -- Deprecated Method
 
-
--(void)setAverageArrange:(BOOL)averageArrange
-{
-    MyFlowLayout *lsc = self.myCurrentSizeClass;
-    
-    if (lsc.orientation == MyOrientation_Vert)
-    {
-        if (averageArrange)
-            lsc.gravity = (lsc.gravity & MyGravity_Horz_Mask) | MyGravity_Horz_Fill;
-        else
-            lsc.gravity = (lsc.gravity & MyGravity_Horz_Mask) | MyGravity_None;
-    }
-    else
-    {
-        if (averageArrange)
-            lsc.gravity = (lsc.gravity & MyGravity_Vert_Mask) | MyGravity_Vert_Fill;
-        else
-            lsc.gravity = (lsc.gravity & MyGravity_Vert_Mask) | MyGravity_None;
-    }
-    
-}
-
--(BOOL)averageArrange
-{
-    MyFlowLayout *lsc = self.myCurrentSizeClass;
-
-    if (lsc.orientation == MyOrientation_Vert)
-        return (lsc.gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill;
-    else
-        return (lsc.gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill;
-}
-
-
-#pragma mark -- Override Method
+#pragma mark -- Override Methods
 
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
@@ -266,7 +233,7 @@
     return [MyFlowLayoutViewSizeClass new];
 }
 
-#pragma mark -- Private Method
+#pragma mark -- Private Methods
 
 
 - (void)myCalcVertLayoutSinglelineWeight:(CGSize)selfSize totalFloatWidth:(CGFloat)totalFloatWidth totalWeight:(CGFloat)totalWeight sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count

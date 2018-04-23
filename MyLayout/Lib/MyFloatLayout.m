@@ -52,6 +52,8 @@
 
 @implementation MyFloatLayout
 
+#pragma mark -- Public Methods
+
 -(instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation
 {
     self = [super initWithFrame:frame];
@@ -122,32 +124,7 @@
 }
 
 
-#pragma mark -- Deprecated Method
-
-
--(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin
-{
-    [self setSubviewsSize:subviewSize minSpace:minMargin maxSpace:CGFLOAT_MAX];
-}
-
--(void)setSubviewFloatMargin:(CGFloat)subviewSize minMargin:(CGFloat)minMargin inSizeClass:(MySizeClass)sizeClass
-{
-    [self setSubviewsSize:subviewSize minSpace:minMargin maxSpace:CGFLOAT_MAX inSizeClass:sizeClass];
-}
-
-
-
-
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
-
-
-#pragma mark -- Override Method
+#pragma mark -- Override Methods
 
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
@@ -226,7 +203,7 @@
     return [MyFloatLayoutViewSizeClass new];
 }
 
-#pragma mark -- Private Method
+#pragma mark -- Private Methods
 
 -(CGPoint)myFindTrailingCandidatePoint:(CGRect)leadingCandidateRect  width:(CGFloat)width trailingBoundary:(CGFloat)trailingBoundary trailingCandidateRects:(NSArray*)trailingCandidateRects hasWeight:(BOOL)hasWeight paddingTop:(CGFloat)paddingTop
 {
@@ -534,8 +511,13 @@
     CGFloat maxHeight = paddingTop;
     CGFloat maxWidth = paddingLeading;
     
-    for (UIView *sbv in sbs)
+    //记录是否有子视图设置了对齐，如果设置了对齐就会在后面对每行子视图做对齐处理。
+    BOOL sbvHasAlignment = NO;
+    NSMutableArray<NSNumber*> *lineIndexes = [NSMutableArray<NSNumber*> new];
+    
+    for (NSInteger idx = 0; idx < sbs.count; idx++)
     {
+        UIView *sbv = sbs[idx];
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
         
@@ -544,6 +526,9 @@
         CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
         CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
         CGRect rect = sbvmyFrame.frame;
+        
+        //只要有一个子视图设置了对齐，就会做对齐处理，否则不会，这里这样做是为了对后面的对齐计算做优化。
+        sbvHasAlignment |= ((sbvsc.myAlignment & MyGravity_Horz_Mask) > MyGravity_Vert_Top);
         
         
         if (subviewSize != 0)
@@ -723,6 +708,11 @@
                 
             }
             
+            //记录每一行的最大子视图位置的索引值。
+            if (trailingLastYOffset != rect.origin.y - topSpace)
+            {
+                [lineIndexes addObject:@(idx - 1)];
+            }
             
             [trailingCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             trailingLastYOffset = rect.origin.y - topSpace;
@@ -790,7 +780,7 @@
             
             rect.origin.x = nextPoint.x + leadingSpace;
             rect.origin.y = _myCGFloatMin(nextPoint.y,maxHeight) + topSpace;
-            
+        
             if (!isEstimate && self.intelligentBorderline != nil)
             {
                 //优先绘制左边和上边的。绘制左边的和上边的。
@@ -856,6 +846,11 @@
                 }
             }
             
+            //记录每一行的最大子视图位置的索引值。
+            if (leadingLastYOffset != rect.origin.y - topSpace)
+            {
+                [lineIndexes addObject:@(idx - 1)];
+            }
             [leadingCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             leadingLastYOffset = rect.origin.y - topSpace;
             
@@ -912,6 +907,64 @@
         }
         
     }
+    
+    
+    //如果有子视图设置了对齐属性，那么就要对处在同一行内的子视图进行对齐设置。
+    //对齐的规则是以行内最高的子视图作为参考的对象，其他的子视图按照行内最高子视图进行垂直对齐的调整。
+    if (sbvHasAlignment)
+    {
+        //最后一行。
+        if (sbs.count > 0)
+        {
+            [lineIndexes addObject:@(sbs.count - 1)];
+        }
+        
+        NSInteger lineFirstIndex = 0;
+        for (NSNumber *idxnum in lineIndexes)
+        {
+            BOOL lineHasAlignment = NO;
+
+            //计算每行内的最高的子视图，作为行对齐的标准。
+            CGFloat lineMaxHeight = 0;
+            for (NSInteger i = lineFirstIndex; i <= idxnum.integerValue; i++)
+            {
+                UIView *sbv = sbs[i];
+                MyFrame *sbvmyFrame = sbv.myFrame;
+                UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                if (sbvmyFrame.height > lineMaxHeight)
+                    lineMaxHeight = sbvmyFrame.height;
+                
+                lineHasAlignment |= ((sbvsc.myAlignment & MyGravity_Horz_Mask) > MyGravity_Vert_Top);
+            }
+            
+            //设置行内的对齐
+            if (lineHasAlignment)
+            {
+                for (NSInteger i = lineFirstIndex; i <= idxnum.integerValue; i++)
+                {
+                    UIView *sbv = sbs[i];
+                    MyFrame *sbvmyFrame = sbv.myFrame;
+                    UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                    switch (sbvsc.myAlignment & MyGravity_Horz_Mask) {
+                        case MyGravity_Vert_Center:
+                            sbvmyFrame.top += (lineMaxHeight - sbvmyFrame.height) / 2.0;
+                            break;
+                        case MyGravity_Vert_Bottom:
+                            sbvmyFrame.top += (lineMaxHeight - sbvmyFrame.height);
+                            break;
+                        case MyGravity_Vert_Fill:
+                            sbvmyFrame.height = lineMaxHeight;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            
+            lineFirstIndex = idxnum.integerValue + 1;
+        }
+    }
+    
    
     return selfSize;
 }
@@ -1037,8 +1090,13 @@
     CGFloat maxWidth = paddingLeading;
     CGFloat maxHeight = paddingTop;
     
-    for (UIView *sbv in sbs)
+    //记录是否有子视图设置了对齐，如果设置了对齐就会在后面对每行子视图做对齐处理。
+    BOOL sbvHasAlignment = NO;
+    NSMutableArray<NSNumber*> *lineIndexes = [NSMutableArray<NSNumber*> new];
+    
+    for (NSInteger idx = 0; idx < sbs.count; idx++)
     {
+        UIView *sbv = sbs[idx];
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
 
@@ -1047,6 +1105,9 @@
         CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
         CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
         CGRect rect = sbvmyFrame.frame;
+        
+        //只要有一个子视图设置了对齐，就会做对齐处理，否则不会，这里这样做是为了对后面的对齐计算做优化。
+        sbvHasAlignment |= ((sbvsc.myAlignment & MyGravity_Vert_Mask) > MyGravity_Horz_Left);
         
         if (sbvsc.widthSizeInner.dimeNumVal != nil)
             rect.size.width = sbvsc.widthSizeInner.measure;
@@ -1219,6 +1280,12 @@
 
             }
             
+            //记录每一列的最大子视图位置的索引值。
+            if (bottomLastXOffset != rect.origin.x - leadingSpace)
+            {
+                [lineIndexes addObject:@(idx - 1)];
+            }
+            
             [bottomCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             bottomLastXOffset = rect.origin.x - leadingSpace;
             
@@ -1345,6 +1412,11 @@
                 
             }
             
+            //记录每一列的最大子视图位置的索引值。
+            if (topLastXOffset != rect.origin.x - leadingSpace)
+            {
+                [lineIndexes addObject:@(idx - 1)];
+            }
             
             [topCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             topLastXOffset = rect.origin.x - leadingSpace;
@@ -1402,6 +1474,62 @@
             }
         }
         
+    }
+    
+    //如果有子视图设置了对齐属性，那么就要对处在同一列内的子视图进行对齐设置。
+    //对齐的规则是以列内最宽的子视图作为参考的对象，其他的子视图按照列内最宽子视图进行水平对齐的调整。
+    if (sbvHasAlignment)
+    {
+        //最后一列。
+        if (sbs.count > 0)
+        {
+            [lineIndexes addObject:@(sbs.count - 1)];
+        }
+        
+        NSInteger lineFirstIndex = 0;
+        for (NSNumber *idxnum in lineIndexes)
+        {
+            BOOL lineHasAlignment = NO;
+            
+            //计算每列内的最宽的子视图，作为列对齐的标准。
+            CGFloat lineMaxWidth = 0;
+            for (NSInteger i = lineFirstIndex; i <= idxnum.integerValue; i++)
+            {
+                UIView *sbv = sbs[i];
+                MyFrame *sbvmyFrame = sbv.myFrame;
+                UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                if (sbvmyFrame.width > lineMaxWidth)
+                    lineMaxWidth = sbvmyFrame.width;
+                
+                lineHasAlignment |= ((sbvsc.myAlignment & MyGravity_Vert_Mask) > MyGravity_Horz_Left);
+            }
+            
+            //设置行内的对齐
+            if (lineHasAlignment)
+            {
+                for (NSInteger i = lineFirstIndex; i <= idxnum.integerValue; i++)
+                {
+                    UIView *sbv = sbs[i];
+                    MyFrame *sbvmyFrame = sbv.myFrame;
+                    UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                    switch ([self myConvertLeftRightGravityToLeadingTrailing:sbvsc.myAlignment & MyGravity_Vert_Mask]) {
+                        case MyGravity_Horz_Center:
+                            sbvmyFrame.leading += (lineMaxWidth - sbvmyFrame.width) / 2.0;
+                            break;
+                        case MyGravity_Horz_Trailing:
+                            sbvmyFrame.leading += (lineMaxWidth - sbvmyFrame.width);
+                            break;
+                        case MyGravity_Horz_Fill:
+                            sbvmyFrame.width = lineMaxWidth;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            
+            lineFirstIndex = idxnum.integerValue + 1;
+        }
     }
     
     return selfSize;

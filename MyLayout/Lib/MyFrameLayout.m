@@ -22,7 +22,7 @@
  */
 
 
-#pragma mark -- Override Method
+#pragma mark -- Override Methods
 
 
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray *)sbs
@@ -111,6 +111,7 @@
 }
 
 
+#pragma mark -- Private Methods
 
 
 -(void)myCalcSubViewRect:(UIView*)sbv

@@ -102,11 +102,15 @@ extern NSString * const vMyGridGravityHeightFill;  //对应MyGravity_Vert_Fill
 @property(nonatomic, weak, readonly) id<MyGrid> superGrid;
 
 
-//得到所有子栅格
+/**
+ 得到所有子栅格
+ */
 @property(nonatomic, strong, readonly) NSArray<id<MyGrid>> *subGrids;
 
 
-//克隆出一个新栅格以及其下的所有子栅格。
+/**
+ 克隆出一个新栅格以及其下的所有子栅格。
+ */
 -(id<MyGrid>)cloneGrid;
 
 

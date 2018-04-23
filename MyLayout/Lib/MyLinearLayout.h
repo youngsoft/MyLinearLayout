@@ -195,21 +195,4 @@
 @end
 
 
-@interface MyLinearLayout(MyLinearLayoutDeprecated)
-
-/**
- * 过期的方法，这些过期的方法名取名不规范，因此为了和TangramKit统一，这里将这些不规范的方法设置为过期。
- */
--(void)averageSubviews:(BOOL)centered  MYMETHODDEPRECATED("use ’equalizeSubviews:(BOOL)centered‘ to instead");
--(void)averageSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass MYMETHODDEPRECATED("use ‘equalizeSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass’ to instead");
-
--(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin MYMETHODDEPRECATED("use ‘equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space’ to instead");
--(void)averageSubviews:(BOOL)centered withMargin:(CGFloat)margin inSizeClass:(MySizeClass)sizeClass MYMETHODDEPRECATED("use ‘equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space inSizeClass:(MySizeClass)sizeClass’ to instead");
-
--(void)averageMargin:(BOOL)centered MYMETHODDEPRECATED("use ‘equalizeSubviewsSpace:(BOOL)centered’ to instead");
--(void)averageMargin:(BOOL)centered inSizeClass:(MySizeClass)sizeClass MYMETHODDEPRECATED("use ‘equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass’ to instead");
-
-
-@end
-
 

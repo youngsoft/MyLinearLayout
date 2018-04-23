@@ -156,6 +156,7 @@
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		20B46A8D1F8A79C300826372 /* layoutdemo8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 20B46A8C1F8A79C300826372 /* layoutdemo8.gif */; };
+		20DCF333208C3BFB007A879B /* FOLTest7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DCF332208C3BFB007A879B /* FOLTest7ViewController.m */; };
 		20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F783551F60399700BE5B31 /* GLTest3ViewController.m */; };
 		4411977B1F6AE78E00C22557 /* GridLayoutDemo5.json in Resources */ = {isa = PBXBuildFile; fileRef = 4411977A1F6AE78E00C22557 /* GridLayoutDemo5.json */; };
 		444B71911F6A3E3F00331872 /* GLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 444B71901F6A3E3F00331872 /* GLTest5ViewController.m */; };
@@ -383,6 +384,8 @@
 		208157C01F5A886300E945B6 /* MyLayoutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDelegate.h; sourceTree = "<group>"; };
 		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
 		20B46A8C1F8A79C300826372 /* layoutdemo8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo8.gif; sourceTree = "<group>"; };
+		20DCF331208C3BEF007A879B /* FOLTest7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest7ViewController.h; sourceTree = "<group>"; };
+		20DCF332208C3BFB007A879B /* FOLTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest7ViewController.m; sourceTree = "<group>"; };
 		20F783541F60398C00BE5B31 /* GLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest3ViewController.h; sourceTree = "<group>"; };
 		20F783551F60399700BE5B31 /* GLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest3ViewController.m; sourceTree = "<group>"; };
 		4411977A1F6AE78E00C22557 /* GridLayoutDemo5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayoutDemo5.json; sourceTree = "<group>"; };
@@ -587,6 +590,8 @@
 				18D3C9571EDF07F800D3DE43 /* FOLTest5ViewController.m */,
 				18D3C9581EDF07F800D3DE43 /* FOLTest6ViewController.h */,
 				18D3C9591EDF07F800D3DE43 /* FOLTest6ViewController.m */,
+				20DCF331208C3BEF007A879B /* FOLTest7ViewController.h */,
+				20DCF332208C3BFB007A879B /* FOLTest7ViewController.m */,
 			);
 			name = FloatLayoutDemo;
 			sourceTree = "<group>";
@@ -1100,6 +1105,7 @@
 				18D3C9171EDF074900D3DE43 /* LLTest7ViewController.m in Sources */,
 				18D3C98A1EDF084000D3DE43 /* AllTest6ViewController.m in Sources */,
 				18D3C9111EDF074900D3DE43 /* LLTest1ViewController.m in Sources */,
+				20DCF333208C3BFB007A879B /* FOLTest7ViewController.m in Sources */,
 				18D3C93E1EDF07C000D3DE43 /* FLLTest6ViewController.m in Sources */,
 				200A26D91FA8A90300B06E7B /* AllTest9ViewController.m in Sources */,
 				18D3C9281EDF07A700D3DE43 /* RLTest1ViewController.m in Sources */,

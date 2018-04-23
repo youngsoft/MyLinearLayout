@@ -554,7 +554,7 @@
 
 
 /**
- 指定子在布局视图上的对齐方式，默认是None表示未指定，这个属性目前只支持框架布局，线性布局，流式布局下的属性设置。
+ 指定子在布局视图上的对齐方式，默认是None表示未指定，这个属性目前只支持框架布局，线性布局，流式布局，浮动布局下的属性设置。
  
  1. 在框架布局中支持上、中、下、垂直拉伸和左、中、右、水平拉伸8个设置
  
@@ -562,9 +562,9 @@
  
  3. 在水平线性布局中只支持上、中、下、垂直拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
  
- 4. 在垂直流式布局中用来设置一行内的上、中、下、垂直拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
+ 4. 在垂直流式布局和垂直浮动布局中用来设置一行内的上、中、下、垂直拉伸对齐。(如果流式父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
  
- 5. 在水平流式布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
+ 5. 在水平流式布局和水平浮动布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果流式父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
  */
 @property(nonatomic, assign) MyGravity myAlignment;
 
@@ -612,69 +612,6 @@
 @end
 
 
-@interface UIView(MyLayoutExtDeprecated)
-
-/**
- * 过期的位置和尺寸设置方法，老版本中带Margin后缀就明确为了边距的概念，但是这个和属性定义的概念是不一致的，位置即可表示边距也可以表示间距。所以这些方法将设置为过期。您可以在相应的位置定义宏：#define MY_USEOLDMETHODNOWARNING = 1 则不会出现老方法告警，不过不建议这么做。
- */
-
-
-/**
- *过期属性,请用myLeft
- */
-@property(nonatomic, assign)  CGFloat myLeftMargin MYMETHODDEPRECATED("use myLeft to instead");
-
-/**
- *过期属性,请用myTop
- */
-@property(nonatomic, assign)  CGFloat myTopMargin MYMETHODDEPRECATED("use myTop to instead");
-
-/**
- *过期属性,请用myRight
- */
-@property(nonatomic, assign)  CGFloat myRightMargin MYMETHODDEPRECATED("use myRight to instead");
-
-/**
- *过期属性,请用myBottom
- */
-@property(nonatomic, assign)  CGFloat myBottomMargin MYMETHODDEPRECATED("use myBottom to instead");
-
-/**
- *过期属性,请用myCenterX
- */
-@property(nonatomic, assign)  CGFloat myCenterXOffset MYMETHODDEPRECATED("use myCenterX to instead");
-
-/**
- *过期属性,请用myCenterY
- */
-@property(nonatomic, assign)  CGFloat myCenterYOffset MYMETHODDEPRECATED("use myCenterY to instead");
-
-/**
- *过期属性,请用myCenter
- */
-@property(nonatomic, assign)  CGPoint myCenterOffset MYMETHODDEPRECATED("use myCenter to instead");
-
-/**
- *过期属性,请用widthSize
- */
-@property(nonatomic, readonly) MyLayoutSize *widthDime MYMETHODDEPRECATED("use widthSize to instead");
-
-/**
- *过期属性,请用heightSize
- */
-@property(nonatomic, readonly) MyLayoutSize *heightDime MYMETHODDEPRECATED("use heightSize to instead");
-
-
-/**
- *过期属性,请用wrapContentHeight
- */
-@property(nonatomic, assign, getter=isFlexedHeight)  BOOL flexedHeight MYMETHODDEPRECATED("use wrapContentHeight to instead");
-
-
-
-@end
-
-
 
 /**
  布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
@@ -686,16 +623,11 @@
  */
 @interface MyBaseLayout : UIView
 
-#if UIKIT_DEFINE_AS_PROPERTIES
-
 /**
   用于实现对阿拉伯国家的布局适配。对于非阿拉伯国家来说，界面布局都是默认从左到右排列。而对于阿拉伯国家来说界面布局则默认是从右往左排列。默认这个属性是NO，您可以将这个属性设置为YES，这样布局里面的所有视图都将从右到左进行排列布局。如果您需要考虑国际化布局的问题，那么您应该用leadingPos来表示头部的位置，而用trailingPos来表示尾部的位置，这样当布局方向是LTR时那么leadingPos就表示的是左边而trailingPos则表示的是右边；而当布局方向是RTL时那么leadingPos表示的是右边而trailingPos则表示的是左边。如果您的界面布局不会考虑到国际化以及不需要考虑RTL时那么您可以用leftPos和rightPos来表示左右而不需要用leadingPos和trailingPos。
  */
 @property(class, nonatomic, assign) BOOL isRTL;
-#else
-+(BOOL)isRTL;
-+(void)setIsRTL:(BOOL)isRTL;
-#endif
+
 
 /*
  布局视图里面的padding属性用来设置布局视图的内边距。内边距是指布局视图里面的子视图离自己距离。外边距则是视图与父视图之间的距离。
@@ -1053,83 +985,5 @@
 
 @end
 
-
-@interface MyBaseLayout(MyBaseLayoutDeprecated)
-
-/**
- *过期方法，对于间距统一用space来描述，而边距用margin来描述。
- *原先子视图之间的间距属性的命名规范不合理，所以这里将原先的设置间距的属性设置为过期。这里也和TangramKit中的命名统一。
- *您可以在相应的位置定义宏：#define MY_USEOLDMETHODNOWARNING = 1 则不会出现老方法告警，不过不建议这么做。
- */
-
-/**
-*过期属性,请用subviewVSpace
-*/
-@property(nonatomic ,assign, getter=subviewVSpace, setter=setSubviewVSpace:) CGFloat subviewVertMargin MYMETHODDEPRECATED("use subviewVSpace to instead");
-
-/**
- *过期属性,请用subviewHSpace
- */
-@property(nonatomic, assign, getter=subviewHSpace, setter=setSubviewHSpace:) CGFloat subviewHorzMargin MYMETHODDEPRECATED("use subviewHSpace to instead");
-
-/**
- *过期属性,请用subviewSpace
- */
-@property(nonatomic, assign, getter=subviewSpace, setter=setSubviewSpace:) CGFloat subviewMargin MYMETHODDEPRECATED("use subviewSpace to instead");
-
-/**
- *过期方法, 原先对边界线命名BorderLine不符合规则，Borderline是一个单词不是一个词组。这里也和TangramKit中的命名统一。
- */
-
-/**
- *过期属性,请用leftBorderline
- */
-@property(nonatomic, strong, getter=leftBorderline, setter=setLeftBorderline:) MyBorderline *leftBorderLine MYMETHODDEPRECATED("use leftBorderline to instead");
-
-/**
- *过期属性,请用rightBorderline
- */
-@property(nonatomic, strong, getter=rightBorderline, setter=setRightBorderline:) MyBorderline *rightBorderLine MYMETHODDEPRECATED("use rightBorderline to instead");
-
-/**
- *过期属性,请用topBorderline
- */
-@property(nonatomic, strong, getter=topBorderline, setter=setTopBorderline:) MyBorderline *topBorderLine MYMETHODDEPRECATED("use topBorderline to instead");
-
-/**
- *过期属性,请用bottomBorderline
- */
-@property(nonatomic, strong, getter=bottomBorderline, setter=setBottomBorderline:) MyBorderline *bottomBorderLine MYMETHODDEPRECATED("use bottomBorderline to instead");
-
-/**
- *过期属性,请用boundBorderline
- */
-@property(nonatomic, strong, getter=boundBorderline, setter=setBoundBorderline:) MyBorderline *boundBorderLine MYMETHODDEPRECATED("use boundBorderline to instead");
-
-/**
- *过期属性,请用intelligentBorderline
- */
-@property(nonatomic, strong, getter=intelligentBorderline, setter=setIntelligentBorderline:) MyBorderline *IntelligentBorderLine MYMETHODDEPRECATED("use intelligentBorderline to instead");
-
-/**
- *过期属性,请用notUseIntelligentBorderline
- */
-@property(nonatomic, assign, getter=notUseIntelligentBorderline, setter=setNotUseIntelligentBorderline:) BOOL notUseIntelligentBorderLine MYMETHODDEPRECATED("use notUseIntelligentBorderline to instead");
-
-
-/**
- *这个属性在新版本将失效并且无任何意义了。如果想让子视图隐藏时是否继续占据位置则请参考使用子视图的myVisibility属性来进行单独设置。
- */
-@property(nonatomic, assign) BOOL hideSubviewReLayout  MYMETHODDEPRECATED("this property was invalid, please use subview's myVisibility to instead");
-
-
-/**
- *过期方法。请用sizeThatFits方法来代替。
- */
--(CGRect)estimateLayoutRect:(CGSize)size MYMETHODDEPRECATED("this method was invalid, please use sizeThatFits: to instead");
--(CGRect)estimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass MYMETHODDEPRECATED("this method was invalid, please use sizeThatFits:inSizeClass: to instead");
-
-
-@end
 
 

@@ -8,12 +8,6 @@
 
 #import "MyLinearLayout.h"
 
-//定义特殊的行列尺寸。主要用于表格布局中。请不要再使用如下的宏，而是改用MyLayoutSize中对应的类属性来代替。
-#define MTLSIZE_AVERAGE MyLayoutSize.average
-#define MTLSIZE_WRAPCONTENT MyLayoutSize.wrap
-#define MTLSIZE_MATCHPARENT MyLayoutSize.fill
-
-
 
 /**
   表格布局行列索引描述扩展对象。
@@ -102,7 +96,7 @@
 
 
 /**
- * 删除一行
+ *删除一行
  */
 -(void)removeRowAt:(NSInteger)rowIndex;
 
@@ -170,15 +164,4 @@
 @end
 
 
-@interface MyTableLayout(MyTableDeprecated)
-
-
-/**
- *  不再单独设置表格的行间距和列间距了，而是复用视图的水平间距和垂直间距。原来表格的行间距和列间距会根据不同的表格方向定义不同而不同，现在统一为水平和垂直间距，不管表格的方向如何，水平间距都是定义左右的间距，垂直间距都是定义上下的间距。
- */
-@property(nonatomic ,assign, getter=subviewVSpace, setter=setSubviewVSpace:)  CGFloat rowSpacing MYMETHODDEPRECATED("use subviewVSpace to instead");
-@property(nonatomic, assign, getter=subviewHSpace, setter=setSubviewHSpace:)  CGFloat colSpacing MYMETHODDEPRECATED("use subviewHSpace to instead");
-
-
-@end
 

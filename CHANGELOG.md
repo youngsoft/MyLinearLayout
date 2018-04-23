@@ -3,6 +3,18 @@
 
 ---
 
+## [V1.5.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.1)(2018/04/23)
+
+#### Added
+1. 添加了对浮动布局MyFloatLayout中的子视图的行或者列内对齐方式的设置，您可以借助子视图的myAlignment属性来设置行或者列内的对齐方式，具体的DEMO请参考：[FOLTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/FOLTest7ViewController.m) 中的介绍。
+2. 将所有设置为过期的方法删除。
+3. 修正一些编译上的告警以及一些和Masonry公用时的一些问题。
+4. 修复方向旋转时有可能不调用`rotationToDeviceOrientationBlock`的问题。
+5. 修正一些注释上的提示。
+6. 将网友提交合并的代码一起发布新的版本。
+
+
+
 ## [V1.5.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.0)(2017/10/9)
 
 #### Added

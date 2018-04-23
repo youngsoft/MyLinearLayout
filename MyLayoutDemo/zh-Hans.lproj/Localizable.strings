@@ -38,6 +38,7 @@
 "4.FloatLayout - Tag cloud" = "4.浮动布局-标签流";
 "5.FloatLayout - Title & Description" = "5.浮动布局-左右排列的文本";
 "6.FloatLayout - User Profiles"="6.浮动布局-各种用户配置的实现";
+"7.FloatLayout - Alignment"="7.浮动布局-行内对齐";
 "1.PathLayout - Animations" = "1.路径布局-各种动画效果";
 "2.PathLayout - Curves"="2.路径布局-各种函数曲线";
 "3.PathLayout - Menu in Circle"="3.路径布局-圆环型菜单";

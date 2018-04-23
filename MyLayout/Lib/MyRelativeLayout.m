@@ -12,36 +12,8 @@
 
 @implementation MyRelativeLayout
 
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
 
-
--(void)setFlexOtherViewWidthWhenSubviewHidden:(BOOL)flexOtherViewWidthWhenSubviewHidden
-{
-    NSAssert(0, @"oops!, flexOtherViewWidthWhenSubviewHidden is invalid please use subview's myVisibility to instead!!!");
-}
-
--(BOOL)flexOtherViewWidthWhenSubviewHidden
-{
-    return NO;
-}
-
--(void)setFlexOtherViewHeightWhenSubviewHidden:(BOOL)flexOtherViewHeightWhenSubviewHidden
-{
-    NSAssert(0, @"oops!, flexOtherViewHeightWhenSubviewHidden is invalid please use subview's myVisibility to instead!!!");
-}
-
--(BOOL)flexOtherViewHeightWhenSubviewHidden
-{
-    return NO;
-}
-
-#pragma mark -- Override Method
+#pragma mark -- Override Methods
 
 -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {

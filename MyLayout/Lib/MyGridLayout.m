@@ -109,7 +109,7 @@
     return _tagsDict;
 }
 
-#pragma mark -- Public Method
+#pragma mark -- Public Methods
 
 +(id<MyGrid>)createTemplateGrid:(NSInteger)gridTag
 {
@@ -776,7 +776,7 @@
 
 
 
-#pragma mark -- Override Method
+#pragma mark -- Override Methods
 
 -(void)dealloc
 {
@@ -929,7 +929,7 @@
     return [MyGridLayoutViewSizeClass new];
 }
 
-#pragma mark -- Private Method
+#pragma mark -- Private Methods
 
 //遍历位置
 -(void)myTraversalGridOrigin:(id<MyGridNode>)grid  gridOrigin:(CGPoint)gridOrigin lsc:(MyGridLayout*)lsc sbvEnumerator:(NSEnumerator<UIView*>*)sbvEnumerator tagViewGroupIndexDict:(NSMutableDictionary*)tagViewGroupIndexDict tagSbvEnumerator:(NSEnumerator<UIView*>*)tagSbvEnumerator isEstimate:(BOOL)isEstimate sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout

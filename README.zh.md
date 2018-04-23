@@ -622,7 +622,7 @@ $ gem install cocoapods
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
-pod 'MyLayout', '~> 1.5.0'
+pod 'MyLayout', '~> 1.5.1'
 ```
    
 然后运行如下命令:

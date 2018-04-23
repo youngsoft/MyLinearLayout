@@ -261,7 +261,7 @@
     return self;
 }
 
-#pragma mark -- Private Method
+#pragma mark -- Private Methods
 
 
 -(NSNumber*)dimeNumVal
@@ -546,7 +546,7 @@
     
 }
 
-#pragma mark -- Override Method
+#pragma mark -- Override Methods
 
 -(NSString*)description
 {
