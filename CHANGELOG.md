@@ -3,6 +3,15 @@
 
 ---
 
+## [V1.5.2](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.2)(2018/05/06)
+
+#### Fixed
+1. 修复路径布局`MyPathLayout`中的方法`getSubviewPathPoint`可能产生数组越界的问题。
+2. 修复路径布局中的`MyPathSpace`的初始化方法和蓝牙框架一起使用时可能会出现编译时错误的问题。
+3. 修复表格布局`MyTableLayout`的行高是MyLayoutSize.wrap时，并且又设置了智能边界线时，列子视图的边界线显示不完整的问题。
+4. 修复了一些编译和分析有可能会产生报警的代码。
+
+
 ## [V1.5.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.1)(2018/04/23)
 
 #### Added

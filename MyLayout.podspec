@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MyLayout"
-  s.version      = "1.5.1"
+  s.version      = "1.5.2"
   s.summary      = "MyLayout is an iOS UI framework integrates the functions with Android,AutoLayout,SizeClass,HTML CSS float and flexbox,UIView UITableView."
 
   s.description  = <<-DESC
