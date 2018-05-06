@@ -14,7 +14,7 @@ static CGFloat sColCountTag = -100000;
 @interface MyTableRowLayout : MyLinearLayout
 
 
-+(id)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation;
++(MyTableRowLayout *)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation;
 
 @property(nonatomic,assign, readonly) CGFloat rowSize;
 @property(nonatomic,assign, readonly) CGFloat colSize;
@@ -28,7 +28,7 @@ static CGFloat sColCountTag = -100000;
 }
 
 
--(id)initWith:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
+-(instancetype)initWith:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
 {
     self = [super initWithOrientation:orientation];
     if (self != nil)
@@ -78,7 +78,34 @@ static CGFloat sColCountTag = -100000;
     return self;
 }
 
-+(id)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
+-(void)myHookSublayout:(MyBaseLayout *)sublayout borderlineRect:(CGRect *)pRect
+{
+    /*
+     如果行布局是包裹的，那么意味着里面的列子视图都需要自己指定行的尺寸，这样列子视图就会有不同的尺寸，如果是有智能边界线时就会出现每个列子视图的边界线的长度不一致的情况。
+     有时候我们希望列子视图的边界线能够布满整个行(比如垂直表格中，所有列子视图的的高度都和所在行的行高是一致的）因此我们需要将列子视图的边界线的可显示范围进行调整。
+     因此我们重载这个方法来解决这个问题，这个方法可以将列子视图的边界线的区域进行扩充和调整，目的是为了让列子视图的边界线能够布满整个行布局上。
+     */
+    if (self.rowSize == MyLayoutSize.wrap)
+    {
+        if (self.orientation == MyOrientation_Horz)
+        {
+            //垂直表格下，行是水平的，所以这里需要将列子视图的y轴的位置和行对齐。
+            pRect->origin.y = 0 - sublayout.frame.origin.y;
+            //垂直表格下，行是水平的，所以这里需要将子视图的边界线的高度和行的高度保持一致。
+            pRect->size.height = self.bounds.size.height;
+        }
+        else
+        {
+            //水平表格下，行是垂直的，所以这里需要将列子视图的x轴的位置和行对齐。
+            pRect->origin.x = 0 - sublayout.frame.origin.x;
+            //水平表格下，行是垂直的，所以这里需要将子视图的边界线的宽度和行的宽度保持一致。
+            pRect->size.width = self.bounds.size.width;
+        }
+    }
+}
+
+
++(MyTableRowLayout *)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
 {
     return [[self alloc] initWith:rowSize colSize:colSize orientation:orientation];
 }

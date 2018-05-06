@@ -951,19 +951,6 @@ void* _myObserverContextC = (void*)20175283;
     return self.myCurrentSizeClass.reverseLayout;
 }
 
-
-
--(void)setHideSubviewReLayout:(BOOL)hideSubviewReLayout
-{
-    //这个属性已经无效了，请单独设置子视图的myVisibility属性来控制视图的显示与否。
-    NSAssert(0, @"oops!, hideSubviewReLayout is invalid please use subview's myVisibility to instead!!!");
-}
-
--(BOOL)hideSubviewReLayout
-{
-    return NO;
-}
-
 -(void)removeAllSubviews
 {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -1934,14 +1921,28 @@ void* _myObserverContextC = (void*)20175283;
             }
         }
         
-        [_borderlineLayerDelegate setNeedsLayoutIn:CGRectMake(0, 0, newSelfSize.width, newSelfSize.height) withLayer:self.layer];
-                
+        
         //这里只用width判断的原因是如果newSelfSize被计算成功则size中的所有值都不是CGFLOAT_MAX，所以这里选width只是其中一个代表。
         if (newSelfSize.width != CGFLOAT_MAX)
         {
             UIView *supv = self.superview;
 
+            
+            //更新边界线。
+            if (_borderlineLayerDelegate != nil)
+            {
+                CGRect borderlineRect = CGRectMake(0, 0, newSelfSize.width, newSelfSize.height);
+                if ([supv isKindOfClass:[MyBaseLayout class]])
+                {
+                    //这里给父布局视图一个机会来可以改变当前布局的borderlineRect的值，也就是显示的边界线有可能会超出当前布局视图本身的区域。
+                    //比如一些表格或者其他的情况。默认情况下这个函数什么也不做。
+                    [((MyBaseLayout*)supv) myHookSublayout:self borderlineRect:&borderlineRect];
+                }
 
+                [_borderlineLayerDelegate setNeedsLayoutIn:borderlineRect withLayer:self.layer];
+
+            }
+            
             //如果自己的父视图是非UIScrollView以及非布局视图。以及自己是wrapContentWidth或者wrapContentHeight时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
             if (supv != nil && ![supv isKindOfClass:[MyBaseLayout class]])
             {
@@ -3182,7 +3183,6 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             if (sbvmyFrame.multiple)
             {
                 sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
-                sbvsc = sbvmyFrame.sizeClass;
             }
         }
     }
@@ -3331,6 +3331,10 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     
 }
 
+-(void)myHookSublayout:(MyBaseLayout *)sublayout borderlineRect:(CGRect *)pRect
+{
+    //do nothing...
+}
 
 
 @end

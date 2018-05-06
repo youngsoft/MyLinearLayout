@@ -26,13 +26,13 @@ typedef enum : NSUInteger {
 @interface MyPathSpace : NSObject
 
 /**浮动距离，根据布局视图的尺寸和子视图的数量动态决定*/
-+(id)flexed;
++(MyPathSpace *)flexed;
 
 /**固定距离，len为长度，每个子视图之间的距离都是len*/
-+(id)fixed:(CGFloat)len;
++(MyPathSpace *)fixed:(CGFloat)len;
 
 /**数量距离，根据布局视图的尺寸和指定的数量count动态决定。*/
-+(id)count:(NSInteger)count;
++(MyPathSpace *)count:(NSInteger)count;
 
 
 /**距离类型。*/

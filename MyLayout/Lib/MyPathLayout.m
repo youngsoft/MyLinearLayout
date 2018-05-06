@@ -12,7 +12,7 @@
 
 @implementation MyPathSpace
 
--(id)initWithType:(MyPathSpaceType)type value:(CGFloat)value
+-(MyPathSpace *)initWithSpaceType:(MyPathSpaceType)type value:(CGFloat)value
 {
     self = [super init];
     if (self != nil)
@@ -25,21 +25,21 @@
 }
 
 //浮动距离，根据布局视图的尺寸和子视图的数量动态决定
-+(id)flexed
++(MyPathSpace *)flexed
 {
-    return [[self alloc] initWithType:MyPathSpace_Flexed value:0];
+    return [[self alloc] initWithSpaceType:MyPathSpace_Flexed value:0];
 }
 
 //固定距离，len为长度，每个子视图之间的距离都是len
-+(id)fixed:(CGFloat)len
++(MyPathSpace *)fixed:(CGFloat)len
 {
-    return [[self alloc] initWithType:MyPathSpace_Fixed value:len];
+    return [[self alloc] initWithSpaceType:MyPathSpace_Fixed value:len];
 }
 
 //数量距离，根据布局视图的尺寸和指定的数量动态决定。
-+(id)count:(NSInteger)count
++(MyPathSpace *)count:(NSInteger)count
 {
-    return [[self alloc] initWithType:MyPathSpace_Count value:count];
+    return [[self alloc] initWithSpaceType:MyPathSpace_Count value:count];
 }
 
 
@@ -52,7 +52,7 @@
     __weak MyPathLayout *_pathLayout;
 }
 
--(id)initWithPathLayout:(MyPathLayout*)pathLayout
+-(MyCoordinateSetting *)initWithPathLayout:(MyPathLayout*)pathLayout
 {
     self = [super init];
     if (self != nil)
@@ -348,20 +348,30 @@
     
     //要求外界传递进来的索引要考虑原点视图的索引。
     NSMutableArray *retPoints = [NSMutableArray new];
-    
+    NSInteger start;
+    NSInteger end;
+    NSInteger indexsCount = self.pointIndexs.count;
+
     if (realFromIndex < realToIndex)
     {
-        NSInteger start;
-        NSInteger end;
-        if (self.pointIndexs == nil)
+        if (indexsCount == 0)
         {
             start = realFromIndex;
             end = realToIndex;
         }
         else
         {
-            start = [self.pointIndexs[realFromIndex] integerValue];
-            end = [self.pointIndexs[realToIndex] integerValue];
+            
+            if (realFromIndex >= indexsCount)
+                start = [self.pointIndexs[indexsCount - 1] integerValue];
+            else
+                start = [self.pointIndexs[realFromIndex] integerValue];
+            
+            
+            if (realToIndex >= indexsCount)
+                end = [self.pointIndexs[indexsCount - 1] integerValue];
+            else
+                end = [self.pointIndexs[realToIndex] integerValue];
         }
         
         for (NSInteger i = start; i <= end; i++)
@@ -371,8 +381,24 @@
     }
     else
     {
-        NSInteger end = [self.pointIndexs[realFromIndex] integerValue];
-        NSInteger start = [self.pointIndexs[realToIndex] integerValue];
+        if (indexsCount == 0)
+        {
+            start = realToIndex;
+            end = realFromIndex;
+        }
+        else
+        {
+            if (realFromIndex >= indexsCount)
+                end = [self.pointIndexs[indexsCount - 1] integerValue];
+            else
+                end = [self.pointIndexs[realFromIndex] integerValue];
+            
+            
+            if (realToIndex >= indexsCount)
+                start = [self.pointIndexs[indexsCount - 1] integerValue];
+            else
+                start = [self.pointIndexs[realToIndex] integerValue];
+        }
         
         for (NSInteger i = end; i >= start; i--)
         {
@@ -556,7 +582,6 @@
                 if (sbvmyFrame.multiple)
                 {
                     sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为sizeThatFits执行后会还原，所以这里要重新设置
-                    sbvsc = sbvmyFrame.sizeClass;
                 }
             }
         }

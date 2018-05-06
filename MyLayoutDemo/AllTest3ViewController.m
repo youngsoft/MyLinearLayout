@@ -299,7 +299,6 @@
 //添加一个能伸缩的布局
 -(void)addShrinkLayout:(MyLinearLayout*)contentLayout
 {
-    //下面两个布局用来测试布局视图的hideSubviewReLayout属性。
     MyLinearLayout *switchLayout = [self createSwitchLayout:NSLocalizedString(@"show all switch", @"") action:@selector(handleShrinkSwitch:)];
     switchLayout.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor redColor]]; //底部边界线设置可以缩进
     switchLayout.bottomBorderline.headIndent = 10;

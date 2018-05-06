@@ -62,7 +62,6 @@
                 if (sbvmyFrame.multiple)
                 {
                     sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为sizeThatFits执行后会还原，所以这里要重新设置
-                    sbvsc = sbvmyFrame.sizeClass;
                 }
             }
         }

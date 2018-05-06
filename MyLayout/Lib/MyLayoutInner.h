@@ -126,6 +126,8 @@
 
 -(MySizeClass)myGetGlobalSizeClass;
 
+//给父布局视图机会来更改子布局视图的边界线的显示的rect
+-(void)myHookSublayout:(MyBaseLayout*)sublayout borderlineRect:(CGRect*)pRect;
 
 @end
 

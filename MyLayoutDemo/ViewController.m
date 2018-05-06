@@ -32,6 +32,8 @@
 #import "TLTest1ViewController.h"
 #import "TLTest2ViewController.h"
 #import "TLTest3ViewController.h"
+#import "TLTest4ViewController.h"
+
 
 #import "FLLTest1ViewController.h"
 #import "FLLTest2ViewController.h"
@@ -154,6 +156,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"3.TableLayout - Intelligent Borderline", @""),
                                                @"class":[TLTest3ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"4.TableLayout - Style&Alignment", @""),
+                                               @"class":[TLTest4ViewController class]
                                                }
                                              ]
                             },

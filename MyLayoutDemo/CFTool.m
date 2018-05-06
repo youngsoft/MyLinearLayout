@@ -37,8 +37,6 @@
 
 +(UIFont*)font:(CGFloat)size
 {
-    //中文显示平方字体，英文显示ding.
-   // [NSLocale preferredLanguages]
     
     UIFont *font =  [UIFont fontWithName:@"STHeitiSC-Light" size:size];
     return  font;
