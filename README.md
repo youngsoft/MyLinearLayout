@@ -286,7 +286,7 @@ Sample code:
     S.subviewHSpace = 10;
     S.subviewVSpace = 10;
     
-    [S addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_WRAPCONTENT];
+    [S addRow:MyLayoutSize.wrap colSize:MyLayoutSize.wrap];
     
     UIView *A = [UIView new];
     A.mySize = CGSizeMake(50,40);
@@ -300,7 +300,7 @@ Sample code:
     C.mySize = CGSizeMake(30,40);
     [S addSubview:C];
     
-    [S addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_WRAPCONTENT];
+    [S addRow:MyLayoutSize.wrap colSize:MyLayoutSize.wrap];
     
     UIView *D = [UIView new];
     D.mySize = CGSizeMake(200,40);
