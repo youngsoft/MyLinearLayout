@@ -33,7 +33,7 @@
         _rootLayout.subviewVSpace = 10;
         _rootLayout.myHorzMargin = 0;
         _rootLayout.wrapContentHeight = YES;
-        _rootLayout.cacheEstimatedRect = YES;
+        _rootLayout.cacheEstimatedRect = YES;  //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         [self.contentView addSubview:_rootLayout];
         
         _titleLabel = [UILabel new];

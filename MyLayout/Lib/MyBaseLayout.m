@@ -77,6 +77,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myTop
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myTop;
 }
 
@@ -87,6 +90,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myLeading
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myLeading;
 }
 
@@ -98,6 +104,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myBottom
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myBottom;
 }
 
@@ -110,6 +119,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myTrailing
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myTrailing;
 }
 
@@ -121,6 +133,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myCenterX
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myCenterX;
 }
 
@@ -131,6 +146,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myCenterY
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myCenterY;
 }
 
@@ -142,6 +160,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGPoint)myCenter
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myCenter;
 }
 
@@ -153,6 +174,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myLeft
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myLeft;
 }
 
@@ -163,6 +187,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myRight
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myRight;
 }
 
@@ -175,6 +202,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myMargin
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myMargin;
 }
 
@@ -185,6 +215,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myHorzMargin
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myHorzMargin;
 }
 
@@ -196,6 +229,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myVertMargin
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myVertMargin;
 }
 
@@ -220,6 +256,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myWidth
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myWidth;
 }
 
@@ -231,6 +270,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myHeight
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
     return self.myCurrentSizeClass.myHeight;
 }
 
@@ -241,6 +283,10 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGSize)mySize
 {
+#if DEBUG
+    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
+#endif
+    
     return self.myCurrentSizeClass.mySize;
 }
 
@@ -1681,8 +1727,11 @@ void* _myObserverContextC = (void*)20175283;
 
 -(void)safeAreaInsetsDidChange
 {
-    [super safeAreaInsetsDidChange];
     
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+
+    [super safeAreaInsetsDidChange];
+#endif
     
     if (self.superview != nil && ![self.superview isKindOfClass:[MyBaseLayout class]] &&
         (self.leadingPosInner.isSafeAreaPos ||
@@ -2451,6 +2500,12 @@ void* _myObserverContextC = (void*)20175283;
         
      }
     
+    //这里要判断自己的宽度设置了最小和最大宽度依赖于父视图的情况。如果有这种情况，则父视图在变化时也需要调整自身。
+    if (lsc.widthSizeInner.lBoundValInner.dimeRelaVal.view == newSuperview || lsc.widthSizeInner.uBoundValInner.dimeRelaVal.view == newSuperview)
+    {
+        isAdjust = YES;
+    }
+    
     rectSelf.size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
     
     if ([MyBaseLayout isRTL])
@@ -2535,6 +2590,12 @@ void* _myObserverContextC = (void*)20175283;
         }
         else
             rectSelf.size.height = lsc.heightSizeInner.measure;
+    }
+    
+    //这里要判断自己的高度设置了最小和最大高度依赖于父视图的情况。如果有这种情况，则父视图在变化时也需要调整自身。
+    if (lsc.heightSizeInner.lBoundValInner.dimeRelaVal.view == newSuperview || lsc.heightSizeInner.uBoundValInner.dimeRelaVal.view == newSuperview)
+    {
+        isAdjust = YES;
     }
     
     rectSelf.size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
@@ -3110,7 +3171,9 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             [subview removeObserver:self forKeyPath:@"hidden"];
             [subview removeObserver:self forKeyPath:@"frame"];
             
-            if ([subview isKindOfClass:[MyBaseLayout class]])
+            //有时候我们可能会把滚动视图加入到布局视图中去，滚动视图的尺寸有可能设置为wrapContent,这样就会调整center。从而需要重新激发滚动视图的布局
+            //这也就是为什么只监听center的原因了。布局子视图也是如此。
+            if ([subview isKindOfClass:[MyBaseLayout class]] || [subview isKindOfClass:[UIScrollView class]])
             {
                 [subview removeObserver:self forKeyPath:@"center"];
             }
@@ -3134,7 +3197,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         //添加hidden, frame,center的属性通知。
         [subview addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:_myObserverContextA];
         [subview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:_myObserverContextA];
-        if ([subview isKindOfClass:[MyBaseLayout class]])
+        if ([subview isKindOfClass:[MyBaseLayout class]] || [subview isKindOfClass:[UIScrollView class]])
         {
             [subview addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:_myObserverContextA];
         }

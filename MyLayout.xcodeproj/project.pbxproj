@@ -152,6 +152,7 @@
 		205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */; };
 		205F9EBA1F7AA5710034732C /* gl.png in Resources */ = {isa = PBXBuildFile; fileRef = 205F9EB91F7AA5710034732C /* gl.png */; };
 		205F9EBC1F7AA6510034732C /* all.png in Resources */ = {isa = PBXBuildFile; fileRef = 205F9EBB1F7AA6510034732C /* all.png */; };
+		2075CC3220A0B2A400BA6F65 /* FLLTest7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2075CC3120A0B2A400BA6F65 /* FLLTest7ViewController.m */; };
 		208157BD1F586AA700E945B6 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157BC1F586AA700E945B6 /* DetailViewController.m */; };
 		208157C21F5A886300E945B6 /* MyLayoutDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 208157C01F5A886300E945B6 /* MyLayoutDelegate.h */; };
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
@@ -383,6 +384,8 @@
 		205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GLTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		205F9EB91F7AA5710034732C /* gl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gl.png; sourceTree = "<group>"; };
 		205F9EBB1F7AA6510034732C /* all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = all.png; sourceTree = "<group>"; };
+		2075CC3020A0B29700BA6F65 /* FLLTest7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest7ViewController.h; sourceTree = "<group>"; };
+		2075CC3120A0B2A400BA6F65 /* FLLTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest7ViewController.m; sourceTree = "<group>"; };
 		208157BB1F586A9900E945B6 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		208157BC1F586AA700E945B6 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		208157C01F5A886300E945B6 /* MyLayoutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDelegate.h; sourceTree = "<group>"; };
@@ -558,6 +561,8 @@
 				18D3C9361EDF07C000D3DE43 /* FLLTest5ViewController.m */,
 				18D3C9371EDF07C000D3DE43 /* FLLTest6ViewController.h */,
 				18D3C9381EDF07C000D3DE43 /* FLLTest6ViewController.m */,
+				2075CC3020A0B29700BA6F65 /* FLLTest7ViewController.h */,
+				2075CC3120A0B2A400BA6F65 /* FLLTest7ViewController.m */,
 			);
 			name = FlowLayoutDemo;
 			sourceTree = "<group>";
@@ -1097,6 +1102,7 @@
 				18D3C95C1EDF07F800D3DE43 /* FOLTest3ViewController.m in Sources */,
 				18D3C9491EDF07E700D3DE43 /* PLTest1ViewController.m in Sources */,
 				18D3C95D1EDF07F800D3DE43 /* FOLTest4ViewController.m in Sources */,
+				2075CC3220A0B2A400BA6F65 /* FLLTest7ViewController.m in Sources */,
 				182225CE1E77E5930081AA4B /* MyFrameLayout.m in Sources */,
 				18D3C9941EDF08F800D3DE43 /* YYFPSLabel.m in Sources */,
 				18D3C91D1EDF078200D3DE43 /* FLTest2ViewController.m in Sources */,

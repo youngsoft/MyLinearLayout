@@ -111,7 +111,7 @@
     _rootLayout= [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     _rootLayout.topPadding = 5;
     _rootLayout.bottomPadding = 5;
-    _rootLayout.cacheEstimatedRect = YES;
+    _rootLayout.cacheEstimatedRect = YES;  //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
  
     /*
      在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
@@ -168,7 +168,7 @@
     _rootLayout = [MyRelativeLayout new];
     _rootLayout.topPadding = 5;
     _rootLayout.bottomPadding = 5;
-    _rootLayout.cacheEstimatedRect = YES;
+    _rootLayout.cacheEstimatedRect = YES; //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
  
     /*
      在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
@@ -218,7 +218,7 @@
     _rootLayout= [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     _rootLayout.topPadding = 5;
     _rootLayout.bottomPadding = 5;
-    _rootLayout.cacheEstimatedRect = YES;
+    _rootLayout.cacheEstimatedRect = YES; //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
     
     /*
      在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：

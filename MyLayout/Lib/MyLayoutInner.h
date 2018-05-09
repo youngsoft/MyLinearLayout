@@ -149,9 +149,13 @@
 
 @property(nonatomic, strong,readonly)  MyLayoutPos *baselinePosInner;
 
+#if UIKIT_DEFINE_AS_PROPERTIES
 
 @property(class, nonatomic, assign) BOOL isRTL;
-
+#else
++(BOOL)isRTL;
++(void)setIsRTL:(BOOL)isRTL;
+#endif
 
 @end
 

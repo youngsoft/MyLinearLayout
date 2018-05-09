@@ -392,10 +392,12 @@
         }
         
         MyGravity sbvVertAlignment = sbvsc.myAlignment & MyGravity_Horz_Mask;
-        if (sbvVertAlignment != MyGravity_None)
-            vertAlignment = sbvVertAlignment;
+        if (sbvVertAlignment == MyGravity_None)
+            sbvVertAlignment = vertAlignment;
+        if (vertAlignment == MyGravity_Vert_Between)
+            sbvVertAlignment = MyGravity_Vert_Between;
         
-        if ((vertAlignment != MyGravity_None && vertAlignment != MyGravity_Vert_Top) || _myCGFloatNotEqual(addXPos, 0)  ||  _myCGFloatNotEqual(addXFill, 0))
+        if ((sbvVertAlignment != MyGravity_None && sbvVertAlignment != MyGravity_Vert_Top) || _myCGFloatNotEqual(addXPos, 0)  ||  _myCGFloatNotEqual(addXFill, 0))
         {
             
             sbvmyFrame.leading += addXPos;
@@ -419,7 +421,7 @@
             }
             
             
-            switch (vertAlignment) {
+            switch (sbvVertAlignment) {
                 case MyGravity_Vert_Center:
                 {
                     sbvmyFrame.top += (rowMaxHeight - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal - sbvmyFrame.height) / 2;
@@ -471,7 +473,7 @@
                 break;
             case MyGravity_Vert_Between:
             {
-                //总宽度减去最大的宽度。再除以数量表示每个应该扩展的空间。最后一行无效(如果数量和单行的数量相等除外)。
+                //总高度减去最大的高度。再除以数量表示每个应该扩展的空间。最后一行无效(如果数量和单行的数量相等除外)。
                 if ((startIndex != sbs.count || count == lsc.arrangedCount) && count > 1)
                 {
                     addYFill = (selfSize.height - paddingVert - colMaxHeight) / (count - 1);
@@ -556,11 +558,14 @@
             }
         }
         
-        CGFloat sbvHorzAlignment = [self myConvertLeftRightGravityToLeadingTrailing:sbvsc.myAlignment & MyGravity_Vert_Mask];
-        if (sbvHorzAlignment != MyGravity_None)
-            horzAlignment = sbvHorzAlignment;
         
-        if ((horzAlignment != MyGravity_None && horzAlignment != MyGravity_Horz_Leading) || _myCGFloatNotEqual(addYPos, 0) || _myCGFloatNotEqual(addYFill, 0) )
+        MyGravity sbvHorzAlignment = [self myConvertLeftRightGravityToLeadingTrailing:sbvsc.myAlignment & MyGravity_Vert_Mask];
+        if (sbvHorzAlignment == MyGravity_None)
+            sbvHorzAlignment = horzAlignment;
+        if (horzAlignment == MyGravity_Horz_Between)
+            sbvHorzAlignment = MyGravity_Horz_Between;
+        
+        if ((sbvHorzAlignment != MyGravity_None && sbvHorzAlignment != MyGravity_Horz_Leading) || _myCGFloatNotEqual(addYPos, 0) || _myCGFloatNotEqual(addYFill, 0) )
         {
             sbvmyFrame.top += addYPos;
             
@@ -581,8 +586,7 @@
                 sbvmyFrame.top += addYFill * (j - (startIndex - count));
             }
             
-            
-            switch (horzAlignment) {
+            switch (sbvHorzAlignment) {
                 case MyGravity_Horz_Center:
                 {
                     sbvmyFrame.leading += (colMaxWidth - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal - sbvmyFrame.width) / 2;
@@ -982,12 +986,14 @@
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
     
+    BOOL autoArrange = lsc.autoArrange;
     NSInteger arrangedCount = lsc.arrangedCount;
     CGFloat xPos = paddingLeading;
     CGFloat yPos = paddingTop;
     CGFloat rowMaxHeight = 0;  //某一行的最高值。
     CGFloat rowMaxWidth = 0;   //某一行的最宽值
     CGFloat maxWidth = paddingLeading;  //全部行的最宽值
+    CGFloat maxHeight = paddingTop; //最大的高度
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
     MyGravity vertAlign = lsc.arrangedGravity & MyGravity_Horz_Mask;
@@ -1114,6 +1120,16 @@
         [self myCalcVertLayoutSinglelineWeight:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
     }
     
+    //每列的下一个位置。
+    NSMutableArray<NSValue*> *nextPointOfRows = nil;
+    if (autoArrange)
+    {
+        nextPointOfRows = [NSMutableArray arrayWithCapacity:arrangedCount];
+        for (NSInteger idx = 0; idx < arrangedCount; idx++)
+        {
+            [nextPointOfRows addObject:[NSValue valueWithCGPoint:CGPointMake(paddingLeading, paddingTop)]];
+        }
+    }
     
     CGFloat pageWidth  = 0; //页宽。
     CGFloat averageWidth = (selfSize.width - paddingHorz - (arrangedCount - 1) * horzSpace) / arrangedCount;
@@ -1203,16 +1219,77 @@
         
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
+        //得到最大的行高
+        if (_myCGFloatLess(rowMaxHeight, topSpace + bottomSpace + rect.size.height))
+            rowMaxHeight = topSpace + bottomSpace + rect.size.height;
+        
+        
+        //自动排列。
+        if (autoArrange)
+        {
+            //查找能存放当前子视图的最小y轴的位置以及索引。
+            CGPoint minPt = CGPointMake(CGFLOAT_MAX, CGFLOAT_MAX);
+            NSInteger minNextPointIndex = 0;
+            for (int idx = 0; idx < arrangedCount; idx++)
+            {
+                CGPoint pt = nextPointOfRows[idx].CGPointValue;
+                if (minPt.y > pt.y)
+                {
+                    minPt = pt;
+                    minNextPointIndex = idx;
+                }
+            }
+            
+            //找到的minNextPointIndex中的
+            xPos = minPt.x;
+            yPos = minPt.y;
+            
+            minPt.y = minPt.y + topSpace + rect.size.height + bottomSpace + vertSpace;
+            nextPointOfRows[minNextPointIndex] = [NSValue valueWithCGPoint:minPt];
+            if (minNextPointIndex + 1 <= arrangedCount - 1)
+            {
+                minPt = nextPointOfRows[minNextPointIndex + 1].CGPointValue;
+                minPt.x = xPos + leadingSpace + rect.size.width + trailingSpace + horzSpace;
+                nextPointOfRows[minNextPointIndex + 1] = [NSValue valueWithCGPoint:minPt];
+            }
+            
+            if (_myCGFloatLess(maxHeight, yPos + topSpace + rect.size.height + bottomSpace))
+                maxHeight = yPos + topSpace + rect.size.height + bottomSpace;
+            
+        }
+        else if (vertAlign == MyGravity_Vert_Between)
+        { //当列是紧凑排列时需要特殊处理当前的垂直位置。
+            //第0行特殊处理。
+            if (i - arrangedCount < 0)
+            {
+                yPos = paddingTop;
+            }
+            else
+            {
+                //取前一行的对应的列的子视图。
+                MyFrame *myPrevColSbvFrame = ((UIView*)sbs[i - arrangedCount]).myFrame;
+                UIView *myPrevColSbvsc = [self myCurrentSizeClassFrom:myPrevColSbvFrame];
+                //当前子视图的位置等于前一行对应列的最大y的值 + 前面对应列的底部间距 + 子视图之间的行间距。
+                yPos =  CGRectGetMaxY(myPrevColSbvFrame.frame)+ myPrevColSbvsc.bottomPosInner.absVal + vertSpace;
+            }
+            
+            if (_myCGFloatLess(maxHeight, yPos + topSpace + rect.size.height + bottomSpace))
+                maxHeight = yPos + topSpace + rect.size.height + bottomSpace;
+        }
+        else
+        {//正常排列。
+            //这里的最大其实就是最后一个视图的位置加上最高的子视图的尺寸。
+            maxHeight = yPos + rowMaxHeight;
+        }
+        
         rect.origin.x = xPos + leadingSpace;
         rect.origin.y = yPos + topSpace;
         xPos += leadingSpace + rect.size.width + trailingSpace;
         
-        if (arrangedIndex != (arrangedCount - 1))
+        if (arrangedIndex != (arrangedCount - 1) && !autoArrange)
             xPos += horzSpace;
         
         
-        if (_myCGFloatLess(rowMaxHeight, topSpace + bottomSpace + rect.size.height))
-            rowMaxHeight = topSpace + bottomSpace + rect.size.height;
         
         if (_myCGFloatLess(rowMaxWidth, (xPos - paddingLeading)))
             rowMaxWidth = (xPos - paddingLeading);
@@ -1231,9 +1308,11 @@
     //最后一行
     [self myCalcVertLayoutSinglelineAlignment:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
     
+    maxHeight += paddingBottom;
+    
     if (lsc.wrapContentHeight)
     {
-        selfSize.height = yPos + paddingBottom + rowMaxHeight;
+        selfSize.height = maxHeight;
         
         //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
         if (isVertPaging && isPagingScroll)
@@ -1254,22 +1333,22 @@
         
         if (vertGravity == MyGravity_Vert_Center)
         {
-            addYPos = (selfSize.height - paddingBottom - rowMaxHeight - yPos) / 2;
+            addYPos = (selfSize.height - maxHeight) / 2;
         }
         else if (vertGravity == MyGravity_Vert_Bottom)
         {
-            addYPos = selfSize.height - paddingBottom - rowMaxHeight - yPos;
+            addYPos = selfSize.height - maxHeight;
         }
         else if (vertGravity == MyGravity_Vert_Fill)
         {
             if (arranges > 0)
-                fill = (selfSize.height - paddingBottom - rowMaxHeight - yPos) / arranges;
+                fill = (selfSize.height - maxHeight) / arranges;
         }
         else if (vertGravity == MyGravity_Vert_Between)
         {
             
             if (arranges > 1)
-                between = (selfSize.height - paddingBottom - rowMaxHeight - yPos) / (arranges - 1);
+                between = (selfSize.height - maxHeight) / (arranges - 1);
         }
         
         
@@ -1611,12 +1690,14 @@
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
 
+    BOOL autoArrange = lsc.autoArrange;
     NSInteger arrangedCount = lsc.arrangedCount;
     CGFloat xPos = paddingLeading;
     CGFloat yPos = paddingTop;
     CGFloat colMaxWidth = 0;  //每列的最大宽度
     CGFloat colMaxHeight = 0; //每列的最大高度
     CGFloat maxHeight = paddingTop;
+    CGFloat maxWidth = paddingLeading; //最大的宽度。
     
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
@@ -1766,7 +1847,17 @@
         [self myCalcHorzLayoutSinglelineWeight:selfSize totalFloatHeight:selfSize.height - paddingVert - rowTotalFixedHeight totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
     }
     
-    
+    //每行的下一个位置。
+    NSMutableArray<NSValue*> *nextPointOfRows = nil;
+    if (autoArrange)
+    {
+        nextPointOfRows = [NSMutableArray arrayWithCapacity:arrangedCount];
+        for (NSInteger idx = 0; idx < arrangedCount; idx++)
+        {
+            [nextPointOfRows addObject:[NSValue valueWithCGPoint:CGPointMake(paddingLeading, paddingTop)]];
+        }
+    }
+   
     CGFloat pageHeight = 0; //页高
     CGFloat averageHeight = (selfSize.height - paddingVert - (arrangedCount - 1) * vertSpace) / arrangedCount;
     arrangedIndex = 0;
@@ -1840,17 +1931,76 @@
                 rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:[sbvsc.widthSizeInner measureWith: rect.size.height ] sbvSize:rect.size selfLayoutSize:selfSize];
         }
         
-        
-        rect.origin.y = yPos + topSpace;
-        rect.origin.x = xPos + leadingSpace;
-        yPos += topSpace + rect.size.height + bottomSpace;
-        
-        if (arrangedIndex != (arrangedCount - 1))
-            yPos += vertSpace;
-        
-        
+        //得到最大的列宽
         if (_myCGFloatLess(colMaxWidth, leadingSpace + trailingSpace + rect.size.width))
             colMaxWidth = leadingSpace + trailingSpace + rect.size.width;
+        
+        //自动排列。
+        if (autoArrange)
+        {
+            //查找能存放当前子视图的最小x轴的位置以及索引。
+            CGPoint minPt = CGPointMake(CGFLOAT_MAX, CGFLOAT_MAX);
+            NSInteger minNextPointIndex = 0;
+            for (int idx = 0; idx < arrangedCount; idx++)
+            {
+                CGPoint pt = nextPointOfRows[idx].CGPointValue;
+                if (minPt.x > pt.x)
+                {
+                    minPt = pt;
+                    minNextPointIndex = idx;
+                }
+            }
+            
+            //找到的minNextPointIndex中的
+            xPos = minPt.x;
+            yPos = minPt.y;
+            
+            minPt.x = minPt.x + leadingSpace + rect.size.width + trailingSpace + horzSpace;
+            nextPointOfRows[minNextPointIndex] = [NSValue valueWithCGPoint:minPt];
+            if (minNextPointIndex + 1 <= arrangedCount - 1)
+            {
+                minPt = nextPointOfRows[minNextPointIndex + 1].CGPointValue;
+                minPt.y = yPos + topSpace + rect.size.height + bottomSpace + vertSpace;
+                nextPointOfRows[minNextPointIndex + 1] = [NSValue valueWithCGPoint:minPt];
+            }
+            
+            if (_myCGFloatLess(maxWidth, xPos + leadingSpace + rect.size.width + trailingSpace))
+                maxWidth = xPos + leadingSpace + rect.size.width + trailingSpace;
+        
+        }
+        else if (horzAlign == MyGravity_Horz_Between)
+        { //当列是紧凑排列时需要特殊处理当前的水平位置。
+            //第0列特殊处理。
+            if (i - arrangedCount < 0)
+            {
+                xPos = paddingLeading;
+            }
+            else
+            {
+                //取前一列的对应的行的子视图。
+                MyFrame *myPrevColSbvFrame = ((UIView*)sbs[i - arrangedCount]).myFrame;
+                UIView *myPrevColSbvsc = [self myCurrentSizeClassFrom:myPrevColSbvFrame];
+                //当前子视图的位置等于前一列对应行的最大x的值 + 前面对应行的尾部间距 + 子视图之间的列间距。
+                xPos =  CGRectGetMaxX(myPrevColSbvFrame.frame)+ myPrevColSbvsc.trailingPosInner.absVal + horzSpace;
+            }
+            
+            if (_myCGFloatLess(maxWidth, xPos + leadingSpace + rect.size.width + trailingSpace))
+                maxWidth = xPos + leadingSpace + rect.size.width + trailingSpace;
+        }
+        else
+        {//正常排列。
+            //这里的最大其实就是最后一个视图的位置加上最宽的子视图的尺寸。
+            maxWidth = xPos + colMaxWidth;
+        }
+        
+        rect.origin.x = xPos + leadingSpace;
+        rect.origin.y = yPos + topSpace;
+        yPos += topSpace + rect.size.height + bottomSpace;
+        
+        //不是最后一行以及非自动排列时才添加布局视图设置的行间距。自动排列的情况下上面已经有添加行间距了。
+        if (arrangedIndex != (arrangedCount - 1) && !autoArrange)
+            yPos += vertSpace;
+        
         
         if (_myCGFloatLess(colMaxHeight, (yPos - paddingTop)))
             colMaxHeight = yPos - paddingTop;
@@ -1858,7 +2008,7 @@
         if (_myCGFloatLess(maxHeight, yPos))
             maxHeight = yPos;
         
-        
+    
         sbvmyFrame.frame = rect;
         
         
@@ -1881,13 +2031,14 @@
             if (_myCGFloatLess(selfSize.height, totalPages * CGRectGetHeight(self.superview.bounds)))
                 selfSize.height = totalPages * CGRectGetHeight(self.superview.bounds);
         }
-        
-        
     }
+    
+    
+    maxWidth += paddingTrailing;
     
     if (lsc.wrapContentWidth)
     {
-        selfSize.width = xPos + paddingTrailing + colMaxWidth;
+        selfSize.width = maxWidth;
         
         //只有在父视图为滚动视图，且开启了分页滚动时才会扩充具有包裹设置的布局视图的宽度。
         if (isHorzPaging && isPagingScroll)
@@ -1905,25 +2056,25 @@
         CGFloat addXPos = 0;
         CGFloat between = 0;
         CGFloat fill = 0;
-        int arranges = floor((sbs.count + arrangedCount - 1.0) / arrangedCount);
+        int arranges = floor((sbs.count + arrangedCount - 1.0) / arrangedCount); //列数
         
         if (horzGravity == MyGravity_Horz_Center)
         {
-            addXPos = (selfSize.width - paddingTrailing - colMaxWidth - xPos) / 2;
+            addXPos = (selfSize.width - maxWidth) / 2;
         }
         else if (horzGravity == MyGravity_Horz_Trailing)
         {
-            addXPos = selfSize.width - paddingTrailing - colMaxWidth - xPos;
+            addXPos = selfSize.width - maxWidth;
         }
         else if (horzGravity == MyGravity_Horz_Fill)
         {
             if (arranges > 0)
-                fill = (selfSize.width - paddingTrailing - colMaxWidth - xPos) / arranges;
+                fill = (selfSize.width - maxWidth) / arranges;
         }
         else if (horzGravity == MyGravity_Horz_Between)
         {
             if (arranges > 1)
-                between = (selfSize.width - paddingLeading - colMaxWidth - xPos) / (arranges - 1);
+                between = (selfSize.width - maxWidth) / (arranges - 1);
         }
         
         if (addXPos != 0 || between != 0 || fill != 0)

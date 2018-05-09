@@ -172,100 +172,100 @@
 
 
 /**
- *视图上边的布局位置, 是topPos.equalTo方法的简化版本
+ *视图上边的布局位置, 是topPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Top layout position of the view. Equivalent to topPos.equalTo(NSNumber).
+ *Top layout position of the view. Equivalent to topPos.equalTo(NSNumber). Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myTop;
 
 
 /**
- *视图头部的布局位置, 是leadingPos.equalTo方法的简化版本
+ *视图头部的布局位置, 是leadingPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Leading layout position of the view. Equivalent to leadingPos.equalTo(NSNumber).
+ *Leading layout position of the view. Equivalent to leadingPos.equalTo(NSNumber).Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myLeading;
 
 
 /**
- *视图下边的布局位置, 是bottomPos.equalTo方法的简化版本
+ *视图下边的布局位置, 是bottomPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Bottom layout position of the view. Equivalent to bottomPos.equalTo(NSNumber).
+ *Bottom layout position of the view. Equivalent to bottomPos.equalTo(NSNumber).Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myBottom;
 
 
 /**
- *视图尾部的布局位置, 是trailingPos.equalTo方法的简化版本
+ *视图尾部的布局位置, 是trailingPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Trailing layout position of the view. Equivalent to trailingPos.equalTo(NSNumber).
+ *Trailing layout position of the view. Equivalent to trailingPos.equalTo(NSNumber).Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myTrailing;
 
 
 /**
- *视图水平中心布局位置, 是centerXPos.equalTo方法的简化版本
+ *视图水平中心布局位置, 是centerXPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Horizontal center layout position of the view. Equivalent to centerXPos.equalTo(NSNumber).
+ *Horizontal center layout position of the view. Equivalent to centerXPos.equalTo(NSNumber).Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myCenterX;
 
 /**
- *视图垂直中心布局位置, 是centerYPos.equalTo方法的简化版本
+ *视图垂直中心布局位置, 是centerYPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Vertical center layout position of the view. Equivalent to centerYPos.equalTo(NSNumber).
+ *Vertical center layout position of the view. Equivalent to centerYPos.equalTo(NSNumber).Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myCenterY;
 
 /**
- *视图中心布局位置, 是myCenterX,myCenterY方法的简化版本
+ *视图中心布局位置, 是myCenterX,myCenterY方法的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Center layout position of the view. Equivalent to set myCenterX and myCenterY .
+ *Center layout position of the view. Equivalent to set myCenterX and myCenterY .Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGPoint myCenter;
 
 
 /**
- *视图左边的布局位置, 是leftPos.equalTo方法的简化版本
+ *视图左边的布局位置, 是leftPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Left layout position of the view. Equivalent to leftPos.equalTo(NSNumber).
+ *Left layout position of the view. Equivalent to leftPos.equalTo(NSNumber).Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myLeft;
 
 
 /**
- *视图右边的布局位置, 是rightPos.equalTo方法的简化版本
+ *视图右边的布局位置, 是rightPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Right layout position of the view. Equivalent to rightPos.equalTo(NSNumber).
+ *Right layout position of the view. Equivalent to rightPos.equalTo(NSNumber).Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myRight;
 
 
 
 /**
- *视图四边的布局位置, 是myLeading,myTop,myTrailing,myBottom的简化版本
+ *视图四边的布局位置, 是myLeading,myTop,myTrailing,myBottom的简化版本。此属性只用于赋值不用于读取！
  */
 /**
- *Boundary layout position of the view. Equivalent to myLeading,myTop,myTrailing,myBottom set to the same number.
+ *Boundary layout position of the view. Equivalent to myLeading,myTop,myTrailing,myBottom set to the same number.Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myMargin;
 
 /**
- *leading and trailing margin of the view to the superview. Equivalent to myLeading,myTrailing set to the same number
+ *leading and trailing margin of the view to the superview. Equivalent to myLeading,myTrailing set to the same number.Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myHorzMargin;
 
 /**
- *top and bottom margin of the view to the superview. Equivalent to myTop,myBottom set to the same number
+ *top and bottom margin of the view to the superview. Equivalent to myTop,myBottom set to the same number.Only for setting, not for getting.
  */
 @property(nonatomic, assign) IBInspectable CGFloat myVertMargin;
 
@@ -337,17 +337,17 @@
  */
 
 /**
- *视图的宽度布局尺寸,是widthSize.equalTo方法的简化版本
+ *视图的宽度布局尺寸,是widthSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 @property(nonatomic,assign) IBInspectable CGFloat myWidth;
 
 /**
- *视图的高度布局尺寸,是heightSize.equalTo方法的简化版本
+ *视图的高度布局尺寸,是heightSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！
  */
 @property(nonatomic,assign) IBInspectable CGFloat myHeight;
 
 /**
- *视图的宽度高度布局尺寸,是myWidth,myHeight方法的简化版本
+ *视图的宽度高度布局尺寸,是myWidth,myHeight方法的简化版本。此属性只用于赋值不用于读取！
  */
 @property(nonatomic,assign) IBInspectable  CGSize  mySize;
 
@@ -622,11 +622,15 @@
  */
 @interface MyBaseLayout : UIView
 
+#if UIKIT_DEFINE_AS_PROPERTIES
 /**
   用于实现对阿拉伯国家的布局适配。对于非阿拉伯国家来说，界面布局都是默认从左到右排列。而对于阿拉伯国家来说界面布局则默认是从右往左排列。默认这个属性是NO，您可以将这个属性设置为YES，这样布局里面的所有视图都将从右到左进行排列布局。如果您需要考虑国际化布局的问题，那么您应该用leadingPos来表示头部的位置，而用trailingPos来表示尾部的位置，这样当布局方向是LTR时那么leadingPos就表示的是左边而trailingPos则表示的是右边；而当布局方向是RTL时那么leadingPos表示的是右边而trailingPos则表示的是左边。如果您的界面布局不会考虑到国际化以及不需要考虑RTL时那么您可以用leftPos和rightPos来表示左右而不需要用leadingPos和trailingPos。
  */
 @property(class, nonatomic, assign) BOOL isRTL;
-
+#else
++(BOOL)isRTL;
++(void)setIsRTL:(BOOL)isRTL;
+#endif
 
 /*
  布局视图里面的padding属性用来设置布局视图的内边距。内边距是指布局视图里面的子视图离自己距离。外边距则是视图与父视图之间的距离。
@@ -938,6 +942,9 @@
  }
  
  @endcode
+ 
+ @note
+   这个属性有可能会造成动态高度计算不正确，请只在UITableviewCell的高度为自适应时使用，其他地方不建议设置这个属性！！
  */
 @property(nonatomic, assign) BOOL cacheEstimatedRect;
 

@@ -33,6 +33,7 @@
 "4.FlowLayout - Weight" = "4.流式布局-对线性布局的替代方案";
 "5.FlowLayout - Paging" = "5.流式布局-对分页滚动的支持";
 "6.FlowLayout - Scroll" = "6.流式布局-不同方向的滚动";
+"7.FlowLayout - Auto Arrange" = "7.流式布局-自动布局和对瀑布流的支持";
 "1.FloatLayout - Float" = "1.浮动布局-浮动效果的演示";
 "2.FloatLayout - Jagged" = "2.浮动布局-仿天猫淘宝首页实现" ;
 "3.FloatLayout - Card news" = "3.浮动布局-仿ZAKER今日头条实现";

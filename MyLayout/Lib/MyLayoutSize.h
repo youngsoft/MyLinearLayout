@@ -24,14 +24,26 @@
  */
 @interface MyLayoutSize : NSObject<NSCopying>
 
-
+#if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸由子视图决定或者由内容决定。目前只用在表格布局MyTableLayout和栅格布局MyGridLayout中。*/
 @property(class, nonatomic, assign,readonly) CGFloat wrap;
+#else
++(CGFloat)wrap;
+#endif
+
+#if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸会填充满父视图的剩余空间。目前只用在表格布局MyTableLayout和栅格布局MyGridLayout中。*/
 @property(class, nonatomic, assign,readonly) CGFloat fill;
+#else
++(CGFloat)fill;
+#endif
+
+#if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸会均分父视图的剩余空间。目前只用在表格布局MyTableLayout */
 @property(class, nonatomic, assign,readonly) CGFloat average;
-
+#else
++(CGFloat)average;
+#endif
 
 //because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
 //if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.

@@ -75,6 +75,8 @@
  */
 @interface MyLayoutPos : NSObject<NSCopying>
 
+#if UIKIT_DEFINE_AS_PROPERTIES
+
 /**
  特殊的位置。只用在布局视图和非布局父视图之间的位置约束和没有导航条时的布局视图内子视图的padding设置上。
  iOS11以后提出了安全区域的概念，因此对于iOS11以下的版本就需要兼容处理，尤其是在那些没有导航条的情况下。通过将布局视图的边距设置为这个特殊值就可以实现在任何版本中都能完美的实现位置的偏移而且各版本保持统一。比如下面的例子：
@@ -110,7 +112,9 @@
  
  */
 @property(class, nonatomic, assign,readonly) CGFloat safeAreaMargin;
-
+#else
++(CGFloat)safeAreaMargin;
+#endif
 
 //because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
 //if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.

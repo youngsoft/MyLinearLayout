@@ -3,13 +3,28 @@
 
 ---
 
+## [V1.5.3](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.3)(2018/05/11)
+
+#### Added
+1.添加了流式布局`MyFlowLayout`对瀑布流的支持，主要是数量约束流式布局来实现，通过设置`autoArrange`为YES或者设置`arrangedGravity`属性为`MyGravity_Horz_Between或者MyGravity_Vert_Between`来实现两种不同策略的瀑布流模式，瀑布流模式其实就是一种紧凑的流式布局排列方式。具体的DEMO在新增加的[FLLTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/FLLTest7ViewController.m)中可以查看。
+
+#### Fixed
+1. 修复了流式布局`MyFlowLayout`中的arrangedGravity属性设置和子视图的myAlignment属性同时设置时有可能对齐方式不正确的问题，以及gravity属性设置后停靠有可能不正确的问题。
+2. 优化和修复了对UIScrollView+布局视图时，设置UIScrollView的高度或者宽度由布局视图的尺寸进行自适应的问题。新版本中UIScrollView的尺寸可以依赖于布局视图的尺寸，同时布局视图的最大最小尺寸可以设置为UIScrollView的尺寸。具体例子参考：[FLLTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/FLLTest7ViewController.m)
+3. 添加了对`myTop,myBottom,myLeft,myRight,myLeading,myTrailing,mySize,myWidth,myHeight,myMargin, myHorzMargin, myVertMargin`的读取使用的告警处理！一般情况下这些属性只能用于设置具体的数值，而不能用来获取某个尺寸，get方法也并不代表着视图的约束尺寸，这个点切记，切记。
+4. 添加了对布局视图的`cacheEstimatedRect`属性的使用限制说明，这个属性只能用于那些需要高度自适应的UITableViewCell的根布局视图中使用，其他地方如果使用则有可能会出现计算不正确的问题。
+5. 恢复了对XCODE8.0以前的编译器版本使用MyLayout的支持。
+
+
+
 ## [V1.5.2](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.2)(2018/05/06)
 
 #### Fixed
 1. 修复路径布局`MyPathLayout`中的方法`getSubviewPathPoint`可能产生数组越界的问题。
-2. 修复路径布局中的`MyPathSpace`的初始化方法和蓝牙框架一起使用时可能会出现编译时错误的问题。
-3. 修复表格布局`MyTableLayout`的行高是MyLayoutSize.wrap时，并且又设置了智能边界线时，列子视图的边界线显示不完整的问题。
+2. 修复路径布局中的`MyPathSpace`的初始化方法和蓝牙框架一起使用时可能会出现编译时错误的问题。[BUG#70](https://github.com/youngsoft/MyLinearLayout/issues/70)
+3. 修复表格布局`MyTableLayout`的行高是MyLayoutSize.wrap时，并且又设置了智能边界线时，列子视图的边界线显示不完整的问题。[BUG#71](https://github.com/youngsoft/MyLinearLayout/issues/71)
 4. 修复了一些编译和分析有可能会产生报警的代码。
+5. 提供了新的关于表格布局的DEMO：[TLTest4ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/TLTest4ViewController.m)
 
 
 ## [V1.5.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.1)(2018/04/23)

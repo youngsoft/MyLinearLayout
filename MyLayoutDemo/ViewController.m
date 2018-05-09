@@ -41,6 +41,7 @@
 #import "FLLTest4ViewController.h"
 #import "FLLTest5ViewController.h"
 #import "FLLTest6ViewController.h"
+#import "FLLTest7ViewController.h"
 
 
 #import "AllTest1ViewController.h"
@@ -182,6 +183,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"6.FlowLayout - Scroll", @""),
                                                @"class":[FLLTest6ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"7.FlowLayout - Auto Arrange", @""),
+                                               @"class":[FLLTest7ViewController class]
                                                }
                                              ]
                             },
