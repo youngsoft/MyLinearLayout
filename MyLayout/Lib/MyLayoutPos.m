@@ -9,6 +9,7 @@
 #import "MyLayoutPos.h"
 #import "MyLayoutPosInner.h"
 #import "MyBaseLayout.h"
+#import "MyLayoutMath.h"
 
 
 
@@ -20,38 +21,90 @@
     MyLayoutPos *_uBoundVal;
 }
 
++(CGFloat)safeAreaMargin
+{
+    //在2017年10月3号定义的一个数字，没有其他特殊意义。
+    return -20171003.0;
+}
+
 -(id)init
 {
     self = [super init];
     if (self != nil)
     {
+        _active = YES;
         _view = nil;
-        _pos = MyMarginGravity_None;
+        _pos = MyGravity_None;
         _posVal = nil;
         _posValType = MyLayoutValueType_Nil;
         _offsetVal = 0;
-        _lBoundVal = [[MyLayoutPos alloc] initWithNoBound];
-        _lBoundVal.equalTo(@(-CGFLOAT_MAX));
-        _uBoundVal = [[MyLayoutPos alloc] initWithNoBound];
-        _uBoundVal.equalTo(@(CGFLOAT_MAX));
+        _lBoundVal = nil;
+        _uBoundVal = nil;
     }
     
     return self;
 }
 
--(id)initWithNoBound
+
+
+-(MyLayoutPos* (^)(id val))myEqualTo
 {
-    self = [super init];
-    if (self !=nil)
-    {
-        _view = nil;
-        _pos = MyMarginGravity_None;
-        _posVal = nil;
-        _posValType = MyLayoutValueType_Nil;
-        _offsetVal = 0;
-    }
-    
-    return self;
+    return ^id(id val){
+        
+        return [self __equalTo:val];
+    };
+}
+
+
+-(MyLayoutPos* (^)(CGFloat val))myOffset
+{
+    return ^id(CGFloat val){
+        
+        return [self __offset:val];
+    };
+}
+
+
+-(MyLayoutPos* (^)(CGFloat val))myMin
+{
+    return ^id(CGFloat val){
+        
+        return [self __min:val];
+    };
+}
+
+
+-(MyLayoutPos* (^)(CGFloat val))myMax
+{
+    return ^id(CGFloat val){
+        
+        return [self __max:val];
+    };
+}
+
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myLBound
+{
+    return ^id(id posVal, CGFloat offset){
+        
+        return [self __lBound:posVal offsetVal:offset];
+    };
+}
+
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myUBound
+{
+    return ^id(id posVal, CGFloat offset){
+        
+        return [self __uBound:posVal offsetVal:offset];
+    };
+}
+
+
+
+
+
+-(void)myClear
+{
+    [self __clear];
 }
 
 
@@ -59,52 +112,25 @@
 {
     return ^id(id val){
         
-        if (![_posVal isEqual:val])
-        {
-            _posVal = val;
-            if ([val isKindOfClass:[NSNumber class]])
-                _posValType = MyLayoutValueType_NSNumber;
-            else if ([val isKindOfClass:[MyLayoutPos class]])
-                _posValType = MyLayoutValueType_LayoutPos;
-            else if ([val isKindOfClass:[NSArray class]])
-                _posValType = MyLayoutValueType_Array;
-            else
-                _posValType = MyLayoutValueType_Nil;
-            
-            [self setNeedLayout];
-        }
-        
-        return self;
+        return [self __equalTo:val];
     };
-    
 }
+
 
 -(MyLayoutPos* (^)(CGFloat val))offset
 {
     return ^id(CGFloat val){
-        
-        if (_offsetVal != val)
-        {
-            _offsetVal = val;
-            [self setNeedLayout];
-        }
-        
-        return self;
+
+        return [self __offset:val];
     };
 }
+
 
 -(MyLayoutPos* (^)(CGFloat val))min
 {
     return ^id(CGFloat val){
-        
-        if (_lBoundVal.posNumVal.doubleValue != val)
-        {
-            _lBoundVal.equalTo(@(val));
-            
-            [self setNeedLayout];
-        }
-        
-        return self;
+    
+        return [self __min:val];
     };
 }
 
@@ -112,27 +138,16 @@
 {
     return ^id(id posVal, CGFloat offsetVal){
         
-        _lBoundVal.equalTo(posVal).offset(offsetVal);
-        
-        [self setNeedLayout];
-        
-        return self;
+        return [self __lBound:posVal offsetVal:offsetVal];
     };
-    
 }
 
 
 -(MyLayoutPos* (^)(CGFloat val))max
 {
     return ^id(CGFloat val){
-        
-        if (_uBoundVal.posNumVal.doubleValue != val)
-        {
-            _uBoundVal.equalTo(@(val));
-            [self setNeedLayout];
-        }
-        
-        return self;
+    
+        return [self __max:val];
     };
 }
 
@@ -140,46 +155,191 @@
 {
     return ^id(id posVal, CGFloat offsetVal){
         
-        _uBoundVal.equalTo(posVal).offset(offsetVal);
-        
-        [self setNeedLayout];
-        
-        return self;
+        return [self __uBound:posVal offsetVal:offsetVal];
     };
-    
 }
+
 
 
 
 -(void)clear
 {
-    _posVal = nil;
-    _posValType = MyLayoutValueType_Nil;
-    _offsetVal = 0;
-    _lBoundVal.equalTo(@(-CGFLOAT_MAX)).offset(0);
-    _uBoundVal.equalTo(@(CGFLOAT_MAX)).offset(0);
-    [self setNeedLayout];
+    [self __clear];
+}
+
+
+-(void)setActive:(BOOL)active
+{
+    if (_active != active)
+    {
+       _active = active;
+        _lBoundVal.active = active;
+        _uBoundVal.active = active;
+      [self setNeedsLayout];
+    }
+}
+
+-(id)posVal
+{
+    return self.isActive ? _posVal : nil;
+}
+
+-(CGFloat)offsetVal
+{
+    return self.isActive? _offsetVal : 0;
+}
+
+-(CGFloat)minVal
+{
+    return self.isActive && _lBoundVal != nil ? _lBoundVal.posNumVal.doubleValue : -CGFLOAT_MAX;
+}
+
+-(CGFloat)maxVal
+{
+    return self.isActive && _uBoundVal != nil ?  _uBoundVal.posNumVal.doubleValue : CGFLOAT_MAX;
 }
 
 
 
+#pragma mark -- NSCopying  
+
+-(id)copyWithZone:(NSZone *)zone
+{
+    MyLayoutPos *lp = [[[self class] allocWithZone:zone] init];
+    lp.view = self.view;
+    lp->_active = _active;
+    lp->_pos = _pos;
+    lp->_posValType = _posValType;
+    lp->_posVal = _posVal;
+    lp->_offsetVal = _offsetVal;
+    if (_lBoundVal != nil)
+    {
+        lp->_lBoundVal = [[[self class] allocWithZone:zone] init];
+        lp->_lBoundVal->_active = _active;
+        [[lp->_lBoundVal __equalTo:_lBoundVal.posVal] __offset:_lBoundVal.offsetVal];
+    }
+    if (_uBoundVal != nil)
+    {
+        lp->_uBoundVal = [[[self class] allocWithZone:zone] init];
+        lp->_uBoundVal->_active = _active;
+        [[lp->_uBoundVal __equalTo:_uBoundVal.posVal] __offset:_uBoundVal.offsetVal];
+    }
+    
+    return lp;
+
+}
+
+
+#pragma mark -- Private Methods
+
+
 -(NSNumber*)posNumVal
 {
-    if (_posVal == nil)
+    if (_posVal == nil || !self.isActive)
         return nil;
     
     if (_posValType == MyLayoutValueType_NSNumber)
+    {
         return _posVal;
+    }
+    else if (_posValType == MyLayoutValueType_UILayoutSupport)
+    {
+       //只有在11以后并且是设置了safearea缩进才忽略UILayoutSupport。
+        UIView *superview = self.view.superview;
+            if (superview != nil &&
+                [UIDevice currentDevice].systemVersion.doubleValue >= 11 &&
+                [superview isKindOfClass:[MyBaseLayout class]])
+            {
+                UIRectEdge edge = ((MyBaseLayout*)superview).insetsPaddingFromSafeArea;
+                if ((_pos == MyGravity_Vert_Top && (edge & UIRectEdgeTop) == UIRectEdgeTop) ||
+                    (_pos == MyGravity_Vert_Bottom && (edge & UIRectEdgeBottom) == UIRectEdgeBottom))
+                {
+                    return @(0);
+                }
+            }
         
+        return @([((id<UILayoutSupport>)_posVal) length]);
+    }
+    else if (_posValType == MyLayoutValueType_SafeArea)
+    {
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        
+        if (@available(iOS 11.0, *)) {
+            
+            UIView *superView = self.view.superview;
+           /* UIEdgeInsets insets = superView.safeAreaInsets;
+            UIScrollView *superScrollView = nil;
+            if ([superView isKindOfClass:[UIScrollView class]])
+            {
+                superScrollView = (UIScrollView*)superView;
+                
+            }
+            */
+            
+            switch (_pos) {
+                case MyGravity_Horz_Leading:
+                    return  [MyBaseLayout isRTL]? @(superView.safeAreaInsets.right) : @(superView.safeAreaInsets.left);
+                    break;
+                case MyGravity_Horz_Trailing:
+                    return  [MyBaseLayout isRTL]? @(superView.safeAreaInsets.left) : @(superView.safeAreaInsets.right);
+                    break;
+                case MyGravity_Vert_Top:
+                    return @(superView.safeAreaInsets.top);
+                    break;
+                case MyGravity_Vert_Bottom:
+                    return @(superView.safeAreaInsets.bottom);
+                    break;
+                default:
+                    return @(0);
+                    break;
+            }
+        }
+#endif
+        if (_pos == MyGravity_Vert_Top)
+        {
+            return @([self findContainerVC].topLayoutGuide.length);
+        }
+        else if (_pos == MyGravity_Vert_Bottom)
+        {
+            return @([self findContainerVC].bottomLayoutGuide.length);
+        }
+        
+        return @(0);
+        
+    }
+    
+    
     return nil;
     
+}
+
+-(UIViewController*)findContainerVC
+{
+    UIViewController *vc = nil;
+    
+    @try {
+        
+        UIView *v = self.view;
+        while (v != nil)
+        {
+            vc = [v valueForKey:@"viewDelegate"];
+            if (vc != nil)
+                break;
+            v = [v superview];
+        }
+        
+    } @catch (NSException *exception) {
+        
+    }
+    
+    return vc;
 }
 
 
 
 -(MyLayoutPos*)posRelaVal
 {
-    if (_posVal == nil)
+    if (_posVal == nil || !self.isActive)
         return nil;
     
     if (_posValType == MyLayoutValueType_LayoutPos)
@@ -192,7 +352,7 @@
 
 -(NSArray*)posArrVal
 {
-    if (_posVal == nil)
+    if (_posVal == nil || !self.isActive)
         return nil;
     
     if (_posValType == MyLayoutValueType_Array)
@@ -204,64 +364,252 @@
 
 -(MyLayoutPos*)lBoundVal
 {
+    if (_lBoundVal == nil)
+    {
+        _lBoundVal = [[MyLayoutPos alloc] init];
+        _lBoundVal->_active = _active;
+        [_lBoundVal __equalTo:@(-CGFLOAT_MAX)];
+    }
     return _lBoundVal;
 }
 
 -(MyLayoutPos*)uBoundVal
+{
+    if (_uBoundVal == nil)
+    {
+        _uBoundVal = [[MyLayoutPos alloc] init];
+        _uBoundVal->_active = _active;
+        [_uBoundVal __equalTo:@(CGFLOAT_MAX)];
+    }
+    
+    return _uBoundVal;
+}
+
+-(MyLayoutPos*)lBoundValInner
+{
+    return _lBoundVal;
+}
+
+-(MyLayoutPos*)uBoundValInner
 {
     return _uBoundVal;
 }
 
 
 
-
--(CGFloat)margin
+-(MyLayoutPos*)__equalTo:(id)val
 {
-    CGFloat retVal = _offsetVal;
     
-    if (self.posNumVal != nil)
-        retVal +=self.posNumVal.doubleValue;
+    if (![_posVal isEqual:val])
+    {
+        if ([val isKindOfClass:[NSNumber class]])
+        {
+            //特殊处理设置为safeAreaMargin边距的值。
+            if ([val doubleValue] == [MyLayoutPos safeAreaMargin])
+            {
+              
+                    _posValType = MyLayoutValueType_SafeArea;
+            }
+            else
+            {
+                _posValType = MyLayoutValueType_NSNumber;
+            }
+        }
+        else if ([val isKindOfClass:[MyLayoutPos class]])
+            _posValType = MyLayoutValueType_LayoutPos;
+        else if ([val isKindOfClass:[NSArray class]])
+            _posValType = MyLayoutValueType_Array;
+        else if ([val conformsToProtocol:@protocol(UILayoutSupport)])
+        {
+            //这里只有上边和下边支持，其他不支持。。
+            if (_pos != MyGravity_Vert_Top && _pos != MyGravity_Vert_Bottom)
+            {
+                NSAssert(0, @"oops! only topPos or bottomPos can set to id<UILayoutSupport>");
+            }
+            
+            _posValType = MyLayoutValueType_UILayoutSupport;
+        }
+        else if ([val isKindOfClass:[UIView class]])
+        {
+            UIView *rview = (UIView*)val;
+            _posValType = MyLayoutValueType_LayoutPos;
+            
+            switch (_pos) {
+                case MyGravity_Horz_Leading:
+                    val = rview.leadingPos;
+                    break;
+                case MyGravity_Horz_Center:
+                    val = rview.centerXPos;
+                    break;
+                case MyGravity_Horz_Trailing:
+                    val = rview.trailingPos;
+                    break;
+                case MyGravity_Vert_Top:
+                    val = rview.topPos;
+                    break;
+                case MyGravity_Vert_Center:
+                    val = rview.centerYPos;
+                    break;
+                case MyGravity_Vert_Bottom:
+                    val = rview.bottomPos;
+                    break;
+                case MyGravity_Vert_Baseline:
+                    val = rview.baselinePos;
+                    break;
+                default:
+                    NSAssert(0, @"oops!");
+                    break;
+            }
+            
+        }
+        else
+            _posValType = MyLayoutValueType_Nil;
+        
+        _posVal = val;
+        [self setNeedsLayout];
+    }
     
-    retVal = MIN(_uBoundVal.posNumVal.doubleValue, retVal);
-    retVal = MAX(_lBoundVal.posNumVal.doubleValue, retVal);
-    return retVal;
+    return self;
 }
 
--(BOOL)isRelativeMargin:(CGFloat)margin
+-(MyLayoutPos*)__offset:(CGFloat)val
 {
-    return margin > 0 && margin < 1;
-}
-
--(CGFloat)realMarginInSize:(CGFloat)size
-{
-    CGFloat realMargin = self.posNumVal.doubleValue;
-    if ([self isRelativeMargin:realMargin])
-        realMargin *= size;
     
-    return  realMargin + _offsetVal;
-}
-
-
-#pragma mark -- NSCopying  
-
--(id)copyWithZone:(NSZone *)zone
-{
-    MyLayoutPos *lp = [[[self class] allocWithZone:zone] init];
-    lp.view = self.view;
-    lp.pos = self.pos;
-    lp.posValType = self.posValType;
-    lp->_offsetVal = self.offsetVal;
-    lp->_lBoundVal.equalTo(_lBoundVal.posVal).offset(_lBoundVal.offsetVal);
-    lp->_uBoundVal.equalTo(_uBoundVal.posVal).offset(_uBoundVal.offsetVal);
-    lp->_posVal = self->_posVal;
+    if (_offsetVal != val)
+    {
+        _offsetVal = val;
+        [self setNeedsLayout];
+    }
     
-    return lp;
+    return self;
+}
 
+-(MyLayoutPos*)__min:(CGFloat)val
+{
+    
+    if (self.lBoundVal.posNumVal.doubleValue != val)
+    {
+        [self.lBoundVal __equalTo:@(val)];
+        
+        [self setNeedsLayout];
+    }
+    
+    return self;
+}
+
+-(MyLayoutPos*)__lBound:(id)posVal offsetVal:(CGFloat)offsetVal
+{
+    
+    [[self.lBoundVal __equalTo:posVal] __offset:offsetVal];
+    
+    [self setNeedsLayout];
+    
+    return self;
 }
 
 
-#pragma mark -- Private Method
--(void)setNeedLayout
+-(MyLayoutPos*)__max:(CGFloat)val
+{
+    
+    if (self.uBoundVal.posNumVal.doubleValue != val)
+    {
+        [self.uBoundVal __equalTo:@(val)];
+        [self setNeedsLayout];
+    }
+    
+    return self;
+}
+
+-(MyLayoutPos*)__uBound:(id)posVal offsetVal:(CGFloat)offsetVal
+{
+    
+    [[self.uBoundVal __equalTo:posVal] __offset:offsetVal];
+    
+    [self setNeedsLayout];
+    
+    return self;
+}
+
+
+
+-(void)__clear
+{
+    _active = YES;
+    _posVal = nil;
+    _posValType = MyLayoutValueType_Nil;
+    _offsetVal = 0;
+    _lBoundVal = nil;
+    _uBoundVal = nil;
+    [self setNeedsLayout];
+}
+
+
+
+
+-(CGFloat)absVal
+{
+    if (self.isActive)
+    {
+        CGFloat retVal = _offsetVal;
+        
+        if (self.posNumVal != nil)
+            retVal +=self.posNumVal.doubleValue;
+        
+        if (_uBoundVal != nil)
+            retVal = _myCGFloatMin(_uBoundVal.posNumVal.doubleValue, retVal);
+        
+        if (_lBoundVal != nil)
+            retVal = _myCGFloatMax(_lBoundVal.posNumVal.doubleValue, retVal);
+        
+        return retVal;
+    }
+    else
+        return 0;
+}
+
+-(BOOL)isRelativePos
+{
+    if (self.isActive)
+    {
+        CGFloat realPos = self.posNumVal.doubleValue;
+        return realPos > 0 && realPos < 1;
+        
+    }
+    else
+        return NO;
+}
+
+-(BOOL)isSafeAreaPos
+{
+    return self.isActive && (_posValType == MyLayoutValueType_SafeArea || _posValType == MyLayoutValueType_UILayoutSupport);
+}
+
+
+-(CGFloat)realPosIn:(CGFloat)size
+{
+    if (self.isActive)
+    {
+        CGFloat realPos = self.posNumVal.doubleValue;
+        if (realPos > 0 && realPos < 1)
+            realPos *= size;
+        
+        realPos += _offsetVal;
+        
+        if (_uBoundVal != nil)
+            realPos = _myCGFloatMin(_uBoundVal.posNumVal.doubleValue, realPos);
+        
+        if (_lBoundVal != nil)
+            realPos = _myCGFloatMax(_lBoundVal.posNumVal.doubleValue, realPos);
+
+        return realPos;
+    }
+    else
+        return 0;
+    
+}
+
+
+-(void)setNeedsLayout
 {
     if (_view != nil && _view.superview != nil && [_view.superview isKindOfClass:[MyBaseLayout class]])
     {
@@ -286,23 +634,26 @@
     NSString *posStr = @"";
     
     switch (posobj.pos) {
-        case MyMarginGravity_Horz_Left:
-            posStr = @"LeftPos";
+        case MyGravity_Horz_Leading:
+            posStr = @"leadingPos";
             break;
-        case MyMarginGravity_Horz_Center:
-            posStr = @"CenterXPos";
+        case MyGravity_Horz_Center:
+            posStr = @"centerXPos";
             break;
-        case MyMarginGravity_Horz_Right:
-            posStr = @"RightPos";
+        case MyGravity_Horz_Trailing:
+            posStr = @"trailingPos";
             break;
-        case MyMarginGravity_Vert_Top:
-            posStr = @"TopPos";
+        case MyGravity_Vert_Top:
+            posStr = @"topPos";
             break;
-        case MyMarginGravity_Vert_Center:
-            posStr = @"CenterYPos";
+        case MyGravity_Vert_Center:
+            posStr = @"centerYPos";
             break;
-        case MyMarginGravity_Vert_Bottom:
-            posStr = @"BottomPos";
+        case MyGravity_Vert_Bottom:
+            posStr = @"bottomPos";
+            break;
+        case MyGravity_Vert_Baseline:
+            posStr = @"baselinePos";
             break;
         default:
             break;
@@ -312,6 +663,9 @@
     
     
 }
+
+
+#pragma mark -- Override Method
 
 -(NSString*)description
 {

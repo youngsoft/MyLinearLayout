@@ -13,37 +13,38 @@
  *定义子视图在路径布局中的距离的类型。
  */
 typedef enum : NSUInteger {
-    MyPathSpace_Flexed,    //浮动距离
-    MyPathSpace_Fixed,     //固定距离
-    MyPathSpace_Count,     //固定数量距离
+    MyPathSpace_Flexed,    //浮动距离，子视图之间的距离根据路径布局的尺寸和子视图的数量而确定。
+    MyPathSpace_Fixed,     //固定距离，就是子视图之间的距离是固定的某个数值。
+    MyPathSpace_Count,     //固定数量距离，就是子视图之间的距离根据路径布局的尺寸和某个具体的数量而确定。
 } MyPathSpaceType;
 
 
+
 /**
- *路径距离类，描述子视图在路径上的距离的类型。
+ *子视图之间的路径距离类，描述子视图在路径上的间隔距离的类型。
  */
 @interface MyPathSpace : NSObject
 
-//浮动距离，根据布局视图的尺寸和子视图的数量动态决定
-+(id)flexed;
+/**浮动距离，根据布局视图的尺寸和子视图的数量动态决定*/
++(MyPathSpace *)flexed;
 
-//固定距离，len为长度，每个子视图之间的距离都是len
-+(id)fixed:(CGFloat)len;
+/**固定距离，len为长度，每个子视图之间的距离都是len*/
++(MyPathSpace *)fixed:(CGFloat)len;
 
-//数量距离，根据布局视图的尺寸和指定的数量动态决定。
-+(id)count:(NSInteger)count;
+/**数量距离，根据布局视图的尺寸和指定的数量count动态决定。*/
++(MyPathSpace *)count:(NSInteger)count;
 
 
-//距离类型。
+/**距离类型。*/
 @property(nonatomic, assign, readonly) MyPathSpaceType type;
-//距离的值。
+/**距离的值。*/
 @property(nonatomic, assign, readonly) CGFloat value;
 
 @end
 
 
 /**
- * 坐标轴设置类，用来描述坐标轴的信息。
+ * 坐标轴设置类，用来描述坐标轴的信息。一个坐标轴具有原点、坐标系类型、开始和结束点、坐标轴对应的值这四个方面的内容。
  */
 @interface MyCoordinateSetting : NSObject
 
@@ -64,30 +65,34 @@ typedef enum : NSUInteger {
 @property(nonatomic, assign) BOOL isReverse;
 
 
-//开始位置和结束位置。如果不设置则根据坐标原点设置以及视图的尺寸自动确定.默认是-CGFLOAT_MAX, CGFLOAT_MAX
+/**开始位置。如果不设置则根据坐标原点设置以及视图的尺寸自动确定.默认是-CGFLOAT_MAX*/
 @property(nonatomic, assign) CGFloat start;
+/**结束位置。如果不设置则根据坐标原点设置以及视图的尺寸自动确定.默认是CGFLOAT_MAX*/
 @property(nonatomic, assign) CGFloat end;
 
--(void)reset;  //恢复默认设置。
+/**恢复默认设置。*/
+-(void)reset;
 
 @end
 
 
 
 /**
- *路径布局类。路径布局通过坐标轴的设置，曲线路径函数方程，子视图中心点之间的距离三个要素来确定其中子视图的位置。因此通过路径布局可以实现一些非常酷炫的布局效果。
- */
-@interface MyPathLayout : MyBaseLayout
-
-
-/*
-  你可以从MyPathLayout中派生出一个子类。并实现如下方法：
+ 路径布局类。路径布局通过坐标轴的设置，曲线路径函数方程，子视图之间的距离三个要素来确定其中子视图的位置。因此通过路径布局可以实现一些非常酷炫的布局效果。
+ 
+ 你可以从MyPathLayout中派生出一个子类。并实现如下方法：
+ @code
  +(Class)layerClass
  {
-    return [CAShapeLayer class];
+ return [CAShapeLayer class];
  }
-  也就是说MyPathLayout的派生类返回一个CAShapeLayer，那么系统将自动会在每次布局时将layer的path属性进行赋值操作。
+ 
+ @endcode
+ 
+ @note 也就是说MyPathLayout的派生类返回一个CAShapeLayer，那么系统将自动会在每次布局时将layer的path属性进行赋值操作。
+
  */
+@interface MyPathLayout : MyBaseLayout
 
 
 /**
@@ -137,34 +142,46 @@ typedef enum : NSUInteger {
 
 
 /**
- *得到子视图在曲线路径中定位时的函数的自变量的值。也就是说在函数中当值等于下面的返回值时，这个视图的位置就被确定了。方法如果返回NAN则表示这个子视图没有定位。
+ 得到子视图在曲线路径中定位时的函数的自变量的值。也就是说在函数中当值等于下面的返回值时，这个视图的位置就被确定了。方法如果返回NAN则表示这个子视图没有定位。
+ @param subview 指定的子视图
+ @return 返回指定子视图在曲线路径中的自变量值
  */
 -(CGFloat)argumentFrom:(UIView*)subview;
 
 
 /**
- *下面三个函数用来获取两个子视图之间的曲线路径数据，在调用getSubviewPathPoint方法之前请先调用beginSubviewPathPoint方法，而调用完毕后请调用endSubviewPathPoint方法，否则getSubviewPathPoint返回的结果未可知。
+ 下面三个函数用来获取两个子视图之间的曲线路径数据，在调用getSubviewPathPoint方法之前请先调用beginSubviewPathPoint方法，而调用完毕后请调用endSubviewPathPoint方法，否则getSubviewPathPoint返回的结果未可知。
  */
 
-//开始和结束获取子视图路径数据的方法,full表示getSubviewPathPoint获取的是否是全部路径点。如果为NO则只会获取子视图的位置的点。
+
+/**
+ 开始获取子视图路径数据的方法
+ @param full 表示getSubviewPathPoint获取的是否是全部路径点。如果为NO则只会获取子视图的位置的点
+ */
 -(void)beginSubviewPathPoint:(BOOL)full;
+/**
+ 结束获取子视图路径数据的方法
+ */
 -(void)endSubviewPathPoint;
 
 /**
- *创建从某个子视图到另外一个子视图之间的路径点，返回NSValue数组，里面的值是CGPoint。
- *fromIndex指定开始的子视图的索引位置，toIndex指定结束的子视图的索引位置。如果有原点子视图时,这两个索引值不能算上原点子视图的索引值。
+ 创建从某个子视图到另外一个子视图之间的路径点，返回NSValue数组，里面的值是CGPoint。
+ @param fromIndex 指定开始的子视图的索引位置
+ @param toIndex 指定结束的子视图的索引位置。如果有原点子视图时,这两个索引值不能算上原点子视图的索引值。
+ @return 返回fromIndex到toIndex之间的所有曲线路径点数组
  */
--(NSArray*)getSubviewPathPoint:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
+-(NSArray<NSValue*>*)getSubviewPathPoint:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 
 /**
- *创建布局的曲线的路径。用户需要负责销毁返回的值。调用者可以用这个方法来获得曲线的路径，进行一些绘制的工作。
- *subviewCount:指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的spaceType为Flexed,Count的话则这个参数设置无效。
+ 创建布局的曲线的路径。用户需要负责销毁返回的值。调用者可以用这个方法来获得曲线的路径，进行一些绘制的工作。
+ @param subviewCount 指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的spaceType为Flexed,Count的话则这个参数设置无效。
+ @return 返回指定数量的子视图的曲线路径，用户需要负责销毁返回的对象。
  */
 -(CGPathRef)createPath:(NSInteger)subviewCount;
 
 
 /**
- * 设置获取子视图距离的误差值。默认是0.5，误差越小则距离的精确值越大，误差最低值不能<=0。一般不需要调整这个值，只有那些要求精度非常高的场景才需要微调这个值,比如在一些曲线路径较短的情况下，通过调小这个值来子视图之间间距的精确计算。
+  设置获取子视图距离的误差值。默认是0.5，误差越小则距离的精确值越大，误差最低值不能<=0。一般不需要调整这个值，只有那些要求精度非常高的场景才需要微调这个值,比如在一些曲线路径较短的情况下，通过调小这个值来子视图之间间距的精确计算。
  */
 @property(nonatomic, assign) CGFloat distanceError;
 

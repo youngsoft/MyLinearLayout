@@ -9,8 +9,10 @@
 
 #import "MyLayoutDef.h"
 #import "MyLayoutPos.h"
-#import "MyLayoutDime.h"
+#import "MyLayoutSize.h"
+#import "MyGrid.h"
 
+@class MyBaseLayout;
 
 /*
  SizeClass的尺寸定义,用于定义苹果设备的各种屏幕的尺寸，对于任意一种设备来说某个纬度的尺寸都可以描述为：Any任意，Compact压缩，Regular常规
@@ -86,6 +88,7 @@ typedef enum : unsigned char{
     MySizeClass_hCompact = 1 << 2,   //高度压缩尺寸,这个属性在iOS8以下不支持
     MySizeClass_hRegular = 2 << 2,   //高度常规尺寸,这个属性在iOS8以下不支持
 
+    MySizeClass_Any = 0x0,     //所有设备，等价于MySizeClass_wAny|MySizeClass_hAny
     MySizeClass_Portrait = 0x40,  //竖屏
     MySizeClass_Landscape = 0x80,  //横屏,注意横屏和竖屏不支持 | 运算操作，只能指定一个。
 }MySizeClass;
@@ -102,58 +105,67 @@ typedef enum : unsigned char{
  SizeClass，以及MySizeClass_Portrait或者MySizeClass_Landscape 也就是设置布局默认的约束。而iOS8以上的系统则能支持所有的SizeClass.
   
  */
-@interface MyLayoutSizeClass:NSObject<NSCopying>
+@interface MyViewSizeClass:NSObject<NSCopying>
 
+@property(nonatomic, weak) UIView *view;
 
 //所有视图通用
-@property(nonatomic, strong)  MyLayoutPos *leftPos;
 @property(nonatomic, strong)  MyLayoutPos *topPos;
-@property(nonatomic, strong)  MyLayoutPos *rightPos;
+@property(nonatomic, strong)  MyLayoutPos *leadingPos;
 @property(nonatomic, strong)  MyLayoutPos *bottomPos;
+@property(nonatomic, strong)  MyLayoutPos *trailingPos;
 @property(nonatomic, strong)  MyLayoutPos *centerXPos;
 @property(nonatomic, strong)  MyLayoutPos *centerYPos;
 
 
-@property(nonatomic, assign) CGFloat myLeftMargin;
-@property(nonatomic, assign) CGFloat myTopMargin;
-@property(nonatomic, assign) CGFloat myRightMargin;
-@property(nonatomic, assign) CGFloat myBottomMargin;
+@property(nonatomic, strong,readonly)  MyLayoutPos *leftPos;
+@property(nonatomic, strong,readonly)  MyLayoutPos *rightPos;
+
+@property(nonatomic, strong)  MyLayoutPos *baselinePos;
+
+
+@property(nonatomic, assign) CGFloat myTop;
+@property(nonatomic, assign) CGFloat myLeading;
+@property(nonatomic, assign) CGFloat myBottom;
+@property(nonatomic, assign) CGFloat myTrailing;
+@property(nonatomic, assign) CGFloat myCenterX;
+@property(nonatomic, assign) CGFloat myCenterY;
+@property(nonatomic, assign) CGPoint myCenter;
+
+
+@property(nonatomic, assign) CGFloat myLeft;
+@property(nonatomic, assign) CGFloat myRight;
+
+
+
 @property(nonatomic, assign) CGFloat myMargin;
-@property(nonatomic, assign) CGFloat myCenterXOffset;
-@property(nonatomic, assign) CGFloat myCenterYOffset;
-@property(nonatomic, assign) CGPoint myCenterOffset;
+@property(nonatomic, assign) CGFloat myHorzMargin;
+@property(nonatomic, assign) CGFloat myVertMargin;
 
 
+@property(nonatomic, strong)  MyLayoutSize *widthSize;
+@property(nonatomic, strong)  MyLayoutSize *heightSize;
 
-@property(nonatomic, strong)  MyLayoutDime *widthDime;
-@property(nonatomic, strong)  MyLayoutDime *heightDime;
-
-@property(nonatomic,assign) CGFloat myWidth;
-@property(nonatomic,assign) CGFloat myHeight;
-@property(nonatomic,assign) CGSize  mySize;
+@property(nonatomic, assign) CGFloat myWidth;
+@property(nonatomic, assign) CGFloat myHeight;
+@property(nonatomic, assign) CGSize  mySize;
 
 
-@property(nonatomic, assign,getter=isFlexedHeight)  BOOL flexedHeight;
+@property(nonatomic, assign) BOOL wrapContentWidth;
+@property(nonatomic, assign) BOOL wrapContentHeight;
+
+@property(nonatomic, assign) BOOL wrapContentSize;
 
 @property(nonatomic, assign) BOOL useFrame;
 @property(nonatomic, assign) BOOL noLayout;
 
-@property(nonatomic, copy) void (^viewLayoutCompleteBlock)(UIView* layout, UIView *v);
+@property(nonatomic, assign) MyVisibility myVisibility;
+@property(nonatomic, assign) MyGravity myAlignment;
 
-/*
- 隐藏不参与布局，这个属性是默认sizeClass外可以用来设置某个视图是否参与布局的标志，如果设置为YES则表示不参与布局。默认是NO。
- 对于默认的sizeClass来说，就可以直接使用子视图本身的hidden属性来设置。
- 不参与布局的意思是在这种sizeClass下的frame会被设置为CGRectZero。而不是不加入到视图体系中去。
- 如果视图真设置了隐藏属性则这个属性设置无效。
- */
-@property(nonatomic, assign, getter=isHidden) BOOL hidden;
-
+@property(nonatomic, copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
 
 //线性布局和浮动布局子视图专用
 @property(nonatomic, assign) CGFloat weight;
-
-//框架布局子视图专用
-@property(nonatomic, assign) MyMarginGravity marginGravity;
 
 //浮动布局子视图专用
 @property(nonatomic,assign,getter=isReverseFloat) BOOL reverseFloat;
@@ -162,18 +174,31 @@ typedef enum : unsigned char{
 @end
 
 
-@interface MyLayoutSizeClassLayout : MyLayoutSizeClass
+@interface MyLayoutViewSizeClass : MyViewSizeClass
 
-@property(nonatomic,assign) UIEdgeInsets padding;
 @property(nonatomic, assign) CGFloat topPadding;
-@property(nonatomic, assign) CGFloat leftPadding;
+@property(nonatomic, assign) CGFloat leadingPadding;
 @property(nonatomic, assign) CGFloat bottomPadding;
+@property(nonatomic, assign) CGFloat trailingPadding;
+@property(nonatomic, assign) UIEdgeInsets padding;
+
+
+@property(nonatomic, assign) CGFloat leftPadding;
 @property(nonatomic, assign) CGFloat rightPadding;
 
-@property(nonatomic,assign) BOOL wrapContentWidth;
-@property(nonatomic,assign) BOOL wrapContentHeight;
 
-@property(nonatomic, assign) BOOL hideSubviewReLayout;
+@property(nonatomic, assign) BOOL zeroPadding;
+
+@property(nonatomic, assign) UIRectEdge insetsPaddingFromSafeArea;
+@property(nonatomic, assign) BOOL insetLandscapeFringePadding;
+
+
+
+@property(nonatomic ,assign) CGFloat subviewVSpace;
+@property(nonatomic, assign) CGFloat subviewHSpace;
+@property(nonatomic, assign) CGFloat subviewSpace;
+
+@property(nonatomic, assign) MyGravity gravity;
 
 @property(nonatomic, assign) BOOL reverseLayout;   //逆序布局，子视图从后往前。
 
@@ -182,60 +207,74 @@ typedef enum : unsigned char{
 @end
 
 
+@interface MySequentLayoutViewSizeClass : MyLayoutViewSizeClass
+
+@property(nonatomic,assign) MyOrientation orientation;
 
 
-@interface MyLayoutSizeClassLinearLayout : MyLayoutSizeClassLayout
-
-@property(nonatomic,assign) MyLayoutViewOrientation orientation;
-@property(nonatomic, assign) MyMarginGravity gravity;
-
-@property(nonatomic ,assign) CGFloat subviewVertMargin;
-@property(nonatomic, assign) CGFloat subviewHorzMargin;
-@property(nonatomic, assign) CGFloat subviewMargin;
 
 @end
 
 
 
-@interface MyLayoutSizeClassTableLayout : MyLayoutSizeClassLinearLayout
 
-@property(nonatomic, assign) CGFloat rowSpacing;
-@property(nonatomic, assign) CGFloat colSpacing;
+@interface MyLinearLayoutViewSizeClass : MySequentLayoutViewSizeClass
+
+@property(nonatomic, assign) MySubviewsShrinkType shrinkType;
 
 @end
 
 
-@interface MyLayoutSizeClassFlowLayout : MyLayoutSizeClassLinearLayout
+
+@interface MyTableLayoutViewSizeClass : MyLinearLayoutViewSizeClass
+
+@end
+
+
+@interface MyFlowLayoutViewSizeClass : MySequentLayoutViewSizeClass
 
 @property(nonatomic,assign) NSInteger arrangedCount;
-@property(nonatomic,assign) BOOL averageArrange;
+@property(nonatomic, assign) NSInteger pagedCount;
 @property(nonatomic,assign) BOOL autoArrange;
-@property(nonatomic,assign) MyMarginGravity arrangedGravity;
+@property(nonatomic,assign) MyGravity arrangedGravity;
+
+@property(nonatomic, assign) CGFloat subviewSize;
+@property(nonatomic, assign) CGFloat minSpace;
+@property(nonatomic, assign) CGFloat maxSpace;
+
 
 
 @end
 
 
-@interface MyLayoutSizeClassFloatLayout : MyLayoutSizeClassLinearLayout
+@interface MyFloatLayoutViewSizeClass : MySequentLayoutViewSizeClass
 
 @property(nonatomic, assign) CGFloat subviewSize;
-@property(nonatomic, assign) CGFloat minMargin;
+@property(nonatomic, assign) CGFloat minSpace;
+@property(nonatomic, assign) CGFloat maxSpace;
 @property(nonatomic,assign) BOOL noBoundaryLimit;
 
 @end
 
 
-@interface MyLayoutSizeClassRelativeLayout : MyLayoutSizeClassLayout
-
-@property(nonatomic, assign) BOOL flexOtherViewWidthWhenSubviewHidden;
-@property(nonatomic, assign) BOOL flexOtherViewHeightWhenSubviewHidden;
+@interface MyRelativeLayoutViewSizeClass : MyLayoutViewSizeClass
 
 
 @end
 
 
-@interface MyLayoutSizeClassPathLayout  : MyLayoutSizeClassLayout
+@interface MyFrameLayoutViewSizeClass : MyLayoutViewSizeClass
 
+
+@end
+
+@interface MyPathLayoutViewSizeClass  : MyLayoutViewSizeClass
+
+
+@end
+
+
+@interface MyGridLayoutViewSizeClass : MyLayoutViewSizeClass<MyGrid>
 
 @end
 

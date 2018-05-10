@@ -8,9 +8,10 @@
 
 #import "MyLayoutDef.h"
 
+#if TARGET_OS_IPHONE
 
 /**
- *专门为布局设置的简化操作类，以便在统一的地方进行布局设置
+ *专门为布局设置的简化操作类，以便在统一的地方进行布局设置,MyLayout提供了类似masonry的布局设置语法。
  */
 @interface MyMaker : NSObject
 
@@ -20,14 +21,25 @@
 -(MyMaker*)right;
 -(MyMaker*)margin;
 
+-(MyMaker*)leading;
+-(MyMaker*)trailing;
+
+
+-(MyMaker*)wrapContentHeight;
+-(MyMaker*)wrapContentWidth;
+
 -(MyMaker*)height;
 -(MyMaker*)width;
--(MyMaker*)flexedHeight;
 -(MyMaker*)useFrame;
 -(MyMaker*)noLayout;
 
 -(MyMaker*)centerX;
 -(MyMaker*)centerY;
+-(MyMaker*)center;
+-(MyMaker*)baseline;
+
+-(MyMaker*)visibility;
+-(MyMaker*)alignment;
 
 -(MyMaker*)sizeToFit;
 
@@ -37,29 +49,29 @@
 -(MyMaker*)leftPadding;
 -(MyMaker*)bottomPadding;
 -(MyMaker*)rightPadding;
--(MyMaker*)wrapContentHeight;
--(MyMaker*)wrapContentWidth;
+-(MyMaker*)leadingPadding;
+-(MyMaker*)trailingPadding;
+-(MyMaker*)padding;
+-(MyMaker*)zeroPadding;
 -(MyMaker*)reverseLayout;
+-(MyMaker*)vertSpace;
+-(MyMaker*)horzSpace;
+-(MyMaker*)space;
 
 
-
-//框架布局子视图独有
--(MyMaker*)marginGravity;
 
 //线性布局和流式布局独有
 -(MyMaker*)orientation;
 -(MyMaker*)gravity;
--(MyMaker*)subviewMargin;
 
+//线性布局独有
+-(MyMaker*)shrinkType;
 
 //流式布局独有
 -(MyMaker*)arrangedCount;
--(MyMaker*)averageArrange;
 -(MyMaker*)autoArrange;
 -(MyMaker*)arrangedGravity;
--(MyMaker*)subviewVertMargin;
--(MyMaker*)subviewHorzMargin;
-
+-(MyMaker*)pagedCount;
 
 
 //线性布局和浮动布局和流式布局子视图独有
@@ -73,14 +85,15 @@
 //浮动布局独有。
 -(MyMaker*)noBoundaryLimit;
 
-//赋值操支持NSNumber,UIView,MyLayoutPos,MyLayoutDime, NSArray[MyLayoutDime]
+//赋值操支持NSNumber,UIView,MyLayoutPos,MyLayoutSize, NSArray[MyLayoutSize]
 -(MyMaker* (^)(id val))equalTo;
+-(MyMaker* (^)(id val))min;
+-(MyMaker* (^)(id val))max;
 
 -(MyMaker* (^)(CGFloat val))offset;
 -(MyMaker* (^)(CGFloat val))multiply;
 -(MyMaker* (^)(CGFloat val))add;
--(MyMaker* (^)(CGFloat val))min;
--(MyMaker* (^)(CGFloat val))max;
+
 
 
 
@@ -98,5 +111,6 @@
 
 @end
 
+#endif
 
 

@@ -7,8 +7,13 @@
 //
 
 #import "MyMaker.h"
+
+#if TARGET_OS_IPHONE
+
 #import "MyLayoutPos.h"
-#import "MyLayoutDime.h"
+#import "MyLayoutSize.h"
+#import "MyLayoutPosInner.h"
+#import "MyLayoutSizeInner.h"
 
 @implementation MyMaker
 {
@@ -70,22 +75,27 @@
    return [self bottom];
 }
 
+-(MyMaker*)leading
+{
+    return [self addMethod:@"leadingPos"];
+
+}
+
+-(MyMaker*)trailing
+{
+    return [self addMethod:@"trailingPos"];
+
+}
+
 
 -(MyMaker*)height
 {
-    return [self addMethod:@"heightDime"];
+    return [self addMethod:@"heightSize"];
 }
 
 -(MyMaker*)width
 {
-    return [self addMethod:@"widthDime"];
-}
-
-
-
--(MyMaker*)flexedHeight
-{
-    return [self addMethod:@"flexedHeight"];
+    return [self addMethod:@"widthSize"];
 }
 
 -(MyMaker*)useFrame
@@ -164,6 +174,32 @@
     
 }
 
+-(MyMaker*)leadingPadding
+{
+    
+    return [self addMethod:@"leadingPadding"];
+    
+}
+
+-(MyMaker*)trailingPadding
+{
+    return [self addMethod:@"trailingPadding"];
+    
+}
+
+
+-(MyMaker*)padding
+{
+     [self addMethod:@"topPadding"];
+     [self addMethod:@"leftPadding"];
+     [self addMethod:@"bottomPadding"];
+    return [self addMethod:@"rightPadding"];
+}
+
+-(MyMaker*)zeroPadding
+{
+    return [self addMethod:@"zeroPadding"];
+}
 
 -(MyMaker*)orientation
 {
@@ -188,6 +224,29 @@
     return [self addMethod:@"centerYPos"];
 }
 
+-(MyMaker*)center
+{
+    [self addMethod:@"centerXPos"];
+    return [self addMethod:@"centerYPos"];
+}
+-(MyMaker*)baseline
+{
+    return [self addMethod:@"baselinePos"];
+}
+
+
+-(MyMaker*)visibility
+{
+    return [self addMethod:@"myVisibility"];
+}
+
+-(MyMaker*)alignment
+{
+    return [self addMethod:@"myAlignment"];
+}
+
+
+
 -(MyMaker*)sizeToFit
 {
     for (UIView *myView in _myViews)
@@ -199,26 +258,23 @@
 }
 
 
--(MyMaker*)marginGravity
-{
-    return [self addMethod:@"marginGravity"];
 
-}
-
--(MyMaker*)subviewMargin
+-(MyMaker*)space
 {
-    return [self addMethod:@"subviewMargin"];
+    return [self addMethod:@"subviewSpace"];
     
 }
+
+-(MyMaker*)shrinkType
+{
+    return [self addMethod:@"shrinkType"];
+    
+}
+
 
 -(MyMaker*)arrangedCount
 {
     return [self addMethod:@"arrangedCount"];
-}
-
--(MyMaker*)averageArrange
-{
-    return [self addMethod:@"averageArrange"];
 }
 
 -(MyMaker*)autoArrange
@@ -232,16 +288,22 @@
 
 }
 
--(MyMaker*)subviewVertMargin
+-(MyMaker*)vertSpace
 {
-    return [self addMethod:@"subviewVertMargin"];
+    return [self addMethod:@"subviewVSpace"];
 
 }
 
--(MyMaker*)subviewHorzMargin
+-(MyMaker*)horzSpace
 {
-    return [self addMethod:@"subviewHorzMargin"];
+    return [self addMethod:@"subviewHSpace"];
 
+}
+
+-(MyMaker*)pagedCount
+{
+    return [self addMethod:@"pagedCount"];
+    
 }
 
 
@@ -252,47 +314,47 @@
     _clear = YES;
     return ^id(id val) {
         
-        for (NSString *key in _keys)
+        for (NSString *key in self->_keys)
         {
             
-            for (UIView * myView in _myViews)
+            for (UIView * myView in self->_myViews)
             {
                 if ([val isKindOfClass:[NSNumber class]])
                 {
                     id oldVal = [myView valueForKey:key];
                     if ([oldVal isKindOfClass:[MyLayoutPos class]])
                     {
-                        ((MyLayoutPos*)oldVal).equalTo(val);
+                        [((MyLayoutPos*)oldVal) __equalTo:val];
                     }
-                    else if ([oldVal isKindOfClass:[MyLayoutDime class]])
+                    else if ([oldVal isKindOfClass:[MyLayoutSize class]])
                     {
-                        ((MyLayoutDime*)oldVal).equalTo(val);
+                        [((MyLayoutSize*)oldVal) __equalTo:val];
                     }
                     else
                         [myView setValue:val forKey:key];
                 }
                 else if ([val isKindOfClass:[MyLayoutPos class]])
                 {
-                    ((MyLayoutPos*)[myView valueForKey:key]).equalTo(val);
+                    [((MyLayoutPos*)[myView valueForKey:key]) __equalTo:val];
                 }
-                else if ([val isKindOfClass:[MyLayoutDime class]])
+                else if ([val isKindOfClass:[MyLayoutSize class]])
                 {
-                    ((MyLayoutDime*)[myView valueForKey:key]).equalTo(val);
+                    [((MyLayoutSize*)[myView valueForKey:key]) __equalTo:val];
                 }
                 else if ([val isKindOfClass:[NSArray class]])
                 {
-                    ((MyLayoutDime*)[myView valueForKey:key]).equalTo(val);
+                    [((MyLayoutSize*)[myView valueForKey:key]) __equalTo:val];
                 }
                 else if ([val isKindOfClass:[UIView class]])
                 {
                     id oldVal = [val valueForKey:key];
                     if ([oldVal isKindOfClass:[MyLayoutPos class]])
                     {
-                        ((MyLayoutPos*)[myView valueForKey:key]).equalTo(oldVal);
+                        [((MyLayoutPos*)[myView valueForKey:key]) __equalTo:oldVal];
                     }
-                    else if ([oldVal isKindOfClass:[MyLayoutDime class]])
+                    else if ([oldVal isKindOfClass:[MyLayoutSize class]])
                     {
-                        ((MyLayoutDime*)[myView valueForKey:key]).equalTo(oldVal);
+                        [((MyLayoutSize*)[myView valueForKey:key]) __equalTo:oldVal];
                         
                     }
                     else
@@ -314,12 +376,12 @@
     
     return ^id(CGFloat val) {
         
-        for (NSString *key in _keys)
+        for (NSString *key in self->_keys)
         {
-            for (UIView *myView in _myViews)
+            for (UIView *myView in self->_myViews)
             {
                 
-                ((MyLayoutPos*)[myView valueForKey:key]).offset(val);
+                [((MyLayoutPos*)[myView valueForKey:key]) __offset:val];
             }
         }
         
@@ -332,12 +394,12 @@
     _clear = YES;
     return ^id(CGFloat val) {
         
-        for (NSString *key in _keys)
+        for (NSString *key in self->_keys)
         {
-            for (UIView *myView in _myViews)
+            for (UIView *myView in self->_myViews)
             {
                 
-                ((MyLayoutDime*)[myView valueForKey:key]).multiply(val);
+                [((MyLayoutSize*)[myView valueForKey:key]) __multiply:val];
             }
         }
         return self;
@@ -350,13 +412,13 @@
     _clear = YES;
     return ^id(CGFloat val) {
         
-        for (NSString *key in _keys)
+        for (NSString *key in self->_keys)
         {
             
-            for (UIView *myView in _myViews)
+            for (UIView *myView in self->_myViews)
             {
                 
-                ((MyLayoutDime*)[myView valueForKey:key]).add(val);
+                [((MyLayoutSize*)[myView valueForKey:key]) __add:val];
             }
         }
         return self;
@@ -364,37 +426,64 @@
     
 }
 
--(MyMaker* (^)(CGFloat val))min
+-(MyMaker* (^)(id val))min
 {
     _clear = YES;
-    return ^id(CGFloat val) {
+    return ^id(id val) {
         
-        for (NSString *key in _keys)
+        for (NSString *key in self->_keys)
         {
             
-            for (UIView *myView in _myViews)
+            for (UIView *myView in self->_myViews)
             {
                 
-                ((MyLayoutDime*)[myView valueForKey:key]).min(val);
+                
+                id val2 = val;
+                if ([val isKindOfClass:[UIView class]])
+                    val2 = [val valueForKey:key];
+                
+                id oldVal = [myView valueForKey:key];
+                if ([oldVal isKindOfClass:[MyLayoutPos class]])
+                {
+                    [((MyLayoutPos*)oldVal) __lBound:val2 offsetVal:0];
+                }
+                else if ([oldVal isKindOfClass:[MyLayoutSize class]])
+                {
+                    [((MyLayoutSize*)oldVal) __lBound:val2 addVal:0 multiVal:1];
+                }
+                else
+                    ;
             }
         }
         return self;
     };
-
+    
 }
 
--(MyMaker* (^)(CGFloat val))max
+-(MyMaker* (^)(id val))max
 {
     _clear = YES;
-    return ^id(CGFloat val) {
+    return ^id(id val) {
         
-        for (NSString *key in _keys)
+        for (NSString *key in self->_keys)
         {
-            
-            for (UIView *myView in _myViews)
+            for (UIView *myView in self->_myViews)
             {
+                id val2 = val;
+                if ([val isKindOfClass:[UIView class]])
+                    val2 = [val valueForKey:key];
                 
-                ((MyLayoutDime*)[myView valueForKey:key]).max(val);
+                id oldVal = [myView valueForKey:key];
+                if ([oldVal isKindOfClass:[MyLayoutPos class]])
+                {
+                    [((MyLayoutPos*)oldVal) __uBound:val2 offsetVal:0];
+                }
+                else if ([oldVal isKindOfClass:[MyLayoutSize class]])
+                {
+                    [((MyLayoutSize*)oldVal) __uBound:val2 addVal:0 multiVal:1];
+                }
+                else
+                    ;
             }
         }
         return self;
@@ -425,4 +514,6 @@
 
 
 @end
+
+#endif
 

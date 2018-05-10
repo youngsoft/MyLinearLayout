@@ -16,20 +16,16 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MyLayout"
-  s.version      = "1.2.4"
-  s.summary      = "MyLayout is A powerful iOS UI framework. It integrated the Android layout,AutoLayout,SizeClass, HTML/CSS float and flexbox functions."
+  s.version      = "1.5.3"
+  s.summary      = "MyLayout is an iOS UI framework integrates the functions with Android,AutoLayout,SizeClass,HTML CSS float and flexbox,UIView UITableView."
 
   s.description  = <<-DESC
-                   **MyLayout is a powerful iOS UI layout framework which is not an encapsulation based on the AutoLayout but is based on primary *frame* property and by overwriting the *layoutSubview* method to realize the subview's layout. So It is unlimited to run in any version of iOS system. Its idea and principle is referenced from the layout of the Android system, HTML/CSS float&flexbox, iOS AutoLayout and SizeClass. You can implement the UI layout through the seven kinds of layout class below: MyLinearLayout, MyRelativeLayout, MyFrameLayout MyTableLayout, MyFlowLayout,MyFloatLayout ,MyPathLayout and the support for SizeClass.**
-
-**Powerful function, easy to use, barely constraint 
-setting and fit various screen size perfectly are MyLayout's main advantages.**
-
-**I hope you use MyLayout right now or in your next project will be happy!**
+                   MyLayout is a simple and easy objective-c framework for iOS view layout. 
+                   It provides some simple method to build a variety of complex interface. It integrates the functions including: Autolayout and SizeClass of iOS, five layout classes of Android, float and flex-box and bootstrap of HTML/CSS.
                    DESC
 
   s.homepage     = "https://github.com/youngsoft/MyLinearLayout"
-  s.screenshots  = "http://7xoymz.com1.z0.glb.clouddn.com/mylayout.gif", "http://7xoymz.com1.z0.glb.clouddn.com/sizeClassLayout.gif"
+  s.screenshots  = "http://upload-images.jianshu.io/upload_images/1432482-3bfd0855a51b6d8e.gif?imageMogr2/auto-orient/strip"
 
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -56,7 +52,7 @@ setting and fit various screen size perfectly are MyLayout's main advantages.**
   s.author             = { "欧阳大哥" => "obq0387_cn@sina.com" }
   # Or just: s.author    = "欧阳大哥"
   # s.authors            = { "欧阳大哥" => "obq0387_cn@sina.com" }
-  # s.social_media_url   = "http://blog.csdn.net/yangtiang"
+  # s.social_media_url   = "http://www.jianshu.com/u/3c9287519f58"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -68,7 +64,7 @@ setting and fit various screen size perfectly are MyLayout's main advantages.**
   s.platform     = :ios, "7.0"
 
   #  When using multiple platforms
-  # s.ios.deployment_target = "5.0"
+  s.ios.deployment_target = "7.0"
   # s.osx.deployment_target = "10.7"
   # s.watchos.deployment_target = "2.0"
 
@@ -79,7 +75,7 @@ setting and fit various screen size perfectly are MyLayout's main advantages.**
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => "1.2.4" }
+  s.source       = { :git => "https://github.com/youngsoft/MyLinearLayout.git", :tag => s.version }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -95,43 +91,5 @@ setting and fit various screen size perfectly are MyLayout's main advantages.**
 
   s.public_header_files = "MyLayout/Lib/*.h"
 
-
-  # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  A list of resources included with the Pod. These are copied into the
-  #  target bundle with a build phase script. Anything else will be cleaned.
-  #  You can preserve files from being cleaned, please don't preserve
-  #  non-essential files like tests, examples and documentation.
-  #
-
-  # s.resource  = "icon.png"
-  # s.resources = "Resources/*.png"
-
-  # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
-
-
-  # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  Link your library with frameworks, or libraries. Libraries do not include
-  #  the lib prefix of their name.
-  #
-
-  # s.framework  = "SomeFramework"
-  # s.frameworks = "SomeFramework", "AnotherFramework"
-
-  # s.library   = "iconv"
-  # s.libraries = "iconv", "xml2"
-
-
-  # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  If your library depends on compiler flags you can set them in the xcconfig hash
-  #  where they will only apply to your library. If you depend on other Podspecs
-  #  you can include multiple dependencies to ensure it works.
-
-  # s.requires_arc = true
-
-  # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  # s.dependency "JSONKit", "~> 1.4"
 
 end

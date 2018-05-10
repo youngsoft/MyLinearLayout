@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#if TARGET_OS_IPHONE
+
 #import <UIKit/UIKit.h>
+
+
 
 /**
  *一个用于计算位置和尺寸在不同设备屏幕下缩放比例的辅助类，用于实现不同大小设备屏幕之间的位置和尺寸的适配。
@@ -35,8 +40,41 @@
  */
 +(CGFloat)scaleH:(CGFloat)val;
 
+/**
+ *根据屏幕清晰度将带小数的入参返回能转化为有效物理像素的最接近的设备点值。
+ *比如当入参为1.3时，那么在1倍屏幕下的有效值就是1,而在2倍屏幕下的有效值就是1.5,而在3倍屏幕下的有效值就是1.3333333了
+ */
++(CGFloat)roundNumber:(CGFloat)number;
+
+/**
+ *根据屏幕清晰度将带小数的point入参返回能转化为有效物理像素的最接近的设备point点值。
+ */
++(CGPoint)roundPoint:(CGPoint)point;
+
+
+/**
+ *根据屏幕清晰度将带小数的size入参返回能转化为有效物理像素的最接近的设备size点值。
+ */
++(CGSize)roundSize:(CGSize)size;
+
+/**
+ *根据屏幕清晰度将带小数的rect入参返回能转化为有效物理像素的最接近的设备rect点值。
+ */
++(CGRect)roundRect:(CGRect)rect;
+
+
+
 @end
 
 #define MYDIMESCALE(val)   ([MyDimeScale scale:val])
 #define MYDIMESCALEW(val)  ([MyDimeScale scaleW:val])
 #define MYDIMESCALEH(val)  ([MyDimeScale scaleH:val])
+
+#elif TARGET_OS_MAC
+
+#define MYDIMESCALE(val)   val
+#define MYDIMESCALEW(val)  val
+#define MYDIMESCALEH(val)  val
+
+
+#endif
