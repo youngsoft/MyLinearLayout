@@ -52,21 +52,13 @@
     _rootLayout= [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     _rootLayout.padding = UIEdgeInsetsMake(0, 65, 0, 10);
     _rootLayout.cacheEstimatedRect = YES;
-    
-    /*
-     在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
-     _rootLayout.widthSize.equalTo(self.contentView.widthSize);
-     _rootLayout.wrapContentHeight = YES;
-     */
-    // _rootLayout.widthSize.equalTo(self.contentView.widthSize);
     _rootLayout.myHorzMargin = MyLayoutPos.safeAreaMargin;
     _rootLayout.wrapContentHeight = YES;
     _rootLayout.wrapContentWidth = NO;
     //这里设置其他位置有间隔线而最后一行没有下划线。我们可以借助布局视图本身所提供的边界线来代替掉系统默认的cell之间的间隔线，因为布局视图的边界线所提供的能力要大于默认的间隔线。
     MyBorderline  *bld = [[MyBorderline alloc] initWithColor:[UIColor whiteColor]];
     self.rootLayout.bottomBorderline = bld;
-    [self.contentView addSubview:_rootLayout];  //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时用了myLeft和myRight来做边界的话，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
-    
+    [self.contentView addSubview:_rootLayout];
     MyLinearLayout *giveLikeLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     giveLikeLayout.padding = UIEdgeInsetsMake(5, 6, 5, 6);
     giveLikeLayout.weight = 1;
@@ -78,8 +70,7 @@
     _commentsLabel.text = @"正文";
     _commentsLabel.textColor = [UIColor blueColor];
     _commentsLabel.font = [UIFont systemFontOfSize:12];
-    _commentsLabel.myLeading = 0;
-    _commentsLabel.myTrailing = 0; //垂直线性布局里面如果同时设置了左右边距则能确定子视图的宽度，这里表示宽度和父视图相等。
+    _commentsLabel.myHorzMargin = 0;
     _commentsLabel.wrapContentHeight = YES; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
     [giveLikeLayout addSubview:_commentsLabel];
 }

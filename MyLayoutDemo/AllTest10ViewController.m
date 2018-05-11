@@ -60,6 +60,7 @@
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.estimatedRowHeight = 100;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 65, 0, 10);
     self.tableView.separatorColor = [UIColor clearColor];
     [self.tableView registerClass:[AllTest10Cell class] forCellReuseIdentifier:@"AllTest10Cell"];
@@ -101,6 +102,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     MyBaseLayout *footerView = [[MyBaseLayout alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10)];
     footerView.backgroundColor = [UIColor whiteColor];
+    footerView.myHorzMargin = MyLayoutPos.safeAreaMargin;
     MyBorderline  *bld = [[MyBorderline alloc] initWithColor:[UIColor colorWithRed:216.0/255 green:214.0/255 blue:216.0/255 alpha:1]];
     footerView.bottomBorderline = bld;
     return footerView;
