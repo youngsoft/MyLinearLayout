@@ -21,20 +21,9 @@
 
 -(void)loadView
 {
-    
-    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    MyFrameLayout *rootLayout = [[MyFrameLayout alloc] init];
     rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
-    
-    //为了支持iPhoneX的全屏幕适配。我们只需要对根布局视图设置一些扩展的属性，默认情况下是不需要进行特殊设置的，MyLayout自动会对iPhoneX进行适配
-    //我们知道iOS11中引入了安全区域的概念，MyLayout中的根布局视图会自动将安全区域叠加到设置的padding中去。这个属性是通过insetsPaddingFromSafeArea来完成的。
-    //默认情况下四周的安全区域都会叠加到padding中去，因此您可以根据特殊情况来设置只需要叠加哪一个方向的安全区域。您可以通过如下的方法：
-    rootLayout.insetsPaddingFromSafeArea = UIRectEdgeAll;  //您可以在这里将值改变为UIRectEdge的其他类型然后试试运行的效果。并且在运行时切换横竖屏看看效果
-    
-    //iPhoneX设备中具有一个尺寸为44的刘海区域。当您横屏时为了对齐，左右两边的安全缩进区域都是44。但是有些时候我们希望没有刘海的那一边不需要缩进对齐而是延伸到安全区域以外。这时候您可以通过给根布局视图设置insetLandscapeFringePadding属性来达到效果。
-    //注意这个属性只有insetsPaddingFromSafeArea设置了左右都缩进时才有效。
-    rootLayout.insetLandscapeFringePadding = NO;   //您可以在横屏下将这个属性设置为YES后，然后尝试一下进行左右旋转后查看运行的效果。
-    
 }
 
 - (void)viewDidLoad {
@@ -47,25 +36,23 @@
 
 - (void)setNavBar {
     self.navigationItem.titleView = [[YYFPSLabel alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
-    
     self.title = @"朋友圈";
 }
 
 - (void)setupUI {
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-    self.tableView.myHorzMargin = 0;
-    self.tableView.heightSize.lBound(self.view.heightSize, 0, 1);
+    self.tableView.myMargin = 0;
     self.tableView.delegate = self;
-    self.tableView.sectionFooterHeight = 0.0001;
     self.tableView.dataSource = self;
-    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.sectionFooterHeight = 0.0001;
     self.tableView.estimatedRowHeight = 100;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.sectionHeaderHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedSectionHeaderHeight = 100;
+    self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 65, 0, 10);
     self.tableView.separatorColor = [UIColor clearColor];
     [self.tableView registerClass:[AllTest10Cell class] forCellReuseIdentifier:@"AllTest10Cell"];
-    self.tableView.sectionHeaderHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedSectionHeaderHeight = 100;
     [self.tableView registerClass:[AllTest10HeaderView class] forHeaderFooterViewReuseIdentifier:@"AllTest10HeaderView"];
     [self.view addSubview:self.tableView];
 }
