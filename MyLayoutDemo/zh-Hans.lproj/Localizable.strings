@@ -60,6 +60,7 @@
 "❁1.Screen perfect fit - Demo1" = "❁1.界面的完美适配DEMO";
 "❁2.Screen perfect fit - Demo2" = "❁2.界面的完美适配DEMO2";
 "❁3.UICollectionView height self-adaption" = "❁3.UICollectionView 高度自适应";
+"❁4.Circle of friends height self-adaption" = "❁3.朋友圈 高度自适应";
 
 //LLTest1ViewController
 "vertical(from top to bottom)" = "垂直布局(从上到下)";

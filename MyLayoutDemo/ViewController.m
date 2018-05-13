@@ -53,6 +53,7 @@
 #import "AllTest7ViewController.h"
 #import "AllTest8ViewController.h"
 #import "AllTest9ViewController.h"
+#import "AllTest10ViewController.h"
 
 
 #import "FOLTest1ViewController.h"
@@ -284,6 +285,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"❁3.UICollectionView height self-adaption", @""),
                                                @"class":[AllTest9ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"❁4.Circle of friends height self-adaption", @""),
+                                               @"class":[AllTest10ViewController class]
                                                }
                                              ]
                             }
