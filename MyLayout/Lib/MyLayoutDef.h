@@ -161,6 +161,86 @@ typedef enum : NSUInteger {
 
 
 
+/*
+ SizeClass的尺寸定义,用于定义苹果设备的各种屏幕的尺寸，对于任意一种设备来说某个纬度的尺寸都可以描述为：Any任意，Compact压缩，Regular常规
+ 三种形式，比如下面就列出了苹果各种设备的SizeClass定义：
+ 
+ iPhone4S,iPhone5/5s,iPhone6
+ 竖屏：(w:Compact h:Regular)
+ 横屏：(w:Compact h:Compact)
+ iPhone6 Plus
+ 竖屏：(w:Compact h:Regular)
+ 横屏：(w:Regular h:Compact)
+ iPad
+ 竖屏：(w:Regular h:Regular)
+ 横屏：(w:Regular h:Regular)
+ Apple Watch
+ 竖屏：(w:Compact h:Compact)
+ 横屏：(w:Compact h:Compact)
+ 
+ 我们可以专门为某种设备的SizeClass来设置具体的各种子视图和布局的约束，但是为了兼容多种设备，我们提出了SizeClass的继承关系,其中的继承关系如下：
+ 
+ w:Compact h:Compact 继承 (w:Any h:Compact , w:Compact h:Any , w:Any h:Any)
+ w:Regular h:Compact 继承 (w:Any h:Compact , w:Regular h:Any , w:Any h:Any)
+ w:Compact h:Regular 继承 (w:Any h:Regular , w:Compact h:Any , w:Any h:Any)
+ w:Regular h:Regular 继承 (w:Any h:Regular , w:Regular h:Any , w:Any h:Any)
+ 
+ 
+ 也就是说设备当前是：w:Compact h:Compact 则会找出某个视图是否定义了这个SizeClass的界面约束布局，如果没有则找w:Any h:Compact。如果找到了
+ 则使用，否则继续往上找，直到w:Any h:Any这种尺寸，因为默认所有视图和布局视图的约束设置都是基于w:Any h:Any的。所以总是会找到对应的视图定义的约束的。
+ 
+ 在上述的定义中我们发现了2个问题，一个就是没有一个明确来指定横屏和竖屏这种屏幕的情况；另外一个是iPad设备的宽度和高度都是regular，而无法区分横屏和竖屏。因此这里对
+ MySizeClass新增加了两个定义：竖屏MySizeClass_Portrait和横屏MySizeClass_Landscape。我们可以用这两个SizeClass来定义全局横屏以及某类设备的横屏和竖屏
+ 
+ 在默认情况下现有的布局以及子视图的约束设置都是基于w:Any h:Any的,如果我们要为某种SizeClass设置约束则可以调用视图的扩展方法：
+ 
+ -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass;
+ -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
+ 
+ 
+ 这两个方法需要传递一个宽度的MySizeClass定义和高度的MySizeClass定义，并通过 | 运算符来组合。 比如：
+ 
+ 1.想设置所有iPhone设备的横屏的约束
+ UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wAny|MySizeClass_hCompact];
+ 
+ 2.想设置所有iPad设备的横屏的约束
+ UIView *lsc = [某视图 fetchLayoutSizeClass: MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape];
+ 
+ 3.想设置iphone6plus下的横屏的约束
+ UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wRegular|MySizeClass_hCompact];
+ 
+ 4.想设置ipad下的约束
+ UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular];
+ 
+ 5.想设置所有设备下的约束，也是默认的视图的约束
+ UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny];
+ 
+ 6.所有设备的竖屏约束：
+ UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_Portrait];
+ 
+ 7.所有设备的横屏约束：
+ UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_Landscape];
+ 
+ 
+ 
+ fetchLayoutSizeClass虽然返回的是一个instancetype,但实际得到了一个MyLayoutSizeClass对象或者其派生类，而MyLayoutSizeClass类中又定义了跟UIView一样相同的布局方法，因此虽然是返回视图对象，并设置各种约束，但实际上是设置MyLayoutSizeClass对象的各种约束。
+ 
+ */
+typedef enum : unsigned char{
+    MySizeClass_wAny = 0,       //宽度任意尺寸
+    MySizeClass_wCompact = 1,   //宽度压缩尺寸,这个属性在iOS8以下不支持
+    MySizeClass_wRegular = 2,   //宽度常规尺寸,这个属性在iOS8以下不支持
+    
+    MySizeClass_hAny = 0,            //高度任意尺寸
+    MySizeClass_hCompact = 1 << 2,   //高度压缩尺寸,这个属性在iOS8以下不支持
+    MySizeClass_hRegular = 2 << 2,   //高度常规尺寸,这个属性在iOS8以下不支持
+    
+    MySizeClass_Any = 0x0,     //所有设备，等价于MySizeClass_wAny|MySizeClass_hAny
+    MySizeClass_Portrait = 0x40,  //竖屏
+    MySizeClass_Landscape = 0x80,  //横屏,注意横屏和竖屏不支持 | 运算操作，只能指定一个。
+}MySizeClass;
+
+
 
 //内部使用
 typedef enum : unsigned char

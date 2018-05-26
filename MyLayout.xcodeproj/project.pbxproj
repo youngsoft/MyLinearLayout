@@ -25,7 +25,7 @@
 		182225D31E77E5930081AA4B /* MyTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225C31E77E5930081AA4B /* MyTableLayout.m */; };
 		182225D41E77E5930081AA4B /* MyDimeScale.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225C41E77E5930081AA4B /* MyDimeScale.m */; };
 		182225D51E77E5930081AA4B /* MyLayoutSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225C51E77E5930081AA4B /* MyLayoutSize.m */; };
-		182DB6421EF7876200E2D65D /* MyGridLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 182DB6401EF7876200E2D65D /* MyGridLayout.h */; };
+		182DB6421EF7876200E2D65D /* MyGridLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 182DB6401EF7876200E2D65D /* MyGridLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		182DB6431EF7876200E2D65D /* MyGridLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 182DB6411EF7876200E2D65D /* MyGridLayout.m */; };
 		182DB6441EF7876200E2D65D /* MyGridLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 182DB6411EF7876200E2D65D /* MyGridLayout.m */; };
 		1897384F1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 1897384E1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m */; };
@@ -44,7 +44,7 @@
 		18C15AF41EDF140400AADEAC /* MyBaseLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225AF1E77E5930081AA4B /* MyBaseLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AF51EDF140D00AADEAC /* MyLayoutPos.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225B01E77E5930081AA4B /* MyLayoutPos.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AF61EDF141000AADEAC /* MyLayoutSize.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225BC1E77E5930081AA4B /* MyLayoutSize.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		18C15AF71EDF141600AADEAC /* MyLayoutSizeClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C01E77E5930081AA4B /* MyLayoutSizeClass.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		18C15AF71EDF141600AADEAC /* MyLayoutSizeClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C01E77E5930081AA4B /* MyLayoutSizeClass.h */; };
 		18C15AF81EDF141A00AADEAC /* MyMaker.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C21E77E5930081AA4B /* MyMaker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AF91EDF142000AADEAC /* MyDimeScale.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C71E77E5930081AA4B /* MyDimeScale.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AFA1EDF142300AADEAC /* MyLayoutDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225B31E77E5930081AA4B /* MyLayoutDef.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -139,7 +139,7 @@
 		200A26D91FA8A90300B06E7B /* AllTest9ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 200A26D81FA8A90300B06E7B /* AllTest9ViewController.m */; };
 		200A26DC1FA96B2400B06E7B /* AllTest9CollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 200A26DB1FA96B2400B06E7B /* AllTest9CollectionViewCell.m */; };
 		204DC321209D5A8700F6CB57 /* TLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 204DC320209D5A8600F6CB57 /* TLTest4ViewController.m */; };
-		205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */ = {isa = PBXBuildFile; fileRef = 205642841F4CFF9B00E8BDDE /* MyBorderline.h */; };
+		205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */ = {isa = PBXBuildFile; fileRef = 205642841F4CFF9B00E8BDDE /* MyBorderline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		205642871F4CFF9B00E8BDDE /* MyBorderline.m in Sources */ = {isa = PBXBuildFile; fileRef = 205642851F4CFF9B00E8BDDE /* MyBorderline.m */; };
 		205642881F4CFFB600E8BDDE /* MyBorderline.m in Sources */ = {isa = PBXBuildFile; fileRef = 205642851F4CFF9B00E8BDDE /* MyBorderline.m */; };
 		2056430A1F4E53CD00E8BDDE /* MyGridNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 205643081F4E53CD00E8BDDE /* MyGridNode.h */; };
@@ -150,11 +150,15 @@
 		205643171F55A03000E8BDDE /* MyLayoutMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643151F55A03000E8BDDE /* MyLayoutMath.m */; };
 		205643181F55A16400E8BDDE /* MyLayoutMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643151F55A03000E8BDDE /* MyLayoutMath.m */; };
 		205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */; };
+		205E0C5F20B90347001A8B99 /* MyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 205642891F4D013D00E8BDDE /* MyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		205E0C6020B907CC001A8B99 /* MyLayoutPosInner.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C61E77E5930081AA4B /* MyLayoutPosInner.h */; };
+		205E0C6120B907D1001A8B99 /* MyLayoutSizeInner.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C81E77E5930081AA4B /* MyLayoutSizeInner.h */; };
+		205E0C6220B907DB001A8B99 /* MyLayoutInner.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225B81E77E5930081AA4B /* MyLayoutInner.h */; };
+		205E0C6320B907EC001A8B99 /* MyLayoutDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 208157C01F5A886300E945B6 /* MyLayoutDelegate.h */; };
 		205F9EBA1F7AA5710034732C /* gl.png in Resources */ = {isa = PBXBuildFile; fileRef = 205F9EB91F7AA5710034732C /* gl.png */; };
 		205F9EBC1F7AA6510034732C /* all.png in Resources */ = {isa = PBXBuildFile; fileRef = 205F9EBB1F7AA6510034732C /* all.png */; };
 		2075CC3220A0B2A400BA6F65 /* FLLTest7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2075CC3120A0B2A400BA6F65 /* FLLTest7ViewController.m */; };
 		208157BD1F586AA700E945B6 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157BC1F586AA700E945B6 /* DetailViewController.m */; };
-		208157C21F5A886300E945B6 /* MyLayoutDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 208157C01F5A886300E945B6 /* MyLayoutDelegate.h */; };
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		20B46A8D1F8A79C300826372 /* layoutdemo8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 20B46A8C1F8A79C300826372 /* layoutdemo8.gif */; };
@@ -854,7 +858,6 @@
 				2056430A1F4E53CD00E8BDDE /* MyGridNode.h in Headers */,
 				18C15AEC1EDF13D700AADEAC /* MyLayout.h in Headers */,
 				18C15AED1EDF13DE00AADEAC /* MyFlowLayout.h in Headers */,
-				208157C21F5A886300E945B6 /* MyLayoutDelegate.h in Headers */,
 				18C15AEE1EDF13E500AADEAC /* MyLinearLayout.h in Headers */,
 				18C15AEF1EDF13E900AADEAC /* MyFloatLayout.h in Headers */,
 				18C15AF01EDF13EF00AADEAC /* MyTableLayout.h in Headers */,
@@ -865,12 +868,17 @@
 				18C15AF41EDF140400AADEAC /* MyBaseLayout.h in Headers */,
 				18C15AF51EDF140D00AADEAC /* MyLayoutPos.h in Headers */,
 				18C15AF61EDF141000AADEAC /* MyLayoutSize.h in Headers */,
-				18C15AF71EDF141600AADEAC /* MyLayoutSizeClass.h in Headers */,
-				18C15AF81EDF141A00AADEAC /* MyMaker.h in Headers */,
-				18C15AF91EDF142000AADEAC /* MyDimeScale.h in Headers */,
-				205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */,
+				205E0C5F20B90347001A8B99 /* MyGrid.h in Headers */,
 				182DB6421EF7876200E2D65D /* MyGridLayout.h in Headers */,
+				205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */,
+				18C15AF81EDF141A00AADEAC /* MyMaker.h in Headers */,
+				18C15AF71EDF141600AADEAC /* MyLayoutSizeClass.h in Headers */,
+				18C15AF91EDF142000AADEAC /* MyDimeScale.h in Headers */,
 				18C15AFA1EDF142300AADEAC /* MyLayoutDef.h in Headers */,
+				205E0C6020B907CC001A8B99 /* MyLayoutPosInner.h in Headers */,
+				205E0C6120B907D1001A8B99 /* MyLayoutSizeInner.h in Headers */,
+				205E0C6220B907DB001A8B99 /* MyLayoutInner.h in Headers */,
+				205E0C6320B907EC001A8B99 /* MyLayoutDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
