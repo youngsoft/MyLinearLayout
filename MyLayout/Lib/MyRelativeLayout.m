@@ -114,6 +114,9 @@
     //如果是反向则调整所有子视图的左右位置。
     NSArray *sbs2 = [self myGetLayoutSubviews];
     
+    //对所有子视图进行布局变换
+    [self myAdjustSubviewsLayoutTransform:sbs2 lsc:lsc selfWidth:selfSize.width selfHeight:selfSize.height];
+    //对所有子视图进行RTL设置
     [self myAdjustSubviewsRTLPos:sbs2 selfWidth:selfSize.width];
     
     return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs2 lsc:lsc];

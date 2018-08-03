@@ -221,7 +221,9 @@
     
     //调整布局视图自己的尺寸。
     [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
-    //如果是反向则调整所有子视图的左右位置。
+    //对所有子视图进行布局变换
+    [self myAdjustSubviewsLayoutTransform:sbs lsc:lsc selfWidth:selfSize.width selfHeight:selfSize.height];
+    //对所有子视图进行RTL设置
     [self myAdjustSubviewsRTLPos:sbs selfWidth:selfSize.width];
     
     return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs lsc:lsc];
@@ -1003,6 +1005,27 @@
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
     
+    CGFloat subviewSize = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
+    if (subviewSize != 0)
+    {
+        CGFloat maxSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
+        CGFloat minSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
+        if (arrangedCount > 1)
+        {
+            horzSpace = (selfSize.width - paddingHorz - subviewSize * arrangedCount)/(arrangedCount - 1);
+            if (_myCGFloatGreat(horzSpace, maxSpace) || _myCGFloatLess(horzSpace, minSpace))
+            {
+                if (_myCGFloatGreat(horzSpace, maxSpace))
+                    horzSpace = maxSpace;
+                if (_myCGFloatLess(horzSpace, minSpace))
+                    horzSpace = minSpace;
+                
+                subviewSize =  (selfSize.width - paddingHorz -  horzSpace * (arrangedCount - 1)) / arrangedCount;
+                
+            }
+        }
+    }
+    
 #if TARGET_OS_IOS
     //判断父滚动视图是否分页滚动
     BOOL isPagingScroll = (self.superview != nil &&
@@ -1084,6 +1107,9 @@
         }
         else
         {
+            if (subviewSize != 0)
+                rect.size.width = subviewSize;
+            
             if (pagingItemWidth != 0)
                 rect.size.width = pagingItemWidth;
             
@@ -1459,6 +1485,9 @@
             if (sbvsc.widthSizeInner.dimeNumVal != nil)
                 rect.size.width = sbvsc.widthSizeInner.measure;
             
+            if (subviewSize != 0)
+                rect.size.height = subviewSize;
+            
             if (sbvsc.heightSizeInner.dimeNumVal != nil)
                 rect.size.height = sbvsc.heightSizeInner.measure;
             
@@ -1512,14 +1541,13 @@
         if (sbvsc.widthSizeInner.dimeNumVal != nil)
             rect.size.width = sbvsc.widthSizeInner.measure;
         
+        if (subviewSize != 0)
+            rect.size.height = subviewSize;
+        
         if (sbvsc.heightSizeInner.dimeNumVal != nil)
             rect.size.height = sbvsc.heightSizeInner.measure;
         
         [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-        
-        if (subviewSize != 0)
-            rect.size.height = subviewSize;
-        
         
         [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
         
@@ -1706,6 +1734,27 @@
 
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
+    CGFloat subviewSize = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
+    if (subviewSize != 0)
+    {
+        
+        CGFloat maxSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
+        CGFloat minSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
+        if (arrangedCount > 1)
+        {
+            vertSpace = (selfSize.height - paddingVert - subviewSize * arrangedCount)/(arrangedCount - 1);
+            if (_myCGFloatGreat(vertSpace, maxSpace) || _myCGFloatLess(vertSpace, minSpace))
+            {
+                if (_myCGFloatGreat(vertSpace, maxSpace))
+                    vertSpace = maxSpace;
+                if (_myCGFloatLess(vertSpace, minSpace))
+                    vertSpace = minSpace;
+                
+                subviewSize =  (selfSize.height - paddingVert -  vertSpace * (arrangedCount - 1)) / arrangedCount;
+                
+            }
+        }
+    }
     
     //父滚动视图是否分页滚动。
 #if TARGET_OS_IOS
@@ -1802,6 +1851,9 @@
         {
             
             BOOL isFlexedHeight = sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && sbvsc.heightSizeInner.dimeRelaVal.view != self;
+            
+            if (subviewSize != 0)
+                rect.size.height = subviewSize;
             
             if (pagingItemHeight != 0)
                 rect.size.height = pagingItemHeight;

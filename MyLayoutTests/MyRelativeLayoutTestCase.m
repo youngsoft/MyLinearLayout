@@ -877,6 +877,40 @@
 
 }
 
+-(void)testMaxHeightAndWidth
+{
+    MyRelativeLayout *rellayout = [MyRelativeLayout new];
+    
+    UIView *vv = [UIView new];
+    [rellayout addSubview:vv];
+    
+    UILabel *label = [UILabel new];
+    [rellayout addSubview:label];
+    
+    label.myLeft = 10;
+    label.wrapContentWidth = YES;
+    label.widthSize.max(100);
+    label.wrapContentHeight = YES;
+    
+    
+    vv.topPos.equalTo(label.topPos);
+    vv.bottomPos.equalTo(label.bottomPos);
+    vv.leftPos.equalTo(label.leftPos);
+    vv.rightPos.equalTo(label.rightPos);
+    
+    
+    label.text = @"测试12345660392034323";
+    vv.backgroundColor = [UIColor redColor];
+    
+    [rellayout sizeThatFits:CGSizeZero];
+    
+    XCTAssertTrue(CGSizeEqualToSize(label.estimatedRect.size, CGSizeMake(90, 61)));
+    XCTAssertTrue(CGSizeEqualToSize(vv.estimatedRect.size, CGSizeMake(90, 61)));
+    XCTAssertTrue(CGSizeEqualToSize(vv.estimatedRect.size, label.estimatedRect.size));
+
+    
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

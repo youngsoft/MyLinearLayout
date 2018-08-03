@@ -558,7 +558,7 @@ BOOL _myisRTL = NO;
         _zeroPadding = YES;
         _insetsPaddingFromSafeArea = UIRectEdgeLeft | UIRectEdgeRight;
         _insetLandscapeFringePadding = NO;
-        
+        _layoutTransform = CGAffineTransformIdentity;
     }
     
     return self;
@@ -818,6 +818,7 @@ BOOL _myisRTL = NO;
     lsc.insetLandscapeFringePadding = self.insetLandscapeFringePadding;
     lsc.gravity = self.gravity;
     lsc.reverseLayout = self.reverseLayout;
+    lsc.layoutTransform = self.layoutTransform;
     lsc.subviewVSpace = self.subviewVSpace;
     lsc.subviewHSpace = self.subviewHSpace;
     
@@ -833,7 +834,7 @@ BOOL _myisRTL = NO;
                NSStringFromUIEdgeInsets(self.padding),
                self.zeroPadding?@"YES":@"NO",
                self.gravity,
-               self.reverseLayout ? @"YES":@"NO",
+               self.reverseLayout?@"YES":@"NO",
                self.subviewVSpace,
                self.subviewHSpace
                ];

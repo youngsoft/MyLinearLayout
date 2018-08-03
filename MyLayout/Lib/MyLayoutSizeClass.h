@@ -96,6 +96,15 @@
 
 @interface MyLayoutViewSizeClass : MyViewSizeClass
 
+@property(nonatomic, assign) BOOL zeroPadding;
+
+@property(nonatomic, assign) BOOL reverseLayout;
+@property(nonatomic, assign) CGAffineTransform layoutTransform;  //布局变换。
+
+@property(nonatomic, assign) MyGravity gravity;
+
+@property(nonatomic, assign) BOOL insetLandscapeFringePadding;
+
 @property(nonatomic, assign) CGFloat topPadding;
 @property(nonatomic, assign) CGFloat leadingPadding;
 @property(nonatomic, assign) CGFloat bottomPadding;
@@ -107,10 +116,8 @@
 @property(nonatomic, assign) CGFloat rightPadding;
 
 
-@property(nonatomic, assign) BOOL zeroPadding;
 
 @property(nonatomic, assign) UIRectEdge insetsPaddingFromSafeArea;
-@property(nonatomic, assign) BOOL insetLandscapeFringePadding;
 
 
 
@@ -118,9 +125,8 @@
 @property(nonatomic, assign) CGFloat subviewHSpace;
 @property(nonatomic, assign) CGFloat subviewSpace;
 
-@property(nonatomic, assign) MyGravity gravity;
 
-@property(nonatomic, assign) BOOL reverseLayout;   //逆序布局，子视图从后往前。
+
 
 
 
@@ -153,10 +159,11 @@
 
 @interface MyFlowLayoutViewSizeClass : MySequentLayoutViewSizeClass
 
+@property(nonatomic,assign) MyGravity arrangedGravity;
+@property(nonatomic,assign) BOOL autoArrange;
+
 @property(nonatomic,assign) NSInteger arrangedCount;
 @property(nonatomic, assign) NSInteger pagedCount;
-@property(nonatomic,assign) BOOL autoArrange;
-@property(nonatomic,assign) MyGravity arrangedGravity;
 
 @property(nonatomic, assign) CGFloat subviewSize;
 @property(nonatomic, assign) CGFloat minSpace;

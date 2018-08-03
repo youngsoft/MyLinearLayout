@@ -758,6 +758,24 @@
 
 
 /**
+ 设置布局内所有子视图的位置的坐标变换，这个坐标变换不会影响到子视图的尺寸。默认值为CGAffineTransformIdentity，表示对子视图不进行任何位置变换。
+  这个属性会对布局视图内所有的子视图进行单独的位置变换，而不是进行整体的变换。在对子视图进行变换时的坐标原点是布局视图的中心点，并且是以子视图自身的中心点作为坐标变换计算的依据。
+ 
+ @note
+ 我们可以设置如下的值进行一些常见的位置变化：
+ 1.CGAffineTransformIdentity 表示恢复正常，不进行任何位置变换。
+ 2.CGAffineTransformMakeTranslation(tx, ty) 表示布局视图内所有子视图的水平位置都将偏移tx, 垂直位置都将偏移ty。
+ 3.CGAffineTransformMakeScale(sx,sy)  表示布局视图内所有子视图的水平位置都将缩放sx倍，所有子视图的垂直位置都将缩放sy倍。
+ 4.CGAffineTransformMake(-1,0,0,1,0,0) 表示布局视图内所有子视图的位置都将水平翻转，形成水平镜像效果。
+ 5.CGAffineTransformMake(1,0,0,-1,0,0) 表示布局视图内所有子视图的位置都将垂直翻转，形成垂直镜像效果。
+ 6.CGAffineTransformMake(-1,0,0,-1,0,0) 表示布局视图内所有子视图的位置都将旋转180度。
+ 7. 当然我们还可以进行任意的坐标变换，只要您熟悉CGAffineTransform的使用和设置方法。
+ */
+@property(nonatomic, assign) CGAffineTransform layoutTransform;
+
+
+
+/**
  *把一个布局视图放入到UIScrollView(UITableView和UICollectionView除外)内时是否自动调整UIScrollView的contentSize值。默认是MyAdjustScrollViewContentSizeModeAuto表示布局视图会自动接管UIScrollView的contentSize的值。 你可以将这个属性设置MyAdjustScrollViewContentSizeModeNo而不调整和控制contentSize的值，设置为MyAdjustScrollViewContentSizeModeYes则一定会调整contentSize.
  */
 @property(nonatomic, assign) MyAdjustScrollViewContentSizeMode adjustScrollViewContentSizeMode;

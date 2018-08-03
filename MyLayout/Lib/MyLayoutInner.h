@@ -96,6 +96,8 @@
 
 -(void)myAdjustSubviewsRTLPos:(NSArray*)sbs selfWidth:(CGFloat)selfWidth;
 
+-(void)myAdjustSubviewsLayoutTransform:(NSArray*)sbs lsc:(MyBaseLayout*)lsc selfWidth:(CGFloat)selfWidth selfHeight:(CGFloat)selfHeight;
+
 -(MyGravity)myConvertLeftRightGravityToLeadingTrailing:(MyGravity)horzGravity;
 
 //为支持iOS11的safeArea而进行的padding的转化

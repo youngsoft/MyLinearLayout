@@ -265,9 +265,12 @@ static NSInteger sBaseTag = 100000;
 {
     //MyBaseLayout的属性reverseLayout可以将子视图按照添加的顺序逆序布局。
     
+    
     for (MyBaseLayout *layout in self.containerLayouts)
     {
+        
         layout.reverseLayout = !layout.reverseLayout;
+        
         [layout layoutAnimationWithDuration:0.3];
     }
 }

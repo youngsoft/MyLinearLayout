@@ -42,6 +42,7 @@
 #import "FLLTest5ViewController.h"
 #import "FLLTest6ViewController.h"
 #import "FLLTest7ViewController.h"
+#import "FLLTest8ViewController.h"
 
 
 #import "AllTest1ViewController.h"
@@ -54,6 +55,7 @@
 #import "AllTest8ViewController.h"
 #import "AllTest9ViewController.h"
 #import "AllTest10ViewController.h"
+#import "AllTest11ViewController.h"
 
 
 #import "FOLTest1ViewController.h"
@@ -187,6 +189,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"7.FlowLayout - Auto Arrange", @""),
                                                @"class":[FLLTest7ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"8.FlowLayout - Flex space", @""),
+                                               @"class":[FLLTest8ViewController class]
                                                }
                                              ]
                             },
@@ -288,6 +293,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"❁4.Circle of friends height self-adaption", @""),
                                                @"class":[AllTest10ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"❁5.Subviews layout transform", @""),
+                                               @"class":[AllTest11ViewController class]
                                                }
                                              ]
                             }

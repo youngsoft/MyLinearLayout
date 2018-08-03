@@ -123,8 +123,7 @@ typedef enum : unsigned short {
  *设置当将布局视图嵌入到UIScrollView以及其派生类时对UIScrollView的contentSize的调整设置模式的枚举类型定义。
  *当将一个布局视图作为子视图添加到UIScrollView或者其派生类时(UITableView,UICollectionView除外)系统会自动调整和计算并设置其中的contentSize值。您可以使用布局视图的属性adjustScrollViewContentSizeMode来进行设置定义的枚举值。
  */
-typedef enum :unsigned char 
-{
+typedef enum :unsigned char {
     /**自动调整，在添加到UIScrollView之前(UITableView, UICollectionView除外)。如果值被设置Auto则在添加到父视图后自动会变为YES。*/
     MyAdjustScrollViewContentSizeModeAuto = 0,
     /**不调整，任何加入到UIScrollView中的布局视图在尺寸变化时都不会调整和设置contentSize的值。*/
@@ -138,7 +137,7 @@ typedef enum :unsigned char
 /**
  *用来设置当线性布局中的子视图的尺寸大于线性布局的尺寸时的子视图的压缩策略和压缩内容枚举类型定义。请参考线性布局的shrinkType属性的定义。
  */
-typedef enum : NSUInteger {
+typedef enum : unsigned char  {
     /**不压缩。*/
     MySubviewsShrink_None = 0,
     /**平均压缩。*/

@@ -997,6 +997,23 @@ void* _myObserverContextC = (void*)20175283;
     return self.myCurrentSizeClass.reverseLayout;
 }
 
+
+
+-(CGAffineTransform)layoutTransform
+{
+    return self.myCurrentSizeClass.layoutTransform;
+}
+
+-(void)setLayoutTransform:(CGAffineTransform)layoutTransform
+{
+    MyBaseLayout *lsc = self.myCurrentSizeClass;
+    if (!CGAffineTransformEqualToTransform(lsc.layoutTransform, layoutTransform))
+    {
+        lsc.layoutTransform = layoutTransform;
+        [self setNeedsLayout];
+    }
+}
+
 -(void)removeAllSubviews
 {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -2365,7 +2382,13 @@ void* _myObserverContextC = (void*)20175283;
     
     if (isWrapWidth || isWrapHeight)
     {
-        CGSize fitSize = [sbv sizeThatFits:CGSizeZero];
+        
+        CGSize thatFits = CGSizeZero;
+        //在一些场景中，计算包裹时有可能设置了最大的尺寸约束，所以这里要进行特殊处理。
+        thatFits.width = sbvsc.widthSizeInner.uBoundValInner.dimeNumVal.doubleValue;
+        thatFits.height = sbvsc.heightSizeInner.uBoundValInner.dimeNumVal.doubleValue;
+        
+        CGSize fitSize = [sbv sizeThatFits:thatFits];
         if (isWrapWidth)
         {
             if (sbvsc.wrapContentWidth)
@@ -3000,6 +3023,37 @@ void* _myObserverContextC = (void*)20175283;
             
             myFrame.leading = selfWidth - myFrame.leading - myFrame.width;
             myFrame.trailing = myFrame.leading + myFrame.width;
+            
+        }
+    }
+}
+
+
+-(void)myAdjustSubviewsLayoutTransform:(NSArray*)sbs lsc:(MyBaseLayout*)lsc selfWidth:(CGFloat)selfWidth selfHeight:(CGFloat)selfHeight
+{
+    CGAffineTransform layoutTransform = lsc.layoutTransform;
+    if (!CGAffineTransformIsIdentity(layoutTransform))
+    {
+        for (UIView *sbv in sbs)
+        {
+            MyFrame *myFrame = sbv.myFrame;
+            
+            //取子视图中心点坐标。因为这个坐标系的原点是布局视图的左上角，所以要转化为数学坐标系的原点坐标, 才能应用坐标变换。
+            CGPoint centerPoint = CGPointMake(myFrame.leading + myFrame.width / 2 - selfWidth / 2,
+                                              myFrame.top + myFrame.height / 2 - selfHeight / 2);
+            
+            //应用坐标变换
+            centerPoint = CGPointApplyAffineTransform(centerPoint, layoutTransform);
+            
+            //还原为左上角坐标系。
+            centerPoint.x +=  selfWidth / 2;
+            centerPoint.y += selfHeight / 2;
+            
+            //根据中心点的变化调整开始和结束位置。
+            myFrame.leading = centerPoint.x - myFrame.width / 2;
+            myFrame.trailing = myFrame.leading + myFrame.width;
+            myFrame.top = centerPoint.y - myFrame.height / 2;
+            myFrame.bottom = myFrame.top + myFrame.height;
         }
     }
 }

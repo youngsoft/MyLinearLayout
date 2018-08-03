@@ -20,6 +20,32 @@
 -(void)loadView
 {
     
+    MyFloatLayout *roo1 = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
+    roo1.subviewHSpace = 10;
+    roo1.subviewVSpace = 10;
+    roo1.layoutTransform = CGAffineTransformMake(0, 1, 1, 0, 0, 0);
+    self.view = roo1;
+    
+    for (int i = 0; i < 10; i++)
+    {
+        UILabel *v1 = [UILabel new];
+        v1.backgroundColor = [UIColor redColor];
+        v1.text = [NSString stringWithFormat:@"%d",i];
+        v1.mySize = CGSizeMake(100, 100);
+        
+        if (i % 4 == 0)
+        {
+            v1.clearFloat = YES;
+        }
+        
+        [roo1 addSubview:v1];
+    }
+    
+    
+    
+    return;
+    
+    
     /*
        使用MyLayout时必读的知识点：
      

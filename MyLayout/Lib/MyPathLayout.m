@@ -821,8 +821,11 @@
     [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
     
     
+    //对所有子视图进行布局变换
+    [self myAdjustSubviewsLayoutTransform:sbs lsc:lsc selfWidth:selfSize.width selfHeight:selfSize.height];
+    
     //路径布局不支持RTL。
-   // [self myAdjustSubviewsRTLPos:sbs2 selfWidth:selfSize.width];
+    
     
     return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs2 lsc:lsc];
 }
