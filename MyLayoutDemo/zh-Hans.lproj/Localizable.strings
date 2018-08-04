@@ -34,6 +34,7 @@
 "5.FlowLayout - Paging" = "5.流式布局-对分页滚动的支持";
 "6.FlowLayout - Scroll" = "6.流式布局-不同方向的滚动";
 "7.FlowLayout - Auto Arrange" = "7.流式布局-自动布局和对瀑布流的支持";
+"8.FlowLayout - Flex space" = "8.流式布局-浮动间距";
 "1.FloatLayout - Float" = "1.浮动布局-浮动效果的演示";
 "2.FloatLayout - Jagged" = "2.浮动布局-仿天猫淘宝首页实现" ;
 "3.FloatLayout - Card news" = "3.浮动布局-仿ZAKER今日头条实现";
@@ -60,8 +61,8 @@
 "❁1.Screen perfect fit - Demo1" = "❁1.界面的完美适配DEMO";
 "❁2.Screen perfect fit - Demo2" = "❁2.界面的完美适配DEMO2";
 "❁3.UICollectionView height self-adaption" = "❁3.UICollectionView 高度自适应";
-"❁4.Circle of friends height self-adaption" = "❁3.朋友圈 高度自适应";
-
+"❁4.Circle of friends height self-adaption" = "❁4.朋友圈 高度自适应";
+"❁5.Subviews layout transform" = "❁5.布局内子视图的整体变换";
 //LLTest1ViewController
 "vertical(from top to bottom)" = "垂直布局(从上到下)";
 "left margin" = "左边边距";
@@ -272,3 +273,14 @@
 //AllTest8ViewController
 "Pop layoutview at center"="居中弹出布局视图";
 "Title"="标题";
+
+//AllTest11ViewController
+"Identity"="正常";
+"Translation" = "平移";
+"Scale" = "缩放";
+"Horz Reflection" = "水平翻转";
+"Vert Reflection" = "垂直翻转";
+"Reverse" = "对角翻转";
+
+
+

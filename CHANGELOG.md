@@ -2,6 +2,16 @@
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
 ---
+## [V1.6.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.6.0)(2018/08/04)
+
+#### Added
+1. 添加布局属性`layoutTransform`,用来实现对布局内子视图的整体位置变换，可以通过这个属性来实现一般常见的平移，缩放，水平翻转，垂直翻转等功能。具体的DEMO在新增加的[AllTest11ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/AllTest11ViewController.m)中可以查看。
+2. 为流式布局`MyFlowLayout`支持子视图固定尺寸并且间距动态拉伸调整的能力，你可以通过设置流式布局的方法：`setSubviewsSize:minSpace:maxSpace:`来实现，这个方法原先只支持内容约束流式布局，现在新版本对数量约束流式布局也同样支持了。具体的DEMO在新增加的[FLLTest8ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/FLLTest8ViewController.m)中可以查看。
+
+#### Fixed
+1. 修复了UILabel等控件的尺寸设置了wrapContentHeight或者wrapContentWidth为YES并且同时又设置了最大最小尺寸时，在相对布局内进行尺寸计算内可能会出现的问题。
+2. 修复了通过Carthage引入库时出现符合以及文件无法找到的问题。
+
 
 ## [V1.5.3](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.3)(2018/05/11)
 

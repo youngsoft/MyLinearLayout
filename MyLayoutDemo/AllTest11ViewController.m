@@ -26,6 +26,9 @@
      方法，就可以用他来进行各种布局视图内子视图的整体的坐标变换，比如：平移、缩放、水平反转、垂直反转、旋转等以及一些复合的坐标变换。在下面的例子里面我分别列举了一些常见的布局位置
      坐标变换的设置方法以及参数。
      
+     
+     当你的布局内所有视图都需要有统一的变换的动画时，你可以借助layoutTransform属性并且配合layoutAnimationWithDuration方法来实现动画效果。
+     
      */
     
     self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
@@ -58,6 +61,8 @@
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"Reverse", @"")
                                                action:@selector(handleReverseTransform:)]];
     
+    
+    //下面是用于测试的layoutTransform属性的布局视图，本系统中的所有布局视图都支持layoutTransform属性。
     MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
     contentLayout.backgroundColor = [CFTool color:5];
     contentLayout.weight = 1.0;  //占用线性布局中的剩余高度。
