@@ -5,8 +5,8 @@
 ## [V1.6.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.6.0)(2018/08/04)
 
 #### Added
-1. 添加布局属性`layoutTransform`,用来实现对布局内子视图的整体位置变换，可以通过这个属性来实现一般常见的平移，缩放，水平翻转，垂直翻转等功能。具体的DEMO在新增加的[AllTest11ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/AllTest11ViewController.m)中可以查看。
-2. 为流式布局`MyFlowLayout`支持子视图固定尺寸并且间距动态拉伸调整的能力，你可以通过设置流式布局的方法：`setSubviewsSize:minSpace:maxSpace:`来实现，这个方法原先只支持内容约束流式布局，现在新版本对数量约束流式布局也同样支持了。具体的DEMO在新增加的[FLLTest8ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/FLLTest8ViewController.m)中可以查看。
+1. 添加布局属性`layoutTransform`,用来实现对布局内子视图的整体位置变换，可以通过这个属性来实现一般常见的平移，缩放，水平翻转，垂直翻转等功能。具体的DEMO在新增加的[AllTest11ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/AllTest11ViewController.m)中可以查看。
+2. 为流式布局`MyFlowLayout`支持子视图固定尺寸并且间距动态拉伸调整的能力，你可以通过设置流式布局的方法：`setSubviewsSize:minSpace:maxSpace:`来实现，这个方法原先只支持内容约束流式布局，现在新版本对数量约束流式布局也同样支持了。具体的DEMO在新增加的[FLLTest8ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/FLLTest8ViewController.m)中可以查看。
 
 #### Fixed
 1. 修复了UILabel等控件的尺寸设置了wrapContentHeight或者wrapContentWidth为YES并且同时又设置了最大最小尺寸时，在相对布局内进行尺寸计算内可能会出现的问题。
@@ -16,11 +16,11 @@
 ## [V1.5.3](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.3)(2018/05/11)
 
 #### Added
-1.添加了流式布局`MyFlowLayout`对瀑布流的支持，主要是数量约束流式布局来实现，通过设置`autoArrange`为YES或者设置`arrangedGravity`属性为`MyGravity_Horz_Between或者MyGravity_Vert_Between`来实现两种不同策略的瀑布流模式，瀑布流模式其实就是一种紧凑的流式布局排列方式。具体的DEMO在新增加的[FLLTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/FLLTest7ViewController.m)中可以查看。
+1.添加了流式布局`MyFlowLayout`对瀑布流的支持，主要是数量约束流式布局来实现，通过设置`autoArrange`为YES或者设置`arrangedGravity`属性为`MyGravity_Horz_Between或者MyGravity_Vert_Between`来实现两种不同策略的瀑布流模式，瀑布流模式其实就是一种紧凑的流式布局排列方式。具体的DEMO在新增加的[FLLTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/FLLTest7ViewController.m)中可以查看。
 
 #### Fixed
 1. 修复了流式布局`MyFlowLayout`中的arrangedGravity属性设置和子视图的myAlignment属性同时设置时有可能对齐方式不正确的问题，以及gravity属性设置后停靠有可能不正确的问题。
-2. 优化和修复了对UIScrollView+布局视图时，设置UIScrollView的高度或者宽度由布局视图的尺寸进行自适应的问题。新版本中UIScrollView的尺寸可以依赖于布局视图的尺寸，同时布局视图的最大最小尺寸可以设置为UIScrollView的尺寸。具体例子参考：[FLLTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/FLLTest7ViewController.m)
+2. 优化和修复了对UIScrollView+布局视图时，设置UIScrollView的高度或者宽度由布局视图的尺寸进行自适应的问题。新版本中UIScrollView的尺寸可以依赖于布局视图的尺寸，同时布局视图的最大最小尺寸可以设置为UIScrollView的尺寸。具体例子参考：[FLLTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/FLLTest7ViewController.m)
 3. 添加了对`myTop,myBottom,myLeft,myRight,myLeading,myTrailing,mySize,myWidth,myHeight,myMargin, myHorzMargin, myVertMargin`的读取使用的告警处理！一般情况下这些属性只能用于设置具体的数值，而不能用来获取某个尺寸，get方法也并不代表着视图的约束尺寸，这个点切记，切记。
 4. 添加了对布局视图的`cacheEstimatedRect`属性的使用限制说明，这个属性只能用于那些需要高度自适应的UITableViewCell的根布局视图中使用，其他地方如果使用则有可能会出现计算不正确的问题。
 5. 恢复了对XCODE8.0以前的编译器版本使用MyLayout的支持。
@@ -34,13 +34,13 @@
 2. 修复路径布局中的`MyPathSpace`的初始化方法和蓝牙框架一起使用时可能会出现编译时错误的问题。[BUG#70](https://github.com/youngsoft/MyLinearLayout/issues/70)
 3. 修复表格布局`MyTableLayout`的行高是MyLayoutSize.wrap时，并且又设置了智能边界线时，列子视图的边界线显示不完整的问题。[BUG#71](https://github.com/youngsoft/MyLinearLayout/issues/71)
 4. 修复了一些编译和分析有可能会产生报警的代码。
-5. 提供了新的关于表格布局的DEMO：[TLTest4ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/TLTest4ViewController.m)
+5. 提供了新的关于表格布局的DEMO：[TLTest4ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/TLTest4ViewController.m)
 
 
 ## [V1.5.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.5.1)(2018/04/23)
 
 #### Added
-1. 添加了对浮动布局MyFloatLayout中的子视图的行或者列内对齐方式的设置，您可以借助子视图的myAlignment属性来设置行或者列内的对齐方式，具体的DEMO请参考：[FOLTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/FOLTest7ViewController.m) 中的介绍。
+1. 添加了对浮动布局MyFloatLayout中的子视图的行或者列内对齐方式的设置，您可以借助子视图的myAlignment属性来设置行或者列内的对齐方式，具体的DEMO请参考：[FOLTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/FOLTest7ViewController.m) 中的介绍。
 2. 将所有设置为过期的方法删除。
 3. 修正一些编译上的告警以及一些和Masonry公用时的一些问题。
 4. 修复方向旋转时有可能不调用`rotationToDeviceOrientationBlock`的问题。
@@ -54,9 +54,9 @@
 #### Added
 1. 添加新的布局种类：**栅格布局(MyGridLayout)**。栅格布局是一种将矩形区域划分为多个子矩形区域，并将这个划分一直持续下去的机制，然后再将子视图填充到对应的栅格区域里面的一种布局视图。栅格布局特别适合于动态布局，布局样式可以从服务器动态下发，并且可以用JSON格式的语言来描述这种布局结构，具体请参考新增加的栅格布局和对应的DEMO。以及对应的说明文档：[栅格布局介绍](http://bicyclering.com/2017/09/01/IOS-UIViewLayout-%E5%B8%83%E5%B1%80-MyLinearLayout/#more)
 2. 添加了对 **基线对齐baseline**的支持[issue:#43](https://github.com/youngsoft/MyLinearLayout/issues/43)，目前只有**水平线性布局(MyLinearLayout)**和**相对布局(MyRelativeLayout)**支持基线对齐。
-    1. 在**MyGravity**中添加了`MyGravity_Vert_Baseline`的枚举定义来支持线性布局的基线对齐，并且在线性布局中添加了一个属性：`baselineBaseView`来指定某个基线基准视图。同时在布局视图的gravity属性中支持对`MyGravity_Vert_Baseline`的设置。具体例子参考：[LLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/LLTest1ViewController.m)
+    1. 在**MyGravity**中添加了`MyGravity_Vert_Baseline`的枚举定义来支持线性布局的基线对齐，并且在线性布局中添加了一个属性：`baselineBaseView`来指定某个基线基准视图。同时在布局视图的gravity属性中支持对`MyGravity_Vert_Baseline`的设置。具体例子参考：[LLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/LLTest1ViewController.m)
 
-    2. 在UIView的扩展属性中增加了一个扩展属性：`baselinePos`。你可以在相对布局中的子视图使用这个属性来进行基线对齐的设置。具体例子请参考：[RLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/RelativeLayoutDemo/RLTest1ViewController.m)
+    2. 在UIView的扩展属性中增加了一个扩展属性：`baselinePos`。你可以在相对布局中的子视图使用这个属性来进行基线对齐的设置。具体例子请参考：[RLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/RLTest1ViewController.m)
 
 3. 添加对Apple TV_OS 的支持，您可以用MyLayout来开发apple TV方面的应用。
 4. **MyLayoutPos**中增加了一个特殊的值`safeAreaMargin`用来支持对iOS11应用的适配。
@@ -80,7 +80,7 @@
 #### Added
 1. 添加适配iOS11的能力以及**iPhoneX**的方法。基本不需要改动当前代码。如果需要改动只需要设置根布局视图的一些属性即可。
   1. 新增布局视图属性：`insetsPaddingFromSafeArea`用来设置在哪个方向缩进对应方向的安全区域。
-  2. 新增布局视图属性：`insetLandscapeFringePadding`用来设置当支持横屏时，并且insetsPaddingFromSafeArea设置为左右缩进时，是否只缩进有刘海的那一边。这个属性默认设置为NO，表示两边都缩进。您可以在特殊需要时将这个属性设置为YES表示只缩进刘海那一边，非刘海那一边则不缩进。具体参考使用DEMO：[LLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/LLTest1ViewController.m)
+  2. 新增布局视图属性：`insetLandscapeFringePadding`用来设置当支持横屏时，并且insetsPaddingFromSafeArea设置为左右缩进时，是否只缩进有刘海的那一边。这个属性默认设置为NO，表示两边都缩进。您可以在特殊需要时将这个属性设置为YES表示只缩进刘海那一边，非刘海那一边则不缩进。具体参考使用DEMO：[LLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/LLTest1ViewController.m)
 
 #### Changed
 1. 布局方法：`estimateLayoutRect`设置为过期，请用`sizeThatFits`方法来代替，方法换名字的原因是iOS的默认sizeThatFits本来就是用来进行尺寸评估的，所以没有必要用新方法。
@@ -91,7 +91,7 @@
 ## [V1.4.2](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.4.2)(2017/8/31)
 
 #### Added
-1. 表格布局MyTableLayout添加了`addRow:colCount:`方法，目的是为了支持那些列数固定并且宽度固定的需求，具体例子见DEMO：[TLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/TLTest1ViewController.m)中的第五行的代码。
+1. 表格布局MyTableLayout添加了`addRow:colCount:`方法，目的是为了支持那些列数固定并且宽度固定的需求，具体例子见DEMO：[TLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/TLTest1ViewController.m)中的第五行的代码。
 2. 添加了布局视图的高度等于非布局父视图宽度以及布局视图宽度等于非布局父视图高度的支持，目的是为了支持对布局视图进行旋转`transform`的支持。
 3. 添加了框架布局MyFrameLayout中子视图的高度等于另外视图宽度以及宽度等于另外视图高度的支持。
 4. 下一个版本将会有重大功能的添加：栅格布局的支持、基线对齐的支持、均分的再次优化等等功能，敬请期待吧。。
@@ -150,7 +150,7 @@
 3. 将原先线性布局、流式布局、浮动布局中的`gravity`属性提升到了布局基类中，目前线性布局、流式布局、浮动布局、和框架布局都支持`gravity`的设置。
 4. 进一步优化了布局视图的性能，表现为对KVO监听的延迟处理和优化。
 5. 进一步优化了布局视图的内存占用尺寸，将布局视图中对触摸事件处理的变量变为按需要才创建，以及布局视图的边界线对象也改为了按需要才建立，这两部分按需处理机制将有效的减少了布局视图的内存占用。
-6. 为了更进一步的优化和简化MyLayout对UITableviewCell高度自适应的处理，新版本中对实现的解决方案进行优化处理，具体详情请参考：[AllTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/AllTest1ViewController.m)中的介绍
+6. 为了更进一步的优化和简化MyLayout对UITableviewCell高度自适应的处理，新版本中对实现的解决方案进行优化处理，具体详情请参考：[AllTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/AllTest1ViewController.m)中的介绍
 7. 优化工程目录结构。
 
 
