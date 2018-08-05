@@ -56,7 +56,7 @@
 2. 添加了对 **基线对齐baseline**的支持[issue:#43](https://github.com/youngsoft/MyLinearLayout/issues/43)，目前只有**水平线性布局(MyLinearLayout)**和**相对布局(MyRelativeLayout)**支持基线对齐。
     1. 在**MyGravity**中添加了`MyGravity_Vert_Baseline`的枚举定义来支持线性布局的基线对齐，并且在线性布局中添加了一个属性：`baselineBaseView`来指定某个基线基准视图。同时在布局视图的gravity属性中支持对`MyGravity_Vert_Baseline`的设置。具体例子参考：[LLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/LLTest1ViewController.m)
 
-    2. 在UIView的扩展属性中增加了一个扩展属性：`baselinePos`。你可以在相对布局中的子视图使用这个属性来进行基线对齐的设置。具体例子请参考：[RLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/RLTest1ViewController.m)
+    2. 在UIView的扩展属性中增加了一个扩展属性：`baselinePos`。你可以在相对布局中的子视图使用这个属性来进行基线对齐的设置。具体例子请参考：[RLTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayout/RelativeLayoutDemo/RLTest1ViewController.m)
 
 3. 添加对Apple TV_OS 的支持，您可以用MyLayout来开发apple TV方面的应用。
 4. **MyLayoutPos**中增加了一个特殊的值`safeAreaMargin`用来支持对iOS11应用的适配。
