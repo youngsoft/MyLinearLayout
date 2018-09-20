@@ -2,6 +2,12 @@
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
 ---
+## [V1.6.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.6.1)(2018/09/29)
+#### Fixed
+1. 修复对所有iPhoneX系列的设备的布局视图在设置padding的值为safeAreaMargin时的BUG。
+2. 添加对Application Extension上使用布局库视图的支持。[BUG#81](https://github.com/youngsoft/MyLinearLayout/issues/81)
+
+
 ## [V1.6.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.6.0)(2018/08/04)
 
 #### Added

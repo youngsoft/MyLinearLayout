@@ -637,7 +637,15 @@ BOOL _myisRTL = NO;
     //如果padding值是特殊的值。
     if (self.topPadding >= MyLayoutPos.safeAreaMargin - 2000 && self.topPadding <= MyLayoutPos.safeAreaMargin + 2000)
     {
-        return  self.topPadding - MyLayoutPos.safeAreaMargin + CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
+        
+        CGFloat topPaddingAdd = 20.0; //默认高度是状态栏的高度。
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        
+        if (@available(iOS 11.0, *)) {
+            topPaddingAdd = self.view.safeAreaInsets.top;
+        }
+#endif
+        return  self.topPadding - MyLayoutPos.safeAreaMargin + topPaddingAdd;
     }
     
     if ((self.insetsPaddingFromSafeArea & UIRectEdgeTop) == UIRectEdgeTop)
@@ -659,15 +667,11 @@ BOOL _myisRTL = NO;
     if (self.bottomPadding >= MyLayoutPos.safeAreaMargin - 2000 && self.bottomPadding <= MyLayoutPos.safeAreaMargin + 2000)
     {
         CGFloat bottomPaddingAdd = 0;
-#if TARGET_OS_IOS
-            //如果设备是iPhoneX就特殊处理。竖屏是34，横屏是21
-            if ([UIScreen mainScreen].bounds.size.height == 812 || [UIScreen mainScreen].bounds.size.width == 812)
-            {
-               if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
-                   bottomPaddingAdd = 21;
-                else
-                    bottomPaddingAdd = 34;
-            }
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        
+        if (@available(iOS 11.0, *)) {
+            bottomPaddingAdd = self.view.safeAreaInsets.bottom;
+        }
 #endif
         return self.bottomPadding - MyLayoutPos.safeAreaMargin + bottomPaddingAdd;
     }
@@ -691,14 +695,10 @@ BOOL _myisRTL = NO;
     if (self.leadingPadding >= MyLayoutPos.safeAreaMargin - 2000 && self.leadingPadding <= MyLayoutPos.safeAreaMargin + 2000)
     {
         CGFloat leadingPaddingAdd = 0;
-#if TARGET_OS_IOS
-        //如果设备是iPhoneX就特殊处理。竖屏是34，横屏是21
-        if ([UIScreen mainScreen].bounds.size.height == 812 || [UIScreen mainScreen].bounds.size.width == 812)
-        {
-            if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
-                leadingPaddingAdd = 44;
-            else
-                leadingPaddingAdd = 0;
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        
+        if (@available(iOS 11.0, *)) {
+            leadingPaddingAdd = self.view.safeAreaInsets.left; //因为这里左右的缩进都是一样的，因此不需要考虑RTL的情况。
         }
 #endif
         return self.leadingPadding - MyLayoutPos.safeAreaMargin + leadingPaddingAdd;
@@ -741,14 +741,10 @@ BOOL _myisRTL = NO;
     if (self.trailingPadding >= MyLayoutPos.safeAreaMargin - 2000 && self.trailingPadding <= MyLayoutPos.safeAreaMargin + 2000)
     {
         CGFloat trailingPaddingAdd = 0;
-#if TARGET_OS_IOS
-        //如果设备是iPhoneX就特殊处理。竖屏是34，横屏是21
-        if ([UIScreen mainScreen].bounds.size.height == 812 || [UIScreen mainScreen].bounds.size.width == 812)
-        {
-            if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
-                trailingPaddingAdd = 44;
-            else
-                trailingPaddingAdd = 0;
+#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
+        
+        if (@available(iOS 11.0, *)) {
+            trailingPaddingAdd = self.view.safeAreaInsets.right;
         }
 #endif
         return self.trailingPadding - MyLayoutPos.safeAreaMargin + trailingPaddingAdd;
