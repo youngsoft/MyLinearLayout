@@ -1,5 +1,5 @@
 //
-//  UIWindow+MyLayoutRTL.h
+//  UIWindow+RTLRefreshView.h
 //  MyLayoutDemo
 //
 //  Created by mac on 2019/4/19.
@@ -10,9 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UIWindow (MyLayoutRTL)
+@interface UIWindow (RTLRefreshView)
 -(void)updateAllMyLayout:(BOOL)isRTL;
-
 @end
 
 NS_ASSUME_NONNULL_END
