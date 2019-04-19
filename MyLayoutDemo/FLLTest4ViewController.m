@@ -9,6 +9,7 @@
 #import "FLLTest4ViewController.h"
 #import "MyLayout.h"
 #import "CFTool.h"
+#import "UIWindow+RTLRefreshView.h"
 
 @interface FLLTest4ViewController ()
 
@@ -54,10 +55,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(upViewRTL)];
     // Do any additional setup after loading the view.
     
 }
+- (void)upViewRTL
+{
+    
+    [self.view.window updateAllMyLayout:YES];
 
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

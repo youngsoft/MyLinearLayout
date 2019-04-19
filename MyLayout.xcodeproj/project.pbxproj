@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04054AA82269EC9200EB5606 /* UIWindow+MyLayoutRTL.m in Sources */ = {isa = PBXBuildFile; fileRef = 04054AA62269EC9200EB5606 /* UIWindow+MyLayoutRTL.m */; };
+		04054AA92269EC9200EB5606 /* UIWindow+MyLayoutRTL.h in Headers */ = {isa = PBXBuildFile; fileRef = 04054AA72269EC9200EB5606 /* UIWindow+MyLayoutRTL.h */; };
 		180BD8A11EA9EF9A00C6980B /* MyFrameLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 180BD8A01EA9EF9A00C6980B /* MyFrameLayoutTestCase.m */; };
 		1810AC221EB966D30022CBFF /* MyLayoutPerformanceTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 1810AC211EB966D30022CBFF /* MyLayoutPerformanceTestCase.m */; };
 		181836951EAB1CB10031F337 /* MyNoLayoutSuperviewTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 181836941EAB1CB10031F337 /* MyNoLayoutSuperviewTestCase.m */; };
@@ -194,6 +196,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04054AA62269EC9200EB5606 /* UIWindow+MyLayoutRTL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+MyLayoutRTL.m"; sourceTree = "<group>"; };
+		04054AA72269EC9200EB5606 /* UIWindow+MyLayoutRTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+MyLayoutRTL.h"; sourceTree = "<group>"; };
 		180BD8A01EA9EF9A00C6980B /* MyFrameLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFrameLayoutTestCase.m; sourceTree = "<group>"; };
 		1810AC211EB966D30022CBFF /* MyLayoutPerformanceTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutPerformanceTestCase.m; sourceTree = "<group>"; };
 		181836941EAB1CB10031F337 /* MyNoLayoutSuperviewTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNoLayoutSuperviewTestCase.m; sourceTree = "<group>"; };
@@ -760,6 +764,8 @@
 		18D683E61C4F421400A48BB4 /* MyLayout */ = {
 			isa = PBXGroup;
 			children = (
+				04054AA72269EC9200EB5606 /* UIWindow+MyLayoutRTL.h */,
+				04054AA62269EC9200EB5606 /* UIWindow+MyLayoutRTL.m */,
 				18C15AEA1EDF133200AADEAC /* Info.plist */,
 				18D3C9BD1EDF0A7900D3DE43 /* Images */,
 				18D683FB1C4F421400A48BB4 /* Lib */,
@@ -865,6 +871,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04054AA92269EC9200EB5606 /* UIWindow+MyLayoutRTL.h in Headers */,
 				2056430A1F4E53CD00E8BDDE /* MyGridNode.h in Headers */,
 				18C15AEC1EDF13D700AADEAC /* MyLayout.h in Headers */,
 				18C15AED1EDF13DE00AADEAC /* MyFlowLayout.h in Headers */,
@@ -1002,6 +1009,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				Base,
 				"zh-Hans",
 			);
@@ -1099,6 +1107,7 @@
 				18C15B041EDF144B00AADEAC /* MyLayoutSize.m in Sources */,
 				208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */,
 				18C15B051EDF144B00AADEAC /* MyLayoutSizeClass.m in Sources */,
+				04054AA82269EC9200EB5606 /* UIWindow+MyLayoutRTL.m in Sources */,
 				18C15B061EDF144B00AADEAC /* MyMaker.m in Sources */,
 				18C15B071EDF144B00AADEAC /* MyDimeScale.m in Sources */,
 			);
