@@ -122,7 +122,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIBarButtonItem *RTLBar = [[UIBarButtonItem alloc]initWithTitle:@"RTL" style:UIBarButtonItemStylePlain target:self action:@selector(RTLAction)];
+    UIBarButtonItem *LTRBar = [[UIBarButtonItem alloc]initWithTitle:@"LTR" style:UIBarButtonItemStylePlain target:self action:@selector(LTRAction)];
+    self.navigationItem.rightBarButtonItems = @[RTLBar,LTRBar];
     // Do any additional setup after loading the view.
+}
+
+// RTL- UI - 更新
+- (void)RTLAction
+{
+    // 当前view的window
+    [MyBaseLayout myUpArabicUI:YES inWindow:self.view.window];
+}
+- (void)LTRAction
+{
+    // 这个适合APP 使用appdelegate 中的window
+    [MyBaseLayout myUpArabicUI:NO inWindow:[UIApplication sharedApplication].delegate.window];
 }
 
 - (void)didReceiveMemoryWarning {

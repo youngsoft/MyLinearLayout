@@ -631,6 +631,11 @@
 +(void)setIsRTL:(BOOL)isRTL;
 #endif
 
+/**
+ 只是适配UI-RTL  ,不是显示字RTL
+ */
++ (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window;
+
 /*
  布局视图里面的padding属性用来设置布局视图的内边距。内边距是指布局视图里面的子视图离自己距离。外边距则是视图与父视图之间的距离。
  内边距是在自己的尺寸内离子视图的距离，而外边距则不是自己尺寸内离其他视图的距离。下面是内边距和外边距的效果图：
@@ -1008,5 +1013,13 @@
 
 @end
 
+/**
+ 只是适配UI-RTL  ,不是显示字RTL
+ */
 
+@interface UIWindow (MyBaseUpUIRTL)
+
+-(void)myUpBasisUIViewMyLayout:(BOOL)isRTL;
+
+@end
 
