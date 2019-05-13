@@ -759,6 +759,10 @@ void* _myObserverContextC = (void*)20175283;
     [MyViewSizeClass setIsRTL:isRTL];
 }
 
++ (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window
+{
+    [window myUpBasisUIViewMyLayout:isArabicUI];
+}
 
 
 -(CGFloat)topPadding
@@ -3510,7 +3514,29 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 {
     return [NSString stringWithFormat:@"leading:%g, top:%g, width:%g, height:%g, trailing:%g, bottom:%g",_leading,_top,_width,_height,_trailing,_bottom];
 }
+@end
+@implementation UIWindow (MyBaseUpUIRTL)
 
 
+-(void)myUpBasisUIViewMyLayout:(BOOL)isRTL
+
+{
+    [MyBaseLayout setIsRTL:isRTL];
+    [self mySetBasisUISubviewsNeedLayoutRTL:self];
+}
+
+
+-(void)mySetBasisUISubviewsNeedLayoutRTL:(UIView *)v
+{
+    NSArray *sbs = v.subviews;
+    for (UIView *sv in sbs)
+    {
+        if ([sv isKindOfClass:[MyBaseLayout class]])
+        {
+            [sv setNeedsLayout];
+        }
+        [self mySetBasisUISubviewsNeedLayoutRTL:sv];
+    }
+}
 @end
 

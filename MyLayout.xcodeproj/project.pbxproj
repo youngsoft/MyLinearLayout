@@ -982,7 +982,7 @@
 					};
 					1840828C1B2C46E8003F378B = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = BGQ8WB468K;
+						DevelopmentTeam = 8EDMCH2Z7A;
 						ProvisioningStyle = Automatic;
 					};
 					184082A51B2C46E8003F378B = {
@@ -1002,6 +1002,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				Base,
 				"zh-Hans",
 			);
@@ -1455,7 +1456,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BGQ8WB468K;
+				DEVELOPMENT_TEAM = 8EDMCH2Z7A;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayoutDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1477,7 +1478,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BGQ8WB468K;
+				DEVELOPMENT_TEAM = 8EDMCH2Z7A;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayoutDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

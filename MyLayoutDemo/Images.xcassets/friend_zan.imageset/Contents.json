@@ -2,6 +2,10 @@
   "images" : [
     {
       "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
       "filename" : "friend_zan@2x.png",
       "scale" : "2x"
     },
