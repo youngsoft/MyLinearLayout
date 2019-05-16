@@ -196,7 +196,7 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         if (!isEstimate)
         {
@@ -399,7 +399,7 @@
         for (UIView *sbv in sbs)
         {
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
            
             //只有宽度不依赖于父视图并且没有设置左右边距则参与最大包裹宽度计算。
             MyLayoutSize *relaSize = sbvsc.widthSizeInner.dimeRelaVal;
@@ -456,7 +456,7 @@
     {
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
       
         CGRect rect = sbvmyFrame.frame;
         
@@ -648,7 +648,7 @@
         for (UIView *sbv in sbs) {
             
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
           
             
             CGFloat topSpace = sbvsc.topPosInner.posNumVal.doubleValue;
@@ -785,7 +785,7 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         if (sbvsc.leadingPosInner.isRelativePos)
         {
@@ -983,7 +983,7 @@
     for (UIView *sbv in sbs) {
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         CGFloat leadingSpace = sbvsc.leadingPosInner.posNumVal.doubleValue;
         CGFloat trailingSpace = sbvsc.trailingPosInner.posNumVal.doubleValue;
@@ -1152,7 +1152,7 @@
         for (UIView *sbv in sbs)
         {
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
           
             CGRect rect = sbvmyFrame.frame;
             
@@ -1217,7 +1217,7 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         BOOL canAddToNoWrapSbs = YES;
         CGRect rect = sbvmyFrame.frame;
@@ -1339,7 +1339,7 @@
     {
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         pos += [self myValidMargin:sbvsc.topPosInner sbv:sbv calcPos:[sbvsc.topPosInner realPosIn:floatingHeight] selfLayoutSize:selfSize];
         
@@ -1396,7 +1396,7 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         BOOL canAddToNoWrapSbs = YES;
         CGRect rect = sbvmyFrame.frame;
@@ -1533,7 +1533,7 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         pos += [self myValidMargin:sbvsc.leadingPosInner sbv:sbv calcPos:[sbvsc.leadingPosInner realPosIn:floatingWidth] selfLayoutSize:selfSize];
         

@@ -140,7 +140,7 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         if (!isEstimate)
         {
@@ -420,7 +420,7 @@
         for (UIView *sbv in sbs)
         {
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
            
             CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
             CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
@@ -521,7 +521,7 @@
     {
         UIView *sbv = sbs[idx];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         CGFloat topSpace = sbvsc.topPosInner.absVal;
         CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
@@ -932,7 +932,7 @@
             {
                 UIView *sbv = sbs[i];
                 MyFrame *sbvmyFrame = sbv.myFrame;
-                UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                 if (sbvmyFrame.height > lineMaxHeight)
                     lineMaxHeight = sbvmyFrame.height;
                 
@@ -946,7 +946,7 @@
                 {
                     UIView *sbv = sbs[i];
                     MyFrame *sbvmyFrame = sbv.myFrame;
-                    UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                    UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                     switch (sbvsc.myAlignment & MyGravity_Horz_Mask) {
                         case MyGravity_Vert_Center:
                             sbvmyFrame.top += (lineMaxHeight - sbvmyFrame.height) / 2.0;
@@ -997,7 +997,7 @@
         for (UIView *sbv in sbs)
         {
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
             
             CGFloat topSpace = sbvsc.topPosInner.absVal;
             CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
@@ -1100,7 +1100,7 @@
     {
         UIView *sbv = sbs[idx];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
 
         CGFloat topSpace = sbvsc.topPosInner.absVal;
         CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
@@ -1499,7 +1499,7 @@
             {
                 UIView *sbv = sbs[i];
                 MyFrame *sbvmyFrame = sbv.myFrame;
-                UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                 if (sbvmyFrame.width > lineMaxWidth)
                     lineMaxWidth = sbvmyFrame.width;
                 
@@ -1513,7 +1513,7 @@
                 {
                     UIView *sbv = sbs[i];
                     MyFrame *sbvmyFrame = sbv.myFrame;
-                    UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                    UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                     switch ([self myConvertLeftRightGravityToLeadingTrailing:sbvsc.myAlignment & MyGravity_Vert_Mask]) {
                         case MyGravity_Horz_Center:
                             sbvmyFrame.leading += (lineMaxWidth - sbvmyFrame.width) / 2.0;

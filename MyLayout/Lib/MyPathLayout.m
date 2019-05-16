@@ -561,7 +561,7 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         if (!isEstimate)
         {
@@ -617,7 +617,7 @@
         UIView *sbv = sbs[i];
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         CGPoint pt = CGPointZero;
         if (pts.count > i)
@@ -704,7 +704,7 @@
     if (sbv != nil)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         CGRect rect = sbvmyFrame.frame;
         

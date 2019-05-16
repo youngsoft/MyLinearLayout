@@ -56,6 +56,7 @@
 #import "AllTest9ViewController.h"
 #import "AllTest10ViewController.h"
 #import "AllTest11ViewController.h"
+#import "AllTest12ViewController.h"
 
 
 #import "FOLTest1ViewController.h"
@@ -296,6 +297,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"❁5.Subviews layout transform", @""),
                                                @"class":[AllTest11ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"❁6.MyLayout & AutoLayout", @""),
+                                               @"class":[AllTest12ViewController class]
                                                }
                                              ]
                             }

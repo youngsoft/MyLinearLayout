@@ -1770,6 +1770,146 @@ void* _myObserverContextC = (void*)20175283;
     }
 }
 
+
+-(void)setNeedsLayout
+{
+    [super setNeedsLayout];
+    if (!self.translatesAutoresizingMaskIntoConstraints)
+    {
+        if (self.wrapContentWidth || self.wrapContentHeight)
+            [self invalidateIntrinsicContentSize];
+    }
+}
+
+-(CGSize)intrinsicContentSize
+{
+    
+    CGSize sz = [super intrinsicContentSize];
+    if (self.translatesAutoresizingMaskIntoConstraints == NO && (self.wrapContentWidth || self.wrapContentHeight))
+    {
+        if (self.wrapContentWidth && self.wrapContentHeight)
+        {
+            sz = [self sizeThatFits:CGSizeZero];
+        }
+        else if (self.wrapContentWidth)
+        {
+            //动态宽度
+            NSLayoutConstraint *heightConstraint = nil;
+            for (NSLayoutConstraint *constraint in self.constraints)
+            {
+                if (constraint.firstItem == self && constraint.firstAttribute == NSLayoutAttributeHeight)
+                {
+                    heightConstraint = constraint;
+                    break;
+                }
+            }
+            
+            if (heightConstraint == nil)
+            {
+                for (NSLayoutConstraint *constraint in self.superview.constraints)
+                {
+                    if (constraint.firstItem == self && constraint.firstAttribute == NSLayoutAttributeHeight)
+                    {
+                        heightConstraint = constraint;
+                        break;
+                    }
+                }
+            }
+            
+            if (heightConstraint != nil)
+            {
+                CGFloat dependHeight = UIViewNoIntrinsicMetric;
+                if ([heightConstraint.secondItem isKindOfClass:[UIView class]])
+                {
+                    UIView *dependView = (UIView*)heightConstraint.secondItem;
+                    CGRect dependViewRect = dependView.bounds;
+                    if (heightConstraint.secondAttribute == NSLayoutAttributeHeight)
+                        dependHeight = CGRectGetHeight(dependViewRect);
+                    else if (heightConstraint.secondAttribute == NSLayoutAttributeWidth)
+                        dependHeight = CGRectGetWidth(dependViewRect);
+                    else
+                        dependHeight = UIViewNoIntrinsicMetric;
+                }
+                else if (heightConstraint.secondItem == nil)
+                {
+                    dependHeight = 0;
+                }
+                else
+                {
+                    //do nothing...
+                }
+                
+                if (dependHeight != UIViewNoIntrinsicMetric)
+                {
+                    dependHeight *= heightConstraint.multiplier;
+                    dependHeight += heightConstraint.constant;
+                    
+                    sz.width = [self sizeThatFits:CGSizeMake(0, dependHeight)].width;
+                }
+            }
+        }
+        else
+        {
+            //动态高度
+            NSLayoutConstraint *widthConstraint = nil;
+            for (NSLayoutConstraint *constraint in self.constraints)
+            {
+                if (constraint.firstItem == self && constraint.firstAttribute == NSLayoutAttributeWidth)
+                {
+                    widthConstraint = constraint;
+                    break;
+                }
+            }
+            
+            if (widthConstraint == nil)
+            {
+                for (NSLayoutConstraint *constraint in self.superview.constraints)
+                {
+                    if (constraint.firstItem == self && constraint.firstAttribute == NSLayoutAttributeWidth)
+                    {
+                        widthConstraint = constraint;
+                        break;
+                    }
+                }
+            }
+            
+            CGFloat dependWidth = UIViewNoIntrinsicMetric;
+            if (widthConstraint != nil)
+            {
+                if ([widthConstraint.secondItem isKindOfClass:[UIView class]])
+                {
+                    UIView *dependView = (UIView*)widthConstraint.secondItem;
+                    CGRect dependViewRect = dependView.bounds;
+                    if (widthConstraint.secondAttribute == NSLayoutAttributeWidth)
+                        dependWidth = CGRectGetWidth(dependViewRect);
+                    else if (widthConstraint.secondAttribute == NSLayoutAttributeHeight)
+                        dependWidth = CGRectGetHeight(dependViewRect);
+                    else
+                        dependWidth = UIViewNoIntrinsicMetric;
+                }
+                else if (widthConstraint.secondItem == nil)
+                {
+                    dependWidth = 0;
+                }
+                else
+                {
+                    //do nothing...
+                }
+                
+                if (dependWidth != UIViewNoIntrinsicMetric)
+                {
+                    dependWidth *= widthConstraint.multiplier;
+                    dependWidth += widthConstraint.constant;
+                    sz.height = [self sizeThatFits:CGSizeMake(dependWidth, 0)].height;
+                }
+            }
+        }
+    }
+    
+    return sz;
+    
+}
+
 -(void)layoutSubviews
 {
     
@@ -1841,7 +1981,7 @@ void* _myObserverContextC = (void*)20175283;
             CGPoint sbvOldCenter = sbv.center;
 
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
             
             if (sbvmyFrame.leading != CGFLOAT_MAX && sbvmyFrame.top != CGFLOAT_MAX && !sbvsc.noLayout && !sbvsc.useFrame)
             {

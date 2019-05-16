@@ -1016,7 +1016,7 @@
             //调整位置和尺寸。。。
             MyFrame *sbvmyFrame = sbv.myFrame;
             
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
             
             //取垂直和水平对齐
             MyGravity vertGravity = grid.gravity & MyGravity_Horz_Mask;
@@ -1295,7 +1295,7 @@
                         if (!grid.anchor || (grid.measure == 0 && grid.anchor))
                         {
                             MyFrame *sbvmyFrame = sbv.myFrame;
-                            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+                            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                             sbvmyFrame.frame = sbv.bounds;
                             
                             //如果子视图不设置任何约束但是又是包裹的则这里特殊处理。

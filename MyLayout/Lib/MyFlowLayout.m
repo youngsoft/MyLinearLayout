@@ -154,7 +154,7 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         if (!isEstimate)
         {
@@ -243,7 +243,7 @@
     {
         UIView *sbv = sbs[j];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         if (sbvsc.weight != 0)
         {
@@ -266,7 +266,7 @@
     {
         UIView *sbv = sbs[j];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         if (sbvsc.weight != 0)
         {
@@ -345,7 +345,7 @@
         UIView *sbv = sbs[j];
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         if (!isEstimate && self.intelligentBorderline != nil)
         {
@@ -506,7 +506,7 @@
     {
         UIView *sbv = sbs[j];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         
         if (!isEstimate && self.intelligentBorderline != nil)
@@ -757,7 +757,7 @@
         for (UIView* sbv in sbs)
         {
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
             
 #ifdef DEBUG
             //约束异常：垂直流式布局设置autoArrange为YES时，子视图不能将weight设置为非0.
@@ -794,7 +794,7 @@
         UIView *sbv = sbs[i];
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         CGFloat topSpace = sbvsc.topPosInner.absVal;
         CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
@@ -1079,7 +1079,7 @@
         UIView *sbv = sbs[i];
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         if (arrangedIndex >= arrangedCount)
         {
@@ -1165,7 +1165,7 @@
     {
         UIView *sbv = sbs[i];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         //新的一行
         if (arrangedIndex >=  arrangedCount)
@@ -1293,8 +1293,9 @@
             else
             {
                 //取前一行的对应的列的子视图。
-                MyFrame *myPrevColSbvFrame = ((UIView*)sbs[i - arrangedCount]).myFrame;
-                UIView *myPrevColSbvsc = [self myCurrentSizeClassFrom:myPrevColSbvFrame];
+                UIView *myPrevColSbv = (UIView*)sbs[i - arrangedCount];
+                MyFrame *myPrevColSbvFrame = myPrevColSbv.myFrame;
+                UIView *myPrevColSbvsc = [myPrevColSbv myCurrentSizeClassFrom:myPrevColSbvFrame];
                 //当前子视图的位置等于前一行对应列的最大y的值 + 前面对应列的底部间距 + 子视图之间的行间距。
                 yPos =  CGRectGetMaxY(myPrevColSbvFrame.frame)+ myPrevColSbvsc.bottomPosInner.absVal + vertSpace;
             }
@@ -1470,7 +1471,7 @@
         for (UIView* sbv in sbs)
         {
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
             
 #ifdef DEBUG
             //约束异常：水平流式布局设置autoArrange为YES时，子视图不能将weight设置为非0.
@@ -1529,7 +1530,7 @@
         UIView *sbv = sbs[i];
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
 
         
         CGFloat topSpace = sbvsc.topPosInner.absVal;
@@ -1808,7 +1809,7 @@
     {
         UIView *sbv = sbs[i];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         if (arrangedIndex >= arrangedCount)
         {
@@ -1918,7 +1919,7 @@
     {
         UIView *sbv = sbs[i];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         if (arrangedIndex >=  arrangedCount)
         {
@@ -2030,8 +2031,9 @@
             else
             {
                 //取前一列的对应的行的子视图。
-                MyFrame *myPrevColSbvFrame = ((UIView*)sbs[i - arrangedCount]).myFrame;
-                UIView *myPrevColSbvsc = [self myCurrentSizeClassFrom:myPrevColSbvFrame];
+                UIView *myPrevColSbv = (UIView*)sbs[i - arrangedCount];
+                MyFrame *myPrevColSbvFrame = myPrevColSbv.myFrame;
+                UIView *myPrevColSbvsc = [myPrevColSbv myCurrentSizeClassFrom:myPrevColSbvFrame];
                 //当前子视图的位置等于前一列对应行的最大x的值 + 前面对应行的尾部间距 + 子视图之间的列间距。
                 xPos =  CGRectGetMaxX(myPrevColSbvFrame.frame)+ myPrevColSbvsc.trailingPosInner.absVal + horzSpace;
             }

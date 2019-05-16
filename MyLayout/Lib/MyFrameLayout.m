@@ -50,7 +50,7 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         
         [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:selfSize sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
@@ -79,7 +79,7 @@
         for (UIView *sbv in sbs)
         {
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
            
             
             //只有子视图的尺寸或者位置依赖父视图的情况下才需要重新计算位置和尺寸。

@@ -63,6 +63,7 @@
 "❁3.UICollectionView height self-adaption" = "❁3.UICollectionView 高度自适应";
 "❁4.Circle of friends height self-adaption" = "❁4.朋友圈 高度自适应";
 "❁5.Subviews layout transform" = "❁5.布局内子视图的整体变换";
+"❁6.MyLayout & AutoLayout" = "❁6.MyLayout和AutoLayout结合";
 //LLTest1ViewController
 "vertical(from top to bottom)" = "垂直布局(从上到下)";
 "left margin" = "左边边距";

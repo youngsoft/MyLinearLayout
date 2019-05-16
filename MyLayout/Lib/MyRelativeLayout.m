@@ -25,7 +25,7 @@
     for (UIView *sbv in self.subviews)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         if (sbvsc.useFrame)
             continue;
@@ -55,7 +55,12 @@
             
             if (isEstimate && (sbvsc.wrapContentWidth || sbvsc.wrapContentHeight))
             {
-                [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                CGSize sbvSize = sbvmyFrame.frame.size;
+                if (sbvSize.width == CGFLOAT_MAX)
+                    sbvSize.width = 0;
+                if (sbvSize.height == CGFLOAT_MAX)
+                    sbvSize.height = 0;
+                [(MyBaseLayout*)sbv sizeThatFits:sbvSize inSizeClass:sizeClass];
                 
                 sbvmyFrame.leading = sbvmyFrame.trailing = sbvmyFrame.top = sbvmyFrame.bottom = CGFLOAT_MAX;
                 
@@ -488,7 +493,7 @@
 -(CGFloat)myCalcSubView:(UIView*)sbv lsc:(MyRelativeLayout*)lsc gravity:(MyGravity)gravity selfSize:(CGSize)selfSize
 {
     MyFrame *sbvmyFrame = sbv.myFrame;
-    UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+    UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
     
     switch (gravity) {
         case MyGravity_Horz_Leading:
@@ -806,7 +811,7 @@
     for (UIView *sbv in self.subviews)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         
         [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
@@ -863,7 +868,7 @@
     for (UIView *sbv in self.subviews)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         if (sbvsc.widthSizeInner.dimeArrVal != nil)
         {
@@ -1149,7 +1154,7 @@
     {
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [self myCurrentSizeClassFrom:sbvmyFrame];
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         BOOL sbvWrapContentHeight = sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]];
         
         [self myCalcSubViewLeadingTrailing:sbv sbvsc:sbvsc lsc:lsc sbvmyFrame:sbvmyFrame selfSize:selfSize];

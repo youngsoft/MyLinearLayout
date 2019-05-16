@@ -170,6 +170,8 @@
 		444B71911F6A3E3F00331872 /* GLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 444B71901F6A3E3F00331872 /* GLTest5ViewController.m */; };
 		44EBDA8C1F619A6300B47CBD /* GLTest4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EBDA8B1F619A6300B47CBD /* GLTest4ViewController.m */; };
 		44EBDA8E1F619C9000B47CBD /* GridLayoutDemo4.json in Resources */ = {isa = PBXBuildFile; fileRef = 44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.json */; };
+		467E63CC228C4D6F0065D080 /* AllTest12ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 467E63CB228C4D6F0065D080 /* AllTest12ViewController.m */; };
+		467E63CF228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 467E63CE228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m */; };
 		6740E1F820A52D9E00AFBC5A /* AllTest10ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740E1F620A52D9E00AFBC5A /* AllTest10ViewController.m */; };
 		6740E1FB20A52DA900AFBC5A /* AllTest10Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740E1F920A52DA900AFBC5A /* AllTest10Model.m */; };
 		6740E1FE20A52DB100AFBC5A /* AllTest10HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740E1FC20A52DB000AFBC5A /* AllTest10HeaderView.m */; };
@@ -415,6 +417,10 @@
 		44EBDA8A1F619A6300B47CBD /* GLTest4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest4ViewController.h; sourceTree = "<group>"; };
 		44EBDA8B1F619A6300B47CBD /* GLTest4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest4ViewController.m; sourceTree = "<group>"; };
 		44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayoutDemo4.json; sourceTree = "<group>"; };
+		467E63CA228C4D630065D080 /* AllTest12ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest12ViewController.h; sourceTree = "<group>"; };
+		467E63CB228C4D6F0065D080 /* AllTest12ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest12ViewController.m; sourceTree = "<group>"; };
+		467E63CD228CDA550065D080 /* AllTest1TableViewCellForAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewCellForAutoLayout.h; sourceTree = "<group>"; };
+		467E63CE228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewCellForAutoLayout.m; sourceTree = "<group>"; };
 		6740E1F520A52D9D00AFBC5A /* AllTest10ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest10ViewController.h; sourceTree = "<group>"; };
 		6740E1F620A52D9E00AFBC5A /* AllTest10ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest10ViewController.m; sourceTree = "<group>"; };
 		6740E1F920A52DA900AFBC5A /* AllTest10Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest10Model.m; sourceTree = "<group>"; };
@@ -670,6 +676,8 @@
 				6740E1F620A52D9E00AFBC5A /* AllTest10ViewController.m */,
 				20F0DFFB2111749A00CFCE8C /* AllTest11ViewController.h */,
 				20F0DFFC2111749A00CFCE8C /* AllTest11ViewController.m */,
+				467E63CA228C4D630065D080 /* AllTest12ViewController.h */,
+				467E63CB228C4D6F0065D080 /* AllTest12ViewController.m */,
 				18D3C9021EDF068200D3DE43 /* AllTestModel&View */,
 			);
 			name = IntegratedDemo;
@@ -680,6 +688,8 @@
 			children = (
 				18D3C9691EDF082800D3DE43 /* AllTest1TableViewCell.h */,
 				18D3C96A1EDF082800D3DE43 /* AllTest1TableViewCell.m */,
+				467E63CD228CDA550065D080 /* AllTest1TableViewCellForAutoLayout.h */,
+				467E63CE228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m */,
 				18D3C96B1EDF082800D3DE43 /* AllTest1TableViewHeaderFooterView.h */,
 				18D3C96C1EDF082800D3DE43 /* AllTest1TableViewHeaderFooterView.m */,
 				18D3C96D1EDF082800D3DE43 /* AllTest2TableViewCell.h */,
@@ -982,16 +992,17 @@
 					};
 					1840828C1B2C46E8003F378B = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = 8EDMCH2Z7A;
+						DevelopmentTeam = BGQ8WB468K;
 						ProvisioningStyle = Automatic;
 					};
 					184082A51B2C46E8003F378B = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = Q5MFLFRY64;
+						DevelopmentTeam = BGQ8WB468K;
 						TestTargetID = 1840828C1B2C46E8003F378B;
 					};
 					18B152301DEDDE5500AD7A1C = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = BGQ8WB468K;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 1840828C1B2C46E8003F378B;
 					};
@@ -1127,6 +1138,7 @@
 				182225D51E77E5930081AA4B /* MyLayoutSize.m in Sources */,
 				6740E20120A52DC100AFBC5A /* AllTest10Cell.m in Sources */,
 				18D3C93A1EDF07C000D3DE43 /* FLLTest2ViewController.m in Sources */,
+				467E63CF228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m in Sources */,
 				18D3C95A1EDF07F800D3DE43 /* FOLTest1ViewController.m in Sources */,
 				182225D01E77E5930081AA4B /* MyLayoutPos.m in Sources */,
 				18D3C98B1EDF084000D3DE43 /* AllTest7ViewController.m in Sources */,
@@ -1148,6 +1160,7 @@
 				18D3C9941EDF08F800D3DE43 /* YYFPSLabel.m in Sources */,
 				18D3C91D1EDF078200D3DE43 /* FLTest2ViewController.m in Sources */,
 				18D3C9661EDF080800D3DE43 /* TLTest1ViewController.m in Sources */,
+				467E63CC228C4D6F0065D080 /* AllTest12ViewController.m in Sources */,
 				6740E1FE20A52DB100AFBC5A /* AllTest10HeaderView.m in Sources */,
 				18D3C94A1EDF07E700D3DE43 /* PLTest2ViewController.m in Sources */,
 				205642881F4CFFB600E8BDDE /* MyBorderline.m in Sources */,
@@ -1456,7 +1469,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8EDMCH2Z7A;
+				DEVELOPMENT_TEAM = BGQ8WB468K;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayoutDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1478,7 +1491,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8EDMCH2Z7A;
+				DEVELOPMENT_TEAM = BGQ8WB468K;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayoutDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1496,7 +1509,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = Q5MFLFRY64;
+				DEVELOPMENT_TEAM = BGQ8WB468K;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1517,7 +1530,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = Q5MFLFRY64;
+				DEVELOPMENT_TEAM = BGQ8WB468K;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1538,6 +1551,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = BGQ8WB468K;
 				INFOPLIST_FILE = MyLayoutUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1555,6 +1569,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = BGQ8WB468K;
 				INFOPLIST_FILE = MyLayoutUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

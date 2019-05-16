@@ -2,6 +2,18 @@
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
 ---
+
+## [V1.7.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.7.0)(2019/05/16)
+#### Added
+1. 添加了对MyLayout的尺寸自适应和AutoLayout结合的能力。AutoLayout能使用和UILabel一样的MyLayout布局视图中的高度和宽度自适应的设置。具体需求见[issue#79](https://github.com/youngsoft/MyLinearLayout/issues/79)。这个问题的解决得到简化处理。新版本的能力让UITableViewCell的高度自适应的能力得到简化。具体的代码演示见[AllTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/AllTest1ViewController.m)，以及[AllTest12ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/AllTest12ViewController.m)中的详细介绍。
+
+ 2.  添加了对RTL设置的即时生效的能力，您可通过方法`+[MyBaseLayout myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window
+`来设置，具体的功能实现要感谢[LAnqxpp](https://github.com/LAnqxpp)的贡献。
+#### Fixed
+1. 修复了在完成布局后再对子视图设置约束时子视图约束不起作用的[BUG#90](https://github.com/youngsoft/MyLinearLayout/issues/90)。当代码中不对布局视图中的子视图设置任何约束时就会出现这个问题，这个问题涉及到所有布局。
+2. 修复了相对布局可能会产生尺寸无限大的问题，尤其是当相对布局的高度为自适应，并且相对布局中同样存在着具有高度自适应的子布局视图的情况。
+
+
 ## [V1.6.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.6.1)(2018/09/29)
 #### Fixed
 1. 修复对所有iPhoneX系列的设备的布局视图在设置padding的值为safeAreaMargin时的BUG。
