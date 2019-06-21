@@ -32,7 +32,7 @@
 		189738511E16330B004F80D6 /* MyLayoutTestCaseBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 189738501E16330B004F80D6 /* MyLayoutTestCaseBase.m */; };
 		18B152341DEDDE5500AD7A1C /* MyLayoutUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B152331DEDDE5500AD7A1C /* MyLayoutUITests.m */; };
 		18B2CCE81EAF5066001AE0E1 /* MyLinearLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B2CCE71EAF5066001AE0E1 /* MyLinearLayoutTestCase.m */; };
-		18B2CCEA1EB046AC001AE0E1 /* MyFloatLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B2CCE91EB046AB001AE0E1 /* MyFloatLayoutTestCase.m */; };
+		18B2CCEA1EB046AC001AE0E1 /* MyFlowLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B2CCE91EB046AB001AE0E1 /* MyFlowLayoutTestCase.m */; };
 		18C15AEC1EDF13D700AADEAC /* MyLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 18D684001C4F421400A48BB4 /* MyLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AED1EDF13DE00AADEAC /* MyFlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225AB1E77E5930081AA4B /* MyFlowLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AEE1EDF13E500AADEAC /* MyLinearLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225AC1E77E5930081AA4B /* MyLinearLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -149,6 +149,7 @@
 		205643161F55A03000E8BDDE /* MyLayoutMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 205643141F55A03000E8BDDE /* MyLayoutMath.h */; };
 		205643171F55A03000E8BDDE /* MyLayoutMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643151F55A03000E8BDDE /* MyLayoutMath.m */; };
 		205643181F55A16400E8BDDE /* MyLayoutMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 205643151F55A03000E8BDDE /* MyLayoutMath.m */; };
+		205AE95E22BC4C2900BE8E76 /* MyFloatLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 205AE95D22BC4C2900BE8E76 /* MyFloatLayoutTestCase.m */; };
 		205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */; };
 		205E0C5F20B90347001A8B99 /* MyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 205642891F4D013D00E8BDDE /* MyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		205E0C6020B907CC001A8B99 /* MyLayoutPosInner.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C61E77E5930081AA4B /* MyLayoutPosInner.h */; };
@@ -245,7 +246,7 @@
 		18B152331DEDDE5500AD7A1C /* MyLayoutUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyLayoutUITests.m; sourceTree = "<group>"; };
 		18B152351DEDDE5500AD7A1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18B2CCE71EAF5066001AE0E1 /* MyLinearLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLinearLayoutTestCase.m; sourceTree = "<group>"; };
-		18B2CCE91EB046AB001AE0E1 /* MyFloatLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFloatLayoutTestCase.m; sourceTree = "<group>"; };
+		18B2CCE91EB046AB001AE0E1 /* MyFlowLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFlowLayoutTestCase.m; sourceTree = "<group>"; };
 		18C15AEA1EDF133200AADEAC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D3C9031EDF074900D3DE43 /* LLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTest1ViewController.h; sourceTree = "<group>"; };
 		18D3C9041EDF074900D3DE43 /* LLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTest1ViewController.m; sourceTree = "<group>"; };
@@ -392,6 +393,7 @@
 		205643121F51C7EB00E8BDDE /* GLTest2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GLTest2ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		205643141F55A03000E8BDDE /* MyLayoutMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutMath.h; sourceTree = "<group>"; };
 		205643151F55A03000E8BDDE /* MyLayoutMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutMath.m; sourceTree = "<group>"; };
+		205AE95D22BC4C2900BE8E76 /* MyFloatLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFloatLayoutTestCase.m; sourceTree = "<group>"; };
 		205CFA8C1F49BD1C00355489 /* GLTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest1ViewController.h; sourceTree = "<group>"; };
 		205CFA8D1F49BD1C00355489 /* GLTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GLTest1ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		205F9EB91F7AA5710034732C /* gl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gl.png; sourceTree = "<group>"; };
@@ -837,7 +839,8 @@
 				180BD8A01EA9EF9A00C6980B /* MyFrameLayoutTestCase.m */,
 				181836941EAB1CB10031F337 /* MyNoLayoutSuperviewTestCase.m */,
 				18B2CCE71EAF5066001AE0E1 /* MyLinearLayoutTestCase.m */,
-				18B2CCE91EB046AB001AE0E1 /* MyFloatLayoutTestCase.m */,
+				18B2CCE91EB046AB001AE0E1 /* MyFlowLayoutTestCase.m */,
+				205AE95D22BC4C2900BE8E76 /* MyFloatLayoutTestCase.m */,
 				1810AC211EB966D30022CBFF /* MyLayoutPerformanceTestCase.m */,
 			);
 			path = MyLayoutTests;
@@ -1217,13 +1220,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				18B2CCE81EAF5066001AE0E1 /* MyLinearLayoutTestCase.m in Sources */,
+				205AE95E22BC4C2900BE8E76 /* MyFloatLayoutTestCase.m in Sources */,
 				18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */,
 				1810AC221EB966D30022CBFF /* MyLayoutPerformanceTestCase.m in Sources */,
 				181836951EAB1CB10031F337 /* MyNoLayoutSuperviewTestCase.m in Sources */,
 				180BD8A11EA9EF9A00C6980B /* MyFrameLayoutTestCase.m in Sources */,
 				1897384F1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m in Sources */,
 				189738511E16330B004F80D6 /* MyLayoutTestCaseBase.m in Sources */,
-				18B2CCEA1EB046AC001AE0E1 /* MyFloatLayoutTestCase.m in Sources */,
+				18B2CCEA1EB046AC001AE0E1 /* MyFlowLayoutTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

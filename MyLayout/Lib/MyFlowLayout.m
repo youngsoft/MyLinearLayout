@@ -151,57 +151,29 @@
     MyGravity gravity = lsc.gravity;
     MyGravity arrangedGravity = lsc.arrangedGravity;
     
-    for (UIView *sbv in sbs)
-    {
-        MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+    [self myCalcSubviewsWrapContentSize:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
         
-        if (!isEstimate)
+        if (sbvsc.wrapContentWidth)
         {
-            sbvmyFrame.frame = sbv.bounds;
-            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
+            if (lsc.pagedCount > 0 || sbvsc.widthSizeInner.dimeVal != nil ||
+                (orientation == MyOrientation_Horz && (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill) ||
+                (orientation == MyOrientation_Vert && ((gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill || sbvsc.weight != 0)))
+            {
+                sbvsc.wrapContentWidth = NO;
+            }
         }
         
-        if ([sbv isKindOfClass:[MyBaseLayout class]])
+        if (sbvsc.wrapContentHeight)
         {
-            
-            if (sbvsc.wrapContentWidth)
+            if (lsc.pagedCount > 0 || sbvsc.heightSizeInner.dimeVal != nil ||
+                (orientation == MyOrientation_Vert && (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill) ||
+                (orientation == MyOrientation_Horz && ((gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill || sbvsc.weight != 0)))
             {
-                if (lsc.pagedCount > 0 || sbvsc.widthSizeInner.dimeVal != nil ||
-                    (orientation == MyOrientation_Horz && (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill) ||
-                    (orientation == MyOrientation_Vert && ((gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill || sbvsc.weight != 0)))
-                {
-                    sbvsc.wrapContentWidth = NO;
-                }
-            }
-            
-            if (sbvsc.wrapContentHeight)
-            {
-                if (lsc.pagedCount > 0 || sbvsc.heightSizeInner.dimeVal != nil ||
-                    (orientation == MyOrientation_Vert && (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill) ||
-                    (orientation == MyOrientation_Horz && ((gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill || sbvsc.weight != 0)))
-                {
-                    sbvsc.wrapContentHeight = NO;
-                }
-            }
-
-            
-            BOOL isSbvWrap = sbvsc.wrapContentHeight || sbvsc.wrapContentWidth;
-
-            if (pHasSubLayout != nil && isSbvWrap)
-                *pHasSubLayout = YES;
-            
-            if (isEstimate && isSbvWrap)
-            {
-                [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
-                if (sbvmyFrame.multiple)
-                {
-                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为sizeThatFits执行后会还原，所以这里要重新设置
-                }
+                sbvsc.wrapContentHeight = NO;
             }
         }
-    }
-
+        
+    }];
     
     
     if (orientation == MyOrientation_Vert)
@@ -707,6 +679,61 @@
     
 }
 
+-(CGFloat)myCalcMaxMinSubviewSizeForContent:(CGFloat)selfSize lsc:(MyFlowLayoutViewSizeClass*)lsc space:(CGFloat*)pSpace
+{
+    CGFloat subviewSize = lsc.subviewSize;
+    if (subviewSize != 0)
+    {
+        
+        CGFloat minSpace = lsc.minSpace;
+        CGFloat maxSpace = lsc.maxSpace;
+        
+        NSInteger rowCount =  floor((selfSize + minSpace) / (subviewSize + minSpace));
+        if (rowCount > 1)
+        {
+            *pSpace = (selfSize - subviewSize * rowCount)/(rowCount - 1);
+            if (_myCGFloatGreat(*pSpace, maxSpace) || _myCGFloatLess(*pSpace, minSpace))
+            {
+                if (_myCGFloatGreat(*pSpace, maxSpace))
+                    *pSpace = maxSpace;
+                if (_myCGFloatLess(*pSpace, minSpace))
+                    *pSpace = minSpace;
+                
+                subviewSize =  (selfSize - (*pSpace) * (rowCount - 1)) / rowCount;
+            }
+        }
+    }
+    
+    return subviewSize;
+}
+
+
+-(CGFloat)myCalcMaxMinSubviewSize:(CGFloat)selfSize lsc:(MyFlowLayoutViewSizeClass*)lsc arrangedCount:(NSInteger)arrangedCount space:(CGFloat*)pSpace
+{
+    CGFloat subviewSize = lsc.subviewSize;
+    if (subviewSize != 0)
+    {
+        CGFloat maxSpace = lsc.maxSpace;
+        CGFloat minSpace = lsc.minSpace;
+        if (arrangedCount > 1)
+        {
+            *pSpace = (selfSize - subviewSize * arrangedCount)/(arrangedCount - 1);
+            if (_myCGFloatGreat(*pSpace, maxSpace) || _myCGFloatLess(*pSpace, minSpace))
+            {
+                if (_myCGFloatGreat(*pSpace, maxSpace))
+                    *pSpace = maxSpace;
+                if (_myCGFloatLess(*pSpace, minSpace))
+                    *pSpace = minSpace;
+                
+                subviewSize =  (selfSize -  (*pSpace) * (arrangedCount - 1)) / arrangedCount;
+                
+            }
+        }
+    }
+    
+    return subviewSize;
+}
+
 
 -(CGSize)myLayoutSubviewsForVertContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
@@ -729,27 +756,7 @@
     //支持浮动水平间距。
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
-    CGFloat subviewSize = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
-    if (subviewSize != 0)
-    {
-        
-        CGFloat minSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
-        CGFloat maxSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
-        
-        NSInteger rowCount =  floor((selfSize.width - paddingHorz  + minSpace) / (subviewSize + minSpace));
-        if (rowCount > 1)
-        {
-            horzSpace = (selfSize.width - paddingHorz - subviewSize * rowCount)/(rowCount - 1);
-            if (_myCGFloatGreat(horzSpace, maxSpace))
-            {
-                horzSpace = maxSpace;
-                
-                subviewSize =  (selfSize.width - paddingHorz -  horzSpace * (rowCount - 1)) / rowCount;
-                
-            }
-        }
-    }
-    
+    CGFloat subviewSize = [self myCalcMaxMinSubviewSizeForContent:selfSize.width - paddingHorz lsc:(MyFlowLayoutViewSizeClass*)lsc space:&horzSpace];
     
     if (lsc.autoArrange)
     {
@@ -766,13 +773,8 @@
             CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
             CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
             CGRect rect = sbvmyFrame.frame;
-            
-            if (sbvsc.widthSizeInner.dimeNumVal != nil)
-                rect.size.width = sbvsc.widthSizeInner.measure;
-            
-            
-            [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-            
+        
+            rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
             rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
             //暂时把宽度存放sbv.myFrame.trailing上。因为浮动布局来说这个属性无用。
@@ -802,23 +804,12 @@
         CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
         CGRect rect = sbvmyFrame.frame;
         
-        
+        //计算子视图的宽度。
         if (subviewSize != 0)
+        {
             rect.size.width = subviewSize;
-        
-        if (sbvsc.widthSizeInner.dimeNumVal != nil)
-            rect.size.width = sbvsc.widthSizeInner.measure;
-        
-        if (sbvsc.heightSizeInner.dimeNumVal != nil)
-            rect.size.height = sbvsc.heightSizeInner.measure;
-        
-        
-        [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-        
-        [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-        
-        
-        if (sbvsc.weight != 0)
+        }
+        else if (sbvsc.weight != 0)
         {
             //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
             CGFloat floatWidth = selfSize.width - paddingHorz - rowMaxWidth;
@@ -834,19 +825,34 @@
             rect.size.width = (floatWidth + sbvsc.widthSizeInner.addVal) * sbvsc.weight - leadingSpace - trailingSpace;
             
         }
-        
+        else
+        {
+            rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+            
+        }
         
         rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
-        if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
-            rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width ];
-        
-        
-        //如果高度是浮动的则需要调整高度。
-        if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
-            rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
-        
+     
+        //计算子视图的高度。
+        rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        
+        if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
+        {//特殊处理高度等于宽度的情况
+            rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
+            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        }
+        
+        
+        if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+        {//特殊处理宽度等于高度的情况
+            rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
+            rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        }
+        
+        
         
         //计算xPos的值加上leadingSpace + rect.size.width + trailingSpace 的值要小于整体的宽度。
         CGFloat place = xPos + leadingSpace + rect.size.width + trailingSpace;
@@ -863,7 +869,7 @@
             
             
             [arrangeIndexSet addIndex:i - arrangedIndex];
-            //计算每行的gravity情况。
+            //计算前面每行的gravity情况。
             [self myCalcVertLayoutSinglelineAlignment:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
             
             //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
@@ -872,9 +878,16 @@
                 
                 rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:selfSize.width - paddingHorz - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
                 
+                //特殊处理高度包裹。
                 if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
                 {
                     rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
+                    rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+                }
+                
+                if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
+                {//特殊处理高度等于宽度的情况
+                    rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
                     rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
                 }
                 
@@ -1004,27 +1017,7 @@
     
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
-    
-    CGFloat subviewSize = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
-    if (subviewSize != 0)
-    {
-        CGFloat maxSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
-        CGFloat minSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
-        if (arrangedCount > 1)
-        {
-            horzSpace = (selfSize.width - paddingHorz - subviewSize * arrangedCount)/(arrangedCount - 1);
-            if (_myCGFloatGreat(horzSpace, maxSpace) || _myCGFloatLess(horzSpace, minSpace))
-            {
-                if (_myCGFloatGreat(horzSpace, maxSpace))
-                    horzSpace = maxSpace;
-                if (_myCGFloatLess(horzSpace, minSpace))
-                    horzSpace = minSpace;
-                
-                subviewSize =  (selfSize.width - paddingHorz -  horzSpace * (arrangedCount - 1)) / arrangedCount;
-                
-            }
-        }
-    }
+    CGFloat subviewSize = [self myCalcMaxMinSubviewSize:selfSize.width - paddingHorz lsc:(MyFlowLayoutViewSizeClass*)lsc arrangedCount:arrangedCount space:&horzSpace];
     
 #if TARGET_OS_IOS
     //判断父滚动视图是否分页滚动
@@ -1109,17 +1102,29 @@
         {
             if (subviewSize != 0)
                 rect.size.width = subviewSize;
-            
-            if (pagingItemWidth != 0)
+            else if (pagingItemWidth != 0)
                 rect.size.width = pagingItemWidth;
-            
-            if (sbvsc.widthSizeInner.dimeNumVal != nil && !averageArrange)
-                rect.size.width = sbvsc.widthSizeInner.measure;
-            
-            
-            [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-            
-            
+            else
+            {
+                if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+                {//特殊处理宽度等于高度的情况
+                    
+                    if (pagingItemHeight != 0)
+                        rect.size.height = pagingItemHeight;
+                    else
+                        rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+                    rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+                    
+                    
+                    rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
+                    rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+                }
+                else
+                {
+                    rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+                }
+            }
+        
             rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
             rowTotalFixedWidth += rect.size.width;
@@ -1221,14 +1226,6 @@
         CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
         CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
         CGRect rect = sbvmyFrame.frame;
-        BOOL isFlexedHeight = sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && sbvsc.heightSizeInner.dimeRelaVal.view != self;
-        
-        if (pagingItemHeight != 0)
-            rect.size.height = pagingItemHeight;
-        
-        
-        if (sbvsc.heightSizeInner.dimeNumVal != nil)
-            rect.size.height = sbvsc.heightSizeInner.measure;
         
         if (averageArrange)
         {
@@ -1236,14 +1233,32 @@
         }
         
         
-        [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-        
-        //如果高度是浮动的则需要调整高度。
-        if (isFlexedHeight)
-            rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
-        
-        
+        if (pagingItemHeight != 0)
+            rect.size.height = pagingItemHeight;
+        else
+            rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        
+        //再算一次宽度。
+        if (!averageArrange)
+        {
+         rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        }
+        
+        //特殊处理宽度和高度相互依赖的情况。。
+        if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
+        {//特殊处理高度等于宽度的情况
+            rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
+            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+        }
+        
+        
+        if (!averageArrange && sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+        {//特殊处理宽度等于高度的情况
+            rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
+            rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        }
         
         //得到最大的行高
         if (_myCGFloatLess(rowMaxHeight, topSpace + bottomSpace + rect.size.height))
@@ -1444,25 +1459,8 @@
     //支持浮动垂直间距。
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
-    CGFloat subviewSize = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
-    if (subviewSize != 0)
-    {
-        
-        CGFloat minSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
-        CGFloat maxSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
-        NSInteger rowCount =  floor((selfSize.height - paddingVert  + minSpace) / (subviewSize + minSpace));
-        if (rowCount > 1)
-        {
-            vertSpace = (selfSize.height - paddingVert - subviewSize * rowCount)/(rowCount - 1);
-            if (_myCGFloatGreat(vertSpace, maxSpace))
-            {
-                vertSpace = maxSpace;
-                
-                subviewSize =  (selfSize.height - paddingVert -  vertSpace * (rowCount - 1)) / rowCount;
-                
-            }
-        }
-    }
+    CGFloat subviewSize = [self myCalcMaxMinSubviewSizeForContent:selfSize.height - paddingVert lsc:(MyFlowLayoutViewSizeClass*)lsc space:&vertSpace];
+
     
     
     if (lsc.autoArrange)
@@ -1483,33 +1481,13 @@
             CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
             CGRect rect = sbvmyFrame.frame;
             
-            if (sbvsc.widthSizeInner.dimeNumVal != nil)
-                rect.size.width = sbvsc.widthSizeInner.measure;
             
-            if (subviewSize != 0)
-                rect.size.height = subviewSize;
-            
-            if (sbvsc.heightSizeInner.dimeNumVal != nil)
-                rect.size.height = sbvsc.heightSizeInner.measure;
-            
-            [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-            
-            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
-            
-            [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-            
+            rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
             rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
             
-            
-            //如果高度是浮动的则需要调整高度。
-            if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
-            {
-                rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
-                
-                rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
-            }
-            
-            
+            rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+
             //暂时把宽度存放sbv.myFrame.trailing上。因为浮动布局来说这个属性无用。
             sbvmyFrame.trailing = topSpace + rect.size.height + bottomSpace;
             if (_myCGFloatGreat(sbvmyFrame.trailing, selfSize.height - paddingVert))
@@ -1539,21 +1517,14 @@
         CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
         CGRect rect = sbvmyFrame.frame;
         
-        if (sbvsc.widthSizeInner.dimeNumVal != nil)
-            rect.size.width = sbvsc.widthSizeInner.measure;
+        rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (subviewSize != 0)
+        {
             rect.size.height = subviewSize;
-        
-        if (sbvsc.heightSizeInner.dimeNumVal != nil)
-            rect.size.height = sbvsc.heightSizeInner.measure;
-        
-        [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-        
-        [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-        
-        
-        if (sbvsc.weight != 0)
+        }
+        else if (sbvsc.weight != 0)
         {
             //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
             CGFloat floatHeight = selfSize.height - paddingVert - colMaxHeight;
@@ -1569,24 +1540,27 @@
             rect.size.height = (floatHeight + sbvsc.heightSizeInner.addVal) * sbvsc.weight - topSpace - bottomSpace;
             
         }
-        
+        else
+        {
+            rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        }
         
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
-        if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
-            rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height ];
-        
-        
-        
-        rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
-        
-        //如果高度是浮动的则需要调整高度。
-        if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
-        {
-            rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
-            
+        if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
+        {//特殊处理高度等于宽度的情况
+            rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
             rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         }
+        
+        
+        if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+        {//特殊处理宽度等于高度的情况
+            rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
+            rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        }
+        
+        
         
         //计算yPos的值加上topSpace + rect.size.height + bottomSpace的值要小于整体的高度。
         CGFloat place = yPos + topSpace + rect.size.height + bottomSpace;
@@ -1610,6 +1584,12 @@
             if (_myCGFloatGreat(topSpace + bottomSpace + rect.size.height, selfSize.height - paddingVert))
             {
                 rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:selfSize.height - paddingVert - topSpace - bottomSpace sbvSize:rect.size selfLayoutSize:selfSize];
+                
+                if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+                {//特殊处理宽度等于高度的情况
+                    rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
+                    rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+                }
             }
             
             colMaxWidth = 0;
@@ -1735,27 +1715,7 @@
 
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
-    CGFloat subviewSize = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).subviewSize;
-    if (subviewSize != 0)
-    {
-        
-        CGFloat maxSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).maxSpace;
-        CGFloat minSpace = ((MyFlowLayoutViewSizeClass*)self.myCurrentSizeClass).minSpace;
-        if (arrangedCount > 1)
-        {
-            vertSpace = (selfSize.height - paddingVert - subviewSize * arrangedCount)/(arrangedCount - 1);
-            if (_myCGFloatGreat(vertSpace, maxSpace) || _myCGFloatLess(vertSpace, minSpace))
-            {
-                if (_myCGFloatGreat(vertSpace, maxSpace))
-                    vertSpace = maxSpace;
-                if (_myCGFloatLess(vertSpace, minSpace))
-                    vertSpace = minSpace;
-                
-                subviewSize =  (selfSize.height - paddingVert -  vertSpace * (arrangedCount - 1)) / arrangedCount;
-                
-            }
-        }
-    }
+    CGFloat subviewSize = [self myCalcMaxMinSubviewSize:selfSize.height - paddingVert lsc:(MyFlowLayoutViewSizeClass*)lsc arrangedCount:arrangedCount space:&vertSpace];
     
     //父滚动视图是否分页滚动。
 #if TARGET_OS_IOS
@@ -1832,13 +1792,8 @@
         
         if (pagingItemWidth != 0)
             rect.size.width = pagingItemWidth;
-        
-        if (sbvsc.widthSizeInner.dimeNumVal != nil)
-            rect.size.width = sbvsc.widthSizeInner.measure;
-        
-        //当子视图的尺寸是相对依赖于其他尺寸的值。
-        [self mySetSubviewRelativeDimeSize:sbvsc.widthSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-        
+        else
+            rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
         
         rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
@@ -1851,29 +1806,28 @@
         else
         {
             
-            BOOL isFlexedHeight = sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && sbvsc.heightSizeInner.dimeRelaVal.view != self;
-            
             if (subviewSize != 0)
                 rect.size.height = subviewSize;
-            
-            if (pagingItemHeight != 0)
+            else if (pagingItemHeight != 0)
                 rect.size.height = pagingItemHeight;
-            
-            if (sbvsc.heightSizeInner.dimeNumVal != nil && !averageArrange)
-                rect.size.height = sbvsc.heightSizeInner.measure;
-            
-            //当子视图的尺寸是相对依赖于其他尺寸的值。
-            [self mySetSubviewRelativeDimeSize:sbvsc.heightSizeInner selfSize:selfSize lsc:lsc pRect:&rect];
-            
-            
-            //如果高度是浮动的则需要调整高度。
-            if (isFlexedHeight)
-                rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
+            else
+                rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
             
             rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
             
+            if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
+            {//特殊处理高度等于宽度的情况
+                rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
+                rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+            }
+            
+            
             if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
-                rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:[sbvsc.widthSizeInner measureWith: rect.size.height ] sbvSize:rect.size selfLayoutSize:selfSize];
+            {//特殊处理宽度等于高度的情况
+                rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
+                rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+            }
+            
             
             rowTotalFixedHeight += rect.size.height;
         }

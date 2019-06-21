@@ -56,6 +56,7 @@
     
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.insetsPaddingFromSafeArea = ~UIRectEdgeBottom;  //为了防止拉到底部时iPhoneX设备的抖动发生，不能将底部安全区叠加到padding中去。
     rootLayout.widthSize.equalTo(scrollView.widthSize);
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.wrapContentHeight = YES;

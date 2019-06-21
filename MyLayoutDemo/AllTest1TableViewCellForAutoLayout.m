@@ -34,6 +34,9 @@
        // [self createRelativeRootLayout];
        // [self createFloatRootLayout];
        
+        //如果是代码实现autolayout的话必须要将translatesAutoresizingMaskIntoConstraints 设置为NO。
+        _rootLayout.translatesAutoresizingMaskIntoConstraints = NO;
+        
         //设置布局视图的autolayout约束，这里是用iOS9提供的约束设置方法，您也可以用低级版本设置，以及用masonry来进行设置。
         [_rootLayout.leftAnchor constraintEqualToAnchor:self.contentView.leftAnchor].active = YES;
         [_rootLayout.topAnchor constraintEqualToAnchor:self.contentView.topAnchor].active = YES;
@@ -100,7 +103,6 @@
 -(void)createLinearRootLayout
 {
     _rootLayout= [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    _rootLayout.translatesAutoresizingMaskIntoConstraints = NO;  //通过代码形式来设置autolayout约束时必须要将这个属性设置为NO
     _rootLayout.topPadding = 5;
     _rootLayout.bottomPadding = 5;
     //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
@@ -151,7 +153,6 @@
 -(void)createRelativeRootLayout
 {
     _rootLayout = [MyRelativeLayout new];
-    _rootLayout.translatesAutoresizingMaskIntoConstraints = NO;
     _rootLayout.topPadding = 5;
     _rootLayout.bottomPadding = 5;
     //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！

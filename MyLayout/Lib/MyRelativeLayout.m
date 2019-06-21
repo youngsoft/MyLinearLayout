@@ -253,13 +253,19 @@
     //这里要更新左边最小和右边最大约束的情况。
     MyLayoutPos *lBoundPos = sbvsc.leadingPosInner.lBoundValInner;
     MyLayoutPos *uBoundPos = sbvsc.trailingPosInner.uBoundValInner;
+    UIView *lBoundRelaView = lBoundPos.posRelaVal.view;
+    UIView *uBoundRelaView = uBoundPos.posRelaVal.view;
     
     if (lBoundPos.posRelaVal != nil && uBoundPos.posRelaVal != nil)
     {
         //让宽度缩小并在最小和最大的中间排列。
-        CGFloat   minLeading = [self myCalcSubView:lBoundPos.posRelaVal.view lsc:lsc gravity:lBoundPos.posRelaVal.pos selfSize:selfSize] + lBoundPos.offsetVal;
+        CGFloat   minLeading = [self myCalcSubView:lBoundRelaView lsc:lsc gravity:lBoundPos.posRelaVal.pos selfSize:selfSize] + lBoundPos.offsetVal;
+        if (lBoundRelaView != nil && lBoundRelaView != self && [self myIsNoLayoutSubview:lBoundRelaView])
+            minLeading -= lBoundPos.offsetVal;
         
-        CGFloat  maxTrailing = [self myCalcSubView:uBoundPos.posRelaVal.view lsc:lsc gravity:uBoundPos.posRelaVal.pos selfSize:selfSize] - uBoundPos.offsetVal;
+        CGFloat  maxTrailing = [self myCalcSubView:uBoundRelaView lsc:lsc gravity:uBoundPos.posRelaVal.pos selfSize:selfSize] - uBoundPos.offsetVal;
+        if (uBoundRelaView != nil && uBoundRelaView != self && [self myIsNoLayoutSubview:uBoundRelaView])
+            maxTrailing += uBoundPos.offsetVal;
         
         //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
         CGFloat intervalWidth = maxTrailing - minLeading;
@@ -280,7 +286,9 @@
     else if (lBoundPos.posRelaVal != nil)
     {
         //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
-        CGFloat   minLeading = [self myCalcSubView:lBoundPos.posRelaVal.view lsc:lsc gravity:lBoundPos.posRelaVal.pos selfSize:selfSize] + lBoundPos.offsetVal;
+        CGFloat minLeading = [self myCalcSubView:lBoundRelaView lsc:lsc gravity:lBoundPos.posRelaVal.pos selfSize:selfSize] + lBoundPos.offsetVal;
+        if (lBoundRelaView != nil && lBoundRelaView != self && [self myIsNoLayoutSubview:lBoundRelaView])
+            minLeading -= lBoundPos.offsetVal;
         
         
         if (_myCGFloatLess(sbvmyFrame.leading, minLeading))
@@ -292,7 +300,9 @@
     else if (uBoundPos.posRelaVal != nil)
     {
         //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
-        CGFloat   maxTrailing = [self myCalcSubView:uBoundPos.posRelaVal.view lsc:lsc gravity:uBoundPos.posRelaVal.pos selfSize:selfSize] -  uBoundPos.offsetVal;
+        CGFloat   maxTrailing = [self myCalcSubView:uBoundRelaView lsc:lsc gravity:uBoundPos.posRelaVal.pos selfSize:selfSize] -  uBoundPos.offsetVal;
+        if (uBoundRelaView != nil && uBoundRelaView != self && [self myIsNoLayoutSubview:uBoundRelaView])
+            maxTrailing += uBoundPos.offsetVal;
         
         if (_myCGFloatGreat(sbvmyFrame.trailing, maxTrailing))
         {
@@ -300,7 +310,6 @@
             sbvmyFrame.width = sbvmyFrame.trailing - sbvmyFrame.leading;
         }
     }
-    
     
 }
 
@@ -439,12 +448,20 @@
     }
     
     //这里要更新上边最小和下边最大约束的情况。
-    if (sbvsc.topPosInner.lBoundValInner.posRelaVal != nil && sbvsc.bottomPosInner.uBoundValInner.posRelaVal != nil)
+    MyLayoutPos *lBoundPos = sbvsc.topPosInner.lBoundValInner;
+    MyLayoutPos *uBoundPos = sbvsc.bottomPosInner.uBoundValInner;
+    UIView *lBoundRelaView = lBoundPos.posRelaVal.view;
+    UIView *uBoundRelaView = uBoundPos.posRelaVal.view;
+    
+    if (lBoundPos.posRelaVal != nil && uBoundPos.posRelaVal != nil)
     {
         //让宽度缩小并在最小和最大的中间排列。
-        CGFloat   minTop = [self myCalcSubView:sbvsc.topPosInner.lBoundValInner.posRelaVal.view lsc:lsc gravity:sbvsc.topPosInner.lBoundValInner.posRelaVal.pos selfSize:selfSize] + sbvsc.topPosInner.lBoundValInner.offsetVal;
-        
-        CGFloat   maxBottom = [self myCalcSubView:sbvsc.bottomPosInner.uBoundValInner.posRelaVal.view lsc:lsc gravity:sbvsc.bottomPosInner.uBoundValInner.posRelaVal.pos selfSize:selfSize] - sbvsc.bottomPosInner.uBoundValInner.offsetVal;
+        CGFloat   minTop = [self myCalcSubView:lBoundRelaView lsc:lsc gravity:lBoundPos.posRelaVal.pos selfSize:selfSize] + lBoundPos.offsetVal;
+        if (lBoundRelaView != nil && lBoundRelaView != self && [self myIsNoLayoutSubview:lBoundRelaView])
+            minTop -= lBoundPos.offsetVal;
+        CGFloat   maxBottom = [self myCalcSubView:uBoundRelaView lsc:lsc gravity:uBoundPos.posRelaVal.pos selfSize:selfSize] - uBoundPos.offsetVal;
+        if (uBoundRelaView != nil && uBoundRelaView != self && [self myIsNoLayoutSubview:uBoundRelaView])
+            maxBottom += uBoundPos.offsetVal;
         
         //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
         if (_myCGFloatLess(maxBottom - minTop, sbvmyFrame.height))
@@ -461,10 +478,12 @@
         
         
     }
-    else if (sbvsc.topPosInner.lBoundValInner.posRelaVal != nil)
+    else if (lBoundPos.posRelaVal != nil)
     {
         //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
-        CGFloat   minTop = [self myCalcSubView:sbvsc.topPosInner.lBoundValInner.posRelaVal.view lsc:lsc gravity:sbvsc.topPosInner.lBoundValInner.posRelaVal.pos selfSize:selfSize] + sbvsc.topPosInner.lBoundValInner.offsetVal;
+        CGFloat   minTop = [self myCalcSubView:lBoundRelaView lsc:lsc gravity:lBoundPos.posRelaVal.pos selfSize:selfSize] + lBoundPos.offsetVal;
+        if (lBoundRelaView != nil && lBoundRelaView != self && [self myIsNoLayoutSubview:lBoundRelaView])
+            minTop -= lBoundPos.offsetVal;
         
         if (_myCGFloatLess(sbvmyFrame.top, minTop))
         {
@@ -473,10 +492,13 @@
         }
         
     }
-    else if (sbvsc.bottomPosInner.uBoundValInner.posRelaVal != nil)
+    else if (uBoundPos.posRelaVal != nil)
     {
         //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
-        CGFloat   maxBottom = [self myCalcSubView:sbvsc.bottomPosInner.uBoundValInner.posRelaVal.view lsc:lsc gravity:sbvsc.bottomPosInner.uBoundValInner.posRelaVal.pos selfSize:selfSize] - sbvsc.bottomPosInner.uBoundValInner.offsetVal;
+        CGFloat   maxBottom = [self myCalcSubView:uBoundRelaView lsc:lsc gravity:uBoundPos.posRelaVal.pos selfSize:selfSize] - uBoundPos.offsetVal;
+        if (uBoundRelaView != nil && uBoundRelaView != self && [self myIsNoLayoutSubview:uBoundRelaView])
+            maxBottom += uBoundPos.offsetVal;
+        
         if (_myCGFloatGreat(sbvmyFrame.bottom, maxBottom))
         {
             sbvmyFrame.bottom = maxBottom;
@@ -676,12 +698,27 @@
         if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
         {
             if (sbvsc.leadingPosInner.posRelaVal != nil)
-                sbvmyFrame.leading = [self myCalcSubView:sbvsc.leadingPosInner.posRelaVal.view lsc:lsc gravity:sbvsc.leadingPosInner.posRelaVal.pos selfSize:selfSize] + sbvsc.leadingPosInner.absVal;
+            {
+                UIView *relaView = sbvsc.leadingPosInner.posRelaVal.view;
+                sbvmyFrame.leading = [self myCalcSubView:relaView lsc:lsc gravity:sbvsc.leadingPosInner.posRelaVal.pos selfSize:selfSize] + sbvsc.leadingPosInner.absVal;
+                
+                if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
+                {
+                    sbvmyFrame.leading -= sbvsc.leadingPosInner.absVal;
+                }
+            }
             else
                 sbvmyFrame.leading = sbvsc.leadingPosInner.absVal + lsc.myLayoutLeadingPadding;
             
             if (sbvsc.trailingPosInner.posRelaVal != nil)
+            {
+                UIView *relaView = sbvsc.trailingPosInner.posRelaVal.view;
                 sbvmyFrame.trailing = [self myCalcSubView:sbvsc.trailingPosInner.posRelaVal.view lsc:lsc gravity:sbvsc.trailingPosInner.posRelaVal.pos selfSize:selfSize] - sbvsc.trailingPosInner.absVal;
+                if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
+                {
+                    sbvmyFrame.trailing += sbvsc.trailingPosInner.absVal;
+                }
+            }
             else
                 sbvmyFrame.trailing = selfSize.width - sbvsc.trailingPosInner.absVal - lsc.myLayoutTrailingPadding;
             
@@ -725,7 +762,6 @@
     {
         if (sbvsc.heightSizeInner.dimeRelaVal != nil)
         {
-            
             sbvmyFrame.height = [sbvsc.heightSizeInner measureWith:[self myCalcSubView:sbvsc.heightSizeInner.dimeRelaVal.view lsc:lsc gravity:sbvsc.heightSizeInner.dimeRelaVal.dime selfSize:selfSize] ];
             
             sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
@@ -748,12 +784,30 @@
         if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
         {
             if (sbvsc.topPosInner.posRelaVal != nil)
-                sbvmyFrame.top = [self myCalcSubView:sbvsc.topPosInner.posRelaVal.view lsc:lsc  gravity:sbvsc.topPosInner.posRelaVal.pos selfSize:selfSize] + sbvsc.topPosInner.absVal;
+            {
+                UIView *relaView = sbvsc.topPosInner.posRelaVal.view;
+                sbvmyFrame.top = [self myCalcSubView:relaView lsc:lsc  gravity:sbvsc.topPosInner.posRelaVal.pos selfSize:selfSize] + sbvsc.topPosInner.absVal;
+                
+                if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
+                {
+                    sbvmyFrame.top -= sbvsc.topPosInner.absVal;
+                }
+                
+            }
             else
                 sbvmyFrame.top = sbvsc.topPosInner.absVal + lsc.myLayoutTopPadding;
             
             if (sbvsc.bottomPosInner.posRelaVal != nil)
-                sbvmyFrame.bottom = [self myCalcSubView:sbvsc.bottomPosInner.posRelaVal.view lsc:lsc gravity:sbvsc.bottomPosInner.posRelaVal.pos selfSize:selfSize] - sbvsc.bottomPosInner.absVal;
+            {
+                UIView *relaView = sbvsc.bottomPosInner.posRelaVal.view;
+
+                sbvmyFrame.bottom = [self myCalcSubView:relaView lsc:lsc gravity:sbvsc.bottomPosInner.posRelaVal.pos selfSize:selfSize] - sbvsc.bottomPosInner.absVal;
+                
+                if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
+                {
+                    sbvmyFrame.bottom += sbvsc.bottomPosInner.absVal;
+                }
+            }
             else
                 sbvmyFrame.bottom = selfSize.height - sbvsc.bottomPosInner.absVal - lsc.myLayoutBottomPadding;
             
