@@ -2730,13 +2730,13 @@ void* _myObserverContextC = (void*)20175283;
             }
             else
             {
-                rectSelf.size.width = [lsc.widthSizeInner measureWith:lsc.widthSizeInner.dimeRelaVal.view.estimatedRect.size.width];
+                rectSelf.size.width = [lsc.widthSizeInner measureWith:lsc.widthSizeInner.dimeRelaVal.view.myEstimatedWidth];
             }
             isAdjust = YES;
         }
         else
             rectSelf.size.width = lsc.widthSizeInner.measure;
-        
+         
      }
     
     //这里要判断自己的宽度设置了最小和最大宽度依赖于父视图的情况。如果有这种情况，则父视图在变化时也需要调整自身。
@@ -2823,7 +2823,7 @@ void* _myObserverContextC = (void*)20175283;
             }
             else
             {
-                rectSelf.size.height = [lsc.heightSizeInner measureWith:lsc.heightSizeInner.dimeRelaVal.view.estimatedRect.size.height];
+                rectSelf.size.height = [lsc.heightSizeInner measureWith:lsc.heightSizeInner.dimeRelaVal.view.myEstimatedHeight];
             }
             isAdjust = YES;
         }
