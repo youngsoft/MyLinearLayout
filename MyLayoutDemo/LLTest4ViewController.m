@@ -18,52 +18,44 @@
 
 @implementation LLTest4ViewController
 
+-(void)loadView
+{
+    /*
+     这个例子详细说明wrapContentHeight和wrapContentWidth的包裹属性的设置、以及边界线性的设定、以及布局中可局部缩放背景图片的设定方法。
+     */
+    
+    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
+    
+    [super loadView];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    UIView *contentView = [UIView new];
+    contentView.backgroundColor = [CFTool color:5];
+    [self.view addSubview:contentView];
+    contentView.wrapContentWidth = YES;
+    contentView.wrapContentHeight = YES;   //如果一个非布局父视图里面有布局子视图，那么这个非布局父视图也是可以设置wrapContentHeight和wrapContentWidth的，他表示的意义是这个非布局父视图的尺寸由里面的布局子视图的尺寸来决定的。这个功能是在1.3.3版本支持的。 还有一个场景是非布局父视图是一个UIScrollView。他是左右滚动的，但是滚动视图的高度是由里面的布局子视图确定的，而宽度则是和窗口保持一致。这样只需要将滚动视图的宽度设置为和屏幕保持一致，高度设置为wrapContentHeight，并且把一个水平线性布局添加到滚动视图即可。
+    
+    
+    self.rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    self.rootLayout.layer.borderWidth = 1;
+    self.rootLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.rootLayout.wrapContentHeight = YES;
+    self.rootLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
+    self.rootLayout.myTop = 10;
+    self.rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    self.rootLayout.zeroPadding = NO;  //这个属性设置为NO时表示当布局视图的尺寸是wrap也就是由子视图决定时并且在没有任何子视图是不会参与布局视图高度的计算的。您可以在这个DEMO的测试中将所有子视图都删除掉，看看效果，然后注释掉这句代码看看效果。
+    self.rootLayout.subviewVSpace = 5;
+    [contentView addSubview:self.rootLayout];
+    
+    [self.rootLayout addSubview:[self addWrapContentLayout]];
+    
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    MyLinearLayout *layout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    layout.backgroundColor = [UIColor redColor];
-    layout.gravity = MyGravity_Horz_Center;
-    layout.padding = UIEdgeInsetsMake(15, 0, 0, 0);
-    layout.subviewVSpace = 12;
-    layout.myHorzMargin = 0;
-    layout.myTop = 100;
-    [self.view addSubview:layout];
-    
-    
-    UILabel *timeLabel = UILabel.new;
-    timeLabel.myHorzMargin = 0;
-    timeLabel.wrapContentHeight = YES;
-    timeLabel.textAlignment = NSTextAlignmentCenter;
-    timeLabel.text = @"剩余时间为";
-    [layout addSubview:timeLabel];
-    
-    // 汇率
-    MyLinearLayout *convertLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    convertLayout.backgroundColor = [UIColor greenColor];
-    convertLayout.wrapContentHeight = YES;
-    convertLayout.gravity = MyGravity_Vert_Center;
-    convertLayout.subviewHSpace = 7;
-    [layout addSubview:convertLayout];
-    
-    NSArray *items = @[@"$454", @"^sdsf"];
-    for (int i=0; i<items.count; i++) {
-        UILabel *label = UILabel.new;
-        label.wrapContentSize = YES;
-        label.text = items[i];
-        label.font = [UIFont systemFontOfSize:28];
-        [convertLayout addSubview:label];
-        
-        if (i==0) {
-           
-            UILabel *btn = [UILabel new];
-            btn.wrapContentSize = YES;
-            btn.text = @"->";
-            [convertLayout addSubview:btn];
-        }
-    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -82,7 +74,7 @@
     wrapContentLayout.wrapContentWidth = YES;  //布局的高度和宽度由子视图决定
     wrapContentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     wrapContentLayout.subviewHSpace = 5;
-
+    
     
     /*
      布局视图的backgroundImage的属性的内部实现是通过设置视图的layer的content属性来实现的。因此如果我们希望实现具有拉升效果的
@@ -163,7 +155,7 @@
     }
     else if (sender.tag == 300)
     {
-         MyLinearLayout*actionLayout = (MyLinearLayout*)sender.superview;
+        MyLinearLayout*actionLayout = (MyLinearLayout*)sender.superview;
         [actionLayout removeFromSuperview];
     }
     else if (sender.tag == 400)
@@ -180,13 +172,12 @@
 
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

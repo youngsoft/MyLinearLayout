@@ -247,7 +247,7 @@
         {
             button.backgroundColor = [UIColor greenColor];
         }
-        [button setTitle:[NSString stringWithFormat:@"%zi",i] forState:UIControlStateNormal];
+        [button setTitle:[NSString stringWithFormat:@"%i",i] forState:UIControlStateNormal];
         button.heightSize.equalTo(rootLayout1.heightSize);
         [rootLayout1 addSubview:button];
     }
@@ -263,16 +263,66 @@
 
 }
 
+-(void)testWrapContentHeight2
+{
+    MyLinearLayout *layout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 0) orientation:MyOrientation_Vert];
+    layout.backgroundColor = [UIColor redColor];
+    layout.gravity = MyGravity_Horz_Center;
+    layout.padding = UIEdgeInsetsMake(15, 0, 0, 0);
+    layout.subviewVSpace = 12;
+    
+    
+    UILabel *timeLabel = UILabel.new;
+    timeLabel.myHorzMargin = 0;
+    timeLabel.wrapContentHeight = YES;
+    timeLabel.textAlignment = NSTextAlignmentCenter;
+    timeLabel.text = @"剩余时间为";
+    [layout addSubview:timeLabel];
+    
+    // 汇率
+    MyLinearLayout *convertLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    convertLayout.backgroundColor = [UIColor greenColor];
+    convertLayout.wrapContentHeight = YES;
+    convertLayout.gravity = MyGravity_Vert_Center;
+    convertLayout.subviewHSpace = 7;
+    [layout addSubview:convertLayout];
+    
+    NSArray *items = @[@"$454", @"^sdsf"];
+    for (int i=0; i<items.count; i++) {
+        UILabel *label = UILabel.new;
+        label.wrapContentSize = YES;
+        label.text = items[i];
+        label.font = [UIFont systemFontOfSize:28];
+        [convertLayout addSubview:label];
+        
+        if (i==0) {
+            
+            UILabel *btn = [UILabel new];
+            btn.wrapContentSize = YES;
+            btn.text = @"->";
+            [convertLayout addSubview:btn];
+        }
+    }
+    
+    [layout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(layout.frame, CGRectMake(0,0,375,81)), @"the layout.frame = %@",NSStringFromCGRect(layout.frame));
+    XCTAssertTrue(CGRectEqualToRect(convertLayout.frame, CGRectMake(105,47.5,165,33.5)), @"the convertLayout.frame = %@",NSStringFromCGRect(convertLayout.frame));
+    
+    XCTAssertTrue(CGRectEqualToRect(timeLabel.frame, CGRectMake(0,15,375,20.5)), @"the timeLabel.frame = %@",NSStringFromCGRect(timeLabel.frame));
+    XCTAssertTrue(CGRectEqualToRect(convertLayout.subviews[1].frame, CGRectMake(76,6.5,18.5,20.5)), @"the convertLayout.subviews[1].frame = %@",NSStringFromCGRect(convertLayout.subviews[1].frame));
+
+}
 
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     
     
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-        
-    }];
-    
+//    [self measureBlock:^{
+//        // Put the code you want to measure the time of here.
+//
+//    }];
+//
    
 }
 
