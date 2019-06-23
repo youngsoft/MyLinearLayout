@@ -37,7 +37,7 @@
        
     1.当使用gravity属性时意味着布局视图必须要有明确的尺寸才有意义，因为有确定的尺寸才能决定里面的子视图的停靠的方位。
     2.布局视图的wrapContentHeight设置为YES时是和gravity上设置垂直停靠方向以及垂直填充是互斥的；而布局视图的wrapContentWidth设置为YES时是和gravity上设置水平停靠方向和水平填充是互斥的。
-    3.布局视图的gravity的属性的优先级要高于子视图的边距和尺寸设置，但是低于子视图的myAlignment属性的设置。
+    3.布局视图的gravity的属性的优先级要高于子视图的边距和尺寸设置，但是低于子视图的alignment属性的设置。
      
      */
     
@@ -169,7 +169,7 @@
     
     UILabel *v2 = [self createLabel:NSLocalizedString(@"always alignment to left", @"") backgroundColor:[CFTool color:6]];
     v2.myHeight = 20;
-    v2.myAlignment = MyGravity_Horz_Left;  //对于垂直布局里面的子视图可以通过这个属性来设置水平对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
+    v2.alignment = MyGravity_Horz_Left;  //对于垂直布局里面的子视图可以通过这个属性来设置水平对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
     [self.vertGravityLayout addSubview:v2];
     
     UILabel *v3 = [self createLabel:NSLocalizedString(@"test text3 test text3 test text3", @"") backgroundColor:[CFTool color:7]];
@@ -257,7 +257,7 @@
     UILabel *v2 = [self createLabel:NSLocalizedString(@"always alignment to top", @"") backgroundColor:[CFTool color:6]];
     v2.wrapContentHeight = YES;
     v2.myWidth = 60;
-    v2.myAlignment = MyGravity_Vert_Top;  //对于水平布局里面的子视图可以通过这个属性来设置垂直对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
+    v2.alignment = MyGravity_Vert_Top;  //对于水平布局里面的子视图可以通过这个属性来设置垂直对齐的方位，这样即使布局视图设置了gravity属性，这个视图的对齐都不会受到影响。
     [self.horzGravityLayout addSubview:v2];
     
     

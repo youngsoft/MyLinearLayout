@@ -19,6 +19,17 @@ void* _myObserverContextB = (void*)20175282;
 void* _myObserverContextC = (void*)20175283;
 
 
+/**
+ 窗口对RTL的支持。
+ */
+
+@interface UIWindow (MyLayoutExt)
+
+-(void)myUpdateRTL:(BOOL)isRTL;
+
+@end
+
+
 @implementation UIView(MyLayoutExt)
 
 -(MyLayoutPos*)topPos
@@ -400,18 +411,18 @@ void* _myObserverContextC = (void*)20175283;
     
 }
 
--(MyVisibility)myVisibility
+-(MyVisibility)visibility
 {
-    return self.myCurrentSizeClass.myVisibility;
+    return self.myCurrentSizeClass.visibility;
 }
 
--(void)setMyVisibility:(MyVisibility)myVisibility
+-(void)setVisibility:(MyVisibility)visibility
 {
     UIView *sc = self.myCurrentSizeClass;
-    if (sc.myVisibility != myVisibility)
+    if (sc.visibility != visibility)
     {
-        sc.myVisibility = myVisibility;
-        if (myVisibility == MyVisibility_Visible)
+        sc.visibility = visibility;
+        if (visibility == MyVisibility_Visible)
             self.hidden = NO;
         else
             self.hidden = YES;
@@ -419,24 +430,42 @@ void* _myObserverContextC = (void*)20175283;
         if (self.superview != nil)
             [ self.superview setNeedsLayout];
     }
-
 }
 
--(MyGravity)myAlignment
+-(MyVisibility)myVisibility
 {
-    return self.myCurrentSizeClass.myAlignment;
+    return self.visibility;
+}
+
+-(void)setMyVisibility:(MyVisibility)myVisibility
+{
+    self.visibility = myVisibility;
+}
+
+-(MyGravity)alignment
+{
+    return self.myCurrentSizeClass.alignment;
+}
+
+-(void)setAlignment:(MyGravity)alignment
+{
+    UIView *sc = self.myCurrentSizeClass;
+    if (sc.alignment != alignment)
+    {
+        sc.alignment = alignment;
+        if (self.superview != nil)
+            [ self.superview setNeedsLayout];
+    }
 }
 
 -(void)setMyAlignment:(MyGravity)myAlignment
 {
-    UIView *sc = self.myCurrentSizeClass;
-    if (sc.myAlignment != myAlignment)
-    {
-        sc.myAlignment = myAlignment;
-        if (self.superview != nil)
-            [ self.superview setNeedsLayout];
-    }
+    self.alignment = myAlignment;
+}
 
+-(MyGravity)myAlignment
+{
+    return self.alignment;
 }
 
 
@@ -742,6 +771,7 @@ void* _myObserverContextC = (void*)20175283;
 
 
 
+
 @implementation MyBaseLayout
 {
     MyLayoutTouchEventDelegate *_touchEventDelegate;
@@ -777,9 +807,13 @@ void* _myObserverContextC = (void*)20175283;
     [MyViewSizeClass setIsRTL:isRTL];
 }
 
++ (void)updateRTL:(BOOL)isRTL inWindow:(UIWindow *)window
+{
+    [window myUpdateRTL:isRTL];
+}
 + (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window
 {
-    [window myUpBasisUIViewMyLayout:isArabicUI];
+    [self updateRTL:isArabicUI inWindow:window];
 }
 
 
@@ -2066,7 +2100,7 @@ void* _myObserverContextC = (void*)20175283;
                 
             }
             
-            if (sbvsc.myVisibility == MyVisibility_Gone && !sbv.isHidden)
+            if (sbvsc.visibility == MyVisibility_Gone && !sbv.isHidden)
             {
                 sbv.bounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, 0, 0);
             }
@@ -2327,7 +2361,7 @@ void* _myObserverContextC = (void*)20175283;
 
 -(MyGravity)myGetSubviewVertGravity:(UIView*)sbv sbvsc:(UIView*)sbvsc vertGravity:(MyGravity)vertGravity
 {
-    MyGravity sbvVertAligement = sbvsc.myAlignment & MyGravity_Horz_Mask;
+    MyGravity sbvVertAligement = sbvsc.alignment & MyGravity_Horz_Mask;
     MyGravity sbvVertGravity = MyGravity_Vert_Top;
     
     if (vertGravity != MyGravity_None)
@@ -2442,7 +2476,7 @@ void* _myObserverContextC = (void*)20175283;
 
 -(MyGravity)myGetSubviewHorzGravity:(UIView*)sbv sbvsc:(UIView*)sbvsc horzGravity:(MyGravity)horzGravity
 {
-    MyGravity sbvHorzAligement = [self myConvertLeftRightGravityToLeadingTrailing:sbvsc.myAlignment & MyGravity_Vert_Mask];
+    MyGravity sbvHorzAligement = [self myConvertLeftRightGravityToLeadingTrailing:sbvsc.alignment & MyGravity_Vert_Mask];
     MyGravity sbvHorzGravity = MyGravity_Horz_Leading;
     
     if (horzGravity != MyGravity_None)
@@ -2545,7 +2579,7 @@ void* _myObserverContextC = (void*)20175283;
 
 -(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvmyFrame:(MyFrame*)sbvmyFrame
 {
-    if (sbvsc.myVisibility == MyVisibility_Gone)
+    if (sbvsc.visibility == MyVisibility_Gone)
     {
         sbvmyFrame.width = 0;
         sbvmyFrame.height = 0;
@@ -3100,11 +3134,11 @@ void* _myObserverContextC = (void*)20175283;
     
     if (sbv.isHidden)
     {
-        return sbvsc.myVisibility != MyVisibility_Invisible;
+        return sbvsc.visibility != MyVisibility_Invisible;
     }
     else
     {
-        return sbvsc.myVisibility == MyVisibility_Gone;
+        return sbvsc.visibility == MyVisibility_Gone;
     }
     
 }
@@ -3755,18 +3789,24 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     return [NSString stringWithFormat:@"leading:%g, top:%g, width:%g, height:%g, trailing:%g, bottom:%g",_leading,_top,_width,_height,_trailing,_bottom];
 }
 @end
-@implementation UIWindow (MyBaseUpUIRTL)
 
 
--(void)myUpBasisUIViewMyLayout:(BOOL)isRTL
 
+@implementation UIWindow (MyLayoutExt)
+
+
+-(void)myUpdateRTL:(BOOL)isRTL
 {
-    [MyBaseLayout setIsRTL:isRTL];
-    [self mySetBasisUISubviewsNeedLayoutRTL:self];
+    BOOL oldRTL = [MyBaseLayout isRTL];
+    if (oldRTL != isRTL)
+    {
+        [MyBaseLayout setIsRTL:isRTL];
+        [self mySetNeedLayoutAllSubviews:self];
+    }
 }
 
 
--(void)mySetBasisUISubviewsNeedLayoutRTL:(UIView *)v
+-(void)mySetNeedLayoutAllSubviews:(UIView *)v
 {
     NSArray *sbs = v.subviews;
     for (UIView *sv in sbs)
@@ -3775,7 +3815,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         {
             [sv setNeedsLayout];
         }
-        [self mySetBasisUISubviewsNeedLayoutRTL:sv];
+        [self mySetNeedLayoutAllSubviews:sv];
     }
 }
 @end

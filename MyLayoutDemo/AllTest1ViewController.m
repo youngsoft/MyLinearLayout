@@ -339,10 +339,10 @@
 -(void)handleTableHeaderViewLayoutClick:(MyBaseLayout*)sender
 {
     UILabel *label1 = [sender viewWithTag:1000];
-    if (label1.myVisibility == MyVisibility_Visible)
-        label1.myVisibility = MyVisibility_Gone;
+    if (label1.visibility == MyVisibility_Visible)
+        label1.visibility = MyVisibility_Gone;
     else
-        label1.myVisibility = MyVisibility_Visible;
+        label1.visibility = MyVisibility_Visible;
     
     
     [UIView animateWithDuration:0.3 animations:^{

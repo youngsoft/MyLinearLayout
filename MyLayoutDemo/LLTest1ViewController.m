@@ -133,12 +133,12 @@
 - (void)RTLAction
 {
     // 当前view的window
-    [MyBaseLayout myUpArabicUI:YES inWindow:self.view.window];
+    [MyBaseLayout updateRTL:YES inWindow:self.view.window];
 }
 - (void)LTRAction
 {
     // 这个适合APP 使用appdelegate 中的window
-    [MyBaseLayout myUpArabicUI:NO inWindow:[UIApplication sharedApplication].delegate.window];
+    [MyBaseLayout updateRTL:NO inWindow:[UIApplication sharedApplication].delegate.window];
 }
 
 - (void)didReceiveMemoryWarning {

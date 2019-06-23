@@ -485,18 +485,18 @@
 
 -(void)handleResetShow:(UIButton *)sender
 {
-    self.invisibleButton.myVisibility = MyVisibility_Visible;
-    self.goneButton.myVisibility = MyVisibility_Visible;
+    self.invisibleButton.visibility = MyVisibility_Visible;
+    self.goneButton.visibility = MyVisibility_Visible;
 }
 
 -(void)handleInvisible:(UIButton*)sender
 {
-    sender.myVisibility = MyVisibility_Invisible;
+    sender.visibility = MyVisibility_Invisible;
 }
 
 -(void)handleGone:(UIButton*)sender
 {
-    sender.myVisibility = MyVisibility_Gone;
+    sender.visibility = MyVisibility_Gone;
 }
 
 -(void)handleLeftFlexed:(UISegmentedControl*)segmented

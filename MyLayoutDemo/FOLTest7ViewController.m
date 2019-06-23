@@ -20,7 +20,7 @@
 -(void)loadView
 {
     /*
-       这个例子主要给大家演示，在浮动布局中也可以支持一行(列)内的子视图的对齐方式的设置了。我们可以借助子视图的myAlignment属性来设置其在浮动布局行(列)内的对齐方式。
+       这个例子主要给大家演示，在浮动布局中也可以支持一行(列)内的子视图的对齐方式的设置了。我们可以借助子视图的alignment属性来设置其在浮动布局行(列)内的对齐方式。
        这里的对齐的标准都是以当前行(列)内最高(宽)的子视图为参考来进行(列)对齐的。
      
        在垂直浮动布局里面的子视图的行内对齐只能设置MyGravity_Vert_Top, MyGravity_Vert_Center, MyGravity_Vert_Bottom, MyGravity_Vert_Fill这几种对齐方式。
@@ -80,7 +80,7 @@
     UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"p1-12"]];
     logoImageView.layer.borderColor = [CFTool color:4].CGColor;
     logoImageView.layer.borderWidth = 1;
-    logoImageView.myAlignment = MyGravity_Vert_Center;  //在浮动的一行内垂直居中对齐。
+    logoImageView.alignment = MyGravity_Vert_Center;  //在浮动的一行内垂直居中对齐。
     logoImageView.myMargin = 10;  //四周的边距都设置为10.
     logoImageView.mySize = CGSizeMake(80, 36);
     [floatLayout addSubview:logoImageView];
@@ -88,7 +88,7 @@
     UILabel *brandLabel = [UILabel new];
     brandLabel.text = @"千奈美官方旗舰店";
     [brandLabel sizeToFit];
-    brandLabel.myAlignment = MyGravity_Vert_Center; //在浮动的一行内垂直居中对齐。
+    brandLabel.alignment = MyGravity_Vert_Center; //在浮动的一行内垂直居中对齐。
     brandLabel.myVertMargin = 10;
     [floatLayout addSubview:brandLabel];
     
@@ -97,7 +97,7 @@
     [attentionButton sizeToFit];
     attentionButton.reverseFloat = YES;   //关注放在右边，所以浮动到右边。
     attentionButton.myMargin = 10;
-    attentionButton.myAlignment = MyGravity_Vert_Center;  //在浮动的一行内垂直居中对齐。
+    attentionButton.alignment = MyGravity_Vert_Center;  //在浮动的一行内垂直居中对齐。
     [floatLayout addSubview:attentionButton];
     
     //单独一行。
@@ -160,13 +160,13 @@
     signatureLabel.textColor = [CFTool color:4];
     [signatureLabel sizeToFit];
     signatureLabel.myHorzMargin = 10;
-    signatureLabel.myAlignment = MyGravity_Vert_Center;
+    signatureLabel.alignment = MyGravity_Vert_Center;
     [floatLayout addSubview:signatureLabel];
     
     UIImageView *moreImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"next"]];
     moreImageView.reverseFloat = YES;
     moreImageView.myHorzMargin = 10;
-    moreImageView.myAlignment = MyGravity_Vert_Center;
+    moreImageView.alignment = MyGravity_Vert_Center;
     [floatLayout addSubview:moreImageView];
     
     
@@ -174,7 +174,7 @@
     moreLabel.text = @"进店看看";
     [moreLabel sizeToFit];
     moreLabel.reverseFloat = YES;
-    moreLabel.myAlignment = MyGravity_Vert_Center;
+    moreLabel.alignment = MyGravity_Vert_Center;
     [floatLayout addSubview:moreLabel];
     
     
@@ -188,12 +188,12 @@
     
     //
     UIImageView *commentImageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions4"]];
-    commentImageView1.myAlignment = MyGravity_Vert_Fill;  //这里使用填充对齐，表明会和这行里面高度最高的那个子视图的高度保持一致。
+    commentImageView1.alignment = MyGravity_Vert_Fill;  //这里使用填充对齐，表明会和这行里面高度最高的那个子视图的高度保持一致。
     commentImageView1.myLeft = 10;
     [floatLayout addSubview:commentImageView1];
     
     UIImageView *commentImageView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"minions3"]];
-    commentImageView2.myAlignment = MyGravity_Vert_Fill;   //这里使用填充对齐，表明会和这行里面高度最高的那个子视图的高度保持一致。
+    commentImageView2.alignment = MyGravity_Vert_Fill;   //这里使用填充对齐，表明会和这行里面高度最高的那个子视图的高度保持一致。
     commentImageView2.myLeft = 10;
     [floatLayout addSubview:commentImageView2];
     
@@ -206,7 +206,7 @@
     {
         UIImageView *starImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"section2"]];
         starImageView.mySize = CGSizeMake(20, 20);
-        starImageView.myAlignment = MyGravity_Vert_Bottom;  //这里底部对齐，表明子视图和一行内最高的子视图保持底部对齐。
+        starImageView.alignment = MyGravity_Vert_Bottom;  //这里底部对齐，表明子视图和一行内最高的子视图保持底部对齐。
         starImageView.myLeft = 5;
         [floatLayout addSubview:starImageView];
     }
@@ -247,15 +247,15 @@
         switch (i) {
             case 0:
             case 1:
-                imageView.myAlignment = MyGravity_Horz_Center;
+                imageView.alignment = MyGravity_Horz_Center;
                 break;
             case 2:
             case 3:
-                imageView.myAlignment = MyGravity_Horz_Right;
+                imageView.alignment = MyGravity_Horz_Right;
                 break;
             case 4:
             case 5:
-                imageView.myAlignment = MyGravity_Horz_Fill;
+                imageView.alignment = MyGravity_Horz_Fill;
             default:
                 break;
         }

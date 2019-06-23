@@ -537,7 +537,7 @@
         CGRect rect = sbvmyFrame.frame;
         
         //只要有一个子视图设置了对齐，就会做对齐处理，否则不会，这里这样做是为了对后面的对齐计算做优化。
-        sbvHasAlignment |= ((sbvsc.myAlignment & MyGravity_Horz_Mask) > MyGravity_Vert_Top);
+        sbvHasAlignment |= ((sbvsc.alignment & MyGravity_Horz_Mask) > MyGravity_Vert_Top);
         
         //如果是RTL的场景则默认是右对齐的。
         if (sbvsc.isReverseFloat)
@@ -911,7 +911,7 @@
                 if (sbvmyFrame.height > lineMaxHeight)
                     lineMaxHeight = sbvmyFrame.height;
                 
-                lineHasAlignment |= ((sbvsc.myAlignment & MyGravity_Horz_Mask) > MyGravity_Vert_Top);
+                lineHasAlignment |= ((sbvsc.alignment & MyGravity_Horz_Mask) > MyGravity_Vert_Top);
             }
             
             //设置行内的对齐
@@ -922,7 +922,7 @@
                     UIView *sbv = sbs[i];
                     MyFrame *sbvmyFrame = sbv.myFrame;
                     UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    switch (sbvsc.myAlignment & MyGravity_Horz_Mask) {
+                    switch (sbvsc.alignment & MyGravity_Horz_Mask) {
                         case MyGravity_Vert_Center:
                             sbvmyFrame.top += (lineMaxHeight - sbvmyFrame.height) / 2.0;
                             break;
@@ -1036,7 +1036,7 @@
         CGRect rect = sbvmyFrame.frame;
         
         //只要有一个子视图设置了对齐，就会做对齐处理，否则不会，这里这样做是为了对后面的对齐计算做优化。
-        sbvHasAlignment |= ((sbvsc.myAlignment & MyGravity_Vert_Mask) > MyGravity_Horz_Left);
+        sbvHasAlignment |= ((sbvsc.alignment & MyGravity_Vert_Mask) > MyGravity_Horz_Left);
         
         if (sbvsc.reverseFloat)
         {
@@ -1384,7 +1384,7 @@
                 if (sbvmyFrame.width > lineMaxWidth)
                     lineMaxWidth = sbvmyFrame.width;
                 
-                lineHasAlignment |= ((sbvsc.myAlignment & MyGravity_Vert_Mask) > MyGravity_Horz_Left);
+                lineHasAlignment |= ((sbvsc.alignment & MyGravity_Vert_Mask) > MyGravity_Horz_Left);
             }
             
             //设置行内的对齐
@@ -1395,7 +1395,7 @@
                     UIView *sbv = sbs[i];
                     MyFrame *sbvmyFrame = sbv.myFrame;
                     UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    switch ([self myConvertLeftRightGravityToLeadingTrailing:sbvsc.myAlignment & MyGravity_Vert_Mask]) {
+                    switch ([self myConvertLeftRightGravityToLeadingTrailing:sbvsc.alignment & MyGravity_Vert_Mask]) {
                         case MyGravity_Horz_Center:
                             sbvmyFrame.leading += (lineMaxWidth - sbvmyFrame.width) / 2.0;
                             break;

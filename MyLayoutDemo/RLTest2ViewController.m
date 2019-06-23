@@ -222,18 +222,18 @@
 {
     if (self.visibilitySwitch.isOn)
     {
-        self.visibilityButton.myVisibility = MyVisibility_Gone;
+        self.visibilityButton.visibility = MyVisibility_Gone;
     }
     else
     {
-        self.visibilityButton.myVisibility = MyVisibility_Invisible;
+        self.visibilityButton.visibility = MyVisibility_Invisible;
     }
 
 }
 
 -(void)handleShow:(UIButton*)sender
 {
-    self.visibilityButton.myVisibility = MyVisibility_Visible;
+    self.visibilityButton.visibility = MyVisibility_Visible;
 }
 
 /*

@@ -395,7 +395,7 @@
     baselineLabel.wrapContentSize = YES;
     baselineLabel.font = [CFTool font:20];
     baselineLabel.backgroundColor = [CFTool color:5];
-    baselineLabel.myAlignment = MyGravity_Vert_Center;  //标准视图垂直居中。
+    baselineLabel.alignment = MyGravity_Vert_Center;  //标准视图垂直居中。
     [baselineLayout addSubview:baselineLabel];
     
     UILabel *rightLabel = [UILabel new];
@@ -451,7 +451,7 @@
     
     UIView *hiddenView = [UIView new];
     hiddenView.backgroundColor = [CFTool color:3];
-    hiddenView.myVisibility = MyVisibility_Gone;
+    hiddenView.visibility = MyVisibility_Gone;
     hiddenView.myTop = 20;
     hiddenView.myLeading = hiddenView.myTrailing = 0;
     hiddenView.myHeight = 800;
@@ -483,15 +483,15 @@
 
 -(void)handleHideAndShowMore:(UIButton*)sender
 {
-    if (self.hiddenView.myVisibility == MyVisibility_Visible)
+    if (self.hiddenView.visibility == MyVisibility_Visible)
     {
-        self.hiddenView.myVisibility = MyVisibility_Gone;
+        self.hiddenView.visibility = MyVisibility_Gone;
         [sender setTitle:NSLocalizedString(@"Show more》", @"") forState:UIControlStateNormal];
         [sender sizeToFit];
     }
     else
     {
-        self.hiddenView.myVisibility = MyVisibility_Visible;
+        self.hiddenView.visibility = MyVisibility_Visible;
         [sender setTitle:NSLocalizedString(@"Close up《", @"") forState:UIControlStateNormal];
         [sender sizeToFit];
     }

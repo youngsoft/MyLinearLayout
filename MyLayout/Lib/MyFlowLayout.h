@@ -207,7 +207,7 @@
      MyGravity_Horz_Fill    两端对齐
      MyGravity_Horz_Between  数量约束垂直流式布局有效，子视图会紧凑进行排列，当设置为这个属性值时，子视图的x轴的位置总是从对应行的上一列的结尾开始，而不是上一列的最宽位置开始。
    @endcode
- @note 如果您想单独设置某个子视图在排内的对齐方式则请使用子视图的扩展属性myAlignment。
+ @note 如果您想单独设置某个子视图在排内的对齐方式则请使用子视图的扩展属性alignment。
  
  */
 @property(nonatomic,assign)  MyGravity arrangedGravity;

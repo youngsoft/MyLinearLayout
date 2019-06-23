@@ -79,8 +79,8 @@
 @property(nonatomic, assign) BOOL useFrame;
 @property(nonatomic, assign) BOOL noLayout;
 
-@property(nonatomic, assign) MyVisibility myVisibility;
-@property(nonatomic, assign) MyGravity myAlignment;
+@property(nonatomic, assign) MyVisibility visibility;
+@property(nonatomic, assign) MyGravity alignment;
 
 @property(nonatomic, copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
 

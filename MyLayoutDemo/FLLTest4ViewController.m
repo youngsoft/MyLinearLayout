@@ -144,7 +144,7 @@
     rememberLabel.textColor = [CFTool color:4];
     rememberLabel.font = [CFTool font:15];
     rememberLabel.weight = 1;
-    rememberLabel.myAlignment = MyGravity_Vert_Bottom;   //流式布局通过arrangedGravity设置每行的对齐方式，如果某个子视图不想使用默认的对齐方式则可以通过myAlignment属性来单独设置对齐方式，这个例子中所有都是居中对齐，但是这个标题则是底部对齐。
+    rememberLabel.alignment = MyGravity_Vert_Bottom;   //流式布局通过arrangedGravity设置每行的对齐方式，如果某个子视图不想使用默认的对齐方式则可以通过alignment属性来单独设置对齐方式，这个例子中所有都是居中对齐，但是这个标题则是底部对齐。
     [rememberLabel sizeToFit];
     [flowLayout addSubview:rememberLabel];
     

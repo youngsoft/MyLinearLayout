@@ -180,6 +180,53 @@
     
 }
 
+-(void)testSubviewSizeDependent2
+{
+    //测试隐藏、比重、尺寸依赖。
+    
+    MyLinearLayout *layout2 = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 200) orientation:MyOrientation_Horz];
+    layout2.wrapContentWidth = NO;
+    
+    
+    UIButton *zoneBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    zoneBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+    zoneBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+    
+    UILabel *nameLab = [[UILabel alloc] initWithFrame:CGRectZero];
+    nameLab.numberOfLines = 1.0;
+    nameLab.font = [UIFont systemFontOfSize:18];
+    nameLab.textAlignment = NSTextAlignmentCenter;
+    
+    UIButton *placeholderBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    
+    zoneBtn.myLeft = 20;
+    zoneBtn.myCenterY = 0;
+    zoneBtn.widthSize.equalTo(zoneBtn.widthSize).add(20);
+    zoneBtn.heightSize.equalTo(zoneBtn.heightSize).add(3);
+    
+    nameLab.myCenterY = 0;
+    nameLab.weight = 1.0;
+    nameLab.heightSize.equalTo(nameLab.heightSize);
+    
+    placeholderBtn.myCenterY = 0;
+    placeholderBtn.myRight = 20;
+    placeholderBtn.widthSize.equalTo(zoneBtn.widthSize);
+    placeholderBtn.heightSize.equalTo(zoneBtn.heightSize);
+    
+    [layout2 addSubview:zoneBtn];
+    [layout2 addSubview:nameLab];
+    [layout2 addSubview:placeholderBtn];
+    
+    zoneBtn.visibility = MyVisibility_Gone;
+    placeholderBtn.visibility = MyVisibility_Gone;
+    
+    [layout2 layoutIfNeeded];
+    
+    XCTAssertTrue(nameLab.frame.size.width == layout2.frame.size.width &&
+                  nameLab.center.y == layout2.frame.size.height * 0.5, @"nameLab.frame = %@",NSStringFromCGRect(nameLab.frame));
+    
+}
+
 -(void)testWeight
 {//测试均分
     

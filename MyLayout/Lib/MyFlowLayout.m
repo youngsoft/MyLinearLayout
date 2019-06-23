@@ -365,7 +365,7 @@
             }
         }
         
-        MyGravity sbvVertAlignment = sbvsc.myAlignment & MyGravity_Horz_Mask;
+        MyGravity sbvVertAlignment = sbvsc.alignment & MyGravity_Horz_Mask;
         if (sbvVertAlignment == MyGravity_None)
             sbvVertAlignment = vertAlignment;
         if (vertAlignment == MyGravity_Vert_Between)
@@ -533,7 +533,7 @@
         }
         
         
-        MyGravity sbvHorzAlignment = [self myConvertLeftRightGravityToLeadingTrailing:sbvsc.myAlignment & MyGravity_Vert_Mask];
+        MyGravity sbvHorzAlignment = [self myConvertLeftRightGravityToLeadingTrailing:sbvsc.alignment & MyGravity_Vert_Mask];
         if (sbvHorzAlignment == MyGravity_None)
             sbvHorzAlignment = horzAlignment;
         if (horzAlignment == MyGravity_Horz_Between)

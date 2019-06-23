@@ -237,12 +237,12 @@
 
 -(MyMaker*)visibility
 {
-    return [self addMethod:@"myVisibility"];
+    return [self addMethod:@"visibility"];
 }
 
 -(MyMaker*)alignment
 {
-    return [self addMethod:@"myAlignment"];
+    return [self addMethod:@"alignment"];
 }
 
 

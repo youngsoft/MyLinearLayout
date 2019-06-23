@@ -53,7 +53,7 @@
     
     if (model.imageMessage.length == 0)
     {
-        self.imageMessageImageView.myVisibility = MyVisibility_Gone;
+        self.imageMessageImageView.visibility = MyVisibility_Gone;
     }
     else
     {
@@ -61,11 +61,11 @@
         [self.imageMessageImageView sizeToFit];
         if (isImageMessageHidden)
         {
-            self.imageMessageImageView.myVisibility = MyVisibility_Gone;
+            self.imageMessageImageView.visibility = MyVisibility_Gone;
         }
         else
         {
-            self.imageMessageImageView.myVisibility = MyVisibility_Visible;
+            self.imageMessageImageView.visibility = MyVisibility_Visible;
         }
     }
 

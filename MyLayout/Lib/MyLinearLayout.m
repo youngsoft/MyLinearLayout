@@ -414,8 +414,14 @@
                                                                  sbvsc:sbvsc
                                                                    lsc:lsc];
         
-        if (tempSelfWidth > maxSelfWidth)
+        
+        
+        if ((tempSelfWidth > maxSelfWidth) &&
+            (lsc.widthSizeInner == nil || (sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner))  &&
+            (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
+        {
             maxSelfWidth = tempSelfWidth;
+        }
         
         if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
         {//特殊处理高度等于宽度的情况
@@ -607,7 +613,7 @@
     }
     
     //如果有浮动尺寸或者有压缩模式
-    if (totalWeight != 0 || (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingHeight, 0)) || vertGravity != MyGravity_None)
+    if (totalWeight != 0 || (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingHeight, 0)) || vertGravity != MyGravity_None || lsc.wrapContentWidth)
     {
         maxSelfWidth = 0;
         CGFloat between = 0; //间距扩充
@@ -718,8 +724,12 @@
                                                                      sbvsc:sbvsc
                                                                        lsc:lsc];
             
-            if (tempSelfWidth > maxSelfWidth)
+            if ((tempSelfWidth > maxSelfWidth) &&
+                (lsc.widthSizeInner == nil || (sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner))  &&
+                (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
+            {
                 maxSelfWidth = tempSelfWidth;
+            }
             
             pos += rect.size.height;
             
@@ -845,8 +855,14 @@
                              baselinePos:baselinePos
                                   sbvsc:sbvsc
                                     lsc:lsc];
-        if (tempSelfHeight > maxSelfHeight)
+        
+        if ((tempSelfHeight > maxSelfHeight) &&
+            (lsc.heightSizeInner == nil || (sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner))  &&
+            (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil))
+        {
             maxSelfHeight = tempSelfHeight;
+        }
+        
         
         //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
         if (vertGravity == MyGravity_Vert_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == sbv)
@@ -1094,7 +1110,7 @@
     }
     
     //如果有浮动尺寸或者有压缩模式
-    if (totalWeight != 0 || (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingWidth, 0)) || horzGravity != MyGravity_None)
+    if (totalWeight != 0 || (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingWidth, 0)) || horzGravity != MyGravity_None || lsc.wrapContentHeight)
     {
         maxSelfHeight = 0;
         CGFloat between = 0; //间距扩充
@@ -1206,8 +1222,13 @@
                                  baselinePos:baselinePos
                                        sbvsc:sbvsc
                                          lsc:lsc];
-            if (tempSelfHeight > maxSelfHeight)
+            
+            if ((tempSelfHeight > maxSelfHeight) &&
+                (lsc.heightSizeInner == nil || (sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner))  &&
+                (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil))
+            {
                 maxSelfHeight = tempSelfHeight;
+            }
     
             pos += rect.size.width;
             

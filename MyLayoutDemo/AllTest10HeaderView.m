@@ -180,8 +180,8 @@
     [_browLabel sizeToFit];
     
     NSString *giveLikeText = model.giveLikeNames.count > 0 ? [NSString stringWithFormat:@"%@等点了👍",[model.giveLikeNames componentsJoinedByString:@"、"]] : @"";
-    _giveLikeLayout.myVisibility = model.giveLikeNames.count > 0 ? MyVisibility_Visible : MyVisibility_Gone;
-    _nineFlowLayout.myVisibility = model.commentsImageUrls.count > 0 ? MyVisibility_Visible : MyVisibility_Gone;
+    _giveLikeLayout.visibility = model.giveLikeNames.count > 0 ? MyVisibility_Visible : MyVisibility_Gone;
+    _nineFlowLayout.visibility = model.commentsImageUrls.count > 0 ? MyVisibility_Visible : MyVisibility_Gone;
     _giveLikeLabel.text = giveLikeText;
     [_giveLikeLabel sizeToFit];
     [self setCountWithImageArray:model.commentsImageUrls];

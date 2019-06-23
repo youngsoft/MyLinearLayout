@@ -489,7 +489,7 @@ BOOL _myisRTL = NO;
 -(NSString*)debugDescription
 {
     
-    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nmyVisibility=%c\nmyAlignment=%hu\nwrapContentWidth=%@\nwrapContentHeight=%@\nreverseFloat=%@\nclearFloat=%@",
+    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nvisibility=%c\nalignment=%hu\nwrapContentWidth=%@\nwrapContentHeight=%@\nreverseFloat=%@\nclearFloat=%@",
                     self.topPosInner,
                     self.leadingPosInner,
                     self.bottomPosInner,
@@ -501,8 +501,8 @@ BOOL _myisRTL = NO;
                     self.weight,
                     self.useFrame ? @"YES":@"NO",
                     self.noLayout? @"YES":@"NO",
-                    self.myVisibility,
-                    self.myAlignment,
+                    self.visibility,
+                    self.alignment,
                     self.wrapContentWidth ? @"YES":@"NO",
                     self.wrapContentHeight ? @"YES":@"NO",
                     self.reverseFloat ? @"YES":@"NO",
@@ -535,8 +535,8 @@ BOOL _myisRTL = NO;
     lsc->_wrapHeight = self.wrapHeight;
     lsc.useFrame = self.useFrame;
     lsc.noLayout = self.noLayout;
-    lsc.myVisibility = self.myVisibility;
-    lsc.myAlignment = self.myAlignment;
+    lsc.visibility = self.visibility;
+    lsc.alignment = self.alignment;
     lsc.weight = self.weight;
     lsc.reverseFloat = self.isReverseFloat;
     lsc.clearFloat = self.clearFloat;

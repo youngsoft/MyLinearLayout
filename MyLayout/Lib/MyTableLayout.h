@@ -12,7 +12,7 @@
 /**
   表格布局行列索引描述扩展对象。
  */
-@interface NSIndexPath(MyTableLayoutEx)
+@interface NSIndexPath(MyTableLayoutExt)
 
 
 /**

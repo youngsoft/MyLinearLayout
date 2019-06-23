@@ -13,7 +13,7 @@
 
 /*
  几种视图类型的定义：
-1.布局视图：    就是从MyBaseLayout派生而出的视图，目前MyLayout中一共有：线性布局、框架布局、相对布局、表格布局、流式布局、浮动布局、路径布局7种布局。 布局视图也是一个视图。
+1.布局视图：    就是从MyBaseLayout派生而出的视图，目前MyLayout中一共有：线性布局、框架布局、相对布局、表格布局、流式布局、浮动布局、路径布局、栅格布局8种布局。 布局视图也是一个视图。
 2.非布局视图：  除上面说的7种布局视图外的所有视图和控件。
 3.布局父视图：  如果某个视图的父视图是一个布局视图，那么这个父视图就是布局父视图。
 4.非布局父视图：如果某个视图的父视图不是一个布局视图，那么这个父视图就是非布局父视图。
@@ -39,7 +39,7 @@
  |--------------------+------------------+----------------------+---------------+-----------+--------------------+-------+-------|
  |Vert MyTableLayout  |   T,B,CY         | L,R                  | L,R,T,B,CY    |    -      |    -               |  -    |T,B    |
  |--------------------+------------------+----------------------+---------------+-----------+--------------------+-------+-------|
- |Horz MyTableLayout  |   L,R,CX         | T,B                  | L,R,CX,T,B    |    -      |    -               | L,R   |    -    |
+ |Horz MyTableLayout  |   L,R,CX         | T,B                  | L,R,CX,T,B    |    -      |    -               | L,R   |  -    |
  |--------------------+------------------+----------------------+---------------+-----------+--------------------+-------+-------|
  |MyFrameLayout       |   ALL            |  -                   | L,R,T,B,CX,CY |    -      |    -               |  -    | -     |
  |--------------------+------------------+----------------------+---------------+-----------+--------------------+-------+-------|
@@ -294,11 +294,11 @@
  
  定义A为操作的视图本身，B为A的兄弟视图，P为A的父视图。
  +-------------+----------+--------------+---------------+------------+--------------+---------------+--------------+----------------------+
- | 对象 \ 值    | NSNumber |A.widthSize   |A.heightSize   |B.widthSize | B.heightSize |    P.widthSize  |P.heightSize  |NSArray<MyLayoutSize*>|
+ | 对象 \ 值    | NSNumber |A.widthSize   |A.heightSize   |B.widthSize | B.heightSize |  P.widthSize  |P.heightSize  |NSArray<MyLayoutSize*>|
  +-------------+----------+--------------+---------------+------------+--------------+---------------+--------------+----------------------+
- |A.widthSize  | ALL      |ALL           |FR/R/FL-H/FO   |FR/R/FO/P      | R             |L/FR/R/FL/FO/P | R            |R                     |
+ |A.widthSize  | ALL      |ALL           |ALL            |ALL         | ALL          |ALL            |ALL           |R                     |
  +-------------+----------+--------------+---------------+------------+--------------+---------------+--------------+----------------------+
- |A.heightSize | ALL      |FR/R/FL-V/FO/L|ALL            |R              |FR/R/FO/P     |R              |L/FR/R/FL/FO/P|R                     |
+ |A.heightSize | ALL      |ALL           |ALL            |ALL         |ALL           |ALL            |ALL           |R                     |
  +-------------+----------+--------------+---------------+------------+--------------+---------------+--------------+----------------------+
 
   上表中所有的布局尺寸的值都支持设置为数值，而且所有布局下的子视图的宽度和高度尺寸都可以设置为等于自身的宽度和高度尺寸，布局库这里做了特殊处理，是不会造成循环引用的。比如：
@@ -548,7 +548,8 @@
    建议您用这个属性设置视图的隐藏的显示而不用系统默认的hidden来进行设置。
  
  */
-@property(nonatomic, assign) MyVisibility  myVisibility;
+@property(nonatomic, assign) MyVisibility  visibility;
+@property(nonatomic, assign) MyVisibility  myVisibility MYDEPRECATED("use visibility instead");
 
 
 /**
@@ -564,12 +565,17 @@
  
  5. 在水平流式布局和水平浮动布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果流式父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
  */
-@property(nonatomic, assign) MyGravity myAlignment;
+@property(nonatomic, assign) MyGravity alignment;
+@property(nonatomic, assign) MyGravity myAlignment MYDEPRECATED("use alignment instead");
 
 
 
 /**
  视图在父布局视图中布局完成后也就是视图的frame更新完成后执行的block，执行完block后会被重置为nil。通过在viewLayoutCompleteBlock中我们可以得到这个视图真实的frame值,当然您也可以在里面进行其他业务逻辑的操作和属性的获取和更新。block方法中layout参数就是父布局视图，而v就是视图本身，block中这两个参数目的是为了防止循环引用的问题。
+ 
+ 不再建议使用这个block进行获取子视图最终frame值，因为这个block只会执行一次，所以得到的frame值可能不准确。
+ 建议通过KVO来观察布局视图的isLayouting属性来获取布局完成后子视图的frame值。
+ 
  */
 @property(nonatomic,copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
 
@@ -632,9 +638,11 @@
 #endif
 
 /**
- 只是适配UI-RTL  ,不是显示字RTL
+ 直接更新window下所有布局视图的RTL特性。
  */
-+ (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window;
++ (void)updateRTL:(BOOL)isRTL inWindow:(UIWindow *)window;
++ (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window MYDEPRECATED("use updateRTL:inWindow: instead");
+
 
 /*
  布局视图里面的padding属性用来设置布局视图的内边距。内边距是指布局视图里面的子视图离自己距离。外边距则是视图与父视图之间的距离。
@@ -854,7 +862,7 @@
 
 
 /**
- *判断当前是否正在布局中,如果正在布局中则返回YES,否则返回NO
+ *判断当前是否正在布局中,如果正在布局中则返回YES,否则返回NO。 我们可以通过KVO的方式来监听这个属性的变化，以便获取布局完成后的真实frame值。
  */
 @property(nonatomic,assign,readonly) BOOL isMyLayouting;
 
@@ -1013,13 +1021,5 @@
 
 @end
 
-/**
- 只是适配UI-RTL  ,不是显示字RTL
- */
 
-@interface UIWindow (MyBaseUpUIRTL)
-
--(void)myUpBasisUIViewMyLayout:(BOOL)isRTL;
-
-@end
 
