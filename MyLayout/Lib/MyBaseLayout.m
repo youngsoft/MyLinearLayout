@@ -1085,9 +1085,10 @@ void* _myObserverContextC = (void*)20175283;
     };
     
     self.endLayoutBlock = ^{
-    
+        
         [UIView commitAnimations];
     };
+    
 }
 
 -(MyBorderline*)topBorderline

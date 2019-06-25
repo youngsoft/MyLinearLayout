@@ -2,6 +2,28 @@
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
 ---
+## [V1.8.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.8.0)(2019/06/25)
+
+#### Fixed
+
+1. 重构线性布局，精简实现逻辑和代码。
+2. 针对各种布局下的子视图的尺寸约束能力做了扩展。原先版本中只有相对布局中的子视图可以设置尺寸依赖任意其他子视图，而其他布局中的子视图只有有限的约束依赖能力。新版本中这些约束依赖得到增强，几乎所有布局下的子视图都可以支持自身宽度等于自身高度，以及尺寸依赖其他子视图的情况。[issue#94](https://github.com/youngsoft/MyLinearLayout/issues/94)
+3. 修复当将布局视图作为UIScrollView下的容器视图同时UIScrollView支持放大缩小能力时，在屏幕旋转时可能会产生的BUG。[issue#93](https://github.com/youngsoft/MyLinearLayout/issues/93)
+4. 修复了布局视图的尺寸自适应能力和AutoLayout结合后，布局视图添加删除子视图后要手动代码进行布局视图尺寸自适应的刷新问题。[issue#95](https://github.com/youngsoft/MyLinearLayout/issues/95)
+5. 修复相对布局子视图隐藏时，其他依赖这个子视图的子视图的位置和尺寸不正确更新的问题。
+6. 修复UIImageView的宽度固定高度自适应的问题。
+7. 支持通过对isLayouting进行KVO监听来实现布局的通知处理机制，我们可以通过KVO布局视图的isLayouting属性来或者布局完成后子视图的frame以及布局视图的frame值了。
+8. 下列方法或属性名被列为过期，并推荐使用新的方法名和属性名：
+
+```
++[MyBaseLayout myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window]  ==>  +[MyBaseLayout updateRTL:(BOOL)isRTL inWindow:(UIWindow *)window]
+  
+-[UIView myVisibility]  ==>  -[UIView visibility]
+  
+-[UIView myAlignment] == > -[UIView alignment]
+   
+```
+
 
 ## [V1.7.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.7.0)(2019/05/16)
 #### Added
