@@ -434,21 +434,13 @@ BOOL _myisRTL = NO;
         
         if (wrapContentWidth)
         {
-#ifdef MY_USEPREFIXMETHOD
-            self.widthSize.myEqualTo(self.widthSize);
-#else
-            self.widthSize.equalTo(self.widthSize);
-#endif
+            [self.widthSize __equalTo:self.widthSize];
         }
         else
         {
             if (self.widthSizeInner.dimeSelfVal != nil)
             {
-#ifdef MY_USEPREFIXMETHOD
-                self.widthSizeInner.myEqualTo(nil);
-#else
-                self.widthSizeInner.equalTo(nil);
-#endif
+                [self.widthSizeInner __equalTo:nil];
             }
         }
     }
@@ -916,24 +908,8 @@ BOOL _myisRTL = NO;
     lsc.subviewSize = self.subviewSize;
     lsc.minSpace = self.minSpace;
     lsc.maxSpace = self.maxSpace;
-    lsc.noBoundaryLimit = self.noBoundaryLimit;
-    
     return lsc;
 }
-
-
--(NSString*)debugDescription
-{
-    NSString *dbgDesc = [super debugDescription];
-    
-    dbgDesc = [NSString stringWithFormat:@"%@\nFloatLayout: \nnoBoundaryLimit=%@",
-               dbgDesc,
-               self.noBoundaryLimit ? @"YES":@"NO"];
-    
-    return dbgDesc;
-}
-
-
 
 @end
 

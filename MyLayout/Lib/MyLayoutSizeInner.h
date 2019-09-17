@@ -47,3 +47,13 @@
 -(CGFloat)measureWith:(CGFloat)size;
 
 @end
+
+@interface MyLayoutExtremeSize:NSObject
+
+-(instancetype)initWith:(NSArray *)sizes isMax:(BOOL)isMax;
+
+//获取极限值
+-(CGFloat)getExtremeSizeFrom:(MyLayoutSize *)layoutSize;
+
+@end
+

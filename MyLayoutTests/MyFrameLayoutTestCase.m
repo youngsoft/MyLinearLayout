@@ -162,6 +162,84 @@
 
 }
 
+-(void)testWrapContent2
+{
+    MyFrameLayout * dataview = [[MyFrameLayout alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0)];
+    dataview.heightSize.min([UIScreen mainScreen].bounds.size.height);
+    dataview.wrapContentHeight = YES;
+    //上面在滚动视图下。
+    
+    MyLinearLayout * dataContentV = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    dataContentV.topPadding = 64;
+    dataContentV.bottomPadding = 64;      // + 10;
+    dataContentV.myCenterX = 0;
+    dataContentV.myCenterY = 0;
+    dataContentV.wrapContentHeight = YES;
+    dataContentV.myHorzMargin = 0;
+    [dataview addSubview:dataContentV];
+
+    
+    MyLinearLayout * subrootview1 = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    subrootview1.gravity = MyGravity_Horz_Fill;
+    subrootview1.wrapContentHeight = YES;
+    subrootview1.myHorzMargin = 0;
+    subrootview1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
+    [dataContentV addSubview:subrootview1];
+
+    
+    UILabel * view1 = [UILabel new];
+    view1.myTop = 120;
+    view1.myHeight = 140 + 180;
+    [subrootview1 addSubview:view1];
+    
+    
+    UILabel * view2 = [UILabel new];
+    view2.myHeight = 160 + 200;
+    [subrootview1 addSubview:view2];
+    
+    
+    UILabel * subrootview2 = [UILabel new];
+    subrootview2.myHeight = 150;
+    subrootview2.myHorzMargin = 0;
+    subrootview2.text = @"subrootview2";
+    [dataContentV addSubview:subrootview2];
+    
+    view2.hidden = YES;
+    subrootview2.hidden = YES;
+    
+    [dataview layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(dataview.frame, CGRectMake(0,0,375,667)), @"dataview rect is:%@", NSStringFromCGRect(dataview.frame));
+     XCTAssertTrue(CGRectEqualToRect(dataContentV.frame, CGRectMake(0,49.5,375,568)), @"dataContentV rect is:%@", NSStringFromCGRect(dataContentV.frame));
+    
+    
+    subrootview2.hidden = NO;
+    
+    [dataview layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(dataview.frame, CGRectMake(0,0,375,718)), @"dataview rect is:%@", NSStringFromCGRect(dataview.frame));
+    XCTAssertTrue(CGRectEqualToRect(dataContentV.frame, CGRectMake(0,0,375,718)), @"dataContentV rect is:%@", NSStringFromCGRect(dataContentV.frame));
+    
+    
+    view2.hidden = NO;
+    subrootview2.hidden = YES;
+    
+    [dataview layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(dataview.frame, CGRectMake(0,0,375,928)), @"dataview rect is:%@", NSStringFromCGRect(dataview.frame));
+    XCTAssertTrue(CGRectEqualToRect(dataContentV.frame, CGRectMake(0,0,375,928)), @"dataContentV rect is:%@", NSStringFromCGRect(dataContentV.frame));
+    
+    
+    view2.hidden = YES;
+    subrootview2.hidden = YES;
+    
+    [dataview layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(dataview.frame, CGRectMake(0,0,375,667)), @"dataview rect is:%@", NSStringFromCGRect(dataview.frame));
+    XCTAssertTrue(CGRectEqualToRect(dataContentV.frame, CGRectMake(0,49.5,375,568)), @"dataContentV rect is:%@", NSStringFromCGRect(dataContentV.frame));
+
+}
+
 -(void)testPerformanceExample
 {
     [self measureBlock:^{

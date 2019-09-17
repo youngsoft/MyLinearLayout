@@ -84,8 +84,12 @@ typedef enum : unsigned short {
     MyGravity_Horz_Leading = 32,
     /**尾部对齐,对于阿拉伯国家来说是和Left等价的,对于非阿拉伯国家则是和Right等价的*/
     MyGravity_Horz_Trailing = 64,
+    /**水平间距拉伸,并且头尾部分为其他部分间距的一半,如果只有一个子视图则变为水平居中停靠*/
+    MyGravity_Horz_Around = 128,
     /**水平宽度填充*/
     MyGravity_Horz_Fill = MyGravity_Horz_Left | MyGravity_Horz_Center | MyGravity_Horz_Right,
+    /**水平宽度拉伸,它跟宽度填充的区别是如果子视图指定了宽度则不会被拉伸*/
+    MyGravity_Horz_Stretch = MyGravity_Horz_Left | MyGravity_Horz_Right,
     /**水平掩码，用来获取水平方向的枚举值*/
     MyGravity_Horz_Mask = 0xFF00,
 
@@ -102,8 +106,12 @@ typedef enum : unsigned short {
     MyGravity_Vert_Between = 16 << 8,
     /**基线对齐,只支持水平线性布局，指定基线对齐必须要指定出一个基线标准的子视图*/
     MyGravity_Vert_Baseline = 32 << 8,
+    /**垂直间距拉伸,并且头尾部分为其他部分间距的一半, 如果只有一个子视图则变为垂直居中停靠*/
+    MyGravity_Vert_Around = 64 << 8,
     /**垂直高度填充*/
     MyGravity_Vert_Fill = MyGravity_Vert_Top | MyGravity_Vert_Center | MyGravity_Vert_Bottom,
+    /**垂直高度拉伸,它跟高度填充的区别是如果子视图指定了高度则不会被拉伸*/
+    MyGravity_Vert_Stretch = MyGravity_Vert_Top | MyGravity_Vert_Bottom,
     /**垂直掩码，用来获取垂直方向的枚举值*/
     MyGravity_Vert_Mask = 0x00FF,
 
@@ -240,7 +248,6 @@ typedef enum : unsigned char{
 }MySizeClass;
 
 
-
 //内部使用
 typedef enum : unsigned char
 {
@@ -251,4 +258,7 @@ typedef enum : unsigned char
     MyLayoutValueType_Array,
     MyLayoutValueType_UILayoutSupport,
     MyLayoutValueType_SafeArea,
+    MyLayoutValueType_Extreme,
+    MyLayoutValueType_LayoutDimeDetach,
+    MyLayoutValueType_Weight,
 }MyLayoutValueType;

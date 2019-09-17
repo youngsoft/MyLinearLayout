@@ -172,6 +172,9 @@
             vertGravity = MyGravity_Vert_Between;
             break;
         case MyGravity_Vert_Between:
+            vertGravity = MyGravity_Vert_Around;
+            break;
+        case MyGravity_Vert_Around:
             vertGravity = MyGravity_Vert_Fill;
             break;
         case MyGravity_Vert_Fill:
@@ -209,6 +212,9 @@
             horzGravity = MyGravity_Horz_Between;
             break;
         case MyGravity_Horz_Between:
+            horzGravity = MyGravity_Horz_Around;
+            break;
+        case MyGravity_Horz_Around:
             horzGravity = MyGravity_Horz_Fill;
             break;
         case MyGravity_Horz_Fill:
@@ -350,6 +356,9 @@
         case MyGravity_Vert_Between:
             vertGravityStr = @"MyGravity_Vert_Between";
             break;
+        case MyGravity_Vert_Around:
+            vertGravityStr = @"MyGravity_Vert_Around";
+            break;
         case MyGravity_Vert_Window_Center:
             vertGravityStr = @"MyGravity_Vert_Window_Center";
             break;
@@ -374,6 +383,9 @@
             break;
         case MyGravity_Horz_Between:
             horzGravityStr = @"MyGravity_Horz_Between";
+            break;
+        case MyGravity_Horz_Around:
+            horzGravityStr = @"MyGravity_Horz_Around";
             break;
         case MyGravity_Horz_Window_Center:
             horzGravityStr = @"MyGravity_Horz_Window_Center";

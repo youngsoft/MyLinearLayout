@@ -9,6 +9,7 @@
 #import "MyLayoutSize.h"
 #import "MyLayoutSizeInner.h"
 #import "MyBaseLayout.h"
+#import "MyLayoutInner.h"
 #import "MyLayoutMath.h"
 
 
@@ -52,6 +53,7 @@
         _multiVal = 1;
         _lBoundVal = nil;
         _uBoundVal = nil;
+        _shrink = 0.0;
     }
     
     return self;
@@ -202,6 +204,10 @@
     }
 }
 
+-(CGFloat)shrink
+{
+    return _active ? _shrink : 0.0;
+}
 
 
 -(id)dimeVal
@@ -236,6 +242,7 @@
     MyLayoutSize *ld = [[[self class] allocWithZone:zone] init];
     ld.view = self.view;
     ld->_active = _active;
+    ld->_shrink = _shrink;
     ld->_dime = _dime;
     ld->_addVal = _addVal;
     ld->_multiVal = _multiVal;
@@ -271,6 +278,10 @@
     
     if (_dimeValType == MyLayoutValueType_NSNumber)
         return _dimeVal;
+    
+    if (_dimeValType == MyLayoutValueType_Extreme)
+        return @([((MyLayoutExtremeSize*)_dimeVal) getExtremeSizeFrom:self]);
+    
     return nil;
 }
 
@@ -383,6 +394,10 @@
         {
             _dimeValType = MyLayoutValueType_Array;
         }
+        else if ([val isKindOfClass:[MyLayoutExtremeSize class]])
+        {
+            _dimeValType = MyLayoutValueType_Extreme;
+        }
         else
         {
             _dimeValType = MyLayoutValueType_Nil;
@@ -489,6 +504,7 @@
     _lBoundVal = nil;
     _uBoundVal = nil;
     _dimeVal = nil;
+    _shrink = 0;
     _dimeValType = MyLayoutValueType_Nil;
     
     [self setNeedsLayout];
@@ -592,7 +608,109 @@
     
 }
 
+@end
+
+
+@implementation MyLayoutSize(Detach)
+
+-(MyLayoutSize* (^)(CGFloat addVal, CGFloat multiVal))detach
+{
+    return ^id(CGFloat addVal, CGFloat multiVal){
+        
+        MyLayoutSize *ld = [[[self class] allocWithZone:nil] init];
+        ld->_addVal = addVal;
+        ld->_multiVal = multiVal;
+        ld->_dimeVal = self;
+        ld->_dimeValType = MyLayoutValueType_LayoutDimeDetach;
+        return ld;
+    };
+}
 
 
 @end
 
+
+@implementation MyLayoutExtremeSize
+{
+    NSArray *_sizes;
+    BOOL _isMax;
+}
+
+-(instancetype)initWith:(NSArray *)sizes isMax:(BOOL)isMax
+{
+    self = [self init];
+    if (self != nil)
+    {
+        _sizes = sizes;
+        _isMax = isMax;
+    }
+    
+    return self;
+}
+
+
+-(CGFloat)getExtremeSizeFrom:(MyLayoutSize *)layoutSize
+{
+    CGFloat retVal = _isMax ? -CGFLOAT_MAX : CGFLOAT_MAX;
+    
+    for (id size in _sizes)
+    {
+        CGFloat val = 0;
+        if ([size isKindOfClass:[NSNumber class]])
+        {
+            val = [(NSNumber*)size doubleValue];
+            if (val == MyLayoutSize.wrap)
+            {//特殊的自适应值。
+                CGSize sz = [layoutSize.view sizeThatFits:CGSizeZero];
+                if (layoutSize.dime == MyGravity_Horz_Fill)
+                    val = sz.width;
+                else
+                    val = sz.height;
+            }
+            
+            retVal = _isMax ? _myCGFloatMax(val, retVal) : _myCGFloatMin(val, retVal);
+        }
+        else if ([size isKindOfClass:[MyLayoutSize class]])
+        {
+            MyLayoutSize *lsize = (MyLayoutSize *)size;
+            if (lsize.dimeValType == MyLayoutValueType_LayoutDimeDetach)
+            {
+                MyLayoutSize *llsize = (MyLayoutSize *)lsize.dimeVal;
+                val = (llsize.dime == MyGravity_Horz_Fill) ? llsize.view.myEstimatedWidth : llsize.view.myEstimatedHeight;
+                val *= lsize.multiVal;
+                val += lsize.addVal;
+            }
+            else
+            {
+                val = (lsize.dime == MyGravity_Horz_Fill) ? lsize.view.myEstimatedWidth : lsize.view.myEstimatedHeight;
+            }
+            
+            retVal = _isMax ? _myCGFloatMax(val, retVal) : _myCGFloatMin(val, retVal);
+
+        }
+        else
+        {
+            NSAssert(NO, @"oops!, invalid type, only support NSNumber or MyLayoutSize");
+        }
+    }
+    
+    return retVal;
+}
+
+@end
+
+
+@implementation NSArray(MyLayoutExtremeSize)
+
+-(MyLayoutExtremeSize *)myMinSize
+{
+    return [[MyLayoutExtremeSize alloc] initWith:self isMax:NO];
+}
+
+-(MyLayoutExtremeSize *)myMaxSize
+{
+    return [[MyLayoutExtremeSize alloc] initWith:self isMax:YES];
+}
+
+
+@end

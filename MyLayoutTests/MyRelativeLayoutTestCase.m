@@ -1003,6 +1003,44 @@
     
 }
 
+-(void)testMaxAndMin
+{
+    
+//    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+//    rootLayout.wrapContentWidth = YES;
+//    rootLayout.myVertMargin = 0;
+//    rootLayout.backgroundColor = [UIColor redColor];
+//    [self.view addSubview:rootLayout];
+//    rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+//    rootLayout.topPadding = MyLayoutPos.safeAreaMargin + 100;
+//    
+//    
+//    UILabel *l1 = [UILabel new];
+//    l1.text = @"您好";
+//    l1.backgroundColor = [UIColor blueColor];
+//    l1.wrapContentSize = YES;
+//    [rootLayout addSubview:l1];
+//    
+//    UILabel *l3 = [UILabel new];
+//    l3.text = @"ak";
+//    l3.wrapContentSize = YES;
+//    l3.topPos.equalTo(l1.bottomPos).offset(10);
+//    l3.leftPos.equalTo(l1.leftPos);
+//    l3.backgroundColor = [UIColor greenColor];
+//    [rootLayout addSubview:l3];
+//    
+//    UILabel *l2 = [UILabel new];
+//    l2.text = @"2019-04-03";
+//    [l2 sizeToFit];
+//    [rootLayout addSubview:l2];
+//    l2.topPos.equalTo(l1.topPos);
+//    l2.rightPos.equalTo(l3.rightPos);
+//    l2.rightPos.min(-1 *(l2.frame.size.width + 30 + 50));
+//    
+    
+    
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

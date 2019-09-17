@@ -21,91 +21,33 @@
 
 @implementation LLTest2ViewController
 
--(void)loadView
-{
-    /*
-       本例子用来实现将一个布局视图嵌入到一个UIScrollView里面的功能。
-       我们可以把一个布局视图作为一个子视图加入到UIScrollView中，布局库内部会根据布局视图的尺寸自动调整UIScrollView的contentSize。如果您不想调整contentSize则请将布局视图的adjustScrollViewContentSizeMode属性设置为MyAdjustScrollViewContentSizeModeNo。
-     */
-    
-    UIScrollView *scrollView = [UIScrollView new];
-    scrollView.backgroundColor = [UIColor whiteColor];
-    self.view = scrollView;
-    
-    /*
-     这里的contentLayout是非布局视图UIScrollView的子视图。因为同时设置了myHorzMargin为0表示宽度和UIScrollView是保持一致；而高度则因为垂直线性布局的wrapContentHeight属性设置来确定,表示垂直线性布局的高度等于里面的所有子视图高度；而其中的x,y轴的位置则因为没有设置默认是0。
-     */
-    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    contentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10); //设置布局内的子视图离自己的边距.
-    contentLayout.myHorzMargin = 0;                          //同时指定左右边距为0表示宽度和父视图一样宽
-    contentLayout.heightSize.lBound(scrollView.heightSize, 10, 1); //高度虽然是wrapContentHeight的。但是最小的高度不能低于父视图的高度加10.
-    [scrollView addSubview:contentLayout];
-    self.contentLayout = contentLayout;
-    
-    
-    /*
-      布局视图里面的padding属性用来设置布局视图的内边距。内边距是指布局视图里面的子视图离自己距离。外边距则是视图与父视图之间的距离。
-      内边距是在自己的尺寸内离子视图的距离，而外边距则不是自己尺寸内离其他视图的距离。下面是内边距和外边距的效果图：
-     
-             ^
-             | topMargin
-             |           width
-           +------------------------------+
-           |                              |------------>
-           |  l                       r   | rightMargin
-           |  e       topPadding      i   |
-           |  f                       g   |
-           |  t   +---------------+   h   |
-<----------|  P   |               |   t   |
- leftMargin|  a   |               |   P   |
-           |  d   |   subviews    |   a   |  height
-           |  d   |    content    |   d   |
-           |  i   |               |   d   |
-           |  n   |               |   i   |
-           |  g   +---------------+   n   |
-           |                          g   |
-           |        bottomPadding         |
-           +------------------------------+
-             |bottomMargin
-             |
-             V
-     
-     
-     如果一个布局视图中的每个子视图都离自己有一定的距离就可以通过设置布局视图的内边距来实现，而不需要为每个子视图都设置外边距。
-     
-     */
-    
-
-    //垂直线性布局直接添加子视图
-    [self createSection1:contentLayout];
-    
-    //垂直线性布局套水平线性布局
-    [self createSection2:contentLayout];
-
-    //垂直线性布局套垂直线性布局
-    [self createSection3:contentLayout];
-
-    //垂直线性布局套水平线性布局
-    [self createSection4:contentLayout];
-
-    //垂直线性布局套水平线性布局，水平线性布局利用相对边距实现左右布局
-    [self createSection5:contentLayout];
-    
-    //水平线性布局中的基线对齐
-    [self createSection6:contentLayout];
-
-    //对子视图的高度的缩放调整
-    [self createSection7:contentLayout];
-    
-    //子视图的显示和隐藏
-    [self createSection8:contentLayout];
-    
-}
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    //创建一个视图。
+    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.myMargin = 0;
+    [self.view addSubview:rootLayout];
+    
+    UIView *v1 = [UIView new];
+    v1.myCenter = CGPointMake(0, 0);
+    v1.backgroundColor = [UIColor redColor];
+    v1.widthSize.equalTo(@[rootLayout.widthSize, rootLayout.heightSize].myMinSize).multiply(0.5);
+    v1.heightSize.equalTo(v1.widthSize);
+    [rootLayout addSubview:v1];
+
+    UILabel *label = [UILabel new];
+    label.myCenterX = 0;
+    label.myBottom = MyLayoutPos.safeAreaMargin;
+    label.text = @"您好！！！";
+    label.backgroundColor = [UIColor redColor];
+    label.widthSize.equalTo(@[@(MyLayoutSize.wrap), v1.widthSize.detach(0, 0.5)].myMaxSize);
+    label.wrapContentHeight = YES;
+    [rootLayout addSubview:label];
+        
 }
 
 - (void)didReceiveMemoryWarning {

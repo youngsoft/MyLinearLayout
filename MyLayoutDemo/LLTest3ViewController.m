@@ -32,11 +32,14 @@
      3.假设某个垂直线性布局有A,B,C三个子视图，并且我们希望这三个子视图整体垂直居中。第一个方法是为设置A的myTop=0.5和设置C的myBottom=0.5;第二个方法是只需要设置布局视图的gravity的值为MyGravity_Vert_Center就可以实现了。
      4.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图整体居中。我们就只需要将布局视图的gravity值设置为MyGravity_Center就可以了。
      5.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图的宽度都和布局视图一样宽。第一个方法是分别为每个子视图的myLeft和myRight设置为0;第二个方法是只需要设置布局视图的gravity的值为MyGravity_Horz_Fill就可以了。
+     6.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图高度不变但是垂直间距填充满整个布局视图。解决的方法是将布局视图的gravity的值设置为MyGravity_Vert_Between就可以实现了。
+     7.假设某个垂直线性布局有A,B,C三个子视图，我们希望这三个子视图高度不变但是垂直间距填充满整个布局视图,并且第一个子视图的上间距和最后一个子视图的下间距是间距的一半。解决的方法是将布局视图的gravity的值设置为MyGravity_Vert_Around就可以实现了。
+
      
      通过上面的几个场景我们可以看出gravity属性的设置可以在很大程度上简化布局视图里面的子视图的布局属性的设置的，通过gravity属性的设置我们可以控制布局视图里面所有子视图的整体停靠方向和填充的尺寸。在使用gravity属性时需要明确如下几个条件：
        
     1.当使用gravity属性时意味着布局视图必须要有明确的尺寸才有意义，因为有确定的尺寸才能决定里面的子视图的停靠的方位。
-    2.布局视图的wrapContentHeight设置为YES时是和gravity上设置垂直停靠方向以及垂直填充是互斥的；而布局视图的wrapContentWidth设置为YES时是和gravity上设置水平停靠方向和水平填充是互斥的。
+    2.布局视图的wrapContentHeight设置为YES时是和gravity上设置垂直停靠方向以及垂直填充是互斥的；而布局视图的wrapContentWidth设置为YES时是和gravity上设置水平停靠方向和水平填充是互斥的。(也有特殊情况就是布局视图设置了最小尺寸限制时才有效)
     3.布局视图的gravity的属性的优先级要高于子视图的边距和尺寸设置，但是低于子视图的alignment属性的设置。
      
      */
@@ -129,6 +132,7 @@
                          NSLocalizedString(@"screen vert center",@""),
                          NSLocalizedString(@"screen horz center",@""),
                          NSLocalizedString(@"between",@""),
+                         NSLocalizedString(@"around",@""),
                          NSLocalizedString(@"horz fill",@""),
                          NSLocalizedString(@"vert fill", @"")];
     
@@ -217,6 +221,7 @@
                          NSLocalizedString(@"screen vert center",@""),
                          NSLocalizedString(@"screen horz center",@""),
                          NSLocalizedString(@"between",@""),
+                         NSLocalizedString(@"around",@""),
                          NSLocalizedString(@"horz fill",@""),
                          NSLocalizedString(@"vert fill", @"")];
     
@@ -329,10 +334,13 @@
         case 9:  //垂直间距拉伸
             vertGravity = MyGravity_Vert_Between;
             break;
-        case 10:   //水平填充
+        case 10:  //垂直间距环绕
+            vertGravity = MyGravity_Vert_Around;
+            break;
+        case 11:   //水平填充
             horzGravity  = MyGravity_Horz_Fill;
             break;
-        case 11:  //垂直填充
+        case 12:  //垂直填充
             vertGravity = MyGravity_Vert_Fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
             break;
         default:
@@ -382,10 +390,13 @@
         case 9:  //水平间距拉伸
             horzGravity = MyGravity_Horz_Between;
             break;
-        case 10:   //水平填充
+        case 10:  //水平间距环绕
+            horzGravity = MyGravity_Horz_Around;
+            break;
+        case 11:   //水平填充
             horzGravity  = MyGravity_Horz_Fill;
             break;
-        case 11:
+        case 12:
             vertGravity = MyGravity_Vert_Fill;
             break;
         default:
@@ -470,6 +481,9 @@
         case MyGravity_Vert_Between:
             vertGravityStr = @"MyGravity_Vert_Between";
             break;
+        case MyGravity_Vert_Around:
+            vertGravityStr = @"MyGravity_Vert_Around";
+            break;
         case MyGravity_Vert_Window_Center:
             vertGravityStr = @"MyGravity_Vert_Window_Center";
             break;
@@ -494,6 +508,9 @@
             break;
         case MyGravity_Horz_Between:
             horzGravityStr = @"MyGravity_Horz_Between";
+            break;
+        case MyGravity_Horz_Around:
+            horzGravityStr = @"MyGravity_Horz_Around";
             break;
         case MyGravity_Horz_Window_Center:
             horzGravityStr = @"MyGravity_Horz_Window_Center";

@@ -243,12 +243,12 @@
     if ([UIDevice currentDevice].systemVersion.floatValue < 8)
     {
      //如果您的系统要求最低支持到iOS7那么需要通过-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 来评估高度，因此请不要使用- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath 这个方法来初始化UITableviewCell，否则可能造成系统崩溃！！！
-        cell = (AllTest1TableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifiers[rand()%2]];
+        cell = (AllTest1TableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifiers[0]];
     }
     else
     {
         //如果你最低支持到iOS8那么请用这个方法来初始化一个UITableviewCell,用这个方法要记得调用registerClass来注册UITableviewCell，否则可能会返回nil
-        cell = (AllTest1TableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifiers[rand()%2] forIndexPath:indexPath];
+        cell = (AllTest1TableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifiers[0] forIndexPath:indexPath];
     }
     
         

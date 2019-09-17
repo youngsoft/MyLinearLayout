@@ -40,6 +40,7 @@
         _offsetVal = 0;
         _lBoundVal = nil;
         _uBoundVal = nil;
+        _shrink = 0.0;
     }
     
     return self;
@@ -179,6 +180,11 @@
     }
 }
 
+-(CGFloat)shrink
+{
+    return self.isActive ? _shrink : 0;
+}
+
 -(id)posVal
 {
     return self.isActive ? _posVal : nil;
@@ -208,6 +214,7 @@
     MyLayoutPos *lp = [[[self class] allocWithZone:zone] init];
     lp.view = self.view;
     lp->_active = _active;
+    lp->_shrink = _shrink;
     lp->_pos = _pos;
     lp->_posValType = _posValType;
     lp->_posVal = _posVal;
@@ -540,6 +547,7 @@
     _offsetVal = 0;
     _lBoundVal = nil;
     _uBoundVal = nil;
+    _shrink = 0;
     [self setNeedsLayout];
 }
 

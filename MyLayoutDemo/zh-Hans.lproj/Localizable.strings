@@ -107,6 +107,7 @@
 "screen horz center" ="屏幕水平居中";
 "space" = "间距调整";
 "between" = "间距拉伸";
+"around" = "间距环绕";
 "test text1"="测试文本1";
 "always alignment to left"="总是停靠在左边";
 "always alignment to top"="总是停靠在上边";

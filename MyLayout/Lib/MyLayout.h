@@ -53,6 +53,7 @@
 #import "MyRelativeLayout.h"
 #import "MyTableLayout.h"
 #import "MyFlowLayout.h"
+#import "MyFlexLayout.h"
 #import "MyFloatLayout.h"
 #import "MyPathLayout.h"
 #import "MyGridLayout.h"

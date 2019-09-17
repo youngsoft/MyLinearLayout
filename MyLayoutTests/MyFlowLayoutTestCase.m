@@ -30,6 +30,36 @@
   
 }
 
+-(void)testWrapContentSize
+{
+    //测试内容约束布局的宽度自适应和高度自适应的设置。
+    MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
+    rootLayout.wrapContentSize = YES;
+    rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
+    rootLayout.subviewHSpace = 5;
+    rootLayout.subviewVSpace = 5;
+    
+    for (int i = 0; i < 3; i++)
+    {
+        UIView *v = [UIView new];
+        v.mySize = CGSizeMake(100, 100 * (i+1));
+        [rootLayout addSubview:v];
+    }
+    
+    [rootLayout layoutIfNeeded];
+    
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,20+40+3*100 + 2*5 ,10+30+300)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+    
+    
+    rootLayout.orientation = MyOrientation_Horz;
+    
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,20+40+100, 10+30+100+200+300+2*5)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+    
+}
+
 
 -(void)testSubviewSizeDependent
 {//测试子视图尺寸依赖

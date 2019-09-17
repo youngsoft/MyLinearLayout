@@ -30,7 +30,7 @@
  @endcode
  
  2.垂直内容约束流式布局.
-    orientation为MyOrientation_Vert,arrangedCount为0,支持wrapContentHeight,不支持wrapContentWidth,支持autoArrange。
+    orientation为MyOrientation_Vert,arrangedCount为0,支持wrapContentHeight,支持wrapContentWidth,支持autoArrange。
  @code
      垂直内容约束流式布局
            =>
@@ -64,7 +64,7 @@
  @endcode
  
  4.水平内容约束流式布局
-    orientation为MyOrientation_Horz,arrangedCount为0,不支持wrapContentHeight,支持wrapContentWidth,支持autoArrange。
+    orientation为MyOrientation_Horz,arrangedCount为0,支持wrapContentHeight,支持wrapContentWidth,支持autoArrange。
  
  @code
      水平内容约束流式布局
@@ -197,7 +197,9 @@
     MyGravity_Vert_Center  垂直居中对齐
     MyGravity_Vert_Bottom  底部对齐
     MyGravity_Vert_Fill    两端对齐
+    MyGravity_Vert_Baseline 基线对齐，以每一行的第一个带有文字的视图作为基线进行对齐。
     MyGravity_Vert_Between  数量约束垂直流式布局有效，子视图会紧凑进行排列,当设置为这个属性值时，子视图的y轴的位置总是从对应列的上一行的结尾开始，而不是上一行的最高位置开始。
+    MyGravity_Vert_Around 如果行内子视图没有设置高度约束，则子视图的高度填充整行，否则按子视图的高度是高度约束决定。
   @endcode
  2. 如果是水平流式布局则表示每排内子视图的左中右对齐方式，这里的对齐基础是以每排中的最宽的子视图为基准。这个属性只支持：
     @code
@@ -206,6 +208,7 @@
      MyGravity_Horz_Right   右边对齐
      MyGravity_Horz_Fill    两端对齐
      MyGravity_Horz_Between  数量约束垂直流式布局有效，子视图会紧凑进行排列，当设置为这个属性值时，子视图的x轴的位置总是从对应行的上一列的结尾开始，而不是上一列的最宽位置开始。
+     MyGravity_Horz_Around 如果列内子视图没有设置宽度约束，则子视图的宽度填充整行，否则按子视图的宽度是宽度约束决定。
    @endcode
  @note 如果您想单独设置某个子视图在排内的对齐方式则请使用子视图的扩展属性alignment。
  
@@ -235,6 +238,4 @@
 
 
 @end
-
-
 

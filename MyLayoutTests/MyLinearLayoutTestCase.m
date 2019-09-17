@@ -314,6 +314,141 @@
 
 }
 
+-(void)testWrapGravityMinMaxShrink
+{
+    //测试自适应，停靠，最大和最小。
+    MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    testLayout.widthSize.min(200).max(300);
+    testLayout.heightSize.min(40).max(100);
+    testLayout.shrinkType = MySubviewsShrink_Average;
+    testLayout.subviewHSpace = 10;
+    testLayout.wrapContentHeight = YES;
+    testLayout.gravity = MyGravity_Center;
+    
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:@"点我" forState:UIControlStateNormal];
+    [button sizeToFit];
+    [testLayout addSubview:button];
+
+    
+    UILabel *label1 = [[UILabel alloc] init];
+    label1.wrapContentSize = YES;
+    label1.text = @"文本1";
+    label1.backgroundColor = [UIColor grayColor];
+    [testLayout addSubview:label1];
+    
+    UILabel *label2 = [[UILabel alloc] init];
+    label2.text = @"文本2";
+    label2.wrapContentSize = YES;
+    label2.backgroundColor = [UIColor cyanColor];
+    [label2 sizeToFit];
+    [testLayout addSubview:label2];
+    
+    [testLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(testLayout.frame, CGRectMake(0,0,200,40)), @"the testLayout.frame = %@",NSStringFromCGRect(testLayout.frame));
+    XCTAssertTrue(CGRectEqualToRect(button.frame, CGRectMake(28,3,37,34)), @"the button.frame = %@",NSStringFromCGRect(button.frame));
+    XCTAssertTrue(CGRectEqualToRect(label1.frame, CGRectMake(75,10,42.5,20.5)), @"the label1.frame = %@",NSStringFromCGRect(label1.frame));
+
+    //字体高度扩高。文字超长。
+    button.titleLabel.font = [UIFont systemFontOfSize:30];
+    label1.text = @"文本111111111111";
+    [button sizeToFit];
+    
+    [testLayout layoutIfNeeded];
+
+    XCTAssertTrue(CGRectEqualToRect(testLayout.frame, CGRectMake(0,0,251.5,48)), @"the testLayout.frame = %@",NSStringFromCGRect(testLayout.frame));
+    XCTAssertTrue(CGRectEqualToRect(button.frame, CGRectMake(0,0,61,48)), @"the button.frame = %@",NSStringFromCGRect(button.frame));
+    XCTAssertTrue(CGRectEqualToRect(label1.frame, CGRectMake(71,14,125.5,20.5)), @"the label1.frame = %@",NSStringFromCGRect(label1.frame));
+
+    
+//    label1.text = @"文本111111111111111111111111111";
+//    label1.mySize = CGSizeMake(400, 20.5);
+//    [testLayout layoutIfNeeded];
+//    
+//    XCTAssertTrue(CGRectEqualToRect(testLayout.frame, CGRectMake(0,0,330,48)), @"the testLayout.frame = %@",NSStringFromCGRect(testLayout.frame));
+//    XCTAssertTrue(CGRectEqualToRect(button.frame, CGRectMake(0,0,44.5,48)), @"the button.frame = %@",NSStringFromCGRect(button.frame));
+//    XCTAssertTrue(CGRectEqualToRect(label1.frame, CGRectMake(54.5,14,237,20.5)), @"the label1.frame = %@",NSStringFromCGRect(label1.frame));
+
+}
+
+-(void)testBetweenAndAround
+{
+    //测试布局视图的gravity属性的between和around特性。
+    
+    MyLinearLayout *layout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100, 100) orientation:MyOrientation_Vert];
+    layout.wrapContentSize = NO;
+    
+    //一个子视图下的垂直和水平的差异。
+    UIView *v1 = [UIView new];
+    v1.mySize = CGSizeMake(30, 30);
+    [layout addSubview:v1];
+    
+    layout.orientation = MyOrientation_Vert;
+    layout.gravity = MyGravity_Vert_Between;
+    [layout layoutIfNeeded];
+    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,30,30)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+
+
+    layout.orientation = MyOrientation_Horz;
+    layout.gravity = MyGravity_Horz_Between;
+    [layout layoutIfNeeded];
+    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,30,30)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+
+    
+    layout.orientation = MyOrientation_Vert;
+    layout.gravity = MyGravity_Vert_Around;
+    layout.wrapContentSize = NO;
+    [layout layoutIfNeeded];
+    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,35,30,30)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+    
+    
+    layout.orientation = MyOrientation_Horz;
+    layout.gravity = MyGravity_Horz_Around;
+    layout.wrapContentSize = NO;
+    [layout layoutIfNeeded];
+    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(35,0,30,30)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+    
+    
+    //两个子视图
+    UIView *v2 = [UIView new];
+    v2.mySize = CGSizeMake(30, 30);
+    [layout addSubview:v2];
+    
+    layout.orientation = MyOrientation_Vert;
+    layout.gravity = MyGravity_Vert_Between;
+    layout.wrapContentSize = NO;
+    [layout layoutIfNeeded];
+    XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,70,30,30)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+    
+    
+    layout.orientation = MyOrientation_Horz;
+    layout.gravity = MyGravity_Horz_Between;
+    layout.wrapContentSize = NO;
+    [layout layoutIfNeeded];
+    XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(70,0,30,30)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+    
+    
+    layout.orientation = MyOrientation_Vert;
+    layout.gravity = MyGravity_Vert_Around;
+    layout.wrapContentSize = NO;
+    [layout layoutIfNeeded];
+    XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,60,30,30)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+    
+    
+    layout.orientation = MyOrientation_Horz;
+    layout.gravity = MyGravity_Horz_Around;
+    layout.wrapContentSize = NO;
+    [layout layoutIfNeeded];
+    XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(60,0,30,30)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+    
+    
+    
+    
+    
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     

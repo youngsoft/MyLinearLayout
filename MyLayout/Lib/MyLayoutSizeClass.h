@@ -84,7 +84,7 @@
 
 @property(nonatomic, copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
 
-//线性布局和浮动布局子视图专用
+//线性布局和浮动布局和流式布局子视图专用
 @property(nonatomic, assign) CGFloat weight;
 
 //浮动布局子视图专用
@@ -179,7 +179,6 @@
 @property(nonatomic, assign) CGFloat subviewSize;
 @property(nonatomic, assign) CGFloat minSpace;
 @property(nonatomic, assign) CGFloat maxSpace;
-@property(nonatomic,assign) BOOL noBoundaryLimit;
 
 @end
 

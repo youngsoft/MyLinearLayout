@@ -95,17 +95,12 @@
 
 -(void)setNoBoundaryLimit:(BOOL)noBoundaryLimit
 {
-    MyFloatLayout *lsc = self.myCurrentSizeClass;
-    if (lsc.noBoundaryLimit != noBoundaryLimit)
-    {
-        lsc.noBoundaryLimit = noBoundaryLimit;
-        [self setNeedsLayout];
-    }
+    NSLog(@"属性已经过期！请直接设置wrapContentWidth或者wrapContentHeight即可");
 }
 
 -(BOOL)noBoundaryLimit
 {
-    return self.myCurrentSizeClass.noBoundaryLimit;
+    return NO;
 }
 
 
@@ -458,12 +453,8 @@
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
  //   CGFloat paddingVert = paddingTop + paddingBottom;
     
-    BOOL hasBoundaryLimit = YES;
-    if (lsc.wrapContentWidth && lsc.noBoundaryLimit)
-        hasBoundaryLimit = NO;
-    
     //如果没有边界限制我们将高度设置为最大。。
-    if (!hasBoundaryLimit)
+    if (lsc.wrapContentWidth)
         selfSize.width = CGFLOAT_MAX;
     
     
@@ -474,31 +465,6 @@
     
     //设置子视图的宽度和高度。
     [self myCalcFloatLayoutSubviewsSize:sbs lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing subviewSize:subviewSize isWidth:YES];
-    
-    //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-    if (lsc.wrapContentWidth && hasBoundaryLimit)
-    {
-        CGFloat maxContentWidth = selfSize.width - paddingHorz;
-        for (UIView *sbv in sbs)
-        {
-            MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-           
-            CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
-            CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
-            CGFloat sbvWidth = sbvmyFrame.width;
-            
-            if (_myCGFloatGreat(leadingSpace + sbvWidth + trailingSpace, maxContentWidth) &&
-                (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)  &&
-                sbvsc.weight == 0)
-            {
-                maxContentWidth = leadingSpace + sbvWidth + trailingSpace;
-            }
-        }
-        
-        selfSize.width = paddingHorz + maxContentWidth;
-    }
-    
     
     //左边候选区域数组，保存的是CGRect值。
     NSMutableArray *leadingCandidateRects = [NSMutableArray new];
@@ -543,8 +509,8 @@
         if (sbvsc.isReverseFloat)
         {
 #ifdef DEBUG
-            //异常崩溃：当布局视图设置了noBoundaryLimit为YES时子视图不能设置逆向浮动
-            NSCAssert(hasBoundaryLimit, @"Constraint exception！！, vertical float layout:%@ can not set noBoundaryLimit to YES when the subview:%@ set reverseFloat to YES.",self, sbv);
+            //异常崩溃：当布局视图设置了wrapContentWidth为YES时子视图不能设置逆向浮动
+             NSCAssert(!lsc.wrapContentWidth, @"Constraint exception！！, vertical float layout:%@ can not set wrapContentWidth to YES when the subview:%@ set reverseFloat to YES.",self, sbv);
 #endif
             
             CGPoint nextPoint = {selfSize.width - paddingTrailing, leadingLastYOffset};
@@ -733,10 +699,9 @@
             if (sbvsc.weight != 0)
             {
 #ifdef DEBUG
-                //异常崩溃：当布局视图设置了noBoundaryLimit为YES时子视图不能设置weight大于0
-                NSCAssert(hasBoundaryLimit, @"Constraint exception！！, vertical float layout:%@ can not set noBoundaryLimit to YES when the subview:%@ set weight big than zero.",self, sbv);
+                //异常崩溃：当布局视图设置了wrapContentWidth为YES时子视图不能设置weight大于0
+                NSCAssert(!lsc.wrapContentWidth, @"Constraint exception！！, vertical float layout:%@ can not set wrapContentWidth to YES when the subview:%@ set weight big than zero.",self, sbv);
 #endif
-                
                 rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:(trailingCandidateXBoundary - nextPoint.x + sbvsc.widthSizeInner.addVal) * sbvsc.weight - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
                 
                 //特殊处理高度等于宽度，并且高度依赖宽度的情况。
@@ -852,12 +817,11 @@
         maxWidth -= horzSpace;
     }
     
-    maxHeight += paddingBottom;
     maxWidth += paddingTrailing;
-    
-    if (!hasBoundaryLimit)
+    if (lsc.wrapContentWidth)
         selfSize.width = maxWidth;
     
+    maxHeight += paddingBottom;
     if (lsc.wrapContentHeight)
         selfSize.height = maxHeight;
     else
@@ -882,7 +846,6 @@
                 sbv.myFrame.top += addYPos;
             }
         }
-        
     }
     
     
@@ -917,12 +880,22 @@
             //设置行内的对齐
             if (lineHasAlignment)
             {
+                CGFloat baselinePos = CGFLOAT_MAX;                
                 for (NSInteger i = lineFirstIndex; i <= idxnum.integerValue; i++)
                 {
                     UIView *sbv = sbs[i];
                     MyFrame *sbvmyFrame = sbv.myFrame;
                     UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    switch (sbvsc.alignment & MyGravity_Horz_Mask) {
+                    MyGravity sbvVertAlignment = sbvsc.alignment & MyGravity_Horz_Mask;
+                    UIFont *sbvFont = nil;
+                    if (sbvVertAlignment == MyGravity_Vert_Baseline)
+                    {
+                        sbvFont = [self myGetSubviewFont:sbv];
+                        if (sbvFont == nil)
+                            sbvVertAlignment = MyGravity_Vert_Top;
+                    }
+                    
+                    switch (sbvVertAlignment) {
                         case MyGravity_Vert_Center:
                             sbvmyFrame.top += (lineMaxHeight - sbvmyFrame.height) / 2.0;
                             break;
@@ -931,6 +904,20 @@
                             break;
                         case MyGravity_Vert_Fill:
                             sbvmyFrame.height = lineMaxHeight;
+                            break;
+                        case MyGravity_Vert_Stretch:
+                        {
+                            if (!sbvsc.wrapContentHeight && sbvsc.heightSizeInner.dimeVal == nil)
+                                sbvmyFrame.height = lineMaxHeight;
+                        }
+                            break;
+                        case MyGravity_Vert_Baseline:
+                        {
+                            if (baselinePos == CGFLOAT_MAX)
+                                baselinePos = sbvmyFrame.top + (sbvmyFrame.height - sbvFont.lineHeight) / 2.0 + sbvFont.ascender;
+                            else
+                                sbvmyFrame.top = baselinePos - sbvFont.ascender - (sbvmyFrame.height - sbvFont.lineHeight) / 2;
+                        }
                             break;
                         default:
                             break;
@@ -957,12 +944,8 @@
  //   CGFloat paddingHorz = paddingLeading + paddingTrailing;
     CGFloat paddingVert = paddingTop + paddingBottom;
     
-    BOOL hasBoundaryLimit = YES;
-    if (lsc.wrapContentHeight && lsc.noBoundaryLimit)
-        hasBoundaryLimit = NO;
-    
     //如果没有边界限制我们将高度设置为最大。。
-    if (!hasBoundaryLimit)
+    if (lsc.wrapContentHeight)
         selfSize.height = CGFLOAT_MAX;
     
     //支持浮动垂直间距。
@@ -973,38 +956,12 @@
     //设置子视图的宽度和高度。
     [self myCalcFloatLayoutSubviewsSize:sbs lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing subviewSize:subviewSize isWidth:NO];
     
-    //遍历所有的子视图，查看是否有子视图的宽度会比视图自身要宽，如果有且有包裹属性则扩充自身的宽度
-    if (lsc.wrapContentHeight && hasBoundaryLimit)
-    {
-        CGFloat maxContentHeight = selfSize.height - paddingVert;
-        for (UIView *sbv in sbs)
-        {
-            MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-            
-            CGFloat topSpace = sbvsc.topPosInner.absVal;
-            CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
-            CGFloat sbvHeight = sbvmyFrame.height;
-            
-            if (_myCGFloatGreat(topSpace + sbvHeight + bottomSpace, maxContentHeight) &&
-                (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
-                sbvsc.weight == 0)
-            {
-                maxContentHeight = topSpace + sbvHeight + bottomSpace;
-            }
-        }
-        
-        selfSize.height = paddingVert + maxContentHeight;
-    }
-    
-  
-    
     //上边候选区域数组，保存的是CGRect值。
     NSMutableArray *topCandidateRects = [NSMutableArray new];
     //为了计算方便总是把最上边的个虚拟区域作为一个候选区域
     [topCandidateRects addObject:[NSValue valueWithCGRect:CGRectMake(paddingLeading, paddingTop,CGFLOAT_MAX,0)]];
     
-    //右边候选区域数组，保存的是CGRect值。
+    //下边候选区域数组，保存的是CGRect值。
     NSMutableArray *bottomCandidateRects = [NSMutableArray new];
     //为了计算方便总是把最下边的个虚拟区域作为一个候选区域,如果没有边界限制则
     [bottomCandidateRects addObject:[NSValue valueWithCGRect:CGRectMake(paddingLeading, selfSize.height - paddingBottom, CGFLOAT_MAX, 0)]];
@@ -1041,8 +998,8 @@
         if (sbvsc.reverseFloat)
         {
 #ifdef DEBUG
-            //异常崩溃：当布局视图设置了noBoundaryLimit为YES时子视图不能设置逆向浮动
-            NSCAssert(hasBoundaryLimit, @"Constraint exception！！, horizontal float layout:%@ can not set noBoundaryLimit to YES when the subview:%@ set reverseFloat to YES.",self, sbv);
+            //异常崩溃：当布局视图设置了wrapContentHeight为YES时子视图不能设置逆向浮动
+            NSCAssert(!lsc.wrapContentHeight, @"Constraint exception！！, horizontal float layout:%@ can not set wrapContentHeight to YES when the subview:%@ set reverseFloat to YES.",self, sbv);
 #endif
             
             CGPoint nextPoint = {topLastXOffset, selfSize.height - paddingBottom};
@@ -1121,9 +1078,7 @@
                         {
                             sbvl.topBorderline = self.intelligentBorderline;
                         }
-                        
                     }
-                    
                 }
             }
             
@@ -1215,8 +1170,8 @@
             {
                 
 #ifdef DEBUG
-                //异常崩溃：当布局视图设置了noBoundaryLimit为YES时子视图不能设置weight大于0
-                NSCAssert(hasBoundaryLimit, @"Constraint exception！！, horizontal float layout:%@ can not set noBoundaryLimit to YES when the subview:%@ set weight big than zero.",self, sbv);
+                //异常崩溃：当布局视图设置了wrapContentHeight为YES时子视图不能设置weight大于0
+                NSCAssert(!lsc.wrapContentHeight, @"Constraint exception！！, horizontal float layout:%@ can not set wrapContentHeight to YES when the subview:%@ set weight big than zero.",self, sbv);
 #endif
                 
                 rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:(bottomCandidateYBoundary - nextPoint.y + sbvsc.heightSizeInner.addVal) * sbvsc.weight - topSpace - bottomSpace sbvSize:rect.size selfLayoutSize:selfSize];
@@ -1254,7 +1209,6 @@
                             sbvl.bottomBorderline = self.intelligentBorderline;
                         }
                     }
-                    
                 }
             }
             
@@ -1291,8 +1245,6 @@
                     cRect = CGRectUnion(cRect, candidateRect);
                     cRect.size.height += cMaxY - candidateMinY; //要加上重叠部分来增加高度，否则会出现高度不正确的问题。
                 }
-
-                
             }
             
             //记录每一列的最大子视图位置的索引值。
@@ -1325,12 +1277,11 @@
         maxHeight -= vertSpace;
     }
     
-    maxWidth += paddingTrailing;
-    
     maxHeight += paddingBottom;
-    if (!hasBoundaryLimit)
+    if (lsc.wrapContentHeight)
         selfSize.height = maxHeight;
-    
+
+    maxWidth += paddingTrailing;
     if (lsc.wrapContentWidth)
         selfSize.width = maxWidth;
     else
@@ -1404,6 +1355,12 @@
                             break;
                         case MyGravity_Horz_Fill:
                             sbvmyFrame.width = lineMaxWidth;
+                            break;
+                        case MyGravity_Horz_Stretch:
+                        {
+                            if (!sbvsc.wrapContentWidth && sbvsc.widthSizeInner == nil)
+                                sbvmyFrame.width = lineMaxWidth;
+                        }
                             break;
                         default:
                             break;

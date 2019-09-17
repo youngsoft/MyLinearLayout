@@ -143,6 +143,10 @@
  A的最终topPos = 10 - 40 *(10/30) = -3
  D的最终topPos = 20 - 40 *(20/30) = -7
  @endcode
+ 
+ @note
+   你可以将子视图的尺寸和位置的shrink属性设置为非0，这样这些子视图的尺寸的和位置的压缩策略将优先于这个属性的设置。一旦有子视图设置压缩策略则这个属性设置将失效。
+ 
  */
 @property(nonatomic, assign) MySubviewsShrinkType shrinkType;
 

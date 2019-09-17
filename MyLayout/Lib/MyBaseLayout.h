@@ -314,12 +314,12 @@
 
 
 /**
- *视图的宽度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,nil这四种值
+ *视图的宽度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,MyLayoutExtremeSize,UIView,nil这六种值
  */
 @property(nonatomic, readonly)  MyLayoutSize *widthSize;
 
 /**
- *视图的高度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,nil这四种值
+ *视图的高度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,MyLayoutExtremeSize,UIView,nil这六种值
  */
 @property(nonatomic, readonly)  MyLayoutSize *heightSize;
 
@@ -452,7 +452,6 @@
 @property(nonatomic, assign) IBInspectable CGFloat weight;
 
 
-
 /**
  设置视图不受布局父视图的布局约束控制和不再参与视图的布局，所有设置的其他扩展属性都将失效而必须用frame来设置视图的位置和尺寸，默认值是NO。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
 
@@ -559,9 +558,9 @@
  
  2. 在垂直线性布局中只支持左、中、右、水平拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
  
- 3. 在水平线性布局中只支持上、中、下、垂直拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
+ 3. 在水平线性布局中只支持上、中、下、垂直拉伸、基线对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
  
- 4. 在垂直流式布局和垂直浮动布局中用来设置一行内的上、中、下、垂直拉伸对齐。(如果流式父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
+ 4. 在垂直流式布局和垂直浮动布局中用来设置一行内的上、中、下、垂直拉伸、基线对齐。(如果流式父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
  
  5. 在水平流式布局和水平浮动布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果流式父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
  */
@@ -623,7 +622,7 @@
    -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
      的方法，要求派生类去重载这个方法，这样不同的派生类就可以实现不同的应用场景，这就是布局视图的核心实现机制。
  
- MyLayout布局库根据实际中常见的场景实现了7种不同的布局视图派生类他们分别是：线性布局、表格布局、相对布局、框架布局、流式布局、浮动布局、路径布局。
+ MyLayout布局库根据实际中常见的场景实现了8种不同的布局视图派生类他们分别是：线性布局、表格布局、相对布局、框架布局、流式布局、浮动布局、路径布局、栅格布局。
  */
 @interface MyBaseLayout : UIView
 
@@ -746,7 +745,7 @@
  布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
  
  @note
- 只有框架布局、线性布局、表格布局、流式布局、浮动布局支持gravity属性，相对布局和路径布局不支持。
+ 只有框架布局、线性布局、表格布局、流式布局、浮动布局、栅格布局支持gravity属性，相对布局和路径布局不支持。
  
  1. MyGravity_Vert_Top,MyGravity_Vert_Center,MyGravity_Vert_Bottom 表示整体垂直居上，居中，居下 (支持：框架布局,线性布局,表格布局,流式布局,垂直浮动布局)
  
@@ -756,10 +755,14 @@
  
  4. MyGravity_Horz_Between 表示每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
  
- 5. MyGravity_Vert_Fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
+ 5. MyGravity_Vert_Around 表示每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图，首尾子视图和父视图的间距是子视图兄弟之间的一半。 (支持：垂直线性布局,垂直表格布局，流式布局)
  
- 6. MyGravity_Horz_Fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
- 7. MyGravity_Vert_Baseline 表示布局里面的子视图都基线对齐，目前只支持水平线性布局。
+ 6. MyGravity_Horz_Around 表示每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图，首尾子视图和父视图的间距是子视图兄弟之间的一半。 (支持：水平线性布局,水平表格布局，流式布局)
+ 
+ 7. MyGravity_Vert_Fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
+ 
+ 8. MyGravity_Horz_Fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
+ 9. MyGravity_Vert_Baseline 表示布局里面的子视图都基线对齐，目前只支持水平线性布局。
  */
 @property(nonatomic, assign) IBInspectable MyGravity gravity;
 
@@ -1018,6 +1021,51 @@
  */
 -(CGRect)subview:(UIView*)subview estimatedRectInLayoutSize:(CGSize)size;
 
+
+@end
+
+
+
+//布局视图拖动器类，用来实现布局内的视图的拖动封装。用于实现布局子视图的拖放处理。
+//布局视图的拖动器类，只支持那些按顺序添加的布局视图，不支持相对布局、框架布局、栅格布局、路径布局。
+//一般情况下我们要实现布局内子视图的：
+//  1.UIControlEventTouchDown 事件来处理拖动开始
+//  2.UIControlEventTouchDragInside UIControlEventTouchDragOutside 事件来处理拖动进行中
+//  3. UIControlEventTouchUpInside UIControlEventTouchCancel 事件来处理拖动结束。
+
+@interface MyLayoutDragger:NSObject
+
+//子视图拖动时，拖动区域当前所归属的子视图位置索引。
+@property(nonatomic, assign, readonly) NSUInteger currentIndex;
+//子视图拖动时，拖动视图的老的位置索引。
+@property(nonatomic, assign, readonly) NSUInteger oldIndex;
+
+//当前是否正在拖动中。
+@property(nonatomic, assign, readonly) BOOL hasDragging;
+
+//设置拖动时不会调整的子视图列表。也就是说数组中指定的子视图在拖动时不会被移动而是总是固定在原有的位置。
+@property(nonatomic,strong) NSArray<UIView*> *exclusiveViews;
+
+//设置拖动时位置调整的动画时长，默认是0.2秒，设置为0时拖动不产生动画效果。
+@property(nonatomic, assign) NSTimeInterval animateDuration;
+
+//当拖动的视图和现有视图重叠时是否支持悬停功能，默认为NO。当开启开关后，并且oldIndex和currentIndex相等时则处于悬停状态。开启悬停功能的目的是为了支持一些替换或者更新的能力。
+@property(nonatomic, assign) BOOL canHover;
+
+//开始拖动,请在子视图view的拖动开始事件处调用这个方法，其中view指定要开始拖动的视图。
+-(void)dragView:(UIView *)view withEvent:(UIEvent *)event;
+//拖动中,请在子视图view的拖动过程事件中调用这个方法，其中的view指定拖动中的视图。
+-(void)dragginView:(UIView *)view withEvent:(UIEvent *)event;
+//结束拖动，请在子视图view的结束拖动事件中调用这个方法，其中的view指定要结束拖动的视图。
+-(void)dropView:(UIView *)view withEvent:(UIEvent *)event;
+
+@end
+
+
+@interface MyBaseLayout(MyLayoutDragger)
+
+//创建一个布局视图拖动器。要求拖动的视图必须是布局视图中的子视图。
+-(MyLayoutDragger*)createLayoutDragger;
 
 @end
 

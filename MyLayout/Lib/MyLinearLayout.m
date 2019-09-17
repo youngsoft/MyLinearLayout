@@ -240,7 +240,6 @@
         {
             //只要同时设置了左右边距或者设置了宽度或者设置了子视图宽度填充则应该把wrapContentWidth置为NO
             if ((sbvsc.widthSizeInner.dimeVal != nil) ||
-                (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil) ||
                 (gravity == MyGravity_Horz_Fill)
                 )
             {
@@ -266,7 +265,6 @@
         {
             //只要同时设置了高度或者上下边距或者父视图的填充属性则应该把wrapContentHeight置为NO
             if ((sbvsc.heightSizeInner.dimeVal != nil) ||
-                (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil) ||
                 (gravity == MyGravity_Vert_Fill)
                 )
             {
@@ -369,6 +367,7 @@
 
     CGFloat fixedHeight = 0;   //计算固定部分的高度
     CGFloat totalWeight = 0;    //剩余部分的总比重
+    CGFloat totalShrink = 0;    //总的压缩比重
     CGFloat addSpace = 0;      //用于压缩时的间距压缩增量。
     CGFloat maxSelfWidth = 0;
    
@@ -416,9 +415,11 @@
         
         
         
+        
+        
+        
         if ((tempSelfWidth > maxSelfWidth) &&
-            (lsc.widthSizeInner == nil || (sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner))  &&
-            (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
+            ((sbvsc.widthSizeInner.dimeVal != nil && sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) || sbvsc.wrapContentWidth))
         {
             maxSelfWidth = tempSelfWidth;
         }
@@ -453,8 +454,9 @@
                 fixedSpaceCount += 1;
                 fixedSpaceHeight += sbvsc.topPosInner.absVal;
             }
-
         }
+        
+        totalShrink += sbvsc.topPosInner.shrink;
         
         pos += sbvsc.topPosInner.absVal;
         rect.origin.y = pos;
@@ -467,6 +469,7 @@
         else
         {
             fixedHeight += rect.size.height;
+            totalShrink += sbvsc.heightSizeInner.shrink;
             
             //如果最小高度不为自身并且高度不是包裹的则可以进行缩小。
             if (sbvsc.heightSizeInner.lBoundValInner.dimeSelfVal == nil)
@@ -492,8 +495,8 @@
                 fixedSpaceCount += 1;
                 fixedSpaceHeight += sbvsc.bottomPosInner.absVal;
             }
-
         }
+        totalShrink += sbvsc.bottomPosInner.shrink;
         
         pos += sbvsc.bottomPosInner.absVal;
         
@@ -510,7 +513,7 @@
             }
         }
         
-        if (vertGravity == MyGravity_Vert_Fill)
+        if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
         {
             BOOL canAddToNoWrapSbs = YES;
             
@@ -529,6 +532,10 @@
             if (sbvsc.heightSizeInner.lBoundValInner.dimeSelfVal != nil)
                 canAddToNoWrapSbs = NO;
             
+            //对于尺寸拉升来说，只要设置了高度约束就都不拉升。
+            if (vertGravity == MyGravity_Vert_Stretch && sbvsc.heightSizeInner.dimeVal != nil)
+                canAddToNoWrapSbs = NO;
+            
             if (canAddToNoWrapSbs)
                 [noWrapsbsSet addObject:sbv];
         }
@@ -536,19 +543,30 @@
         sbvmyFrame.frame = rect;
     }
     
-    //在包裹高度且总体比重不为0时则，则需要还原最小的高度，这样就不会使得高度在横竖屏或者多次计算后越来高。
-    if (lsc.wrapContentHeight && totalWeight != 0)
+    if (lsc.wrapContentHeight)
     {
-        CGFloat tempSelfHeight = paddingVert;
-        if (sbs.count > 1)
-            tempSelfHeight += (sbs.count - 1) * subviewSpace;
+        if (totalWeight != 0)
+        { //在包裹高度且总体比重不为0时则，则需要还原最小的高度，这样就不会使得高度在横竖屏或者多次计算后越来高。
+            CGFloat tempSelfHeight = paddingVert;
+            if (sbs.count > 1)
+                tempSelfHeight += (sbs.count - 1) * subviewSpace;
+            
+            selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:tempSelfHeight sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+        }
+        else
+        {
+            selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:fixedHeight + paddingVert sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+        }
         
-        selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:tempSelfHeight sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+        //如果是高度自适应则不需要压缩。
+        totalShrink = 0.0;
         
     }
     
     if (lsc.wrapContentWidth)
-        selfSize.width = maxSelfWidth + paddingLeading + paddingTrailing;
+    {
+        selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:maxSelfWidth + paddingLeading + paddingTrailing sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    }
 
     //这里需要特殊处理当子视图的尺寸高度大于布局视图的高度的情况。
     
@@ -558,13 +576,18 @@
     //取出shrinkType中的模式和内容类型：
     MySubviewsShrinkType sstMode = lsc.shrinkType & 0x0F; //压缩的模式
     MySubviewsShrinkType sstContent = lsc.shrinkType & 0xF0; //压缩内容
+    
+    //如果子视图设置了压缩比重则ssMode不起作用
+    if (totalShrink != 0.0)
+        sstMode = MySubviewsShrink_None;
+    
     if (_myCGFloatLessOrEqual(floatingHeight, 0))
     {
         if (sstMode != MySubviewsShrink_None)
         {
             if (sstContent == MySubviewsShrink_Size)
             {//压缩尺寸
-                if (fixedSizeSbs.count > 0 && totalWeight != 0 && floatingHeight < 0 && selfSize.height > 0)
+                if (fixedSizeSbs.count > 0 && floatingHeight < 0 && selfSize.height > 0)
                 {
                     if (sstMode == MySubviewsShrink_Average)
                     {//均分。
@@ -608,12 +631,23 @@
 
         }
 
-        
-        floatingHeight = 0;
+        if (totalShrink == 0.0)
+            floatingHeight = 0;
+    }
+    else
+    {
+        //如果不需要压缩则压缩比设置为0
+        totalShrink = 0.0;
+    }
+    
+    //如果是总的压缩比重不为0则认为固定高度和布局视图高度保持一致。
+    if (totalShrink != 0.0)
+    {
+        fixedHeight = selfSize.height - paddingVert;
     }
     
     //如果有浮动尺寸或者有压缩模式
-    if (totalWeight != 0 || (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingHeight, 0)) || vertGravity != MyGravity_None || lsc.wrapContentWidth)
+    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingHeight, 0)) || vertGravity != MyGravity_None || lsc.wrapContentWidth)
     {
         maxSelfWidth = 0;
         CGFloat between = 0; //间距扩充
@@ -643,7 +677,20 @@
             if (sbs.count > 1)
                 between = (selfSize.height - fixedHeight - paddingVert) / (sbs.count - 1);
         }
-        else if (vertGravity == MyGravity_Vert_Fill)
+        else if (vertGravity == MyGravity_Vert_Around)
+        {
+            //around停靠中如果子视图数量大于1则间距均分，并且首尾子视图和父视图的间距为均分的一半，如果子视图数量为1则一个子视图垂直居中。
+            if (sbs.count > 1)
+            {
+                between = (selfSize.height - fixedHeight - paddingVert) / sbs.count;
+                pos = paddingTop + between / 2;
+            }
+            else
+            {
+                pos = (selfSize.height - fixedHeight - paddingVert)/2.0 + paddingTop;
+            }
+        }
+        else if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
         {
             pos = paddingTop;
             if (noWrapsbsSet.count > 0)
@@ -670,8 +717,6 @@
             {
                 CGFloat topSpaceWeight = topSpace;
                 topSpace = _myCGFloatRound((topSpaceWeight / totalWeight) * floatingHeight);
-                floatingHeight -= topSpace;
-                totalWeight -= topSpaceWeight;
                 if (_myCGFloatLessOrEqual(topSpace, 0))
                     topSpace = 0;
             }
@@ -686,18 +731,21 @@
                         pos += weightShrinkSpaceTotalHeight * (topSpace + sbvsc.topPosInner.offsetVal) / fixedSpaceHeight;
                     }
                 }
-                
             }
             
-            pos += [self myValidMargin:sbvsc.topPosInner sbv:sbv calcPos:topSpace + sbvsc.topPosInner.offsetVal selfLayoutSize:selfSize];
+            topSpace += sbvsc.topPosInner.offsetVal;
+            if (totalShrink != 0.0 && sbvsc.topPosInner.shrink != 0.0)
+            {
+                topSpace += (sbvsc.topPosInner.shrink / totalShrink) * floatingHeight;
+            }
+            
+            pos += [self myValidMargin:sbvsc.topPosInner sbv:sbv calcPos:topSpace selfLayoutSize:selfSize];
             rect.origin.y = pos;
             
             //分别处理相对高度和绝对高度
             if (weight != 0)
             {
                 CGFloat h = _myCGFloatRound((weight / totalWeight) * floatingHeight);
-                floatingHeight -= h;
-                totalWeight -= weight;
                 if (_myCGFloatLessOrEqual(h, 0))
                     h = 0;
                 
@@ -708,6 +756,12 @@
             if (fill != 0 && [noWrapsbsSet containsObject:sbv])
                 rect.size.height += fill;
             
+            if (totalShrink != 0.0 && sbvsc.heightSizeInner.shrink != 0.0)
+            {
+                rect.size.height += (sbvsc.heightSizeInner.shrink / totalShrink) * floatingHeight;
+                if (rect.size.height < 0.0)
+                    rect.size.height = 0.0;
+            }
             
             if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
             {//特殊处理宽度等于高度的情况
@@ -725,8 +779,7 @@
                                                                        lsc:lsc];
             
             if ((tempSelfWidth > maxSelfWidth) &&
-                (lsc.widthSizeInner == nil || (sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner))  &&
-                (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
+                ((sbvsc.widthSizeInner.dimeVal != nil && sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) || sbvsc.wrapContentWidth))
             {
                 maxSelfWidth = tempSelfWidth;
             }
@@ -738,11 +791,8 @@
             {
                 CGFloat bottomSpaceWeight = bottomSpace;
                 bottomSpace = _myCGFloatRound((bottomSpaceWeight / totalWeight) * floatingHeight);
-                floatingHeight -= bottomSpace;
-                totalWeight -= bottomSpaceWeight;
                 if ( _myCGFloatLessOrEqual(bottomSpace, 0))
                     bottomSpace = 0;
-                
             }
             else
             {
@@ -755,10 +805,15 @@
                         pos += weightShrinkSpaceTotalHeight * (bottomSpace + sbvsc.bottomPosInner.offsetVal) / fixedSpaceHeight;
                     }
                 }
-                
             }
             
-            pos += [self myValidMargin:sbvsc.bottomPosInner sbv:sbv calcPos:bottomSpace + sbvsc.bottomPosInner.offsetVal selfLayoutSize:selfSize];
+            bottomSpace += sbvsc.bottomPosInner.offsetVal;
+            if (totalShrink != 0.0 && sbvsc.bottomPosInner.shrink != 0.0)
+            {
+                bottomSpace += (sbvsc.bottomPosInner.shrink / totalShrink) * floatingHeight;
+            }
+            
+            pos += [self myValidMargin:sbvsc.bottomPosInner sbv:sbv calcPos:bottomSpace selfLayoutSize:selfSize];
             
             //添加共有的子视图间距
             if (sbv != sbs.lastObject)
@@ -804,8 +859,10 @@
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
+    
     CGFloat fixedWidth = 0;   //计算固定部分的宽度
     CGFloat totalWeight = 0;    //剩余部分的总比重
+    CGFloat totalShrink = 0;    //总的压缩比重
     CGFloat addSpace = 0;      //用于压缩时的间距压缩增量。
     
     //宽度不是包裹的子视图集合
@@ -857,8 +914,7 @@
                                     lsc:lsc];
         
         if ((tempSelfHeight > maxSelfHeight) &&
-            (lsc.heightSizeInner == nil || (sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner))  &&
-            (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil))
+            ((sbvsc.heightSizeInner.dimeVal != nil && sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) || sbvsc.wrapContentHeight))
         {
             maxSelfHeight = tempSelfHeight;
         }
@@ -898,8 +954,9 @@
                 fixedSpaceCount += 1;
                 fixedSpaceWidth += sbvsc.leadingPosInner.absVal;
             }
-            
         }
+        
+        totalShrink += sbvsc.leadingPosInner.shrink;
         
         pos += sbvsc.leadingPosInner.absVal;
         rect.origin.x = pos;
@@ -912,6 +969,7 @@
         else
         {
             fixedWidth += rect.size.width;
+            totalShrink += sbvsc.widthSizeInner.shrink;
             
             //如果最小宽度不为自身并且宽度不是包裹的则可以进行缩小。
             if (sbvsc.widthSizeInner.lBoundValInner.dimeSelfVal == nil)
@@ -942,8 +1000,8 @@
                 fixedSpaceCount += 1;
                 fixedSpaceWidth += sbvsc.trailingPosInner.absVal;
             }
-            
         }
+        totalShrink += sbvsc.trailingPosInner.shrink;
         
         pos += sbvsc.trailingPosInner.absVal;
         
@@ -960,7 +1018,7 @@
             }
         }
         
-        if (horzGravity == MyGravity_Horz_Fill)
+        if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
         {
             BOOL canAddToNoWrapSbs = YES;
             
@@ -979,6 +1037,9 @@
             if (sbvsc.widthSizeInner.lBoundValInner.dimeSelfVal != nil)
                 canAddToNoWrapSbs = NO;
             
+            if (horzGravity == MyGravity_Horz_Stretch && sbvsc.widthSizeInner.dimeVal != nil)
+                canAddToNoWrapSbs = NO;
+            
             if (canAddToNoWrapSbs)
                 [noWrapsbsSet addObject:sbv];
         }
@@ -987,21 +1048,32 @@
     }
     
     //在包裹宽度且总体比重不为0时则，则需要还原最小的宽度，这样就不会使得宽度在横竖屏或者多次计算后越来越宽。
-    if (lsc.wrapContentWidth && totalWeight != 0)
+    if (lsc.wrapContentWidth)
     {
-        CGFloat tempSelfWidth = paddingHorz;
-        if (sbs.count > 1)
-            tempSelfWidth += (sbs.count - 1) * subviewSpace;
+        if (totalWeight != 0)
+        {
+            CGFloat tempSelfWidth = paddingHorz;
+            if (sbs.count > 1)
+                tempSelfWidth += (sbs.count - 1) * subviewSpace;
+            
+            selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:tempSelfWidth sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+        }
+        else
+        {
+            selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:fixedWidth + paddingHorz sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+        }
         
-        selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:tempSelfWidth sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+        //如果是宽度自适应则不需要压缩。
+        totalShrink = 0.0;
         
     }
     
     if (lsc.wrapContentHeight)
-        selfSize.height = maxSelfHeight + paddingTop + paddingBottom;
+    {
+        selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:maxSelfHeight + paddingTop + paddingBottom sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    }
     
-    //这里需要特殊处理当子视图的尺寸宽度大于布局视图的宽度的情况。
-    
+    //这里需要特殊处理当子视图的尺寸宽度大于布局视图的宽度的情况.
     //剩余的可浮动的宽度，那些weight不为0的从这个宽度来进行分发
     BOOL isWeightShrinkSpace = NO;   //是否按比重缩小间距。。。
     CGFloat weightShrinkSpaceTotalWidth = 0;
@@ -1009,6 +1081,11 @@
     //取出shrinkType中的模式和内容类型：
     MySubviewsShrinkType sstMode = lsc.shrinkType & 0x0F; //压缩的模式
     MySubviewsShrinkType sstContent = lsc.shrinkType & 0xF0; //压缩内容
+    
+    //如果子视图设置了压缩比重则ssMode不起作用
+    if (totalShrink != 0.0)
+        sstMode = MySubviewsShrink_None;
+    
     if (_myCGFloatLessOrEqual(floatingWidth, 0))
     {
         //如果压缩方式为自动，但是浮动宽度子视图数量不为2则压缩类型无效。
@@ -1019,7 +1096,7 @@
         {
             if (sstContent == MySubviewsShrink_Size)
             {
-                if (fixedSizeSbs.count > 0 && totalWeight != 0 && floatingWidth < 0 && selfSize.width > 0)
+                if (fixedSizeSbs.count > 0 && floatingWidth < 0 && selfSize.width > 0)
                 {
                     //均分。
                     if (sstMode == MySubviewsShrink_Average)
@@ -1095,22 +1172,30 @@
                         weightShrinkSpaceTotalWidth = floatingWidth;
                     }
                 }
-                
             }
             else
             {
                 ;
             }
-            
         }
-        
-        
-        
-        floatingWidth = 0;
+    
+        if (totalShrink == 0.0)
+            floatingWidth = 0;
+    }
+    else
+    {
+        //如果不需要压缩则压缩比设置为0
+        totalShrink = 0.0;
     }
     
+    //如果是总的压缩比重不为0则认为固定宽度和布局视图宽度保持一致。
+    if (totalShrink != 0.0)
+    {
+        fixedWidth = selfSize.width - paddingHorz;
+    }
+
     //如果有浮动尺寸或者有压缩模式
-    if (totalWeight != 0 || (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingWidth, 0)) || horzGravity != MyGravity_None || lsc.wrapContentHeight)
+    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingWidth, 0)) || horzGravity != MyGravity_None || lsc.wrapContentHeight)
     {
         maxSelfHeight = 0;
         CGFloat between = 0; //间距扩充
@@ -1127,8 +1212,6 @@
                 
                 CGPoint pt = CGPointMake(pos, 0);
                 pos = [self.window convertPoint:pt toView:self].x;
-                
-                
             }
         }
         else if (horzGravity == MyGravity_Horz_Trailing)
@@ -1142,7 +1225,20 @@
             if (sbs.count > 1)
                 between = (selfSize.width - fixedWidth - paddingHorz) / (sbs.count - 1);
         }
-        else if (horzGravity == MyGravity_Horz_Fill)
+        else if (horzGravity == MyGravity_Horz_Around)
+        {
+            //around停靠中如果子视图数量大于1则间距均分，并且首尾子视图和父视图的间距为均分的一半，如果子视图数量为1则一个子视图垂直居中。
+            if (sbs.count > 1)
+            {
+                between = (selfSize.width - fixedWidth - paddingHorz) / sbs.count;
+                pos = paddingLeading + between / 2.0;
+            }
+            else
+            {
+                pos = (selfSize.width - fixedWidth - paddingHorz)/2.0 + paddingLeading;
+            }
+        }
+        else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
         {
             pos = paddingLeading;
             if (noWrapsbsSet.count > 0)
@@ -1169,8 +1265,6 @@
             {
                 CGFloat topSpaceWeight = leadingSpace;
                 leadingSpace = _myCGFloatRound((topSpaceWeight / totalWeight) * floatingWidth);
-                floatingWidth -= leadingSpace;
-                totalWeight -= topSpaceWeight;
                 if (_myCGFloatLessOrEqual(leadingSpace, 0))
                     leadingSpace = 0;
             }
@@ -1187,16 +1281,19 @@
                 }
                 
             }
+            leadingSpace += sbvsc.leadingPosInner.offsetVal;
+            if (totalShrink != 0.0 && sbvsc.leadingPosInner.shrink != 0.0)
+            {
+                leadingSpace += (sbvsc.leadingPosInner.shrink / totalShrink) * floatingWidth;
+            }
             
-            pos += [self myValidMargin:sbvsc.leadingPosInner sbv:sbv calcPos:leadingSpace + sbvsc.leadingPosInner.offsetVal selfLayoutSize:selfSize];
+            pos += [self myValidMargin:sbvsc.leadingPosInner sbv:sbv calcPos:leadingSpace selfLayoutSize:selfSize];
             rect.origin.x = pos;
             
             //分别处理相对高度和绝对高度
             if (weight != 0)
             {
                 CGFloat w = _myCGFloatRound((weight / totalWeight) * floatingWidth);
-                floatingWidth -= w;
-                totalWeight -= weight;
                 if (_myCGFloatLessOrEqual(w, 0))
                     w = 0;
                 
@@ -1206,6 +1303,13 @@
             //加上扩充的宽度。
             if (fill != 0 && [noWrapsbsSet containsObject:sbv])
                 rect.size.width += fill;
+            
+            if (totalShrink != 0.0 && sbvsc.widthSizeInner.shrink != 0.0)
+            {
+                rect.size.width += (sbvsc.widthSizeInner.shrink / totalShrink) * floatingWidth;
+                if (rect.size.width < 0.0)
+                    rect.size.width = 0.0;
+            }
             
             //特殊处理高度依赖宽度的情况。
             if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
@@ -1224,8 +1328,7 @@
                                          lsc:lsc];
             
             if ((tempSelfHeight > maxSelfHeight) &&
-                (lsc.heightSizeInner == nil || (sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner))  &&
-                (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil))
+                ((sbvsc.heightSizeInner.dimeVal != nil && sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) || sbvsc.wrapContentHeight))
             {
                 maxSelfHeight = tempSelfHeight;
             }
@@ -1237,8 +1340,6 @@
             {
                 CGFloat trailingSpaceWeight = trailingSpace;
                 trailingSpace = _myCGFloatRound((trailingSpaceWeight / totalWeight) * floatingWidth);
-                floatingWidth -= trailingSpace;
-                totalWeight -= trailingSpaceWeight;
                 if (_myCGFloatLessOrEqual(trailingSpace, 0))
                     trailingSpace = 0;
             }
@@ -1254,8 +1355,13 @@
                     }
                 }
             }
+            trailingSpace += sbvsc.trailingPosInner.offsetVal;
+            if (totalShrink != 0.0 && sbvsc.trailingPosInner.shrink != 0.0)
+            {
+                trailingSpace += (sbvsc.trailingPosInner.shrink / totalShrink) * floatingWidth;
+            }
             
-            pos += [self myValidMargin:sbvsc.trailingPosInner sbv:sbv calcPos:trailingSpace + sbvsc.trailingPosInner.offsetVal selfLayoutSize:selfSize];
+            pos += [self myValidMargin:sbvsc.trailingPosInner sbv:sbv calcPos:trailingSpace  selfLayoutSize:selfSize];
             
             //添加共有的子视图间距
             if (sbv != sbs.lastObject)
@@ -1272,7 +1378,7 @@
                     }
                 }
                 
-                pos += between;  //只有mgvert为between才加这个间距拉伸。
+                pos += between;  //只有gravity为between或者around才加这个间距拉伸。
             }
             
             sbvmyFrame.frame = rect;
@@ -1297,7 +1403,12 @@
     pRect->size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:lsc.myLayoutTopPadding paddingLeading:paddingLeading paddingBottom:lsc.myLayoutBottomPadding paddingTrailing:paddingTrailing sbvSize:pRect->size];
     
     if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
-        pRect->size.width = selfSize.width - paddingLeading - paddingTrailing - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal;
+    {
+        if (sbvsc.widthSizeInner.dimeVal == nil && !sbvsc.wrapContentWidth)
+        {
+            pRect->size.width = selfSize.width - paddingLeading - paddingTrailing - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal;
+        }
+    }
     
     pRect->size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:pRect->size.width sbvSize:pRect->size selfLayoutSize:selfSize];
     
@@ -1309,8 +1420,12 @@
     pRect->size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:lsc.myLayoutLeadingPadding paddingBottom:paddingBottom paddingTrailing:lsc.myLayoutTrailingPadding sbvSize:pRect->size];
 
     if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
-        pRect->size.height = selfSize.height - paddingTop - paddingBottom - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal;
-    
+    {
+        if (sbvsc.heightSizeInner.dimeVal == nil && !sbvsc.wrapContentHeight)
+        {
+            pRect->size.height = selfSize.height - paddingTop - paddingBottom - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal;
+        }
+    }
     
     pRect->size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:pRect->size.height sbvSize:pRect->size selfLayoutSize:selfSize];
     

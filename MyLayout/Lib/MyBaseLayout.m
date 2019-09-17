@@ -19,6 +19,19 @@ void* _myObserverContextB = (void*)20175282;
 void* _myObserverContextC = (void*)20175283;
 
 
+@interface MyLayoutDragger()
+
+@property(nonatomic, assign) NSUInteger currentIndex;
+@property(nonatomic, assign) NSUInteger oldIndex;
+@property(nonatomic, assign) BOOL hasDragging;
+
+@property(nonatomic, weak) MyBaseLayout *layout;
+
+
+@end
+
+
+
 /**
  窗口对RTL的支持。
  */
@@ -351,12 +364,9 @@ void* _myObserverContextC = (void*)20175283;
 -(void)setWrapContentSize:(BOOL)wrapContentSize
 {
     UIView *sc = self.myCurrentSizeClass;
-    if (sc.wrapContentSize != wrapContentSize)
-    {
-        sc.wrapContentSize = wrapContentSize;
-        if (self.superview != nil)
-            [self.superview setNeedsLayout];
-    }
+    sc.wrapContentSize = wrapContentSize;
+    if (self.superview != nil)
+        [self.superview setNeedsLayout];
 }
 
 -(CGFloat)weight
@@ -374,7 +384,6 @@ void* _myObserverContextC = (void*)20175283;
             [self.superview setNeedsLayout];
     }
 }
-
 
 
 -(BOOL)useFrame
@@ -502,10 +511,6 @@ void* _myObserverContextC = (void*)20175283;
 {
     [self.myFrame.sizeClasses removeObjectForKey:@(sizeClass)];
 }
-
-
-
-
 
 
 -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass
@@ -1358,6 +1363,16 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
+-(MyLayoutDragger*)createLayoutDragger
+{
+    MyLayoutDragger *dragger = [MyLayoutDragger new];
+    dragger.currentIndex = -1;
+    dragger.oldIndex = -1;
+    dragger.hasDragging = NO;
+    dragger.layout = self;
+    return dragger;
+}
+
 
 
 
@@ -1477,11 +1492,8 @@ void* _myObserverContextC = (void*)20175283;
 -(void)setWrapContentSize:(BOOL)wrapContentSize
 {
     MyBaseLayout *lsc = self.myCurrentSizeClass;
-    if (lsc.wrapContentSize != wrapContentSize)
-    {
-        lsc.wrapContentSize = wrapContentSize;
-        [self setNeedsLayout];
-    }
+    lsc.wrapContentSize = wrapContentSize;
+    [self setNeedsLayout];
 }
 
 
@@ -2122,7 +2134,6 @@ void* _myObserverContextC = (void*)20175283;
         if (newSelfSize.width != CGFLOAT_MAX && (lsc.wrapContentWidth || lsc.wrapContentHeight))
         {
             
-            
             //因为布局子视图的新老尺寸计算在上面有两种不同的方法，因此这里需要考虑两种计算的误差值，而这两种计算的误差值是不超过1/屏幕精度的。
             //因此我们认为当二者的值超过误差时我们才认为有尺寸变化。
             BOOL isWidthAlter =  _myCGFloatErrorNotEqual(newSelfSize.width, oldSelfSize.width, sSizeError);
@@ -2383,7 +2394,8 @@ void* _myObserverContextC = (void*)20175283;
         
         if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
         {
-            sbvVertGravity = MyGravity_Vert_Fill;
+            if (sbvsc.heightSizeInner.dimeVal == nil && !sbvsc.wrapContentHeight)
+                sbvVertGravity = MyGravity_Vert_Fill;
         }
         else if (sbvsc.centerYPosInner.posVal != nil)
         {
@@ -2420,6 +2432,32 @@ void* _myObserverContextC = (void*)20175283;
     
    CGFloat  bottomMargin = [self myValidMargin:sbvsc.bottomPosInner sbv:sbv calcPos:[sbvsc.bottomPosInner realPosIn:selfSize.height - paddingTop - paddingBottom] selfLayoutSize:selfSize];
 
+    
+    //垂直压缩。
+    CGFloat fixedHeight = topMargin + centerMargin + bottomMargin + pRect->size.height;
+    if (fixedHeight > selfSize.height)
+    {
+        CGFloat floatingHeight = selfSize.height - fixedHeight;
+        CGFloat totalShrink = sbvsc.topPosInner.shrink + sbvsc.centerYPosInner.shrink + sbvsc.bottomPosInner.shrink + sbvsc.heightSizeInner.shrink;
+        if (totalShrink != 0.0)
+        {
+            topMargin += (sbvsc.topPosInner.shrink / totalShrink) * floatingHeight;
+            centerMargin += (sbvsc.centerYPosInner.shrink / totalShrink) * floatingHeight;
+            bottomMargin += (sbvsc.bottomPosInner.shrink / totalShrink) * floatingHeight;
+            pRect->size.height += (sbvsc.heightSizeInner.shrink / totalShrink) * floatingHeight;
+        }
+    }
+    
+    //如果是设置垂直拉伸则，如果子视图有约束则不受影响，否则就变为和填充一个意思。
+    if (vertGravity == MyGravity_Vert_Stretch)
+    {
+        if (sbvsc.wrapContentHeight || sbvsc.heightSizeInner.dimeVal != nil)
+            vertGravity = MyGravity_Vert_Top;
+        else
+            vertGravity = MyGravity_Vert_Fill;
+    }
+    
+    
     //确保设置基线对齐的视图都是UILabel,UITextField,UITextView
     if (baselinePos == CGFLOAT_MAX && vertGravity == MyGravity_Vert_Baseline)
         vertGravity = MyGravity_Vert_Top;
@@ -2498,7 +2536,8 @@ void* _myObserverContextC = (void*)20175283;
         
         if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
         {
-            sbvHorzGravity = MyGravity_Horz_Fill;
+            if (sbvsc.widthSizeInner.dimeVal == nil && !sbvsc.wrapContentWidth)
+                sbvHorzGravity = MyGravity_Horz_Fill;
         }
         else if (sbvsc.centerXPosInner.posVal != nil)
         {
@@ -2534,6 +2573,30 @@ void* _myObserverContextC = (void*)20175283;
     
    CGFloat  trailingMargin = [self myValidMargin:sbvsc.trailingPosInner sbv:sbv calcPos:[sbvsc.trailingPosInner realPosIn:selfSize.width - paddingHorz] selfLayoutSize:selfSize];
 
+    //水平压缩。
+    CGFloat fixedWidth = leadingMargin + centerMargin + trailingMargin + pRect->size.width;
+    if (fixedWidth > selfSize.width)
+    {
+        CGFloat floatingWidth = selfSize.width - fixedWidth;
+        CGFloat totalShrink = sbvsc.leadingPosInner.shrink + sbvsc.centerXPosInner.shrink + sbvsc.trailingPosInner.shrink + sbvsc.widthSizeInner.shrink;
+        if (totalShrink != 0.0)
+        {
+            leadingMargin += (sbvsc.leadingPosInner.shrink / totalShrink) * floatingWidth;
+            centerMargin += (sbvsc.centerXPosInner.shrink / totalShrink) * floatingWidth;
+            trailingMargin += (sbvsc.trailingPosInner.shrink / totalShrink) * floatingWidth;
+            pRect->size.width += (sbvsc.widthSizeInner.shrink / totalShrink) * floatingWidth;
+        }
+    }
+    
+    //如果是设置水平拉伸则，如果子视图有约束则不受影响，否则就变为和填充一个意思。
+    if (horzGravity == MyGravity_Horz_Stretch)
+    {
+        if (sbvsc.wrapContentWidth || sbvsc.widthSizeInner.dimeVal != nil)
+            horzGravity = MyGravity_Horz_Fill;
+        else
+            horzGravity = MyGravity_Horz_Leading;
+    }
+    
     
     if (horzGravity == MyGravity_Horz_Leading)
     {
@@ -2643,10 +2706,13 @@ void* _myObserverContextC = (void*)20175283;
         
         if (lsc.leadingPosInner.posVal != nil && lsc.trailingPosInner.posVal != nil)
         {
-            CGFloat leadingMargin = [lsc.leadingPosInner realPosIn:rectSuper.size.width];
-            CGFloat trailingMargin = [lsc.trailingPosInner realPosIn:rectSuper.size.width];
-            size.width = rectSuper.size.width - leadingMargin - trailingMargin;
-            size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:size.width sbvSize:size selfLayoutSize:rectSuper.size];
+            if (!lsc.wrapContentWidth && lsc.widthSizeInner.dimeVal == nil)
+            {
+                CGFloat leadingMargin = [lsc.leadingPosInner realPosIn:rectSuper.size.width];
+                CGFloat trailingMargin = [lsc.trailingPosInner realPosIn:rectSuper.size.width];
+                size.width = rectSuper.size.width - leadingMargin - trailingMargin;
+                size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:size.width sbvSize:size selfLayoutSize:rectSuper.size];
+            }
             
         }
         
@@ -2671,11 +2737,13 @@ void* _myObserverContextC = (void*)20175283;
         
         if (lsc.topPosInner.posVal != nil && lsc.bottomPosInner.posVal != nil)
         {
-            CGFloat topMargin = [lsc.topPosInner realPosIn:rectSuper.size.height];
-            CGFloat bottomMargin = [lsc.bottomPosInner realPosIn:rectSuper.size.height];
-            size.height = rectSuper.size.height - topMargin - bottomMargin;
-            size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:size.height sbvSize:size selfLayoutSize:rectSuper.size];
-            
+            if (!lsc.wrapContentHeight && lsc.heightSizeInner.dimeVal == nil)
+            {
+                CGFloat topMargin = [lsc.topPosInner realPosIn:rectSuper.size.height];
+                CGFloat bottomMargin = [lsc.bottomPosInner realPosIn:rectSuper.size.height];
+                size.height = rectSuper.size.height - topMargin - bottomMargin;
+                size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:size.height sbvSize:size selfLayoutSize:rectSuper.size];
+            }
         }
         
         if (size.height < 0)
@@ -2755,9 +2823,11 @@ void* _myObserverContextC = (void*)20175283;
     if (lsc.leadingPosInner.posVal != nil && lsc.trailingPosInner.posVal != nil)
     {
         isAdjust = YES;
-        lsc.wrapContentWidth = NO;
-        rectSelf.size.width = rectSuper.size.width - leadingMargin - trailingMargin;
-        rectSelf.size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
+        if (!lsc.wrapContentWidth && lsc.widthSizeInner.dimeVal == nil)
+        {
+            rectSelf.size.width = rectSuper.size.width - leadingMargin - trailingMargin;
+            rectSelf.size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
+        }
         
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
         
@@ -2843,9 +2913,11 @@ void* _myObserverContextC = (void*)20175283;
     if (lsc.topPosInner.posVal != nil && lsc.bottomPosInner.posVal != nil)
     {
         isAdjust = YES;
-        lsc.wrapContentHeight = NO;
-        rectSelf.size.height = rectSuper.size.height - topMargin - bottomMargin;
-        rectSelf.size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
+        if (!lsc.wrapContentHeight && lsc.heightSizeInner.dimeVal == nil)
+        {
+            rectSelf.size.height = rectSuper.size.height - topMargin - bottomMargin;
+            rectSelf.size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
+        }
         
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
         
@@ -2978,7 +3050,7 @@ void* _myObserverContextC = (void*)20175283;
         return value;
     
     MyLayoutValueType lValueType = boundDime.dimeValType;
-    if (lValueType == MyLayoutValueType_NSNumber)
+    if (lValueType == MyLayoutValueType_NSNumber || lValueType == MyLayoutValueType_Extreme)
     {
         value = boundDime.dimeNumVal.doubleValue;
     }
@@ -3017,11 +3089,11 @@ void* _myObserverContextC = (void*)20175283;
         {
             if (boundDime.dimeRelaVal.dime == MyGravity_Horz_Fill)
             {
-                value = boundDime.dimeRelaVal.view.estimatedRect.size.width;
+                value = boundDime.dimeRelaVal.view.myEstimatedWidth;
             }
             else
             {
-                value = boundDime.dimeRelaVal.view.estimatedRect.size.height;
+                value = boundDime.dimeRelaVal.view.myEstimatedHeight;
             }
         }
         
@@ -3471,12 +3543,12 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     if ([sbv isKindOfClass:[MyBaseLayout class]])
     {
         
-        if (sbvsc.wrapContentHeight && (sbvsc.heightSizeInner.dimeVal != nil || (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)))
+        if (sbvsc.wrapContentHeight && sbvsc.heightSizeInner.dimeVal != nil)
         {
             sbvsc.wrapContentHeight = NO;
         }
         
-        if (sbvsc.wrapContentWidth && (sbvsc.widthSizeInner.dimeVal != nil || (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)))
+        if (sbvsc.wrapContentWidth && sbvsc.widthSizeInner.dimeVal != nil)
         {
             sbvsc.wrapContentWidth = NO;
         }
@@ -3644,15 +3716,19 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             }
             
             //宽度不依赖布局并且没有同时设置左右边距则参与最大宽度计算。
-            if ((sbvsc.widthSizeInner.dimeRelaVal.view != self) &&
-                (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil))
+            if ((sbvsc.widthSizeInner.dimeVal != nil && sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) || sbvsc.wrapContentWidth)
             {
                 
                 if (_myCGFloatLess(pMaxWrapSize->width, sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing))
                     pMaxWrapSize->width = sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing;
                 
-                if (_myCGFloatLess(pMaxWrapSize->width,sbvmyFrame.trailing + sbvsc.trailingPosInner.absVal + paddingTrailing))
+                //只有不居中和底部对齐才比较底部。
+                if (sbvsc.centerXPosInner.posVal == nil &&
+                    sbvsc.trailingPosInner.posVal == nil &&
+                    _myCGFloatLess(pMaxWrapSize->width,sbvmyFrame.trailing + sbvsc.trailingPosInner.absVal + paddingTrailing))
+                {
                     pMaxWrapSize->width = sbvmyFrame.trailing + sbvsc.trailingPosInner.absVal + paddingTrailing;
+                }
                 
             }
         }
@@ -3667,14 +3743,18 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             }
             
             //高度不依赖布局并且没有同时设置上下边距则参与最大高度计算。
-            if ((sbvsc.heightSizeInner.dimeRelaVal.view != self) &&
-                (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil))
+             if ((sbvsc.heightSizeInner.dimeVal != nil && sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) || sbvsc.wrapContentHeight)
             {
                 if (_myCGFloatLess(pMaxWrapSize->height, sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom))
                     pMaxWrapSize->height = sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom;
                 
-                if (_myCGFloatLess(pMaxWrapSize->height, sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + paddingBottom))
+                //只有在不居中对齐和底部对齐时才比较底部。
+                if (sbvsc.centerYPosInner.posVal == nil &&
+                    sbvsc.bottomPosInner.posVal == nil &&
+                    _myCGFloatLess(pMaxWrapSize->height, sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + paddingBottom))
+                {
                     pMaxWrapSize->height = sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + paddingBottom;
+                }
             }
         }
     }
@@ -3821,3 +3901,110 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 @end
 
+
+@implementation MyLayoutDragger
+
+
+//开始拖动
+-(void)dragView:(UIView *)view withEvent:(UIEvent *)event
+{
+    if (self.layout == nil)
+        return;
+    
+    self.oldIndex = [self.layout.subviews indexOfObject:view];
+    self.currentIndex = self.oldIndex;
+    self.hasDragging = NO;
+}
+
+//拖动中,在拖动时要排除移动的子视图序列，动画的时长。返回是否拖动成功。
+-(void)dragginView:(UIView *)view withEvent:(UIEvent *)event
+{
+    if (self.layout == nil)
+        return;
+    
+    self.hasDragging = YES;
+    
+    //取出拖动时当前的位置点。
+    CGPoint pt = [[event touchesForView:view].anyObject locationInView:self.layout];
+    
+    UIView *sbv2 = nil;  //sbv2保存拖动时手指所在的视图。
+    //判断当前手指在具体视图的位置。这里要排除self.addButton的位置(因为这个按钮将固定不调整)。
+    for (UIView *sbv in self.layout.subviews)
+    {
+        if (sbv != view && view.useFrame && ![self.exclusiveViews containsObject:sbv])
+        {
+            CGRect rc1 =  sbv.frame;
+            if (CGRectContainsPoint(rc1, pt))
+            {
+                sbv2 = sbv;
+                break;
+            }
+        }
+    }
+    
+    //如果拖动的控件sender和手指下当前其他的兄弟控件有重合时则意味着需要将当前控件插入到手指下的sbv2所在的位置，并且调整sbv2的位置。
+    if (sbv2 != nil)
+    {
+        if (self.animateDuration > 0)
+            [self.layout layoutAnimationWithDuration:self.animateDuration];
+        
+        //得到要移动的视图的位置索引。
+        self.currentIndex = [self.layout.subviews indexOfObjectIdenticalTo:sbv2];
+        if (self.oldIndex != self.currentIndex)
+        {
+            self.oldIndex = self.currentIndex;
+        }
+        else
+        {
+            if (!self.canHover)
+            {
+                if (sbv2.center.x > view.center.x)
+                    self.currentIndex = self.oldIndex + 1;
+            }
+        }
+        
+        for (NSInteger i = self.layout.subviews.count - 1; i > self.currentIndex; i--)
+        {
+            [self.layout exchangeSubviewAtIndex:i withSubviewAtIndex:i - 1];
+        }
+        
+        //因为sender在bringSubviewToFront后变为了最后一个子视图，因此要调整正确的位置。
+        //经过上面的sbv2的位置调整完成后，需要重新激发布局视图的布局，因此这里要设置autoresizesSubviews为YES。
+        self.layout.autoresizesSubviews = YES;
+        view.useFrame = NO;
+        view.noLayout = YES;
+        //这里设置为YES表示布局时不会改变sender的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
+        [self.layout layoutIfNeeded];
+        
+    }
+    
+    //在进行sender的位置调整时，要把sender移动到最顶端，也就子视图数组的的最后。同时布局视图不能激发子视图布局，因此要把autoresizesSubviews设置为NO，同时因为要自定义sender的位置，因此要把useFrame设置为YES，并且恢复noLayout为NO。
+    [self.layout bringSubviewToFront:view]; //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
+    self.layout.autoresizesSubviews = NO;  //在拖动时不要让布局视图激发布局
+    view.useFrame = YES;  //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
+    view.center = pt;  //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
+    view.noLayout = NO; //恢复noLayout为NO。
+}
+
+//结束拖动
+-(void)dropView:(UIView *)view withEvent:(UIEvent *)event
+{
+    if (self.layout == nil)
+        return;
+    
+    if (!self.hasDragging)
+        return;
+    self.hasDragging = NO;
+    
+    //当抬起时，需要让拖动的子视图调整到正确的顺序，并重新参与布局，因此这里要把拖动的子视图的useFrame设置为NO，同时把布局视图的autoresizesSubviews还原为YES。
+    for (NSInteger i = self.layout.subviews.count - 1; i > self.currentIndex; i--)
+    {
+        [self.layout exchangeSubviewAtIndex:i withSubviewAtIndex:i - 1];
+    }
+    
+    view.useFrame = NO;  //让拖动的子视图重新参与布局，将useFrame设置为NO
+    self.layout.autoresizesSubviews = YES; //让布局视图可以重新激发布局，这里还原为YES。
+}
+
+
+@end
