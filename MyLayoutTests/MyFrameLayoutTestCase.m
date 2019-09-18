@@ -240,6 +240,50 @@
 
 }
 
+-(void)testWrapContent3
+{
+    //测试一个布局视图的尺寸是包裹的，同时里面的子视图设置了宽高。
+    MyFrameLayout *rootLayout = [MyFrameLayout new];
+    rootLayout.wrapContentSize = YES;
+    rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
+    
+    //1.同时设置了上下和左右。没有设置高度。
+    UIView *v1 = [UIView new];
+    v1.myLeft = 10;
+    v1.myRight = 20;
+    v1.myTop = 30;
+    v1.myBottom = 40;
+    [rootLayout addSubview:v1];
+    
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,90,110)), @"rootLayout rect is:%@", NSStringFromCGRect(rootLayout.frame));
+    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(30,40,0,0)), @"v1 rect is:%@", NSStringFromCGRect(v1.frame));
+
+    
+    
+    UIView *v2 = [UIView new];
+    v2.myLeft = 40;
+    v2.myRight = 30;
+    v2.myTop = 20;
+    v2.myBottom = 10;
+    v2.myWidth = 100;
+    v2.myHeight = 200;
+    [rootLayout addSubview:v2];
+    
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,230,270)), @"rootLayout rect is:%@", NSStringFromCGRect(rootLayout.frame));
+    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(30,40,140,160)), @"v1 rect is:%@", NSStringFromCGRect(v1.frame));
+    XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(60,30,100,200)), @"v2 rect is:%@", NSStringFromCGRect(v2.frame));
+
+    
+    
+    
+    //测试一个布局视图的尺寸是非包裹的，同时里面的子视图设置了宽高。
+    
+}
+
 -(void)testPerformanceExample
 {
     [self measureBlock:^{

@@ -3716,7 +3716,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             }
             
             //宽度不依赖布局并且没有同时设置左右边距则参与最大宽度计算。
-            if ((sbvsc.widthSizeInner.dimeVal != nil && sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) || sbvsc.wrapContentWidth)
+            if ((sbvsc.widthSizeInner.dimeVal != nil && (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)) || sbvsc.wrapContentWidth)
             {
                 
                 if (_myCGFloatLess(pMaxWrapSize->width, sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing))
@@ -3743,7 +3743,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             }
             
             //高度不依赖布局并且没有同时设置上下边距则参与最大高度计算。
-             if ((sbvsc.heightSizeInner.dimeVal != nil && sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) || sbvsc.wrapContentHeight)
+             if ((sbvsc.heightSizeInner.dimeVal != nil && (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner)) || sbvsc.wrapContentHeight)
             {
                 if (_myCGFloatLess(pMaxWrapSize->height, sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom))
                     pMaxWrapSize->height = sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom;
