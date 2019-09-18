@@ -1003,6 +1003,30 @@
     
 }
 
+-(void)test123
+{
+    //创建一个视图。
+    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.myMargin = 0;
+   // [self.view addSubview:rootLayout];
+    
+    UIView *v1 = [UIView new];
+    v1.myCenter = CGPointMake(0, 0);
+    v1.backgroundColor = [UIColor redColor];
+    v1.widthSize.equalTo(@[rootLayout.widthSize, rootLayout.heightSize].myMinSize).multiply(0.5);
+    v1.heightSize.equalTo(v1.widthSize);
+    [rootLayout addSubview:v1];
+    
+    UILabel *label = [UILabel new];
+    label.myCenterX = 0;
+    label.myBottom = MyLayoutPos.safeAreaMargin;
+    label.text = @"您好！！！";
+    label.backgroundColor = [UIColor redColor];
+    label.widthSize.equalTo(@[@(MyLayoutSize.wrap), v1.widthSize.detach(0, 0.5)].myMaxSize);
+    label.wrapContentHeight = YES;
+    [rootLayout addSubview:label];
+}
+
 -(void)testMaxAndMin
 {
     
