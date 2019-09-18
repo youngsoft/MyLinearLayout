@@ -1230,14 +1230,14 @@ void* _myObserverContextC = (void*)20175283;
     }
     
     BOOL hasSubLayout = NO;
-    CGSize selfSize= [self calcLayoutRect:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass sbs:sbs];
+    CGSize selfSize= [self calcLayoutSize:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass sbs:sbs];
     
     if (hasSubLayout)
     {
         selfMyFrame.width = selfSize.width;
         selfMyFrame.height = selfSize.height;
         
-        selfSize = [self calcLayoutRect:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass sbs:sbs];
+        selfSize = [self calcLayoutSize:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass sbs:sbs];
     }
     
     selfMyFrame.width = selfSize.width;
@@ -1498,7 +1498,7 @@ void* _myObserverContextC = (void*)20175283;
 
 
 
--(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+-(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
     CGSize selfSize;
     if (isEstimate)
@@ -2030,7 +2030,7 @@ void* _myObserverContextC = (void*)20175283;
         }
         else
         {
-            newSelfSize = [self calcLayoutRect:[self myCalcSizeInNoLayoutSuperview:self.superview currentSize:oldSelfSize] isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass sbs:nil];
+            newSelfSize = [self calcLayoutSize:[self myCalcSizeInNoLayoutSuperview:self.superview currentSize:oldSelfSize] isEstimate:NO pHasSubLayout:nil sizeClass:sizeClass sbs:nil];
         }
         newSelfSize = _myCGSizeRound(newSelfSize);
         _useCacheRects = NO;

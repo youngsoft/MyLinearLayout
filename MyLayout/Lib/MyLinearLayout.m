@@ -179,9 +179,9 @@
 
 
 
--(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray *)sbs
+-(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray *)sbs
 {
-    CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
+    CGSize selfSize = [super calcLayoutSize:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
     
     if (sbs == nil)
         sbs = [self myGetLayoutSubviews];
@@ -191,18 +191,18 @@
     
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    MyOrientation oreintation = lsc.orientation;
+    MyOrientation orientation = lsc.orientation;
     
     [self myCalcSubviewsWrapContentSize:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
         
-        [self myAdjustSubviewWrapContent:sbv sbvsc:sbvsc orientation:oreintation gravity:(oreintation == MyOrientation_Vert)? horzGravity : vertGravity];
+        [self myAdjustSubviewWrapContent:sbv sbvsc:sbvsc orientation:orientation gravity:(orientation == MyOrientation_Vert)? horzGravity : vertGravity];
     }];
     
     
-    if (oreintation == MyOrientation_Vert)
-        selfSize = [self myLayoutSubviewsForVert:selfSize sbs:sbs lsc:lsc];
+    if (orientation == MyOrientation_Vert)
+        selfSize = [self myCalcLayoutSizeForVertOrientation:selfSize sbs:sbs lsc:lsc];
     else
-        selfSize = [self myLayoutSubviewsForHorz:selfSize sbs:sbs lsc:lsc];
+        selfSize = [self myCalcLayoutSizeForHorzOrientation:selfSize sbs:sbs lsc:lsc];
     
     //绘制智能线。
     if (!isEstimate)
@@ -354,7 +354,7 @@
     }
 }
 
--(CGSize)myLayoutSubviewsForVert:(CGSize)selfSize sbs:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
+-(CGSize)myCalcLayoutSizeForVertOrientation:(CGSize)selfSize sbs:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
 {
     CGFloat subviewSpace = lsc.subviewVSpace;
     CGFloat paddingTop = lsc.myLayoutTopPadding;
@@ -419,7 +419,7 @@
         
         
         if ((tempSelfWidth > maxSelfWidth) &&
-            ((sbvsc.widthSizeInner.dimeVal != nil && sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) || sbvsc.wrapContentWidth))
+            ((sbvsc.widthSizeInner.dimeVal != nil && (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)) || sbvsc.wrapContentWidth))
         {
             maxSelfWidth = tempSelfWidth;
         }
@@ -779,7 +779,7 @@
                                                                        lsc:lsc];
             
             if ((tempSelfWidth > maxSelfWidth) &&
-                ((sbvsc.widthSizeInner.dimeVal != nil && sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) || sbvsc.wrapContentWidth))
+                ((sbvsc.widthSizeInner.dimeVal != nil && (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)) || sbvsc.wrapContentWidth))
             {
                 maxSelfWidth = tempSelfWidth;
             }
@@ -849,7 +849,7 @@
     return selfSize;
 }
 
--(CGSize)myLayoutSubviewsForHorz:(CGSize)selfSize sbs:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
+-(CGSize)myCalcLayoutSizeForHorzOrientation:(CGSize)selfSize sbs:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
 {
     CGFloat subviewSpace = lsc.subviewHSpace;
     CGFloat paddingTop = lsc.myLayoutTopPadding;
@@ -914,7 +914,7 @@
                                     lsc:lsc];
         
         if ((tempSelfHeight > maxSelfHeight) &&
-            ((sbvsc.heightSizeInner.dimeVal != nil && sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) || sbvsc.wrapContentHeight))
+            ((sbvsc.heightSizeInner.dimeVal != nil && (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner)) || sbvsc.wrapContentHeight))
         {
             maxSelfHeight = tempSelfHeight;
         }
@@ -1328,7 +1328,7 @@
                                          lsc:lsc];
             
             if ((tempSelfHeight > maxSelfHeight) &&
-                ((sbvsc.heightSizeInner.dimeVal != nil && sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) || sbvsc.wrapContentHeight))
+                ((sbvsc.heightSizeInner.dimeVal != nil && (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner)) || sbvsc.wrapContentHeight))
             {
                 maxSelfHeight = tempSelfHeight;
             }

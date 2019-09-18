@@ -7,7 +7,13 @@
 //
 
 #import "MyLayoutTestCaseBase.h"
+#import "FOLTest1ViewController.h"
 #import "FOLTest2ViewController.h"
+#import "FOLTest3ViewController.h"
+#import "FOLTest4ViewController.h"
+#import "FOLTest5ViewController.h"
+#import "FOLTest6ViewController.h"
+#import "FOLTest7ViewController.h"
 
 @interface MyFloatLayoutTestCase : MyLayoutTestCaseBase
 
@@ -28,18 +34,30 @@
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
-    FOLTest2ViewController *vc = [FOLTest2ViewController new];
-    
-    [self startClock];
-    UIView *v1 = vc.view;
-    [self endClock:@"load view:"];       //>60ms
-    
-    [self startClock];
-    
+    FOLTest1ViewController *vc1 = [FOLTest1ViewController new];
+    FOLTest2ViewController *vc2 = [FOLTest2ViewController new];
+    FOLTest3ViewController *vc3 = [FOLTest3ViewController new];
+    FOLTest4ViewController *vc4 = [FOLTest4ViewController new];
+    FOLTest5ViewController *vc5 = [FOLTest5ViewController new];
+    FOLTest6ViewController *vc6 = [FOLTest6ViewController new];
+    FOLTest7ViewController *vc7 = [FOLTest7ViewController new];
+
+    UIView *v1 = vc1.view;
+    UIView *v2=  vc2.view;
+    UIView *v3 = vc3.view;
+    UIView *v4 = vc4.view;
+    UIView *v5 = vc5.view;
+    UIView *v6 = vc6.view;
+    UIView *v7 = vc7.view;
+
+   
     [v1 layoutIfNeeded];
-    
-    [self endClock:@"layout:"];
-    
+    [v2 layoutIfNeeded];
+    [v3 layoutIfNeeded];
+    [v4 layoutIfNeeded];
+    [v5 layoutIfNeeded];
+    [v6 layoutIfNeeded];
+    [v7 layoutIfNeeded];
     
 }
 

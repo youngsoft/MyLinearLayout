@@ -7,6 +7,8 @@
 //
 
 #import "MyLayoutTestCaseBase.h"
+#import "FLTest1ViewController.h"
+#import "FLTest2ViewController.h"
 
 @interface MyFrameLayoutTestCase : MyLayoutTestCaseBase
 
@@ -22,6 +24,22 @@
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+-(void)testExample
+{
+    FLTest1ViewController *vc1 = [FLTest1ViewController new];
+    FLTest2ViewController *vc2 = [FLTest2ViewController new];
+   
+    
+    [self startClock];
+    UIView *v1 = vc1.view;
+    UIView *v2=  vc2.view;
+    
+    [v1 layoutIfNeeded];
+    [v2 layoutIfNeeded];
+   
+
 }
 
 -(void)testblurred
@@ -277,10 +295,36 @@
     XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(30,40,140,160)), @"v1 rect is:%@", NSStringFromCGRect(v1.frame));
     XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(60,30,100,200)), @"v2 rect is:%@", NSStringFromCGRect(v2.frame));
 
+    [v1 removeFromSuperview];
+    [v2 removeFromSuperview];
+    
+    UILabel *label = [UILabel new];
+    label.wrapContentSize = YES;
+    label.text = @"您好！";
+    label.myMargin = 20;
+    CGSize lablesz = [label sizeThatFits:CGSizeZero];
+    [rootLayout addSubview:label];
+    
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,60+40+lablesz.width,40+40+lablesz.height)), @"rootLayout rect is:%@", NSStringFromCGRect(rootLayout.frame));
+    XCTAssertTrue(CGRectEqualToRect(label.frame, CGRectMake(20+20,10+20,lablesz.width,lablesz.height)), @"label rect is:%@", NSStringFromCGRect(label.frame));
     
     
+    UIView *v3 = [UIView new];
+    v3.myRight = 30;
+    v3.myBottom = 30;
+    v3.mySize = CGSizeMake(100, 100);
+    [rootLayout addSubview:v3];
     
-    //测试一个布局视图的尺寸是非包裹的，同时里面的子视图设置了宽高。
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,20+40+30+100,10+30+30+100)), @"rootLayout rect is:%@", NSStringFromCGRect(rootLayout.frame));
+    
+     XCTAssertTrue(CGRectEqualToRect(label.frame, CGRectMake(20+20,10+20,lablesz.width,lablesz.height)), @"label rect is:%@", NSStringFromCGRect(label.frame));
+    
+    XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(rootLayout.frame.size.width - 40 - 30 - 100 ,rootLayout.frame.size.height - 30 - 30 - 100, 100,100)), @"v3 rect is:%@", NSStringFromCGRect(v3.frame));
+    
     
 }
 

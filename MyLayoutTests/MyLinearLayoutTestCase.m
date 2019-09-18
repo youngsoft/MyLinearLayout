@@ -7,7 +7,19 @@
 //
 
 #import "MyLayoutTestCaseBase.h"
+#import "LLTest1ViewController.h"
+#import "LLTest2ViewController.h"
+#import "LLTest3ViewController.h"
+#import "LLTest4ViewController.h"
+#import "LLTest5ViewController.h"
+#import "LLTest6ViewController.h"
+#import "LLTest7ViewController.h"
+
+#import "TLTest1ViewController.h"
+#import "TLTest2ViewController.h"
 #import "TLTest3ViewController.h"
+#import "TLTest4ViewController.h"
+
 
 @interface MyLinearLayoutTestCase : MyLayoutTestCaseBase
 
@@ -28,6 +40,51 @@
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    LLTest1ViewController *vc1 = [LLTest1ViewController new];
+    LLTest2ViewController *vc2 = [LLTest2ViewController new];
+    LLTest3ViewController *vc3 = [LLTest3ViewController new];
+    LLTest4ViewController *vc4 = [LLTest4ViewController new];
+    LLTest5ViewController *vc5 = [LLTest5ViewController new];
+    LLTest6ViewController *vc6 = [LLTest6ViewController new];
+    LLTest7ViewController *vc7 = [LLTest7ViewController new];
+    
+    
+    TLTest1ViewController *vc10 = [TLTest1ViewController new];
+    TLTest2ViewController *vc11 = [TLTest2ViewController new];
+    TLTest3ViewController *vc12 = [TLTest3ViewController new];
+    TLTest4ViewController *vc13 = [TLTest4ViewController new];
+    
+    
+    UIView *v1 = vc1.view;
+    UIView *v2=  vc2.view;
+    UIView *v3 = vc3.view;
+    UIView *v4 = vc4.view;
+    UIView *v5 = vc5.view;
+    UIView *v6 = vc6.view;
+    UIView *v7 = vc7.view;
+    
+    UIView *v10 = vc10.view;
+    UIView *v11 = vc11.view;
+    UIView *v12 = vc12.view;
+    UIView *v13 = vc13.view;
+
+   
+    
+    [v1 layoutIfNeeded];
+    [v2 layoutIfNeeded];
+    [v3 layoutIfNeeded];
+    [v4 layoutIfNeeded];
+    [v5 layoutIfNeeded];
+    [v6 layoutIfNeeded];
+    [v7 layoutIfNeeded];
+    
+    [v10 layoutIfNeeded];
+    [v11 layoutIfNeeded];
+    [v12 layoutIfNeeded];
+    [v13 layoutIfNeeded];
+
+    
 }
 
 -(void)testWrapContentHeight
@@ -36,25 +93,6 @@
     
 }
 
-- (void)testTable1 {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-    
-    TLTest3ViewController *vc = [TLTest3ViewController new];
-    
-    [self startClock];
-    
-    UIView *view = vc.view;
-    
-    [self endClock:@"vc loadview"];   //>=20ms
-    
-    [self startClock];
-    
-    [view layoutIfNeeded];
-    
-    [self endClock:@"view layout"];
-    
-}
 
 -(void)testSubviewSizeDependent
 {//测试子视图尺寸依赖
@@ -255,9 +293,9 @@
     [rootLayout1 layoutIfNeeded];
     
     XCTAssertTrue(CGRectEqualToRect(rootLayout1.subviews[0].frame, CGRectMake(0,0,94,667)), @"the button0.frame = %@",NSStringFromCGRect(rootLayout1.subviews[0].frame));
-    XCTAssertTrue(CGRectEqualToRect(rootLayout1.subviews[1].frame, CGRectMake(94,0,93.5,667)), @"the button0.frame = %@",NSStringFromCGRect(rootLayout1.subviews[1].frame));
-    XCTAssertTrue(CGRectEqualToRect(rootLayout1.subviews[2].frame, CGRectMake(187.5,0,94,667)), @"the button0.frame = %@",NSStringFromCGRect(rootLayout1.subviews[2].frame));
-    XCTAssertTrue(CGRectEqualToRect(rootLayout1.subviews[3].frame, CGRectMake(281.5,0,93.5,667)), @"the button0.frame = %@",NSStringFromCGRect(rootLayout1.subviews[3].frame));
+    XCTAssertTrue(CGRectEqualToRect(rootLayout1.subviews[1].frame, CGRectMake(94,0,94,667)), @"the button0.frame = %@",NSStringFromCGRect(rootLayout1.subviews[1].frame));
+    XCTAssertTrue(CGRectEqualToRect(rootLayout1.subviews[2].frame, CGRectMake(188,0,94,667)), @"the button0.frame = %@",NSStringFromCGRect(rootLayout1.subviews[2].frame));
+    XCTAssertTrue(CGRectEqualToRect(rootLayout1.subviews[3].frame, CGRectMake(282,0,94,667)), @"the button0.frame = %@",NSStringFromCGRect(rootLayout1.subviews[3].frame));
 
     
 
@@ -328,7 +366,7 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"点我" forState:UIControlStateNormal];
-    [button sizeToFit];
+    button.wrapContentSize = YES;
     [testLayout addSubview:button];
 
     
@@ -342,7 +380,6 @@
     label2.text = @"文本2";
     label2.wrapContentSize = YES;
     label2.backgroundColor = [UIColor cyanColor];
-    [label2 sizeToFit];
     [testLayout addSubview:label2];
     
     [testLayout layoutIfNeeded];
@@ -354,7 +391,7 @@
     //字体高度扩高。文字超长。
     button.titleLabel.font = [UIFont systemFontOfSize:30];
     label1.text = @"文本111111111111";
-    [button sizeToFit];
+    [testLayout setNeedsLayout];
     
     [testLayout layoutIfNeeded];
 
@@ -365,6 +402,8 @@
     
 //    label1.text = @"文本111111111111111111111111111";
 //    label1.mySize = CGSizeMake(400, 20.5);
+//    
+//    [testLayout setNeedsLayout];
 //    [testLayout layoutIfNeeded];
 //    
 //    XCTAssertTrue(CGRectEqualToRect(testLayout.frame, CGRectMake(0,0,330,48)), @"the testLayout.frame = %@",NSStringFromCGRect(testLayout.frame));
@@ -443,8 +482,213 @@
     [layout layoutIfNeeded];
     XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(60,0,30,30)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
     
+}
+
+-(void)testFillAndStretch
+{
+    //子视图有几个设置了约束，有几个没有设置约束。分别展现Fill 和Stretch的差异。
+    {
+        MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 0, 400) orientation:MyOrientation_Vert];
+        rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
+        rootLayout.wrapContentWidth = YES;
+        rootLayout.wrapContentHeight = NO;
+        
+        //视图1宽度依赖父视图，高度设置。
+        UILabel *v1 = [UILabel new];
+        v1.text = @"你好";  //iPhone8模拟器
+        v1.myHorzMargin = 10;
+        v1.wrapContentHeight = YES;
+        [rootLayout addSubview:v1];
+        
+        //视图2宽度定值，右边对齐，高度不设置。
+        UIView *v2 = [UIView new];
+        v2.myRight = 20;
+        v2.myWidth = 50;
+        [rootLayout addSubview:v2];
+        
+        //视图3宽度定值，居中对齐，高度设置。
+        UIView *v3 = [UIView new];
+        v3.widthSize.equalTo(v2.widthSize).add(20);
+        v3.myCenterX = 0;
+        v3.myHeight = 40;
+        [rootLayout addSubview:v3];
+        
+        //视图4设置左右边距，并且宽度定值，高度不设置。
+        UIView *v4 = [UIView new];
+        v4.myHorzMargin = 30;
+        v4.myWidth = 100;
+        [rootLayout addSubview:v4];
+        
+        //视图5设置宽度依赖父视图，高度设置。
+        UIView *v5 = [UIView new];
+        v5.widthSize.equalTo(rootLayout.widthSize).multiply(0.5);
+        v5.myHeight = 40;
+        [rootLayout addSubview:v5];
+        
+        rootLayout.gravity = MyGravity_Vert_Fill;
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,190,400)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(20,10,140,20.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(100,30.5,50,67.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(55,98,70,107.5)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+         XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(40,205.5,100,67.5)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
+         XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(10,272.5,80,107.5)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
+    }
+
+    {
+        MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 0, 400) orientation:MyOrientation_Vert];
+        rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
+        rootLayout.wrapContentWidth = YES;
+        rootLayout.wrapContentHeight = NO;
+        
+        //视图1宽度依赖父视图，高度设置。
+        UILabel *v1 = [UILabel new];
+        v1.text = @"你好";  //iPhone8模拟器
+        v1.myHorzMargin = 10;
+        v1.wrapContentHeight = YES;
+        [rootLayout addSubview:v1];
+        
+        //视图2宽度定值，右边对齐，高度不设置。
+        UIView *v2 = [UIView new];
+        v2.myRight = 20;
+        v2.myWidth = 50;
+        [rootLayout addSubview:v2];
+        
+        //视图3宽度定值，居中对齐，高度设置。
+        UIView *v3 = [UIView new];
+        v3.widthSize.equalTo(v2.widthSize).add(20);
+        v3.myCenterX = 0;
+        v3.myHeight = 40;
+        [rootLayout addSubview:v3];
+        
+        //视图4设置左右边距，并且宽度定值，高度不设置。
+        UIView *v4 = [UIView new];
+        v4.myHorzMargin = 30;
+        v4.myWidth = 100;
+        [rootLayout addSubview:v4];
+        
+        //视图5设置宽度依赖父视图，高度设置。
+        UIView *v5 = [UIView new];
+        v5.widthSize.equalTo(rootLayout.widthSize).multiply(0.5);
+        v5.myHeight = 40;
+        [rootLayout addSubview:v5];
+        
+        rootLayout.gravity = MyGravity_Vert_Stretch;
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,190,400)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(20,10,140,20.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(100,30.5,50,135)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(55,165.5,70,40)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(40,205.5,100,135)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(10,340,80,40)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
+    }
+
     
+    {
+        MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 400, 0) orientation:MyOrientation_Horz];
+        rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
+        rootLayout.wrapContentWidth = NO;
+        rootLayout.wrapContentHeight = YES;
+        
+        //视图1高度依赖父视图，宽度设置。
+        UILabel *v1 = [UILabel new];
+        v1.text = @"你好";  //iPhone8模拟器
+        v1.myVertMargin = 10;
+        v1.wrapContentWidth = YES;
+        [rootLayout addSubview:v1];
+        
+        //视图2高度定值，下边对齐，宽度不设置。
+        UIView *v2 = [UIView new];
+        v2.myBottom = 20;
+        v2.myHeight = 50;
+        [rootLayout addSubview:v2];
+        
+        //视图3高度定值，居中对齐，宽度设置。
+        UIView *v3 = [UIView new];
+        v3.heightSize.equalTo(v2.heightSize).add(20);
+        v3.myCenterY = 0;
+        v3.myWidth = 40;
+        [rootLayout addSubview:v3];
+        
+        //视图4设置上下边距，并且高度定值，宽度不设置。
+        UIView *v4 = [UIView new];
+        v4.myVertMargin = 30;
+        v4.myHeight = 100;
+        [rootLayout addSubview:v4];
+        
+        //视图5设置高度依赖父视图，宽度设置。
+        UIView *v5 = [UIView new];
+        v5.heightSize.equalTo(rootLayout.heightSize).multiply(0.5);
+        v5.myWidth = 40;
+        [rootLayout addSubview:v5];
+        
+        rootLayout.gravity = MyGravity_Horz_Fill;
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,400,190)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,20,35,140)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(45,100,96,50)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(141,55,72,70)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(212.5,40,96,100)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(308.5,10,72,80)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
+    }
     
+    {
+        MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 400, 0) orientation:MyOrientation_Horz];
+        rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
+        rootLayout.wrapContentWidth = NO;
+        rootLayout.wrapContentHeight = YES;
+        
+        //视图1高度依赖父视图，宽度设置。
+        UILabel *v1 = [UILabel new];
+        v1.text = @"你好";  //iPhone8模拟器
+        v1.myVertMargin = 10;
+        v1.wrapContentWidth = YES;
+        [rootLayout addSubview:v1];
+        
+        //视图2高度定值，下边对齐，宽度不设置。
+        UIView *v2 = [UIView new];
+        v2.myBottom = 20;
+        v2.myHeight = 50;
+        [rootLayout addSubview:v2];
+        
+        //视图3高度定值，居中对齐，宽度设置。
+        UIView *v3 = [UIView new];
+        v3.heightSize.equalTo(v2.heightSize).add(20);
+        v3.myCenterY = 0;
+        v3.myWidth = 40;
+        [rootLayout addSubview:v3];
+        
+        //视图4设置上下边距，并且高度定值，宽度不设置。
+        UIView *v4 = [UIView new];
+        v4.myVertMargin = 30;
+        v4.myHeight = 100;
+        [rootLayout addSubview:v4];
+        
+        //视图5设置高度依赖父视图，宽度设置。
+        UIView *v5 = [UIView new];
+        v5.heightSize.equalTo(rootLayout.heightSize).multiply(0.5);
+        v5.myWidth = 40;
+        [rootLayout addSubview:v5];
+        
+        rootLayout.gravity = MyGravity_Horz_Stretch;
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,400,190)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,20,35,140)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(45,100,127.5,50)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(172.5,55,40,70)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(212.5,40,127.5,100)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(340,10,40,80)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
+    }
+
+
     
     
 }

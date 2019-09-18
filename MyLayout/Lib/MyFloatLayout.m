@@ -121,9 +121,9 @@
 
 #pragma mark -- Override Methods
 
--(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+-(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
-    CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
+    CGSize selfSize = [super calcLayoutSize:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
     
     if (sbs == nil)
         sbs = [self myGetLayoutSubviews];
@@ -152,9 +152,9 @@
     }];
     
     if (orientation == MyOrientation_Vert)
-        selfSize = [self myLayoutSubviewsForVert:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
+        selfSize = [self myCalcLayoutSizeForVertOrientation:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
     else
-        selfSize = [self myLayoutSubviewsForHorz:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
+        selfSize = [self myCalcLayoutSizeForHorzOrientation:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
     
     
     [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
@@ -442,7 +442,7 @@
 }
 
 
--(CGSize)myLayoutSubviewsForVert:(CGSize)selfSize sbs:(NSArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFloatLayout*)lsc 
+-(CGSize)myCalcLayoutSizeForVertOrientation:(CGSize)selfSize sbs:(NSArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFloatLayout*)lsc 
 {
     //对于垂直浮动布局来说，默认是左浮动,当设置为RTL时则默认是右浮动，因此我们只需要改变一下sbv.reverseFloat的定义就好了。
     
@@ -933,7 +933,7 @@
     return selfSize;
 }
 
--(CGSize)myLayoutSubviewsForHorz:(CGSize)selfSize sbs:(NSArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFloatLayout*)lsc
+-(CGSize)myCalcLayoutSizeForHorzOrientation:(CGSize)selfSize sbs:(NSArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFloatLayout*)lsc
 {
     //对于水平浮动布局来说，最终是从左到右排列，而对于RTL则是从右到左排列，因此这里先抽象定义头尾的概念，然后最后再计算时统一将抽象位置转化为CGRect的左边值。
 

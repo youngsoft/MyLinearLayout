@@ -138,9 +138,9 @@
 
 #pragma mark -- Override Methods
 
--(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+-(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
-    CGSize selfSize = [super calcLayoutRect:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
+    CGSize selfSize = [super calcLayoutSize:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
     
     if (sbs == nil)
         sbs = [self myGetLayoutSubviews];
@@ -179,16 +179,16 @@
     if (orientation == MyOrientation_Vert)
     {
         if (lsc.arrangedCount == 0)
-            selfSize = [self myLayoutSubviewsForVertContent:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
+            selfSize = [self myCalcLayoutSizeForVertOrientationContent:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
         else
-            selfSize = [self myLayoutSubviewsForVert:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
+            selfSize = [self myCalcLayoutSizeForVertOrientation:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
     }
     else
     {
         if (lsc.arrangedCount == 0)
-            selfSize = [self myLayoutSubviewsForHorzContent:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
+            selfSize = [self myCalcLayoutSizeForHorzOrientationContent:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
         else
-            selfSize = [self myLayoutSubviewsForHorz:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
+            selfSize = [self myCalcLayoutSizeForHorzOrientation:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
     }
     
     //调整布局视图自己的尺寸。
@@ -887,7 +887,7 @@
 }
 
 
--(CGSize)myLayoutSubviewsForVertContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
+-(CGSize)myCalcLayoutSizeForVertOrientationContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
     
     CGFloat paddingTop = lsc.myLayoutTopPadding;
@@ -1169,7 +1169,7 @@
 }
 
 
--(CGSize)myLayoutSubviewsForVert:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
+-(CGSize)myCalcLayoutSizeForVertOrientation:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
     CGFloat paddingTop = lsc.myLayoutTopPadding;
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
@@ -1640,7 +1640,7 @@
     return selfSize;
 }
 
--(CGSize)myLayoutSubviewsForHorzContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
+-(CGSize)myCalcLayoutSizeForHorzOrientationContent:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
 
     CGFloat paddingTop = lsc.myLayoutTopPadding;
@@ -1905,7 +1905,7 @@
 
 
 
--(CGSize)myLayoutSubviewsForHorz:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
+-(CGSize)myCalcLayoutSizeForHorzOrientation:(CGSize)selfSize sbs:(NSMutableArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFlowLayout*)lsc
 {
     CGFloat paddingTop = lsc.myLayoutTopPadding;
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
