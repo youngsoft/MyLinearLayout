@@ -52,7 +52,9 @@
 {
     return ^id(id val){
         
-        return [self __equalTo:val];
+        [self __equalTo:val];
+        [self setNeedsLayout];
+        return self;
     };
 }
 
@@ -61,7 +63,9 @@
 {
     return ^id(CGFloat val){
         
-        return [self __offset:val];
+        [self __offset:val];
+        [self setNeedsLayout];
+        return self;
     };
 }
 
@@ -70,7 +74,9 @@
 {
     return ^id(CGFloat val){
         
-        return [self __min:val];
+        [self __min:val];
+        [self setNeedsLayout];
+        return self;
     };
 }
 
@@ -79,7 +85,9 @@
 {
     return ^id(CGFloat val){
         
-        return [self __max:val];
+        [self __max:val];
+        [self setNeedsLayout];
+        return self;
     };
 }
 
@@ -87,7 +95,9 @@
 {
     return ^id(id posVal, CGFloat offset){
         
-        return [self __lBound:posVal offsetVal:offset];
+        [self __lBound:posVal offsetVal:offset];
+        [self setNeedsLayout];
+        return self;
     };
 }
 
@@ -95,7 +105,9 @@
 {
     return ^id(id posVal, CGFloat offset){
         
-        return [self __uBound:posVal offsetVal:offset];
+        [self __uBound:posVal offsetVal:offset];
+        [self setNeedsLayout];
+        return self;
     };
 }
 
@@ -106,58 +118,41 @@
 -(void)myClear
 {
     [self __clear];
+    [self setNeedsLayout];
 }
 
 
 -(MyLayoutPos* (^)(id val))equalTo
 {
-    return ^id(id val){
-        
-        return [self __equalTo:val];
-    };
+    return self.myEqualTo;
 }
 
 
 -(MyLayoutPos* (^)(CGFloat val))offset
 {
-    return ^id(CGFloat val){
-
-        return [self __offset:val];
-    };
+    return self.myOffset;
 }
 
 
 -(MyLayoutPos* (^)(CGFloat val))min
 {
-    return ^id(CGFloat val){
-    
-        return [self __min:val];
-    };
+    return self.myMin;
 }
 
 -(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))lBound
 {
-    return ^id(id posVal, CGFloat offsetVal){
-        
-        return [self __lBound:posVal offsetVal:offsetVal];
-    };
+    return self.myLBound;
 }
 
 
 -(MyLayoutPos* (^)(CGFloat val))max
 {
-    return ^id(CGFloat val){
-    
-        return [self __max:val];
-    };
+    return self.myMax;
 }
 
 -(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))uBound
 {
-    return ^id(id posVal, CGFloat offsetVal){
-        
-        return [self __uBound:posVal offsetVal:offsetVal];
-    };
+    return self.myUBound;
 }
 
 
@@ -165,7 +160,7 @@
 
 -(void)clear
 {
-    [self __clear];
+    [self myClear];
 }
 
 
@@ -473,7 +468,6 @@
             _posValType = MyLayoutValueType_Nil;
         
         _posVal = val;
-        [self setNeedsLayout];
     }
     
     return self;
@@ -485,7 +479,6 @@
     if (_offsetVal != val)
     {
         _offsetVal = val;
-        [self setNeedsLayout];
     }
     
     return self;
@@ -497,8 +490,6 @@
     if (self.lBoundVal.posNumVal.doubleValue != val)
     {
         [self.lBoundVal __equalTo:@(val)];
-        
-        [self setNeedsLayout];
     }
     
     return self;
@@ -508,8 +499,6 @@
 {
     
     [[self.lBoundVal __equalTo:posVal] __offset:offsetVal];
-    
-    [self setNeedsLayout];
     
     return self;
 }
@@ -521,7 +510,6 @@
     if (self.uBoundVal.posNumVal.doubleValue != val)
     {
         [self.uBoundVal __equalTo:@(val)];
-        [self setNeedsLayout];
     }
     
     return self;
@@ -531,8 +519,6 @@
 {
     
     [[self.uBoundVal __equalTo:posVal] __offset:offsetVal];
-    
-    [self setNeedsLayout];
     
     return self;
 }
@@ -548,7 +534,6 @@
     _lBoundVal = nil;
     _uBoundVal = nil;
     _shrink = 0;
-    [self setNeedsLayout];
 }
 
 

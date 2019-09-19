@@ -50,9 +50,9 @@ static CGFloat sColCountTag = -100000;
         else if (rowSize == MyLayoutSize.wrap)
         {
             if (orientation == MyOrientation_Horz)
-                lsc.wrapContentHeight = YES;
+                [lsc.heightSize __equalTo:@(MyLayoutSize.wrap)];
             else
-                lsc.wrapContentWidth = YES;
+                [lsc.widthSize __equalTo:@(MyLayoutSize.wrap)];
         }
         else
         {
@@ -63,12 +63,12 @@ static CGFloat sColCountTag = -100000;
         {
             if (orientation == MyOrientation_Horz)
             {
-                lsc.wrapContentWidth = NO;
+                [lsc.widthSize __equalTo:nil];
                 lsc.myHorzMargin = 0;
             }
             else
             {
-                lsc.wrapContentHeight = NO;
+                [lsc.heightSize __equalTo:nil];
                 lsc.myVertMargin = 0;
             }
             
@@ -223,19 +223,11 @@ static CGFloat sColCountTag = -100000;
         NSUInteger colCount = sColCountTag - rowView.colSize;
         if (rowsc.orientation == MyOrientation_Horz)
         {
-#ifdef MY_USEPREFIXMETHOD
-            colsc.widthSize.myEqualTo(rowView.widthSize).myMultiply(1.0 / colCount).myAdd(-1 * rowView.subviewHSpace * (colCount - 1.0)/ colCount);
-#else
-            colsc.widthSize.equalTo(rowView.widthSize).multiply(1.0 / colCount).add(-1 * rowView.subviewHSpace * (colCount - 1.0)/ colCount);
-#endif
+            [[[colsc.widthSize __equalTo:rowView.widthSize] __multiply:(1.0 / colCount)] __add:-1 * rowView.subviewHSpace * (colCount - 1.0)/ colCount];
         }
         else
         {
-#ifdef MY_USEPREFIXMETHOD
-            colsc.heightSize.myEqualTo(rowView.heightSize).myMultiply(1.0 / colCount).myAdd(-1 * rowView.subviewVSpace * (colCount - 1.0)/ colCount);
-#else
-            colsc.heightSize.equalTo(rowView.heightSize).multiply(1.0 / colCount).add(-1 * rowView.subviewVSpace * (colCount - 1.0)/ colCount);
-#endif
+            [[[colsc.heightSize __equalTo:rowView.heightSize] __multiply:(1.0 / colCount)] __add:-1 * rowView.subviewVSpace * (colCount - 1.0)/ colCount];
         }
 
     }
@@ -253,7 +245,7 @@ static CGFloat sColCountTag = -100000;
         {
             if ([colView isKindOfClass:[MyBaseLayout class]])
             {
-                if (!colsc.wrapContentHeight)
+                if (!colsc.heightSizeInner.dimeWrapVal)
                     [colsc.heightSize __equalTo:rowsc.heightSize];
             }
             else
@@ -267,15 +259,13 @@ static CGFloat sColCountTag = -100000;
             
             if ([colView isKindOfClass:[MyBaseLayout class]])
             {
-                if (!colsc.wrapContentWidth)
+                if (!colsc.widthSizeInner.dimeWrapVal)
                     [colsc.widthSize __equalTo:rowsc.widthSize];
             }
             else
                 [colsc.widthSize __equalTo:rowsc.widthSize];
         }
-        
     }
-    
     
     [rowView insertSubview:colView atIndex:indexPath.col];
 }

@@ -27,23 +27,23 @@
 
 #if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸由子视图决定或者由内容决定。目前只用在表格布局MyTableLayout和栅格布局MyGridLayout中。*/
-@property(class, nonatomic, assign,readonly) CGFloat wrap;
+@property(class, nonatomic, assign,readonly) NSInteger wrap;
 #else
-+(CGFloat)wrap;
++(NSInteger)wrap;
 #endif
 
 #if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸会填充满父视图的剩余空间。目前只用在表格布局MyTableLayout和栅格布局MyGridLayout中。*/
-@property(class, nonatomic, assign,readonly) CGFloat fill;
+@property(class, nonatomic, assign,readonly) NSInteger fill;
 #else
-+(CGFloat)fill;
++(NSInteger)fill;
 #endif
 
 #if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸会均分父视图的剩余空间。目前只用在表格布局MyTableLayout */
-@property(class, nonatomic, assign,readonly) CGFloat average;
+@property(class, nonatomic, assign,readonly) NSInteger average;
 #else
-+(CGFloat)average;
++(NSInteger)average;
 #endif
 
 //because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so

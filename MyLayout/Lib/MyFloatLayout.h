@@ -131,14 +131,14 @@
 /**
  不做布局边界尺寸的限制，子视图不会自动换行。因此当设置为YES时，子视图需要明确设置clearFloat来实现主动换行的处理。默认为NO。这个属性设置的意义使得我们可以自定义子视图的换行，而不是让子视图根据布局视图的尺寸限制自动换行。
  
- 1. 当布局的orientation为MyOrientation_Vert并且wrapContentWidth为YES时,这个属性设置为YES才生效。
+ 1. 当布局的orientation为MyOrientation_Vert并且宽度自适应时,这个属性设置为YES才生效。
  
- 2. 当布局的orientation为MyOrientation_Horz并且wrapContentHeight为YES时，这个属性设置为YES才生效。
+ 2. 当布局的orientation为MyOrientation_Horz并且高度自适应时，这个属性设置为YES才生效。
  
  @note 当属性设置为YES时，子视图不能将扩展属性reverseFloat设置为YES，同时不能设置weight属性，否则将导致结果异常。
- @note 这个属性设置为YES时，在左右浮动布局中，子视图只能向左浮动，并且没有右边界的限制，因此如果子视图没有clearFloat时则总是排列在前一个子视图的右边，并不会自动换行,因此为了让这个属性生效，布局视图必须要同时设置wrapContentWidth为YES。
- @note 这个属性设置为YES时，在上下浮动布局中，子视图只能向上浮动，并且没有下边界的限制，因此如果子视图没有设置clearFloat时则总是排列在前一个子视图的下边，并不会自动换行，因此为了让这个属性生效，布局视图必须要同时设置wrapContentHeight为YES.
+ @note 这个属性设置为YES时，在左右浮动布局中，子视图只能向左浮动，并且没有右边界的限制，因此如果子视图没有clearFloat时则总是排列在前一个子视图的右边，并不会自动换行,因此为了让这个属性生效，布局视图必须要同时设置宽度为自适应。
+ @note 这个属性设置为YES时，在上下浮动布局中，子视图只能向上浮动，并且没有下边界的限制，因此如果子视图没有设置clearFloat时则总是排列在前一个子视图的下边，并不会自动换行，因此为了让这个属性生效，布局视图必须要同时设置高度为自适应。
  */
-@property(nonatomic,assign) IBInspectable BOOL noBoundaryLimit MYDEPRECATED("此属性已经过期,请直接设置布局视图的wrapContentWidth或者wrapContentHeight为YES即可");
+@property(nonatomic,assign) IBInspectable BOOL noBoundaryLimit MYDEPRECATED("此属性已经过期,请直接设置布局视图的高度或者宽度值为MyLayoutSize.wrap即可");
 
 @end

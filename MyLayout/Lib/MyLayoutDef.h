@@ -261,4 +261,6 @@ typedef enum : unsigned char
     MyLayoutValueType_Extreme,
     MyLayoutValueType_LayoutDimeDetach,
     MyLayoutValueType_Weight,
+    MyLayoutValueType_Wrap,
+    MyLayoutValueType_Fill,
 }MyLayoutValueType;

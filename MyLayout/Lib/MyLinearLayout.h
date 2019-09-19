@@ -39,7 +39,7 @@
 
 /**
  初始化一个线性布局，并指定子视图排列的方向。如果不明确指定方向则默认是建立一个垂直线性布局。
- @note 建立一个垂直线性布局时默认的wrapContentHeight设置为YES，表示高度默认由所有子视图的高度决定；而建立一个水平线性布局时默认的wrapContentWidth设置为YES，表示宽度默认由所有子视图的宽度决定。
+ @note 建立一个垂直线性布局时默认的高度是自适应，表示高度默认由所有子视图的高度决定；而建立一个水平线性布局时默认的宽度是自适应，表示宽度默认由所有子视图的宽度决定。
  
  @param orientation 布局视图内子视图的排列方向。
  @return 返回线性布局对象实例。
@@ -110,22 +110,22 @@
  @code
  MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
  horzLayout.myHorzMargin = 0;
- horzLayout.wrapContentHeight = YES;
+ horzLayout.myHeight = MyLayoutSize.wrap;
  horzLayout.subviewSpace = 10;  //二者的最小间距不能小于20
  horzLayout.shrinkType = MySubviewsShrink_Auto;
  
  UILabel *A = [UILabel new];
  A.text = @"xxxxxxx";
- A.widthSize.equalTo(A.widthSize); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
- A.wrapContentHeight = YES;        //自动换行
+ A.myWidth = MyLayoutSize.wrap; //宽度自适应，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
+ A.myHeight = MyLayoutSize.wrap;     //高度自适应
  A.rightPos.equalTo(@0.5);         //右边间距是剩余的50%
  [horzLayout addSubview:A];
  
  
  UILabel *B = [UILabel new];
  B.text = @"XXXXXXXX";
- B.widthSize.equalTo(B.widthSize); //宽度等于自身内容的宽度，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
- B.wrapContentHeight = YES;        //自动换行
+ B.myWidth = MyLayoutSize.wrap; //宽度自适应，必须要这么设置和 MySubviewsShrink_Auto 结合使用。
+ B.myHeight = MyLayoutSize.wrap;        //高度自适应
  B.leftPos.equalTo(@0.5);         //左边间距是剩余的50%
  [horzLayout addSubview:B];
  @endcode

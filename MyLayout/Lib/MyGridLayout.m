@@ -867,12 +867,12 @@
     //遍历尺寸
     NSInteger index = 0;
     CGFloat selfMeasure = [self myTraversalGridSize:lsc gridSize:selfSize lsc:lsc sbs:sbs pIndex:&index tagViewGroupIndexDict:tagKeyIndexDict tagViewGroup:nil pTagIndex:nil];
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
     {
         selfSize.height =  selfMeasure;
     }
     
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
     {
         selfSize.width = selfMeasure;
     }

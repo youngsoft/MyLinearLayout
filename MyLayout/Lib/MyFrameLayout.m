@@ -44,7 +44,7 @@
     
     CGSize maxWrapSize = CGSizeMake(paddingLeading + paddingTrailing, paddingTop + paddingBottom);
     CGSize *pMaxWrapSize = &maxWrapSize;
-    if (!lsc.wrapContentHeight && !lsc.wrapContentWidth)
+    if (!lsc.heightSizeInner.dimeWrapVal && !lsc.widthSizeInner.dimeWrapVal)
         pMaxWrapSize = NULL;
     
     for (UIView *sbv in sbs)
@@ -60,12 +60,12 @@
         
     }
     
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
     {
         selfSize.width = maxWrapSize.width;
     }
     
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
     {
         selfSize.height = maxWrapSize.height;
     }
@@ -74,7 +74,7 @@
     [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
     
     //如果布局视图具有包裹属性这里要调整那些依赖父视图宽度和高度的子视图的位置和尺寸。
-    if ((lsc.wrapContentWidth && horzGravity != MyGravity_Horz_Fill) || (lsc.wrapContentHeight && vertGravity != MyGravity_Vert_Fill))
+    if ((lsc.widthSizeInner.dimeWrapVal && horzGravity != MyGravity_Horz_Fill) || (lsc.heightSizeInner.dimeWrapVal && vertGravity != MyGravity_Vert_Fill))
     {
         for (UIView *sbv in sbs)
         {

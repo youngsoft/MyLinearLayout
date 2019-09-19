@@ -14,7 +14,7 @@
  流式布局是一种里面的子视图按照添加的顺序依次排列，当遇到某种约束限制后会另起一排再重新排列的多行多列展示的布局视图。这里的约束限制主要有数量约束限制和内容尺寸约束限制两种，排列的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品，同时流式布局实现了CSS3的flexbox的几乎全部功能。
 
  1.垂直数量约束流式布局
- orientation为MyOrientation_Vert,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,不支持autoArrange。
+ orientation为MyOrientation_Vert,arrangedCount不为0
  
  @code
 每排数量为3的垂直数量约束流式布局
@@ -30,7 +30,7 @@
  @endcode
  
  2.垂直内容约束流式布局.
-    orientation为MyOrientation_Vert,arrangedCount为0,支持wrapContentHeight,支持wrapContentWidth,支持autoArrange。
+    orientation为MyOrientation_Vert,arrangedCount为0
  @code
      垂直内容约束流式布局
            =>
@@ -45,7 +45,7 @@
  @endcode
  
  3.水平数量约束流式布局。
- orientation为MyOrientation_Horz,arrangedCount不为0,支持wrapContentHeight,支持wrapContentWidth,不支持autoArrange。
+ orientation为MyOrientation_Horz,arrangedCount不为0
  
  @code
  每排数量为3的水平数量约束流式布局
@@ -64,7 +64,7 @@
  @endcode
  
  4.水平内容约束流式布局
-    orientation为MyOrientation_Horz,arrangedCount为0,支持wrapContentHeight,支持wrapContentWidth,支持autoArrange。
+    orientation为MyOrientation_Horz,arrangedCount为0
  
  @code
      水平内容约束流式布局
@@ -137,9 +137,9 @@
 
 
 /**
- 为流式布局提供分页展示的能力,默认是0表不支持分页展示。当设置为非0时则要求必须是arrangedCount的整数倍数，表示每页的子视图的数量。而arrangedCount则表示每排内的子视图的数量。当启用pagedCount时要求将流式布局加入到UIScrollView或者其派生类中才能生效。只有数量约束流式布局才支持分页展示的功能，通过pagedCount和wrapContentHeight以及wrapContentWidth配合使用能实现不同的分页展示能力:
+ 为流式布局提供分页展示的能力,默认是0表不支持分页展示。当设置为非0时则要求必须是arrangedCount的整数倍数，表示每页的子视图的数量。而arrangedCount则表示每排内的子视图的数量。当启用pagedCount时要求将流式布局加入到UIScrollView或者其派生类中才能生效。只有数量约束流式布局才支持分页展示的功能，通过pagedCount和设置尺寸的高度或者宽度自适应配合使用能实现不同的分页展示能力:
  @note
- 1. 垂直数量约束流式布局的wrapContentHeight设置为YES时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的宽度你也可以自定义)，整体的分页滚动是从上到下滚动。(每页布局时从左到右再从上到下排列，新页往下滚动继续排列)：
+ 1. 垂直数量约束流式布局的高度设置为自适应时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的宽度你也可以自定义)，整体的分页滚动是从上到下滚动。(每页布局时从左到右再从上到下排列，新页往下滚动继续排列)：
  @code
      1  2  3
      4  5  6
@@ -148,21 +148,21 @@
      10 11 12
  @endcode 
  
- 2. 垂直数量约束流式布局的wrapContentWidth设置为YES时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的高度你也可以自定义)，整体的分页滚动是从左到右滚动。(每页布局时从左到右再从上到下排列，新页往右滚动继续排列)
+ 2. 垂直数量约束流式布局的宽度设置为自适应时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的高度你也可以自定义)，整体的分页滚动是从左到右滚动。(每页布局时从左到右再从上到下排列，新页往右滚动继续排列)
  @code
      1  2  3 | 7  8  9
      4  5  6 | 10 11 12
              →
  @endcode
  
- 3. 水平数量约束流式布局的wrapContentWidth设置为YES时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的高度你也可以自定义)，整体的分页滚动是从左到右滚动。(每页布局时从上到下再从左到右排列，新页往右滚动继续排列)
+ 3. 水平数量约束流式布局的宽度设置为自适应时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的高度你也可以自定义)，整体的分页滚动是从左到右滚动。(每页布局时从上到下再从左到右排列，新页往右滚动继续排列)
  @code
      1  3  5 | 7  9   11
      2  4  6 | 8  10  12
              →
  @endcode
  
- 4. 水平数量约束流式布局的wrapContentHeight设置为YES时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的宽度你也可以自定义)，整体的分页滚动是从上到下滚动。(每页布局时从上到下再从左到右排列，新页往下滚动继续排列)
+ 4. 水平数量约束流式布局的高度设置为自适应时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的宽度你也可以自定义)，整体的分页滚动是从上到下滚动。(每页布局时从上到下再从左到右排列，新页往下滚动继续排列)
   @code
      1  3  5
      2  4  6

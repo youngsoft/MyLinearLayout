@@ -117,19 +117,19 @@ static const int _sstretch = 6;
         if (_width != CGFLOAT_MAX)
         {
             if (_width == MyLayoutSize.fill)
-            self->_view.widthSize.equalTo(val);
+                [self->_view.widthSize __equalTo:val];
             else if (_width < 1 && _width > 0)
-            self->_view.widthSize.equalTo(val.widthSize).multiply(_width);
+                [[self->_view.widthSize __equalTo:val.widthSize] __multiply:_width];
             else;
         }
         
         if (_height != CGFLOAT_MAX)
         {
-        if (_height == MyLayoutSize.fill)
-            self->_view.heightSize.equalTo(val);
-        else if (_height < 1 && _height > 0)
-            self->_view.heightSize.equalTo(val.heightSize).multiply(_height);
-        else;
+            if (_height == MyLayoutSize.fill)
+                [self->_view.heightSize __equalTo:val];
+            else if (_height < 1 && _height > 0)
+                [[self->_view.heightSize __equalTo:val.heightSize] __multiply:_height];
+            else;
         }
 
         [val addSubview:self->_view];
@@ -144,18 +144,14 @@ static const int _sstretch = 6;
         if (_width == MyLayoutSize.fill)
         {
             if (self->_view.superview)
-            self->_view.widthSize.equalTo(self->_view.superview);
-        }
-        else if (_width == MyLayoutSize.wrap)
-        {
-            self->_view.wrapContentWidth = YES;
+                [self->_view.widthSize __equalTo:self->_view.superview];
         }
         else
         {
             if (_width < 1 && _width > 0)
             {
                 if (self->_view.superview)
-                    self->_view.widthSize.equalTo(self->_view.superview).multiply(_width);
+                    [[self->_view.widthSize __equalTo:self->_view.superview] __multiply:_width];
             }
             else
                 self->_view.myWidth = _width;
@@ -171,18 +167,14 @@ static const int _sstretch = 6;
         if (_height == MyLayoutSize.fill)
         {
             if (self->_view.superview)
-            self->_view.heightSize.equalTo(self->_view.superview);
-        }
-        else if (_height == MyLayoutSize.wrap)
-        {
-            self->_view.wrapContentHeight = YES;
+                [self->_view.heightSize __equalTo:self->_view.superview];
         }
         else
         {
             if (_height < 1 && _height > 0)
             {
                 if (self->_view.superview)
-                self->_view.heightSize.equalTo(self->_view.superview).multiply(_height);
+                    [[self->_view.heightSize __equalTo:self->_view.superview] __multiply:_height];
             }
             else
                 self->_view.myHeight = _height;
@@ -510,16 +502,16 @@ static const int _sstretch = 6;
             if (lsc.orientation == MyOrientation_Vert)
             {
                 if (flexItem->_flex_basis < 1)
-                    sbvsc.widthSize.equalTo(lsc.widthSize).multiply(flexItem->_flex_basis);
+                    [[sbvsc.widthSize __equalTo:lsc.widthSize] __multiply:flexItem->_flex_basis];
                 else
-                    sbvsc.widthSize.equalTo(@(flexItem->_flex_basis));
+                    [sbvsc.widthSize __equalTo:@(flexItem->_flex_basis)];
             }
             else
             {
                 if (flexItem->_flex_basis < 1)
-                    sbvsc.heightSize.equalTo(lsc.heightSize).multiply(flexItem->_flex_basis);
+                    [[sbvsc.heightSize __equalTo:lsc.heightSize] __multiply:flexItem->_flex_basis];
                 else
-                    sbvsc.heightSize.equalTo(@(flexItem->_flex_basis));
+                    [sbvsc.heightSize __equalTo:@(flexItem->_flex_basis)];
             }
         }
         

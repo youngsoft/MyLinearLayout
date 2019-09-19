@@ -153,23 +153,23 @@
     
     [self myCalcSubviewsWrapContentSize:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
         
-        if (sbvsc.wrapContentWidth)
+        if (sbvsc.widthSizeInner.dimeWrapVal)
         {
             if (lsc.pagedCount > 0 || sbvsc.widthSizeInner.dimeVal != nil ||
                 (orientation == MyOrientation_Horz && (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill) ||
                 (orientation == MyOrientation_Vert && ((gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill || sbvsc.weight != 0)))
             {
-                sbvsc.wrapContentWidth = NO;
+                [sbvsc.widthSizeInner __equalTo:nil];
             }
         }
         
-        if (sbvsc.wrapContentHeight)
+        if (sbvsc.heightSizeInner.dimeWrapVal)
         {
             if (lsc.pagedCount > 0 || sbvsc.heightSizeInner.dimeVal != nil ||
                 (orientation == MyOrientation_Vert && (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill) ||
                 (orientation == MyOrientation_Horz && ((gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill || sbvsc.weight != 0)))
             {
-                sbvsc.wrapContentHeight = NO;
+                [sbvsc.heightSizeInner __equalTo:nil];
             }
         }
         
@@ -473,7 +473,7 @@
                 //只拉伸宽度不拉伸间距
                 if (horzGravity == MyGravity_Horz_Stretch)
                 {
-                    if (!sbvsc.wrapContentWidth && sbvsc.widthSizeInner.dimeVal == nil)
+                    if (sbvsc.widthSizeInner.dimeVal == nil)
                         sbvmyFrame.width += addXFill;
                 }
                 else
@@ -510,7 +510,7 @@
                     break;
                 case MyGravity_Vert_Stretch:
                 {
-                    if (!sbvsc.wrapContentHeight && sbvsc.heightSizeInner.dimeVal == nil)
+                    if (sbvsc.heightSizeInner.dimeVal == nil)
                     {
                         sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rowMaxHeight - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
                     }
@@ -686,7 +686,7 @@
                 
                 if (vertGravity == MyGravity_Vert_Stretch)
                 {
-                    if (!sbvsc.wrapContentHeight && sbvsc.heightSizeInner.dimeVal == nil)
+                    if (sbvsc.heightSizeInner.dimeVal == nil)
                         sbvmyFrame.height += addYFill;
                 }
                 else
@@ -723,7 +723,7 @@
                     break;
                 case MyGravity_Horz_Stretch:
                 {
-                    if (!sbvsc.wrapContentWidth && sbvsc.widthSizeInner.dimeVal == nil)
+                    if (sbvsc.widthSizeInner.dimeVal == nil)
                     {
                         sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:colMaxWidth - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
                     }
@@ -1016,7 +1016,7 @@
         maxWidth = place;
         
         //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
-        if (!lsc.wrapContentWidth && (place - selfSize.width > 0.0001))
+        if (!lsc.widthSizeInner.dimeWrapVal && (place - selfSize.width > 0.0001))
         {
             xPos = paddingLeading;
             yPos += vertSpace;
@@ -1034,7 +1034,7 @@
                 rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:selfSize.width - paddingHorz - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
                 
                 //特殊处理高度包裹。
-                if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+                if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
                 {
                     rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
                     rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -1077,7 +1077,7 @@
     }
     
     //内容填充约束布局的宽度包裹计算。
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
     {
         selfSize.width = maxWidth;
     }
@@ -1088,7 +1088,7 @@
     [self myCalcVertLayoutSinglelineAlignment:selfSize rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth rowTotalShrink:0 horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
     
     
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
         selfSize.height = yPos + paddingBottom + rowMaxHeight;
     else
     {
@@ -1143,7 +1143,7 @@
                 if (vertGravity == MyGravity_Vert_Stretch)
                 {
                     UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    if (!sbvsc.wrapContentHeight && sbvsc.heightSizeInner == nil)
+                    if (sbvsc.heightSizeInner == nil)
                         sbvmyFrame.height += fill;
                 }
                 else
@@ -1213,7 +1213,7 @@
         NSInteger rows = lsc.pagedCount / arrangedCount;  //每页的行数。
         
         //对于垂直流式布局来说，要求要有明确的宽度。因此如果我们启用了分页又设置了宽度包裹时则我们的分页是从左到右的排列。否则分页是从上到下的排列。
-        if (lsc.wrapContentWidth)
+        if (lsc.widthSizeInner.dimeWrapVal)
         {
             isHorzPaging = YES;
             if (isPagingScroll)
@@ -1543,7 +1543,7 @@
     
     maxHeight += paddingBottom;
     
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
     {
         selfSize.height = maxHeight;
         
@@ -1600,7 +1600,7 @@
                 if (vertGravity == MyGravity_Vert_Stretch)
                 {
                     UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    if (!sbvsc.wrapContentHeight && sbvsc.heightSizeInner == nil)
+                    if (sbvsc.heightSizeInner.dimeVal == nil)
                         sbvmyFrame.height += fill;
                 }
                 else
@@ -1622,7 +1622,7 @@
         }
     }
     
-    if (lsc.wrapContentWidth && !averageArrange)
+    if (lsc.widthSizeInner.dimeWrapVal && !averageArrange)
     {
         selfSize.width = maxWidth + paddingTrailing;
         
@@ -1768,7 +1768,7 @@
         maxHeight = place;
         
         //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
-        if (!lsc.wrapContentHeight && (place - selfSize.height > 0.0001))
+        if (!lsc.heightSizeInner.dimeWrapVal && (place - selfSize.height > 0.0001))
         {
             yPos = paddingTop;
             xPos += horzSpace;
@@ -1817,7 +1817,7 @@
         
     }
     
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
     {
         selfSize.height = maxHeight;
     }
@@ -1826,7 +1826,7 @@
     [arrangeIndexSet addIndex:i - arrangedIndex];
     [self myCalcHorzLayoutSinglelineAlignment:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight colTotalShrink:0 vertGravity:vertGravity horzAlignment:horzAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
     
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = xPos + paddingTrailing + colMaxWidth;
     else
     {
@@ -1880,7 +1880,7 @@
                 if (horzGravity == MyGravity_Horz_Stretch)
                 {
                     UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    if (!sbvsc.wrapContentWidth && sbvsc.widthSizeInner == nil)
+                    if (sbvsc.widthSizeInner.dimeVal == nil)
                         sbvmyFrame.width += fill;
                 }
                 else
@@ -1950,7 +1950,7 @@
         NSInteger cols = lsc.pagedCount / arrangedCount;  //每页的列数。
         
         //对于水平流式布局来说，要求要有明确的高度。因此如果我们启用了分页又设置了高度包裹时则我们的分页是从上到下的排列。否则分页是从左到右的排列。
-        if (lsc.wrapContentHeight)
+        if (lsc.heightSizeInner.dimeWrapVal)
         {
             isVertPaging = YES;
             if (isPagingScroll)
@@ -2260,7 +2260,7 @@
     //最后一列
     [self myCalcHorzLayoutSinglelineAlignment:selfSize colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight colTotalShrink:colTotalShrink vertGravity:vertGravity horzAlignment:horzAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
     
-    if (lsc.wrapContentHeight && !averageArrange)
+    if (lsc.heightSizeInner.dimeWrapVal && !averageArrange)
     {
         selfSize.height = maxHeight + paddingBottom;
         
@@ -2277,7 +2277,7 @@
     
     maxWidth += paddingTrailing;
     
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
     {
         selfSize.width = maxWidth;
         
@@ -2335,7 +2335,7 @@
                 if (horzGravity == MyGravity_Horz_Stretch)
                 {
                     UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    if (!sbvsc.wrapContentWidth && sbvsc.widthSizeInner == nil)
+                    if (sbvsc.widthSizeInner.dimeVal == nil)
                         sbvmyFrame.width += fill;
                 }
                 else

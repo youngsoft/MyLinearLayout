@@ -37,23 +37,10 @@
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
             
-            if (sbvsc.wrapContentWidth)
-            {
-                //只要设置了宽度则应该把wrapContentWidth置为NO
-                if (sbvsc.widthSizeInner.dimeVal != nil)
-                    sbvsc.wrapContentWidth = NO;
-            }
-            
-            if (sbvsc.wrapContentHeight)
-            {
-                if (sbvsc.heightSizeInner.dimeVal != nil)
-                    sbvsc.wrapContentHeight = NO;
-            }
-            
-            if (pHasSubLayout != nil && (sbvsc.wrapContentHeight || sbvsc.wrapContentWidth))
+            if (pHasSubLayout != nil && (sbvsc.heightSizeInner.dimeWrapVal || sbvsc.widthSizeInner.dimeWrapVal))
                 *pHasSubLayout = YES;
             
-            if (isEstimate && (sbvsc.wrapContentWidth || sbvsc.wrapContentHeight))
+            if (isEstimate && (sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal))
             {
                 CGSize sbvSize = sbvmyFrame.frame.size;
                 if (sbvSize.width == CGFLOAT_MAX)
@@ -76,17 +63,17 @@
     BOOL reCalc = NO;
     CGSize maxSize = [self myCalcLayout:&reCalc lsc:lsc selfSize:selfSize];
     
-    if (lsc.wrapContentWidth || lsc.wrapContentHeight)
+    if (lsc.widthSizeInner.dimeWrapVal || lsc.heightSizeInner.dimeWrapVal)
     {
         if (_myCGFloatNotEqual(selfSize.height, maxSize.height)  || _myCGFloatNotEqual(selfSize.width, maxSize.width))
         {
             
-            if (lsc.wrapContentWidth)
+            if (lsc.widthSizeInner.dimeWrapVal)
             {
                 selfSize.width = maxSize.width;
             }
             
-            if (lsc.wrapContentHeight)
+            if (lsc.heightSizeInner.dimeWrapVal)
             {
                 selfSize.height = maxSize.height;
             }
@@ -186,7 +173,7 @@
             sbvmyFrame.leading -= sbvsc.centerXPosInner.absVal;
         }
         
-        if (sbvmyFrame.leading < 0 && relaView == self && lsc.wrapContentWidth)
+        if (sbvmyFrame.leading < 0 && relaView == self && lsc.widthSizeInner.dimeWrapVal)
             sbvmyFrame.leading = 0;
         
         sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
@@ -195,7 +182,7 @@
     {
         sbvmyFrame.leading = (selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding - sbvmyFrame.width) / 2 + lsc.myLayoutLeadingPadding + sbvsc.centerXPosInner.absVal;
         
-        if (sbvmyFrame.leading < 0 && lsc.wrapContentWidth)
+        if (sbvmyFrame.leading < 0 && lsc.widthSizeInner.dimeWrapVal)
             sbvmyFrame.leading = 0;
         
         sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
@@ -378,7 +365,7 @@
             sbvmyFrame.top -= sbvsc.centerYPosInner.absVal;
         }
         
-        if (sbvmyFrame.top < 0 && relaView == self && lsc.wrapContentHeight)
+        if (sbvmyFrame.top < 0 && relaView == self && lsc.heightSizeInner.dimeWrapVal)
             sbvmyFrame.top = 0;
         
         sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
@@ -387,7 +374,7 @@
     {
         sbvmyFrame.top = (selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding -  sbvmyFrame.height) / 2 + lsc.myLayoutTopPadding + sbvsc.centerYPosInner.absVal;
         
-        if (sbvmyFrame.top < 0 && lsc.wrapContentHeight)
+        if (sbvmyFrame.top < 0 && lsc.heightSizeInner.dimeWrapVal)
             sbvmyFrame.top = 0;
         
         sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
@@ -428,7 +415,7 @@
         }
         else if (sbvsc.bottomPosInner.posNumVal != nil)
         {
-            if (selfSize.height == 0 && lsc.wrapContentHeight)
+            if (selfSize.height == 0 && lsc.heightSizeInner.dimeWrapVal)
             {
                 sbvmyFrame.top = lsc.myLayoutTopPadding;
                 sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
@@ -733,7 +720,7 @@
             }
             
             //只有在没有设置宽度时才计算宽度。
-            if (sbvsc.widthSizeInner.dimeVal == nil && !sbvsc.wrapContentWidth)
+            if (sbvsc.widthSizeInner.dimeVal == nil)
             {
                 sbvmyFrame.width = sbvmyFrame.trailing - sbvmyFrame.leading;
                 sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
@@ -836,7 +823,7 @@
             }
             
             //只有在没有设置高度时才计算高度。
-            if (sbvsc.heightSizeInner.dimeVal == nil && !sbvsc.wrapContentHeight)
+            if (sbvsc.heightSizeInner.dimeVal == nil)
             {
                 sbvmyFrame.height = sbvmyFrame.bottom - sbvmyFrame.top;
                 sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
@@ -858,7 +845,7 @@
         {
             sbvmyFrame.height = CGRectGetHeight(sbv.bounds);
             
-            if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]] && ![self myIsNoLayoutSubview:sbv])
+            if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]] && ![self myIsNoLayoutSubview:sbv])
             {
                 if (sbvmyFrame.width == CGFLOAT_MAX)
                     [self myCalcWidth:sbv sbvsc:sbvsc lsc:lsc sbvmyFrame:sbvmyFrame selfSize:selfSize];
@@ -1237,7 +1224,7 @@
         
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-        BOOL sbvWrapContentHeight = sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]];
+        BOOL sbvWrapContentHeight = sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]];
         
         [self myCalcSubViewLeadingTrailing:sbv sbvsc:sbvsc lsc:lsc sbvmyFrame:sbvmyFrame selfSize:selfSize];
         
@@ -1254,7 +1241,7 @@
             continue;
         
         
-        if (lsc.wrapContentWidth && pRecalc != NULL)
+        if (lsc.widthSizeInner.dimeWrapVal && pRecalc != NULL)
         {
             //当有子视图依赖于父视图的一些设置时，需要重新进行布局(设置了右边或者中间的值，或者宽度依赖父视图)
             if(sbvsc.trailingPosInner.posNumVal != nil ||
@@ -1283,7 +1270,7 @@
                 else if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
                 {
                     //如果设置有宽度则宽度参与最大！！！！！！
-                    if (sbvsc.wrapContentWidth || sbvsc.widthSizeInner.dimeVal != nil)
+                    if (sbvsc.widthSizeInner.dimeVal != nil)
                     {
                         if (_myCGFloatLess(maxWidth, sbvmyFrame.leading + sbvmyFrame.width + sbvmyFrame.trailing + lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding))
                         {
@@ -1315,7 +1302,7 @@
             }
         }
         
-        if (lsc.wrapContentHeight && pRecalc != NULL)
+        if (lsc.heightSizeInner.dimeWrapVal && pRecalc != NULL)
         {
             //当有子视图依赖于父视图的一些设置时，需要重新进行布局(设置了下边或者中间的值，或者高度依赖父视图)
             if(sbvsc.bottomPosInner.posNumVal != nil ||
@@ -1333,11 +1320,9 @@
                 maxHeight = sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding;
             }
             
-            
-            //这里加入特殊的条件sbvWrapContentHeight，因为有可能有同时设置顶部和底部位置又同时设置wrapContentHeight的情况，这种情况我们也让其加入最大高度计算行列。
+
             if (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != self.heightSizeInner)
             {
-                
                 if (sbvsc.centerYPosInner.posVal != nil)
                 {
                     if (_myCGFloatLess(maxHeight, sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding))
@@ -1346,7 +1331,7 @@
                 else if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
                 {
                     //如果设置有高度则高度参与最大！！！！！！
-                    if (sbvsc.wrapContentHeight || sbvsc.heightSizeInner.dimeVal != nil)
+                    if (sbvsc.heightSizeInner.dimeVal != nil)
                     {
                         if (_myCGFloatLess(maxHeight, sbvmyFrame.top + sbvmyFrame.height + sbvmyFrame.bottom + lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding))
                         {

@@ -14,9 +14,6 @@
 
 @interface MyViewSizeClass()
 
-@property(nonatomic, assign) BOOL wrapWidth;
-@property(nonatomic, assign) BOOL wrapHeight;
-
 @end
 
 @implementation MyViewSizeClass
@@ -343,9 +340,6 @@ BOOL _myisRTL = NO;
     [self.bottomPos __equalTo:@(myVertMargin)];
 }
 
-
-
-
 -(MyLayoutSize*)widthSize
 {
     if (_widthSize == nil)
@@ -353,7 +347,6 @@ BOOL _myisRTL = NO;
         _widthSize = [MyLayoutSize new];
         _widthSize.view = self.view;
         _widthSize.dime = MyGravity_Horz_Fill;
-        
     }
     
     return _widthSize;
@@ -367,7 +360,6 @@ BOOL _myisRTL = NO;
         _heightSize = [MyLayoutSize new];
         _heightSize.view = self.view;
         _heightSize.dime = MyGravity_Vert_Fill;
-        
     }
     
     return _heightSize;
@@ -418,49 +410,36 @@ BOOL _myisRTL = NO;
 
 -(BOOL)wrapContentWidth
 {
-    return self.wrapWidth;
+    return self.widthSizeInner.dimeWrapVal;
 }
 
 -(BOOL)wrapContentHeight
 {
-    return self.wrapHeight;
+    return self.heightSizeInner.dimeWrapVal;
 }
 
 -(void)setWrapContentWidth:(BOOL)wrapContentWidth
 {
-    if (self.wrapWidth != wrapContentWidth)
+    if (wrapContentWidth)
     {
-        self.wrapWidth = wrapContentWidth;
-        
-        if (wrapContentWidth)
-        {
-            [self.widthSize __equalTo:self.widthSize];
-        }
-        else
-        {
-            if (self.widthSizeInner.dimeSelfVal != nil)
-            {
-                [self.widthSizeInner __equalTo:nil];
-            }
-        }
+        [self.widthSize __equalTo:@(MyLayoutSize.wrap)];
+    }
+    else
+    {
+        [self.widthSize __equalTo:nil];
     }
 }
 
 
 -(void)setWrapContentHeight:(BOOL)wrapContentHeight
 {
-    if (self.wrapHeight != wrapContentHeight)
+    if (wrapContentHeight)
     {
-        self.wrapHeight = wrapContentHeight;
-        
-        if (wrapContentHeight)
-        {
-            if([_view isKindOfClass:[UILabel class]])
-            {
-                if (((UILabel*)_view).numberOfLines == 1)
-                    ((UILabel*)_view).numberOfLines = 0;
-            }
-        }
+        [self.heightSize __equalTo:@(MyLayoutSize.wrap)];
+    }
+    else
+    {
+        [self.heightSize __equalTo:nil];
     }
 }
 
@@ -481,7 +460,7 @@ BOOL _myisRTL = NO;
 -(NSString*)debugDescription
 {
     
-    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nvisibility=%c\nalignment=%hu\nwrapContentWidth=%@\nwrapContentHeight=%@\nreverseFloat=%@\nclearFloat=%@",
+    NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nvisibility=%c\nalignment=%hu\nreverseFloat=%@\nclearFloat=%@",
                     self.topPosInner,
                     self.leadingPosInner,
                     self.bottomPosInner,
@@ -495,8 +474,6 @@ BOOL _myisRTL = NO;
                     self.noLayout? @"YES":@"NO",
                     self.visibility,
                     self.alignment,
-                    self.wrapContentWidth ? @"YES":@"NO",
-                    self.wrapContentHeight ? @"YES":@"NO",
                     self.reverseFloat ? @"YES":@"NO",
                     self.clearFloat ? @"YES":@"NO"];
     
@@ -511,7 +488,6 @@ BOOL _myisRTL = NO;
 {
     MyViewSizeClass *lsc = [[[self class] allocWithZone:zone] init];
     
-  
     //这里不会复制hidden属性
     lsc->_view = _view;
     lsc->_topPos = [self.topPosInner copy];
@@ -523,8 +499,6 @@ BOOL _myisRTL = NO;
     lsc->_baselinePos = [self.baselinePos copy];
     lsc->_widthSize = [self.widthSizeInner copy];
     lsc->_heightSize = [self.heightSizeInner copy];
-    lsc->_wrapWidth = self.wrapWidth;
-    lsc->_wrapHeight = self.wrapHeight;
     lsc.useFrame = self.useFrame;
     lsc.noLayout = self.noLayout;
     lsc.visibility = self.visibility;
@@ -533,7 +507,6 @@ BOOL _myisRTL = NO;
     lsc.reverseFloat = self.isReverseFloat;
     lsc.clearFloat = self.clearFloat;
 
-    
     return lsc;
 }
 
@@ -555,25 +528,6 @@ BOOL _myisRTL = NO;
     
     return self;
 }
-
--(void)setWrapContentWidth:(BOOL)wrapContentWidth
-{
-    if (self.wrapWidth != wrapContentWidth)
-    {
-        self.wrapWidth = wrapContentWidth;
-    }
-    
-}
-
--(void)setWrapContentHeight:(BOOL)wrapContentHeight
-{
-    if (self.wrapHeight != wrapContentHeight)
-    {
-        self.wrapHeight = wrapContentHeight;
-    }
-    
-}
-
 
 
 -(UIEdgeInsets)padding

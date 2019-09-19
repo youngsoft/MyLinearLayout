@@ -95,7 +95,7 @@
 
 -(void)setNoBoundaryLimit:(BOOL)noBoundaryLimit
 {
-    NSLog(@"属性已经过期！请直接设置wrapContentWidth或者wrapContentHeight即可");
+    NSLog(@"属性已经过期！请直接设置宽度或者高度值为MyLayoutSize.wrap");
 }
 
 -(BOOL)noBoundaryLimit
@@ -133,22 +133,21 @@
     
     [self myCalcSubviewsWrapContentSize:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
         
-        if (sbvsc.wrapContentWidth)
+        if (sbvsc.widthSizeInner.dimeWrapVal)
         {
-            if (sbvsc.widthSizeInner.dimeVal != nil || (orientation == MyOrientation_Vert && sbvsc.weight != 0))
+            if (orientation == MyOrientation_Vert && sbvsc.weight != 0)
             {
-                sbvsc.wrapContentWidth = NO;
+                [sbvsc.widthSizeInner __equalTo:nil];
             }
         }
         
-        if (sbvsc.wrapContentHeight)
+        if (sbvsc.heightSizeInner.dimeWrapVal)
         {
-            if (sbvsc.heightSizeInner.dimeVal != nil || (orientation == MyOrientation_Horz && sbvsc.weight != 0))
+            if (orientation == MyOrientation_Horz && sbvsc.weight != 0)
             {
-                sbvsc.wrapContentHeight = NO;
+                [sbvsc.heightSizeInner __equalTo:nil];
             }
         }
-        
     }];
     
     if (orientation == MyOrientation_Vert)
@@ -454,7 +453,7 @@
  //   CGFloat paddingVert = paddingTop + paddingBottom;
     
     //如果没有边界限制我们将高度设置为最大。。
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = CGFLOAT_MAX;
     
     
@@ -509,8 +508,8 @@
         if (sbvsc.isReverseFloat)
         {
 #ifdef DEBUG
-            //异常崩溃：当布局视图设置了wrapContentWidth为YES时子视图不能设置逆向浮动
-             NSCAssert(!lsc.wrapContentWidth, @"Constraint exception！！, vertical float layout:%@ can not set wrapContentWidth to YES when the subview:%@ set reverseFloat to YES.",self, sbv);
+            //异常崩溃：当布局视图设置了宽度值为MyLayoutSize.wrap时，子视图不能逆向浮动
+             NSCAssert(!lsc.widthSizeInner.dimeWrapVal, @"Constraint exception！！, vertical float layout:%@ can not set width to MyLayoutSize.wrap when the subview:%@ set reverseFloat to YES.",self, sbv);
 #endif
             
             CGPoint nextPoint = {selfSize.width - paddingTrailing, leadingLastYOffset};
@@ -558,7 +557,7 @@
                 }
                 
                 //特殊处理高度包裹的场景
-                if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+                if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
                 {
                     rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
                     rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -699,8 +698,8 @@
             if (sbvsc.weight != 0)
             {
 #ifdef DEBUG
-                //异常崩溃：当布局视图设置了wrapContentWidth为YES时子视图不能设置weight大于0
-                NSCAssert(!lsc.wrapContentWidth, @"Constraint exception！！, vertical float layout:%@ can not set wrapContentWidth to YES when the subview:%@ set weight big than zero.",self, sbv);
+                //异常崩溃：当布局视图设置了宽度值为MyLayoutSize.wrap 子视图不能设置weight大于0
+                NSCAssert(!lsc.widthSizeInner.dimeWrapVal, @"Constraint exception！！, vertical float layout:%@ can not set width to MyLayoutSize.wrap when the subview:%@ set weight big than zero.",self, sbv);
 #endif
                 rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:(trailingCandidateXBoundary - nextPoint.x + sbvsc.widthSizeInner.addVal) * sbvsc.weight - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
                 
@@ -712,7 +711,7 @@
                 }
                 
                 //特殊处理高度包裹的场景
-                if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+                if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
                 {
                     rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
                     rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -818,11 +817,11 @@
     }
     
     maxWidth += paddingTrailing;
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = maxWidth;
     
     maxHeight += paddingBottom;
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
         selfSize.height = maxHeight;
     else
     {
@@ -907,7 +906,7 @@
                             break;
                         case MyGravity_Vert_Stretch:
                         {
-                            if (!sbvsc.wrapContentHeight && sbvsc.heightSizeInner.dimeVal == nil)
+                            if (sbvsc.heightSizeInner.dimeVal == nil)
                                 sbvmyFrame.height = lineMaxHeight;
                         }
                             break;
@@ -945,7 +944,7 @@
     CGFloat paddingVert = paddingTop + paddingBottom;
     
     //如果没有边界限制我们将高度设置为最大。。
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
         selfSize.height = CGFLOAT_MAX;
     
     //支持浮动垂直间距。
@@ -998,8 +997,8 @@
         if (sbvsc.reverseFloat)
         {
 #ifdef DEBUG
-            //异常崩溃：当布局视图设置了wrapContentHeight为YES时子视图不能设置逆向浮动
-            NSCAssert(!lsc.wrapContentHeight, @"Constraint exception！！, horizontal float layout:%@ can not set wrapContentHeight to YES when the subview:%@ set reverseFloat to YES.",self, sbv);
+            //异常崩溃：当布局视图设置了高度为MyLayoutSize.wrap时子视图不能设置逆向浮动
+            NSCAssert(!lsc.heightSizeInner.dimeWrapVal, @"Constraint exception！！, horizontal float layout:%@ can not set height to wrap when the subview:%@ set reverseFloat to YES.",self, sbv);
 #endif
             
             CGPoint nextPoint = {topLastXOffset, selfSize.height - paddingBottom};
@@ -1170,8 +1169,8 @@
             {
                 
 #ifdef DEBUG
-                //异常崩溃：当布局视图设置了wrapContentHeight为YES时子视图不能设置weight大于0
-                NSCAssert(!lsc.wrapContentHeight, @"Constraint exception！！, horizontal float layout:%@ can not set wrapContentHeight to YES when the subview:%@ set weight big than zero.",self, sbv);
+                //异常崩溃：当布局视图设置了高度为wrap时子视图不能设置weight大于0
+                NSCAssert(!lsc.heightSizeInner.dimeWrapVal, @"Constraint exception！！, horizontal float layout:%@ can not set height to wrap when the subview:%@ set weight big than zero.",self, sbv);
 #endif
                 
                 rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:(bottomCandidateYBoundary - nextPoint.y + sbvsc.heightSizeInner.addVal) * sbvsc.weight - topSpace - bottomSpace sbvSize:rect.size selfLayoutSize:selfSize];
@@ -1278,11 +1277,11 @@
     }
     
     maxHeight += paddingBottom;
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
         selfSize.height = maxHeight;
 
     maxWidth += paddingTrailing;
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = maxWidth;
     else
     {
@@ -1358,7 +1357,7 @@
                             break;
                         case MyGravity_Horz_Stretch:
                         {
-                            if (!sbvsc.wrapContentWidth && sbvsc.widthSizeInner == nil)
+                            if (sbvsc.widthSizeInner.dimeVal == nil)
                                 sbvmyFrame.width = lineMaxWidth;
                         }
                             break;

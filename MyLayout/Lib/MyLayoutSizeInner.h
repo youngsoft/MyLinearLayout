@@ -19,7 +19,8 @@
 @property(nonatomic, readonly, strong) NSNumber *dimeNumVal;
 @property(nonatomic, readonly, strong) MyLayoutSize *dimeRelaVal;
 @property(nonatomic, readonly, strong) NSArray *dimeArrVal;
-@property(nonatomic, readonly, strong) MyLayoutSize *dimeSelfVal;
+
+@property(nonatomic, readonly, assign) BOOL dimeWrapVal;
 
 @property(nonatomic, readonly, strong) MyLayoutSize *lBoundVal;
 @property(nonatomic, readonly, strong) MyLayoutSize *uBoundVal;
@@ -27,9 +28,12 @@
 @property(nonatomic, readonly, strong) MyLayoutSize *lBoundValInner;
 @property(nonatomic, readonly, strong) MyLayoutSize *uBoundValInner;
 
+//优先级，内部使用，值是0，500， 1000 分别代表低、中、高，默认是500，这个属性先内部生效。
+@property(nonatomic, assign) NSInteger priority;
 
 
 -(MyLayoutSize*)__equalTo:(id)val;
+-(MyLayoutSize*)__equalTo:(id)val priority:(NSInteger)priority;
 -(MyLayoutSize*)__add:(CGFloat)val;
 -(MyLayoutSize*)__multiply:(CGFloat)val;
 -(MyLayoutSize*)__min:(CGFloat)val;

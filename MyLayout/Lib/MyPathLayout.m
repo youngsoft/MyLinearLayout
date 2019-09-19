@@ -734,12 +734,12 @@
     }
 
     
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
     {
         selfSize.width = maxXPos - minXPos;
     }
     
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
     {
         selfSize.height = maxYPos - minYPos;
     }

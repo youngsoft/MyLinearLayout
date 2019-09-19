@@ -1447,14 +1447,12 @@ void* _myObserverContextC = (void*)20175283;
             
             UIView *sbvsc = object.myCurrentSizeClass;
             
-            if (sbvsc.widthSizeInner.dimeSelfVal != nil && sbvsc.heightSizeInner.dimeSelfVal != nil)
+            //这是什么意思？ 这就是不注释的悲剧！！！
+            if (sbvsc.widthSizeInner.dimeWrapVal && sbvsc.heightSizeInner.dimeWrapVal)
             {
                 [self setNeedsLayout];
             }
-            else if (sbvsc.wrapContentWidth ||
-                     sbvsc.wrapContentHeight ||
-                     sbvsc.widthSizeInner.dimeSelfVal != nil ||
-                     sbvsc.heightSizeInner.dimeSelfVal != nil)
+            else if (sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal)
             {
                 [object sizeToFit];
             }
@@ -1597,7 +1595,7 @@ void* _myObserverContextC = (void*)20175283;
     
     MyBaseLayout *lsc = self.myCurrentSizeClass;
     
-    //特殊处理如果视图是控制器根视图则取消wrapContentWidth, wrapContentHeight,以及adjustScrollViewContentSizeMode的设置。
+    //特殊处理如果视图是控制器根视图则取消高度或者宽度包裹,以及adjustScrollViewContentSizeMode的设置。
     @try {
         
         if (newSuperview != nil)
@@ -1606,8 +1604,11 @@ void* _myObserverContextC = (void*)20175283;
             id vc = [self valueForKey:@"viewDelegate"];
             if (vc != nil)
             {
-                lsc.wrapContentWidth = NO;
-                lsc.wrapContentHeight = NO;
+                if (lsc.widthSizeInner.dimeWrapVal)
+                    [lsc.widthSizeInner __equalTo:nil];
+                if (lsc.heightSizeInner.dimeWrapVal)
+                    [lsc.heightSizeInner __equalTo:nil];
+                
                 if (lsc.insetsPaddingFromSafeArea == defRectEdge)
                     lsc.insetsPaddingFromSafeArea = ~UIRectEdgeTop;
                 self.adjustScrollViewContentSizeMode = MyAdjustScrollViewContentSizeModeNo;
@@ -1624,26 +1625,6 @@ void* _myObserverContextC = (void*)20175283;
     } @catch (NSException *exception) {
         
     }
-    
-    
-#ifdef DEBUG
-    
-    if (lsc.wrapContentHeight && lsc.heightSizeInner.dimeVal != nil)
-    {
-        //约束警告：wrapContentHeight和设置的heightSize可能有约束冲突
-        NSLog(@"Constraint warning！%@'s wrapContentHeight and heightSize setting may be constraint.",self);
-    }
-    
-    if (lsc.wrapContentWidth && lsc.widthSizeInner.dimeVal != nil)
-    {
-        //约束警告：wrapContentWidth和设置的widthSize可能有约束冲突
-        NSLog(@"Constraint warning！%@'s wrapContentWidth and widthSize setting may be constraint.",self);
-    }
-    
-#endif
-    
-    
-    
     
     //将要添加到父视图时，如果不是MyLayout派生则则跟需要根据父视图的frame的变化而调整自身的位置和尺寸
     if (newSuperview != nil && ![newSuperview isKindOfClass:[MyBaseLayout class]])
@@ -1850,13 +1831,13 @@ void* _myObserverContextC = (void*)20175283;
 {
     
     CGSize sz = [super intrinsicContentSize];
-    if (self.translatesAutoresizingMaskIntoConstraints == NO && (self.wrapContentWidth || self.wrapContentHeight))
+    if (self.translatesAutoresizingMaskIntoConstraints == NO && (self.widthSizeInner.dimeWrapVal || self.heightSizeInner.dimeWrapVal))
     {
-        if (self.wrapContentWidth && self.wrapContentHeight)
+        if (self.widthSizeInner.dimeWrapVal && self.heightSizeInner.dimeWrapVal)
         {
             sz = [self sizeThatFits:CGSizeZero];
         }
-        else if (self.wrapContentWidth)
+        else if (self.widthSizeInner.dimeWrapVal)
         {
             //动态宽度
             NSLayoutConstraint *heightConstraint = nil;
@@ -2131,7 +2112,7 @@ void* _myObserverContextC = (void*)20175283;
         }
         
         
-        if (newSelfSize.width != CGFLOAT_MAX && (lsc.wrapContentWidth || lsc.wrapContentHeight))
+        if (newSelfSize.width != CGFLOAT_MAX && (lsc.widthSizeInner.dimeWrapVal || lsc.heightSizeInner.dimeWrapVal))
         {
             
             //因为布局子视图的新老尺寸计算在上面有两种不同的方法，因此这里需要考虑两种计算的误差值，而这两种计算的误差值是不超过1/屏幕精度的。
@@ -2163,10 +2144,10 @@ void* _myObserverContextC = (void*)20175283;
                 if (CGAffineTransformIsIdentity(self.transform))
                 {
                     CGRect currentFrame = self.frame;
-                    if (isWidthAlter && lsc.wrapContentWidth)
+                    if (isWidthAlter && lsc.widthSizeInner.dimeWrapVal)
                         currentFrame.size.width = newSelfSize.width;
                     
-                    if (isHeightAlter && lsc.wrapContentHeight)
+                    if (isHeightAlter && lsc.heightSizeInner.dimeWrapVal)
                         currentFrame.size.height = newSelfSize.height;
                     
                     self.frame = currentFrame;
@@ -2181,13 +2162,13 @@ void* _myObserverContextC = (void*)20175283;
                     if ([self.superview isKindOfClass:[UIScrollView class]])
                         superViewZoomScale = ((UIScrollView*)self.superview).zoomScale;
                     
-                    if (isWidthAlter && lsc.wrapContentWidth)
+                    if (isWidthAlter && lsc.widthSizeInner.dimeWrapVal)
                     {
                         currentBounds.size.width = newSelfSize.width;
                         currentCenter.x += (newSelfSize.width - oldSelfSize.width) * self.layer.anchorPoint.x * superViewZoomScale;
                     }
                     
-                    if (isHeightAlter && lsc.wrapContentHeight)
+                    if (isHeightAlter && lsc.heightSizeInner.dimeWrapVal)
                     {
                         currentBounds.size.height = newSelfSize.height;
                         currentCenter.y += (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y * superViewZoomScale;
@@ -2222,7 +2203,7 @@ void* _myObserverContextC = (void*)20175283;
 
             }
             
-            //如果自己的父视图是非UIScrollView以及非布局视图。以及自己是wrapContentWidth或者wrapContentHeight时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
+            //如果自己的父视图是非UIScrollView以及非布局视图。以及自己的宽度或者高度是包裹的，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
             if (supv != nil && ![supv isKindOfClass:[MyBaseLayout class]])
             {
                 CGPoint centerPonintSelf = self.center;
@@ -2242,14 +2223,14 @@ void* _myObserverContextC = (void*)20175283;
                     }
                 }
 
-                //如果自己的父视图是非UIScrollView以及非布局视图。以及自己是wrapContentWidth或者wrapContentHeight时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
-                if (![supv isKindOfClass:[UIScrollView class]] && (lsc.wrapContentWidth || lsc.wrapContentHeight))
+                //如果自己的父视图是非UIScrollView以及非布局视图。以及自己的宽度或者高度是包裹的时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
+                if (![supv isKindOfClass:[UIScrollView class]] && (lsc.widthSizeInner.dimeWrapVal || lsc.heightSizeInner.dimeWrapVal))
                 {
                     
                     if ([MyBaseLayout isRTL])
                         centerPonintSelf.x = rectSuper.size.width - centerPonintSelf.x;
                     
-                    if (lsc.wrapContentWidth)
+                    if (lsc.widthSizeInner.dimeWrapVal)
                     {
                         //如果只设置了右边，或者只设置了居中则更新位置。。
                         if (lsc.centerXPosInner.posVal != nil)
@@ -2265,7 +2246,7 @@ void* _myObserverContextC = (void*)20175283;
                         
                     }
                     
-                    if (lsc.wrapContentHeight)
+                    if (lsc.heightSizeInner.dimeWrapVal)
                     {
                         if (lsc.centerYPosInner.posVal != nil)
                         {
@@ -2295,19 +2276,19 @@ void* _myObserverContextC = (void*)20175283;
             //这里处理当布局视图的父视图是非布局父视图，且父视图具有wrap属性时需要调整父视图的尺寸。
             if (supv != nil && ![supv isKindOfClass:[MyBaseLayout class]])
             {
-                if (supv.wrapContentHeight || supv.wrapContentWidth)
+                if (supv.heightSizeInner.dimeWrapVal || supv.widthSizeInner.dimeWrapVal)
                 {
                     //调整父视图的高度和宽度。frame值。
                     CGRect superBounds = supv.bounds;
                     CGPoint superCenter = supv.center;
                     
-                    if (supv.wrapContentHeight)
+                    if (supv.heightSizeInner.dimeWrapVal)
                     {
                         superBounds.size.height = [self myValidMeasure:supv.heightSizeInner sbv:supv calcSize:lsc.myTop + newSelfSize.height + lsc.myBottom sbvSize:superBounds.size selfLayoutSize:newSelfSize];
                         superCenter.y += (superBounds.size.height - supv.bounds.size.height) * supv.layer.anchorPoint.y;
                     }
                     
-                    if (supv.wrapContentWidth)
+                    if (supv.widthSizeInner.dimeWrapVal)
                     {
                         superBounds.size.width = [self myValidMeasure:supv.widthSizeInner sbv:supv calcSize:lsc.myLeading + newSelfSize.width + lsc.myTrailing sbvSize:superBounds.size selfLayoutSize:newSelfSize];
                         superCenter.x += (superBounds.size.width - supv.bounds.size.width) * supv.layer.anchorPoint.x;
@@ -2394,7 +2375,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
         {
-            if (sbvsc.heightSizeInner.dimeVal == nil && !sbvsc.wrapContentHeight)
+            if (sbvsc.heightSizeInner.dimeVal == nil)
                 sbvVertGravity = MyGravity_Vert_Fill;
         }
         else if (sbvsc.centerYPosInner.posVal != nil)
@@ -2451,7 +2432,7 @@ void* _myObserverContextC = (void*)20175283;
     //如果是设置垂直拉伸则，如果子视图有约束则不受影响，否则就变为和填充一个意思。
     if (vertGravity == MyGravity_Vert_Stretch)
     {
-        if (sbvsc.wrapContentHeight || sbvsc.heightSizeInner.dimeVal != nil)
+        if (sbvsc.heightSizeInner.dimeVal != nil)
             vertGravity = MyGravity_Vert_Top;
         else
             vertGravity = MyGravity_Vert_Fill;
@@ -2536,7 +2517,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
         {
-            if (sbvsc.widthSizeInner.dimeVal == nil && !sbvsc.wrapContentWidth)
+            if (sbvsc.widthSizeInner.dimeVal == nil)
                 sbvHorzGravity = MyGravity_Horz_Fill;
         }
         else if (sbvsc.centerXPosInner.posVal != nil)
@@ -2591,10 +2572,10 @@ void* _myObserverContextC = (void*)20175283;
     //如果是设置水平拉伸则，如果子视图有约束则不受影响，否则就变为和填充一个意思。
     if (horzGravity == MyGravity_Horz_Stretch)
     {
-        if (sbvsc.wrapContentWidth || sbvsc.widthSizeInner.dimeVal != nil)
-            horzGravity = MyGravity_Horz_Fill;
-        else
+        if (sbvsc.widthSizeInner.dimeVal != nil)
             horzGravity = MyGravity_Horz_Leading;
+        else
+            horzGravity = MyGravity_Horz_Fill;
     }
     
     
@@ -2651,8 +2632,8 @@ void* _myObserverContextC = (void*)20175283;
     }
     
     BOOL isLayoutView = [sbv isKindOfClass:[MyBaseLayout class]];
-    BOOL isWrapWidth = (sbvsc.widthSizeInner.dimeSelfVal != nil) || (!isLayoutView && sbvsc.wrapContentWidth); //宽度包裹特殊处理
-    BOOL isWrapHeight = (sbvsc.heightSizeInner.dimeSelfVal != nil) || (!isLayoutView && sbvsc.wrapContentSize);//高度包裹也特殊处理
+    BOOL isWrapWidth =  (!isLayoutView && sbvsc.widthSizeInner.dimeWrapVal); //宽度包裹特殊处理
+    BOOL isWrapHeight = (!isLayoutView && sbvsc.heightSizeInner.dimeWrapVal);//高度包裹也特殊处理
     
     
     if (isWrapWidth || isWrapHeight)
@@ -2665,20 +2646,10 @@ void* _myObserverContextC = (void*)20175283;
         
         CGSize fitSize = [sbv sizeThatFits:thatFits];
         if (isWrapWidth)
-        {
-            if (sbvsc.wrapContentWidth)
-                sbvmyFrame.width = fitSize.width;
-            else
-                sbvmyFrame.width = [sbvsc.widthSizeInner measureWith:fitSize.width];
-        }
+            sbvmyFrame.width = [sbvsc.widthSizeInner measureWith:fitSize.width];
         
         if (isWrapHeight)
-        {
-            if (sbvsc.wrapContentHeight)
-                sbvmyFrame.height = fitSize.height;
-            else
-                sbvmyFrame.height = [sbvsc.heightSizeInner measureWith:fitSize.height];
-        }
+            sbvmyFrame.height = [sbvsc.heightSizeInner measureWith:fitSize.height];
     }
 }
 
@@ -2692,7 +2663,7 @@ void* _myObserverContextC = (void*)20175283;
     UIView *ssc = newSuperview.myCurrentSizeClassInner;
     UIView *lsc = self.myCurrentSizeClass;
     
-    if (!ssc.wrapContentWidth)
+    if (!ssc.widthSizeInner.dimeWrapVal)
     {
         if (lsc.widthSizeInner.dimeRelaVal.view == newSuperview)
         {
@@ -2706,7 +2677,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (lsc.leadingPosInner.posVal != nil && lsc.trailingPosInner.posVal != nil)
         {
-            if (!lsc.wrapContentWidth && lsc.widthSizeInner.dimeVal == nil)
+            if (lsc.widthSizeInner.dimeVal == nil)
             {
                 CGFloat leadingMargin = [lsc.leadingPosInner realPosIn:rectSuper.size.width];
                 CGFloat trailingMargin = [lsc.trailingPosInner realPosIn:rectSuper.size.width];
@@ -2722,7 +2693,7 @@ void* _myObserverContextC = (void*)20175283;
         }
     }
 
-    if (!ssc.wrapContentHeight)
+    if (!ssc.heightSizeInner.dimeWrapVal)
     {
         if (lsc.heightSizeInner.dimeRelaVal.view == newSuperview)
         {
@@ -2737,7 +2708,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (lsc.topPosInner.posVal != nil && lsc.bottomPosInner.posVal != nil)
         {
-            if (!lsc.wrapContentHeight && lsc.heightSizeInner.dimeVal == nil)
+            if (lsc.heightSizeInner.dimeVal == nil)
             {
                 CGFloat topMargin = [lsc.topPosInner realPosIn:rectSuper.size.height];
                 CGFloat bottomMargin = [lsc.bottomPosInner realPosIn:rectSuper.size.height];
@@ -2785,8 +2756,6 @@ void* _myObserverContextC = (void*)20175283;
     //确定左右边距和宽度。
     if (lsc.widthSizeInner.dimeVal != nil)
     {
-        lsc.wrapContentWidth = NO;
-        
         if (lsc.widthSizeInner.dimeRelaVal != nil)
         {
             if (lsc.widthSizeInner.dimeRelaVal.view == newSuperview)
@@ -2823,7 +2792,7 @@ void* _myObserverContextC = (void*)20175283;
     if (lsc.leadingPosInner.posVal != nil && lsc.trailingPosInner.posVal != nil)
     {
         isAdjust = YES;
-        if (!lsc.wrapContentWidth && lsc.widthSizeInner.dimeVal == nil)
+        if (lsc.widthSizeInner.dimeVal == nil)
         {
             rectSelf.size.width = rectSuper.size.width - leadingMargin - trailingMargin;
             rectSelf.size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
@@ -2881,8 +2850,6 @@ void* _myObserverContextC = (void*)20175283;
     
     if (lsc.heightSizeInner.dimeVal != nil)
     {
-        lsc.wrapContentHeight = NO;
-        
         if (lsc.heightSizeInner.dimeRelaVal != nil)
         {
             if (lsc.heightSizeInner.dimeRelaVal.view == newSuperview)
@@ -2913,7 +2880,7 @@ void* _myObserverContextC = (void*)20175283;
     if (lsc.topPosInner.posVal != nil && lsc.bottomPosInner.posVal != nil)
     {
         isAdjust = YES;
-        if (!lsc.wrapContentHeight && lsc.heightSizeInner.dimeVal == nil)
+        if (lsc.heightSizeInner.dimeVal == nil)
         {
             rectSelf.size.height = rectSuper.size.height - topMargin - bottomMargin;
             rectSelf.size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
@@ -2993,9 +2960,9 @@ void* _myObserverContextC = (void*)20175283;
             self.center = CGPointMake(rectSelf.origin.x + self.layer.anchorPoint.x * rectSelf.size.width * superViewZoomScale, rectSelf.origin.y + self.layer.anchorPoint.y * rectSelf.size.height * superViewZoomScale);
         }
     }
-    else if (lsc.wrapContentWidth || lsc.wrapContentHeight)
+    else if (lsc.widthSizeInner.dimeWrapVal || lsc.heightSizeInner.dimeWrapVal)
     {
-            [self setNeedsLayout];
+        [self setNeedsLayout];
     }
     
     
@@ -3010,7 +2977,7 @@ void* _myObserverContextC = (void*)20175283;
     if ([sbv isKindOfClass:[UIImageView class]])
     {
         //根据图片的尺寸进行等比缩放得到合适的高度。
-        if (!sbvsc.wrapContentWidth)
+        if (!sbvsc.widthSizeInner.dimeWrapVal)
         {
             UIImage *img = ((UIImageView*)sbv).image;
             if (img != nil && img.size.width != 0)
@@ -3078,13 +3045,6 @@ void* _myObserverContextC = (void*)20175283;
                     value = sbvSize.height;
             }
         }
-        else if (boundDime.dimeSelfVal != nil)
-        {
-            if (dimeType == MyGravity_Horz_Fill)
-                value = sbvSize.width;
-            else
-                value = sbvSize.height;
-        }
         else
         {
             if (boundDime.dimeRelaVal.dime == MyGravity_Horz_Fill)
@@ -3097,6 +3057,13 @@ void* _myObserverContextC = (void*)20175283;
             }
         }
         
+    }
+    else if (lValueType == MyLayoutValueType_Wrap)
+    {
+        if (dimeType == MyGravity_Horz_Fill)
+            value = sbvSize.width;
+        else
+            value = sbvSize.height;
     }
     else
     {
@@ -3254,9 +3221,9 @@ void* _myObserverContextC = (void*)20175283;
     //如果没有子视图，并且padding不参与空子视图尺寸计算则尺寸应该扣除padding的值。
     if (sbs.count == 0 && !lsc.zeroPadding)
     {
-        if (lsc.wrapContentWidth)
+        if (lsc.widthSizeInner.dimeWrapVal)
             size.width -= (lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding);
-        if (lsc.wrapContentHeight)
+        if (lsc.heightSizeInner.dimeWrapVal)
             size.height -= (lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding);
     }
     
@@ -3543,21 +3510,10 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     if ([sbv isKindOfClass:[MyBaseLayout class]])
     {
         
-        if (sbvsc.wrapContentHeight && sbvsc.heightSizeInner.dimeVal != nil)
-        {
-            sbvsc.wrapContentHeight = NO;
-        }
-        
-        if (sbvsc.wrapContentWidth && sbvsc.widthSizeInner.dimeVal != nil)
-        {
-            sbvsc.wrapContentWidth = NO;
-        }
-        
-        
-        if (pHasSubLayout != nil && (sbvsc.wrapContentHeight || sbvsc.wrapContentWidth))
+        if (pHasSubLayout != nil && (sbvsc.heightSizeInner.dimeWrapVal || sbvsc.widthSizeInner.dimeWrapVal))
             *pHasSubLayout = YES;
         
-        if (isEstimate && (sbvsc.wrapContentHeight || sbvsc.wrapContentWidth))
+        if (isEstimate && (sbvsc.heightSizeInner.dimeWrapVal || sbvsc.widthSizeInner.dimeWrapVal))
         {
             [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
             if (sbvmyFrame.multiple)
@@ -3643,7 +3599,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     }
     
     //高度等于内容的高度,特殊处理。
-    if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+    if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
         retVal = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:sbvSize.width];
     
     return retVal;
@@ -3693,7 +3649,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     {
         rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
         
-        if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+        if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
             rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
         
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -3706,7 +3662,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     
     if (pMaxWrapSize != NULL)
     {
-        if (lsc.wrapContentWidth)
+        if (lsc.widthSizeInner.dimeWrapVal)
         {
             //如果同时设置左右边界则左右边界为最小的宽度
             if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
@@ -3716,7 +3672,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             }
             
             //宽度不依赖布局并且没有同时设置左右边距则参与最大宽度计算。
-            if ((sbvsc.widthSizeInner.dimeVal != nil && (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)) || sbvsc.wrapContentWidth)
+            if (sbvsc.widthSizeInner.dimeVal != nil && (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner))
             {
                 
                 if (_myCGFloatLess(pMaxWrapSize->width, sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing))
@@ -3733,7 +3689,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             }
         }
         
-        if (lsc.wrapContentHeight)
+        if (lsc.heightSizeInner.dimeWrapVal)
         {
             //如果同时设置上下边界则上下边界为最小的高度
             if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
@@ -3743,7 +3699,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             }
             
             //高度不依赖布局并且没有同时设置上下边距则参与最大高度计算。
-             if ((sbvsc.heightSizeInner.dimeVal != nil && (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner)) || sbvsc.wrapContentHeight)
+             if (sbvsc.heightSizeInner.dimeVal != nil && (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner))
             {
                 if (_myCGFloatLess(pMaxWrapSize->height, sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom))
                     pMaxWrapSize->height = sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom;
@@ -3771,7 +3727,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 {
     if (!self.translatesAutoresizingMaskIntoConstraints)
     {
-        if (self.wrapContentWidth || self.wrapContentHeight)
+        if (self.widthSizeInner.dimeWrapVal || self.heightSizeInner.dimeWrapVal)
             [self invalidateIntrinsicContentSize];
     }
 }
@@ -3795,7 +3751,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             if (customSetting != nil)
                 customSetting(sbv, sbvsc);
             
-            BOOL isSbvWrap = sbvsc.wrapContentHeight || sbvsc.wrapContentWidth;
+            BOOL isSbvWrap = sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal;
             
             if (pHasSubLayout != nil && isSbvWrap)
                 *pHasSubLayout = YES;

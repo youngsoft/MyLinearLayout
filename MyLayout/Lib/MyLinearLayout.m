@@ -20,9 +20,9 @@
     {
         MyLinearLayout *lsc = self.myCurrentSizeClass;
         if (orientation == MyOrientation_Vert)
-            lsc.wrapContentHeight = YES;
+            [lsc.heightSize __equalTo:@(MyLayoutSize.wrap) priority:0];  //这是暂时先设置为低优先级。
         else
-            lsc.wrapContentWidth = YES;
+            [lsc.widthSize __equalTo:@(MyLayoutSize.wrap) priority:0];
         lsc.orientation = orientation;
     }
  
@@ -114,7 +114,6 @@
 {
     [self equalizeSubviewsSpace:centered inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
     [self setNeedsLayout];
-
 }
 
 -(void)equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass
@@ -141,31 +140,6 @@
 
 
 #pragma mark -- Override Methods
-
-- (void)willMoveToSuperview:(UIView*)newSuperview
-{
-    //减少约束冲突的提示。。
-    MyLinearLayout *lsc = self.myCurrentSizeClass;
-    
-    if (lsc.orientation == MyOrientation_Vert)
-    {
-        if (lsc.heightSizeInner.dimeVal != nil && lsc.wrapContentHeight)
-        {
-            lsc.wrapContentHeight = NO;
-        }
-            
-    }
-    else
-    {
-        if (lsc.widthSizeInner.dimeVal != nil && lsc.wrapContentWidth)
-        {
-            lsc.wrapContentWidth = NO;
-        }
-        
-    }
-    
-    [super willMoveToSuperview:newSuperview];
-}
 
 - (void)willRemoveSubview:(UIView *)subview
 {
@@ -236,48 +210,54 @@
 {
     if (orientation == MyOrientation_Vert)
     {
-        if (sbvsc.wrapContentWidth)
+        if (sbvsc.widthSizeInner.dimeWrapVal)
         {
-            //只要同时设置了左右边距或者设置了宽度或者设置了子视图宽度填充则应该把wrapContentWidth置为NO
-            if ((sbvsc.widthSizeInner.dimeVal != nil) ||
-                (gravity == MyGravity_Horz_Fill)
-                )
+            //如果是拉伸处理则需要把包裹宽度取消。
+            if (gravity == MyGravity_Horz_Fill)
             {
-                sbvsc.wrapContentWidth = NO;
+                [sbvsc.widthSizeInner __equalTo:nil];
+            }
+            
+            //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
+            if (sbvsc.widthSizeInner.priority == 0 && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
+            {
+                [sbvsc.widthSizeInner __equalTo:nil];
             }
         }
         
-        if (sbvsc.wrapContentHeight)
+        if (sbvsc.heightSizeInner.dimeWrapVal)
         {
-            //只要同时设置了高度或者比重属性则应该把wrapContentHeight置为NO
-            if ((sbvsc.heightSizeInner.dimeVal != nil) ||
-                (sbvsc.weight != 0))
+            //只要同时设置了高度或者比重属性则应该把尺寸设置为空
+            if (sbvsc.weight != 0)
             {
-                sbvsc.wrapContentHeight = NO;
+                [sbvsc.heightSizeInner __equalTo:nil];
             }
         }
-        
     }
     else
     {
         
-        if (sbvsc.wrapContentHeight)
+        if (sbvsc.heightSizeInner.dimeWrapVal)
         {
-            //只要同时设置了高度或者上下边距或者父视图的填充属性则应该把wrapContentHeight置为NO
-            if ((sbvsc.heightSizeInner.dimeVal != nil) ||
-                (gravity == MyGravity_Vert_Fill)
-                )
+            //如果是拉伸处理则需要把包裹高度
+            if (gravity == MyGravity_Vert_Fill)
             {
-                sbvsc.wrapContentHeight = NO;
+                [sbvsc.heightSizeInner __equalTo:nil];
+            }
+            
+            //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
+            if (sbvsc.heightSizeInner.priority == 0 && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
+            {
+                [sbvsc.heightSizeInner __equalTo:nil];
             }
         }
         
-        if (sbvsc.wrapContentWidth)
+        if (sbvsc.widthSizeInner.dimeWrapVal)
         {
-            //只要同时设置了宽度或者比重属性则应该把wrapContentWidth置为NO
-            if (sbvsc.widthSizeInner.dimeVal != nil || sbvsc.weight != 0)
+            //只要同时设置了宽度或者比重属性则应该把宽度置空
+            if (sbvsc.weight != 0)
             {
-                sbvsc.wrapContentWidth = NO;
+                [sbvsc.widthSizeInner __equalTo:nil];
             }
         }
     }
@@ -398,11 +378,11 @@
                 canAddToNoWrapSbs = NO;
             
             //如果子视图高度是包裹的也不进行扩展
-            if (sbvsc.wrapContentHeight)
+            if (sbvsc.heightSizeInner.dimeWrapVal)
                 canAddToNoWrapSbs = NO;
             
             //如果子视图的最小高度就是自身则也不进行扩展。
-            if (sbvsc.heightSizeInner.lBoundValInner.dimeSelfVal != nil)
+            if (sbvsc.heightSizeInner.lBoundValInner.dimeWrapVal)
                 canAddToNoWrapSbs = NO;
             
             //对于尺寸拉升来说，只要设置了高度约束就都不拉升。
@@ -413,7 +393,7 @@
                 [noWrapsbsSet addObject:sbv];
             
             //在计算拉伸时，如果没有设置宽度约束则将宽度设置为0
-            if (!sbvsc.wrapContentHeight && sbvsc.heightSizeInner.dimeVal == nil && sbvsc.heightSizeInner.lBoundValInner.dimeSelfVal == nil)
+            if (sbvsc.heightSizeInner.dimeVal == nil && !sbvsc.heightSizeInner.lBoundValInner.dimeWrapVal)
                 rect.size.height = 0;
         }
     
@@ -450,7 +430,7 @@
         
         
         if ((tempSelfWidth > maxSelfWidth) &&
-            ((sbvsc.widthSizeInner.dimeVal != nil && (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)) || sbvsc.wrapContentWidth))
+            (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner))
         {
             maxSelfWidth = tempSelfWidth;
         }
@@ -463,7 +443,7 @@
         }
         
         //再次特殊处理高度包裹的场景
-        if (sbvsc.wrapContentHeight && ![sbv isKindOfClass:[MyBaseLayout class]])
+        if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
         {
             rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
             rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
@@ -503,7 +483,7 @@
             totalShrink += sbvsc.heightSizeInner.shrink;
             
             //如果最小高度不为自身并且高度不是包裹的则可以进行缩小。
-            if (sbvsc.heightSizeInner.lBoundValInner.dimeSelfVal == nil)
+            if (!sbvsc.heightSizeInner.lBoundValInner.dimeWrapVal)
             {
                 fixedSizeHeight += rect.size.height;
                 [fixedSizeSbs addObject:sbv];
@@ -547,7 +527,7 @@
         sbvmyFrame.frame = rect;
     }
     
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
     {
         if (totalWeight != 0)
         { //在包裹高度且总体比重不为0时则，则需要还原最小的高度，这样就不会使得高度在横竖屏或者多次计算后越来高。
@@ -567,7 +547,7 @@
         
     }
     
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
     {
         selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:maxSelfWidth + paddingLeading + paddingTrailing sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     }
@@ -651,7 +631,7 @@
     }
     
     //如果有浮动尺寸或者有压缩模式
-    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingHeight, 0)) || vertGravity != MyGravity_None || lsc.wrapContentWidth)
+    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingHeight, 0)) || vertGravity != MyGravity_None || lsc.widthSizeInner.dimeWrapVal)
     {
         maxSelfWidth = 0;
         CGFloat between = 0; //间距扩充
@@ -783,7 +763,7 @@
                                                                        lsc:lsc];
             
             if ((tempSelfWidth > maxSelfWidth) &&
-                ((sbvsc.widthSizeInner.dimeVal != nil && (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)) || sbvsc.wrapContentWidth))
+                (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner))
             {
                 maxSelfWidth = tempSelfWidth;
             }
@@ -844,10 +824,10 @@
     
     pos += paddingBottom;
 
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
         selfSize.height = pos;
     
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = maxSelfWidth + paddingLeading + paddingTrailing;
     
     return selfSize;
@@ -901,11 +881,11 @@
                 canAddToNoWrapSbs = NO;
             
             //如果子视图宽度是包裹的也不进行扩展
-            if (sbvsc.wrapContentWidth)
+            if (sbvsc.widthSizeInner.dimeWrapVal)
                 canAddToNoWrapSbs = NO;
             
             //如果子视图的最小宽度就是自身则也不进行扩展。
-            if (sbvsc.widthSizeInner.lBoundValInner.dimeSelfVal != nil)
+            if (sbvsc.widthSizeInner.lBoundValInner.dimeWrapVal)
                 canAddToNoWrapSbs = NO;
             
             if (horzGravity == MyGravity_Horz_Stretch && sbvsc.widthSizeInner.dimeVal != nil)
@@ -915,7 +895,7 @@
                 [noWrapsbsSet addObject:sbv];
             
             //在计算拉伸时，如果没有设置宽度约束则将宽度设置为0
-            if (!sbvsc.wrapContentWidth && sbvsc.widthSizeInner.dimeVal == nil && sbvsc.widthSizeInner.lBoundValInner.dimeSelfVal == nil)
+            if (sbvsc.widthSizeInner.dimeVal == nil && !sbvsc.widthSizeInner.lBoundValInner.dimeWrapVal)
                 rect.size.width = 0;
         }
         
@@ -948,7 +928,7 @@
                                     lsc:lsc];
         
         if ((tempSelfHeight > maxSelfHeight) &&
-            ((sbvsc.heightSizeInner.dimeVal != nil && (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner)) || sbvsc.wrapContentHeight))
+            (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner))
         {
             maxSelfHeight = tempSelfHeight;
         }
@@ -1006,13 +986,13 @@
             totalShrink += sbvsc.widthSizeInner.shrink;
             
             //如果最小宽度不为自身并且宽度不是包裹的则可以进行缩小。
-            if (sbvsc.widthSizeInner.lBoundValInner.dimeSelfVal == nil)
+            if (!sbvsc.widthSizeInner.lBoundValInner.dimeWrapVal)
             {
                 fixedSizeWidth += rect.size.width;
                 [fixedSizeSbs addObject:sbv];
             }
             
-            if (sbvsc.widthSizeInner.dimeSelfVal != nil)
+            if (sbvsc.widthSizeInner.dimeWrapVal)
             {
                 [flexedSizeSbs addObject:sbv];
             }
@@ -1056,7 +1036,7 @@
     }
     
     //在包裹宽度且总体比重不为0时则，则需要还原最小的宽度，这样就不会使得宽度在横竖屏或者多次计算后越来越宽。
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
     {
         if (totalWeight != 0)
         {
@@ -1076,7 +1056,7 @@
         
     }
     
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
     {
         selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:maxSelfHeight + paddingTop + paddingBottom sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     }
@@ -1203,7 +1183,7 @@
     }
 
     //如果有浮动尺寸或者有压缩模式
-    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingWidth, 0)) || horzGravity != MyGravity_None || lsc.wrapContentHeight)
+    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingWidth, 0)) || horzGravity != MyGravity_None || lsc.heightSizeInner.dimeWrapVal)
     {
         maxSelfHeight = 0;
         CGFloat between = 0; //间距扩充
@@ -1336,7 +1316,7 @@
                                          lsc:lsc];
             
             if ((tempSelfHeight > maxSelfHeight) &&
-                ((sbvsc.heightSizeInner.dimeVal != nil && (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner)) || sbvsc.wrapContentHeight))
+                (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner))
             {
                 maxSelfHeight = tempSelfHeight;
             }
@@ -1396,10 +1376,10 @@
     
     pos += paddingTrailing;
     
-    if (lsc.wrapContentWidth)
+    if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = pos;
     
-    if (lsc.wrapContentHeight)
+    if (lsc.heightSizeInner.dimeWrapVal)
         selfSize.height = maxSelfHeight + paddingTop + paddingBottom;
     
     return selfSize;
@@ -1412,7 +1392,7 @@
     
     if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
     {
-        if (sbvsc.widthSizeInner.dimeVal == nil && !sbvsc.wrapContentWidth)
+        if (sbvsc.widthSizeInner.dimeVal == nil)
         {
             pRect->size.width = selfSize.width - paddingLeading - paddingTrailing - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal;
         }
@@ -1429,7 +1409,7 @@
 
     if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
     {
-        if (sbvsc.heightSizeInner.dimeVal == nil && !sbvsc.wrapContentHeight)
+        if (sbvsc.heightSizeInner.dimeVal == nil)
         {
             pRect->size.height = selfSize.height - paddingTop - paddingBottom - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal;
         }
