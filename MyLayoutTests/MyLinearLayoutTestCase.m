@@ -84,6 +84,13 @@
     [v12 layoutIfNeeded];
     [v13 layoutIfNeeded];
 
+    for (int i = 1; i <=12; i++)
+    {
+        Class cls = NSClassFromString([NSString stringWithFormat:@"AllTest%dViewController", i]);
+        UIViewController *vc = [cls new];
+        UIView *v = vc.view;
+        [v layoutIfNeeded];
+    }
     
 }
 
@@ -487,7 +494,7 @@
 -(void)testFillAndStretch
 {
     //子视图有几个设置了约束，有几个没有设置约束。分别展现Fill 和Stretch的差异。
-    {
+    if (1){
         MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 0, 400) orientation:MyOrientation_Vert];
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
         rootLayout.wrapContentWidth = YES;
@@ -537,7 +544,7 @@
          XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(10,272.5,80,107.5)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
     }
 
-    {
+    if (1){
         MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 0, 400) orientation:MyOrientation_Vert];
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
         rootLayout.wrapContentWidth = YES;
@@ -588,7 +595,7 @@
     }
 
     
-    {
+    if (1){
         MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 400, 0) orientation:MyOrientation_Horz];
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
         rootLayout.wrapContentWidth = NO;
@@ -632,13 +639,13 @@
         XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,400,190)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
 
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,20,35,140)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
-        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(45,100,96,50)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
-        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(141,55,72,70)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
-        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(212.5,40,96,100)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
-        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(308.5,10,72,80)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(45,100,64,50)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(109,55,104,70)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(212.5,40,64,100)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(276.5,10,104,80)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
     }
     
-    {
+    if (1){
         MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 400, 0) orientation:MyOrientation_Horz];
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
         rootLayout.wrapContentWidth = NO;

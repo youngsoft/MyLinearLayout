@@ -385,6 +385,37 @@
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         CGRect rect = sbvmyFrame.frame;
+        
+        if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
+        {
+            BOOL canAddToNoWrapSbs = YES;
+            
+            if (sbvsc.weight != 0)
+                canAddToNoWrapSbs = NO;
+            
+            //判断是否是添加到参与布局视图包裹计算的子视图。
+            if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == lsc.heightSizeInner)
+                canAddToNoWrapSbs = NO;
+            
+            //如果子视图高度是包裹的也不进行扩展
+            if (sbvsc.wrapContentHeight)
+                canAddToNoWrapSbs = NO;
+            
+            //如果子视图的最小高度就是自身则也不进行扩展。
+            if (sbvsc.heightSizeInner.lBoundValInner.dimeSelfVal != nil)
+                canAddToNoWrapSbs = NO;
+            
+            //对于尺寸拉升来说，只要设置了高度约束就都不拉升。
+            if (vertGravity == MyGravity_Vert_Stretch && sbvsc.heightSizeInner.dimeVal != nil)
+                canAddToNoWrapSbs = NO;
+            
+            if (canAddToNoWrapSbs)
+                [noWrapsbsSet addObject:sbv];
+            
+            //在计算拉伸时，如果没有设置宽度约束则将宽度设置为0
+            if (!sbvsc.wrapContentHeight && sbvsc.heightSizeInner.dimeVal == nil && sbvsc.heightSizeInner.lBoundValInner.dimeSelfVal == nil)
+                rect.size.height = 0;
+        }
     
         //计算子视图的高度
         rect.size.height = [self myGetSubviewHeightSizeValue:sbv
@@ -511,33 +542,6 @@
                 fixedSpaceCount += 1;
                 fixedSpaceHeight += subviewSpace;
             }
-        }
-        
-        if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
-        {
-            BOOL canAddToNoWrapSbs = YES;
-            
-            if (sbvsc.weight != 0)
-                canAddToNoWrapSbs = NO;
-            
-            //判断是否是添加到参与布局视图包裹计算的子视图。
-            if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == lsc.heightSizeInner)
-                canAddToNoWrapSbs = NO;
-            
-            //如果子视图高度是包裹的也不进行扩展
-            if (sbvsc.wrapContentHeight)
-                canAddToNoWrapSbs = NO;
-            
-            //如果子视图的最小高度就是自身则也不进行扩展。
-            if (sbvsc.heightSizeInner.lBoundValInner.dimeSelfVal != nil)
-                canAddToNoWrapSbs = NO;
-            
-            //对于尺寸拉升来说，只要设置了高度约束就都不拉升。
-            if (vertGravity == MyGravity_Vert_Stretch && sbvsc.heightSizeInner.dimeVal != nil)
-                canAddToNoWrapSbs = NO;
-            
-            if (canAddToNoWrapSbs)
-                [noWrapsbsSet addObject:sbv];
         }
         
         sbvmyFrame.frame = rect;
@@ -885,6 +889,36 @@
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         CGRect rect = sbvmyFrame.frame;
         
+        if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
+        {
+            BOOL canAddToNoWrapSbs = YES;
+            
+            if (sbvsc.weight != 0)
+                canAddToNoWrapSbs = NO;
+            
+            //判断是否是添加到参与布局视图包裹计算的子视图。
+            if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == lsc.widthSizeInner)
+                canAddToNoWrapSbs = NO;
+            
+            //如果子视图宽度是包裹的也不进行扩展
+            if (sbvsc.wrapContentWidth)
+                canAddToNoWrapSbs = NO;
+            
+            //如果子视图的最小宽度就是自身则也不进行扩展。
+            if (sbvsc.widthSizeInner.lBoundValInner.dimeSelfVal != nil)
+                canAddToNoWrapSbs = NO;
+            
+            if (horzGravity == MyGravity_Horz_Stretch && sbvsc.widthSizeInner.dimeVal != nil)
+                canAddToNoWrapSbs = NO;
+            
+            if (canAddToNoWrapSbs)
+                [noWrapsbsSet addObject:sbv];
+            
+            //在计算拉伸时，如果没有设置宽度约束则将宽度设置为0
+            if (!sbvsc.wrapContentWidth && sbvsc.widthSizeInner.dimeVal == nil && sbvsc.widthSizeInner.lBoundValInner.dimeSelfVal == nil)
+                rect.size.width = 0;
+        }
+        
         //计算子视图的宽度，这里不管是否设置约束以及是否宽度是weight的都是进行计算。
         rect.size.width = [self myGetSubviewWidthSizeValue:sbv
                                                        sbvsc:sbvsc
@@ -1016,32 +1050,6 @@
                 fixedSpaceCount += 1;
                 fixedSpaceWidth += subviewSpace;
             }
-        }
-        
-        if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
-        {
-            BOOL canAddToNoWrapSbs = YES;
-            
-            if (sbvsc.weight != 0)
-                canAddToNoWrapSbs = NO;
-            
-            //判断是否是添加到参与布局视图包裹计算的子视图。
-            if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == lsc.widthSizeInner)
-                canAddToNoWrapSbs = NO;
-            
-            //如果子视图宽度是包裹的也不进行扩展
-            if (sbvsc.wrapContentWidth)
-                canAddToNoWrapSbs = NO;
-            
-            //如果子视图的最小宽度就是自身则也不进行扩展。
-            if (sbvsc.widthSizeInner.lBoundValInner.dimeSelfVal != nil)
-                canAddToNoWrapSbs = NO;
-            
-            if (horzGravity == MyGravity_Horz_Stretch && sbvsc.widthSizeInner.dimeVal != nil)
-                canAddToNoWrapSbs = NO;
-            
-            if (canAddToNoWrapSbs)
-                [noWrapsbsSet addObject:sbv];
         }
         
         sbvmyFrame.frame = rect;
