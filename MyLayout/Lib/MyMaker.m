@@ -319,37 +319,37 @@
                     id oldVal = [myView valueForKey:key];
                     if ([oldVal isKindOfClass:[MyLayoutPos class]])
                     {
-                        [((MyLayoutPos*)oldVal) __equalTo:val];
+                        ((MyLayoutPos*)oldVal).myEqualTo(val);
                     }
                     else if ([oldVal isKindOfClass:[MyLayoutSize class]])
                     {
-                        [((MyLayoutSize*)oldVal) __equalTo:val];
+                        ((MyLayoutSize*)oldVal).myEqualTo(val);
                     }
                     else
                         [myView setValue:val forKey:key];
                 }
                 else if ([val isKindOfClass:[MyLayoutPos class]])
                 {
-                    [((MyLayoutPos*)[myView valueForKey:key]) __equalTo:val];
+                    ((MyLayoutPos*)[myView valueForKey:key]).myEqualTo(val);
                 }
                 else if ([val isKindOfClass:[MyLayoutSize class]])
                 {
-                    [((MyLayoutSize*)[myView valueForKey:key]) __equalTo:val];
+                    ((MyLayoutSize*)[myView valueForKey:key]).myEqualTo(val);
                 }
                 else if ([val isKindOfClass:[NSArray class]])
                 {
-                    [((MyLayoutSize*)[myView valueForKey:key]) __equalTo:val];
+                    ((MyLayoutSize*)[myView valueForKey:key]).myEqualTo(val);
                 }
                 else if ([val isKindOfClass:[UIView class]])
                 {
                     id oldVal = [val valueForKey:key];
                     if ([oldVal isKindOfClass:[MyLayoutPos class]])
                     {
-                        [((MyLayoutPos*)[myView valueForKey:key]) __equalTo:oldVal];
+                        ((MyLayoutPos*)[myView valueForKey:key]).myEqualTo(oldVal);
                     }
                     else if ([oldVal isKindOfClass:[MyLayoutSize class]])
                     {
-                        [((MyLayoutSize*)[myView valueForKey:key]) __equalTo:oldVal];
+                        ((MyLayoutSize*)[myView valueForKey:key]).myEqualTo(oldVal);
                         
                     }
                     else

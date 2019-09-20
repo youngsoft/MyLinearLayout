@@ -209,7 +209,7 @@ BOOL _myisRTL = NO;
 
 -(void)setMyTop:(CGFloat)myTop
 {
-    [self.topPos __equalTo:@(myTop)];
+    self.topPos.myEqualTo(@(myTop));
 }
 
 
@@ -220,7 +220,7 @@ BOOL _myisRTL = NO;
 
 -(void)setMyLeading:(CGFloat)myLeading
 {
-    [self.leadingPos __equalTo:@(myLeading)];
+    self.leadingPos.myEqualTo(@(myLeading));
 }
 
 
@@ -231,7 +231,7 @@ BOOL _myisRTL = NO;
 
 -(void)setMyBottom:(CGFloat)myBottom
 {
-    [self.bottomPos __equalTo:@(myBottom)];
+    self.bottomPos.myEqualTo(@(myBottom));
 }
 
 
@@ -242,7 +242,7 @@ BOOL _myisRTL = NO;
 
 -(void)setMyTrailing:(CGFloat)myTrailing
 {
-    [self.trailingPos __equalTo:@(myTrailing)];
+    self.trailingPos.myEqualTo(@(myTrailing));
 }
 
 
@@ -253,7 +253,7 @@ BOOL _myisRTL = NO;
 
 -(void)setMyCenterX:(CGFloat)myCenterX
 {
-    [self.centerXPos __equalTo:@(myCenterX)];
+    self.centerXPos.myEqualTo(@(myCenterX));
 }
 
 -(CGFloat)myCenterY
@@ -263,7 +263,7 @@ BOOL _myisRTL = NO;
 
 -(void)setMyCenterY:(CGFloat)myCenterY
 {
-    [self.centerYPos __equalTo:@(myCenterY)];
+    self.centerYPos.myEqualTo(@(myCenterY));
 }
 
 
@@ -287,8 +287,7 @@ BOOL _myisRTL = NO;
 
 -(void)setMyLeft:(CGFloat)myLeft
 {
-    [self.leftPos __equalTo:@(myLeft)];
-    
+    self.leftPos.myEqualTo(@(myLeft));
 }
 
 -(CGFloat)myRight
@@ -298,7 +297,7 @@ BOOL _myisRTL = NO;
 
 -(void)setMyRight:(CGFloat)myRight
 {
-    [self.rightPos __equalTo:@(myRight)];
+    self.rightPos.myEqualTo(@(myRight));
 }
 
 
@@ -311,10 +310,10 @@ BOOL _myisRTL = NO;
 
 -(void)setMyMargin:(CGFloat)myMargin
 {
-    [self.topPos __equalTo:@(myMargin)];
-    [self.leftPos __equalTo:@(myMargin)];
-    [self.rightPos __equalTo:@(myMargin)];
-    [self.bottomPos __equalTo:@(myMargin)];
+    self.topPos.myEqualTo(@(myMargin));
+    self.leftPos.myEqualTo(@(myMargin));
+    self.rightPos.myEqualTo(@(myMargin));
+    self.bottomPos.myEqualTo(@(myMargin));
 }
 
 
@@ -325,8 +324,8 @@ BOOL _myisRTL = NO;
 
 -(void)setMyHorzMargin:(CGFloat)myHorzMargin
 {
-    [self.leftPos __equalTo:@(myHorzMargin)];
-    [self.rightPos __equalTo:@(myHorzMargin)];
+    self.leftPos.myEqualTo(@(myHorzMargin));
+    self.rightPos.myEqualTo(@(myHorzMargin));
 }
 
 -(CGFloat)myVertMargin
@@ -336,8 +335,8 @@ BOOL _myisRTL = NO;
 
 -(void)setMyVertMargin:(CGFloat)myVertMargin
 {
-    [self.topPos __equalTo:@(myVertMargin)];
-    [self.bottomPos __equalTo:@(myVertMargin)];
+    self.topPos.myEqualTo(@(myVertMargin));
+    self.bottomPos.myEqualTo(@(myVertMargin));
 }
 
 -(MyLayoutSize*)widthSize
@@ -368,22 +367,29 @@ BOOL _myisRTL = NO;
 
 -(CGFloat)myWidth
 {
-    return self.widthSizeInner.measure;
+    //特殊处理设置为MyLayoutSize.wrap的返回
+    if (self.widthSizeInner.dimeValType == MyLayoutValueType_Wrap)
+        return MyLayoutSize.wrap;
+    else
+        return self.widthSizeInner.measure;
 }
 
 -(void)setMyWidth:(CGFloat)width
 {
-    [self.widthSize __equalTo:@(width)];
+    self.widthSize.myEqualTo(@(width));
 }
 
 -(CGFloat)myHeight
 {
-    return self.heightSizeInner.measure;
+    if (self.heightSizeInner.dimeValType == MyLayoutValueType_Wrap)
+        return MyLayoutSize.wrap;
+    else
+        return self.heightSizeInner.measure;
 }
 
 -(void)setMyHeight:(CGFloat)height
 {
-    [self.heightSize __equalTo:@(height)];
+    self.heightSize.myEqualTo(@(height));
 }
 
 -(CGSize)mySize
@@ -396,7 +402,6 @@ BOOL _myisRTL = NO;
     self.myWidth = mySize.width;
     self.myHeight = mySize.height;
 }
-
 
 
 -(void)setWeight:(CGFloat)weight
@@ -420,27 +425,13 @@ BOOL _myisRTL = NO;
 
 -(void)setWrapContentWidth:(BOOL)wrapContentWidth
 {
-    if (wrapContentWidth)
-    {
-        [self.widthSize __equalTo:@(MyLayoutSize.wrap)];
-    }
-    else
-    {
-        [self.widthSize __equalTo:nil];
-    }
+    self.widthSize.myEqualTo(wrapContentWidth?@(MyLayoutSize.wrap):nil);
 }
 
 
 -(void)setWrapContentHeight:(BOOL)wrapContentHeight
 {
-    if (wrapContentHeight)
-    {
-        [self.heightSize __equalTo:@(MyLayoutSize.wrap)];
-    }
-    else
-    {
-        [self.heightSize __equalTo:nil];
-    }
+    self.heightSize.myEqualTo(wrapContentHeight?@(MyLayoutSize.wrap):nil);
 }
 
 -(BOOL)wrapContentSize
@@ -453,9 +444,6 @@ BOOL _myisRTL = NO;
 {
     self.wrapContentWidth = self.wrapContentHeight = wrapContentSize;
 }
-
-
-
 
 -(NSString*)debugDescription
 {

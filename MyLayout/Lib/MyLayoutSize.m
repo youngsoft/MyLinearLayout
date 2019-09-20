@@ -10,7 +10,6 @@
 #import "MyLayoutSizeInner.h"
 #import "MyBaseLayout.h"
 #import "MyLayoutInner.h"
-#import "MyLayoutMath.h"
 
 
 @implementation MyLayoutSize
@@ -54,7 +53,7 @@
         _lBoundVal = nil;
         _uBoundVal = nil;
         _shrink = 0.0;
-        _priority = 500;
+        _priority = MyPriority_Normal;
     }
     
     return self;
@@ -213,6 +212,11 @@
     return (self.isActive && _uBoundVal != nil) ?  _uBoundVal.dimeNumVal.doubleValue : CGFLOAT_MAX;
 }
 
+-(BOOL)isWrap
+{
+    return [self dimeWrapVal];
+}
+
 
 #pragma mark -- NSCopying
 
@@ -325,10 +329,9 @@
     return _uBoundVal;
 }
 
-
 -(MyLayoutSize*)__equalTo:(id)val
 {
-    return [self __equalTo:val priority:500];
+    return [self __equalTo:val priority:MyPriority_Normal];
 }
 
 -(MyLayoutSize*)__equalTo:(id)val priority:(NSInteger)priority
@@ -509,7 +512,7 @@
     _uBoundVal = nil;
     _dimeVal = nil;
     _shrink = 0;
-    _priority = 500;
+    _priority = MyPriority_Normal;
     _dimeValType = MyLayoutValueType_Nil;
 }
 
@@ -535,7 +538,6 @@
         if (!lb.isMyLayouting)
             [_view.superview setNeedsLayout];
     }
-    
 }
 
 
@@ -716,6 +718,5 @@
 {
     return [[MyLayoutExtremeSize alloc] initWith:self isMax:YES];
 }
-
 
 @end

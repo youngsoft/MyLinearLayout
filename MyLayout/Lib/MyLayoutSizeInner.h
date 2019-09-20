@@ -7,6 +7,8 @@
 //
 
 #import "MyLayoutSize.h"
+#import "MyLayoutMath.h"
+
 
 
 //尺寸对象内部定义
@@ -29,7 +31,17 @@
 @property(nonatomic, readonly, strong) MyLayoutSize *uBoundValInner;
 
 //优先级，内部使用，值是0，500， 1000 分别代表低、中、高，默认是500，这个属性先内部生效。
-@property(nonatomic, assign) NSInteger priority;
+@property(nonatomic, assign) MyPriority priority;
+
+
+-(MyLayoutSize* (^)(id val))myEqualTo;
+-(MyLayoutSize* (^)(CGFloat val))myAdd;
+-(MyLayoutSize* (^)(CGFloat val))myMultiply;
+-(MyLayoutSize* (^)(CGFloat val))myMin;
+-(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myLBound;
+-(MyLayoutSize* (^)(CGFloat val))myMax;
+-(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myUBound;
+-(void)myClear;
 
 
 -(MyLayoutSize*)__equalTo:(id)val;

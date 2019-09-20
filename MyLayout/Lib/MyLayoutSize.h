@@ -59,7 +59,6 @@
 -(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myUBound;
 -(void)myClear;
 
-
 #else
 
 
@@ -215,6 +214,9 @@
 @property(nonatomic, assign, readonly) CGFloat multiVal;
 @property(nonatomic, assign, readonly) CGFloat minVal;
 @property(nonatomic, assign, readonly) CGFloat maxVal;
+
+//判断尺寸值是否是包裹自适应
+@property(nonatomic, assign, readonly) BOOL isWrap;
 
 @end
 

@@ -246,21 +246,3 @@ typedef enum : unsigned char{
     MySizeClass_Portrait = 0x40,  //竖屏
     MySizeClass_Landscape = 0x80,  //横屏,注意横屏和竖屏不支持 | 运算操作，只能指定一个。
 }MySizeClass;
-
-
-//内部使用
-typedef enum : unsigned char
-{
-    MyLayoutValueType_Nil,
-    MyLayoutValueType_NSNumber,
-    MyLayoutValueType_LayoutDime,
-    MyLayoutValueType_LayoutPos,
-    MyLayoutValueType_Array,
-    MyLayoutValueType_UILayoutSupport,
-    MyLayoutValueType_SafeArea,
-    MyLayoutValueType_Extreme,
-    MyLayoutValueType_LayoutDimeDetach,
-    MyLayoutValueType_Weight,
-    MyLayoutValueType_Wrap,
-    MyLayoutValueType_Fill,
-}MyLayoutValueType;

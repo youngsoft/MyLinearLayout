@@ -421,8 +421,7 @@
     
     //下面四个属性配合一起简单的实现文本的收起和展开。
     shrinkLabel.clipsToBounds = YES;  //为了实现文本可缩放，需要将这个标志设置为YES，否则效果无法实现。但要慎重使用这个标志，因为如果设置YES的话会影响性能。
-    shrinkLabel.myHeight = 0;  //这里设置高度为0，而下面设置wrapContentHeight为YES的优先级比较高。所以当wrapContentHeight = NO时这个高度才起作用。这两个属性搭配使用非常容易实现UILabel的收起和展开
-    shrinkLabel.wrapContentHeight = YES;  //这个属性会控制在固定宽度下自动调整视图的高度。
+    shrinkLabel.myHeight = MyLayoutSize.wrap;
     [contentLayout addSubview:shrinkLabel];
     self.shrinkLabel = shrinkLabel;
     
@@ -460,25 +459,22 @@
     
 }
 
-
-
 #pragma mark -- Handle Method
 
 
 -(void)handleLabelShrink:(UIButton*)sender
 {
-    //因为self.shrinkLabel设置了wrapContentHeight来实现动态的文本高度。因此这里可以通过这个标志来实现文本伸缩功能。
-    if (self.shrinkLabel.wrapContentHeight)
+    //通过设置文本的高度在自适应和0之间切换来实现文本的伸缩显示功能。
+    if (self.shrinkLabel.myHeight == MyLayoutSize.wrap)
     {
-        self.shrinkLabel.wrapContentHeight = NO;  //当设置为NO时，视图的myHeight将起作用，这边高度就变为了0
+        self.shrinkLabel.myHeight = 0;  //当设置为NO时，视图的myHeight将起作用，这边高度就变为了0
     }
     else
     {
-        self.shrinkLabel.wrapContentHeight = YES; //当设置为YES时，视图的myHeight将不起作用，这样高度就由内容包裹。
+        self.shrinkLabel.myHeight = MyLayoutSize.wrap; //当设置为YES时，视图的myHeight将不起作用，这样高度就由内容包裹。
     }
     
     [self.contentLayout layoutAnimationWithDuration:0.3];
-    
 }
 
 -(void)handleHideAndShowMore:(UIButton*)sender

@@ -280,9 +280,6 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myWidth
 {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
     return self.myCurrentSizeClass.myWidth;
 }
 
@@ -294,9 +291,6 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myHeight
 {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
     return self.myCurrentSizeClass.myHeight;
 }
 
@@ -2089,7 +2083,6 @@ void* _myObserverContextC = (void*)20175283;
                     
                     sbv.center = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height);
                     sbv.bounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, rc.size.width, rc.size.height);
-                    
                 }
                 
             }
@@ -2132,14 +2125,10 @@ void* _myObserverContextC = (void*)20175283;
             {
                 
                 if (newSelfSize.width < 0)
-                {
                     newSelfSize.width = 0;
-                }
                 
                 if (newSelfSize.height < 0)
-                {
                     newSelfSize.height = 0;
-                }
                 
                 if (CGAffineTransformIsIdentity(self.transform))
                 {
@@ -2261,7 +2250,6 @@ void* _myObserverContextC = (void*)20175283;
                     
                     if ([MyBaseLayout isRTL])
                         centerPonintSelf.x = rectSuper.size.width - centerPonintSelf.x;
-                    
                 }
                 
                 //如果有变化则只调整自己的center。而不变化
@@ -2269,7 +2257,6 @@ void* _myObserverContextC = (void*)20175283;
                 {
                     self.center = centerPonintSelf;
                 }
-                
             }
             
             
@@ -2299,7 +2286,6 @@ void* _myObserverContextC = (void*)20175283;
                         supv.center = superCenter;
                         supv.bounds = superBounds;
                     }
-                    
                 }
             }
             
@@ -2337,8 +2323,6 @@ void* _myObserverContextC = (void*)20175283;
         
         _lastScreenOrientation = currentScreenOrientation;
     }
-    
-
 }
 
 
@@ -2677,14 +2661,13 @@ void* _myObserverContextC = (void*)20175283;
         
         if (lsc.leadingPosInner.posVal != nil && lsc.trailingPosInner.posVal != nil)
         {
-            if (lsc.widthSizeInner.dimeVal == nil)
+            if (lsc.widthSizeInner.priority == MyPriority_Low)
             {
                 CGFloat leadingMargin = [lsc.leadingPosInner realPosIn:rectSuper.size.width];
                 CGFloat trailingMargin = [lsc.trailingPosInner realPosIn:rectSuper.size.width];
                 size.width = rectSuper.size.width - leadingMargin - trailingMargin;
                 size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:size.width sbvSize:size selfLayoutSize:rectSuper.size];
             }
-            
         }
         
         if (size.width < 0)
@@ -2703,12 +2686,11 @@ void* _myObserverContextC = (void*)20175283;
                 size.height = [lsc.heightSizeInner measureWith:rectSuper.size.width];
 
             size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:size.height sbvSize:size selfLayoutSize:rectSuper.size];
-            
         }
         
         if (lsc.topPosInner.posVal != nil && lsc.bottomPosInner.posVal != nil)
         {
-            if (lsc.heightSizeInner.dimeVal == nil)
+            if (lsc.heightSizeInner.priority == MyPriority_Low)
             {
                 CGFloat topMargin = [lsc.topPosInner realPosIn:rectSuper.size.height];
                 CGFloat bottomMargin = [lsc.bottomPosInner realPosIn:rectSuper.size.height];
@@ -2731,7 +2713,7 @@ void* _myObserverContextC = (void*)20175283;
 
 -(BOOL)myUpdateLayoutRectInNoLayoutSuperview:(UIView*)newSuperview
 {
-    BOOL isAdjust = NO;
+    BOOL isAdjust = NO; //这个变量表明是否后续父视图尺寸变化后需要调整更新布局视图的尺寸。
     
     CGRect rectSuper = newSuperview.bounds;
     
@@ -2760,21 +2742,26 @@ void* _myObserverContextC = (void*)20175283;
         {
             if (lsc.widthSizeInner.dimeRelaVal.view == newSuperview)
             {
+                isAdjust = YES;
+
                 if (lsc.widthSizeInner.dimeRelaVal.dime == MyGravity_Horz_Fill)
                     rectSelf.size.width = [lsc.widthSizeInner measureWith:rectSuper.size.width];
                 else
                     rectSelf.size.width = [lsc.widthSizeInner measureWith:rectSuper.size.height];
-
             }
             else
             {
                 rectSelf.size.width = [lsc.widthSizeInner measureWith:lsc.widthSizeInner.dimeRelaVal.view.myEstimatedWidth];
             }
-            isAdjust = YES;
+        }
+        else if (lsc.widthSizeInner.dimeNumVal != nil)
+        {
+            rectSelf.size.width = lsc.widthSizeInner.measure;
         }
         else
-            rectSelf.size.width = lsc.widthSizeInner.measure;
-         
+        {
+            //do nothing...
+        }
      }
     
     //这里要判断自己的宽度设置了最小和最大宽度依赖于父视图的情况。如果有这种情况，则父视图在变化时也需要调整自身。
@@ -2792,8 +2779,10 @@ void* _myObserverContextC = (void*)20175283;
     if (lsc.leadingPosInner.posVal != nil && lsc.trailingPosInner.posVal != nil)
     {
         isAdjust = YES;
-        if (lsc.widthSizeInner.dimeVal == nil)
+        //如果是没有设置宽度约束，或者宽度约束的优先级很低都按左右边距来决定布局视图的宽度。
+        if (lsc.widthSizeInner.priority == MyPriority_Low)
         {
+            [lsc.widthSizeInner __equalTo:nil];
             rectSelf.size.width = rectSuper.size.width - leadingMargin - trailingMargin;
             rectSelf.size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
         }
@@ -2854,6 +2843,7 @@ void* _myObserverContextC = (void*)20175283;
         {
             if (lsc.heightSizeInner.dimeRelaVal.view == newSuperview)
             {
+                isAdjust = YES;
                 if (lsc.heightSizeInner.dimeRelaVal.dime == MyGravity_Vert_Fill)
                     rectSelf.size.height = [lsc.heightSizeInner measureWith:rectSuper.size.height];
                 else
@@ -2863,10 +2853,15 @@ void* _myObserverContextC = (void*)20175283;
             {
                 rectSelf.size.height = [lsc.heightSizeInner measureWith:lsc.heightSizeInner.dimeRelaVal.view.myEstimatedHeight];
             }
-            isAdjust = YES;
+        }
+        else if (lsc.heightSizeInner.dimeNumVal != nil)
+        {
+            rectSelf.size.height = lsc.heightSizeInner.measure;
         }
         else
-            rectSelf.size.height = lsc.heightSizeInner.measure;
+        {
+            // do nothing...
+        }
     }
     
     //这里要判断自己的高度设置了最小和最大高度依赖于父视图的情况。如果有这种情况，则父视图在变化时也需要调整自身。
@@ -2880,8 +2875,10 @@ void* _myObserverContextC = (void*)20175283;
     if (lsc.topPosInner.posVal != nil && lsc.bottomPosInner.posVal != nil)
     {
         isAdjust = YES;
-        if (lsc.heightSizeInner.dimeVal == nil)
+        //如果没有设置高度约束，或者高度约束优先级很低则按上下边距来决定布局视图高度。
+        if (lsc.heightSizeInner.priority == MyPriority_Low)
         {
+            [lsc.heightSizeInner __equalTo:nil];
             rectSelf.size.height = rectSuper.size.height - topMargin - bottomMargin;
             rectSelf.size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
         }
@@ -2965,10 +2962,8 @@ void* _myObserverContextC = (void*)20175283;
         [self setNeedsLayout];
     }
     
-    
-    
-    return isAdjust;
 
+    return isAdjust;
 }
 
 -(CGFloat)myHeightFromFlexedHeightView:(UIView*)sbv sbvsc:(UIView*)sbvsc inWidth:(CGFloat)width
@@ -3001,7 +2996,9 @@ void* _myObserverContextC = (void*)20175283;
         }
     }
     else
-        ;
+    {
+        // do nothing...
+    }
     
     if (sbvsc.heightSizeInner == nil)
         return h;
@@ -3509,6 +3506,11 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     
     if ([sbv isKindOfClass:[MyBaseLayout class]])
     {
+        if (sbvsc.widthSizeInner.priority == MyPriority_Low && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
+            [sbvsc.widthSizeInner __equalTo:nil];
+        
+        if (sbvsc.heightSizeInner.priority == MyPriority_Low && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
+            [sbvsc.heightSizeInner __equalTo:nil];
         
         if (pHasSubLayout != nil && (sbvsc.heightSizeInner.dimeWrapVal || sbvsc.widthSizeInner.dimeWrapVal))
             *pHasSubLayout = YES;
@@ -3541,7 +3543,6 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     
     if (sbvWidthSizeInner.dimeNumVal != nil)
     {//宽度等于固定的值。
-        
         retVal =  sbvWidthSizeInner.measure;
     }
     else if (sbvWidthSizeInner.dimeRelaVal != nil && sbvWidthSizeInner.dimeRelaVal.view != sbv)
@@ -3574,10 +3575,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
                           sbvSize:(CGSize)sbvSize
 {
     CGFloat retVal = sbvSize.height;
-    
-    
     MyLayoutSize *sbvHeightSizeInner = sbvsc.heightSizeInner;
-    
     
     if (sbvHeightSizeInner.dimeNumVal != nil)
     {//高度等于固定的值。
@@ -3655,7 +3653,6 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         [self myCalcVertGravity:[self myGetSubviewVertGravity:sbv sbvsc:sbvsc vertGravity:vertGravity] sbv:sbv sbvsc:sbvsc paddingTop:paddingTop paddingBottom:paddingBottom baselinePos:CGFLOAT_MAX selfSize:selfSize pRect:&rect];
-        
     }
     
     sbvmyFrame.frame = rect;

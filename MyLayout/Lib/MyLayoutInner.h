@@ -223,6 +223,4 @@
 @property(nonatomic, readonly) CGFloat myEstimatedWidth;
 @property(nonatomic, readonly) CGFloat myEstimatedHeight;
 
-
-
 @end

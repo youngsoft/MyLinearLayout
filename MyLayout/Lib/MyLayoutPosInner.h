@@ -7,6 +7,7 @@
 //
 
 #import "MyLayoutPos.h"
+#import "MyLayoutMath.h"
 
 
 //布局位置内部定义
@@ -27,6 +28,13 @@
 @property(nonatomic, readonly, strong) MyLayoutPos *uBoundValInner;
 
 
+-(MyLayoutPos* (^)(id val))myEqualTo;
+-(MyLayoutPos* (^)(CGFloat val))myOffset;
+-(MyLayoutPos* (^)(CGFloat val))myMin;
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myLBound;
+-(MyLayoutPos* (^)(CGFloat val))myMax;
+-(MyLayoutPos* (^)(id posVal, CGFloat offset))myUBound;
+-(void)myClear;
 
 -(MyLayoutPos*)__equalTo:(id)val;
 -(MyLayoutPos*)__offset:(CGFloat)val;

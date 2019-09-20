@@ -20,9 +20,9 @@
     {
         MyLinearLayout *lsc = self.myCurrentSizeClass;
         if (orientation == MyOrientation_Vert)
-            [lsc.heightSize __equalTo:@(MyLayoutSize.wrap) priority:0];  //这是暂时先设置为低优先级。
+            [lsc.heightSize __equalTo:@(MyLayoutSize.wrap) priority:MyPriority_Low];  //这是暂时先设置为低优先级,为了兼容老版本。
         else
-            [lsc.widthSize __equalTo:@(MyLayoutSize.wrap) priority:0];
+            [lsc.widthSize __equalTo:@(MyLayoutSize.wrap) priority:MyPriority_Low];
         lsc.orientation = orientation;
     }
  
@@ -214,24 +214,18 @@
         {
             //如果是拉伸处理则需要把包裹宽度取消。
             if (gravity == MyGravity_Horz_Fill)
-            {
                 [sbvsc.widthSizeInner __equalTo:nil];
-            }
             
             //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
-            if (sbvsc.widthSizeInner.priority == 0 && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
-            {
+            if (sbvsc.widthSizeInner.priority == MyPriority_Low && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
                 [sbvsc.widthSizeInner __equalTo:nil];
-            }
         }
         
         if (sbvsc.heightSizeInner.dimeWrapVal)
         {
             //只要同时设置了高度或者比重属性则应该把尺寸设置为空
             if (sbvsc.weight != 0)
-            {
                 [sbvsc.heightSizeInner __equalTo:nil];
-            }
         }
     }
     else
@@ -241,24 +235,18 @@
         {
             //如果是拉伸处理则需要把包裹高度
             if (gravity == MyGravity_Vert_Fill)
-            {
                 [sbvsc.heightSizeInner __equalTo:nil];
-            }
             
             //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
-            if (sbvsc.heightSizeInner.priority == 0 && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
-            {
+            if (sbvsc.heightSizeInner.priority == MyPriority_Low && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
                 [sbvsc.heightSizeInner __equalTo:nil];
-            }
         }
         
         if (sbvsc.widthSizeInner.dimeWrapVal)
         {
             //只要同时设置了宽度或者比重属性则应该把宽度置空
             if (sbvsc.weight != 0)
-            {
                 [sbvsc.widthSizeInner __equalTo:nil];
-            }
         }
     }
 }
@@ -425,12 +413,11 @@
                                                                    lsc:lsc];
         
         
-        
-        
-        
-        
+       
+        //左右依赖的，或者依赖父视图宽度的不参数最宽计算！！
         if ((tempSelfWidth > maxSelfWidth) &&
-            (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner))
+            (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) &&
+            (sbvsc.leadingPosInner == nil || sbvsc.trailingPosInner == nil || sbvsc.widthSizeInner.dimeVal != nil))
         {
             maxSelfWidth = tempSelfWidth;
         }
@@ -763,7 +750,8 @@
                                                                        lsc:lsc];
             
             if ((tempSelfWidth > maxSelfWidth) &&
-                (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner))
+                (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) &&
+                (sbvsc.leadingPosInner == nil || sbvsc.trailingPosInner == nil || sbvsc.widthSizeInner.dimeVal != nil))
             {
                 maxSelfWidth = tempSelfWidth;
             }
@@ -928,7 +916,8 @@
                                     lsc:lsc];
         
         if ((tempSelfHeight > maxSelfHeight) &&
-            (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner))
+            (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
+            (sbvsc.topPosInner == nil || sbvsc.bottomPosInner == nil || sbvsc.heightSizeInner.dimeVal != nil))
         {
             maxSelfHeight = tempSelfHeight;
         }
@@ -1316,7 +1305,8 @@
                                          lsc:lsc];
             
             if ((tempSelfHeight > maxSelfHeight) &&
-                (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner))
+                (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
+                (sbvsc.topPosInner == nil || sbvsc.bottomPosInner == nil || sbvsc.heightSizeInner.dimeVal != nil))
             {
                 maxSelfHeight = tempSelfHeight;
             }
