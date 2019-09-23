@@ -307,7 +307,7 @@
     [rootRelativeView addSubview:dateLabel];
     
     UILabel *newsTitleLabel = [UILabel new];
-    newsTitleLabel.wrapContentHeight = YES;
+   // newsTitleLabel.wrapContentHeight = YES;
     newsTitleLabel.topPos.equalTo(dateLabel.bottomPos).offset(5);
     newsTitleLabel.leftPos.equalTo(dateLabel.leftPos);
     newsTitleLabel.rightPos.equalTo(dateLabel.rightPos);

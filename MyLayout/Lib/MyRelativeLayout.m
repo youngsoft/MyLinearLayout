@@ -33,6 +33,20 @@
         if (!isEstimate || (pHasSubLayout != nil && (*pHasSubLayout) == YES))
             [sbvmyFrame reset];
         
+       
+        //只要同时设置了左右边距则把宽度值置空
+        if (sbvsc.widthSizeInner.priority == MyPriority_Low &&
+            sbvsc.leadingPosInner.posVal != nil &&
+            sbvsc.trailingPosInner.posVal != nil)
+            [sbvsc.widthSizeInner __equalTo:nil];
+        
+       
+        //只要同时设置了上下边距则把高度值置空
+        if (sbvsc.heightSizeInner.priority == MyPriority_Low &&
+            sbvsc.topPosInner.posVal != nil &&
+            sbvsc.bottomPosInner.posVal != nil)
+            [sbvsc.heightSizeInner __equalTo:nil];
+
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
@@ -42,12 +56,7 @@
             
             if (isEstimate && (sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal))
             {
-                CGSize sbvSize = sbvmyFrame.frame.size;
-                if (sbvSize.width == CGFLOAT_MAX)
-                    sbvSize.width = 0;
-                if (sbvSize.height == CGFLOAT_MAX)
-                    sbvSize.height = 0;
-                [(MyBaseLayout*)sbv sizeThatFits:sbvSize inSizeClass:sizeClass];
+                [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
                 
                 sbvmyFrame.leading = sbvmyFrame.trailing = sbvmyFrame.top = sbvmyFrame.bottom = CGFLOAT_MAX;
                 
@@ -1209,10 +1218,7 @@
                 [[pos.view.topPos __equalTo:prev] __offset:pos.view.centerYPos.absVal];
                 prev = pos.view.bottomPos;
             }
-            
         }
-        
-        
     }
     
     //计算最大的宽度和高度
@@ -1260,7 +1266,7 @@
                 maxWidth = sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding;
             }
             
-            if (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != self.widthSizeInner)
+            if (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)
             {
                 if (sbvsc.centerXPosInner.posVal != nil)
                 {
@@ -1321,7 +1327,7 @@
             }
             
 
-            if (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != self.heightSizeInner)
+            if (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner)
             {
                 if (sbvsc.centerYPosInner.posVal != nil)
                 {

@@ -3504,14 +3504,14 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
     }
     
+    if (sbvsc.widthSizeInner.priority == MyPriority_Low && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
+        [sbvsc.widthSizeInner __equalTo:nil];
+    
+    if (sbvsc.heightSizeInner.priority == MyPriority_Low && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
+        [sbvsc.heightSizeInner __equalTo:nil];
+    
     if ([sbv isKindOfClass:[MyBaseLayout class]])
     {
-        if (sbvsc.widthSizeInner.priority == MyPriority_Low && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
-            [sbvsc.widthSizeInner __equalTo:nil];
-        
-        if (sbvsc.heightSizeInner.priority == MyPriority_Low && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
-            [sbvsc.heightSizeInner __equalTo:nil];
-        
         if (pHasSubLayout != nil && (sbvsc.heightSizeInner.dimeWrapVal || sbvsc.widthSizeInner.dimeWrapVal))
             *pHasSubLayout = YES;
         

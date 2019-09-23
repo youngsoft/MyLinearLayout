@@ -168,13 +168,9 @@ static CGFloat sColCountTag = -100000;
     
     MyTableRowLayout *rowView = [MyTableRowLayout rowSize:rowSize colSize:colSize orientation:ori];
     if (ori == MyOrientation_Horz)
-    {
         rowView.subviewHSpace = lsc.subviewHSpace;
-    }
     else
-    {
         rowView.subviewVSpace = lsc.subviewVSpace;
-    }
     rowView.intelligentBorderline = self.intelligentBorderline;
     [super insertSubview:rowView atIndex:rowIndex];
     return rowView;
@@ -213,7 +209,6 @@ static CGFloat sColCountTag = -100000;
     MyLinearLayout *rowsc = rowView.myCurrentSizeClass;
     UIView *colsc = colView.myCurrentSizeClass;
     
-    //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
     if (rowView.colSize == MyLayoutSize.average)
     {
         colsc.weight = 1;
@@ -242,29 +237,12 @@ static CGFloat sColCountTag = -100000;
     if (rowsc.orientation == MyOrientation_Horz)
     {
         if (CGRectGetHeight(colView.bounds) == 0 && colsc.heightSizeInner.dimeVal == nil)
-        {
-            if ([colView isKindOfClass:[MyBaseLayout class]])
-            {
-                if (!colsc.heightSizeInner.dimeWrapVal)
-                    [colsc.heightSize __equalTo:rowsc.heightSize];
-            }
-            else
-                [colsc.heightSize __equalTo:rowsc.heightSize];
-        }
+            [colsc.heightSize __equalTo:rowsc.heightSize];
     }
     else
     {
         if (CGRectGetWidth(colView.bounds) == 0 && colsc.widthSizeInner.dimeVal == nil)
-        {
-            
-            if ([colView isKindOfClass:[MyBaseLayout class]])
-            {
-                if (!colsc.widthSizeInner.dimeWrapVal)
-                    [colsc.widthSize __equalTo:rowsc.widthSize];
-            }
-            else
-                [colsc.widthSize __equalTo:rowsc.widthSize];
-        }
+            [colsc.widthSize __equalTo:rowsc.widthSize];
     }
     
     [rowView insertSubview:colView atIndex:indexPath.col];
