@@ -217,6 +217,22 @@
 
 
 
+/**
+ 是否停靠属性gravity在所有行中都有效。默认是NO，表示停靠属性不会在最后一行生效。当设置为YES时则所有行的子视图都会受到gravity属性设置的影响。
+ 在一些场景中，往往最后一行的子视图个数并没有填充满布局视图，如果这时候设置了gravity时产生的效果并不美观。所以默认情况下最后一行的子视图
+ 并不会受到gravity设置的影响，但是特殊情况除外：1.只有一行时，2.最后一行的数量和其他行的数量一样时 这两种情况gravity会影响所有子视图。
+ */
+@property(nonatomic, assign) BOOL gravityAlways;
+
+
+/**
+ 单独为某一行或者一列定制gravity停靠对齐属性，默认情况下布局视图的gravity作用于所有行或者列的停靠对齐。如果你想单独定制某一行或者某一列的停靠对齐方式时
+ 可以通过设置这个block属性。lineGravity的入参是布局对象和当前行列的索引值，索引值以0开始，返回的是此行的停靠对齐方式，如果返回MyGravity_None则表示使用
+ 布局默认的gravity停靠对齐属性。
+ */
+@property(nonatomic, copy) MyGravity (^lineGravity)(MyFlowLayout *layout, NSInteger lineIndex);
+
+
 
 /**
  在流式布局的一些应用场景中我们希望子视图的宽度或者高度是固定的但间距是浮动的，这样就尽可能在一排中容纳更多的子视图。比如设置每个子视图的宽度固定为80，那么在小屏幕下每排只能放3个，而大屏幕则每排能放4个或者5个子视图。 因此您可以通过如下方法来设置子视图的固定尺寸和最小最大浮动间距。这个方法会根据您当前布局的方向不同而具有不同的意义：
@@ -235,6 +251,7 @@
  */
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
+
 
 
 @end

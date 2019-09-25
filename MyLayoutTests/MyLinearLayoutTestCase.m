@@ -734,24 +734,45 @@
         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,240,100,60)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
 
         
+        v1.weight = 0;
+        v2.weight = 0;
+        v3.weight = 0;
         [rootLayout equalizeSubviewsSpace:YES];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,67.5,100,10)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,67.5+10+67.5,100,10)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,67.5*3+10*2,100,10)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
         
+        v1.myTop = 0;
+        v1.myBottom = 0;
+        v2.myTop = 0;
+        v2.myBottom = 0;
+        v3.myTop = 0;
+        v3.myBottom = 0;
         [rootLayout equalizeSubviewsSpace:NO];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,100,10)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
-        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,90+10,100,10)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
-        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,90+10+90,100,10)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,135+10,100,10)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,135+10+135+10,100,10)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
         
+        v1.weight = 0;
+        v2.weight = 0;
+        v3.weight = 0;
+        v1.myTop = 0;
+        v1.myBottom = 0;
+        v2.myTop = 0;
+        v2.myBottom = 0;
+        v3.myTop = 0;
+        v3.myBottom = 0;
         [rootLayout equalizeSubviews:YES withSpace:10];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,10,100,86.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,106.5,100,86.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,203,100,86.5)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
         
+        v1.weight = 0;
+        v2.weight = 0;
+        v3.weight = 0;
         [rootLayout equalizeSubviews:NO withSpace:10];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,100,93.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
@@ -791,25 +812,45 @@
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(120,0,60,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(240,0,60,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
         
-        
+        v1.weight = 0;
+        v2.weight = 0;
+        v3.weight = 0;
         [rootLayout equalizeSubviewsSpace:YES];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(67.5,0,10,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(67.5+10+67.5,0,10,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(67.5*3+10*2,0,10,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
         
+        v1.myLeading = 0;
+        v1.myTrailing = 0;
+        v2.myLeading = 0;
+        v2.myTrailing = 0;
+        v3.myLeading = 0;
+        v3.myTrailing = 0;
         [rootLayout equalizeSubviewsSpace:NO];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,10,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
-        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(90+10,0,10,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
-        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(90+10+90,0,10,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(135+10,0,10,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(135+10+135+10,0,10,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
         
+        v1.weight = 0;
+        v2.weight = 0;
+        v3.weight = 0;
+        v1.myLeading = 0;
+        v1.myTrailing = 0;
+        v2.myLeading = 0;
+        v2.myTrailing = 0;
+        v3.myLeading = 0;
+        v3.myTrailing = 0;
         [rootLayout equalizeSubviews:YES withSpace:10];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,0,86.5,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(106.5,0,86.5,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(203,0,86.5,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
         
+        v1.weight = 0;
+        v2.weight = 0;
+        v3.weight = 0;
         [rootLayout equalizeSubviews:NO withSpace:10];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,93.5,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));

@@ -432,6 +432,7 @@ static const int _sstretch = 6;
         _flex = [[MyFlex alloc] initWithView:self];
         self.orientation = MyOrientation_Vert;
         self.arrangedCount = NSIntegerMax; //单行
+        self.gravityAlways = YES; //flexbox对所有行都让停靠生效。
     }
     return self;
 }

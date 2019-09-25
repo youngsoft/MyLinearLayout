@@ -215,11 +215,11 @@
             //如果是拉伸处理则需要把包裹宽度取消。
             if (gravity == MyGravity_Horz_Fill)
                 [sbvsc.widthSizeInner __clear];
-            
-            //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
-            if (sbvsc.widthSizeInner.priority == MyPriority_Low && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
-                [sbvsc.widthSizeInner __clear];
         }
+        
+        //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
+        if (sbvsc.widthSizeInner.priority == MyPriority_Low && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
+            [sbvsc.widthSizeInner __clear];
         
         if (sbvsc.heightSizeInner.dimeWrapVal)
         {
@@ -236,11 +236,11 @@
             //如果是拉伸处理则需要把包裹高度
             if (gravity == MyGravity_Vert_Fill)
                 [sbvsc.heightSizeInner __clear];
-            
-            //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
-            if (sbvsc.heightSizeInner.priority == MyPriority_Low && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
-                [sbvsc.heightSizeInner __clear];
         }
+        
+        //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
+        if (sbvsc.heightSizeInner.priority == MyPriority_Low && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
+            [sbvsc.heightSizeInner __clear];
         
         if (sbvsc.widthSizeInner.dimeWrapVal)
         {

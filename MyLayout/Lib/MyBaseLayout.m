@@ -3742,11 +3742,11 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
         }
         
+        if (customSetting != nil)
+            customSetting(sbv, sbvsc);
+        
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
-            
-            if (customSetting != nil)
-                customSetting(sbv, sbvsc);
             
             BOOL isSbvWrap = sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal;
             

@@ -237,12 +237,12 @@ static CGFloat sColCountTag = -100000;
     if (rowsc.orientation == MyOrientation_Horz)
     {
         if (CGRectGetHeight(colView.bounds) == 0 && colsc.heightSizeInner.dimeVal == nil)
-            [colsc.heightSize __equalTo:rowsc.heightSize];
+            [colsc.heightSize __equalTo:rowsc.heightSize priority:MyPriority_Low];
     }
     else
     {
         if (CGRectGetWidth(colView.bounds) == 0 && colsc.widthSizeInner.dimeVal == nil)
-            [colsc.widthSize __equalTo:rowsc.widthSize];
+            [colsc.widthSize __equalTo:rowsc.widthSize priority:MyPriority_Low];
     }
     
     [rowView insertSubview:colView atIndex:indexPath.col];
