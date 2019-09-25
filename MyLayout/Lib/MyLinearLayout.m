@@ -214,18 +214,18 @@
         {
             //如果是拉伸处理则需要把包裹宽度取消。
             if (gravity == MyGravity_Horz_Fill)
-                [sbvsc.widthSizeInner __equalTo:nil];
+                [sbvsc.widthSizeInner __clear];
             
             //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
             if (sbvsc.widthSizeInner.priority == MyPriority_Low && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
-                [sbvsc.widthSizeInner __equalTo:nil];
+                [sbvsc.widthSizeInner __clear];
         }
         
         if (sbvsc.heightSizeInner.dimeWrapVal)
         {
             //只要同时设置了高度或者比重属性则应该把尺寸设置为空
             if (sbvsc.weight != 0)
-                [sbvsc.heightSizeInner __equalTo:nil];
+                [sbvsc.heightSizeInner __clear];
         }
     }
     else
@@ -235,18 +235,18 @@
         {
             //如果是拉伸处理则需要把包裹高度
             if (gravity == MyGravity_Vert_Fill)
-                [sbvsc.heightSizeInner __equalTo:nil];
+                [sbvsc.heightSizeInner __clear];
             
             //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
             if (sbvsc.heightSizeInner.priority == MyPriority_Low && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
-                [sbvsc.heightSizeInner __equalTo:nil];
+                [sbvsc.heightSizeInner __clear];
         }
         
         if (sbvsc.widthSizeInner.dimeWrapVal)
         {
             //只要同时设置了宽度或者比重属性则应该把宽度置空
             if (sbvsc.weight != 0)
-                [sbvsc.widthSizeInner __equalTo:nil];
+                [sbvsc.widthSizeInner __clear];
         }
     }
 }
@@ -1447,7 +1447,6 @@
         if (sbv == sbs.lastObject && centered)
             [sbvsc.bottomPos __equalTo:@(scale2)];
     }
-    
 }
 
 -(void)myEqualizeSubviewsForHorz:(BOOL)centered withSpace:(CGFloat)space

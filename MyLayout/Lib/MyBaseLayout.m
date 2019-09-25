@@ -2661,7 +2661,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (lsc.leadingPosInner.posVal != nil && lsc.trailingPosInner.posVal != nil)
         {
-            if (lsc.widthSizeInner.priority == MyPriority_Low)
+            if (lsc.widthSizeInner.priority == MyPriority_Low || lsc.widthSizeInner.dimeVal == nil)
             {
                 CGFloat leadingMargin = [lsc.leadingPosInner realPosIn:rectSuper.size.width];
                 CGFloat trailingMargin = [lsc.trailingPosInner realPosIn:rectSuper.size.width];
@@ -2690,7 +2690,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (lsc.topPosInner.posVal != nil && lsc.bottomPosInner.posVal != nil)
         {
-            if (lsc.heightSizeInner.priority == MyPriority_Low)
+            if (lsc.heightSizeInner.priority == MyPriority_Low || lsc.heightSizeInner.dimeVal == nil)
             {
                 CGFloat topMargin = [lsc.topPosInner realPosIn:rectSuper.size.height];
                 CGFloat bottomMargin = [lsc.bottomPosInner realPosIn:rectSuper.size.height];
@@ -2780,9 +2780,9 @@ void* _myObserverContextC = (void*)20175283;
     {
         isAdjust = YES;
         //如果是没有设置宽度约束，或者宽度约束的优先级很低都按左右边距来决定布局视图的宽度。
-        if (lsc.widthSizeInner.priority == MyPriority_Low)
+        if (lsc.widthSizeInner.priority == MyPriority_Low || lsc.widthSizeInner.dimeVal == nil)
         {
-            [lsc.widthSizeInner __equalTo:nil];
+            [lsc.widthSizeInner __clear];
             rectSelf.size.width = rectSuper.size.width - leadingMargin - trailingMargin;
             rectSelf.size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:rectSelf.size.width sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
         }
@@ -2876,9 +2876,9 @@ void* _myObserverContextC = (void*)20175283;
     {
         isAdjust = YES;
         //如果没有设置高度约束，或者高度约束优先级很低则按上下边距来决定布局视图高度。
-        if (lsc.heightSizeInner.priority == MyPriority_Low)
+        if (lsc.heightSizeInner.priority == MyPriority_Low || lsc.heightSizeInner.dimeVal == nil)
         {
-            [lsc.heightSizeInner __equalTo:nil];
+            [lsc.heightSizeInner __clear];
             rectSelf.size.height = rectSuper.size.height - topMargin - bottomMargin;
             rectSelf.size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:rectSelf.size.height sbvSize:rectSelf.size selfLayoutSize:rectSuper.size];
         }
@@ -3504,11 +3504,11 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
     }
     
-    if (sbvsc.widthSizeInner.priority == MyPriority_Low && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
-        [sbvsc.widthSizeInner __equalTo:nil];
+    if ((sbvsc.widthSizeInner.priority == MyPriority_Low || sbvsc.widthSizeInner.dimeVal == nil) && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
+        [sbvsc.widthSizeInner __clear];
     
-    if (sbvsc.heightSizeInner.priority == MyPriority_Low && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
-        [sbvsc.heightSizeInner __equalTo:nil];
+    if ((sbvsc.heightSizeInner.priority == MyPriority_Low || sbvsc.heightSizeInner.dimeVal == nil) && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
+        [sbvsc.heightSizeInner __clear];
     
     if ([sbv isKindOfClass:[MyBaseLayout class]])
     {

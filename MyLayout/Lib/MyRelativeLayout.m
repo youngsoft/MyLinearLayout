@@ -35,17 +35,17 @@
         
        
         //只要同时设置了左右边距则把宽度值置空
-        if (sbvsc.widthSizeInner.priority == MyPriority_Low &&
+        if ((sbvsc.widthSizeInner.priority == MyPriority_Low || sbvsc.widthSizeInner.dimeVal == nil)&&
             sbvsc.leadingPosInner.posVal != nil &&
             sbvsc.trailingPosInner.posVal != nil)
-            [sbvsc.widthSizeInner __equalTo:nil];
+            [sbvsc.widthSizeInner __clear];
         
        
         //只要同时设置了上下边距则把高度值置空
-        if (sbvsc.heightSizeInner.priority == MyPriority_Low &&
+        if ((sbvsc.heightSizeInner.priority == MyPriority_Low || sbvsc.heightSizeInner.dimeVal == nil) &&
             sbvsc.topPosInner.posVal != nil &&
             sbvsc.bottomPosInner.posVal != nil)
-            [sbvsc.heightSizeInner __equalTo:nil];
+            [sbvsc.heightSizeInner __clear];
 
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
@@ -1276,20 +1276,20 @@
                 else if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
                 {
                     //如果设置有宽度则宽度参与最大！！！！！！
-                    if (sbvsc.widthSizeInner.dimeVal != nil)
-                    {
-                        if (_myCGFloatLess(maxWidth, sbvmyFrame.leading + sbvmyFrame.width + sbvmyFrame.trailing + lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding))
-                        {
-                            maxWidth = sbvmyFrame.leading + sbvmyFrame.width + sbvmyFrame.trailing + lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding;
-                        }
-                    }
-                    else
-                    {
+//                    if (sbvsc.widthSizeInner.dimeVal != nil)
+//                    {
+//                        if (_myCGFloatLess(maxWidth, sbvmyFrame.leading + sbvmyFrame.width + sbvmyFrame.trailing + lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding))
+//                        {
+//                            maxWidth = sbvmyFrame.leading + sbvmyFrame.width + sbvmyFrame.trailing + lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding;
+//                        }
+//                    }
+//                    else
+//                    {
                         if (_myCGFloatLess(maxWidth, fabs(sbvmyFrame.trailing) + sbvsc.leadingPosInner.absVal + lsc.myLayoutLeadingPadding))
                         {
                             maxWidth = fabs(sbvmyFrame.trailing) + sbvsc.leadingPosInner.absVal + lsc.myLayoutLeadingPadding;
                         }
-                    }
+                    //}
                 }
                 else if (sbvsc.trailingPosInner.posVal != nil)
                 {
@@ -1337,20 +1337,20 @@
                 else if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
                 {
                     //如果设置有高度则高度参与最大！！！！！！
-                    if (sbvsc.heightSizeInner.dimeVal != nil)
-                    {
-                        if (_myCGFloatLess(maxHeight, sbvmyFrame.top + sbvmyFrame.height + sbvmyFrame.bottom + lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding))
-                        {
-                            maxHeight =  sbvmyFrame.top + sbvmyFrame.height + sbvmyFrame.bottom + lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding;
-                        }
-                    }
-                    else
-                    {
+//                    if (sbvsc.heightSizeInner.dimeVal != nil)
+//                    {
+//                        if (_myCGFloatLess(maxHeight, sbvmyFrame.top + sbvmyFrame.height + sbvmyFrame.bottom + lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding))
+//                        {
+//                            maxHeight =  sbvmyFrame.top + sbvmyFrame.height + sbvmyFrame.bottom + lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding;
+//                        }
+//                    }
+//                    else
+//                    {
                         if (_myCGFloatLess(maxHeight, fabs(sbvmyFrame.bottom) + sbvsc.topPosInner.absVal + lsc.myLayoutTopPadding))
                         {
                             maxHeight = fabs(sbvmyFrame.bottom) + sbvsc.topPosInner.absVal + lsc.myLayoutTopPadding;
                         }
-                    }
+                    //}
                 }
                 else if (sbvsc.bottomPosInner.posVal != nil)
                 {

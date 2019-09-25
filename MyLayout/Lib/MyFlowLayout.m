@@ -155,21 +155,21 @@
         
         if (sbvsc.widthSizeInner.dimeWrapVal)
         {
-            if (lsc.pagedCount > 0 || sbvsc.widthSizeInner.dimeVal != nil ||
+            if (lsc.pagedCount > 0  ||
                 (orientation == MyOrientation_Horz && (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill) ||
                 (orientation == MyOrientation_Vert && ((gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill || sbvsc.weight != 0)))
             {
-                [sbvsc.widthSizeInner __equalTo:nil];
+                [sbvsc.widthSizeInner __clear];
             }
         }
         
         if (sbvsc.heightSizeInner.dimeWrapVal)
         {
-            if (lsc.pagedCount > 0 || sbvsc.heightSizeInner.dimeVal != nil ||
+            if (lsc.pagedCount > 0 ||
                 (orientation == MyOrientation_Vert && (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill) ||
                 (orientation == MyOrientation_Horz && ((gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill || sbvsc.weight != 0)))
             {
-                [sbvsc.heightSizeInner __equalTo:nil];
+                [sbvsc.heightSizeInner __clear];
             }
         }
         

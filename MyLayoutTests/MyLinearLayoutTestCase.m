@@ -700,6 +700,127 @@
     
 }
 
+-(void)testequalizeSubviews
+{
+    //测试均分视图的能力。
+    {
+        MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+        rootLayout.heightSize.equalTo(@300);
+        rootLayout.frame = CGRectMake(0, 0, 100, 300);
+        rootLayout.gravity = MyGravity_Horz_Fill;
+        
+        UIView *v1 = [UIView new];
+        v1.myHeight = 10;
+        UIView *v2 = [UIView new];
+        v2.myHeight = 10;
+        UIView *v3 = [UIView new];
+        v3.myHeight = 10;
+        
+        [rootLayout addSubview:v1];
+        [rootLayout addSubview:v2];
+        [rootLayout addSubview:v3];
+        
+        [rootLayout equalizeSubviews:YES];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,43,100,43)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,129,100,43)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,215,100,43)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+
+
+        [rootLayout equalizeSubviews:NO];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,100,60)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,120,100,60)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,240,100,60)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+
+        
+        [rootLayout equalizeSubviewsSpace:YES];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,67.5,100,10)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,67.5+10+67.5,100,10)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,67.5*3+10*2,100,10)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        [rootLayout equalizeSubviewsSpace:NO];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,100,10)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,90+10,100,10)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,90+10+90,100,10)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        [rootLayout equalizeSubviews:YES withSpace:10];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,10,100,86.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,106.5,100,86.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,203,100,86.5)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        [rootLayout equalizeSubviews:NO withSpace:10];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,100,93.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,103.5,100,93.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(0,207,100,93.5)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+    }
+
+    
+    {
+        MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+        rootLayout.widthSize.equalTo(@300);
+        rootLayout.frame = CGRectMake(0, 0, 300, 100);
+        rootLayout.gravity = MyGravity_Vert_Fill;
+        
+        UIView *v1 = [UIView new];
+        v1.myWidth = 10;
+        UIView *v2 = [UIView new];
+        v2.myWidth = 10;
+        UIView *v3 = [UIView new];
+        v3.myWidth = 10;
+        
+        [rootLayout addSubview:v1];
+        [rootLayout addSubview:v2];
+        [rootLayout addSubview:v3];
+        
+        [rootLayout equalizeSubviews:YES];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(43,0,43,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(129,0,43,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(215,0,43,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        
+        
+        [rootLayout equalizeSubviews:NO];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,60,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(120,0,60,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(240,0,60,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        
+        [rootLayout equalizeSubviewsSpace:YES];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(67.5,0,10,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(67.5+10+67.5,0,10,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(67.5*3+10*2,0,10,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        [rootLayout equalizeSubviewsSpace:NO];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,10,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(90+10,0,10,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(90+10+90,0,10,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        [rootLayout equalizeSubviews:YES withSpace:10];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,0,86.5,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(106.5,0,86.5,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(203,0,86.5,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        [rootLayout equalizeSubviews:NO withSpace:10];
+        [rootLayout layoutIfNeeded];
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,93.5,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(103.5,0,93.5,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(207,0,93.5,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+    }
+    
+    
+    
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     

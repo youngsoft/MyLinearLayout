@@ -137,7 +137,7 @@
         {
             if (orientation == MyOrientation_Vert && sbvsc.weight != 0)
             {
-                [sbvsc.widthSizeInner __equalTo:nil];
+                [sbvsc.widthSizeInner __clear];
             }
         }
         
@@ -145,7 +145,7 @@
         {
             if (orientation == MyOrientation_Horz && sbvsc.weight != 0)
             {
-                [sbvsc.heightSizeInner __equalTo:nil];
+                [sbvsc.heightSizeInner __clear];
             }
         }
     }];

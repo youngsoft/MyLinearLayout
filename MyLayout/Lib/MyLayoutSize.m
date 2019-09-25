@@ -512,7 +512,7 @@
     _uBoundVal = nil;
     _dimeVal = nil;
     _shrink = 0;
-    _priority = MyPriority_Normal;
+    _priority = MyPriority_Low;
     _dimeValType = MyLayoutValueType_Nil;
 }
 

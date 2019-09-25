@@ -425,13 +425,19 @@ BOOL _myisRTL = NO;
 
 -(void)setWrapContentWidth:(BOOL)wrapContentWidth
 {
-    self.widthSize.myEqualTo(wrapContentWidth?@(MyLayoutSize.wrap):nil);
+    if (wrapContentWidth)
+        self.widthSize.myEqualTo(@(MyLayoutSize.wrap));
+    else
+        _widthSize = nil;
 }
 
 
 -(void)setWrapContentHeight:(BOOL)wrapContentHeight
 {
-    self.heightSize.myEqualTo(wrapContentHeight?@(MyLayoutSize.wrap):nil);
+    if (wrapContentHeight)
+        self.heightSize.myEqualTo(@(MyLayoutSize.wrap));
+    else
+        _heightSize = nil;
 }
 
 -(BOOL)wrapContentSize

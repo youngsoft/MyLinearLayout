@@ -103,6 +103,8 @@
 "right" = "右停靠";
 "horz fill"="水平填充";
 "vert fill"="垂直填充";
+"horz stretch"="水平拉伸";
+"vert stretch"="垂直拉伸";
 "screen vert center" = "屏幕垂直居中";
 "screen horz center" ="屏幕水平居中";
 "space" = "间距调整";

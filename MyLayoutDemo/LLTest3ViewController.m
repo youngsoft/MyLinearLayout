@@ -134,7 +134,9 @@
                          NSLocalizedString(@"between",@""),
                          NSLocalizedString(@"around",@""),
                          NSLocalizedString(@"horz fill",@""),
-                         NSLocalizedString(@"vert fill", @"")];
+                         NSLocalizedString(@"vert fill", @""),
+                         NSLocalizedString(@"horz stretch", @""),
+                         NSLocalizedString(@"vert stretch", @"")];
     
     for (NSInteger i = 0; i < actions.count; i++)
     {
@@ -223,7 +225,9 @@
                          NSLocalizedString(@"between",@""),
                          NSLocalizedString(@"around",@""),
                          NSLocalizedString(@"horz fill",@""),
-                         NSLocalizedString(@"vert fill", @"")];
+                         NSLocalizedString(@"vert fill", @""),
+                         NSLocalizedString(@"horz stretch",@""),
+                         NSLocalizedString(@"vert stretch", @"")];
     
     for (NSInteger i = 0; i < actions.count; i++)
     {
@@ -343,6 +347,12 @@
         case 12:  //垂直填充
             vertGravity = MyGravity_Vert_Fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
             break;
+        case 13:   //水平拉伸
+            horzGravity  = MyGravity_Horz_Stretch;
+            break;
+        case 14:  //垂直拉伸
+            vertGravity = MyGravity_Vert_Stretch;  //这里模拟器顶部出现黑线，真机是不会出现的。。
+            break;
         default:
             break;
     }
@@ -398,6 +408,12 @@
             break;
         case 12:
             vertGravity = MyGravity_Vert_Fill;
+            break;
+        case 13:   //水平拉伸
+            horzGravity  = MyGravity_Horz_Stretch;
+            break;
+        case 14:  //垂直拉伸
+            vertGravity = MyGravity_Vert_Stretch;
             break;
         default:
             break;
@@ -478,6 +494,9 @@
         case MyGravity_Vert_Fill:
             vertGravityStr = @"MyGravity_Vert_Fill";
             break;
+        case MyGravity_Vert_Stretch:
+            vertGravityStr = @"MyGravity_Vert_Stretch";
+            break;
         case MyGravity_Vert_Between:
             vertGravityStr = @"MyGravity_Vert_Between";
             break;
@@ -505,6 +524,9 @@
             break;
         case MyGravity_Horz_Fill:
             horzGravityStr = @"MyGravity_Horz_Fill";
+            break;
+        case MyGravity_Horz_Stretch:
+            horzGravityStr = @"MyGravity_Horz_Stretch";
             break;
         case MyGravity_Horz_Between:
             horzGravityStr = @"MyGravity_Horz_Between";
