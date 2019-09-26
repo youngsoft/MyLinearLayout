@@ -347,6 +347,28 @@
     
 }
 
+-(void)updateAllBorderlineColor
+{
+    [self updateBorderlineColorHelper:_topBorderlineLayer borderline:_topBorderline];
+    [self updateBorderlineColorHelper:_bottomBorderlineLayer borderline:_bottomBorderline];
+    [self updateBorderlineColorHelper:_leadingBorderlineLayer borderline:_leadingBorderline];
+    [self updateBorderlineColorHelper:_trailingBorderlineLayer borderline:_trailingBorderline];
+}
+
+-(void)updateBorderlineColorHelper:(CAShapeLayer*)layer borderline:(MyBorderline*)borderline
+{
+    if (layer != nil && borderline != nil)
+    {
+        if (borderline.dash != 0.0)
+        {
+            layer.strokeColor = borderline.color.CGColor;
+        }
+        else
+        {
+            layer.backgroundColor = borderline.color.CGColor;
+        }
+    }
+}
 
 @end
 

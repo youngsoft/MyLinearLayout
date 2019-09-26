@@ -2325,6 +2325,19 @@ void* _myObserverContextC = (void*)20175283;
     }
 }
 
+-(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (@available(iOS 12.0, *)) {
+        if (self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle)
+        {
+            [_borderlineLayerDelegate updateAllBorderlineColor];
+        }
+    } else {
+        // Fallback on earlier versions
+    }
+}
+
 
 #pragma mark -- Private Methods
 
@@ -2359,7 +2372,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
         {
-            if (sbvsc.heightSizeInner.dimeVal == nil)
+            if (sbvsc.heightSizeInner.dimeVal == nil || sbvsc.heightSizeInner.priority == MyPriority_Low)
                 sbvVertGravity = MyGravity_Vert_Fill;
         }
         else if (sbvsc.centerYPosInner.posVal != nil)
@@ -2501,7 +2514,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
         {
-            if (sbvsc.widthSizeInner.dimeVal == nil)
+            if (sbvsc.widthSizeInner.dimeVal == nil || sbvsc.widthSizeInner.priority == MyPriority_Low)
                 sbvHorzGravity = MyGravity_Horz_Fill;
         }
         else if (sbvsc.centerXPosInner.posVal != nil)
@@ -3742,11 +3755,11 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
         }
         
-        if (customSetting != nil)
-            customSetting(sbv, sbvsc);
-        
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
+            
+            if (customSetting != nil)
+                customSetting(sbv, sbvsc);
             
             BOOL isSbvWrap = sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal;
             

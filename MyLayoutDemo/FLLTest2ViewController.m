@@ -34,6 +34,9 @@
     [self createTagButton:NSLocalizedString(@"click to remove tag", @"")];
     [self createTagButton:NSLocalizedString(@"tag2", @"")];
     [self createTagButton:NSLocalizedString(@"MyLayout can used in XIB&SB", @"")];
+    
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"gravity\nalways" style:UIBarButtonItemStylePlain target:self action:@selector(handleChangeGravityAlways:)];
+    self.navigationItem.rightBarButtonItem = item;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,6 +74,11 @@
 }
 
 #pragma mark -- Handle Method
+
+-(IBAction)handleChangeGravityAlways:(id)sender
+{
+    self.flowLayout.gravityAlways = !self.flowLayout.gravityAlways;
+}
 
 - (IBAction)handleShrinkMargin:(UISwitch *)sender {
     
