@@ -8,6 +8,10 @@
 
 #import "MyLayoutTestCaseBase.h"
 #import "RLTest1ViewController.h"
+#import "RLTest2ViewController.h"
+#import "RLTest3ViewController.h"
+#import "RLTest4ViewController.h"
+#import "RLTest5ViewController.h"
 
 
 @interface MyRelativeLayoutTestCase : MyLayoutTestCaseBase
@@ -21,22 +25,25 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    self.vc = [RLTest1ViewController new];
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
-    self.vc = nil;
     [super tearDown];
 }
 
 -(void)testRLTest1VC
 {
-    
-    UIView *v = self.vc.view;
-    [self startClock];
-    [v layoutIfNeeded];
-    [self endClock:@"RLTest1"];
+   
+    for (int i = 0; i <= 5; i++)
+    {
+        Class cls = NSClassFromString([NSString stringWithFormat:@"RLTest%dViewController", i]);
+        UIViewController *vc = [[cls alloc] init];
+        UIView *v = vc.view;
+        [v setNeedsLayout];
+        [v layoutIfNeeded];
+    }
+   
     
     
 }

@@ -162,6 +162,7 @@
 		208157BD1F586AA700E945B6 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157BC1F586AA700E945B6 /* DetailViewController.m */; };
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
+		2094619E2341FD6F005F5C8E /* AllTestExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2094619D2341FD6F005F5C8E /* AllTestExampleViewController.m */; };
 		20A45EC52318FCA50026A18C /* MyFlexLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DF42402318F4EA0078CAA0 /* MyFlexLayout.m */; };
 		20B46A8D1F8A79C300826372 /* layoutdemo8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 20B46A8C1F8A79C300826372 /* layoutdemo8.gif */; };
 		20DCF333208C3BFB007A879B /* FOLTest7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DCF332208C3BFB007A879B /* FOLTest7ViewController.m */; };
@@ -408,6 +409,8 @@
 		208157BC1F586AA700E945B6 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		208157C01F5A886300E945B6 /* MyLayoutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDelegate.h; sourceTree = "<group>"; };
 		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
+		2094619C2341FD5E005F5C8E /* AllTestExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTestExampleViewController.h; sourceTree = "<group>"; };
+		2094619D2341FD6F005F5C8E /* AllTestExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTestExampleViewController.m; sourceTree = "<group>"; };
 		20B46A8C1F8A79C300826372 /* layoutdemo8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo8.gif; sourceTree = "<group>"; };
 		20DCF331208C3BEF007A879B /* FOLTest7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest7ViewController.h; sourceTree = "<group>"; };
 		20DCF332208C3BFB007A879B /* FOLTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest7ViewController.m; sourceTree = "<group>"; };
@@ -690,6 +693,8 @@
 				20F0DFFC2111749A00CFCE8C /* AllTest11ViewController.m */,
 				467E63CA228C4D630065D080 /* AllTest12ViewController.h */,
 				467E63CB228C4D6F0065D080 /* AllTest12ViewController.m */,
+				2094619C2341FD5E005F5C8E /* AllTestExampleViewController.h */,
+				2094619D2341FD6F005F5C8E /* AllTestExampleViewController.m */,
 				18D3C9021EDF068200D3DE43 /* AllTestModel&View */,
 			);
 			name = IntegratedDemo;
@@ -1158,6 +1163,7 @@
 				467E63CF228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m in Sources */,
 				18D3C95A1EDF07F800D3DE43 /* FOLTest1ViewController.m in Sources */,
 				182225D01E77E5930081AA4B /* MyLayoutPos.m in Sources */,
+				2094619E2341FD6F005F5C8E /* AllTestExampleViewController.m in Sources */,
 				18D3C98B1EDF084000D3DE43 /* AllTest7ViewController.m in Sources */,
 				20F0E00021120A8D00CFCE8C /* FLLTest8ViewController.m in Sources */,
 				200A26DC1FA96B2400B06E7B /* AllTest9CollectionViewCell.m in Sources */,

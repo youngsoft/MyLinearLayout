@@ -58,6 +58,7 @@
 #import "AllTest10ViewController.h"
 #import "AllTest11ViewController.h"
 #import "AllTest12ViewController.h"
+#import "AllTestExampleViewController.h"
 
 
 #import "FOLTest1ViewController.h"
@@ -304,6 +305,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"❁6.MyLayout & AutoLayout", @""),
                                                @"class":[AllTest12ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"❁7.example", @""),
+                                               @"class":[AllTestExampleViewController class]
                                                }
                                              ]
                             }
