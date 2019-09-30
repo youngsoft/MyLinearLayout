@@ -108,7 +108,7 @@
 -(CGFloat)myLayoutLeadingPadding;
 -(CGFloat)myLayoutTrailingPadding;
 
--(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout;
+-(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout;
 
 
 //根据子视图的宽度约束得到宽度值

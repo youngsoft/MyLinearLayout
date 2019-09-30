@@ -2074,8 +2074,6 @@ void* _myObserverContextC = (void*)20175283;
                     {
                         sbv.center = sbvTempCenter;
                     }
-
-
                 }
                 else
                 {
@@ -2084,7 +2082,6 @@ void* _myObserverContextC = (void*)20175283;
                     sbv.center = CGPointMake(rc.origin.x + sbv.layer.anchorPoint.x * rc.size.width, rc.origin.y + sbv.layer.anchorPoint.y * rc.size.height);
                     sbv.bounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, rc.size.width, rc.size.height);
                 }
-                
             }
             
             if (sbvsc.visibility == MyVisibility_Gone && !sbv.isHidden)
@@ -2123,7 +2120,6 @@ void* _myObserverContextC = (void*)20175283;
             }
             if (isAdjustSelf && (isWidthAlter || isHeightAlter))
             {
-                
                 if (newSelfSize.width < 0)
                     newSelfSize.width = 0;
                 
@@ -2372,6 +2368,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil)
         {
+            //只有在没有设置高度约束，或者高度约束优先级很低的情况下同时设置上下才转化为填充。
             if (sbvsc.heightSizeInner.dimeVal == nil || sbvsc.heightSizeInner.priority == MyPriority_Low)
                 sbvVertGravity = MyGravity_Vert_Fill;
         }
@@ -2429,7 +2426,7 @@ void* _myObserverContextC = (void*)20175283;
     //如果是设置垂直拉伸则，如果子视图有约束则不受影响，否则就变为和填充一个意思。
     if (vertGravity == MyGravity_Vert_Stretch)
     {
-        if (sbvsc.heightSizeInner.dimeVal != nil)
+        if (sbvsc.heightSizeInner.dimeVal != nil && sbvsc.heightSizeInner.priority != MyPriority_Low)
             vertGravity = MyGravity_Vert_Top;
         else
             vertGravity = MyGravity_Vert_Fill;
@@ -2514,6 +2511,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil)
         {
+            //只有在没有设置宽度约束，或者宽度约束优先级很低的情况下同时设置左右才转化为填充。
             if (sbvsc.widthSizeInner.dimeVal == nil || sbvsc.widthSizeInner.priority == MyPriority_Low)
                 sbvHorzGravity = MyGravity_Horz_Fill;
         }
@@ -2569,7 +2567,7 @@ void* _myObserverContextC = (void*)20175283;
     //如果是设置水平拉伸则，如果子视图有约束则不受影响，否则就变为和填充一个意思。
     if (horzGravity == MyGravity_Horz_Stretch)
     {
-        if (sbvsc.widthSizeInner.dimeVal != nil)
+        if (sbvsc.widthSizeInner.dimeVal != nil && sbvsc.widthSizeInner.priority != MyPriority_Low)
             horzGravity = MyGravity_Horz_Leading;
         else
             horzGravity = MyGravity_Horz_Fill;
@@ -2586,7 +2584,6 @@ void* _myObserverContextC = (void*)20175283;
     }
     if (horzGravity == MyGravity_Horz_Fill)
     {
-        
         pRect->origin.x = paddingLeading + leadingMargin;
         pRect->size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:selfSize.width - paddingHorz - leadingMargin -  trailingMargin sbvSize:pRect->size selfLayoutSize:selfSize];
 
@@ -2674,7 +2671,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (lsc.leadingPosInner.posVal != nil && lsc.trailingPosInner.posVal != nil)
         {
-            if (lsc.widthSizeInner.priority == MyPriority_Low || lsc.widthSizeInner.dimeVal == nil)
+            if (lsc.widthSizeInner.priority == MyPriority_Low)
             {
                 CGFloat leadingMargin = [lsc.leadingPosInner realPosIn:rectSuper.size.width];
                 CGFloat trailingMargin = [lsc.trailingPosInner realPosIn:rectSuper.size.width];
@@ -2703,7 +2700,7 @@ void* _myObserverContextC = (void*)20175283;
         
         if (lsc.topPosInner.posVal != nil && lsc.bottomPosInner.posVal != nil)
         {
-            if (lsc.heightSizeInner.priority == MyPriority_Low || lsc.heightSizeInner.dimeVal == nil)
+            if (lsc.heightSizeInner.priority == MyPriority_Low)
             {
                 CGFloat topMargin = [lsc.topPosInner realPosIn:rectSuper.size.height];
                 CGFloat bottomMargin = [lsc.bottomPosInner realPosIn:rectSuper.size.height];
@@ -2793,7 +2790,7 @@ void* _myObserverContextC = (void*)20175283;
     {
         isAdjust = YES;
         //如果是没有设置宽度约束，或者宽度约束的优先级很低都按左右边距来决定布局视图的宽度。
-        if (lsc.widthSizeInner.priority == MyPriority_Low || lsc.widthSizeInner.dimeVal == nil)
+        if (lsc.widthSizeInner.priority == MyPriority_Low)
         {
             [lsc.widthSizeInner __clear];
             rectSelf.size.width = rectSuper.size.width - leadingMargin - trailingMargin;
@@ -3509,7 +3506,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 
 
--(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout
+-(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout
 {
     if (!isEstimate)
     {
@@ -3517,14 +3514,21 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
     }
     
-    if ((sbvsc.widthSizeInner.priority == MyPriority_Low || sbvsc.widthSizeInner.dimeVal == nil) && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
+    //只要子视图是包裹并且布局视图是fill填充，都应该清除子视图的包裹设置。
+    if (sbvsc.widthSizeInner.dimeWrapVal && horzGravity == MyGravity_Horz_Fill)
         [sbvsc.widthSizeInner __clear];
-    
-    if ((sbvsc.heightSizeInner.priority == MyPriority_Low || sbvsc.heightSizeInner.dimeVal == nil) && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
+    if (sbvsc.heightSizeInner.dimeWrapVal && vertGravity == MyGravity_Vert_Fill)
         [sbvsc.heightSizeInner __clear];
+
     
     if ([sbv isKindOfClass:[MyBaseLayout class]])
     {
+        if ((sbvsc.widthSizeInner.priority == MyPriority_Low) && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
+            [sbvsc.widthSizeInner __clear];
+        
+        if ((sbvsc.heightSizeInner.priority == MyPriority_Low) && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
+            [sbvsc.heightSizeInner __clear];
+        
         if (pHasSubLayout != nil && (sbvsc.heightSizeInner.dimeWrapVal || sbvsc.widthSizeInner.dimeWrapVal))
             *pHasSubLayout = YES;
         

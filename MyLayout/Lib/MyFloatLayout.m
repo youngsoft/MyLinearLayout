@@ -26,7 +26,6 @@
 -(BOOL)isReverseFloat
 {
     return self.myCurrentSizeClass.isReverseFloat;
-    
 }
 
 -(void)setClearFloat:(BOOL)clearFloat

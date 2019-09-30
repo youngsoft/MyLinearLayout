@@ -1051,7 +1051,7 @@
             //如果尺寸是0则因为前面有算出尺寸，所以这里就不进行调整了。
             if (grid.measure != 0 && [sbv isKindOfClass:[MyBaseLayout class]])
             {
-                [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:grid.gridRect.size sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
+                [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:grid.gridRect.size vertGravity:vertGravity horzGravity:horzGravity sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
             }
             else
             {
