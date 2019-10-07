@@ -31,7 +31,7 @@
         /**
          * 您可以尝试用不同的布局来实现相同的功能。
          */
-        //[self createLinearRootLayout];
+       // [self createLinearRootLayout];
         [self createRelativeRootLayout];
        //  [self createFloatRootLayout];
     }

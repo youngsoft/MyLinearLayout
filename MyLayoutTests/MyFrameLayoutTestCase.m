@@ -28,17 +28,14 @@
 
 -(void)testExample
 {
-    FLTest1ViewController *vc1 = [FLTest1ViewController new];
-    FLTest2ViewController *vc2 = [FLTest2ViewController new];
    
-    
-    [self startClock];
-    UIView *v1 = vc1.view;
-    UIView *v2=  vc2.view;
-    
-    [v1 layoutIfNeeded];
-    [v2 layoutIfNeeded];
-   
+    for (int i = 1; i <=2; i++)
+    {
+        Class cls = NSClassFromString([NSString stringWithFormat:@"FLTest%dViewController", i]);
+        UIViewController *vc = [cls new];
+        UIView *v = vc.view;
+        [v layoutIfNeeded];
+    }
 
 }
 

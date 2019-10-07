@@ -35,7 +35,7 @@
 -(void)testRLTest1VC
 {
    
-    for (int i = 0; i <= 5; i++)
+    for (int i = 1; i <= 5; i++)
     {
         Class cls = NSClassFromString([NSString stringWithFormat:@"RLTest%dViewController", i]);
         UIViewController *vc = [[cls alloc] init];
@@ -1070,6 +1070,66 @@
 //    
     
     
+}
+
+-(void)testExample1
+{
+    MyRelativeLayout *rootLayout = [[MyRelativeLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 603)];
+    
+    
+    UIView *v1 = [UIView new];
+    v1.mySize = CGSizeMake(100, 100);
+    v1.myTop = 100;
+    v1.myLeft = 100;
+    v1.visibility = MyVisibility_Gone;
+    [rootLayout addSubview:v1];
+    
+    //某个视图的水平居中依赖另外一个视图，另外一个视图隐藏。
+    UIView *v2 = [UIView new];
+    v2.mySize = CGSizeMake(100, 100);
+    v2.centerXPos.equalTo(v1.centerXPos).offset(20);
+    v2.centerYPos.equalTo(v1.centerYPos).offset(20);
+    [rootLayout addSubview:v2];
+    
+    //某个视图的左边依赖另外一个视图，另外一个视图隐藏。
+    UIView *v3 = [UIView new];
+    v3.mySize = CGSizeMake(100, 100);
+    v3.leadingPos.equalTo(v1.leadingPos).offset(20);
+    v3.bottomPos.equalTo(v1.bottomPos).offset(20);
+    [rootLayout addSubview:v3];
+    
+    UIView *v4 = [UIView new];
+    v4.mySize = CGSizeMake(100, 100);
+    v4.leadingPos.lBound(v3.leadingPos, 0);
+    v4.trailingPos.uBound(rootLayout.trailingPos,0);
+    v4.bottomPos.equalTo(@(10));
+    [rootLayout addSubview:v4];
+    
+    UIView *v5 = [UIView new];
+    v5.mySize = CGSizeMake(100, 100);
+    v5.baselinePos.equalTo(v4.baselinePos).offset(20);
+    [rootLayout addSubview:v5];
+    
+    UILabel *v6 = [UILabel new];
+    v6.mySize = CGSizeMake(100, 100);
+    v6.baselinePos.equalTo(v1.baselinePos).offset(20);
+    [rootLayout addSubview:v6];
+    
+    UILabel *v7 = [UILabel new];
+    v7.mySize = CGSizeMake(100, 100);
+    v7.baselinePos.equalTo(@(40));
+    [rootLayout addSubview:v7];
+    
+    [rootLayout setNeedsLayout];
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(100,100,0,0)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+    XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(50,50,100,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+    XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(100,0,100,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+    XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(187.5,493,100,100)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+    XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(0,20,100,100)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+    XCTAssertTrue(CGRectEqualToRect(v6.frame, CGRectMake(0,44,100,100)), @"the v6.frame = %@",NSStringFromCGRect(v6.frame));
+    XCTAssertTrue(CGRectEqualToRect(v7.frame, CGRectMake(0,-16,100,100)), @"the v7.frame = %@",NSStringFromCGRect(v7.frame));
 }
 
 - (void)testPerformanceExample {

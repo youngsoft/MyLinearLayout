@@ -178,6 +178,9 @@
 		44EBDA8E1F619C9000B47CBD /* GridLayoutDemo4.json in Resources */ = {isa = PBXBuildFile; fileRef = 44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.json */; };
 		467E63CC228C4D6F0065D080 /* AllTest12ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 467E63CB228C4D6F0065D080 /* AllTest12ViewController.m */; };
 		467E63CF228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 467E63CE228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m */; };
+		4689881D23430A8400BFE829 /* MyPathLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4689881C23430A8400BFE829 /* MyPathLayoutTestCase.m */; };
+		4689881F23430AA000BFE829 /* MyGridLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4689881E23430AA000BFE829 /* MyGridLayoutTestCase.m */; };
+		4689882223449E8300BFE829 /* RLTest6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4689882123449E8300BFE829 /* RLTest6ViewController.m */; };
 		6740E1F820A52D9E00AFBC5A /* AllTest10ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740E1F620A52D9E00AFBC5A /* AllTest10ViewController.m */; };
 		6740E1FB20A52DA900AFBC5A /* AllTest10Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740E1F920A52DA900AFBC5A /* AllTest10Model.m */; };
 		6740E1FE20A52DB100AFBC5A /* AllTest10HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740E1FC20A52DB000AFBC5A /* AllTest10HeaderView.m */; };
@@ -434,6 +437,10 @@
 		467E63CB228C4D6F0065D080 /* AllTest12ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest12ViewController.m; sourceTree = "<group>"; };
 		467E63CD228CDA550065D080 /* AllTest1TableViewCellForAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewCellForAutoLayout.h; sourceTree = "<group>"; };
 		467E63CE228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewCellForAutoLayout.m; sourceTree = "<group>"; };
+		4689881C23430A8400BFE829 /* MyPathLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPathLayoutTestCase.m; sourceTree = "<group>"; };
+		4689881E23430AA000BFE829 /* MyGridLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGridLayoutTestCase.m; sourceTree = "<group>"; };
+		4689882023449E7900BFE829 /* RLTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLTest6ViewController.h; sourceTree = "<group>"; };
+		4689882123449E8300BFE829 /* RLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLTest6ViewController.m; sourceTree = "<group>"; };
 		6740E1F520A52D9D00AFBC5A /* AllTest10ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest10ViewController.h; sourceTree = "<group>"; };
 		6740E1F620A52D9E00AFBC5A /* AllTest10ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest10ViewController.m; sourceTree = "<group>"; };
 		6740E1F920A52DA900AFBC5A /* AllTest10Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest10Model.m; sourceTree = "<group>"; };
@@ -582,6 +589,8 @@
 				18D3C9251EDF07A700D3DE43 /* RLTest4ViewController.m */,
 				18D3C9261EDF07A700D3DE43 /* RLTest5ViewController.h */,
 				18D3C9271EDF07A700D3DE43 /* RLTest5ViewController.m */,
+				4689882023449E7900BFE829 /* RLTest6ViewController.h */,
+				4689882123449E8300BFE829 /* RLTest6ViewController.m */,
 			);
 			name = RelativeLayoutDemo;
 			sourceTree = "<group>";
@@ -858,6 +867,8 @@
 				18B2CCE71EAF5066001AE0E1 /* MyLinearLayoutTestCase.m */,
 				18B2CCE91EB046AB001AE0E1 /* MyFlowLayoutTestCase.m */,
 				205AE95D22BC4C2900BE8E76 /* MyFloatLayoutTestCase.m */,
+				4689881C23430A8400BFE829 /* MyPathLayoutTestCase.m */,
+				4689881E23430AA000BFE829 /* MyGridLayoutTestCase.m */,
 				1810AC211EB966D30022CBFF /* MyLayoutPerformanceTestCase.m */,
 			);
 			path = MyLayoutTests;
@@ -1167,6 +1178,7 @@
 				18D3C98B1EDF084000D3DE43 /* AllTest7ViewController.m in Sources */,
 				20F0E00021120A8D00CFCE8C /* FLLTest8ViewController.m in Sources */,
 				200A26DC1FA96B2400B06E7B /* AllTest9CollectionViewCell.m in Sources */,
+				4689882223449E8300BFE829 /* RLTest6ViewController.m in Sources */,
 				18D3C9881EDF084000D3DE43 /* AllTest4ViewController.m in Sources */,
 				18D3C9131EDF074900D3DE43 /* LLTest3ViewController.m in Sources */,
 				18D3C95E1EDF07F800D3DE43 /* FOLTest5ViewController.m in Sources */,
@@ -1241,10 +1253,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4689881D23430A8400BFE829 /* MyPathLayoutTestCase.m in Sources */,
 				18B2CCE81EAF5066001AE0E1 /* MyLinearLayoutTestCase.m in Sources */,
 				205AE95E22BC4C2900BE8E76 /* MyFloatLayoutTestCase.m in Sources */,
 				18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */,
 				1810AC221EB966D30022CBFF /* MyLayoutPerformanceTestCase.m in Sources */,
+				4689881F23430AA000BFE829 /* MyGridLayoutTestCase.m in Sources */,
 				181836951EAB1CB10031F337 /* MyNoLayoutSuperviewTestCase.m in Sources */,
 				180BD8A11EA9EF9A00C6980B /* MyFrameLayoutTestCase.m in Sources */,
 				1897384F1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m in Sources */,

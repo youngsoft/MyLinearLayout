@@ -1281,9 +1281,7 @@ void* _myObserverContextC = (void*)20175283;
 -(void)setHighlightedOpacity:(CGFloat)highlightedOpacity
 {
     if (_touchEventDelegate == nil)
-    {
         _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
-    }
     
     _touchEventDelegate.highlightedOpacity = highlightedOpacity;
 }
@@ -1296,9 +1294,7 @@ void* _myObserverContextC = (void*)20175283;
 -(void)setHighlightedBackgroundColor:(UIColor *)highlightedBackgroundColor
 {
     if (_touchEventDelegate == nil)
-    {
         _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
-    }
     
     _touchEventDelegate.highlightedBackgroundColor = highlightedBackgroundColor;
 }
@@ -1311,9 +1307,7 @@ void* _myObserverContextC = (void*)20175283;
 -(void)setHighlightedBackgroundImage:(UIImage *)highlightedBackgroundImage
 {
     if (_touchEventDelegate == nil)
-    {
         _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
-    }
     
     _touchEventDelegate.highlightedBackgroundImage = highlightedBackgroundImage;
 }
@@ -1327,9 +1321,7 @@ void* _myObserverContextC = (void*)20175283;
 -(void)setTarget:(id)target action:(SEL)action
 {
     if (_touchEventDelegate == nil)
-    {
         _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
-    }
     
     [_touchEventDelegate setTarget:target action:action];
 }
@@ -1338,9 +1330,7 @@ void* _myObserverContextC = (void*)20175283;
 -(void)setTouchDownTarget:(id)target action:(SEL)action
 {
     if (_touchEventDelegate == nil)
-    {
         _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
-    }
 
     [_touchEventDelegate setTouchDownTarget:target action:action];
 }
@@ -1348,9 +1338,7 @@ void* _myObserverContextC = (void*)20175283;
 -(void)setTouchCancelTarget:(id)target action:(SEL)action
 {
     if (_touchEventDelegate == nil)
-    {
         _touchEventDelegate = [[MyLayoutTouchEventDelegate alloc] initWithLayout:self];
-    }
     
     [_touchEventDelegate setTouchCancelTarget:target action:action];
     
@@ -1415,9 +1403,8 @@ void* _myObserverContextC = (void*)20175283;
         CGRect rcOld = [change[NSKeyValueChangeOldKey] CGRectValue];
         CGRect rcNew = [change[NSKeyValueChangeNewKey] CGRectValue];
         if (!_myCGSizeEqual(rcOld.size, rcNew.size))
-        {
             [self myUpdateLayoutRectInNoLayoutSuperview:object];
-        }
+        
         return;
     }
     
@@ -1434,7 +1421,6 @@ void* _myObserverContextC = (void*)20175283;
             {
                 [(UIView*)object setNeedsDisplay];
             }
-            
         }
         else if (context == _myObserverContextB)
         {//针对UILabel特殊处理。。
@@ -2586,7 +2572,6 @@ void* _myObserverContextC = (void*)20175283;
     {
         pRect->origin.x = paddingLeading + leadingMargin;
         pRect->size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:selfSize.width - paddingHorz - leadingMargin -  trailingMargin sbvSize:pRect->size selfLayoutSize:selfSize];
-
     }
     else if (horzGravity == MyGravity_Horz_Center)
     {

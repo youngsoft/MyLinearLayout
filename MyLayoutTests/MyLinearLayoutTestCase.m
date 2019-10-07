@@ -41,49 +41,22 @@
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
     
-    LLTest1ViewController *vc1 = [LLTest1ViewController new];
-    LLTest2ViewController *vc2 = [LLTest2ViewController new];
-    LLTest3ViewController *vc3 = [LLTest3ViewController new];
-    LLTest4ViewController *vc4 = [LLTest4ViewController new];
-    LLTest5ViewController *vc5 = [LLTest5ViewController new];
-    LLTest6ViewController *vc6 = [LLTest6ViewController new];
-    LLTest7ViewController *vc7 = [LLTest7ViewController new];
+    for (int i = 1; i <=7; i++)
+    {
+        Class cls = NSClassFromString([NSString stringWithFormat:@"LLTest%dViewController", i]);
+        UIViewController *vc = [cls new];
+        UIView *v = vc.view;
+        [v layoutIfNeeded];
+    }
     
+    for (int i = 1; i <=3; i++)
+    {
+        Class cls = NSClassFromString([NSString stringWithFormat:@"TLTest%dViewController", i]);
+        UIViewController *vc = [cls new];
+        UIView *v = vc.view;
+        [v layoutIfNeeded];
+    }
     
-    TLTest1ViewController *vc10 = [TLTest1ViewController new];
-    TLTest2ViewController *vc11 = [TLTest2ViewController new];
-    TLTest3ViewController *vc12 = [TLTest3ViewController new];
-    TLTest4ViewController *vc13 = [TLTest4ViewController new];
-    
-    
-    UIView *v1 = vc1.view;
-    UIView *v2=  vc2.view;
-    UIView *v3 = vc3.view;
-    UIView *v4 = vc4.view;
-    UIView *v5 = vc5.view;
-    UIView *v6 = vc6.view;
-    UIView *v7 = vc7.view;
-    
-    UIView *v10 = vc10.view;
-    UIView *v11 = vc11.view;
-    UIView *v12 = vc12.view;
-    UIView *v13 = vc13.view;
-
-   
-    
-    [v1 layoutIfNeeded];
-    [v2 layoutIfNeeded];
-    [v3 layoutIfNeeded];
-    [v4 layoutIfNeeded];
-    [v5 layoutIfNeeded];
-    [v6 layoutIfNeeded];
-    [v7 layoutIfNeeded];
-    
-    [v10 layoutIfNeeded];
-    [v11 layoutIfNeeded];
-    [v12 layoutIfNeeded];
-    [v13 layoutIfNeeded];
-
     for (int i = 1; i <=12; i++)
     {
         Class cls = NSClassFromString([NSString stringWithFormat:@"AllTest%dViewController", i]);

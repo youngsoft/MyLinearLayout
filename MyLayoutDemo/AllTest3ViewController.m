@@ -348,7 +348,8 @@
     [testButton setTitle:@"Click me" forState:UIControlStateNormal];
     testButton.backgroundColor = [CFTool color:0];
     testButton.heightSize.equalTo(@50);
-    testButton.widthSize.equalTo(testButton.widthSize).add(20);
+   // testButton.widthSize.equalTo(testButton.widthSize).add(20);
+    testButton.widthSize.equalTo(@(MyLayoutSize.wrap)).add(20);
     testButton.leadingPos.equalTo(@10).active = YES;  //左边边距是10，设置active为YES表示左边位置对象的设置是生效的。
     testButton.trailingPos.equalTo(@10).active = NO;  //右边边距是10，设置active为NO表示右边位置对象的设置是不生效的。
     
@@ -716,16 +717,19 @@
     {
         sender.leadingPos.active = YES;
         sender.trailingPos.active = NO;  //按钮将停靠在父布局的左边。
+        sender.widthSize.active = YES;
     }
     else if (sender.leadingPos.isActive)
     {
         sender.leadingPos.active = NO;
         sender.trailingPos.active = YES;  //按钮将停靠在父布局的右边
+        sender.widthSize.active = YES;
     }
     else if (sender.trailingPos.isActive)
     {
         sender.leadingPos.active = YES;
         sender.trailingPos.active = YES;  //按钮的左右边距都生效，并且会拉伸按钮的宽度。
+        sender.widthSize.active = NO;
     }
     
     MyLinearLayout *superLayout = (MyLinearLayout*)sender.superview;

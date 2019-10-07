@@ -215,7 +215,7 @@
 @property(nonatomic, assign, readonly) CGFloat minVal;
 @property(nonatomic, assign, readonly) CGFloat maxVal;
 
-//判断尺寸值是否是包裹自适应
+//判断尺寸值是否是自适应值。
 @property(nonatomic, assign, readonly) BOOL isWrap;
 
 @end
@@ -223,7 +223,7 @@
 
 @interface MyLayoutSize(Detach)
 
-//从布局尺寸中分离出一个尺寸对象来。这个分离出来的尺寸值是源尺寸对象的值乘以multival再加上addVal。这个方法用于下面数组元素的构造
+//从布局尺寸中分离出一个尺寸对象来。这个分离出来的尺寸值是源尺寸对象的值乘以multival再加上addVal。这个方法通常用于下面数组元素的构造
 -(MyLayoutSize* (^)(CGFloat addVal, CGFloat multiVal))detach;
 
 @end
@@ -235,9 +235,9 @@
  */
 @interface NSArray(MyLayoutExtremeSize)
 
-//从数组中得到最小的尺寸值。
+//从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutSize类型
 @property(nonatomic, readonly) MyLayoutExtremeSize *myMinSize;
-//从数组中得到最小的尺寸值。
+//从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutSize类型
 @property(nonatomic, readonly) MyLayoutExtremeSize *myMaxSize;
 
 @end

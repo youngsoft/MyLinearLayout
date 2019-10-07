@@ -222,32 +222,31 @@
 
 -(id)copyWithZone:(NSZone *)zone
 {
-    MyLayoutSize *ld = [[[self class] allocWithZone:zone] init];
-    ld.view = self.view;
-    ld->_active = _active;
-    ld->_shrink = _shrink;
-    ld->_dime = _dime;
-    ld->_addVal = _addVal;
-    ld->_multiVal = _multiVal;
-    ld->_dimeVal = _dimeVal;
-    ld->_dimeValType = _dimeValType;
-    ld->_priority = _priority;
+    MyLayoutSize *layoutSize = [[[self class] allocWithZone:zone] init];
+    layoutSize.view = self.view;
+    layoutSize->_active = _active;
+    layoutSize->_shrink = _shrink;
+    layoutSize->_dime = _dime;
+    layoutSize->_addVal = _addVal;
+    layoutSize->_multiVal = _multiVal;
+    layoutSize->_dimeVal = _dimeVal;
+    layoutSize->_dimeValType = _dimeValType;
+    layoutSize->_priority = _priority;
     if (_lBoundVal != nil)
     {
-        ld->_lBoundVal = [[[self class] allocWithZone:zone] init];
-        ld->_lBoundVal->_active = _active;
-        [[[ld->_lBoundVal __equalTo:_lBoundVal.dimeVal] __add:_lBoundVal.addVal] __multiply:_lBoundVal.multiVal];
+        layoutSize->_lBoundVal = [[[self class] allocWithZone:zone] init];
+        layoutSize->_lBoundVal->_active = _active;
+        [[[layoutSize->_lBoundVal __equalTo:_lBoundVal.dimeVal] __add:_lBoundVal.addVal] __multiply:_lBoundVal.multiVal];
     }
     
     if (_uBoundVal != nil)
     {
-        ld->_uBoundVal = [[[self class] allocWithZone:zone] init];
-        ld->_uBoundVal->_active = _active;
-        [[[ld->_uBoundVal __equalTo:_uBoundVal.dimeVal] __add:_uBoundVal.addVal] __multiply:_uBoundVal.multiVal];
+        layoutSize->_uBoundVal = [[[self class] allocWithZone:zone] init];
+        layoutSize->_uBoundVal->_active = _active;
+        [[[layoutSize->_uBoundVal __equalTo:_uBoundVal.dimeVal] __add:_uBoundVal.addVal] __multiply:_uBoundVal.multiVal];
     }
   
-    
-    return self;
+    return layoutSize;
 }
 
 #pragma mark -- Private Methods
@@ -625,12 +624,12 @@
 {
     return ^id(CGFloat addVal, CGFloat multiVal){
         
-        MyLayoutSize *ld = [[[self class] allocWithZone:nil] init];
-        ld->_addVal = addVal;
-        ld->_multiVal = multiVal;
-        ld->_dimeVal = self;
-        ld->_dimeValType = MyLayoutValueType_LayoutDimeDetach;
-        return ld;
+        MyLayoutSize *detachSize = [[[self class] allocWithZone:nil] init];
+        detachSize->_addVal = addVal;
+        detachSize->_multiVal = multiVal;
+        detachSize->_dimeVal = self;
+        detachSize->_dimeValType = MyLayoutValueType_LayoutDimeDetach;
+        return detachSize;
     };
 }
 

@@ -20,6 +20,7 @@
 @property(nonatomic, readonly, strong) NSNumber *posNumVal;
 @property(nonatomic, readonly, strong) MyLayoutPos *posRelaVal;
 @property(nonatomic, readonly, strong) NSArray *posArrVal;
+@property(nonatomic, readonly, strong) NSNumber *posExtremeVal;
 
 @property(nonatomic, readonly, strong) MyLayoutPos *lBoundVal;
 @property(nonatomic, readonly, strong) MyLayoutPos *uBoundVal;
@@ -57,6 +58,13 @@
 
 -(BOOL)isSafeAreaPos;
 
+@end
 
+@interface MyLayoutExtremePos:NSObject
+
+-(instancetype)initWith:(NSArray *)poss isMax:(BOOL)isMax;
+
+//获取极限值
+-(CGFloat)getExtremePosFrom:(MyLayoutPos *)layoutPos;
 
 @end

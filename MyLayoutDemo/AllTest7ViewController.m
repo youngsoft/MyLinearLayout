@@ -64,7 +64,8 @@
     
     [self createDemo11:rootLayout];
 
-    
+    [self createDemo12:rootLayout];
+
 }
 
 
@@ -745,6 +746,54 @@
     UILabel *D = [self createLabel:@"JAVA" color:8];
     [contentLayout addSubview:D];
     
+}
+
+-(void)createDemo12:(MyLinearLayout*)rootLayout
+{
+    //一行内的子视图的间距会根据屏幕尺寸自动缩小。
+    UILabel *tipLabel = [UILabel new];
+    tipLabel.text = @"12. 当布局视图下有多个子视图时有可能无法将这些子视图显示完全，而是需要将某些子视图的尺寸或者子视图之间的间距进行压缩处理。这里可以通过设置子视图尺寸中的shrink或者间距中的shrink值来进行处理。默认情况下这些值都是0表明不压缩，值越大压缩就越大";
+    tipLabel.font = [CFTool font:14];
+    tipLabel.adjustsFontSizeToFitWidth = YES;
+    tipLabel.wrapContentHeight = YES;
+    tipLabel.myTop = 10;
+    [tipLabel sizeToFit];
+    [rootLayout addSubview:tipLabel];
+    
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    contentLayout.wrapContentWidth = NO;
+    contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    contentLayout.heightSize.equalTo(@(MyLayoutSize.wrap)).min(60);
+    contentLayout.gravity = MyGravity_Vert_Center;  //内容垂直居中。
+    contentLayout.backgroundColor = [CFTool color:0];
+    [rootLayout addSubview:contentLayout];
+    
+    UILabel *A = [self createLabel:@"不压缩" color:5];
+    A.widthSize.equalTo(@(MyLayoutSize.wrap));
+    A.heightSize.equalTo(@(MyLayoutSize.wrap));
+    A.widthSize.shrink = 0;
+    [contentLayout addSubview:A];
+    
+    UILabel *B = [self createLabel:@"压缩1,间距不压缩" color:6];
+    B.widthSize.equalTo(@(MyLayoutSize.wrap));
+    B.heightSize.equalTo(@(MyLayoutSize.wrap));
+    B.widthSize.shrink = 1;
+    B.leftPos.equalTo(@(20)).shrink = 0;
+    [contentLayout addSubview:B];
+    
+    UILabel *C  = [self createLabel:@"压缩2,间距压缩1" color:7];
+    C.widthSize.equalTo(@(MyLayoutSize.wrap));
+    C.heightSize.equalTo(@(MyLayoutSize.wrap));
+    C.widthSize.shrink = 2;
+    C.leftPos.equalTo(@(20)).shrink = 1;
+    [contentLayout addSubview:C];
+    
+    UILabel *D = [self createLabel:@"压缩3,间距压缩2" color:8];
+    D.widthSize.equalTo(@(MyLayoutSize.wrap));
+    D.heightSize.equalTo(@(MyLayoutSize.wrap));
+    D.widthSize.shrink = 3;
+    D.leftPos.equalTo(@(20)).shrink = 2;
+    [contentLayout addSubview:D];
 }
 
 

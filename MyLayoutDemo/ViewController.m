@@ -27,7 +27,7 @@
 #import "RLTest3ViewController.h"
 #import "RLTest4ViewController.h"
 #import "RLTest5ViewController.h"
-
+#import "RLTest6ViewController.h"
 
 #import "TLTest1ViewController.h"
 #import "TLTest2ViewController.h"
@@ -149,6 +149,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"5.RelativeLayout - Boundary limit", @""),
                                                @"class":[RLTest5ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"6.RelativeLayout - ExtremeSize", @""),
+                                               @"class":[RLTest6ViewController class]
                                                }
                                              ]
                             },

@@ -247,6 +247,17 @@
     }];
     */
     
+    UIView *squareView = [UIView new];
+    squareView.backgroundColor = [CFTool color:9];
+    //宽度是父布局宽度和高度二者之间的最小值的1/5, 高度等于宽度。
+    //这里面用到了数组的一个扩展属性myMinSize。要求数组中的元素必须是MyLayoutSize类型，而且这些值也必须在本视图约束计算前已经有明确的值。
+    squareView.widthSize.equalTo(@[rootLayout.widthSize, rootLayout.heightSize].myMinSize).multiply(0.2);
+    squareView.heightSize.equalTo(squareView.widthSize);
+    squareView.centerXPos.equalTo(rootLayout.centerXPos);
+    squareView.centerYPos.equalTo(rootLayout.centerYPos).offset(40);
+    [rootLayout addSubview:squareView];
+    
+    
     /*
        左下角区域部分。
      */
