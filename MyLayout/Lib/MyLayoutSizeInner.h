@@ -64,12 +64,12 @@
 
 @end
 
-@interface MyLayoutExtremeSize:NSObject
+@interface MyLayoutMostSize:NSObject
 
 -(instancetype)initWith:(NSArray *)sizes isMax:(BOOL)isMax;
 
 //获取极限值
--(CGFloat)getExtremeSizeFrom:(MyLayoutSize *)layoutSize;
+-(CGFloat)getMostSizeFrom:(MyLayoutSize *)layoutSize;
 
 @end
 

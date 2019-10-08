@@ -8,7 +8,7 @@
 
 #import "MyLayoutDef.h"
 
-@class MyLayoutExtremeSize;
+@class MyLayoutMostSize;
 
 /**
  *视图的布局尺寸类，用来设置视图在布局视图中宽度和高度的尺寸值。布局尺寸类是对尺寸的一个抽象，一个尺寸不一定描述为一个具体的数值，也有可能描述为和另外一个尺寸相等也就是依赖另外一个尺寸，同时一个尺寸可能也会有最大和最小值的限制等等。因此用MyLayoutSize类来描述这种尺寸的抽象概念。
@@ -63,7 +63,7 @@
 
 
 /**
- 设置尺寸的具体值，这个具体值可以设置为NSNumber, MyLayoutSize以及NSArray<MyLayoutSize*>数组,UIView, MyLayoutExtremeSize和nil值。
+ 设置尺寸的具体值，这个具体值可以设置为NSNumber, MyLayoutSize以及NSArray<MyLayoutSize*>数组,UIView, MyLayoutMostSize和nil值。
  
  1. 设置为NSNumber值表示指定具体的宽度或者高度数值
  
@@ -72,7 +72,8 @@
  3. 设置为NSArray<MyLayoutSize*>数组的概念就是所有数组里面的子视图的尺寸平分父视图的尺寸。只有相对布局里面的子视图才支持这种设置。
  
  4. 设置为UIView的概念就是尺寸依赖于指定视图的相对应的尺寸。
- 5. 设置为MyLayoutExtremeSize值表示取数组中所有元素尺寸中的最大的一个或者最小的一个元素的尺寸值。
+ 
+ 5. 设置为MyLayoutMostSize值表示取数组中所有元素尺寸中的最大的一个或者最小的一个元素的尺寸值。
    这个对象从NSArray对象的Category属性:myMaxSize和myMinSize中获取。同时要求数组中的元素只能是MyLayoutSize或者NSNumber。
    如果元素中有一个值为MyLayoutSize.wrap则表示自身的自适应尺寸也参与比较。
    这个设置还有一个要求就是数组中的元素值如果是MyLayoutSize的话则要求这个尺寸必须在本视图之前就计算好的约束尺寸，否则可能设置无效。
@@ -98,7 +99,7 @@
 -(MyLayoutSize* (^)(CGFloat val))min;
 
 /**
-  设置尺寸的最小边界值，如果尺寸对象没有设置最小边界值，那么最小边界默认就是无穷小-CGFLOAT_MAX。lBound方法除了能设置为数值外，还可以设置为MyLayoutSize值和MyLayoutExtremeSize值和nil值，并且还可以指定增量值和倍数值。
+  设置尺寸的最小边界值，如果尺寸对象没有设置最小边界值，那么最小边界默认就是无穷小-CGFLOAT_MAX。lBound方法除了能设置为数值外，还可以设置为MyLayoutSize值和MyLayoutMostSize值和nil值，并且还可以指定增量值和倍数值。
  
  1. 比如我们有一个UILabel的宽度是由内容决定的，但是最小的宽度大于等于父视图的宽度，则设置为：
  @code
@@ -136,7 +137,7 @@
 
 
 /**
- 设置尺寸的最大边界值，如果尺寸对象没有设置最大边界值，那么最大边界默认就是无穷大CGFLOAT_MAX。uBound方法除了能设置为数值外，还可以设置为MyLayoutSize值和MyLayoutExtremeSize值和nil值，并且还可以指定增量值和倍数值。
+ 设置尺寸的最大边界值，如果尺寸对象没有设置最大边界值，那么最大边界默认就是无穷大CGFLOAT_MAX。uBound方法除了能设置为数值外，还可以设置为MyLayoutSize值和MyLayoutMostSize值和nil值，并且还可以指定增量值和倍数值。
  
  1. 比如我们有一个UILabel的宽度是由内容决定的，但是最大的宽度小于等于父视图的宽度，则设置为：
  @code
@@ -203,7 +204,7 @@
  这样最终布局完成时A,B,C三个子视图的最终宽度分别为: 50, 40(50-10), 10(30-20)。最终三个子视图的总和不会再超出父视图的宽度了。
  
  @note
- shrink属性和子视图的weight属性的区别时，前者在剩余空间不足时起作用，后者在有剩余空间时起作用。
+ shrink属性和子视图的weight属性的区别是：前者在剩余空间不足时起作用，后者在有剩余空间时起作用。
  */
 @property(nonatomic, assign) CGFloat shrink;
 
@@ -221,10 +222,10 @@
 @end
 
 
-@interface MyLayoutSize(Detach)
+@interface MyLayoutSize(Clone)
 
-//从布局尺寸中分离出一个尺寸对象来。这个分离出来的尺寸值是源尺寸对象的值乘以multival再加上addVal。这个方法通常用于下面数组元素的构造
--(MyLayoutSize* (^)(CGFloat addVal, CGFloat multiVal))detach;
+//从布局尺寸中克隆一个尺寸对象来。这个克隆出来的尺寸值是源尺寸对象的值乘以multival再加上addVal。这个方法通常用于下面数组元素的构造
+-(MyLayoutSize* (^)(CGFloat addVal, CGFloat multiVal))clone;
 
 @end
 
@@ -233,12 +234,12 @@
  我们可以从一个数组中获取众多尺寸的最大最小的尺寸值。
  这里要求数组的元素只能是MyLayoutSize或者NSNumber两种对象类型的值。
  */
-@interface NSArray(MyLayoutExtremeSize)
+@interface NSArray(MyLayoutMostSize)
 
 //从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutSize类型
-@property(nonatomic, readonly) MyLayoutExtremeSize *myMinSize;
+@property(nonatomic, readonly) MyLayoutMostSize *myMinSize;
 //从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutSize类型
-@property(nonatomic, readonly) MyLayoutExtremeSize *myMaxSize;
+@property(nonatomic, readonly) MyLayoutMostSize *myMaxSize;
 
 @end
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- * 6.RelativeLayout - ExtremeSize
+ * 6.RelativeLayout - MostSize&MostPos
  */
 @interface RLTest6ViewController : UIViewController
 

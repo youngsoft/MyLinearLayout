@@ -55,32 +55,25 @@ void* _myObserverContextC = (void*)20175283;
     return self.myCurrentSizeClass.leadingPos;
 }
 
-
-
 -(MyLayoutPos*)bottomPos
 {
     return self.myCurrentSizeClass.bottomPos;
 }
-
 
 -(MyLayoutPos*)trailingPos
 {
     return self.myCurrentSizeClass.trailingPos;
 }
 
-
-
 -(MyLayoutPos*)centerXPos
 {
     return self.myCurrentSizeClass.centerXPos;
 }
 
-
 -(MyLayoutPos*)centerYPos
 {
    return  self.myCurrentSizeClass.centerYPos;
 }
-
 
 -(MyLayoutPos*)leftPos
 {
@@ -96,7 +89,6 @@ void* _myObserverContextC = (void*)20175283;
 {
     return self.myCurrentSizeClass.baselinePos;
 }
-
 
 
 -(CGFloat)myTop
@@ -223,7 +215,6 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
-
 -(CGFloat)myMargin
 {
 #if DEBUG
@@ -271,7 +262,6 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
-
 -(MyLayoutSize*)heightSize
 {
     return self.myCurrentSizeClass.heightSize;
@@ -313,7 +303,6 @@ void* _myObserverContextC = (void*)20175283;
     self.myCurrentSizeClass.mySize = mySize;
 }
 
-
 -(void)setWrapContentHeight:(BOOL)wrapContentHeight
 {
     UIView *sc = self.myCurrentSizeClass;
@@ -340,7 +329,6 @@ void* _myObserverContextC = (void*)20175283;
         if (self.superview != nil)
             [self.superview setNeedsLayout];
     }
-    
 }
 
 -(BOOL)wrapContentWidth
@@ -483,9 +471,6 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
-
-
-
 -(CGRect)estimatedRect
 {
     CGRect rect = self.myFrame.frame;
@@ -493,7 +478,6 @@ void* _myObserverContextC = (void*)20175283;
         return self.frame;
     return rect;
 }
-
 
 
 -(void)resetMyLayoutSetting
@@ -534,8 +518,6 @@ void* _myObserverContextC = (void*)20175283;
 
 }
 
-
-
 @end
 
 
@@ -547,14 +529,10 @@ void* _myObserverContextC = (void*)20175283;
     return [self fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny];
 }
 
-
 -(instancetype)myCurrentSizeClass
 {
     MyFrame *myFrame = self.myFrame;  //减少多次访问，增加性能。
-    if (myFrame.sizeClass == nil)
-        myFrame.sizeClass = [self myDefaultSizeClass];
-    
-    return myFrame.sizeClass;
+    return [self myCurrentSizeClassFrom:myFrame];
 }
 
 -(instancetype)myCurrentSizeClassInner
@@ -573,16 +551,12 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
-
-
--(instancetype)myBestSizeClass:(MySizeClass)sizeClass
+-(instancetype)myBestSizeClass:(MySizeClass)sizeClass myFrame:(MyFrame*)myFrame
 {
     
     MySizeClass wsc = sizeClass & 0x03;
     MySizeClass hsc = sizeClass & 0x0C;
     MySizeClass ori = sizeClass & 0xC0;
-    
-    MyFrame *myFrame = self.myFrame;
     
     if (myFrame.sizeClasses == nil)
         myFrame.sizeClasses = [NSMutableDictionary new];
@@ -707,12 +681,10 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
-
 -(MyLayoutPos*)centerXPosInner
 {
     return self.myCurrentSizeClass.centerXPosInner;
 }
-
 
 -(MyLayoutPos*)centerYPosInner
 {
@@ -751,18 +723,33 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myEstimatedWidth
 {
-    MyFrame *myFrame = self.myFrame;
-    if (myFrame.width == CGFLOAT_MAX)
+    //如果视图的父视图不是布局视图则直接返回宽度值。
+    if (![self.superview isKindOfClass:[MyBaseLayout class]])
+    {
         return CGRectGetWidth(self.bounds);
-    return myFrame.width;
+    }
+    else
+    {
+        MyFrame *myFrame = self.myFrame;
+        if (myFrame.width == CGFLOAT_MAX)
+            return CGRectGetWidth(self.bounds);
+        return myFrame.width;
+    }
 }
 
 -(CGFloat)myEstimatedHeight
 {
-    MyFrame *myFrame = self.myFrame;
-    if (myFrame.height == CGFLOAT_MAX)
+    if (![self.superview isKindOfClass:[MyBaseLayout class]])
+    {
         return CGRectGetHeight(self.bounds);
-    return myFrame.height;
+    }
+    else
+    {
+        MyFrame *myFrame = self.myFrame;
+        if (myFrame.height == CGFLOAT_MAX)
+            return CGRectGetHeight(self.bounds);
+        return myFrame.height;
+    }
 }
 
 
@@ -1214,13 +1201,13 @@ void* _myObserverContextC = (void*)20175283;
     MyFrame *selfMyFrame = self.myFrame;
     
     if (selfMyFrame.multiple)
-         selfMyFrame.sizeClass = [self myBestSizeClass:sizeClass];
+         selfMyFrame.sizeClass = [self myBestSizeClass:sizeClass myFrame:selfMyFrame];
     
     for (UIView *sbv in self.subviews)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
         if (sbvmyFrame.multiple)
-            sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass];
+            sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
     }
     
     BOOL hasSubLayout = NO;
@@ -1428,13 +1415,14 @@ void* _myObserverContextC = (void*)20175283;
             UIView *sbvsc = object.myCurrentSizeClass;
             
             //这是什么意思？ 这就是不注释的悲剧！！！
-            if (sbvsc.widthSizeInner.dimeWrapVal && sbvsc.heightSizeInner.dimeWrapVal)
-            {
-                [self setNeedsLayout];
-            }
-            else if (sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal)
-            {
-                [object sizeToFit];
+           // if (sbvsc.widthSizeInner.dimeWrapVal && sbvsc.heightSizeInner.dimeWrapVal)
+           // {
+           //     [self setNeedsLayout];
+           // }
+            if (sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal)
+           {
+                //[object sizeToFit];
+               [self setNeedsLayout];
             }
         }
     }
@@ -1966,17 +1954,15 @@ void* _myObserverContextC = (void*)20175283;
         
         MyFrame *selfMyFrame = self.myFrame;
         if (selfMyFrame.multiple)
-            selfMyFrame.sizeClass = [self myBestSizeClass:sizeClass];
+            selfMyFrame.sizeClass = [self myBestSizeClass:sizeClass myFrame:selfMyFrame];
         for (UIView *sbv in self.subviews)
         {
             MyFrame *sbvmyFrame = sbv.myFrame;
             if (sbvmyFrame.multiple)
-                sbv.myFrame.sizeClass = [sbv myBestSizeClass:sizeClass];
+                sbv.myFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
             
             if (!sbvmyFrame.hasObserver && sbvmyFrame.sizeClass != nil && !sbvmyFrame.sizeClass.useFrame)
-            {
                 [self myAddSubviewObserver:sbv sbvmyFrame:sbvmyFrame];
-            }
         }
      
         MyBaseLayout *lsc = (MyBaseLayout*)selfMyFrame.sizeClass;
@@ -2023,7 +2009,7 @@ void* _myObserverContextC = (void*)20175283;
                 //这里的位置需要进行有效像素的舍入处理，否则可能出现文本框模糊，以及视图显示可能多出一条黑线的问题。
                 //原因是当frame中的值不能有效的转化为最小可绘制的物理像素时就会出现模糊，虚化，多出黑线，以及layer处理圆角不圆的情况。
                 //所以这里要将frame中的点转化为有效的点。
-                //这里之所以讲布局子视图的转化方法和一般子视图的转化方法区分开来是因为。我们要保证布局子视图不能出现细微的重叠，因为布局子视图有边界线
+                //这里之所以将布局子视图的转化方法和一般子视图的转化方法区分开来是因为我们要保证布局子视图不能出现细微的重叠，因为布局子视图有边界线
                 //如果有边界线而又出现细微重叠的话，那么边界线将无法正常显示，因此这里做了一个特殊的处理。
                 CGRect rc;
                 if ([sbv isKindOfClass:[MyBaseLayout class]])
@@ -2038,7 +2024,6 @@ void* _myObserverContextC = (void*)20175283;
                     
                     if (_myCGFloatErrorEqual(sbvTempBounds.size.height, sbvOldBounds.size.height, sSizeError))
                         sbvTempBounds.size.height = sbvOldBounds.size.height;
-                    
                     
                     if (_myCGFloatErrorNotEqual(sbvTempBounds.size.width, sbvOldBounds.size.width, sSizeError)||
                         _myCGFloatErrorNotEqual(sbvTempBounds.size.height, sbvOldBounds.size.height, sSizeError))
@@ -3009,7 +2994,7 @@ void* _myObserverContextC = (void*)20175283;
         return value;
     
     MyLayoutValueType lValueType = boundDime.dimeValType;
-    if (lValueType == MyLayoutValueType_NSNumber || lValueType == MyLayoutValueType_Extreme)
+    if (lValueType == MyLayoutValueType_NSNumber || lValueType == MyLayoutValueType_Most)
     {
         value = boundDime.dimeNumVal.doubleValue;
     }
@@ -3520,10 +3505,9 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         if (isEstimate && (sbvsc.heightSizeInner.dimeWrapVal || sbvsc.widthSizeInner.dimeWrapVal))
         {
             [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
+            //因为estimateLayoutRect执行后会还原，所以这里要重新设置
             if (sbvmyFrame.multiple)
-            {
-                sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为estimateLayoutRect执行后会还原，所以这里要重新设置
-            }
+                sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
         }
     }
     
@@ -3758,10 +3742,9 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             if (isEstimate && isSbvWrap)
             {
                 [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                //因为sizeThatFits执行后会还原，所以这里要重新设置
                 if (sbvmyFrame.multiple)
-                {
-                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为sizeThatFits执行后会还原，所以这里要重新设置
-                }
+                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
             }
         }
     }
@@ -3856,6 +3839,8 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 @end
 
+
+#pragma mark -- MyLayoutDragger
 
 @implementation MyLayoutDragger
 
@@ -3959,6 +3944,11 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     
     view.useFrame = NO;  //让拖动的子视图重新参与布局，将useFrame设置为NO
     self.layout.autoresizesSubviews = YES; //让布局视图可以重新激发布局，这里还原为YES。
+}
+
+-(BOOL)isHovering
+{
+    return self.hasDragging && self.canHover && self.oldIndex == self.currentIndex;
 }
 
 

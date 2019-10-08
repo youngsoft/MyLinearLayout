@@ -8,7 +8,7 @@
 
 #import "MyLayoutDef.h"
 
-@class MyLayoutExtremePos;
+@class MyLayoutMostPos;
 
 
 /**
@@ -146,7 +146,7 @@
  
  5. UIView表示位置依赖指定视图的对应位置。
  
- 6.MyLayoutExtremePos表示位置是表示取数组中所有元素位置中的最大的一个或者最小的一个元素的位置值, 只有相对布局中的子视图的位置才能设置这种类型。
+ 6.MyLayoutMostPos表示位置是表示取数组中所有元素位置中的最大的一个或者最小的一个元素的位置值, 只有相对布局中的子视图的位置才能设置这种类型。
  
  7. nil表示位置的值被清除。
  */
@@ -243,28 +243,6 @@
 
 /**
  在布局视图的宽度或者高度是固定的情况下，当某一列或者行中的所有子视图的间距值和尺寸超过父视图的尺寸时子视图的间距压缩比重，默认值为0表示不压缩。数字越大表明压缩的比重越大。目前只有线性布局和框架布局和流式布局中的子视图支持这个属性，而且这特性只在子视图的间距超过布局视图时才有效。
- 
- 子视图设置shrink属性时要注意如下几点：
- 
- - 垂直线性布局中的子视图设置为非0时，表明当所有子视图的高度高于父布局视图时会对子视图的高度进行按比例压缩。
- 
- - 水平线性布局中的子视图设置为非0时，表明当所有子视图的宽度宽于父布局视图时会对子视图的宽度进行按比例压缩。
- 
- - 垂直流式布局中的子视图设置为非0时，表明当子视图所在行中的所有子视图的宽度宽于父布局视图时会对子视图的宽度进行按比例压缩。
- 
- - 水平流式布局中的子视图设置为非0时，表明当子视图所在列中的所有子视图的高度高于父布局视图时会对子视图的高度进行按比例压缩。
- 
- @note
- 假设某个水平线性布局的宽度是100，其中有子视图A,B,C的宽度约束分别为:50,50,30，并且对应的shrink值分别为:0,1,2。因为三个子视图的
- 宽度总和为130已经超过父布局30的宽度。因此需要对A,B,C分别进行压缩处理。那A,B,C视图需要压缩的值分别为:
- A: 30 * (0/(0+1+2)) = 0
- B: 30 * (1/(0+1+2)) = 10
- C: 30 * (2/(0+1+2)) = 20
- 
- 这样最终布局完成时A,B,C三个子视图的最终宽度分别为: 50, 40(50-10), 10(30-20)。最终三个子视图的总和不会再超出父视图的宽度了。
- 
- @note
- shrink属性和子视图的weight属性的区别时，前者在剩余空间不足时起作用，后者在有剩余空间时起作用。
  */
 @property(nonatomic, assign) CGFloat shrink;
 
@@ -279,10 +257,10 @@
 @end
 
 
-@interface MyLayoutPos(Detach)
+@interface MyLayoutPos(Clone)
 
-//从布局位置中分离出一个位置对象来。这个分离出来的位置值是源位置对象的值加上offsetVal。这个方法通常用于下面数组元素的构造
--(MyLayoutPos* (^)(CGFloat offsetVal))detach;
+//从布局位置中克隆出一个位置对象来。这个克隆出来的位置值是源位置对象的值加上offsetVal。这个方法通常用于下面数组元素的构造
+-(MyLayoutPos* (^)(CGFloat offsetVal))clone;
 
 @end
 
@@ -291,11 +269,11 @@
  我们可以从一个数组中获取众多位置的最大最小的位置值。
  这里要求数组的元素只能是MyLayoutPos或者NSNumber两种对象类型的值。如果是NSNumber类型则是一个绝对位置值，也就是包括布局视图padding设置的偏移值。
  */
-@interface NSArray(MyLayoutExtremePos)
+@interface NSArray(MyLayoutMostPos)
 
 //从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
-@property(nonatomic, readonly) MyLayoutExtremePos *myMinPos;
+@property(nonatomic, readonly) MyLayoutMostPos *myMinPos;
 //从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
-@property(nonatomic, readonly) MyLayoutExtremePos *myMaxPos;
+@property(nonatomic, readonly) MyLayoutMostPos *myMaxPos;
 
 @end

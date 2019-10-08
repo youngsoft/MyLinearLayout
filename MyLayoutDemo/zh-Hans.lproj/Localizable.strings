@@ -23,6 +23,7 @@
 "3.RelativeLayout - Centered" = "3.相对布局-子视图整体居中";
 "4.RelativeLayout - Scroll&Dock" = "4.相对布局-滚动和停靠";
 "5.RelativeLayout - Boundary limit" = "5.相对布局-边界约束";
+"6.RelativeLayout - MostSize&MostPos" = "6.相对布局-最值约束";
 "1.TableLayout - Vert" = "1.表格布局-垂直表格";
 "2.TableLayout - Waterfall(Horz)" = "2.表格布局-水平表格实现瀑布流";
 "3.TableLayout - Intelligent Borderline" = "3.表格布局-表格和智能边界线";

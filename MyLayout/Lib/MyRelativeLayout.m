@@ -60,10 +60,9 @@
                 
                 sbvmyFrame.leading = sbvmyFrame.trailing = sbvmyFrame.top = sbvmyFrame.bottom = CGFLOAT_MAX;
                 
+                //因为sizeThatFits执行后会还原，所以这里要重新设置
                 if (sbvmyFrame.multiple)
-                {
-                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass]; //因为sizeThatFits执行后会还原，所以这里要重新设置
-                }
+                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
             }
         }
     }
@@ -187,9 +186,9 @@
         
         sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
     }
-    else if (sbvsc.centerXPosInner.posExtremeVal != nil)
+    else if (sbvsc.centerXPosInner.posMostVal != nil)
     {
-        sbvmyFrame.leading = sbvsc.centerXPosInner.posExtremeVal.doubleValue - sbvmyFrame.width / 2 + sbvsc.centerXPosInner.absVal;
+        sbvmyFrame.leading = sbvsc.centerXPosInner.posMostVal.doubleValue - sbvmyFrame.width / 2 + sbvsc.centerXPosInner.absVal;
         sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
     }
     else if (sbvsc.centerXPosInner.posNumVal != nil)
@@ -217,9 +216,9 @@
             
             sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
         }
-        else if (sbvsc.leadingPosInner.posExtremeVal != nil)
+        else if (sbvsc.leadingPosInner.posMostVal != nil)
         {
-            sbvmyFrame.leading = sbvsc.leadingPosInner.posExtremeVal.doubleValue + sbvsc.leadingPosInner.absVal;
+            sbvmyFrame.leading = sbvsc.leadingPosInner.posMostVal.doubleValue + sbvsc.leadingPosInner.absVal;
             sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
         }
         else if (sbvsc.leadingPosInner.posNumVal != nil)
@@ -242,9 +241,9 @@
             sbvmyFrame.leading = sbvmyFrame.trailing - sbvmyFrame.width;
             
         }
-        else if (sbvsc.trailingPosInner.posExtremeVal != nil)
+        else if (sbvsc.trailingPosInner.posMostVal != nil)
         {
-            sbvmyFrame.trailing = sbvsc.trailingPosInner.posExtremeVal.doubleValue - sbvsc.trailingPosInner.absVal + sbvsc.leadingPosInner.absVal;
+            sbvmyFrame.trailing = sbvsc.trailingPosInner.posMostVal.doubleValue - sbvsc.trailingPosInner.absVal + sbvsc.leadingPosInner.absVal;
             sbvmyFrame.leading = sbvmyFrame.trailing - sbvmyFrame.width;
         }
         else if (sbvsc.trailingPosInner.posNumVal != nil)
@@ -358,16 +357,16 @@
         
         sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
     }
-    else if (sbvsc.baselinePosInner.posExtremeVal != nil)
+    else if (sbvsc.baselinePosInner.posMostVal != nil)
     {
         UIFont *sbvFont = [self myGetSubviewFont:sbv];
         if (sbvFont != nil)
         {
-            sbvmyFrame.top = sbvsc.baselinePosInner.posExtremeVal.doubleValue + sbvsc.baselinePosInner.absVal - sbvFont.ascender - (sbvmyFrame.height - sbvFont.lineHeight) / 2;
+            sbvmyFrame.top = sbvsc.baselinePosInner.posMostVal.doubleValue + sbvsc.baselinePosInner.absVal - sbvFont.ascender - (sbvmyFrame.height - sbvFont.lineHeight) / 2;
         }
         else
         {
-            sbvmyFrame.top = sbvsc.baselinePosInner.posExtremeVal.doubleValue + sbvsc.baselinePosInner.absVal;
+            sbvmyFrame.top = sbvsc.baselinePosInner.posMostVal.doubleValue + sbvsc.baselinePosInner.absVal;
         }
         
         sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
@@ -406,9 +405,9 @@
         
         sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
     }
-    else if (sbvsc.centerYPosInner.posExtremeVal != nil)
+    else if (sbvsc.centerYPosInner.posMostVal != nil)
     {
-        sbvmyFrame.top = sbvsc.centerYPosInner.posExtremeVal.doubleValue  + sbvsc.centerYPosInner.absVal - sbvmyFrame.height / 2;
+        sbvmyFrame.top = sbvsc.centerYPosInner.posMostVal.doubleValue  + sbvsc.centerYPosInner.absVal - sbvmyFrame.height / 2;
         
         if (sbvmyFrame.top < 0 && lsc.heightSizeInner.dimeWrapVal)
             sbvmyFrame.top = 0;
@@ -439,9 +438,9 @@
             
             sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
         }
-        else if (sbvsc.topPosInner.posExtremeVal != nil)
+        else if (sbvsc.topPosInner.posMostVal != nil)
         {
-            sbvmyFrame.top = sbvsc.topPosInner.posExtremeVal.doubleValue + sbvsc.topPosInner.absVal;
+            sbvmyFrame.top = sbvsc.topPosInner.posMostVal.doubleValue + sbvsc.topPosInner.absVal;
             sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
         }
         else if (sbvsc.topPosInner.posNumVal != nil)
@@ -463,9 +462,9 @@
             sbvmyFrame.top = sbvmyFrame.bottom - sbvmyFrame.height;
             
         }
-        else if (sbvsc.bottomPosInner.posExtremeVal != nil)
+        else if (sbvsc.bottomPosInner.posMostVal != nil)
         {
-            sbvmyFrame.bottom = sbvsc.bottomPosInner.posExtremeVal.doubleValue - sbvsc.bottomPosInner.absVal + sbvsc.topPosInner.absVal;
+            sbvmyFrame.bottom = sbvsc.bottomPosInner.posMostVal.doubleValue - sbvsc.bottomPosInner.absVal + sbvsc.topPosInner.absVal;
             sbvmyFrame.top = sbvmyFrame.bottom - sbvmyFrame.height;
         }
         else if (sbvsc.bottomPosInner.posNumVal != nil)
@@ -749,9 +748,9 @@
                     sbvmyFrame.leading -= sbvsc.leadingPosInner.absVal;
                 }
             }
-            else if (sbvsc.leadingPosInner.posExtremeVal != nil)
+            else if (sbvsc.leadingPosInner.posMostVal != nil)
             {
-                sbvmyFrame.leading = sbvsc.leadingPosInner.posExtremeVal.doubleValue + sbvsc.leadingPosInner.absVal;
+                sbvmyFrame.leading = sbvsc.leadingPosInner.posMostVal.doubleValue + sbvsc.leadingPosInner.absVal;
             }
             else
                 sbvmyFrame.leading = sbvsc.leadingPosInner.absVal + lsc.myLayoutLeadingPadding;
@@ -765,9 +764,9 @@
                     sbvmyFrame.trailing += sbvsc.trailingPosInner.absVal;
                 }
             }
-            else if (sbvsc.trailingPosInner.posExtremeVal != nil)
+            else if (sbvsc.trailingPosInner.posMostVal != nil)
             {
-                sbvmyFrame.trailing = sbvsc.trailingPosInner.posExtremeVal.doubleValue - sbvsc.trailingPosInner.absVal;
+                sbvmyFrame.trailing = sbvsc.trailingPosInner.posMostVal.doubleValue - sbvsc.trailingPosInner.absVal;
             }
             else
             {
@@ -866,9 +865,9 @@
                 }
                 
             }
-            else if (sbvsc.topPosInner.posExtremeVal != nil)
+            else if (sbvsc.topPosInner.posMostVal != nil)
             {
-                sbvmyFrame.top = sbvsc.topPosInner.posExtremeVal.doubleValue + sbvsc.topPosInner.absVal;
+                sbvmyFrame.top = sbvsc.topPosInner.posMostVal.doubleValue + sbvsc.topPosInner.absVal;
             }
             else
                 sbvmyFrame.top = sbvsc.topPosInner.absVal + lsc.myLayoutTopPadding;
@@ -884,9 +883,9 @@
                     sbvmyFrame.bottom += sbvsc.bottomPosInner.absVal;
                 }
             }
-            else if (sbvsc.bottomPosInner.posExtremeVal != nil)
+            else if (sbvsc.bottomPosInner.posMostVal != nil)
             {
-                sbvmyFrame.bottom = sbvsc.bottomPosInner.posExtremeVal.doubleValue - sbvsc.bottomPosInner.absVal;
+                sbvmyFrame.bottom = sbvsc.bottomPosInner.posMostVal.doubleValue - sbvsc.bottomPosInner.absVal;
             }
             else
             {

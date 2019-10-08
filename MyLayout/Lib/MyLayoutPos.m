@@ -362,14 +362,14 @@
     
 }
 
--(NSNumber*)posExtremeVal
+-(NSNumber*)posMostVal
 {
    if (_posVal == nil || !self.isActive)
        return nil;
     
-    if (_posValType == MyLayoutValueType_Extreme)
+    if (_posValType == MyLayoutValueType_Most)
     {
-        return @([((MyLayoutExtremePos*)_posVal) getExtremePosFrom:self]);
+        return @([((MyLayoutMostPos*)_posVal) getMostPosFrom:self]);
     }
     
     return nil;
@@ -442,9 +442,9 @@
             
             _posValType = MyLayoutValueType_UILayoutSupport;
         }
-        else if ([val isKindOfClass:[MyLayoutExtremePos class]])
+        else if ([val isKindOfClass:[MyLayoutMostPos class]])
         {
-            _posValType = MyLayoutValueType_Extreme;
+            _posValType = MyLayoutValueType_Most;
         }
         else if ([val isKindOfClass:[UIView class]])
         {
@@ -721,24 +721,25 @@
 
 @end
 
-@implementation MyLayoutPos(Detach)
+@implementation MyLayoutPos(Clone)
 
--(MyLayoutPos* (^)(CGFloat offsetVal))detach
+-(MyLayoutPos* (^)(CGFloat offsetVal))clone
 {
     return ^id(CGFloat offsetVal){
         
-        MyLayoutPos *detachPos = [[[self class] allocWithZone:nil] init];
-        detachPos->_offsetVal = offsetVal;
-        detachPos->_posVal = self;
-        detachPos->_posValType = MyLayoutValueType_LayoutDimeDetach;
-        return detachPos;
+        MyLayoutPos *clonedPos = [[[self class] allocWithZone:nil] init];
+        clonedPos->_offsetVal = offsetVal;
+        clonedPos->_posVal = self;
+        clonedPos->_posValType = MyLayoutValueType_LayoutDimeClone;
+        return clonedPos;
     };
 }
 
 @end
 
+#pragma mark -- MyLayoutMostPos
 
-@implementation MyLayoutExtremePos
+@implementation MyLayoutMostPos
 {
     NSArray *_poss;
     BOOL _isMax;
@@ -752,12 +753,11 @@
         _poss = poss;
         _isMax = isMax;
     }
-    
     return self;
 }
 
 
--(CGFloat)getExtremePosFrom:(MyLayoutPos *)layoutPos
+-(CGFloat)getMostPosFrom:(MyLayoutPos *)layoutPos
 {
     CGFloat retVal = _isMax ? -CGFLOAT_MAX : CGFLOAT_MAX;
     
@@ -767,24 +767,21 @@
         if ([pos isKindOfClass:[NSNumber class]])
         {
             val = [(NSNumber*)pos doubleValue];
-        
-            retVal = _isMax ? _myCGFloatMax(val, retVal) : _myCGFloatMin(val, retVal);
         }
         else if ([pos isKindOfClass:[MyLayoutPos class]])
         {
             MyLayoutPos *lpos = (MyLayoutPos *)pos;
             CGFloat offsetVal = 0;
-            if (lpos.posValType == MyLayoutValueType_LayoutDimeDetach)
+            if (lpos.posValType == MyLayoutValueType_LayoutDimeClone)
             {
                 offsetVal = lpos.offsetVal;
                 lpos = (MyLayoutPos *)lpos.posVal;
             }
             
+            MyFrame *myFrame = lpos.view.myFrame;
+            
             if (layoutPos.pos & MyGravity_Vert_Mask)
             {//水平
-                
-                MyFrame *myFrame = lpos.view.myFrame;
-                
                 if (lpos.pos == MyGravity_Horz_Leading)
                 {
                     val = myFrame.leading + offsetVal;
@@ -797,13 +794,9 @@
                 {
                     val = myFrame.trailing - offsetVal;
                 }
-                
             }
             else
             {//垂直
-                
-                MyFrame *myFrame = lpos.view.myFrame;
-                
                 if (lpos.pos == MyGravity_Vert_Top)
                 {
                     val = myFrame.top + offsetVal;
@@ -817,13 +810,13 @@
                     val = myFrame.bottom - offsetVal;
                 }
             }
-            
-            retVal = _isMax ? _myCGFloatMax(val, retVal) : _myCGFloatMin(val, retVal);
         }
         else
         {
             NSAssert(NO, @"oops!, invalid type, only support NSNumber or MyLayoutPos");
         }
+        
+        retVal = _isMax ? _myCGFloatMax(val, retVal) : _myCGFloatMin(val, retVal);
     }
     
     return retVal;
@@ -832,16 +825,16 @@
 @end
 
 
-@implementation NSArray(MyLayoutExtremePos)
+@implementation NSArray(MyLayoutMostPos)
 
--(MyLayoutExtremePos *)myMinPos
+-(MyLayoutMostPos *)myMinPos
 {
-    return [[MyLayoutExtremePos alloc] initWith:self isMax:NO];
+    return [[MyLayoutMostPos alloc] initWith:self isMax:NO];
 }
 
--(MyLayoutExtremePos *)myMaxPos
+-(MyLayoutMostPos *)myMaxPos
 {
-    return [[MyLayoutExtremePos alloc] initWith:self isMax:YES];
+    return [[MyLayoutMostPos alloc] initWith:self isMax:YES];
 }
 
 @end

@@ -740,7 +740,7 @@
 -(id<MyGridNode>)myBestHitGrid:(NSSet *)touches
 {
     MySizeClass sizeClass = [self myGetGlobalSizeClass];
-    id<MyGridNode> bestSC = (id<MyGridNode>)[self myBestSizeClass:sizeClass];
+    id<MyGridNode> bestSC = (id<MyGridNode>)[self myBestSizeClass:sizeClass myFrame:self.myFrame];
     
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];

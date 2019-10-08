@@ -150,7 +150,7 @@
                                              @{@"title":NSLocalizedString(@"5.RelativeLayout - Boundary limit", @""),
                                                @"class":[RLTest5ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"6.RelativeLayout - ExtremeSize", @""),
+                                             @{@"title":NSLocalizedString(@"6.RelativeLayout - MostSize&MostPos", @""),
                                                @"class":[RLTest6ViewController class]
                                                }
                                              ]

@@ -194,7 +194,7 @@
 
 -(instancetype)myDefaultSizeClass;
 
--(instancetype)myBestSizeClass:(MySizeClass)sizeClass;
+-(instancetype)myBestSizeClass:(MySizeClass)sizeClass myFrame:(MyFrame*)myFrame;
 
 -(instancetype)myCurrentSizeClass;
 

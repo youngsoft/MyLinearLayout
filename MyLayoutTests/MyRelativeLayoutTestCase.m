@@ -35,7 +35,7 @@
 -(void)testRLTest1VC
 {
    
-    for (int i = 1; i <= 5; i++)
+    for (int i = 1; i <= 6; i++)
     {
         Class cls = NSClassFromString([NSString stringWithFormat:@"RLTest%dViewController", i]);
         UIViewController *vc = [[cls alloc] init];
@@ -1029,7 +1029,7 @@
     label.myBottom = MyLayoutPos.safeAreaMargin;
     label.text = @"您好！！！";
     label.backgroundColor = [UIColor redColor];
-    label.widthSize.equalTo(@[@(MyLayoutSize.wrap), v1.widthSize.detach(0, 0.5)].myMaxSize);
+    label.widthSize.equalTo(@[@(MyLayoutSize.wrap), v1.widthSize.clone(0, 0.5)].myMaxSize);
     label.wrapContentHeight = YES;
     [rootLayout addSubview:label];
 }
