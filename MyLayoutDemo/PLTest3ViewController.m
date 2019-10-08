@@ -33,8 +33,8 @@
     self = [super init];
     if (self != nil)
     {
-        self.wrapContentHeight = YES;
-        self.wrapContentWidth = YES;
+        self.widthSize.equalTo(@(MyLayoutSize.wrap));
+        self.heightSize.equalTo(@(MyLayoutSize.wrap));
         
         _circleView = [MyPathLayout new];  //这里这是为路径布局的原因是其中的numLabel是跟随园所在的位置而确定的。
         _circleView.widthSize.equalTo(@60);
@@ -129,12 +129,13 @@
     centerButton.titleLabel.font = [CFTool font:20];
     centerButton.layer.borderWidth = 5;
     centerButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    centerButton.widthSize.equalTo(_pathLayout.widthSize).multiply(0.5).add(-30);  //宽度是父视图宽度的一半再减去30
+    centerButton.widthSize.equalTo(@[_pathLayout.widthSize, _pathLayout.heightSize].myMinSize).multiply(0.5).add(-30);
+    //宽度是父视图宽度或者高度最小者的一半再减去30
+    centerButton.heightSize.equalTo(centerButton.widthSize);  //高度等于宽度。
     centerButton.viewLayoutCompleteBlock = ^(MyBaseLayout *layout, UIView *sbv)
     { //viewLayoutCompleteBlock是在1.2.3中添加的新功能，目的是给完成了布局的子视图一个机会进行一些特殊的处理，viewLayoutCompleteBlock只会在子视图布局完成后调用一次.其中的sbv就是子视图自己，而layout则是父布局视图。因为这个block是完成布局后执行的。所以这时候子视图的frame值已经被计算出来，因此您可以在这里设置一些和frame关联的属性。
       
         sbv.layer.cornerRadius = sbv.frame.size.width / 2;  //这里取子视图的圆角半径为宽度的一半，也就是形成了圆形按钮。
-        sbv.heightSize.equalTo(@(sbv.frame.size.width));    //这里取子视图的高度等于他的宽度。
     };
     
     [centerButton addTarget:self action:@selector(handleClick:) forControlEvents:UIControlEventTouchUpInside];

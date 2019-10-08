@@ -38,15 +38,13 @@
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.gravity = MyGravity_Horz_Fill;  //垂直线性布局里面的子视图的宽度和布局视图一致。
-    rootLayout.wrapContentWidth = NO;
-    rootLayout.wrapContentHeight = NO;
     self.view = rootLayout;
     
     UILabel *tipLabel = [UILabel new];
     tipLabel.font = [CFTool font:13];
     tipLabel.text = NSLocalizedString(@"  You can drag the following tag to adjust location in layout, MyLayout can use subview's useFrame,noLayout property and layout view's autoresizesSubviews propery to complete some position adjustment and the overall animation features: \n useFrame set to YES indicates subview is not controlled by the layout view but use its own frame to set the location and size instead.\n \n autoresizesSubviews set to NO indicate layout view will not do any layout operation, and will remain in the position and size of all subviews.\n \n noLayout set to YES indicate subview in the layout view just only take up the position and size but not real adjust the position and size when layouting.", @"");
     tipLabel.textColor = [CFTool color:4];
-    tipLabel.wrapContentHeight = YES; //这两个属性结合着使用实现自动换行和文本的动态高度。
+    tipLabel.heightSize.equalTo(@(MyLayoutSize.wrap)); //这两个属性结合着使用实现自动换行和文本的动态高度。
     tipLabel.topPos.equalTo(self.topLayoutGuide);   //子视图不会延伸到导航条屏幕下面。
     [rootLayout addSubview:tipLabel];
     

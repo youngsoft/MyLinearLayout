@@ -48,7 +48,7 @@
     
     MyGridLayout *rootLayout = [MyGridLayout new];
     rootLayout.myHorzMargin = 0;
-    rootLayout.wrapContentHeight = YES;
+    rootLayout.myHeight = MyLayoutSize.wrap;
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     rootLayout.subviewSpace = 10;  //直接子栅格之间的间隔。
     [scrollView addSubview:rootLayout];
@@ -196,7 +196,7 @@
     [rootLayout addRow:MyLayoutSize.wrap];
     
     UILabel *shrinkLabel = [UILabel new];
-    shrinkLabel.text = NSLocalizedString(@"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the wrapContentHeight to YES.You can try to switch different simulator or different orientation screen to see the effect.", @"");
+    shrinkLabel.text = NSLocalizedString(@"This is a can automatically wrap text.To realize this function, you need to set the width exact, and set the heightSize to MyLayoutSize.wrap.You can try to switch different simulator or different orientation screen to see the effect.", @"");
     shrinkLabel.backgroundColor = [CFTool color:2];
     shrinkLabel.font = [CFTool font:14];
     shrinkLabel.numberOfLines = 0;

@@ -58,7 +58,7 @@ static NSInteger sBaseTag = 100000;
     _rootLayout.gravity = MyGravity_Horz_Fill;  //设置垂直线性布局的水平填充值表明布局视图里面的所有子视图的宽度都和布局视图相等。
     
     _rootLayout.widthSize.equalTo(scrollView.widthSize);
-    _rootLayout.wrapContentHeight = YES; //布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
+    _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap)); //布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
     [scrollView addSubview:_rootLayout];
     
     self.containerLayouts = [NSMutableArray new];
@@ -134,7 +134,7 @@ static NSInteger sBaseTag = 100000;
 -(MyFlowLayout*)createCellContainerLayout:(NSInteger)arrangedCount
 {
     MyFlowLayout *containerLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:arrangedCount];
-    containerLayout.wrapContentHeight = YES;
+    containerLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     containerLayout.gravity = MyGravity_Horz_Fill; //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
     containerLayout.subviewHSpace = 5;
     containerLayout.subviewVSpace = 5;
@@ -147,7 +147,6 @@ static NSInteger sBaseTag = 100000;
 -(UIView*)createCellLayout1:(NSString*)image title:(NSString*)title
 {
     MyLinearLayout *cellLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    cellLayout.wrapContentHeight = NO;
     cellLayout.gravity = MyGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
     cellLayout.myHeight = 100;
     cellLayout.subviewVSpace = 5;  //设置布局视图里面子视图之间的间距为5个点。

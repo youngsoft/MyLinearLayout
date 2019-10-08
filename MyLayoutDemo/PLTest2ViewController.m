@@ -58,10 +58,9 @@
     self.view = scrollView;
     
     _pathLayout = [MyTestPathLayou new];
-    _pathLayout.wrapContentHeight = YES;
-    _pathLayout.wrapContentWidth = YES;   //这里面的布局视图的宽度和高度都是wrap属性，因此这个例子里面出现不同函数切换时不会立即得到真实的位置，而是要在添加或者删除子视图后才会更新真实的高度和宽度，这个并不是一个BUG。
-    _pathLayout.widthSize.lBound(scrollView.widthSize, 0, 1);
-    _pathLayout.heightSize.lBound(scrollView.heightSize, 0, 1);  //设置最小的宽度和高度和父视图保持一致。
+//这里面的布局视图的宽度和高度都是wrap属性，因此这个例子里面出现不同函数切换时不会立即得到真实的位置，而是要在添加或者删除子视图后才会更新真实的高度和宽度，这个并不是一个BUG。
+    _pathLayout.widthSize.equalTo(@(MyLayoutSize.wrap)).lBound(scrollView.widthSize, 0, 1);
+    _pathLayout.heightSize.equalTo(@(MyLayoutSize.wrap)).lBound(scrollView.heightSize, 0, 1);  //设置最小的宽度和高度和父视图保持一致。
     _pathLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);
     
     [scrollView addSubview:_pathLayout];

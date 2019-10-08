@@ -53,7 +53,7 @@
     label1.font = [UIFont systemFontOfSize:17];
     label1.myCenterY = 0;
     label1.myLeft = 10;
-    label1.wrapContentSize = YES;
+    label1.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     
     [frameLayout addSubview:label1];
     
@@ -63,7 +63,7 @@
     label2.font = [UIFont systemFontOfSize:17];
     label2.myTop = 200;
     label2.myLeft = 10;
-    label2.wrapContentSize = YES;
+    label2.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [frameLayout addSubview:label2];
     
 
@@ -90,7 +90,7 @@
     
     MyFrameLayout *frameLayout = [MyFrameLayout new];
     frameLayout.padding = UIEdgeInsetsMake(20, 10, 5, 6);
-    frameLayout.wrapContentSize = YES;
+    frameLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     
     frameLayout.zeroPadding = NO;
     
@@ -180,8 +180,7 @@
 -(void)testWrapContent2
 {
     MyFrameLayout * dataview = [[MyFrameLayout alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0)];
-    dataview.heightSize.min([UIScreen mainScreen].bounds.size.height);
-    dataview.wrapContentHeight = YES;
+    dataview.heightSize.equalTo(@(MyLayoutSize.wrap)).min([UIScreen mainScreen].bounds.size.height);
     //上面在滚动视图下。
     
     MyLinearLayout * dataContentV = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
@@ -189,14 +188,14 @@
     dataContentV.bottomPadding = 64;      // + 10;
     dataContentV.myCenterX = 0;
     dataContentV.myCenterY = 0;
-    dataContentV.wrapContentHeight = YES;
+    dataContentV.myHeight = MyLayoutSize.wrap;
     dataContentV.myHorzMargin = 0;
     [dataview addSubview:dataContentV];
 
     
     MyLinearLayout * subrootview1 = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     subrootview1.gravity = MyGravity_Horz_Fill;
-    subrootview1.wrapContentHeight = YES;
+    subrootview1.myHeight = MyLayoutSize.wrap;
     subrootview1.myHorzMargin = 0;
     subrootview1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
     [dataContentV addSubview:subrootview1];
@@ -259,7 +258,7 @@
 {
     //测试一个布局视图的尺寸是包裹的，同时里面的子视图设置了宽高。
     MyFrameLayout *rootLayout = [MyFrameLayout new];
-    rootLayout.wrapContentSize = YES;
+    rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
     
     //1.同时设置了上下和左右。没有设置高度。
@@ -296,7 +295,7 @@
     [v2 removeFromSuperview];
     
     UILabel *label = [UILabel new];
-    label.wrapContentSize = YES;
+    label.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     label.text = @"您好！";
     label.myMargin = 20;
     CGSize lablesz = [label sizeThatFits:CGSizeZero];

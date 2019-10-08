@@ -33,7 +33,7 @@
     MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     rootLayout.backgroundColor = [CFTool color:0];
     rootLayout.pagedCount = 9;
-    rootLayout.wrapContentHeight = YES;  //上下滚动，每页9个。
+    rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));  //上下滚动，每页9个。
     rootLayout.subviewSpace = 10;
     rootLayout.padding = UIEdgeInsetsMake(10, 5, 10, 5);
     rootLayout.leftPos.equalTo(@0).active = YES; //active属性用来表示是否让这个属性设置生效。
@@ -71,7 +71,7 @@
     self.rootLayout.bottomPos.active = !self.rootLayout.bottomPos.isActive;
     
     //当前是多行多列。
-    if (self.rootLayout.wrapContentHeight)
+    if (self.rootLayout.heightSize.isWrap)
     {
         //换成单行单列
         self.rootLayout.arrangedCount = 1;
@@ -91,12 +91,11 @@
     }
    
     //这里切换水平滚动还是垂直滚动。
-    self.rootLayout.wrapContentHeight = !self.rootLayout.wrapContentHeight;
-    self.rootLayout.wrapContentWidth = !self.rootLayout.wrapContentWidth;
+    self.rootLayout.heightSize.equalTo(self.rootLayout.heightSize.isWrap? nil : @(MyLayoutSize.wrap));
+    self.rootLayout.widthSize.equalTo(self.rootLayout.widthSize.isWrap? nil : @(MyLayoutSize.wrap));
     
     
-    
-    BOOL isHorzScroll = self.rootLayout.wrapContentWidth;
+    BOOL isHorzScroll = self.rootLayout.widthSize.isWrap;
     [UIView animateWithDuration:0.3 animations:^{
         
         [self.rootLayout layoutIfNeeded];  //上面因为进行布局属性的设置变更，必定会激发重新布局，因此如果想要应用动画时可以在动画块内调用layoutIfNeeded来实现

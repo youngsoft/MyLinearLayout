@@ -64,8 +64,7 @@
     
     
     MyFrameLayout *layout6 = [MyFrameLayout new];
-    layout6.wrapContentWidth = YES;
-    layout6.wrapContentHeight = YES;
+    layout6.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     layout6.myCenterX = 20;
     layout6.myBottom = 20;
     [containerView addSubview:layout6];

@@ -35,7 +35,7 @@
     
     //添加操作按钮。
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:2];
-    actionLayout.wrapContentHeight = YES;
+    actionLayout.myHeight = MyLayoutSize.wrap;
     actionLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平填充，也就是所有子视图的宽度相等。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewHSpace = 5;
@@ -59,7 +59,7 @@
     flowLayoutSetLabel.font = [CFTool font:13];
     flowLayoutSetLabel.textColor = [UIColor redColor];
     flowLayoutSetLabel.adjustsFontSizeToFitWidth = YES;
-    flowLayoutSetLabel.wrapContentHeight = YES;
+    flowLayoutSetLabel.myHeight = MyLayoutSize.wrap;
     flowLayoutSetLabel.numberOfLines = 5;
     [rootLayout addSubview:flowLayoutSetLabel];
     self.flowLayoutSetLabel = flowLayoutSetLabel;

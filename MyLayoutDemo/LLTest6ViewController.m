@@ -57,7 +57,6 @@
     }
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    rootLayout.wrapContentHeight = NO;
     rootLayout.backgroundColor = [UIColor whiteColor];
     [rootLayout setTarget:self action:@selector(handleHideKeyboard:)];  //设置布局上的触摸事件。布局视图支持触摸事件的设置，可以使用setTarget方法来实现。
     
@@ -131,12 +130,12 @@
     textView.delegate = self;
 
     //左右边距为布局的10%，距离底部间距为65%,高度自适应，但高度最高为300，最低为30
-    //wrapContentHeight和max,min的结合能做到一些完美的自动伸缩功能。
+    //高度自适应设置和max,min的结合能做到一些完美的自动伸缩功能。
     textView.myLeading = 0.05;
     textView.myTrailing = 0.05;
     textView.myBottom = 0.65;
-    textView.wrapContentHeight = YES;
-    textView.heightSize.max(300).min(60);  //虽然wrapContentHeight属性设置了视图的高度为动态高度，但是仍然不能超过300的高度以及不能小于60的高度。
+    //虽然高度自适应，但是仍然不能超过300的高度以及不能小于60的高度。
+    textView.heightSize.equalTo(@(MyLayoutSize.wrap)).max(300).min(60);
     [rootLayout addSubview:textView];
     
     

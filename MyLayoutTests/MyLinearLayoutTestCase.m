@@ -80,7 +80,7 @@
     //垂直线性布局
     {
         MyLinearLayout *rootLayout1 = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Vert];
-        rootLayout1.wrapContentHeight = NO;
+        rootLayout1.heightSize.equalTo(nil);
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -90,7 +90,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];
@@ -139,7 +139,7 @@
     //水平线性布局
     {
         MyLinearLayout *rootLayout1 = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Horz];
-        rootLayout1.wrapContentWidth = NO;
+        rootLayout1.widthSize.equalTo(nil);
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -149,7 +149,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];
@@ -203,7 +203,7 @@
     //测试隐藏、比重、尺寸依赖。
     
     MyLinearLayout *layout2 = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 200) orientation:MyOrientation_Horz];
-    layout2.wrapContentWidth = NO;
+    layout2.widthSize.equalTo(nil);
     
     
     UIButton *zoneBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -251,7 +251,7 @@
     MyLinearLayout* rootLayout1 = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Horz];
    // rootLayout1.myMargin = 0;
     rootLayout1.backgroundColor = [UIColor redColor];
-    rootLayout1.wrapContentWidth = NO;
+    rootLayout1.widthSize.equalTo(nil);
     
     for (int i = 0; i < 4; i++)
     {
@@ -292,7 +292,7 @@
     
     UILabel *timeLabel = UILabel.new;
     timeLabel.myHorzMargin = 0;
-    timeLabel.wrapContentHeight = YES;
+    timeLabel.myHeight = MyLayoutSize.wrap;
     timeLabel.textAlignment = NSTextAlignmentCenter;
     timeLabel.text = @"剩余时间为";
     [layout addSubview:timeLabel];
@@ -300,7 +300,7 @@
     // 汇率
     MyLinearLayout *convertLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     convertLayout.backgroundColor = [UIColor greenColor];
-    convertLayout.wrapContentHeight = YES;
+    convertLayout.myHeight = MyLayoutSize.wrap;
     convertLayout.gravity = MyGravity_Vert_Center;
     convertLayout.subviewHSpace = 7;
     [layout addSubview:convertLayout];
@@ -308,7 +308,7 @@
     NSArray *items = @[@"$454", @"^sdsf"];
     for (int i=0; i<items.count; i++) {
         UILabel *label = UILabel.new;
-        label.wrapContentSize = YES;
+        label.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
         label.text = items[i];
         label.font = [UIFont systemFontOfSize:28];
         [convertLayout addSubview:label];
@@ -316,7 +316,7 @@
         if (i==0) {
             
             UILabel *btn = [UILabel new];
-            btn.wrapContentSize = YES;
+            btn.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
             btn.text = @"->";
             [convertLayout addSubview:btn];
         }
@@ -337,28 +337,27 @@
     //测试自适应，停靠，最大和最小。
     MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     testLayout.widthSize.min(200).max(300);
-    testLayout.heightSize.min(40).max(100);
+    testLayout.heightSize.equalTo(@(MyLayoutSize.wrap)).min(40).max(100);
     testLayout.shrinkType = MySubviewsShrink_Average;
     testLayout.subviewHSpace = 10;
-    testLayout.wrapContentHeight = YES;
     testLayout.gravity = MyGravity_Center;
     
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"点我" forState:UIControlStateNormal];
-    button.wrapContentSize = YES;
+    button.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [testLayout addSubview:button];
 
     
     UILabel *label1 = [[UILabel alloc] init];
-    label1.wrapContentSize = YES;
+    label1.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     label1.text = @"文本1";
     label1.backgroundColor = [UIColor grayColor];
     [testLayout addSubview:label1];
     
     UILabel *label2 = [[UILabel alloc] init];
     label2.text = @"文本2";
-    label2.wrapContentSize = YES;
+    label2.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     label2.backgroundColor = [UIColor cyanColor];
     [testLayout addSubview:label2];
     
@@ -397,7 +396,7 @@
     //测试布局视图的gravity属性的between和around特性。
     
     MyLinearLayout *layout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100, 100) orientation:MyOrientation_Vert];
-    layout.wrapContentSize = NO;
+    layout.heightSize.equalTo(nil);
     
     //一个子视图下的垂直和水平的差异。
     UIView *v1 = [UIView new];
@@ -418,14 +417,12 @@
     
     layout.orientation = MyOrientation_Vert;
     layout.gravity = MyGravity_Vert_Around;
-    layout.wrapContentSize = NO;
     [layout layoutIfNeeded];
     XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,35,30,30)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
     
     
     layout.orientation = MyOrientation_Horz;
     layout.gravity = MyGravity_Horz_Around;
-    layout.wrapContentSize = NO;
     [layout layoutIfNeeded];
     XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(35,0,30,30)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
     
@@ -437,28 +434,24 @@
     
     layout.orientation = MyOrientation_Vert;
     layout.gravity = MyGravity_Vert_Between;
-    layout.wrapContentSize = NO;
     [layout layoutIfNeeded];
     XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,70,30,30)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
     
     
     layout.orientation = MyOrientation_Horz;
     layout.gravity = MyGravity_Horz_Between;
-    layout.wrapContentSize = NO;
     [layout layoutIfNeeded];
     XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(70,0,30,30)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
     
     
     layout.orientation = MyOrientation_Vert;
     layout.gravity = MyGravity_Vert_Around;
-    layout.wrapContentSize = NO;
     [layout layoutIfNeeded];
     XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,60,30,30)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
     
     
     layout.orientation = MyOrientation_Horz;
     layout.gravity = MyGravity_Horz_Around;
-    layout.wrapContentSize = NO;
     [layout layoutIfNeeded];
     XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(60,0,30,30)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
     
@@ -470,14 +463,14 @@
     if (1){
         MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 0, 400) orientation:MyOrientation_Vert];
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
-        rootLayout.wrapContentWidth = YES;
-        rootLayout.wrapContentHeight = NO;
+        rootLayout.widthSize.equalTo(@(MyLayoutSize.wrap));
+        rootLayout.heightSize.equalTo(nil);
         
         //视图1宽度依赖父视图，高度设置。
         UILabel *v1 = [UILabel new];
         v1.text = @"你好";  //iPhone8模拟器
         v1.myHorzMargin = 10;
-        v1.wrapContentHeight = YES;
+        v1.myHeight = MyLayoutSize.wrap;
         [rootLayout addSubview:v1];
         
         //视图2宽度定值，右边对齐，高度不设置。
@@ -520,14 +513,14 @@
     if (1){
         MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 0, 400) orientation:MyOrientation_Vert];
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
-        rootLayout.wrapContentWidth = YES;
-        rootLayout.wrapContentHeight = NO;
+        rootLayout.widthSize.equalTo(@(MyLayoutSize.wrap));
+        rootLayout.heightSize.equalTo(nil);
         
         //视图1宽度依赖父视图，高度设置。
         UILabel *v1 = [UILabel new];
         v1.text = @"你好";  //iPhone8模拟器
         v1.myHorzMargin = 10;
-        v1.wrapContentHeight = YES;
+        v1.myHeight = MyLayoutSize.wrap;
         [rootLayout addSubview:v1];
         
         //视图2宽度定值，右边对齐，高度不设置。
@@ -571,14 +564,14 @@
     if (1){
         MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 400, 0) orientation:MyOrientation_Horz];
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
-        rootLayout.wrapContentWidth = NO;
-        rootLayout.wrapContentHeight = YES;
+        rootLayout.widthSize.equalTo(nil);
+        rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
         
         //视图1高度依赖父视图，宽度设置。
         UILabel *v1 = [UILabel new];
         v1.text = @"你好";  //iPhone8模拟器
         v1.myVertMargin = 10;
-        v1.wrapContentWidth = YES;
+        v1.myWidth = MyLayoutSize.wrap;
         [rootLayout addSubview:v1];
         
         //视图2高度定值，下边对齐，宽度不设置。
@@ -621,14 +614,14 @@
     if (1){
         MyLinearLayout *rootLayout = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 400, 0) orientation:MyOrientation_Horz];
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 20, 20);
-        rootLayout.wrapContentWidth = NO;
-        rootLayout.wrapContentHeight = YES;
+        rootLayout.widthSize.equalTo(nil);
+        rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
         
         //视图1高度依赖父视图，宽度设置。
         UILabel *v1 = [UILabel new];
         v1.text = @"你好";  //iPhone8模拟器
         v1.myVertMargin = 10;
-        v1.wrapContentWidth = YES;
+        v1.myWidth = MyLayoutSize.wrap;
         [rootLayout addSubview:v1];
         
         //视图2高度定值，下边对齐，宽度不设置。

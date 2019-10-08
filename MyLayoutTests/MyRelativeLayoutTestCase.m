@@ -57,7 +57,7 @@
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    rootLayout.wrapContentHeight = YES;
+    rootLayout.myHeight = MyLayoutSize.wrap;
     
     UILabel *shopNameLabel = [UILabel new];
     shopNameLabel.topPos.equalTo(rootLayout.topPos).offset(10);
@@ -111,7 +111,7 @@
 -(void)testWrapContentHeight1
 {
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-    rootLayout.wrapContentHeight = YES;
+    rootLayout.myHeight = MyLayoutSize.wrap;
     rootLayout.bottomPadding = 20;
     rootLayout.topPadding = 10;
     rootLayout.leadingPadding = 10;
@@ -175,8 +175,7 @@
     //125
     
     MyLinearLayout * lineLayout=[[MyLinearLayout alloc]initWithOrientation:MyOrientation_Vert];
-    lineLayout.wrapContentHeight=YES;
-    lineLayout.wrapContentWidth=NO;
+    lineLayout.myHeight = MyLayoutSize.wrap;
     lineLayout.topPos.equalTo(orderLabel.bottomPos).offset(5);
     lineLayout.myLeft=lineLayout.myRight=10;
     [rootLayout addSubview:lineLayout];
@@ -208,8 +207,8 @@
     for (int i = 0; i < 3; i++)
     {
        MyLinearLayout  *horzLayout=[[MyLinearLayout alloc]initWithOrientation:MyOrientation_Horz];
-        horzLayout.wrapContentHeight=YES;
-        horzLayout.wrapContentWidth=NO;
+        horzLayout.myHeight = MyLayoutSize.wrap;
+        horzLayout.widthSize.equalTo(nil);
         horzLayout.myLeft=horzLayout.myRight=0;
         
         UILabel *v1 = [UILabel new];
@@ -291,7 +290,7 @@
 -(void)testWrapContentHeight2
 {
     MyRelativeLayout *rootRelativeView = [MyRelativeLayout new];
-    rootRelativeView.wrapContentHeight = YES;
+    rootRelativeView.myHeight = MyLayoutSize.wrap;
     
     UIView *verticalLine = [UIView new];
     verticalLine.leftPos.equalTo(rootRelativeView.leftPos).offset(16);
@@ -314,7 +313,7 @@
     [rootRelativeView addSubview:dateLabel];
     
     UILabel *newsTitleLabel = [UILabel new];
-    newsTitleLabel.wrapContentHeight = YES;
+    newsTitleLabel.myHeight = MyLayoutSize.wrap;
     newsTitleLabel.topPos.equalTo(dateLabel.bottomPos).offset(5);
     newsTitleLabel.leftPos.equalTo(dateLabel.leftPos);
     newsTitleLabel.rightPos.equalTo(dateLabel.rightPos);
@@ -343,7 +342,7 @@
 -(void)testWrapContentHeight3
 {
     MyRelativeLayout * midView = [MyRelativeLayout new];
-    midView.wrapContentSize = YES;
+    midView.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     
     UILabel * cartypeLabel = [UILabel new];
     cartypeLabel.mySize = CGSizeMake(90, 30);
@@ -389,8 +388,7 @@
 -(void)testWrapContentWidth1
 {
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-    rootLayout.wrapContentHeight = YES;
-    rootLayout.wrapContentWidth = YES;
+    rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     rootLayout.bottomPadding = 20;
     rootLayout.topPadding = 10;
     rootLayout.leadingPadding = 10;
@@ -481,7 +479,7 @@
     
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-    rootLayout.wrapContentWidth = YES;
+    rootLayout.myWidth = MyLayoutSize.wrap;
     
 
     //随机生成N个数字保存到数组里面。
@@ -674,13 +672,13 @@
     
     MyRelativeLayout* relative = [MyRelativeLayout new];
   //  relative.widthSize.equalTo(self.contentView.widthSize);
-    relative.wrapContentHeight = YES;
+    relative.myHeight = MyLayoutSize.wrap;
     _layoutRoot = relative;
     
     
     // 头像区域
     MyLinearLayout* linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    linear.wrapContentSize = YES;
+    linear.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     linear.padding = UIEdgeInsetsMake(12, 15, 12, 15);
     linear.myLeading = 0.0f;
     [_layoutRoot addSubview:linear];
@@ -716,15 +714,14 @@
     lbl.font = [UIFont systemFontOfSize:12];
     [lbl setMinimumScaleFactor:10.0f];
     [lbl setTextColor:[UIColor greenColor]];
-    lbl.wrapContentSize = YES;
-    lbl.widthSize.equalTo(lbl.widthSize).uBound(_layoutAccessory.widthSize,-2,1);
+    lbl.heightSize.equalTo(@(MyLayoutSize.wrap));
+    lbl.widthSize.equalTo(@(MyLayoutSize.wrap)).uBound(_layoutAccessory.widthSize,-2,1);
     [lbl setNumberOfLines:1];
     [_layoutAccessory addSubview:lbl];
     
     // 附加区域底部
     linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     linear.gravity = MyGravity_Vert_Center|MyGravity_Horz_Right;
-    linear.wrapContentHeight = NO;
     linear.widthSize.equalTo(_layoutAccessory.widthSize);
     linear.myHeight = 20.0f;
     linear.subviewHSpace = 4.0f;
@@ -763,8 +760,6 @@
     
     // 中间区域
     linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    linear.wrapContentWidth = NO;
-    linear.wrapContentHeight = YES;
     linear.myVertMargin = 0.0f;
     linear.heightSize.min(67.0f);
     linear.leadingPos.equalTo(_layoutPortrait.trailingPos);
@@ -777,7 +772,7 @@
     // 标题区域
     relative = [MyRelativeLayout new];
     relative.widthSize.equalTo(_layoutContent.widthSize);
-    relative.wrapContentHeight = YES;
+    relative.myHeight = MyLayoutSize.wrap;
     [_layoutContent addSubview:relative];
     MyRelativeLayout * _layoutTitle = relative;
     
@@ -785,7 +780,7 @@
     lbl = [UILabel new];
     lbl.text = @"asdfklajdf爱的色放就爱";
     lbl.myLeading = 0.0f;
-    lbl.wrapContentSize = YES;
+    lbl.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [lbl setFont:[UIFont systemFontOfSize:17]];
     [lbl setTextColor:[UIColor greenColor]];
     lbl.numberOfLines = 1;
@@ -811,7 +806,7 @@
     // 摘要
     linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     linear.widthSize.equalTo(_layoutContent.widthSize);
-    linear.wrapContentHeight = YES;
+    linear.myHeight = MyLayoutSize.wrap;
     linear.subviewHSpace = 2.0f;
     [_layoutContent addSubview:linear];
     MyLinearLayout *_layoutSummary = linear;
@@ -819,7 +814,7 @@
     // 发送状态（例如：发送中，发送失败）
     imgv = [UIImageView new];
     [imgv setContentMode:UIViewContentModeScaleAspectFit];
-    imgv.wrapContentSize = YES;
+    imgv.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [imgv setHidden:YES];
     [_layoutSummary addSubview:imgv];
     
@@ -827,7 +822,7 @@
     lbl = [UILabel new];
     [lbl setTextAlignment:NSTextAlignmentCenter];
     [lbl setFont:[UIFont systemFontOfSize:12]];
-    lbl.wrapContentSize = YES;
+    lbl.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [lbl setNumberOfLines:1];
     [lbl setHidden:YES];
     [_layoutSummary addSubview:lbl];
@@ -835,7 +830,7 @@
     // 状态（包括：未读，已读，草稿，有人@）
     lbl = [UILabel new];
     [lbl setFont:[UIFont systemFontOfSize:12]];
-    lbl.wrapContentSize = YES;
+    lbl.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [lbl setNumberOfLines:1];
     [lbl setHidden:YES];
     [_layoutSummary addSubview:lbl];
@@ -844,7 +839,7 @@
     lbl = [UILabel new];
     [lbl setFont:[UIFont systemFontOfSize:12]];
     lbl.weight = 1.0f;
-    lbl.wrapContentSize = YES;
+    lbl.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [lbl setNumberOfLines:1];
     [_layoutSummary addSubview:lbl];
 
@@ -915,10 +910,9 @@
         zoneBtn.heightSize.equalTo(zoneBtn.heightSize).add(3);
         
         nameLab.myCenterY = 0;
-        nameLab.wrapContentSize = YES;
+        nameLab.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
         nameLab.leftPos.lBound(zoneBtn.rightPos, 15);
         nameLab.rightPos.uBound(placeholderBtn.leftPos, 15);
-        nameLab.heightSize.equalTo(nameLab.heightSize);
         nameLab.text = @"这是阿斯蒂芬阿道夫阿斯蒂芬安防安防阿斯蒂芬安防大师傅阿斯蒂芬阿斯蒂芬安防";
         
         placeholderBtn.myCenterY = 0;
@@ -987,9 +981,8 @@
     [rellayout addSubview:label];
     
     label.myLeft = 10;
-    label.wrapContentWidth = YES;
-    label.widthSize.max(100);
-    label.wrapContentHeight = YES;
+    label.widthSize.equalTo(@(MyLayoutSize.wrap)).max(100);
+    label.heightSize.equalTo(@(MyLayoutSize.wrap));
     
     
     vv.topPos.equalTo(label.topPos);
@@ -1030,45 +1023,12 @@
     label.text = @"您好！！！";
     label.backgroundColor = [UIColor redColor];
     label.widthSize.equalTo(@[@(MyLayoutSize.wrap), v1.widthSize.clone(0, 0.5)].myMaxSize);
-    label.wrapContentHeight = YES;
+    label.heightSize.equalTo(@(MyLayoutSize.wrap));
     [rootLayout addSubview:label];
 }
 
 -(void)testMaxAndMin
 {
-    
-//    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-//    rootLayout.wrapContentWidth = YES;
-//    rootLayout.myVertMargin = 0;
-//    rootLayout.backgroundColor = [UIColor redColor];
-//    [self.view addSubview:rootLayout];
-//    rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-//    rootLayout.topPadding = MyLayoutPos.safeAreaMargin + 100;
-//    
-//    
-//    UILabel *l1 = [UILabel new];
-//    l1.text = @"您好";
-//    l1.backgroundColor = [UIColor blueColor];
-//    l1.wrapContentSize = YES;
-//    [rootLayout addSubview:l1];
-//    
-//    UILabel *l3 = [UILabel new];
-//    l3.text = @"ak";
-//    l3.wrapContentSize = YES;
-//    l3.topPos.equalTo(l1.bottomPos).offset(10);
-//    l3.leftPos.equalTo(l1.leftPos);
-//    l3.backgroundColor = [UIColor greenColor];
-//    [rootLayout addSubview:l3];
-//    
-//    UILabel *l2 = [UILabel new];
-//    l2.text = @"2019-04-03";
-//    [l2 sizeToFit];
-//    [rootLayout addSubview:l2];
-//    l2.topPos.equalTo(l1.topPos);
-//    l2.rightPos.equalTo(l3.rightPos);
-//    l2.rightPos.min(-1 *(l2.frame.size.width + 30 + 50));
-//    
-    
     
 }
 

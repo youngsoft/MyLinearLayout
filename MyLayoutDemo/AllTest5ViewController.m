@@ -28,7 +28,6 @@
     //默认设置为垂直布局
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyGravity_Horz_Fill;
     rootLayout.subviewSpace = 10;
     rootLayout.backgroundColor = [UIColor whiteColor];
@@ -66,7 +65,7 @@
     //但是调用lsc.backgroundColor = xx 则会崩溃，因为fetchLayoutSizeClass返回的并不是真的视图对象。
     MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     lsc.orientation = MyOrientation_Horz;
-    lsc.wrapContentWidth = NO;
+    lsc.widthSize.equalTo(nil);
     lsc.gravity = MyGravity_Vert_Fill;
     
     

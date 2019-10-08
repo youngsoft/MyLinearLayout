@@ -27,7 +27,6 @@
 
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyGravity_Horz_Fill;
     rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
@@ -35,7 +34,7 @@
     //创建顶部的菜单布局部分。
     MyFlowLayout *menuLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     menuLayout.gravity = MyGravity_Horz_Fill; //水平填充所有尺寸。
-    menuLayout.wrapContentHeight = YES;
+    menuLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     menuLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     menuLayout.subviewSpace = 10;
     [rootLayout addSubview:menuLayout];
@@ -114,7 +113,7 @@
     MyFlowLayout *menuLayoutSC = [menuLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_hAny | MySizeClass_wAny];
     menuLayoutSC.orientation = MyOrientation_Horz;
     menuLayoutSC.gravity = MyGravity_Vert_Fill;
-    menuLayoutSC.wrapContentWidth = YES;
+    menuLayoutSC.widthSize.equalTo(@(MyLayoutSize.wrap));
     
     UILabel *menu1LabelSC = [menu1Label fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
     UILabel *menu2LabelSC = [menu2Label fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];

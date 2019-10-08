@@ -72,13 +72,13 @@
 
 -(void)createUserProfile1Layout:(MyLinearLayout*)rootLayout
 {
-    //这个例子建立一个只向上浮动的浮动布局视图，注意这里要想布局高度由子视图包裹的话则必须要设置布局视图的wrapContentHeight为YES。
-    //当在水平浮动布局中设置wrapContentHeight为YES时，子视图不能逆向浮动只能向上浮动，并且子视图的weight不能设置为非0.
-    //当在水平浮动布局中设置wrapContentHeight为YES时，需要我们设置某个子视图的clearFloat为YES进行手动换行处理。
+    //这个例子建立一个只向上浮动的浮动布局视图，注意这里要想布局高度由子视图包裹的话则必须要设置布局视图的高度自适应。
+    //当在水平浮动布局中设置高度自适应，子视图不能逆向浮动只能向上浮动，并且子视图的weight不能设置为非0.
+    //当在水平浮动布局中设置高度自适应，需要我们设置某个子视图的clearFloat为YES进行手动换行处理。
     
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.backgroundColor = [UIColor whiteColor];
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewHSpace = 5;
@@ -111,7 +111,7 @@
     addressLabel.text = @"联系地址：中华人民共和国北京市朝阳区盈科中心B座2楼,其他的我就不会再告诉你了。";
     addressLabel.font = [CFTool font:15];
     addressLabel.textColor = [CFTool color:4];
-    addressLabel.wrapContentHeight = YES;
+    addressLabel.heightSize.equalTo(@(MyLayoutSize.wrap));
     addressLabel.widthSize.equalTo(contentLayout.widthSize).add(-45); //40的头像宽度外加5的左右间距。
     [addressLabel sizeToFit];
     [contentLayout addSubview:addressLabel];
@@ -150,7 +150,7 @@
     
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.backgroundColor = [UIColor whiteColor];
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
@@ -238,7 +238,7 @@
     
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.backgroundColor = [UIColor whiteColor];
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
@@ -303,7 +303,7 @@
 {
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.backgroundColor = [UIColor whiteColor];
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
@@ -324,8 +324,8 @@
     editButton.textColor = [CFTool color:4];
     editButton.layer.cornerRadius = 5;
     editButton.layer.masksToBounds = YES;
-    editButton.widthSize.equalTo(editButton.widthSize).add(20);
-    editButton.heightSize.equalTo(editButton.heightSize).add(4);
+    editButton.widthSize.equalTo(@(MyLayoutSize.wrap)).add(20);
+    editButton.heightSize.equalTo(@(MyLayoutSize.wrap)).add(4);
     editButton.reverseFloat = YES;
     [contentLayout addSubview:editButton];
     

@@ -116,7 +116,7 @@
      
      tableHeaderViewLayout.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 100);
      
-      而如果某个布局视图的高度有可能是动态的高度，也就是用了wrapContentHeight为YES时，可以不用指定明确的指定高度，但要指定宽度。而且在布局视图添加到self.tableView.tableHeaderView 之前一定要记得调用：
+      而如果某个布局视图的高度有可能是动态的高度，也就是高度自适应，可以不用指定明确的指定高度，但要指定宽度。而且在布局视图添加到self.tableView.tableHeaderView 之前一定要记得调用：
             [tableHeaderViewLayout layoutIfNeeded]
      
      */
@@ -160,11 +160,11 @@
     
     
     UILabel *label2 = [UILabel new];
-    label2.text = NSLocalizedString(@" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", @"");
+    label2.text = NSLocalizedString(@" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and set view's heightSize to MyLayoutSize.wrap. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView.", @"");
     label2.textColor = [CFTool color:4];
     label2.font = [CFTool font:15];
     label2.myHorzMargin = 5;
-    label2.wrapContentHeight = YES;
+    label2.myHeight = MyLayoutSize.wrap;
     label2.myTop = 10;
     [label2 sizeToFit];
     [tableHeaderViewLayout addSubview:label2];

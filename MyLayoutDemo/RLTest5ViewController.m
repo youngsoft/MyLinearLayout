@@ -33,7 +33,7 @@
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.leadingPos.equalTo(@0);
     rootLayout.trailingPos.equalTo(@0);
-    rootLayout.wrapContentHeight = YES;
+    rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     rootLayout.subviewVSpace = 10;
     [scrollView addSubview:rootLayout];
     
@@ -93,7 +93,7 @@
     MyRelativeLayout *containerLayout = [MyRelativeLayout new];
     containerLayout.leadingPos.equalTo(rootLayout.leadingPos);
     containerLayout.trailingPos.equalTo(rootLayout.trailingPos);
-    containerLayout.wrapContentHeight = YES;
+    containerLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     containerLayout.topPadding = 6;
     containerLayout.bottomPadding = 6;
     containerLayout.backgroundColor = [CFTool color:0];
@@ -149,7 +149,7 @@
     MyRelativeLayout *containerLayout = [MyRelativeLayout new];
     containerLayout.leadingPos.equalTo(rootLayout.leadingPos);
     containerLayout.trailingPos.equalTo(rootLayout.trailingPos);
-    containerLayout.wrapContentHeight = YES;
+    containerLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     containerLayout.padding = UIEdgeInsetsMake(6, 6, 6, 6);
     containerLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:containerLayout];
@@ -179,7 +179,7 @@
         flexedLabel.font = [CFTool font:17];
         flexedLabel.textColor = [CFTool color:4];
         flexedLabel.lineBreakMode = NSLineBreakByCharWrapping;
-        flexedLabel.wrapContentHeight = YES;   //高度自动计算。
+        flexedLabel.heightSize.equalTo(@(MyLayoutSize.wrap)); //高度自动计算。
         flexedLabel.leadingPos.equalTo(leadingImageView.trailingPos).offset(5);  //左边等于leadingImageView的右边
         flexedLabel.topPos.equalTo(leadingImageView.topPos);  //顶部和leadingImageView相等。
         [containerLayout addSubview:flexedLabel];
@@ -238,7 +238,7 @@
     leadingLabel.text = @"Click me:";
     leadingLabel.textColor = [CFTool color:4];
     leadingLabel.widthSize.equalTo(@100);  //宽度固定为100
-    leadingLabel.wrapContentHeight = YES;       //高度由子视图的内容确定，自动计算高度。
+    leadingLabel.heightSize.equalTo(@(MyLayoutSize.wrap)); //高度由子视图的内容确定，自动计算高度。
     leadingLabel.topPos.lBound(containerLayout.topPos,0);   //最小的上边界是父布局的顶部。
     leadingLabel.bottomPos.uBound(containerLayout.bottomPos, 0);  //最大的下边界是父布局的底部
     //通过这两个位置的最小最大边界设置，视图leadingLabel将会在这个范围内垂直居中显示，并且当高度超过这个边界时，会自动的压缩子视图的高度。
@@ -259,9 +259,8 @@
     trailingLabel.trailingPos.equalTo(containerLayout.trailingPos);  //和父布局视图右对齐。
     trailingLabel.centerYPos.equalTo(leadingLabel.centerYPos);   //和左边视图垂直居中对齐。
     trailingLabel.leadingPos.lBound(leadingLabel.trailingPos, 10);     //右边视图的最小边界是等于左边视图的右边再偏移10，这样当右边视图的宽度超过这个最小边界时则会自动压缩视图的宽度。
-    trailingLabel.widthSize.equalTo(trailingLabel.widthSize);    //宽度等于自身的宽度。这个设置和上面的leadingPos.lBound方法配合使用实现子视图宽度的压缩。
-    trailingLabel.wrapContentHeight = YES;  //高度动态调整
-    trailingLabel.heightSize.uBound(containerLayout.heightSize, 0, 1); //但是最大的高度等于父布局视图的高度(注意这里内部自动减去了padding的值)
+    trailingLabel.widthSize.equalTo(@(MyLayoutSize.wrap));    //宽度等于自身的宽度。这个设置和上面的leadingPos.lBound方法配合使用实现子视图宽度的压缩。
+    trailingLabel.heightSize.equalTo(@(MyLayoutSize.wrap)).uBound(containerLayout.heightSize, 0, 1); //但是最大的高度等于父布局视图的高度(注意这里内部自动减去了padding的值)
     [containerLayout addSubview:trailingLabel];
     
     //添加手势处理。

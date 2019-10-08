@@ -89,7 +89,7 @@
 "Show&Hide the Text"="点击按钮显示隐藏文本";
 "Show more》"="点击查看更多》";
 "Close up《" ="点击收起《";
-"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the wrapContentHeight to YES.You can try to switch different simulator or different orientation screen to see the effect."="这是一段可以自动换行的文本。为了实现这个功能，您需要设置明确的宽度，并且把属性wrapContentHeight设置为YES。您可以尝试着切换不同尺寸的模拟器或者横竖屏来看看效果。";
+"This is a can automatically wrap text.To realize this function, you need to set the width exact, and set the heightSize to MyLayoutSize.wrap.You can try to switch different simulator or different orientation screen to see the effect."="这是一段可以自动换行的文本。为了实现这个功能，您需要设置明确的宽度，并且把heightSize设置为MyLayoutSize.wrap。您可以尝试着切换不同尺寸的模拟器或者横竖屏来看看效果。";
 
 //LLTest3ViewController
 "centered title" = "标题居中";
@@ -230,7 +230,7 @@
 
 //AllTest1ViewController
 "add tableHeaderView(please touch me)"="设置tableHeaderView(点我试试)";
-" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView."="  布局视图实现具有动态高度的tableHeaderView时，宽度需要用frame指定，高度则设置wrapContentHeight为YES，并且在赋值给UITableview的tableHeaderView之前需要调用layoutIfNeeded方法来明确高度。";
+" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and set view's heightSize to MyLayoutSize.wrap. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView."="  布局视图实现具有动态高度的tableHeaderView时，宽度需要用frame指定，高度heightSize设置为MyLayoutSize.wrap，并且在赋值给UITableview的tableHeaderView之前需要调用layoutIfNeeded方法来明确高度。";
 "add tableFooterView"="设置tableFooterView";
 "the layoutIfNeeded is not need to call when you use frame to set layout view's size"="如果通过frame设置了明确的尺寸则不需要调用layoutIfNeeded";
 

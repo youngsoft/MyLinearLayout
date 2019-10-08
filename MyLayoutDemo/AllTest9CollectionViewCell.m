@@ -32,18 +32,17 @@
         _rootLayout.bottomPadding = 5;
         _rootLayout.subviewVSpace = 10;
         _rootLayout.myHorzMargin = 0;
-        _rootLayout.wrapContentHeight = YES;
         _rootLayout.cacheEstimatedRect = YES;  //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
         [self.contentView addSubview:_rootLayout];
         
         _titleLabel = [UILabel new];
-        _titleLabel.widthSize.equalTo(_titleLabel.widthSize).max(100);
+        _titleLabel.widthSize.equalTo(@(MyLayoutSize.wrap)).max(100);
         _titleLabel.heightSize.equalTo(@30);
         [_rootLayout addSubview:_titleLabel];
         
         _subtitleLabel = [UILabel new];
         _subtitleLabel.myWidth = 70;
-        _subtitleLabel.wrapContentHeight = YES;
+        _subtitleLabel.myHeight = MyLayoutSize.wrap;
         [_rootLayout addSubview:_subtitleLabel];
         
     }

@@ -215,7 +215,7 @@
             [sbvsc.widthSizeInner __clear];
         
         //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
-        if (sbvsc.widthSizeInner.priority == MyPriority_Low && sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil)
+        if (sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil && sbvsc.widthSizeInner.priority == MyPriority_Low)
             [sbvsc.widthSizeInner __clear];
         
         //只要同时设置了高度或者比重属性则应该把尺寸设置为空
@@ -229,7 +229,7 @@
             [sbvsc.heightSizeInner __clear];
         
         //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
-        if (sbvsc.heightSizeInner.priority == MyPriority_Low && sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil)
+        if (sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil && sbvsc.heightSizeInner.priority == MyPriority_Low)
             [sbvsc.heightSizeInner __clear];
         
         //只要同时设置了宽度或者比重属性则应该把宽度置空

@@ -137,8 +137,8 @@
     else
     {
         itemLayout.gravity = MyGravity_Horz_Fill;
-        itemLayout.wrapContentHeight = YES;
-        label.wrapContentHeight = YES;
+        itemLayout.myHeight = MyLayoutSize.wrap;
+        label.myHeight = MyLayoutSize.wrap;
     }
     
     

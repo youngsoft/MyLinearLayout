@@ -107,8 +107,8 @@
     _rootLayout.bottomPadding = 5;
     //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
     _rootLayout.cacheEstimatedRect = YES;
-    _rootLayout.wrapContentHeight = YES;
-    _rootLayout.wrapContentWidth = NO;
+    _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
+    _rootLayout.widthSize.equalTo(nil);
     [self.contentView addSubview:_rootLayout];
     
     
@@ -140,7 +140,7 @@
     _textMessageLabel.textColor = [CFTool color:4];
     _textMessageLabel.myLeading = 0;
     _textMessageLabel.myTrailing = 0; //垂直线性布局里面如果同时设置了左右边距则能确定子视图的宽度，这里表示宽度和父视图相等。
-    _textMessageLabel.wrapContentHeight = YES; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
+    _textMessageLabel.myHeight = MyLayoutSize.wrap; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将高度设置为自适应。
     [messageLayout addSubview:_textMessageLabel];
     
     
@@ -157,7 +157,7 @@
     _rootLayout.bottomPadding = 5;
     //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
     _rootLayout.cacheEstimatedRect = YES;
-    _rootLayout.wrapContentHeight = YES;
+    _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     [self.contentView addSubview:_rootLayout];
     
   
@@ -182,7 +182,7 @@
     _textMessageLabel.leadingPos.equalTo(_headImageView.trailingPos).offset(5); //文本消息的左边在头像视图的右边并偏移5个点。
     _textMessageLabel.trailingPos.equalTo(_rootLayout.trailingPos);    //文本消息的右边和父布局的右边对齐。上面2行代码也同时确定了文本消息的宽度。
     _textMessageLabel.topPos.equalTo(_nickNameLabel.bottomPos).offset(5); //文本消息的顶部在昵称文本的底部并偏移5个点。
-    _textMessageLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
+    _textMessageLabel.heightSize.equalTo(@(MyLayoutSize.wrap)); //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将高度设置为自适应
     [_rootLayout addSubview:_textMessageLabel];
     
     
@@ -201,7 +201,7 @@
     _rootLayout.bottomPadding = 5;
     //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
     _rootLayout.cacheEstimatedRect = YES;
-    _rootLayout.wrapContentHeight = YES;
+    _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     [self.contentView addSubview:_rootLayout];
 
     /*
@@ -225,7 +225,7 @@
     _textMessageLabel.font = [CFTool font:15];
     _textMessageLabel.textColor = [CFTool color:4];
     _textMessageLabel.weight = 1;  //占用剩余宽度
-    _textMessageLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
+    _textMessageLabel.myHeight = MyLayoutSize.wrap; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将高度设置为自适应。
     [_rootLayout addSubview:_textMessageLabel];
     
     _imageMessageImageView = [UIImageView new];

@@ -101,7 +101,7 @@
     
     
      
-    MyLinearLayout *vertLayout = [self createVertSubviewLayout];//垂直线性布局的高度默认是由子视图的高度决定的，也就是wrapContentHeight默认设置为YES
+    MyLinearLayout *vertLayout = [self createVertSubviewLayout];//垂直线性布局的高度默认是由子视图的高度决定的，也就是高度自适应
     vertLayout.myHorzMargin = 0;  //对于垂直线性布局rootLayout的子视图vertLayout来说，如果同时设置了左右边距为0则表示子视图的宽度和父视图宽度相等。
     [rootLayout addSubview:vertLayout];
     

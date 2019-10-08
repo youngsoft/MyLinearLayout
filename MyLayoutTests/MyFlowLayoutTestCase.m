@@ -43,7 +43,7 @@
 {
     //测试内容约束布局的宽度自适应和高度自适应的设置。
     MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
-    rootLayout.wrapContentSize = YES;
+    rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap,MyLayoutSize.wrap);
     rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
     rootLayout.subviewHSpace = 5;
     rootLayout.subviewVSpace = 5;
@@ -76,7 +76,7 @@
     //垂直线性布局
     {
         MyFlowLayout *rootLayout1 = [[MyFlowLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Vert arrangedCount:4];
-        rootLayout1.wrapContentHeight = NO;
+        rootLayout1.heightSize.equalTo(nil);
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -86,7 +86,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];
@@ -135,7 +135,6 @@
     //水平线性布局
     {
         MyFlowLayout *rootLayout1 = [[MyFlowLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Horz arrangedCount:4];
-        rootLayout1.wrapContentWidth = NO;
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -145,7 +144,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];
@@ -195,7 +194,6 @@
     //垂直线性布局
     {
         MyFlowLayout *rootLayout1 = [[MyFlowLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Vert arrangedCount:0];
-        rootLayout1.wrapContentHeight = NO;
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -205,7 +203,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];
@@ -254,7 +252,6 @@
     //水平线性布局
     {
         MyFlowLayout *rootLayout1 = [[MyFlowLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Horz arrangedCount:0];
-        rootLayout1.wrapContentWidth = NO;
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -264,7 +261,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];

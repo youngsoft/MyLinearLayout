@@ -65,8 +65,8 @@
     tagButton.backgroundColor = [CFTool color:random()%15];    
     //这里可以看到尺寸宽度等于自己的尺寸宽度并且再增加10，且最小是40，意思是按钮的宽度是等于自身内容的宽度再加10，但最小的宽度是40
     //如果没有这个设置，而是直接调用了sizeToFit则按钮的宽度就是内容的宽度。
-    tagButton.widthSize.equalTo(tagButton.widthSize).add(10).min(40);
-    tagButton.heightSize.equalTo(tagButton.heightSize).add(10); //高度根据自身的内容再增加10
+    tagButton.widthSize.equalTo(@(MyLayoutSize.wrap)).add(10).min(40);
+    tagButton.heightSize.equalTo(@(MyLayoutSize.wrap)).add(10); //高度根据自身的内容再增加10
     [tagButton sizeToFit];
     [tagButton addTarget:self action:@selector(handleDelTag:) forControlEvents:UIControlEventTouchUpInside];
     [self.flowLayout addSubview:tagButton];

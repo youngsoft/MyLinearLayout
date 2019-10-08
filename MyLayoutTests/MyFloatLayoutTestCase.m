@@ -46,7 +46,6 @@
     //垂直线性布局
     {
         MyFloatLayout *rootLayout1 = [[MyFloatLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Vert];
-        rootLayout1.wrapContentHeight = NO;
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -56,7 +55,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];
@@ -105,7 +104,6 @@
     //水平线性布局
     {
         MyFloatLayout *rootLayout1 = [[MyFloatLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Horz];
-        rootLayout1.wrapContentWidth = NO;
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -115,7 +113,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];

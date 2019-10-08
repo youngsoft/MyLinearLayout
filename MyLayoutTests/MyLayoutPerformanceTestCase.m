@@ -151,7 +151,7 @@
 -(UIView*)linearlayout_createMyLayout
 {
     MyLinearLayout *containerView = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100, 100) orientation:MyOrientation_Vert];
-    containerView.wrapContentHeight = NO;
+    containerView.heightSize.equalTo(nil);
     
     for (int i = 0; i < self.counts; i++)
     {

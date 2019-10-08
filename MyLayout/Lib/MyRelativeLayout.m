@@ -35,16 +35,15 @@
         
        
         //只要同时设置了左右边距且宽度优先级很低则把宽度值置空
-        if ((sbvsc.widthSizeInner.priority == MyPriority_Low)&&
-            sbvsc.leadingPosInner.posVal != nil &&
-            sbvsc.trailingPosInner.posVal != nil)
+        if (sbvsc.leadingPosInner.posVal != nil &&
+            sbvsc.trailingPosInner.posVal != nil &&
+            sbvsc.widthSizeInner.priority == MyPriority_Low)
             [sbvsc.widthSizeInner __clear];
         
-       
         //只要同时设置了上下边距且高度优先级很低则把高度值置空
-        if ((sbvsc.heightSizeInner.priority == MyPriority_Low) &&
-            sbvsc.topPosInner.posVal != nil &&
-            sbvsc.bottomPosInner.posVal != nil)
+        if (sbvsc.topPosInner.posVal != nil &&
+            sbvsc.bottomPosInner.posVal != nil &&
+            sbvsc.heightSizeInner.priority == MyPriority_Low)
             [sbvsc.heightSizeInner __clear];
 
         

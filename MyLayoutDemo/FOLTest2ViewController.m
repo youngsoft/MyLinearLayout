@@ -428,7 +428,7 @@ static NSInteger sBaseTag = 100000;
     MyFloatLayout *itemContainerLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     itemContainerLayout.tag = 1122;
     itemContainerLayout.backgroundColor = [UIColor whiteColor];
-    itemContainerLayout.wrapContentHeight = YES;
+    itemContainerLayout.myHeight = MyLayoutSize.wrap;
     itemContainerLayout.intelligentBorderline = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
     [self.rootLayout addSubview:itemContainerLayout];
     
@@ -570,7 +570,7 @@ static NSInteger sBaseTag = 100000;
     subTitleLabel.myLeading = 5;
     subTitleLabel.clearFloat = YES; //清除浮动，另起一行。
     subTitleLabel.weight = 1;
-    subTitleLabel.wrapContentHeight = YES;
+    subTitleLabel.myHeight = MyLayoutSize.wrap;
     [subTitleLabel sizeToFit];
     [itemLayout addSubview:subTitleLabel];
     

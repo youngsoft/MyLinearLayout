@@ -33,7 +33,7 @@
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.backgroundColor = [CFTool color:11];
     rootLayout.myHorzMargin = 0;
-    rootLayout.wrapContentHeight = YES;
+    rootLayout.myHeight = MyLayoutSize.wrap;
     rootLayout.subviewVSpace = 10; //子视图之间的间距设置为10
     rootLayout.gravity = MyGravity_Horz_Fill; //所有子视图的宽度都和自己相等，这样子视图就不再需要设置宽度了。
     [scrollView addSubview:rootLayout];
@@ -74,7 +74,7 @@
     //每行2列的垂直流式布局。
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:2];
     flowLayout.backgroundColor = [UIColor whiteColor];
-    flowLayout.wrapContentHeight = YES;  //高度由子视图决定。
+    flowLayout.myHeight = MyLayoutSize.wrap;  //高度由子视图决定。
     flowLayout.gravity = MyGravity_Horz_Center; //所有子视图整体水平居中
     flowLayout.arrangedGravity = MyGravity_Vert_Center; //每行子视图垂直居中对齐。您可以这里尝试设置为：MyGravity_Vert_Top, MyGravity_Vert_Bottom的效果。
     flowLayout.padding = UIEdgeInsetsMake(20, 20, 20, 20);  //四周内边距设置为20
@@ -233,7 +233,7 @@
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
     flowLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:flowLayout];
-   flowLayout.wrapContentHeight = YES;
+    flowLayout.myHeight = MyLayoutSize.wrap;
     flowLayout.subviewSpace = 10;
     flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     
@@ -310,7 +310,7 @@
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:2];
     flowLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:flowLayout];
-    flowLayout.wrapContentHeight = YES;
+    flowLayout.myHeight = MyLayoutSize.wrap;
     flowLayout.subviewSpace = 10;
     flowLayout.arrangedGravity = MyGravity_Vert_Center;
     flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
@@ -327,7 +327,7 @@
     titleLabel.textColor = [CFTool color:5];
     titleLabel.font = [CFTool font:14];
     titleLabel.weight = 1;   //对于指定数量的流式布局来说这个weight的是剩余的占比。
-    titleLabel.wrapContentHeight = YES;
+    titleLabel.myHeight = MyLayoutSize.wrap;
     [flowLayout addSubview:titleLabel];
     
     //第二行第一个固定，剩余的占据全部
@@ -338,7 +338,7 @@
     priceLabel.text = @"$123.23 - $200.12";
     priceLabel.textColor = [UIColor redColor];
     priceLabel.font = [CFTool font:13];
-    priceLabel.wrapContentWidth = YES;
+    priceLabel.myWidth = MyLayoutSize.wrap;
     priceLabel.myHeight = 30;
     [flowLayout addSubview:priceLabel];
     
@@ -346,7 +346,7 @@
     UILabel *buyButton = [UILabel new];
     buyButton.text = @"Buy";
     buyButton.font = [CFTool font:12];
-    buyButton.wrapContentWidth = YES;
+    buyButton.myWidth = MyLayoutSize.wrap;
     buyButton.myLeading = 20;
     buyButton.myHeight = 30;
     [flowLayout addSubview:buyButton];
