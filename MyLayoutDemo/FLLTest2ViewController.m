@@ -34,9 +34,6 @@
     [self createTagButton:NSLocalizedString(@"click to remove tag", @"")];
     [self createTagButton:NSLocalizedString(@"tag2", @"")];
     [self createTagButton:NSLocalizedString(@"MyLayout can used in XIB&SB", @"")];
-    
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"gravity\nalways" style:UIBarButtonItemStylePlain target:self action:@selector(handleChangeGravityAlways:)];
-    self.navigationItem.rightBarButtonItem = item;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -75,46 +72,6 @@
 
 #pragma mark -- Handle Method
 
--(IBAction)handleChangeGravityAlways:(id)sender
-{
-    self.flowLayout.gravityAlways = !self.flowLayout.gravityAlways;
-}
-
-- (IBAction)handleShrinkMargin:(UISwitch *)sender {
-    
-    //间距拉伸
-    if (sender.isOn)
-        self.flowLayout.gravity = MyGravity_Horz_Between;  //流式布局的gravity如果设置为MyGravity_Horz_Fill表示子视图的间距会被拉伸，以便填充满整个布局。
-    else
-        self.flowLayout.gravity = MyGravity_None;
-    
-    [self.flowLayout layoutAnimationWithDuration:0.2];
-}
-
-- (IBAction)handleShrinkContent:(UISwitch *)sender {
-    
-    //内容拉伸
-    if (sender.isOn)
-        self.flowLayout.gravity = MyGravity_Horz_Fill;  //对于内容填充的流时布局来说，gravity属性如果设置为MyGravity_Horz_Fill表示里面的子视图的内容会自动的拉伸以便填充整个布局。
-    else
-        self.flowLayout.gravity = MyGravity_None;
-    
-    [self.flowLayout layoutAnimationWithDuration:0.2];
-
-}
-
-- (IBAction)handleShrinkAuto:(UISwitch *)sender {
-    
-    //自动调整位置。
-    if (sender.isOn)
-        self.flowLayout.autoArrange = YES;  //autoArrange属性会根据子视图的内容自动调整，以便以最合适的布局来填充布局。
-    else
-        self.flowLayout.autoArrange = NO;
-    
-    [self.flowLayout layoutAnimationWithDuration:0.2];
-
-}
-
 - (IBAction)handleAddTag:(id)sender {
     
     if (self.tagTextField.text.length == 0)
@@ -134,6 +91,49 @@
     
     [self.flowLayout layoutAnimationWithDuration:0.2];
 }
+
+
+- (IBAction)handleAdjustSpaceChange:(UISwitch *)sender {
+    
+    //间距拉伸
+    if (sender.isOn)
+        self.flowLayout.gravity = MyGravity_Horz_Between;  //流式布局的gravity如果设置为MyGravity_Horz_Fill表示子视图的间距会被拉伸，以便填充满整个布局。
+    else
+        self.flowLayout.gravity = MyGravity_None;
+    
+    [self.flowLayout layoutAnimationWithDuration:0.2];
+}
+
+- (IBAction)handleAdjustSizeChange:(UISwitch *)sender {
+    
+    //内容拉伸
+    if (sender.isOn)
+        self.flowLayout.gravity = MyGravity_Horz_Fill;  //对于内容填充的流时布局来说，gravity属性如果设置为MyGravity_Horz_Fill表示里面的子视图的内容会自动的拉伸以便填充整个布局。
+    else
+        self.flowLayout.gravity = MyGravity_None;
+    
+    [self.flowLayout layoutAnimationWithDuration:0.2];
+
+}
+
+- (IBAction)handleAutoArrangeChange:(UISwitch *)sender {
+    
+    //自动调整位置。
+    if (sender.isOn)
+        self.flowLayout.autoArrange = YES;  //autoArrange属性会根据子视图的内容自动调整，以便以最合适的布局来填充布局。
+    else
+        self.flowLayout.autoArrange = NO;
+    
+    [self.flowLayout layoutAnimationWithDuration:0.2];
+
+}
+
+-(IBAction)handleGravityAlwaysChange:(id)sender
+{
+    self.flowLayout.gravityAlways = !self.flowLayout.gravityAlways;
+}
+
+
 
 
 @end

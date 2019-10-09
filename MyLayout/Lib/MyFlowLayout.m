@@ -120,6 +120,20 @@
     return self.myCurrentSizeClass.arrangedGravity;
 }
 
+-(BOOL)gravityAlways
+{
+    return self.myCurrentSizeClass.gravityAlways;
+}
+
+-(void)setGravityAlways:(BOOL)gravityAlways
+{
+    MyFlowLayout *lsc = self.myCurrentSizeClass;
+    if (lsc.gravityAlways != gravityAlways)
+    {
+        lsc.gravityAlways = gravityAlways;
+        [self setNeedsLayout];
+    }
+}
 
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace
 {
