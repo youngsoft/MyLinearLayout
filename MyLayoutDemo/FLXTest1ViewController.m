@@ -1,23 +1,23 @@
 //
-//  FLLTest9ViewController.m
+//  FLXTest1ViewController.m
 //  MyLayoutDemo
 //
 //  Created by oubaiquan on 2018/8/1.
 //  Copyright © 2018年 YoungSoft. All rights reserved.
 //
 
-#import "FLLTest9ViewController.h"
+#import "FLXTest1ViewController.h"
 #import "MyLayout.h"
 #import "CFTool.h"
 
-@interface FLLTest9ViewController ()
+@interface FLXTest1ViewController ()
 
 -(UIButton*)createActionButton:(NSString*)title action:(SEL)action;
 
 
 @end
 
-@implementation FLLTest9ViewController
+@implementation FLXTest1ViewController
 
 //创建动作操作按钮。
 -(UIButton*)createActionButton:(NSString*)title action:(SEL)action
@@ -26,7 +26,6 @@
     [button setTitle:title forState:UIControlStateNormal];
     button.titleLabel.font = [CFTool font:14];
     [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    button.myHeight = 30;
     button.layer.borderColor = [UIColor lightGrayColor].CGColor;
     button.layer.borderWidth = 0.5;
     
@@ -58,22 +57,27 @@
     
     [self createActionButton:NSLocalizedString(@"flex-direction", @"") action:@selector(handleFlex_Direction:)].flexItem
     .width(1/3.0)
+    .height(30)
     .addTo(actionLayout);
     [self createActionButton:NSLocalizedString(@"flex-wrap", @"") action:@selector(handleFlex_Wrap:)].flexItem
     .width(1/3.0)
+    .height(30)
     .addTo(actionLayout);
     
     [self createActionButton:NSLocalizedString(@"justify-content", @"") action:@selector(handleJustify_Content:)].flexItem
     .width(1/3.0)
+    .height(30)
     .addTo(actionLayout);
     
     
     [self createActionButton:NSLocalizedString(@"align-items", @"") action:@selector(handleAlign_Items:)].flexItem
     .width(1/3.0)
+    .height(30)
     .addTo(actionLayout);
     
     [self createActionButton:NSLocalizedString(@"align-content", @"") action:@selector(handleAlign_Content:)].flexItem
     .width(1/3.0)
+    .height(30)
     .addTo(actionLayout);
     
     

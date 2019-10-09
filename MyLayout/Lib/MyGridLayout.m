@@ -1298,8 +1298,8 @@
                             UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                             sbvmyFrame.frame = sbv.bounds;
                             
-                            //如果子视图不设置任何约束但是又是包裹的则这里特殊处理。
-                            if (sbvsc.widthSizeInner == nil && sbvsc.heightSizeInner == nil && !sbvsc.wrapContentSize)
+                            //如果子视图不设置任何约束要进行特殊处理。
+                            if (sbvsc.widthSizeInner.dimeVal == nil && sbvsc.heightSizeInner.dimeVal == nil)
                             {
                                 CGSize size = CGSizeZero;
                                 if (grid.superGrid.subGridsType == MySubGridsType_Row)

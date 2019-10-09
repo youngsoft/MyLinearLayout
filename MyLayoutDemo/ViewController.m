@@ -43,7 +43,8 @@
 #import "FLLTest6ViewController.h"
 #import "FLLTest7ViewController.h"
 #import "FLLTest8ViewController.h"
-#import "FLLTest9ViewController.h"
+
+#import "FLXTest1ViewController.h"
 
 
 #import "AllTest1ViewController.h"
@@ -198,13 +199,16 @@
                                                },
                                              @{@"title":NSLocalizedString(@"8.FlowLayout - Flex space", @""),
                                                @"class":[FLLTest8ViewController class]
-                                               },
-                                             @{@"title":NSLocalizedString(@"9.FlowLayout - Flexbox", @""),
-                                               @"class":[FLLTest9ViewController class]
                                                }
                                              ]
                             },
-                          
+                          @{@"type_title":@"Flex布局(FlexLayout)",
+                            @"type_desc":@"fll.png",
+                            @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FlexLayout - Flexlayout", @""),
+                                               @"class":[FLXTest1ViewController class]
+                                               }
+                                             ]
+                            },
                           @{@"type_title":@"浮动布局(FloatLayout)",
                             @"type_desc":@"flo.png",
                             @"type_vclist":@[@{@"title":NSLocalizedString(@"1.FloatLayout - Float", @""),

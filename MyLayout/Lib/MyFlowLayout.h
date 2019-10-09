@@ -228,7 +228,7 @@
 /**
  单独为某一行或者一列定制gravity停靠对齐属性，默认情况下布局视图的gravity作用于所有行或者列的停靠对齐。如果你想单独定制某一行或者某一列的停靠对齐方式时
  可以通过设置这个block属性。lineGravity的入参是布局对象和当前行列的索引值，索引值以0开始，返回的是此行的停靠对齐方式，如果返回MyGravity_None则表示使用
- 布局默认的gravity停靠对齐属性。
+ 布局默认的gravity停靠对齐属性。如果您的gravity属性设置的是Fill的话则有可能通过这个进行定制化会出现一些异常。
  */
 @property(nonatomic, copy) MyGravity (^lineGravity)(MyFlowLayout *layout, NSInteger lineIndex);
 

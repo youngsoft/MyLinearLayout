@@ -19,6 +19,7 @@
 -(MyFlexItem* (^)(CGFloat))flex_basis;
 -(MyFlexItem* (^)(int))align_self;
 
+//设置具体的宽度值，当宽度值大于0小于1是表明的是相对宽度，你也可以设置MyLayoutSize.wrap和MyLayoutSize.fill来设置特殊宽度。
 -(MyFlexItem* (^)(CGFloat))width;
 -(MyFlexItem* (^)(CGFloat))height;
 -(MyFlexItem* (^)(CGFloat))margin_top;
@@ -79,11 +80,16 @@
 
 @interface UIView(MyFlexLayout)
 
+//我们可以借助视图的flexItem来设置当视图在flexbox中的一些属性。
 @property(nonatomic, readonly, strong) MyFlexItem *flexItem;
 
 @end
 
-//row必须指定宽度如果没有则是和父视图等宽，如果没有指定高度则高度自适应。column则反之。
+
+/*
+ * FlexLayout布局是为了兼容flexbox语法而建立了一个布局，它是从MyFlowLayout派生。在MyFlowLayout中也是支持类似flexbox的一些特性的
+ * 但是它的属性和flexbox不兼容和一致，因此提供一个新的类MyFlexLayout来完全支持flexbox.
+ */
 @interface MyFlexLayout:MyFlowLayout
 
 @property(nonatomic, readonly, strong, readonly) MyFlex *flex;

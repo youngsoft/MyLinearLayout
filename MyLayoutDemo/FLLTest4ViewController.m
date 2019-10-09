@@ -21,7 +21,7 @@
 -(void)loadView
 {
     /*
-       这个例子主要展示流式布局对子视图weight属性的支持。对于垂直流式布局来说，子视图的weight值用来指定子视图的宽度在当前行剩余空间所占用的比例值，比如某个流式布局的宽度是100，而每行的数量为2个，且假如第一个子视图的宽度为20，则如果第二个子视图的weight设置为1的话则第二个子视图的真实宽度 = （100-20）*1 = 80。而假如第二个子视图的weight设置为0.5的话则第二个子视图的真实宽度 = (100 - 20) * 0.5 = 40。
+       这个例子主要展示流式布局对子视图weight属性的支持以及对特定行进行对齐停靠的定制支持。对于垂直流式布局来说，子视图的weight值用来指定子视图的宽度在当前行剩余空间所占用的比例值，比如某个流式布局的宽度是100，而每行的数量为2个，且假如第一个子视图的宽度为20，则如果第二个子视图的weight设置为1的话则第二个子视图的真实宽度 = （100-20）*1 = 80。而假如第二个子视图的weight设置为0.5的话则第二个子视图的真实宽度 = (100 - 20) * 0.5 = 40。
      对于水平流式布局来说weight值用来指定一列内的剩余高度的比重值。
      通过对子视图weight值的合理使用，可以很方便的替换掉需要用线性布局来实现的嵌套布局的能力。
      
@@ -129,7 +129,6 @@
     
     //the fourth line: forgot password.
     UIView *placeholderView2 = [UIView new]; //因为流式布局这里面每行两列，所以这里建立一个宽高为0的占位视图。我们可以在流式布局中通过使用占位视图来充满行的数量。
-    placeholderView2.weight = 1;
     [flowLayout addSubview:placeholderView2];
 
     UIButton *forgetPasswordButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -143,7 +142,6 @@
     rememberLabel.text = @"Remember me:";
     rememberLabel.textColor = [CFTool color:4];
     rememberLabel.font = [CFTool font:15];
-    rememberLabel.weight = 1;
     rememberLabel.alignment = MyGravity_Vert_Bottom;   //流式布局通过arrangedGravity设置每行的对齐方式，如果某个子视图不想使用默认的对齐方式则可以通过alignment属性来单独设置对齐方式，这个例子中所有都是居中对齐，但是这个标题则是底部对齐。
     [rememberLabel sizeToFit];
     [flowLayout addSubview:rememberLabel];
@@ -166,6 +164,22 @@
     [flowLayout addSubview:submitButton];
     
     //第六行因为最后只有一个按钮，所以这里不需要建立占位视图。
+    
+    //我们可以通过lineGravity属性来实现为每一行进行不同的对齐方式定制，如果返回MyGravity_None则表示用gravity属性设置的对齐方式来进行处理。
+    flowLayout.lineGravity = ^MyGravity(MyFlowLayout *layout, NSInteger lineIndex) {
+        
+        switch (lineIndex) {
+            case 3:
+                return MyGravity_Horz_Right;  //第3行右对齐
+                break;
+            case 4:
+                return MyGravity_Horz_Between;  //第4行水平间距拉伸。
+                break;
+            default:
+                return MyGravity_None; //其他行按gravity属性所指定的停靠对齐方式
+                break;
+        }
+    };
     
     
     

@@ -1,5 +1,5 @@
 //
-//  FLLTest9ViewController.h
+//  FLXTest1ViewController.h
 //  MyLayoutDemo
 //
 //  Created by oubaiquan on 2018/8/1.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-/*9.FlexLayout - flex box*/
-@interface FLLTest9ViewController : UIViewController
+/*1.FlexLayout - flex box*/
+@interface FLXTest1ViewController : UIViewController
 
 @end
