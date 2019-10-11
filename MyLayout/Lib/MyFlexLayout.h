@@ -8,24 +8,40 @@
 
 #import "MyFlowLayout.h"
 
+//定义flex的方向类型。
+typedef int MyFlexDirection;
+//定义flex的换行类型。
+typedef int MyFlexWrap;
+//定义flex的停靠对齐类型。
+typedef int MyFlexGravity;
+
 
 @interface MyFlexItem:NSObject
 
-+(CGFloat)auto;
+//因为auto是C语言关键字不能直接使用，所以这里加一个_前缀。
+@property(class, readonly, assign) CGFloat _auto;
 
+
+//条目的顺序设置
 -(MyFlexItem* (^)(NSInteger))order;
+//条目的尺寸比重设置，默认为0表示不按比重
 -(MyFlexItem* (^)(CGFloat))flex_grow;
+//条目的压缩比重设置，默认为1，表示当会进行压缩
 -(MyFlexItem* (^)(CGFloat))flex_shrink;
+//条目的尺寸设置，可以设置为_auto,固定值,相对值。你可以使用这个属性也可以通过width/height来设置。
 -(MyFlexItem* (^)(CGFloat))flex_basis;
--(MyFlexItem* (^)(int))align_self;
+//行内条目自身的对齐方式。
+-(MyFlexItem* (^)(MyFlexGravity))align_self;
 
 //设置具体的宽度值，当宽度值大于0小于1是表明的是相对宽度，你也可以设置MyLayoutSize.wrap和MyLayoutSize.fill来设置特殊宽度。
 -(MyFlexItem* (^)(CGFloat))width;
 -(MyFlexItem* (^)(CGFloat))height;
+//条目的外间距设置。
 -(MyFlexItem* (^)(CGFloat))margin_top;
 -(MyFlexItem* (^)(CGFloat))margin_bottom;
 -(MyFlexItem* (^)(CGFloat))margin_left;
 -(MyFlexItem* (^)(CGFloat))margin_right;
+-(MyFlexItem* (^)(CGFloat))margin;
 
 
 -(__kindof UIView* (^)(UIView*))addTo;
@@ -38,37 +54,49 @@
 
 @interface MyFlex:MyFlexItem
 
-+(int)row;
-+(int)row_reverse;
-+(int)column;
-+(int)column_reverse;
+//方向枚举
+@property(class, readonly, assign) MyFlexDirection row;
+@property(class, readonly, assign) MyFlexDirection row_reverse;
+@property(class, readonly, assign) MyFlexDirection column;
+@property(class, readonly, assign) MyFlexDirection column_reverse;
 
-+(int)nowrap;
-+(int)wrap;
-+(int)wrap_reverse;
+//换行枚举
+@property(class, readonly, assign) MyFlexWrap nowrap;
+@property(class, readonly, assign) MyFlexWrap wrap;
+@property(class, readonly, assign) MyFlexWrap wrap_reverse;
 
-+(int)flex_start;
-+(int)flex_end;
-+(int)center;
-+(int)space_between;
-+(int)sapce_around;
-+(int)baseline;
-+(int)stretch;
+//停靠对齐枚举
+@property(class, readonly, assign) MyFlexGravity flex_start;
+@property(class, readonly, assign) MyFlexGravity flex_end;
+@property(class, readonly, assign) MyFlexGravity center;
+@property(class, readonly, assign) MyFlexGravity space_between;
+@property(class, readonly, assign) MyFlexGravity sapce_around;
+@property(class, readonly, assign) MyFlexGravity baseline;
+@property(class, readonly, assign) MyFlexGravity stretch;
 
 
--(MyFlex* (^)(int))flex_direction;
 
--(MyFlex* (^)(int))flex_wrap;
+//方向设置
+-(MyFlex* (^)(MyFlexDirection))flex_direction;
 
+//换行设置
+-(MyFlex* (^)(MyFlexWrap))flex_wrap;
+
+//通过 | 运算来结合 wrap 和direction
 -(MyFlex* (^)(int))flex_flow;
 
--(MyFlex* (^)(int))justify_content;
+//行的停靠设置
+-(MyFlex* (^)(MyFlexGravity))justify_content;
 
--(MyFlex* (^)(int))align_items;
+//行内条目的对齐设置
+-(MyFlex* (^)(MyFlexGravity))align_items;
 
--(MyFlex* (^)(int))align_content;
+//整体的停靠设置
+-(MyFlex* (^)(MyFlexGravity))align_content;
 
+//内边距设置
 -(MyFlex* (^)(UIEdgeInsets))padding;
+//条目之间的垂直和水平间距设置
 -(MyFlex* (^)(CGFloat))vert_space;
 -(MyFlex* (^)(CGFloat))horz_space;
 

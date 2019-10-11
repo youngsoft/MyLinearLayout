@@ -120,17 +120,17 @@
     return self.myCurrentSizeClass.arrangedGravity;
 }
 
--(BOOL)gravityAlways
+-(BOOL)isFlex
 {
-    return self.myCurrentSizeClass.gravityAlways;
+    return self.myCurrentSizeClass.isFlex;
 }
 
--(void)setGravityAlways:(BOOL)gravityAlways
+-(void)setIsFlex:(BOOL)isFlex
 {
     MyFlowLayout *lsc = self.myCurrentSizeClass;
-    if (lsc.gravityAlways != gravityAlways)
+    if (lsc.isFlex != isFlex)
     {
-        lsc.gravityAlways = gravityAlways;
+        lsc.isFlex = isFlex;
         [self setNeedsLayout];
     }
 }
@@ -368,7 +368,7 @@
             case MyGravity_Horz_Between:
             {
                 //总宽度减去最大的宽度。再除以数量表示每个应该扩展的空间。最后一行无效(如果最后一行的数量和其他行的数量一样以及总共就只有一行除外)。
-                if ((self.gravityAlways || startIndex != sbs.count || count == lsc.arrangedCount || sbs.count == count) && count > 1)
+                if ((self.isFlex || startIndex != sbs.count || count == lsc.arrangedCount || sbs.count == count) && count > 1)
                 {
                     addXFill = (selfSize.width - paddingHorz - rowMaxWidth) / (count - 1);
                 }
@@ -396,7 +396,7 @@
         if (lsc.arrangedCount == 0 && averageArrange)
         {
             //不是最后一行。。
-            if (self.gravityAlways || startIndex != sbs.count)
+            if (self.isFlex || startIndex != sbs.count)
             {
                 addXFill = (selfSize.width - paddingHorz - rowMaxWidth) / count;
             }
@@ -599,7 +599,7 @@
             case MyGravity_Vert_Between:
             {
                 //总高度减去最大的高度。再除以数量表示每个应该扩展的空间。最后一列无效(如果最后一列的数量和其他列的数量一样以及总共就只有一列除外)。
-                if ((self.gravityAlways || startIndex != sbs.count || count == lsc.arrangedCount || sbs.count == count) && count > 1)
+                if ((self.isFlex || startIndex != sbs.count || count == lsc.arrangedCount || sbs.count == count) && count > 1)
                 {
                     addYFill = (selfSize.height - paddingVert - colMaxHeight) / (count - 1);
                 }
@@ -625,7 +625,7 @@
         //处理内容拉伸的情况。
         if (lsc.arrangedCount == 0 && averageArrange)
         {
-            if (self.gravityAlways || startIndex != sbs.count)
+            if (self.isFlex || startIndex != sbs.count)
             {
                 addYFill = (selfSize.height  - paddingVert - colMaxHeight) / count;
             }

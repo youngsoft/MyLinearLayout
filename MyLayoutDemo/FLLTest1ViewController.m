@@ -178,6 +178,9 @@
             vertGravity = MyGravity_Vert_Fill;
             break;
         case MyGravity_Vert_Fill:
+            vertGravity = MyGravity_Vert_Stretch;
+            break;
+        case MyGravity_Vert_Stretch:
         {
             vertGravity = MyGravity_Vert_Top;
             [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
@@ -218,6 +221,9 @@
             horzGravity = MyGravity_Horz_Fill;
             break;
         case MyGravity_Horz_Fill:
+            horzGravity = MyGravity_Horz_Stretch;
+            break;
+        case MyGravity_Horz_Stretch:
         {
             horzGravity = MyGravity_Horz_Left;
             [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
@@ -254,6 +260,9 @@
                 vertArrangeGravity = MyGravity_Vert_Fill;
                 break;
             case MyGravity_Vert_Fill:
+                vertArrangeGravity = MyGravity_Vert_Stretch;
+                break;
+            case MyGravity_Vert_Stretch:
             {
                 vertArrangeGravity = MyGravity_Vert_Top;
                 [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
@@ -277,6 +286,8 @@
                 horzArrangeGravity = MyGravity_Horz_Fill;
                 break;
             case MyGravity_Horz_Fill:
+                horzArrangeGravity = MyGravity_Horz_Stretch;
+            case MyGravity_Horz_Stretch:
             {
                 horzArrangeGravity = MyGravity_Horz_Left;
                 [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
@@ -359,6 +370,9 @@
         case MyGravity_Vert_Around:
             vertGravityStr = @"MyGravity_Vert_Around";
             break;
+        case MyGravity_Vert_Stretch:
+            vertGravityStr = @"MyGravity_Vert_Stretch";
+            break;
         case MyGravity_Vert_Window_Center:
             vertGravityStr = @"MyGravity_Vert_Window_Center";
             break;
@@ -386,6 +400,9 @@
             break;
         case MyGravity_Horz_Around:
             horzGravityStr = @"MyGravity_Horz_Around";
+            break;
+        case MyGravity_Horz_Stretch:
+            horzGravityStr = @"MyGravity_Horz_Stretch";
             break;
         case MyGravity_Horz_Window_Center:
             horzGravityStr = @"MyGravity_Horz_Window_Center";

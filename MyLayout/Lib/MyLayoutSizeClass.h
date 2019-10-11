@@ -161,7 +161,7 @@
 
 @property(nonatomic,assign) MyGravity arrangedGravity;
 @property(nonatomic,assign) BOOL autoArrange;
-@property(nonatomic,assign) BOOL gravityAlways;
+@property(nonatomic,assign) BOOL isFlex;
 
 @property(nonatomic,assign) NSInteger arrangedCount;
 @property(nonatomic, assign) NSInteger pagedCount;

@@ -870,7 +870,7 @@ BOOL _myisRTL = NO;
     
     lsc.arrangedCount = self.arrangedCount;
     lsc.autoArrange = self.autoArrange;
-    lsc.gravityAlways = self.gravityAlways;
+    lsc.isFlex = self.isFlex;
     lsc.arrangedGravity = self.arrangedGravity;
     lsc.subviewSize = self.subviewSize;
     lsc.minSpace = self.minSpace;
@@ -885,11 +885,11 @@ BOOL _myisRTL = NO;
 {
     NSString *dbgDesc = [super debugDescription];
     
-    dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\nautoArrange=%@\ngravityAlways=%@\narrangedGravity=%hu\npagedCount=%ld",
+    dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\nautoArrange=%@\nisFlex=%@\narrangedGravity=%hu\npagedCount=%ld",
                                           dbgDesc,
                                           (long)self.arrangedCount,
                                           self.autoArrange ? @"YES":@"NO",
-                                          self.gravityAlways? @"YES":@"NO",
+                                          self.isFlex? @"YES":@"NO",
                                           self.arrangedGravity,
                                           (long)self.pagedCount
                                           ];

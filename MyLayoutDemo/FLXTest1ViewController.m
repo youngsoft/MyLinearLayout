@@ -47,12 +47,18 @@
     .height(MyLayoutSize.fill)
     .addTo(self.view);
     
+    
+    
+    
     MyFlexLayout *actionLayout = MyFlexLayout.new.flex
     .flex_direction(MyFlex.row)
     .flex_wrap(MyFlex.wrap)
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(rootLayout);
+    
+   
+    
     
     
     [self createActionButton:NSLocalizedString(@"flex-direction", @"") action:@selector(handleFlex_Direction:)].flexItem

@@ -47,7 +47,7 @@ static const int _sstretch = 6;
     __weak UIView *_view;
 }
 
-+(CGFloat)auto
++(CGFloat)_auto
 {
     return _sauto;
 }
@@ -114,23 +114,23 @@ static const int _sstretch = 6;
 {
     return ^(UIView *val) {
         
-        if (_width != CGFLOAT_MAX)
-        {
-            if (_width == MyLayoutSize.fill)
-                [self->_view.widthSize __equalTo:val];
-            else if (_width < 1 && _width > 0)
-                [[self->_view.widthSize __equalTo:val.widthSize] __multiply:_width];
-            else;
-        }
-        
-        if (_height != CGFLOAT_MAX)
-        {
-            if (_height == MyLayoutSize.fill)
-                [self->_view.heightSize __equalTo:val];
-            else if (_height < 1 && _height > 0)
-                [[self->_view.heightSize __equalTo:val.heightSize] __multiply:_height];
-            else;
-        }
+//        if (_width != CGFLOAT_MAX)
+//        {
+//            if (_width == MyLayoutSize.fill)
+//                [self->_view.widthSize __equalTo:val];
+//            else if (_width < 1 && _width > 0)
+//                [[self->_view.widthSize __equalTo:val.widthSize] __multiply:_width];
+//            else;
+//        }
+//
+//        if (_height != CGFLOAT_MAX)
+//        {
+//            if (_height == MyLayoutSize.fill)
+//                [self->_view.heightSize __equalTo:val];
+//            else if (_height < 1 && _height > 0)
+//                [[self->_view.heightSize __equalTo:val.heightSize] __multiply:_height];
+//            else;
+//        }
 
         [val addSubview:self->_view];
         return self->_view;
@@ -141,21 +141,21 @@ static const int _sstretch = 6;
 {
     return ^id(CGFloat val) {
         _width = val;
-        if (_width == MyLayoutSize.fill)
-        {
-            if (self->_view.superview)
-                [self->_view.widthSize __equalTo:self->_view.superview];
-        }
-        else
-        {
-            if (_width < 1 && _width > 0)
-            {
-                if (self->_view.superview)
-                    [[self->_view.widthSize __equalTo:self->_view.superview] __multiply:_width];
-            }
-            else
-                self->_view.myWidth = _width;
-        }
+//        if (_width == MyLayoutSize.fill)
+//        {
+//            if (self->_view.superview)
+//                [self->_view.widthSize __equalTo:self->_view.superview];
+//        }
+//        else
+//        {
+//            if (_width < 1 && _width > 0)
+//            {
+//                if (self->_view.superview)
+//                    [[self->_view.widthSize __equalTo:self->_view.superview] __multiply:_width];
+//            }
+//            else
+//                self->_view.myWidth = _width;
+//        }
         return self;
     };
 }
@@ -164,21 +164,21 @@ static const int _sstretch = 6;
 {
     return ^id(CGFloat val) {
         _height = val;
-        if (_height == MyLayoutSize.fill)
-        {
-            if (self->_view.superview)
-                [self->_view.heightSize __equalTo:self->_view.superview];
-        }
-        else
-        {
-            if (_height < 1 && _height > 0)
-            {
-                if (self->_view.superview)
-                    [[self->_view.heightSize __equalTo:self->_view.superview] __multiply:_height];
-            }
-            else
-                self->_view.myHeight = _height;
-        }
+//        if (_height == MyLayoutSize.fill)
+//        {
+//            if (self->_view.superview)
+//                [self->_view.heightSize __equalTo:self->_view.superview];
+//        }
+//        else
+//        {
+//            if (_height < 1 && _height > 0)
+//            {
+//                if (self->_view.superview)
+//                    [[self->_view.heightSize __equalTo:self->_view.superview] __multiply:_height];
+//            }
+//            else
+//                self->_view.myHeight = _height;
+//        }
         return self;
     };
 }
@@ -214,6 +214,18 @@ static const int _sstretch = 6;
         return self;
     };
 }
+
+-(MyFlexItem* (^)(CGFloat))margin
+{
+    return ^id(CGFloat val) {
+        self->_view.myLeft = val;
+        self->_view.myRight = val;
+        self->_view.myTop = val;
+        self->_view.myBottom = val;
+        return self;
+    };
+}
+
 
 -(UIView*)view
 {
@@ -430,9 +442,9 @@ static const int _sstretch = 6;
     if (self != nil)
     {
         _flex = [[MyFlex alloc] initWithView:self];
-        self.orientation = MyOrientation_Vert;
-        self.arrangedCount = NSIntegerMax; //单行
-        self.gravityAlways = YES; //flexbox对所有行都让停靠生效。
+        self.orientation = MyOrientation_Vert; //默认row
+        self.arrangedCount = NSIntegerMax; //默认单行
+        self.isFlex = YES; //满足flexbox的需求。
     }
     return self;
 }
@@ -486,6 +498,7 @@ static const int _sstretch = 6;
         {
             flex_wrap = _snowrap;
         }
+        
         
         //flex_shrink
         if (lsc.orientation == MyOrientation_Vert)

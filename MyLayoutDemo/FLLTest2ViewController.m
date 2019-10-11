@@ -130,7 +130,7 @@
 
 -(IBAction)handleGravityAlwaysChange:(id)sender
 {
-    self.flowLayout.gravityAlways = !self.flowLayout.gravityAlways;
+    self.flowLayout.isFlex = !self.flowLayout.isFlex;
 }
 
 
