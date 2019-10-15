@@ -76,6 +76,7 @@
         label.textAlignment = NSTextAlignmentCenter;
         label.backgroundColor = [CFTool color:random() % 14 + 1];
         label.text = [NSString stringWithFormat:@"%d",i];
+        label.myMargin = 5; //同时带有四边的间距！
         [flowLayout addSubview:label];
         
     }

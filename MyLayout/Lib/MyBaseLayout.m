@@ -3017,6 +3017,9 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGFloat)myValidMeasure:(MyLayoutSize*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize
 {
+    if (calcSize < 0.0)
+        calcSize = 0.0;
+    
     if (dime == nil)
         return calcSize;
     

@@ -162,7 +162,6 @@
     layout.myTrailing = 0.2;  //左右边距0.2表示相对边距，也就是左右边距都是父视图总宽度的20%，这样布局视图的宽度就默认为父视图的60%了。
     layout.myCenterY = 0;  //布局视图在父视图中垂直居中出现。
     //layout.myBottom = 0;  //布局视图在父视图中底部出现。您可以注释上面居中的代码并解开这句看看效果。
-    [self.view addSubview:layout];
     
     //标题
     UILabel *titleLabel = [UILabel new];
