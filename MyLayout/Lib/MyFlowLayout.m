@@ -292,6 +292,51 @@
     }
 }
 
+- (void)myAdjustVertLayoutSinglelineWidth:(CGSize)selfSize rowIndex:(NSInteger)rowIndex floatingWidth:(CGFloat)floatingWidth totalWeight:(CGFloat)totalWeight horzGravity:(MyGravity)horzGravity sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count lsc:(MyFlowLayout*)lsc
+{
+    if (floatingWidth <= 0.0)
+        return;
+
+    MyGravity lineHorzGravity = horzGravity;
+    if (self.lineGravity != nil)
+    {
+        lineHorzGravity = self.lineGravity(self, rowIndex);
+        if (lineHorzGravity == MyGravity_None)
+            lineHorzGravity = horzGravity;
+        else
+            lineHorzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lineHorzGravity];
+    }
+    
+    CGFloat addXFill = 0;
+    if (lineHorzGravity == MyGravity_Horz_Fill && totalWeight != 0.0)
+    {
+        //流式布局中最后一行不会进行拉伸处理。
+        if (lsc.isFlex || startIndex != sbs.count)
+            addXFill = floatingWidth / count;
+    }
+    
+    for (NSInteger j = startIndex - count; j < startIndex; j++)
+    {
+        UIView *sbv = sbs[j];
+        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+        
+        if (sbvsc.weight != 0.0 && totalWeight != 0.0)
+        {
+            CGFloat tempWidth = _myCGFloatRound((floatingWidth * sbvsc.weight / totalWeight));
+            if (sbvsc.widthSizeInner != nil && sbvsc.widthSizeInner.dimeVal == nil)
+                tempWidth = [sbvsc.widthSizeInner measureWith:tempWidth];
+            
+            sbvmyFrame.width = tempWidth + sbvmyFrame.width;
+        }
+        
+        //添加拉伸的尺寸。
+        if (addXFill != 0.0)
+            sbvmyFrame.width += addXFill;
+    }
+    
+}
 
 - (void)myCalcVertLayoutSinglelineWidthShrink:(CGSize)selfSize totalFloatWidth:(CGFloat)totalFloatWidth totalShrink:(CGFloat)totalShrink sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
 {
@@ -978,10 +1023,11 @@
     }
     
     
+    //每行行首的索引位置。
     NSMutableIndexSet *arrangeIndexSet = [NSMutableIndexSet new];
-    NSInteger rowIndex = 0;   //行的索引。
-    NSInteger arrangedIndex = 0;
+    NSInteger arrangedIndex = 0; //行内子视图的索引
     CGFloat rowTotalWeight = 0.0;
+    NSInteger rowIndex = 0;   //行的索引。
     NSInteger i = 0;
     for (; i < sbs.count; i++)
     {
@@ -989,10 +1035,8 @@
         
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-       
-        CGFloat topSpace = sbvsc.topPosInner.absVal;
+        
         CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
-        CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
         CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
         CGRect rect = sbvmyFrame.frame;
         
@@ -1014,20 +1058,105 @@
             else
             {
                 //如果过了，则表示当前的剩余空间为0了，所以就按新的一行来算。。
-                CGFloat floatWidth = selfSize.width - paddingHorz - rowMaxWidth;
-                if (_myCGFloatLessOrEqual(floatWidth, 0))
+                CGFloat floatingWidth = selfSize.width - paddingHorz - rowMaxWidth;
+                if (_myCGFloatLessOrEqual(floatingWidth, 0))
                 {
-                    floatWidth += rowMaxWidth;
+                    floatingWidth += rowMaxWidth;
                     arrangedIndex = 0;
                 }
                 
                 if (arrangedIndex != 0)
-                    floatWidth -= horzSpace;
+                    floatingWidth -= horzSpace;
                 
-                rect.size.width = (floatWidth + sbvsc.widthSizeInner.addVal) * sbvsc.weight - leadingSpace - trailingSpace;
+                rect.size.width = (floatingWidth + sbvsc.widthSizeInner.addVal) * sbvsc.weight - leadingSpace - trailingSpace;
             }
         }
         
+        if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+        {//特殊处理宽度等于高度的情况
+            
+            //计算子视图的高度。
+            rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+            
+            
+            rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
+        }
+        
+        rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        
+        
+        //计算xPos的值加上leadingSpace + rect.size.width + trailingSpace 的值要小于整体的宽度。
+        CGFloat place = xPos + leadingSpace + rect.size.width + trailingSpace;
+        if (arrangedIndex != 0)
+            place += horzSpace;
+        place += paddingTrailing;
+        
+        //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
+        if (!lsc.widthSizeInner.dimeWrapVal && (place - selfSize.width > 0.0001))
+        {
+            [arrangeIndexSet addIndex:i - arrangedIndex];
+            
+            //拉伸以及调整行内子视图的宽度。
+            [self myAdjustVertLayoutSinglelineWidth:selfSize rowIndex:rowIndex floatingWidth:selfSize.width - paddingTrailing - xPos totalWeight:rowTotalWeight horzGravity:horzGravity sbs:sbs startIndex:i count:arrangedIndex lsc:lsc];
+            
+            
+            xPos = paddingLeading;
+            
+            //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
+            if (_myCGFloatGreat(leadingSpace + trailingSpace + rect.size.width, selfSize.width - paddingHorz))
+            {
+                rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:selfSize.width - paddingHorz - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
+            }
+            
+            rowMaxWidth = 0;
+            rowTotalWeight = 0;
+            rowIndex++;
+            arrangedIndex = 0;
+        }
+        
+        if (arrangedIndex != 0)
+            xPos += horzSpace;
+        
+        
+        rect.origin.x = xPos + leadingSpace;
+        xPos += leadingSpace + rect.size.width + trailingSpace;
+        
+        if (_myCGFloatLess(rowMaxWidth, (xPos - paddingLeading)))
+            rowMaxWidth = (xPos - paddingLeading);
+        
+        if (lsc.isFlex && sbvsc.weight != 0)
+            rowTotalWeight += sbvsc.weight;
+        
+        sbvmyFrame.frame = rect;
+        arrangedIndex++;
+    }
+    
+    //最后一行的开始索引。
+    [arrangeIndexSet addIndex:i - arrangedIndex];
+    
+    [self myAdjustVertLayoutSinglelineWidth:selfSize rowIndex:rowIndex floatingWidth:selfSize.width - paddingTrailing - xPos totalWeight:rowTotalWeight horzGravity:horzGravity sbs:sbs startIndex:i count:arrangedIndex lsc:lsc];
+    
+/////////////////////////////
+    //每行行首的索引位置。
+    rowIndex = 0;   //行的索引。
+    arrangedIndex = 0;
+    NSInteger lineFirstIndex = 0;
+    i = 0;
+    for (; i < sbs.count; i++)
+    {
+        UIView *sbv = sbs[i];
+        
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+       
+        CGFloat topSpace = sbvsc.topPosInner.absVal;
+        CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
+        CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
+        CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
+        CGRect rect = sbvmyFrame.frame;
+        
+      
         rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         //计算子视图的高度。
@@ -1040,14 +1169,6 @@
             rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         }
         
-        
-        if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
-        {//特殊处理宽度等于高度的情况
-            rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
-            rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
-        }
-        
-        
         //计算xPos的值加上leadingSpace + rect.size.width + trailingSpace 的值要小于整体的宽度。
         CGFloat place = xPos + leadingSpace + rect.size.width + trailingSpace;
         if (arrangedIndex != 0)
@@ -1056,43 +1177,17 @@
         
         maxWidth = place;
         
+        NSUInteger index = [arrangeIndexSet indexLessThanOrEqualToIndex:i];
         //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
-        if (!lsc.widthSizeInner.dimeWrapVal && (place - selfSize.width > 0.0001))
+        if (!lsc.widthSizeInner.dimeWrapVal && lineFirstIndex != index)
         {
-            [arrangeIndexSet addIndex:i - arrangedIndex];
+            lineFirstIndex = index;
 
-            //如果是flex并且比重不为0则拉伸所有子视图。
-            if (lsc.isFlex && rowTotalWeight != 0.0)
-            {
-                //这里只减paddingTrailing的原因是xPos中已经带有paddingLeading了，所以不需要再次减paddingLeading.
-                 [self myCalcVertLayoutSinglelineWeight:selfSize totalFloatWidth:selfSize.width - paddingTrailing - xPos totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
-            }
-            
             xPos = paddingLeading;
             yPos += vertSpace;
             yPos += [self myCalcVertLayoutSinglelineAlignment:selfSize rowIndex:rowIndex rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth rowTotalShrink:0 horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
             
-            //计算单独的sbv的宽度是否大于整体的宽度。如果大于则缩小宽度。
-            if (_myCGFloatGreat(leadingSpace + trailingSpace + rect.size.width, selfSize.width - paddingHorz))
-            {
-                
-                rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:selfSize.width - paddingHorz - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
-                
-                //特殊处理高度包裹。
-                if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
-                {
-                    rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
-                    rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
-                }
-                
-                if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
-                {//特殊处理高度等于宽度的情况
-                    rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
-                    rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
-                }
-                
-            }
-            
+          
             rowMaxHeight = 0;
             rowMaxWidth = 0;
             rowTotalWeight = 0;
@@ -1127,8 +1222,6 @@
         selfSize.width = maxWidth;
     
     //最后一行
-    [arrangeIndexSet addIndex:i - arrangedIndex];
-    
     if (lsc.isFlex && rowTotalWeight != 0.0)
     {
         //这里只减paddingTrailing的原因是xPos中已经带有paddingLeading了，所以不需要再次减paddingLeading.
@@ -1136,6 +1229,8 @@
     }
     
     rowMaxHeight = [self myCalcVertLayoutSinglelineAlignment:selfSize rowIndex:rowIndex rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth rowTotalShrink:0 horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
+    
+   ////////////////////////////////////
     
     if (lsc.heightSizeInner.dimeWrapVal)
     {
