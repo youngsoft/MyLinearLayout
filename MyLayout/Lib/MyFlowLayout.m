@@ -1281,12 +1281,7 @@
     
     BOOL autoArrange = lsc.autoArrange;
     NSInteger arrangedCount = lsc.arrangedCount;
-    CGFloat xPos = paddingLeading;
-    CGFloat yPos = paddingTop;
-    CGFloat rowMaxHeight = 0;  //某一行的最高值。
-    CGFloat rowMaxWidth = 0;   //某一行的最宽值
-    CGFloat maxWidth = paddingLeading;  //全部行的最宽值
-    CGFloat maxHeight = paddingTop; //最大的高度
+    
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
     MyGravity vertAlign = lsc.arrangedGravity & MyGravity_Horz_Mask;
@@ -1294,6 +1289,13 @@
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
     CGFloat subviewSize = [self myCalcMaxMinSubviewSize:selfSize.width - paddingHorz lsc:(MyFlowLayoutViewSizeClass*)lsc arrangedCount:arrangedCount space:&horzSpace];
+    
+    CGFloat xPos = paddingLeading;
+    CGFloat yPos = paddingTop;
+    CGFloat rowMaxHeight = 0.0;  //某一行的最高值。
+    CGFloat rowMaxWidth = 0.0;   //某一行的最宽值
+    CGFloat maxWidth = paddingLeading;  //全部行的最大宽度
+    CGFloat maxHeight = paddingTop; //最大的高度
     
 #if TARGET_OS_IOS
     //判断父滚动视图是否分页滚动
