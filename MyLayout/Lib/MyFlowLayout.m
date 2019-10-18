@@ -2075,21 +2075,21 @@
 
     BOOL autoArrange = lsc.autoArrange;
     NSInteger arrangedCount = lsc.arrangedCount;
+    
+    MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
+    MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
+    MyGravity horzAlign =  [self myConvertLeftRightGravityToLeadingTrailing:lsc.arrangedGravity & MyGravity_Vert_Mask];
+    
+    CGFloat vertSpace = lsc.subviewVSpace;
+    CGFloat horzSpace = lsc.subviewHSpace;
+    CGFloat subviewSize = [self myCalcMaxMinSubviewSize:selfSize.height - paddingVert lsc:(MyFlowLayoutViewSizeClass*)lsc arrangedCount:arrangedCount space:&vertSpace];
+    
     CGFloat xPos = paddingLeading;
     CGFloat yPos = paddingTop;
     CGFloat colMaxWidth = 0;  //每列的最大宽度
     CGFloat colMaxHeight = 0; //每列的最大高度
     CGFloat maxHeight = paddingTop;
     CGFloat maxWidth = paddingLeading; //最大的宽度。
-    
-    MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
-    MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
-    MyGravity horzAlign =  [self myConvertLeftRightGravityToLeadingTrailing:lsc.arrangedGravity & MyGravity_Vert_Mask];
-    
-
-    CGFloat vertSpace = lsc.subviewVSpace;
-    CGFloat horzSpace = lsc.subviewHSpace;
-    CGFloat subviewSize = [self myCalcMaxMinSubviewSize:selfSize.height - paddingVert lsc:(MyFlowLayoutViewSizeClass*)lsc arrangedCount:arrangedCount space:&vertSpace];
     
     //父滚动视图是否分页滚动。
 #if TARGET_OS_IOS
