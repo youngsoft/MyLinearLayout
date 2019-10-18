@@ -23,7 +23,8 @@
     [super viewDidLoad];
     self.view.backgroundColor  = [UIColor whiteColor];
     
-    [self example1];
+   // [self example1];
+    [self example2];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -95,6 +96,35 @@
     
 }
 
+-(void)example2
+{
+    MyFrameLayout *rootLayout = [MyFrameLayout new];
+    rootLayout.myMargin = 0;
+    [self.view addSubview:rootLayout];
+    
+    // B 视图
+    UIScrollView *scrollview = [[UIScrollView alloc] init];
+    scrollview.backgroundColor = [UIColor blueColor];
+    scrollview.myHorzMargin = 0;
+    scrollview.wrapContentHeight = YES;
+    scrollview.heightSize.max(400).min(280);
+    [rootLayout addSubview:scrollview];
+    
+    // 内容C视图
+    MyLinearLayout * backLinear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    backLinear.backgroundColor = [UIColor greenColor];
+    backLinear.myHorzMargin = 0;
+    backLinear.heightSize.min(280);
+    backLinear.gravity = MyGravity_Vert_Bottom;
+    [scrollview addSubview:backLinear];
+    
+    UIView *v = [UIView new];
+    v.myHeight = 500;  //调整不同的尺寸得到不同的结果。
+    v.myWidth = 100;
+    v.backgroundColor = [UIColor redColor];
+    [backLinear addSubview:v];
+
+}
 
 
 @end
