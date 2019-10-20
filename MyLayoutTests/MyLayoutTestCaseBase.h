@@ -9,11 +9,16 @@
 #import <XCTest/XCTest.h>
 #import "MyLayout.h"
 
+
+#define MyRectAssert(v, rc)  XCTAssert(CGRectEqualToRect(v.frame, rc),  @"the real frame = %@",NSStringFromCGRect(v.frame));
+
+
 @interface MyLayoutTestCaseBase : XCTestCase
 
 -(void)startClock;
 
 -(void)endClock:(NSString*)text;
+
 
 @end
 

@@ -265,6 +265,130 @@
     
 }
 
+-(void)testWrapAndGravity
+{
+    //测试尺寸自适应，但是又设置了停靠的例子。
+    {
+        MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+        rootLayout.mySize = CGSizeMake(100, MyLayoutSize.wrap);
+        rootLayout.frame = CGRectMake(0, 0, 100, 0);
+        rootLayout.gravity = MyGravity_Vert_Center;
+        rootLayout.heightSize.min(90);
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = [UIView new];
+        v2.reverseFloat = YES;
+        v2.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v2];
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(10, 10);
+        [rootLayout addSubview:v3];
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 100, 90));
+        MyRectAssert(v1, CGRectMake(0, 20, 40, 40));
+        MyRectAssert(v2, CGRectMake(50, 20, 50, 50));
+        MyRectAssert(v3, CGRectMake(40, 20, 10, 10));
+        
+        
+        v3.mySize = CGSizeMake(20, 20);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 100, 90));
+        MyRectAssert(v1, CGRectMake(0, 15, 40, 40));
+        MyRectAssert(v2, CGRectMake(50, 15, 50, 50));
+        MyRectAssert(v3, CGRectMake(0, 55, 20, 20));
+        
+        
+        
+        v3.mySize = CGSizeMake(60, 60);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 100, 110));
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
+        MyRectAssert(v2, CGRectMake(50, 0, 50, 50));
+        MyRectAssert(v3, CGRectMake(0, 50, 60, 60));
+        
+        rootLayout.gravity = MyGravity_Vert_Bottom;
+        v3.mySize = CGSizeMake(10, 10);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 100, 90));
+        MyRectAssert(v1, CGRectMake(0, 40, 40, 40));
+        MyRectAssert(v2, CGRectMake(50, 40, 50, 50));
+        MyRectAssert(v3, CGRectMake(40,40,10,10));
+    }
+    
+    {
+        MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap,100);
+        rootLayout.frame = CGRectMake(0, 0, 0,100);
+        rootLayout.gravity = MyGravity_Horz_Center;
+        rootLayout.widthSize.min(90);
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = [UIView new];
+        v2.reverseFloat = YES;
+        v2.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v2];
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(10, 10);
+        [rootLayout addSubview:v3];
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 90, 100));
+        MyRectAssert(v1, CGRectMake(20,0, 40, 40));
+        MyRectAssert(v2, CGRectMake(20,50, 50, 50));
+        MyRectAssert(v3, CGRectMake(20,40, 10, 10));
+        
+        
+        v3.mySize = CGSizeMake(20, 20);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 90, 100));
+        MyRectAssert(v1, CGRectMake(15,0, 40, 40));
+        MyRectAssert(v2, CGRectMake(15,50, 50, 50));
+        MyRectAssert(v3, CGRectMake(55, 0,20, 20));
+        
+        
+        
+        v3.mySize = CGSizeMake(60, 60);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 110, 100));
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
+        MyRectAssert(v2, CGRectMake(0,50, 50, 50));
+        MyRectAssert(v3, CGRectMake(50,0, 60, 60));
+        
+        rootLayout.gravity = MyGravity_Horz_Trailing;
+        v3.mySize = CGSizeMake(10, 10);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 90, 100));
+        MyRectAssert(v1, CGRectMake(40,0, 40, 40));
+        MyRectAssert(v2, CGRectMake(40,50, 50, 50));
+        MyRectAssert(v3, CGRectMake(40,40,10,10));
+    }
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     

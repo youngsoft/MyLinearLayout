@@ -821,27 +821,32 @@
     
     maxHeight += paddingBottom;
     if (lsc.heightSizeInner.dimeWrapVal)
-        selfSize.height = maxHeight;
-    else
     {
-        CGFloat addYPos = 0;
-        MyGravity mgvert = lsc.gravity & MyGravity_Horz_Mask;
-        if (mgvert == MyGravity_Vert_Center)
+        selfSize.height =  [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:maxHeight sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    }
+    
+    if (selfSize.height != maxHeight)
+    {
+        MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
+        if (vertGravity != MyGravity_None)
         {
-            addYPos = (selfSize.height - maxHeight) / 2;
-        }
-        else if (mgvert == MyGravity_Vert_Bottom)
-        {
-            addYPos = selfSize.height - maxHeight;
-        }
-        
-        if (addYPos != 0)
-        {
-            for (int i = 0; i < sbs.count; i++)
+            CGFloat addYPos = 0;
+            if (vertGravity == MyGravity_Vert_Center)
             {
-                UIView *sbv = sbs[i];
-                
-                sbv.myFrame.top += addYPos;
+                addYPos = (selfSize.height - maxHeight) / 2;
+            }
+            else if (vertGravity == MyGravity_Vert_Bottom)
+            {
+                addYPos = selfSize.height - maxHeight;
+            }
+            
+            if (addYPos != 0)
+            {
+                for (int i = 0; i < sbs.count; i++)
+                {
+                    UIView *sbv = sbs[i];
+                    sbv.myFrame.top += addYPos;
+                }
             }
         }
     }
@@ -1281,31 +1286,34 @@
 
     maxWidth += paddingTrailing;
     if (lsc.widthSizeInner.dimeWrapVal)
-        selfSize.width = maxWidth;
-    else
     {
-        CGFloat addXPos = 0;
+        selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:maxWidth sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    }
+    
+    if (selfSize.width != maxWidth)
+    {
         MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
-        
-        if (horzGravity == MyGravity_Horz_Center)
+        if (horzGravity != MyGravity_None)
         {
-            addXPos = (selfSize.width - maxWidth) / 2;
-        }
-        else if (horzGravity == MyGravity_Horz_Trailing)
-        {
-            addXPos = selfSize.width - maxWidth;
-        }
-        
-        if (addXPos != 0)
-        {
-            for (int i = 0; i < sbs.count; i++)
+            CGFloat addXPos = 0;
+            if (horzGravity == MyGravity_Horz_Center)
             {
-                UIView *sbv = sbs[i];
-                
-                sbv.myFrame.leading += addXPos;
+                addXPos = (selfSize.width - maxWidth) / 2;
+            }
+            else if (horzGravity == MyGravity_Horz_Trailing)
+            {
+                addXPos = selfSize.width - maxWidth;
+            }
+            
+            if (addXPos != 0)
+            {
+                for (int i = 0; i < sbs.count; i++)
+                {
+                    UIView *sbv = sbs[i];
+                    sbv.myFrame.leading += addXPos;
+                }
             }
         }
-        
     }
     
     //如果有子视图设置了对齐属性，那么就要对处在同一列内的子视图进行对齐设置。

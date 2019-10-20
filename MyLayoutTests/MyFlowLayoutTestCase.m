@@ -313,72 +313,333 @@
 -(void)testWrapContentSize2
 {
     //测试一个布局宽度固定，高度包裹，然后子视图的高度依赖宽度，或者子视图高度自适应，然后又有压缩的场景，看是否会导致行高不对，或者整个行高不对。
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
+        rootLayout.frame = CGRectMake(0, 0, 110, 0);
+        rootLayout.padding = UIEdgeInsetsMake(10, 10, 5, 5);
+        rootLayout.mySize = CGSizeMake(110, MyLayoutSize.wrap);
+        rootLayout.subviewSpace = 6;
+        rootLayout.gravity = MyGravity_Horz_Fill;
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(10, 20);
+        v1.myMargin = 5;
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = [UIView new];
+        v2.myWidth = 30;
+        v2.heightSize.equalTo(v2.widthSize);
+        v2.myMargin = 6;
+        [rootLayout addSubview:v2];
+        
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(10, 50);
+        v3.myMargin = 2;
+        [rootLayout addSubview:v3];
+        
+        UIView *v4 = [UIView new];
+        v4.myWidth = 20;
+        v4.heightSize.equalTo(v4.widthSize).multiply(0.5).add(10);
+        v4.myMargin = 3;
+        [rootLayout addSubview:v4];
+        
+        UILabel *v5 = [UILabel new];
+        v5.text = @"测试测试测试";
+        v5.frame = CGRectMake(0, 0, 20, 0);
+        v5.heightSize.equalTo(@(MyLayoutSize.wrap));
+        [rootLayout addSubview:v5];
+        
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,110,197)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(15,15,12.5,20)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(44.5,16,32.5,32.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(90.5,12,12.5,50)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(13,73,20,20)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(42,70,20,122)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        rootLayout.isFlex = YES;
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,110,136)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(15,15,12.5,20)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(44.5,16,32.5,32.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(90.5,12,12.5,50)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(13,73,41.5,31)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(63.5,70,41.5,61)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+    }
     
-    MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
-    rootLayout.frame = CGRectMake(0, 0, 110, 0);
-    rootLayout.padding = UIEdgeInsetsMake(10, 10, 5, 5);
-    rootLayout.mySize = CGSizeMake(110, MyLayoutSize.wrap);
-    rootLayout.subviewSpace = 6;
-    rootLayout.gravity = MyGravity_Horz_Fill;
-    
-    UIView *v1 = [UIView new];
-    v1.mySize = CGSizeMake(10, 20);
-    v1.myMargin = 5;
-    [rootLayout addSubview:v1];
-    
-    UIView *v2 = [UIView new];
-    v2.myWidth = 30;
-    v2.heightSize.equalTo(v2.widthSize);
-    v2.myMargin = 6;
-    [rootLayout addSubview:v2];
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:0];
+        rootLayout.frame = CGRectMake(0, 0, 0, 110);
+        rootLayout.padding = UIEdgeInsetsMake(10, 10, 5, 5);
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, 110);
+        rootLayout.subviewSpace = 6;
+        rootLayout.gravity = MyGravity_Vert_Fill;
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(20, 10);
+        v1.myMargin = 5;
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = [UIView new];
+        v2.myHeight = 30;
+        v2.widthSize.equalTo(v2.heightSize);
+        v2.myMargin = 6;
+        [rootLayout addSubview:v2];
+        
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(50, 10);
+        v3.myMargin = 2;
+        [rootLayout addSubview:v3];
+        
+        UIView *v4 = [UIView new];
+        v4.myHeight = 20;
+        v4.widthSize.equalTo(v4.heightSize).multiply(0.5).add(10);
+        v4.myMargin = 3;
+        [rootLayout addSubview:v4];
+        
+        UILabel *v5 = [UILabel new];
+        v5.text = @"测试测试测试";
+        v5.frame = CGRectMake(0, 0, 0, 20);
+        v5.widthSize.equalTo(@(MyLayoutSize.wrap));
+        [rootLayout addSubview:v5];
+        
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,179,110)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(15,15,20,12.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(16,44.5,32.5,32.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(12,90.5,50,12.5)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(73,13,20,20)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(70,42,104,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        rootLayout.isFlex = YES;
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,179,110)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(15,15,20,12.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(16,44.5,32.5,32.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(12,90.5,50,12.5)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(73,13,31,41.5)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(70,63.5,104,41.5)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
 
-    
-    UIView *v3 = [UIView new];
-    v3.mySize = CGSizeMake(10, 50);
-    v3.myMargin = 2;
-    [rootLayout addSubview:v3];
-    
-    UIView *v4 = [UIView new];
-    v4.myWidth = 20;
-    v4.heightSize.equalTo(v4.widthSize).multiply(0.5).add(10);
-    v4.myMargin = 3;
-    [rootLayout addSubview:v4];
-    
-    UILabel *v5 = [UILabel new];
-    v5.text = @"测试测试测试";
-    v5.frame = CGRectMake(0, 0, 20, 0);
-    v5.heightSize.equalTo(@(MyLayoutSize.wrap));
-    [rootLayout addSubview:v5];
-
-    
-    [rootLayout setNeedsLayout];
-    [rootLayout layoutIfNeeded];
-    
-    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,110,197.5)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
-    
-    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(15,15,12.5,20)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
-    
-    XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(44.5,16,32.5,32.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
-    
-    XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(90.5,12,12.5,50)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
-    
-    XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(13,73.5,20,20)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
-    
-    XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(42,70.5,20,122)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
-    
-    rootLayout.isFlex = YES;
-    [rootLayout setNeedsLayout];
-    [rootLayout layoutIfNeeded];
-
-    
-    NSLog(@"");
-    //<MyFlowLayout: 0x7fc9bee4bbf0; frame = (0 0; 100 111); layer = <CALayer: 0x600002f7b600>>
-//    <__NSArrayM 0x600002d2db00>(
-//                                <UIView: 0x7ff67c724630; frame = (15 15; 10 20); layer = <CALayer: 0x60000235b8c0>>,
-//                                <UIView: 0x7ff67c724920; frame = (42 16; 30 30); layer = <CALayer: 0x60000235b060>>,
-//                                <UIView: 0x7ff67c724b00; frame = (86 12; 10 50); layer = <CALayer: 0x60000235bfe0>>,
-//                                <UIView: 0x7ff67c724ef0; frame = (13 73; 40 30); layer = <CALayer: 0x60000235bd80>>
+    }
 }
 
+-(void)testWeight
+{
+    //测试内容约束布局中weight刚好在边界的情况。
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
+        rootLayout.frame = CGRectMake(0, 0, 152, 100);
+        rootLayout.padding = UIEdgeInsetsMake(10, 10, 5, 5);
+        rootLayout.subviewSpace = 6;
+        rootLayout.myHeight = MyLayoutSize.wrap;
+        
+        UIView *v1 = [UIView new];
+        v1.myHorzMargin = 4;
+        v1.mySize = CGSizeMake(20, 20);
+        [rootLayout addSubview:v1];   //  10+4+20+4+6 = 44
+        
+        UIView *v2 = [UIView new];
+        v2.myHorzMargin = 5;
+        v2.mySize = CGSizeMake(30, 30);
+        [rootLayout addSubview:v2];   //10+4+20+4+6+5+30+5+6 = 90
+        
+        UIView *v3 = [UIView new];
+        v3.myHorzMargin = 6;
+        v3.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v3];     //10+4+20+4+6+5+30+5+6+ 6+40+6+ 6 + 5 = 153
+        
+        UIView *v4 = [UIView new];
+        v4.myHeight = 50;
+        v4.weight = 0.6;
+        [rootLayout addSubview:v4];
+        
+        UIView *v5 = [UIView new];
+        v5.mySize = CGSizeMake(20, 20);
+        [rootLayout addSubview:v5];
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(10,56,82,50)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(98,56,20,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,152,111)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        rootLayout.frame = CGRectMake(0, 0, 153, 0);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(10,56,83,50)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(99,56,20,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,153,111)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        
+        rootLayout.frame = CGRectMake(0, 0, 154, 100);
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(148,10,0.5,50)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(10,66,20,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,154,91)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        rootLayout.frame = CGRectMake(0, 0, 152, 100);
+        v4.weight = 1;
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(10,56,137,50)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(10,112,20,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,152,137)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        rootLayout.isFlex = YES;
+        v4.weight = 1;
+        v5.weight = 1;
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(10,56,55.5,50)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(71.5,56,75.5,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,152,111)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+    }
+    
+    //测试内容约束布局中weight刚好在边界的情况。
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:0];
+        rootLayout.frame = CGRectMake(0, 0, 100, 152);
+        rootLayout.padding = UIEdgeInsetsMake(10, 10, 5, 5);
+        rootLayout.subviewSpace = 6;
+        rootLayout.myWidth = MyLayoutSize.wrap;
+        
+        UIView *v1 = [UIView new];
+        v1.myVertMargin = 4;
+        v1.mySize = CGSizeMake(20, 20);
+        [rootLayout addSubview:v1];   //  10+4+20+4+6 = 44
+        
+        UIView *v2 = [UIView new];
+        v2.myVertMargin = 5;
+        v2.mySize = CGSizeMake(30, 30);
+        [rootLayout addSubview:v2];   //10+4+20+4+6+5+30+5+6 = 90
+        
+        UIView *v3 = [UIView new];
+        v3.myVertMargin = 6;
+        v3.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v3];     //10+4+20+4+6+5+30+5+6+ 6+40+6+ 6 + 5 = 153
+        
+        UIView *v4 = [UIView new];
+        v4.myWidth = 50;
+        v4.weight = 0.6;
+        [rootLayout addSubview:v4];
+        
+        UIView *v5 = [UIView new];
+        v5.mySize = CGSizeMake(20, 20);
+        [rootLayout addSubview:v5];
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(56,10,50,82)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(56,98,20,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,111,152)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        rootLayout.frame = CGRectMake(0, 0, 0, 153);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(56,10,50,83)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(56,99,20,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,111,153)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        
+        rootLayout.frame = CGRectMake(0, 0, 100, 154);
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(10,148,50,0.5)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(66,10,20,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,91,154)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        rootLayout.frame = CGRectMake(0, 0, 100, 152);
+        v4.weight = 1;
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(56,10,50,137)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(112,10,20,20)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,137,152)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+        
+        rootLayout.isFlex = YES;
+        v4.weight = 1;
+        v5.weight = 1;
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(56,10,50,55.5)), @"the v4.frame = %@",NSStringFromCGRect(v4.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(56,71.5,20,75.5)), @"the v5.frame = %@",NSStringFromCGRect(v5.frame));
+        
+        XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,111,152)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
+    }
+
+}
+
+-(void)testWrapAndGravity
+{
+    
+}
 
 @end

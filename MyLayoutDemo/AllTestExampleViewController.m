@@ -119,7 +119,7 @@
     [scrollview addSubview:backLinear];
     
     UIView *v = [UIView new];
-    v.myHeight = 500;  //调整不同的尺寸得到不同的结果。
+    v.myHeight = 500;  //调整不同的尺寸得到不同的结果。分别设置为100， 350， 500
     v.myWidth = 100;
     v.backgroundColor = [UIColor redColor];
     [backLinear addSubview:v];

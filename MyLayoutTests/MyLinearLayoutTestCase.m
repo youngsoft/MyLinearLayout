@@ -824,8 +824,62 @@
         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(207,0,93.5,100)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
     }
     
+}
+
+-(void)testMaxAndMin
+{
+    MyFrameLayout *rootLayout = [MyFrameLayout new];
+    rootLayout.frame = CGRectMake(0, 0, 375, 667);
+    
+    // B 视图
+    UIScrollView *scrollview = [[UIScrollView alloc] init];
+    scrollview.backgroundColor = [UIColor blueColor];
+    scrollview.myHorzMargin = 0;
+    scrollview.heightSize.equalTo(@(MyLayoutSize.wrap)).min(280).uBound(rootLayout.heightSize, 66.5, 0.5);
+    [rootLayout addSubview:scrollview];
+    
+    // 内容C视图
+    MyLinearLayout * backLinear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    backLinear.backgroundColor = [UIColor greenColor];
+    backLinear.myHorzMargin = 0;
+    backLinear.heightSize.equalTo(@(MyLayoutSize.wrap)).min(280);
+    backLinear.gravity = MyGravity_Vert_Bottom;
+    [scrollview addSubview:backLinear];
+    
+    UIView *v = [UIView new];
+    v.myHeight = 100;
+    v.myWidth = 100;
+    v.backgroundColor = [UIColor redColor];
+    [backLinear addSubview:v];
+    
+    [rootLayout setNeedsLayout];
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(scrollview.frame, CGRectMake(0,0,375,280)), @"the scrollview.frame = %@",NSStringFromCGRect(scrollview.frame));
+     XCTAssertTrue(CGSizeEqualToSize(scrollview.contentSize, CGSizeMake(375, 280)), @"the scrollview.contentSize = %@",NSStringFromCGSize(scrollview.contentSize));
+    XCTAssertTrue(CGRectEqualToRect(backLinear.frame, CGRectMake(0,0,375,280)), @"the backLinear.frame = %@",NSStringFromCGRect(backLinear.frame));
+    XCTAssertTrue(CGRectEqualToRect(v.frame, CGRectMake(0,180,100,100)), @"the v.frame = %@",NSStringFromCGRect(v.frame));
+
+    
+    v.myHeight = 350;
+    [rootLayout setNeedsLayout];
+    [rootLayout layoutIfNeeded];
+
+    XCTAssertTrue(CGRectEqualToRect(scrollview.frame, CGRectMake(0,0,375,350)), @"the scrollview.frame = %@",NSStringFromCGRect(scrollview.frame));
+    XCTAssertTrue(CGSizeEqualToSize(scrollview.contentSize, CGSizeMake(375, 350)), @"the scrollview.contentSize = %@",NSStringFromCGSize(scrollview.contentSize));
+    XCTAssertTrue(CGRectEqualToRect(backLinear.frame, CGRectMake(0,0,375,350)), @"the backLinear.frame = %@",NSStringFromCGRect(backLinear.frame));
+    XCTAssertTrue(CGRectEqualToRect(v.frame, CGRectMake(0,0,100,350)), @"the v.frame = %@",NSStringFromCGRect(v.frame));
+
+    v.myHeight = 500;
+    [rootLayout setNeedsLayout];
+    [rootLayout layoutIfNeeded];
     
     
+    XCTAssertTrue(CGRectEqualToRect(scrollview.frame, CGRectMake(0,0,375,400)), @"the scrollview.frame = %@",NSStringFromCGRect(scrollview.frame));
+    XCTAssertTrue(CGSizeEqualToSize(scrollview.contentSize, CGSizeMake(375, 500)), @"the scrollview.contentSize = %@",NSStringFromCGSize(scrollview.contentSize));
+    XCTAssertTrue(CGRectEqualToRect(backLinear.frame, CGRectMake(0,0,375,500)), @"the backLinear.frame = %@",NSStringFromCGRect(backLinear.frame));
+    XCTAssertTrue(CGRectEqualToRect(v.frame, CGRectMake(0,0,100,500)), @"the v.frame = %@",NSStringFromCGRect(v.frame));
+
 }
 
 - (void)testPerformanceExample {
