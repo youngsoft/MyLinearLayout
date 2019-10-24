@@ -223,53 +223,48 @@
 #pragma mark -- Private Methods
 
 
-- (void)myCalcVertLayoutSinglelineWeight:(CGSize)selfSize totalFloatWidth:(CGFloat)totalFloatWidth totalWeight:(CGFloat)totalWeight sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
+- (void)myCalcVertLayoutSinglelineWeight:(CGSize)selfSize totalFloatWidth:(CGFloat)totalFloatWidth totalWeight:(CGFloat)totalWeight sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count lsc:(MyFlowLayout*)lsc
 {
     //如果浮动宽度都是小于等于0因为没有拉升必要，所以直接返回
     if (totalFloatWidth <= 0.0)
         return;
     
-    CGFloat incOffset = 0.0;
+    //按照flex规约，如果总的比重小于1则只会将剩余宽度的总比重部分来进行按比例拉伸。
+    if (lsc.isFlex && totalWeight < 1.0)
+        totalFloatWidth *= totalWeight;
+    
+    
     for (NSInteger itemIndex = startIndex - count; itemIndex < startIndex; itemIndex++)
     {
         UIView *sbv = sbs[itemIndex];
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
-        CGFloat oldWidth = sbvmyFrame.width;
         if (sbvsc.weight != 0)
         {
             CGFloat tempWidth = _myCGFloatRound((totalFloatWidth * sbvsc.weight / totalWeight));
             if (sbvsc.widthSizeInner != nil && sbvsc.widthSizeInner.dimeVal == nil)
                 tempWidth = [sbvsc.widthSizeInner measureWith:tempWidth];
             
-            totalFloatWidth -= tempWidth;
-            totalWeight -= sbvsc.weight;
-            
             sbvmyFrame.width =  [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:tempWidth + sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
         }
-        
-        //第一个子视图不偏移。
-        if (itemIndex != startIndex - count)
-            sbvmyFrame.leading += incOffset;
-        sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
-        incOffset += (sbvmyFrame.width - oldWidth);
-    }
+     }
 }
 
-- (void)myCalcHorzLayoutSinglelineWeight:(CGSize)selfSize totalFloatHeight:(CGFloat)totalFloatHeight totalWeight:(CGFloat)totalWeight sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
+- (void)myCalcHorzLayoutSinglelineWeight:(CGSize)selfSize totalFloatHeight:(CGFloat)totalFloatHeight totalWeight:(CGFloat)totalWeight sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count lsc:(MyFlowLayout*)lsc
 {
     if (totalFloatHeight <= 0.0)
         return;
     
-    CGFloat incOffset = 0.0;
+    if (lsc.isFlex && totalWeight < 1.0)
+        totalFloatHeight *= totalWeight;
+    
     for (NSInteger itemIndex = startIndex - count; itemIndex < startIndex; itemIndex++)
     {
         UIView *sbv = sbs[itemIndex];
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
-        CGFloat oldHeight = sbvmyFrame.height;
         if (sbvsc.weight != 0)
         {
             CGFloat tempHeight = _myCGFloatRound((totalFloatHeight * sbvsc.weight / totalWeight));
@@ -284,11 +279,6 @@
             if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
                 sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:[sbvsc.widthSizeInner measureWith: sbvmyFrame.height ] sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
         }
-        
-        if (itemIndex != startIndex - count)
-            sbvmyFrame.top += incOffset;
-        sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
-        incOffset += (sbvmyFrame.height - oldHeight);
     }
 }
 
@@ -311,6 +301,12 @@
         //流式布局中最后一行不会进行拉伸处理。
         if (lsc.isFlex || startIndex != sbs.count)
             addXFill = floatingWidth / count;
+    }
+    else
+    {
+        //flex规则：当总的比重小于1时，剩余的宽度要乘以这个比重值再进行分配。
+        if (lsc.isFlex && totalWeight < 1.0)
+            floatingWidth *= totalWeight;
     }
     
     for (NSInteger itemIndex = startIndex - count; itemIndex < startIndex; itemIndex++)
@@ -355,6 +351,12 @@
         if (lsc.isFlex || startIndex != sbs.count)
             addYFill = floatingHeight / count;
     }
+    else
+    {
+        //flex规则：当总的比重小于1时，剩余的高度要乘以这个比重值再进行分配。
+        if (lsc.isFlex && totalWeight < 1.0)
+            floatingHeight *= totalWeight;
+    }
     
     for (NSInteger itemIndex = startIndex - count; itemIndex < startIndex; itemIndex++)
     {
@@ -378,13 +380,17 @@
     
 }
 
-- (void)myCalcVertLayoutSinglelineWidthShrink:(CGSize)selfSize totalFloatWidth:(CGFloat)totalFloatWidth totalShrink:(CGFloat)totalShrink sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
+- (void)myCalcVertLayoutSinglelineWidthShrink:(CGSize)selfSize totalFloatWidth:(CGFloat)totalFloatWidth totalShrink:(CGFloat)totalShrink sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count lsc:(MyFlowLayout*)lsc
 {
     if (_myCGFloatGreatOrEqual(totalFloatWidth, 0.0))
         totalShrink = 0.0;
     
     if (totalShrink == 0.0)
         return;
+    
+    //根据flex规约：如果总的压缩比重小于1则超出部分会乘以这个压缩比再进行压缩。
+    if (lsc.isFlex && totalShrink < 1.0)
+        totalFloatWidth *= totalShrink;
     
     //如果有压缩则调整子视图的宽度。
     for (NSInteger itemIndex = startIndex - count; itemIndex < startIndex; itemIndex++)
@@ -402,13 +408,17 @@
     }
 }
 
-- (void)myCalcHorzLayoutSinglelineHeightShrink:(CGSize)selfSize totalFloatHeight:(CGFloat)totalFloatHeight totalShrink:(CGFloat)totalShrink sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count
+- (void)myCalcHorzLayoutSinglelineHeightShrink:(CGSize)selfSize totalFloatHeight:(CGFloat)totalFloatHeight totalShrink:(CGFloat)totalShrink sbs:(NSArray *)sbs startIndex:(NSInteger)startIndex count:(NSInteger)count lsc:(MyFlowLayout *)lsc
 {
     if (_myCGFloatGreatOrEqual(totalFloatHeight, 0.0))
         totalShrink = 0.0;
     
     if (totalShrink == 0.0)
         return;
+    
+    //根据flex规约：如果总的压缩比重小于1则超出部分会乘以这个压缩比再进行压缩。
+    if (lsc.isFlex && totalShrink < 1.0)
+        totalFloatHeight *= totalShrink;
     
     //如果有压缩则调整子视图的高度。
     for (NSInteger itemIndex = startIndex - count; itemIndex < startIndex; itemIndex++)
@@ -954,6 +964,8 @@
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
     CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
+    CGFloat paddingVert = paddingTop + paddingBottom;
+
 
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
@@ -1187,91 +1199,101 @@
         arrangedIndex++;
     }
     
+    yPos += rowMaxHeight + paddingBottom;
+
+    
     //内容填充约束布局的宽度包裹计算。
     if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = maxWidth;
     
-    //最后一行
-    [self myCalcVertLayoutSinglelineAlignment:selfSize rowIndex:lineIndex rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth rowTotalShrink:0 horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
-    
-    yPos += rowMaxHeight + paddingBottom;
-    
     if (lsc.heightSizeInner.dimeWrapVal)
        selfSize.height =  [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:yPos sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
+    NSInteger arranges = lineFirstSubviewIndexSet.count;
+    //根据flex规则：如果只有一行则整个高度都作为子视图的拉伸和停靠区域。
+    if (lsc.isFlex && arranges == 1)
+        rowMaxHeight = selfSize.height - paddingVert;
+    
+    //最后一行
+    [self myCalcVertLayoutSinglelineAlignment:selfSize rowIndex:lineIndex rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth rowTotalShrink:0 horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
+
+    //整体的停靠
     if (vertGravity != MyGravity_None && selfSize.height != yPos)
     {
-        CGFloat addYPos = 0.0;
-        CGFloat between = 0.0;
-        CGFloat fill = 0.0;
-        
-        if (vertGravity == MyGravity_Vert_Center)
+        //根据flex标准：只有在多行下vertGravity才有意义。非flex标准则不受这个条件约束。
+        if (arranges > 1 || !lsc.isFlex)
         {
-            addYPos = (selfSize.height - yPos) / 2;
-        }
-        else if (vertGravity == MyGravity_Vert_Bottom)
-        {
-            addYPos = selfSize.height - yPos;
-        }
-        else if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
-        {
-            if (lineFirstSubviewIndexSet.count > 0)
-                fill = (selfSize.height - yPos) / lineFirstSubviewIndexSet.count;
+            CGFloat addYPos = 0.0;
+            CGFloat between = 0.0;
+            CGFloat fill = 0.0;
             
-            //满足flex规则：如果剩余的空间是负数，该值等效于'flex-start'
-            if (fill < 0.0  && vertGravity == MyGravity_Vert_Stretch)
-                fill = 0.0;
-        }
-        else if (vertGravity == MyGravity_Vert_Between)
-        {
-            if (lineFirstSubviewIndexSet.count > 1)
-                between = (selfSize.height - yPos) / (lineFirstSubviewIndexSet.count - 1);
-        }
-        else if (vertGravity == MyGravity_Vert_Around)
-        {
-            if (lineFirstSubviewIndexSet.count > 1)
-                between = (selfSize.height - yPos) / lineFirstSubviewIndexSet.count;
-        }
-        
-        if (addYPos != 0.0 || between != 0.0 || fill != 0.0)
-        {
-            int lineidx = 0;
-            NSUInteger lastIndex = 0;
-            for (int i = 0; i < sbs.count; i++)
+            if (vertGravity == MyGravity_Vert_Center)
             {
-                UIView *sbv = sbs[i];
+                addYPos = (selfSize.height - yPos) / 2;
+            }
+            else if (vertGravity == MyGravity_Vert_Bottom)
+            {
+                addYPos = selfSize.height - yPos;
+            }
+            else if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
+            {
+                if (lineFirstSubviewIndexSet.count > 0)
+                    fill = (selfSize.height - yPos) / arranges;
                 
-                MyFrame *sbvmyFrame = sbv.myFrame;
-                
-                sbvmyFrame.top += addYPos;
-                
-                //找到行的最初索引。
-                NSUInteger index = [lineFirstSubviewIndexSet indexLessThanOrEqualToIndex:i];
-                if (lastIndex != index)
+                //满足flex规则：如果剩余的空间是负数，该值等效于'flex-start'
+                if (fill < 0.0  && vertGravity == MyGravity_Vert_Stretch)
+                    fill = 0.0;
+            }
+            else if (vertGravity == MyGravity_Vert_Between)
+            {
+                if (lineFirstSubviewIndexSet.count > 1)
+                    between = (selfSize.height - yPos) / (arranges - 1);
+            }
+            else if (vertGravity == MyGravity_Vert_Around)
+            {
+                if (lineFirstSubviewIndexSet.count > 1)
+                    between = (selfSize.height - yPos) / arranges;
+            }
+            
+            if (addYPos != 0.0 || between != 0.0 || fill != 0.0)
+            {
+                int lineidx = 0;
+                NSUInteger lastIndex = 0;
+                for (int i = 0; i < sbs.count; i++)
                 {
-                    lastIndex = index;
-                    lineidx ++;
-                }
-                
-                if (vertGravity == MyGravity_Vert_Stretch)
-                {
-                    UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    if (sbvsc.heightSizeInner.dimeVal == nil)
+                    UIView *sbv = sbs[i];
+                    
+                    MyFrame *sbvmyFrame = sbv.myFrame;
+                    
+                    sbvmyFrame.top += addYPos;
+                    
+                    //找到行的最初索引。
+                    NSUInteger index = [lineFirstSubviewIndexSet indexLessThanOrEqualToIndex:i];
+                    if (lastIndex != index)
+                    {
+                        lastIndex = index;
+                        lineidx ++;
+                    }
+                    
+                    if (vertGravity == MyGravity_Vert_Stretch)
+                    {
+                        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+                        if (sbvsc.heightSizeInner.dimeVal == nil)
+                            sbvmyFrame.height += fill;
+                    }
+                    else
+                    {
                         sbvmyFrame.height += fill;
+                    }
+                    sbvmyFrame.top += fill * lineidx;
+                    
+                    sbvmyFrame.top += between * lineidx;
+                    
+                    if (vertGravity == MyGravity_Vert_Around)
+                        sbvmyFrame.top += (between / 2.0);
                 }
-                else
-                {
-                    sbvmyFrame.height += fill;
-                }
-                sbvmyFrame.top += fill * lineidx;
-                
-                sbvmyFrame.top += between * lineidx;
-                
-                if (vertGravity == MyGravity_Vert_Around)
-                    sbvmyFrame.top += (between / 2.0);
             }
         }
-        
     }
     
     return selfSize;
@@ -1369,12 +1391,12 @@
             
             if (rowTotalWeight != 0 && horzGravity != MyGravity_Horz_Fill)
             {
-                [self myCalcVertLayoutSinglelineWeight:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedCount];
+                [self myCalcVertLayoutSinglelineWeight:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedCount lsc:lsc];
             }
             
             if (rowTotalShrink != 0 && horzGravity != MyGravity_Horz_Fill)
             {
-                [self myCalcVertLayoutSinglelineWidthShrink:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalShrink:rowTotalShrink sbs:sbs startIndex:i count:arrangedCount];
+                [self myCalcVertLayoutSinglelineWidthShrink:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalShrink:rowTotalShrink sbs:sbs startIndex:i count:arrangedCount lsc:lsc];
             }
             
             rowTotalWeight = 0.0;
@@ -1450,13 +1472,13 @@
     
     if (rowTotalWeight != 0.0 && horzGravity != MyGravity_Horz_Fill)
     {
-        [self myCalcVertLayoutSinglelineWeight:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
+        [self myCalcVertLayoutSinglelineWeight:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalWeight:rowTotalWeight sbs:sbs startIndex:i count:arrangedIndex lsc:lsc];
     }
     
     //如果有压缩子视图的处理则需要压缩子视图。
     if (rowTotalShrink != 0.0 && horzGravity != MyGravity_Horz_Fill)
     {
-        [self myCalcVertLayoutSinglelineWidthShrink:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalShrink:rowTotalShrink sbs:sbs startIndex:i count:arrangedIndex];
+        [self myCalcVertLayoutSinglelineWidthShrink:selfSize totalFloatWidth:selfSize.width - paddingHorz - rowTotalFixedWidth totalShrink:rowTotalShrink sbs:sbs startIndex:i count:arrangedIndex lsc:lsc];
     }
     
     //初始化每行的下一个子视图的位置。
@@ -1642,9 +1664,6 @@
         //这里只对间距进行压缩比重的计算，因为前面压缩了宽度，这里只需要压缩间距了。
         rowTotalShrink += sbvsc.leadingPosInner.shrink + sbvsc.trailingPosInner.shrink;
     }
-    
-    //最后一行，有可能因为行宽的压缩导致那些高度依赖宽度以及高度自适应的视图会增加高度，从而使得行高被调整。
-    [self myCalcVertLayoutSinglelineAlignment:selfSize rowIndex:rowIndex rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth rowTotalShrink:rowTotalShrink horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
 
     maxHeight += paddingBottom;
     
@@ -1664,69 +1683,90 @@
         selfSize.height =  [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     }
     
+    //得到行数
+    NSInteger arranges = floor((sbs.count + arrangedCount - 1.0) / arrangedCount); //行数
+    //根据flex规则：如果只有一行则整个高度都作为子视图的拉伸和停靠区域。
+    if (lsc.isFlex && arranges == 1)
+        rowMaxHeight = selfSize.height - paddingVert;
+    
+    //最后一行，有可能因为行宽的压缩导致那些高度依赖宽度以及高度自适应的视图会增加高度，从而使得行高被调整。
+    [self myCalcVertLayoutSinglelineAlignment:selfSize rowIndex:rowIndex rowMaxHeight:rowMaxHeight rowMaxWidth:rowMaxWidth rowTotalShrink:rowTotalShrink horzGravity:horzGravity vertAlignment:vertAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
+
+    //整体的停靠
     if  (vertGravity != MyGravity_None && selfSize.height != maxHeight && !(isVertPaging && isPagingScroll))
     {
-        CGFloat addYPos = 0.0;
-        CGFloat between = 0.0;
-        CGFloat fill = 0.0;
-        int arranges = floor((sbs.count + arrangedCount - 1.0) / arrangedCount); //行数
-        
-        if (vertGravity == MyGravity_Vert_Center)
+        //根据flex标准：只有在多行下vertGravity才有意义。非flex标准则不受这个条件约束。
+        if (arranges > 1 || !lsc.isFlex)
         {
-            addYPos = (selfSize.height - maxHeight) / 2;
-        }
-        else if (vertGravity == MyGravity_Vert_Bottom)
-        {
-            addYPos = selfSize.height - maxHeight;
-        }
-        else if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
-        {
-            if (arranges > 0)
-                fill = (selfSize.height - maxHeight) / arranges;
+            CGFloat addYPos = 0.0;
+            CGFloat between = 0.0;
+            CGFloat fill = 0.0;
             
-            //满足flex规则：如果剩余的空间是负数，该值等效于'flex-start'
-            if (fill < 0.0 && vertGravity == MyGravity_Vert_Stretch)
-                fill = 0.0;
-        }
-        else if (vertGravity == MyGravity_Vert_Between)
-        {
-            if (arranges > 1)
-                between = (selfSize.height - maxHeight) / (arranges - 1);
-        }
-        else if (vertGravity == MyGravity_Vert_Around)
-        {
-            if (arranges > 1)
-                between = (selfSize.height - maxHeight) / arranges;
-        }
-        
-        if (addYPos != 0.0 || between != 0.0 || fill != 0.0)
-        {
-            for (int i = 0; i < sbs.count; i++)
+            if (vertGravity == MyGravity_Vert_Center)
             {
-                UIView *sbv = sbs[i];
+                addYPos = (selfSize.height - maxHeight) / 2;
+            }
+            else if (vertGravity == MyGravity_Vert_Bottom)
+            {
+                addYPos = selfSize.height - maxHeight;
+            }
+            else if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
+            {
+                if (arranges > 0)
+                    fill = (selfSize.height - maxHeight) / arranges;
                 
-                MyFrame *sbvmyFrame = sbv.myFrame;
-                
-                int lineidx = i / arrangedCount;
-                if (vertGravity == MyGravity_Vert_Stretch)
+                //满足flex规则：如果剩余的空间是负数，该值等效于'flex-start'
+                if (fill < 0.0 && vertGravity == MyGravity_Vert_Stretch)
+                    fill = 0.0;
+            }
+            else if (vertGravity == MyGravity_Vert_Between)
+            {
+                if (arranges > 1)
+                    between = (selfSize.height - maxHeight) / (arranges - 1);
+            }
+            else if (vertGravity == MyGravity_Vert_Around)
+            {
+                if (arranges > 1)
+                    between = (selfSize.height - maxHeight) / arranges;
+            }
+            
+            if (addYPos != 0.0 || between != 0.0 || fill != 0.0)
+            {
+                for (int i = 0; i < sbs.count; i++)
                 {
-                    UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    if (sbvsc.heightSizeInner.dimeVal == nil)
+                    UIView *sbv = sbs[i];
+                    
+                    MyFrame *sbvmyFrame = sbv.myFrame;
+                    
+                    int lineidx = i / arrangedCount;
+                    if (vertGravity == MyGravity_Vert_Stretch)
+                    {
+                        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+                        if (sbvsc.heightSizeInner.dimeVal == nil)
+                            sbvmyFrame.height += fill;
+                        
+//                        //因为每行都增加了fill。所以如果有行内对齐则需要这里调整。
+//                        MyGravity sbvVertAlignment = sbvsc.alignment & MyGravity_Horz_Mask;
+//                        if (sbvVertAlignment == MyGravity_None)
+//                            sbvVertAlignment = vertAlign;
+//                        if (vertAlignment == MyGravity_Vert_Between)
+//                            sbvVertAlignment = MyGravity_Vert_Between;
+
+                    }
+                    else
+                    {
                         sbvmyFrame.height += fill;
+                    }
+                    sbvmyFrame.top += fill * lineidx;
+                    
+                    sbvmyFrame.top += addYPos;
+                    
+                    sbvmyFrame.top += between * lineidx;
+                    
+                    //如果是vert_around那么所有行都应该添加一半的between值。
+                    if (vertGravity == MyGravity_Vert_Around)
+                        sbvmyFrame.top += (between / 2.0);
                 }
-                else
-                {
-                    sbvmyFrame.height += fill;
-                }
-                sbvmyFrame.top += fill * lineidx;
-                
-                sbvmyFrame.top += addYPos;
-                
-                sbvmyFrame.top += between * lineidx;
-                
-                //如果是vert_around那么所有行都应该添加一半的between值。
-                if (vertGravity == MyGravity_Vert_Around)
-                    sbvmyFrame.top += (between / 2.0);
             }
         }
     }
@@ -1756,6 +1796,7 @@
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
     CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingVert = paddingTop + paddingBottom;
+    CGFloat paddingHorz = paddingLeading + paddingTrailing;
 
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
@@ -1990,87 +2031,96 @@
         arrangedIndex++;
     }
     
+    xPos += colMaxWidth + paddingTrailing;
+
     if (lsc.heightSizeInner.dimeWrapVal)
         selfSize.height = maxHeight;
-    
-    
-    [self myCalcHorzLayoutSinglelineAlignment:selfSize colIndex:lineIndex colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight colTotalShrink:0 vertGravity:vertGravity horzAlignment:horzAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
-    
-    
-    xPos += colMaxWidth + paddingTrailing;
-    
+
+
     if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:xPos sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
+    NSInteger arranges = lineFirstSubviewIndexSet.count;
+    //根据flex规则：如果只有一列则整个宽度都作为子视图的拉伸和停靠区域。
+    if (lsc.isFlex && arranges == 1)
+        colMaxWidth = selfSize.width - paddingHorz;
+
+    //最后一列
+    [self myCalcHorzLayoutSinglelineAlignment:selfSize colIndex:lineIndex colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight colTotalShrink:0 vertGravity:vertGravity horzAlignment:horzAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
+    
+    //整体的停靠
     if (horzGravity != MyGravity_None && selfSize.width != xPos)
     {
-        CGFloat addXPos = 0.0;
-        CGFloat fill = 0.0;
-        CGFloat between = 0.0;
-        
-        if (horzGravity == MyGravity_Horz_Center)
+        //根据flex标准：只有在多行下horzGravity才有意义。非flex标准则不受这个条件约束。
+        if (arranges > 1 || !lsc.isFlex)
         {
-            addXPos = (selfSize.width - xPos) / 2;
-        }
-        else if (horzGravity == MyGravity_Horz_Trailing)
-        {
-            addXPos = selfSize.width - xPos;
-        }
-        else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
-        {
-            if (lineFirstSubviewIndexSet.count > 0)
-                fill = (selfSize.width - xPos) / lineFirstSubviewIndexSet.count;
-            
-            //满足flex规则：如果剩余的空间是负数，该值等效于'flex-start'
-            if (fill < 0.0 && horzGravity == MyGravity_Horz_Stretch)
-                fill = 0.0;
-        }
-        else if (horzGravity == MyGravity_Horz_Between)
-        {
-            if (lineFirstSubviewIndexSet.count > 1)
-                between = (selfSize.width - xPos) / (lineFirstSubviewIndexSet.count - 1);
-        }
-        else if (horzGravity == MyGravity_Horz_Around)
-        {
-            if (lineFirstSubviewIndexSet.count > 1)
-                between = (selfSize.width - xPos) / lineFirstSubviewIndexSet.count;
-        }
-        
-        if (addXPos != 0.0 || between != 0.0 || fill != 0.0)
-        {
-            int lineidx = 0;
-            NSUInteger lastIndex = 0;
-            for (int i = 0; i < sbs.count; i++)
+            CGFloat addXPos = 0.0;
+            CGFloat fill = 0.0;
+            CGFloat between = 0.0;
+            if (horzGravity == MyGravity_Horz_Center)
             {
-                UIView *sbv = sbs[i];
-                MyFrame *sbvmyFrame = sbv.myFrame;
+                addXPos = (selfSize.width - xPos) / 2;
+            }
+            else if (horzGravity == MyGravity_Horz_Trailing)
+            {
+                addXPos = selfSize.width - xPos;
+            }
+            else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
+            {
+                if (lineFirstSubviewIndexSet.count > 0)
+                    fill = (selfSize.width - xPos) / lineFirstSubviewIndexSet.count;
                 
-                sbvmyFrame.leading += addXPos;
-                
-                //找到行的最初索引。
-                NSUInteger index = [lineFirstSubviewIndexSet indexLessThanOrEqualToIndex:i];
-                if (lastIndex != index)
+                //满足flex规则：如果剩余的空间是负数，该值等效于'flex-start'
+                if (fill < 0.0 && horzGravity == MyGravity_Horz_Stretch)
+                    fill = 0.0;
+            }
+            else if (horzGravity == MyGravity_Horz_Between)
+            {
+                if (lineFirstSubviewIndexSet.count > 1)
+                    between = (selfSize.width - xPos) / (lineFirstSubviewIndexSet.count - 1);
+            }
+            else if (horzGravity == MyGravity_Horz_Around)
+            {
+                if (lineFirstSubviewIndexSet.count > 1)
+                    between = (selfSize.width - xPos) / lineFirstSubviewIndexSet.count;
+            }
+            
+            if (addXPos != 0.0 || between != 0.0 || fill != 0.0)
+            {
+                int lineidx = 0;
+                NSUInteger lastIndex = 0;
+                for (int i = 0; i < sbs.count; i++)
                 {
-                    lastIndex = index;
-                    lineidx ++;
-                }
-                
-                if (horzGravity == MyGravity_Horz_Stretch)
-                {
-                    UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    if (sbvsc.widthSizeInner.dimeVal == nil)
+                    UIView *sbv = sbs[i];
+                    MyFrame *sbvmyFrame = sbv.myFrame;
+                    
+                    sbvmyFrame.leading += addXPos;
+                    
+                    //找到行的最初索引。
+                    NSUInteger index = [lineFirstSubviewIndexSet indexLessThanOrEqualToIndex:i];
+                    if (lastIndex != index)
+                    {
+                        lastIndex = index;
+                        lineidx ++;
+                    }
+                    
+                    if (horzGravity == MyGravity_Horz_Stretch)
+                    {
+                        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+                        if (sbvsc.widthSizeInner.dimeVal == nil)
+                            sbvmyFrame.width += fill;
+                    }
+                    else
+                    {
                         sbvmyFrame.width += fill;
+                    }
+                    sbvmyFrame.leading += fill * lineidx;
+                    
+                    sbvmyFrame.leading += between * lineidx;
+                    
+                    if (horzGravity == MyGravity_Horz_Around)
+                        sbvmyFrame.leading += (between / 2.0);
                 }
-                else
-                {
-                    sbvmyFrame.width += fill;
-                }
-                sbvmyFrame.leading += fill * lineidx;
-                
-                sbvmyFrame.leading += between * lineidx;
-                
-                if (horzGravity == MyGravity_Horz_Around)
-                    sbvmyFrame.leading += (between / 2.0);
             }
         }
     }
@@ -2171,12 +2221,12 @@
             
             if (colTotalWeight != 0 && vertGravity != MyGravity_Vert_Fill)
             {
-                [self myCalcHorzLayoutSinglelineWeight:selfSize totalFloatHeight:selfSize.height - paddingVert - colTotalFixedHeight totalWeight:colTotalWeight sbs:sbs startIndex:i count:arrangedCount];
+                [self myCalcHorzLayoutSinglelineWeight:selfSize totalFloatHeight:selfSize.height - paddingVert - colTotalFixedHeight totalWeight:colTotalWeight sbs:sbs startIndex:i count:arrangedCount lsc:lsc];
             }
             
             if (colTotalShrink != 0 && vertGravity != MyGravity_Vert_Fill)
             {
-                [self myCalcHorzLayoutSinglelineHeightShrink:selfSize totalFloatHeight:selfSize.height - paddingVert - colTotalFixedHeight totalShrink:colTotalShrink sbs:sbs startIndex:i count:arrangedCount];
+                [self myCalcHorzLayoutSinglelineHeightShrink:selfSize totalFloatHeight:selfSize.height - paddingVert - colTotalFixedHeight totalShrink:colTotalShrink sbs:sbs startIndex:i count:arrangedCount lsc:lsc];
             }
             
             colTotalWeight = 0.0;
@@ -2258,12 +2308,12 @@
     
     if (colTotalWeight != 0.0 && vertGravity != MyGravity_Vert_Fill)
     {
-        [self myCalcHorzLayoutSinglelineWeight:selfSize totalFloatHeight:selfSize.height - paddingVert - colTotalFixedHeight totalWeight:colTotalWeight sbs:sbs startIndex:i count:arrangedIndex];
+        [self myCalcHorzLayoutSinglelineWeight:selfSize totalFloatHeight:selfSize.height - paddingVert - colTotalFixedHeight totalWeight:colTotalWeight sbs:sbs startIndex:i count:arrangedIndex lsc:lsc];
     }
     
     if (colTotalShrink != 0.0 && vertGravity != MyGravity_Vert_Fill)
     {
-        [self myCalcHorzLayoutSinglelineHeightShrink:selfSize totalFloatHeight:selfSize.height - paddingVert - colTotalFixedHeight totalShrink:colTotalShrink sbs:sbs startIndex:i count:arrangedIndex];
+        [self myCalcHorzLayoutSinglelineHeightShrink:selfSize totalFloatHeight:selfSize.height - paddingVert - colTotalFixedHeight totalShrink:colTotalShrink sbs:sbs startIndex:i count:arrangedIndex lsc:lsc];
     }
     
     //初始化每行的下一个子视图的位置。
@@ -2424,8 +2474,6 @@
         colTotalShrink += sbvsc.topPosInner.shrink + sbvsc.bottomPosInner.shrink;
     }
     
-    //最后一列
-   [self myCalcHorzLayoutSinglelineAlignment:selfSize colIndex:colIndex colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight colTotalShrink:colTotalShrink vertGravity:vertGravity horzAlignment:horzAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
     
     maxWidth += paddingTrailing;
     
@@ -2445,69 +2493,82 @@
         selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     }
     
+    //得到行数
+    NSInteger arranges = floor((sbs.count + arrangedCount - 1.0) / arrangedCount); //行数
+    //根据flex规则：如果只有一行则整个高度都作为子视图的拉伸和停靠区域。
+    if (lsc.isFlex && arranges == 1)
+        colMaxWidth = selfSize.width - paddingHorz;
+    
+    //最后一列
+    [self myCalcHorzLayoutSinglelineAlignment:selfSize colIndex:colIndex colMaxWidth:colMaxWidth colMaxHeight:colMaxHeight colTotalShrink:colTotalShrink vertGravity:vertGravity horzAlignment:horzAlign sbs:sbs startIndex:i count:arrangedIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate lsc:lsc];
+
+    //整体的停靠。
     if (horzGravity != MyGravity_None && selfSize.width != maxWidth && !(isHorzPaging && isPagingScroll))
     {
-        
-        CGFloat addXPos = 0.0;
-        CGFloat between = 0.0;
-        CGFloat fill = 0.0;
-        int arranges = floor((sbs.count + arrangedCount - 1.0) / arrangedCount); //列数
-        
-        if (horzGravity == MyGravity_Horz_Center)
+
+        //根据flex标准：只有在多行下horzGravity才有意义。非flex标准则不受这个条件约束。
+        if (arranges > 1 || !lsc.isFlex)
         {
-            addXPos = (selfSize.width - maxWidth) / 2;
-        }
-        else if (horzGravity == MyGravity_Horz_Trailing)
-        {
-            addXPos = selfSize.width - maxWidth;
-        }
-        else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
-        {
-            if (arranges > 0)
-                fill = (selfSize.width - maxWidth) / arranges;
+            CGFloat addXPos = 0.0;
+            CGFloat between = 0.0;
+            CGFloat fill = 0.0;
             
-            //满足flex规则：如果剩余的空间是负数，该值等效于'flex-start'
-            if (fill < 0.0 && horzGravity == MyGravity_Horz_Stretch)
-                fill = 0.0;
-        }
-        else if (horzGravity == MyGravity_Horz_Between)
-        {
-            if (arranges > 1)
-                between = (selfSize.width - maxWidth) / (arranges - 1);
-        }
-        else if (horzGravity == MyGravity_Horz_Around)
-        {
-            if (arranges > 1)
-                between = (selfSize.width - maxWidth) / arranges;
-        }
-        
-        if (addXPos != 0.0 || between != 0.0 || fill != 0.0)
-        {
-            for (int i = 0; i < sbs.count; i++)
+            if (horzGravity == MyGravity_Horz_Center)
             {
-                UIView *sbv = sbs[i];
+                addXPos = (selfSize.width - maxWidth) / 2;
+            }
+            else if (horzGravity == MyGravity_Horz_Trailing)
+            {
+                addXPos = selfSize.width - maxWidth;
+            }
+            else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
+            {
+                if (arranges > 0)
+                    fill = (selfSize.width - maxWidth) / arranges;
                 
-                MyFrame *sbvmyFrame = sbv.myFrame;
-                
-                int lineidx = i / arrangedCount;
-                if (horzGravity == MyGravity_Horz_Stretch)
+                //满足flex规则：如果剩余的空间是负数，该值等效于'flex-start'
+                if (fill < 0.0 && horzGravity == MyGravity_Horz_Stretch)
+                    fill = 0.0;
+            }
+            else if (horzGravity == MyGravity_Horz_Between)
+            {
+                if (arranges > 1)
+                    between = (selfSize.width - maxWidth) / (arranges - 1);
+            }
+            else if (horzGravity == MyGravity_Horz_Around)
+            {
+                if (arranges > 1)
+                    between = (selfSize.width - maxWidth) / arranges;
+            }
+            
+            if (addXPos != 0.0 || between != 0.0 || fill != 0.0)
+            {
+                for (int i = 0; i < sbs.count; i++)
                 {
-                    UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-                    if (sbvsc.widthSizeInner.dimeVal == nil)
+                    UIView *sbv = sbs[i];
+                    
+                    MyFrame *sbvmyFrame = sbv.myFrame;
+                    
+                    int lineidx = i / arrangedCount;
+                    if (horzGravity == MyGravity_Horz_Stretch)
+                    {
+                        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+                        if (sbvsc.widthSizeInner.dimeVal == nil)
+                            sbvmyFrame.width += fill;
+                    }
+                    else
+                    {
                         sbvmyFrame.width += fill;
+                    }
+                    sbvmyFrame.leading += fill * lineidx;
+                    
+                    sbvmyFrame.leading += addXPos;
+                    
+                    sbvmyFrame.leading += between * lineidx;
+                    
+                    if (horzGravity == MyGravity_Horz_Around)
+                        sbvmyFrame.leading += (between / 2.0);
                 }
-                else
-                {
-                    sbvmyFrame.width += fill;
-                }
-                sbvmyFrame.leading += fill * lineidx;
-                
-                sbvmyFrame.leading += addXPos;
-                
-                sbvmyFrame.leading += between * lineidx;
-                
-                if (horzGravity == MyGravity_Horz_Around)
-                    sbvmyFrame.leading += (between / 2.0);
             }
         }
     }
