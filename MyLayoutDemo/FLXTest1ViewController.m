@@ -29,6 +29,7 @@
 
 -(void)loadView
 {
+    //根视图为flexbox布局视图。
     MyFlexLayout *rootLayout = MyFlexLayout.new.flex
     .flex_direction(MyFlexDirection_Column)
     .vert_space(10)
@@ -193,11 +194,6 @@
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(handleAddItem:) forControlEvents:UIControlEventTouchUpInside];
     
-    
-//    UIScrollView *scrollView = UIScrollView.new.flexItem
-//    .width(MyLayoutSize.fill)
-//    .flex_grow(1)
-//    .addTo(rootLayout);
     
     MyFlexLayout *contentLayout = MyFlexLayout.new.flex
     .width(MyLayoutSize.fill)
@@ -376,6 +372,7 @@
     
     widthTextField.tag = 100;
     widthTextField.borderStyle =  UITextBorderStyleRoundedRect;
+    widthTextField.placeholder = @"数字|wrap|fill|空";
     
     UILabel *heightLabel = UILabel.new.flexItem
     .width(MyLayoutSize.wrap)
@@ -392,7 +389,8 @@
     
     heightTextField.tag = 200;
     heightTextField.borderStyle =  UITextBorderStyleRoundedRect;
-    
+    heightTextField.placeholder = @"数字|wrap|fill|空";
+
     
     UILabel *orderLabel = UILabel.new.flexItem
     .width(MyLayoutSize.wrap)
@@ -409,7 +407,8 @@
     
     orderTextField.tag = 300;
     orderTextField.borderStyle =  UITextBorderStyleRoundedRect;
-    
+    orderTextField.placeholder = @"数字|空";
+
     
     UILabel *flex_growLabel = UILabel.new.flexItem
     .width(MyLayoutSize.wrap)
@@ -426,7 +425,8 @@
     
     flex_growTextField.tag = 400;
     flex_growTextField.borderStyle =  UITextBorderStyleRoundedRect;
-    
+    flex_growTextField.placeholder = @"数字|空";
+
     
     UILabel *flex_shrinkLabel = UILabel.new.flexItem
     .width(MyLayoutSize.wrap)
@@ -443,7 +443,8 @@
     
     flex_shrinkTextField.tag = 500;
     flex_shrinkTextField.borderStyle =  UITextBorderStyleRoundedRect;
-    
+    flex_shrinkTextField.placeholder = @"数字|空";
+
     
     UILabel *flex_basisLabel = UILabel.new.flexItem
     .width(MyLayoutSize.wrap)
@@ -460,7 +461,8 @@
     
     flex_basisTextField.tag = 600;
     flex_basisTextField.borderStyle =  UITextBorderStyleRoundedRect;
-    
+    flex_basisTextField.placeholder = @"数字|空";
+
     
     UILabel *align_selfLabel = UILabel.new.flexItem
     .width(MyLayoutSize.wrap)
@@ -477,7 +479,8 @@
     
     align_selfTextField.tag = 700;
     align_selfTextField.borderStyle =  UITextBorderStyleRoundedRect;
-    
+    align_selfTextField.placeholder = @"flex-start|flex-end|center|stretch|baseline|auto";
+
     
     UIButton *addButton = UIButton.new.flexItem
     .flex_grow(1)
@@ -508,6 +511,12 @@
     
     [closeButton addTarget:self action:@selector(handleCloseDialog:) forControlEvents:UIControlEventTouchUpInside];
     
+    UILabel *tipLabel = UILabel.new.flexItem
+    .width(MyLayoutSize.fill)
+    .height(MyLayoutSize.wrap)
+    .addTo(dialogLayout);
+    
+    tipLabel.text = @"添加后单击修改，长按删除";
     
     if (itemView != nil)
     {

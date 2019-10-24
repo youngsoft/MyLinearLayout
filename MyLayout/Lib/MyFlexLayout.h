@@ -37,6 +37,9 @@ typedef enum : int {
 
 extern const int MyFlex_Auto;
 
+/*
+  flexbox中项目的设置类。
+ */
 @interface MyFlexItem:NSObject
 
 //您可以用链式语法进行属性设置，也可以直接通过属性赋值进行设置和获取。
@@ -66,7 +69,7 @@ extern const int MyFlex_Auto;
 -(MyFlexItem* (^)(CGFloat))flex_basis;
 //行内条目自身的对齐方式。
 -(MyFlexItem* (^)(MyFlexGravity))align_self;
-//设置具体的宽度值，当宽度值大于0小于1是表明的是相对宽度，你也可以设置MyLayoutSize.wrap和MyLayoutSize.fill来设置特殊宽度。
+//设置具体的宽度或高度值，当宽度值大于0小于1是表明的是相对宽度或高度，你也可以设置MyLayoutSize.wrap和MyLayoutSize.fill来设置特殊宽度或高度。
 -(MyFlexItem* (^)(CGFloat))width;
 -(MyFlexItem* (^)(CGFloat))min_width;
 -(MyFlexItem* (^)(CGFloat))max_width;
@@ -87,7 +90,9 @@ extern const int MyFlex_Auto;
 
 @end
 
-
+/*
+  flexbox的设置类。
+ */
 @interface MyFlex:MyFlexItem
 
 @property(nonatomic, assign) MyFlexDirection flex_direction_val;
@@ -118,10 +123,9 @@ extern const int MyFlex_Auto;
 -(MyFlex* (^)(CGFloat))vert_space;
 -(MyFlex* (^)(CGFloat))horz_space;
 
-
 @end
 
-
+//视图在flexbox中的分类扩展，只有MyFlexLayout中的子视图才有用。
 @interface UIView(MyFlexLayout)
 
 //我们可以借助视图的flexItem来设置当视图在flexbox中的一些属性。
@@ -136,6 +140,7 @@ extern const int MyFlex_Auto;
  */
 @interface MyFlexLayout:MyFlowLayout
 
+//用于flexbox约束的设置。
 @property(nonatomic, readonly, strong, readonly) MyFlex *flex;
 
 @end

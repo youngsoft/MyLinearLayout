@@ -741,6 +741,8 @@
  
  8. MyGravity_Horz_Fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
  9. MyGravity_Vert_Baseline 表示布局里面的子视图都基线对齐，目前只支持水平线性布局。
+ 10.MyGravity_Vert_Stretch 表示当布局中的子视图没有设置高度约束时，会拉伸子视图的高度。(支持：线性布局、流式布局)
+ 11.MyGravity_Horz_Stretch 表示当布局中的子视图没有设置宽度约束时，会拉伸子视图的宽度。(支持：线性布局、流式布局)
  */
 @property(nonatomic, assign) IBInspectable MyGravity gravity;
 
