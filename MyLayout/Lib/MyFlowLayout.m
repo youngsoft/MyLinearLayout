@@ -1279,7 +1279,22 @@
                     {
                         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                         if (sbvsc.heightSizeInner.dimeVal == nil)
+                        {
                             sbvmyFrame.height += fill;
+                        }
+                        else
+                        {
+                            //因为每行都增加了fill。所以如果有行内对齐则需要这里调整。
+                            MyGravity sbvVertAlignment = sbvsc.alignment & MyGravity_Horz_Mask;
+                            if (sbvVertAlignment == MyGravity_None)
+                                sbvVertAlignment = vertAlign;
+                            
+                            if (sbvVertAlignment == MyGravity_Vert_Center)
+                                sbvmyFrame.top += fill/2.0;
+                            else if (sbvVertAlignment == MyGravity_Vert_Bottom)
+                                sbvmyFrame.top += fill;
+                            else;
+                        }
                     }
                     else
                     {
@@ -1743,15 +1758,22 @@
                     {
                         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                         if (sbvsc.heightSizeInner.dimeVal == nil)
+                        {
                             sbvmyFrame.height += fill;
-                        
-//                        //因为每行都增加了fill。所以如果有行内对齐则需要这里调整。
-//                        MyGravity sbvVertAlignment = sbvsc.alignment & MyGravity_Horz_Mask;
-//                        if (sbvVertAlignment == MyGravity_None)
-//                            sbvVertAlignment = vertAlign;
-//                        if (vertAlignment == MyGravity_Vert_Between)
-//                            sbvVertAlignment = MyGravity_Vert_Between;
-
+                        }
+                        else
+                        {
+                            //因为每行都增加了fill。所以如果有行内对齐则需要这里调整。
+                            MyGravity sbvVertAlignment = sbvsc.alignment & MyGravity_Horz_Mask;
+                            if (sbvVertAlignment == MyGravity_None)
+                                sbvVertAlignment = vertAlign;
+                            
+                            if (sbvVertAlignment == MyGravity_Vert_Center)
+                                sbvmyFrame.top += fill/2.0;
+                            else if (sbvVertAlignment == MyGravity_Vert_Bottom)
+                                sbvmyFrame.top += fill;
+                            else;
+                        }
                     }
                     else
                     {
@@ -2108,7 +2130,22 @@
                     {
                         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                         if (sbvsc.widthSizeInner.dimeVal == nil)
+                        {
                             sbvmyFrame.width += fill;
+                        }
+                        else
+                        {
+                            //因为每行都增加了fill。所以如果有行内对齐则需要这里调整。
+                            MyGravity sbvHorzAlignment = [self myConvertLeftRightGravityToLeadingTrailing:sbvsc.alignment & MyGravity_Vert_Mask];
+                            if (sbvHorzAlignment == MyGravity_None)
+                                sbvHorzAlignment = horzAlign;
+                            
+                            if (sbvHorzAlignment == MyGravity_Horz_Center)
+                                sbvmyFrame.leading += fill/2.0;
+                            else if (sbvHorzAlignment == MyGravity_Horz_Trailing)
+                                sbvmyFrame.leading += fill;
+                            else;
+                        }
                     }
                     else
                     {
@@ -2554,7 +2591,22 @@
                     {
                         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
                         if (sbvsc.widthSizeInner.dimeVal == nil)
+                        {
                             sbvmyFrame.width += fill;
+                        }
+                        else
+                        {
+                            //因为每行都增加了fill。所以如果有行内对齐则需要这里调整。
+                            MyGravity sbvHorzAlignment = [self myConvertLeftRightGravityToLeadingTrailing:sbvsc.alignment & MyGravity_Vert_Mask];
+                            if (sbvHorzAlignment == MyGravity_None)
+                                sbvHorzAlignment = horzAlign;
+                            
+                            if (sbvHorzAlignment == MyGravity_Horz_Center)
+                                sbvmyFrame.leading += fill/2.0;
+                            else if (sbvHorzAlignment == MyGravity_Horz_Trailing)
+                                sbvmyFrame.leading += fill;
+                            else;
+                        }
                     }
                     else
                     {
