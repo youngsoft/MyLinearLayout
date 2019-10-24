@@ -442,6 +442,9 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
 
 -(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
+    
+    //将flexbox中的属性映射为MyFlowLayout中的属性。
+    
     MyFlexLayout *lsc = self.myCurrentSizeClass;
 
     //最先设置方向。
@@ -555,7 +558,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
     //设置主轴的水平对齐和拉伸
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    
     switch (self.flex.justify_content_val) {
         case MyFlexGravity_Flex_End:
             if (lsc.orientation == MyOrientation_Vert)
@@ -593,7 +595,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
     //次轴的对齐处理。
     MyGravity vertArrangedGravity = lsc.arrangedGravity & MyGravity_Horz_Mask;
     MyGravity horzArrangedGravity = lsc.arrangedGravity & MyGravity_Vert_Mask;
-    
     switch (self.flex.align_items_val) {
         case MyFlexGravity_Flex_End:
             if (lsc.orientation == MyOrientation_Vert)
@@ -628,61 +629,47 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
             break;
     }
     
+    //多行下的整体停靠处理。
     vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    //只有换行才有用，单行不起作用。
-    if (lsc.arrangedCount == 0)
-    {
-        switch (self.flex.align_content_val) {
-            case MyFlexGravity_Flex_End:
-                if (lsc.orientation == MyOrientation_Horz)
-                    lsc.gravity = MyGravity_Horz_Trailing | vertGravity;
-                else
-                    lsc.gravity = MyGravity_Vert_Bottom | horzGravity;
-                break;
-            case MyFlexGravity_Center:
-                if (lsc.orientation == MyOrientation_Horz)
-                    lsc.gravity = MyGravity_Horz_Center | vertGravity;
-                else
-                    lsc.gravity = MyGravity_Vert_Center | horzGravity;
-                break;
-            case MyFlexGravity_Space_Between:
-                if (lsc.orientation == MyOrientation_Horz)
-                    lsc.gravity = MyGravity_Horz_Between | vertGravity;
-                else
-                    lsc.gravity = MyGravity_Vert_Between | horzGravity;
-                break;
-            case MyFlexGravity_Space_Around:
-                if (lsc.orientation == MyOrientation_Horz)
-                    lsc.gravity = MyGravity_Horz_Around | vertGravity;
-                else
-                    lsc.gravity = MyGravity_Vert_Around | horzGravity;
-                break;
-            case MyFlexGravity_Flex_Start:
-                if (lsc.orientation == MyOrientation_Horz)
-                    lsc.gravity = MyGravity_Horz_Leading | vertGravity;
-                else
-                    lsc.gravity = MyGravity_Vert_Top | horzGravity;
-                break;
-            case MyFlexGravity_Stretch:
-            default:
-                if (lsc.orientation == MyOrientation_Horz)
-                    lsc.gravity = MyGravity_Horz_Stretch | vertGravity;
-                else
-                    lsc.gravity = MyGravity_Vert_Stretch | horzGravity;
-                break;
-        }
-    }
-    else
-    {
-        if (lsc.orientation == MyOrientation_Horz)
-        {
-            lsc.gravity = vertGravity;
-        }
-        else
-        {
-            lsc.gravity = horzGravity;
-        }
+    switch (self.flex.align_content_val) {
+        case MyFlexGravity_Flex_End:
+            if (lsc.orientation == MyOrientation_Horz)
+                lsc.gravity = MyGravity_Horz_Trailing | vertGravity;
+            else
+                lsc.gravity = MyGravity_Vert_Bottom | horzGravity;
+            break;
+        case MyFlexGravity_Center:
+            if (lsc.orientation == MyOrientation_Horz)
+                lsc.gravity = MyGravity_Horz_Center | vertGravity;
+            else
+                lsc.gravity = MyGravity_Vert_Center | horzGravity;
+            break;
+        case MyFlexGravity_Space_Between:
+            if (lsc.orientation == MyOrientation_Horz)
+                lsc.gravity = MyGravity_Horz_Between | vertGravity;
+            else
+                lsc.gravity = MyGravity_Vert_Between | horzGravity;
+            break;
+        case MyFlexGravity_Space_Around:
+            if (lsc.orientation == MyOrientation_Horz)
+                lsc.gravity = MyGravity_Horz_Around | vertGravity;
+            else
+                lsc.gravity = MyGravity_Vert_Around | horzGravity;
+            break;
+        case MyFlexGravity_Flex_Start:
+            if (lsc.orientation == MyOrientation_Horz)
+                lsc.gravity = MyGravity_Horz_Leading | vertGravity;
+            else
+                lsc.gravity = MyGravity_Vert_Top | horzGravity;
+            break;
+        case MyFlexGravity_Stretch:
+        default:
+            if (lsc.orientation == MyOrientation_Horz)
+                lsc.gravity = MyGravity_Horz_Stretch | vertGravity;
+            else
+                lsc.gravity = MyGravity_Vert_Stretch | horzGravity;
+            break;
     }
     
     return [super calcLayoutSize:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
