@@ -238,7 +238,7 @@
 
 //从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutSize类型
 @property(nonatomic, readonly) MyLayoutMostSize *myMinSize;
-//从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutSize类型
+//从数组中得到最大的尺寸值。要求数组的元素必须是MyLayoutSize类型
 @property(nonatomic, readonly) MyLayoutMostSize *myMaxSize;
 
 @end

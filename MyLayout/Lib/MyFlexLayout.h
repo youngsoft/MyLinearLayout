@@ -58,14 +58,13 @@ extern const int MyFlex_Auto;
 @property(nonatomic, assign) MyVisibility visibility_val;
 
 
-
 //条目的顺序设置
 -(MyFlexItem* (^)(NSInteger))order;
 //条目的尺寸比重设置，默认为0表示不按比重
 -(MyFlexItem* (^)(CGFloat))flex_grow;
 //条目的压缩比重设置，默认为1，表示当会进行压缩
 -(MyFlexItem* (^)(CGFloat))flex_shrink;
-//条目的尺寸设置，可以设置为_auto,固定值,相对值。你可以使用这个属性也可以通过width/height来设置。
+//条目的尺寸设置，可以设置为MyFlex_Auto,固定值,相对值。你可以使用这个属性也可以通过width/height来设置。
 -(MyFlexItem* (^)(CGFloat))flex_basis;
 //行内条目自身的对齐方式。
 -(MyFlexItem* (^)(MyFlexGravity))align_self;
@@ -125,17 +124,17 @@ extern const int MyFlex_Auto;
 
 @end
 
-//视图在flexbox中的分类扩展，只有MyFlexLayout中的子视图才有用。
+//条目视图在应用flexbox时的分类扩展，只有MyFlexLayout中的子视图才有用。
 @interface UIView(MyFlexLayout)
 
-//我们可以借助视图的flexItem来设置当视图在flexbox中的一些属性。
+//我们可以借助视图的flexItem来设置条目视图在弹性布局视图中的一些属性。
 @property(nonatomic, readonly, strong) MyFlexItem *flexItem;
 
 @end
 
 
 /*
- * FlexLayout布局是为了兼容flexbox语法而建立了一个布局，它是从MyFlowLayout派生。在MyFlowLayout中也是支持类似flexbox的一些特性的
+ * 弹性布局是为了兼容flexbox语法而建立了一个布局，它是从MyFlowLayout派生。在MyFlowLayout中也是支持类似flexbox的一些特性的
  * 但是它的属性和flexbox不兼容和一致，因此提供一个新的类MyFlexLayout来完全支持flexbox.
  */
 @interface MyFlexLayout:MyFlowLayout

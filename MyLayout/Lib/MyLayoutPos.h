@@ -271,9 +271,9 @@
  */
 @interface NSArray(MyLayoutMostPos)
 
-//从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
+//从数组中得到最大的位置值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
 @property(nonatomic, readonly) MyLayoutMostPos *myMinPos;
-//从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
+//从数组中得到最小的位置值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
 @property(nonatomic, readonly) MyLayoutMostPos *myMaxPos;
 
 @end

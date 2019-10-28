@@ -290,7 +290,7 @@
     MyGravity lineHorzGravity = horzGravity;
     if (self.lineGravity != nil)
     {
-        lineHorzGravity = self.lineGravity(self, lineIndex);
+        lineHorzGravity = self.lineGravity(self, lineIndex, count, startIndex == sbs.count) & MyGravity_Vert_Mask;
         if (lineHorzGravity == MyGravity_None)
             lineHorzGravity = horzGravity;
     }
@@ -339,7 +339,7 @@
     MyGravity lineVertGravity = vertGravity;
     if (self.lineGravity != nil)
     {
-        lineVertGravity = self.lineGravity(self, lineIndex);
+        lineVertGravity = self.lineGravity(self, lineIndex, count, startIndex == sbs.count) & MyGravity_Horz_Mask;
         if (lineVertGravity == MyGravity_None)
             lineVertGravity = vertGravity;
     }
@@ -456,13 +456,19 @@
     CGFloat addXFill = 0;  //多出来的平均区域，用于拉伸间距或者尺寸
 
     MyGravity lineHorzGravity = horzGravity;
+    MyGravity lineVertAlignment = vertAlignment;
     if (self.lineGravity != nil)
     {
-        lineHorzGravity = self.lineGravity(self, rowIndex);
+        MyGravity lineGravity = self.lineGravity(self, rowIndex, count, startIndex == sbs.count);
+        lineHorzGravity = lineGravity & MyGravity_Vert_Mask;
         if (lineHorzGravity == MyGravity_None)
             lineHorzGravity = horzGravity;
         else
             lineHorzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lineHorzGravity];
+        
+        lineVertAlignment = lineGravity & MyGravity_Horz_Mask;
+        if (lineVertAlignment == MyGravity_None)
+            lineVertAlignment = vertAlignment;
     }
     
     switch (lineHorzGravity)
@@ -553,9 +559,10 @@
         
         MyGravity sbvVertAlignment = sbvsc.alignment & MyGravity_Horz_Mask;
         if (sbvVertAlignment == MyGravity_None)
-            sbvVertAlignment = vertAlignment;
+            sbvVertAlignment = lineVertAlignment;
+        //因为单行内的垂直间距拉伸被赋予紧凑排列，所以这里的定制化将不起作用。
         if (vertAlignment == MyGravity_Vert_Between)
-            sbvVertAlignment = MyGravity_Vert_Between;
+            sbvVertAlignment = MyGravity_None;
         
         UIFont *sbvFont = nil;
         if (sbvVertAlignment == MyGravity_Vert_Baseline)
@@ -649,10 +656,18 @@
     //计算每行的gravity情况。
     CGFloat addYPos = 0;
     CGFloat addYFill = 0;
+    MyGravity lineHorzAlignment = horzAlignment;
     MyGravity lineVertGravity = vertGravity;
     if (self.lineGravity != nil)
     {
-        lineVertGravity = self.lineGravity(self, colIndex);
+        MyGravity lineGravity = self.lineGravity(self, colIndex, count, startIndex == sbs.count);
+        lineHorzAlignment = lineGravity & MyGravity_Vert_Mask;
+        if (lineHorzAlignment == MyGravity_None)
+            lineHorzAlignment = horzAlignment;
+        else
+            lineHorzAlignment = [self myConvertLeftRightGravityToLeadingTrailing:lineHorzAlignment];
+        
+        lineVertGravity = lineGravity & MyGravity_Horz_Mask;
         if (lineVertGravity == MyGravity_None)
             lineVertGravity = vertGravity;
     }
@@ -745,9 +760,10 @@
         
         MyGravity sbvHorzAlignment = [self myConvertLeftRightGravityToLeadingTrailing:sbvsc.alignment & MyGravity_Vert_Mask];
         if (sbvHorzAlignment == MyGravity_None)
-            sbvHorzAlignment = horzAlignment;
+            sbvHorzAlignment = lineHorzAlignment;
+        //因为单行内的水平间距拉伸被赋予紧凑排列，所以这里的定制化将不起作用。
         if (horzAlignment == MyGravity_Horz_Between)
-            sbvHorzAlignment = MyGravity_Horz_Between;
+            sbvHorzAlignment = MyGravity_None;
         
         if ((sbvHorzAlignment != MyGravity_None && sbvHorzAlignment != MyGravity_Horz_Leading) || _myCGFloatNotEqual(addYPos, 0.0) || _myCGFloatNotEqual(addYFill, 0.0) || colTotalShrink != 0.0)
         {
@@ -1147,7 +1163,17 @@
         rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         //计算子视图的高度。
-        rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        if (sbvsc.heightSizeInner.dimeVal != nil)
+        {
+            rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        }
+        else if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
+        {
+            rect.size.height = 0;
+        }
+        
+        
+        
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
@@ -1375,9 +1401,16 @@
             pagingItemWidth = (selfSize.width - paddingHorz - (arrangedCount - 1) * horzSpace) / arrangedCount;
             //分页滚动时和非分页滚动时的高度计算是不一样的。
             if (isPagingScroll)
+            {
                 pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - paddingVert - (rows - 1) * vertSpace) / rows;
+            }
             else
-                pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - paddingTop - rows * vertSpace) / rows;
+            {
+                if ([self.superview isKindOfClass:[UIScrollView class]])
+                    pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - paddingTop - rows * vertSpace) / rows;
+                else
+                    pagingItemHeight = (selfSize.height - paddingVert - (rows - 1) * vertSpace) / rows;
+            }
             
         }
         
@@ -1571,9 +1604,18 @@
         CGRect rect = sbvmyFrame.frame;
         
         if (pagingItemHeight != 0)
+        {
             rect.size.height = pagingItemHeight - topSpace - bottomSpace;
-        else
+        }
+        else if (sbvsc.heightSizeInner.dimeVal != nil)
+        {
             rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        }
+        else if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
+        {//如果没有设置高度约束但是又是垂直拉伸则将高度设置为0.
+            rect.size.height = 0;
+        }
+        
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         
@@ -1889,6 +1931,10 @@
         {
             rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
             rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
+        }
+        else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
+        {
+            rect.size.width = 0.0;
         }
         
         if (subviewSize != 0.0)
@@ -2228,9 +2274,16 @@
             pagingItemHeight = (selfSize.height - paddingVert - (arrangedCount - 1) * vertSpace) / arrangedCount;
             //分页滚动时和非分页滚动时的宽度计算是不一样的。
             if (isPagingScroll)
+            {
                 pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - paddingHorz - (cols - 1) * horzSpace) / cols;
+            }
             else
-                pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - paddingLeading - cols * horzSpace) / cols;
+            {
+                if ([self.superview isKindOfClass:[UIScrollView class]])
+                    pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - paddingLeading - cols * horzSpace) / cols;
+                else
+                    pagingItemWidth = (selfSize.width - paddingHorz - (cols - 1) * horzSpace) / cols;
+            }
             
         }
         
@@ -2281,8 +2334,14 @@
         //水平流式布局因为高度依赖宽度自适应的情况比较少，所以这里直接先计算宽度
         if (pagingItemWidth != 0.0)
             rect.size.width = pagingItemWidth - leadingSpace - trailingSpace;
-        else
+        else if (sbvsc.widthSizeInner.dimeVal != nil)
+        {
             rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        }
+        else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
+        {
+            rect.size.width = 0;
+        }
         
         rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         

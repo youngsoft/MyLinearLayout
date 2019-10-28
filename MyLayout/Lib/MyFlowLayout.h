@@ -137,7 +137,7 @@
 
 
 /**
- 为流式布局提供分页展示的能力,默认是0表不支持分页展示。当设置为非0时则要求必须是arrangedCount的整数倍数，表示每页的子视图的数量。而arrangedCount则表示每排内的子视图的数量。当启用pagedCount时要求将流式布局加入到UIScrollView或者其派生类中才能生效。只有数量约束流式布局才支持分页展示的功能，通过pagedCount和设置尺寸的高度或者宽度自适应配合使用能实现不同的分页展示能力:
+ 为流式布局提供分页展示的能力,默认是0表不支持分页展示。当设置为非0时则要求必须是arrangedCount的整数倍数，表示每页的子视图的数量。而arrangedCount则表示每排内的子视图的数量。当启用pagedCount时如果流式布局的父视图是UIScrollView或者其派生类就会有分页滚动的效果。只有数量约束流式布局才支持分页展示的功能，通过pagedCount和设置尺寸的高度或者宽度自适应配合使用能实现不同的分页展示能力:
  @note
  1. 垂直数量约束流式布局的高度设置为自适应时则以UIScrollView的尺寸作为一页展示的大小，因为指定了一页的子视图数量，以及指定了一排的子视图数量，因此默认也会自动计算出子视图的宽度和高度，而不需要单独指出高度和宽度(子视图的宽度你也可以自定义)，整体的分页滚动是从上到下滚动。(每页布局时从左到右再从上到下排列，新页往下滚动继续排列)：
  @code
@@ -232,11 +232,12 @@
 
 
 /**
- 单独为某一行或者一列定制gravity停靠对齐属性，默认情况下布局视图的gravity作用于所有行或者列的停靠对齐。如果你想单独定制某一行或者某一列的停靠对齐方式时
- 可以通过设置这个block属性。lineGravity的入参是布局对象和当前行列的索引值，索引值以0开始，返回的是此行的停靠对齐方式，如果返回MyGravity_None则表示使用
- 布局默认的gravity停靠对齐属性。如果您的gravity属性设置的是Fill的话则有可能通过这个进行定制化会出现一些异常。
+ 单独为某一行或者一列定制的水平和垂直停靠对齐属性，默认情况下布局视图的gravity和arrangedGravity作用于所有行或者列的停靠对齐。如果你想单独定制某一行或者某一列的停靠对齐方式时
+ 可以通过设置这个block属性。
+ lineGravity的入参分别是布局对象、当前行的索引(0开始)、当前行的条目视图数量、是否是最后一行四个参数。
+ 函数返回的是此行的停靠对齐方式，如果返回MyGravity_None则表示使用布局默认的gravity和arrangedGravity停靠对齐属性。
  */
-@property(nonatomic, copy) MyGravity (^lineGravity)(MyFlowLayout *layout, NSInteger lineIndex);
+@property(nonatomic, copy) MyGravity (^lineGravity)(MyFlowLayout *layout, NSInteger lineIndex, NSInteger itemCount, BOOL isLastLine);
 
 
 

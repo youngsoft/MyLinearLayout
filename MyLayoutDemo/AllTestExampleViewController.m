@@ -24,7 +24,8 @@
     self.view.backgroundColor  = [UIColor whiteColor];
     
    // [self example1];
-    [self example2];
+   // [self example2];
+    [self example3];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -126,5 +127,55 @@
 
 }
 
+-(void)example3
+{
+    //用链式语法创建一个弹性布局，宽度和父视图一致，高度为100
+    MyFlexLayout *layout = MyFlexLayout.new.flex
+    .flex_direction(MyFlexDirection_Row)
+    .flex_wrap(MyFlexWrap_Wrap)
+    .align_content(MyFlexGravity_Center)
+    .align_items(MyFlexGravity_Flex_End)
+    .vert_space(10)
+    .horz_space(10)
+    .padding(UIEdgeInsetsMake(10, 10, 10, 10))
+    .margin_top(50)
+    .width(MyLayoutSize.fill)
+    .height(MyLayoutSize.wrap)
+    .addTo(self.view);
+    
+    
+    UILabel *itemA = UILabel.new.flexItem
+    .width(MyLayoutSize.fill)
+    .height(30)
+    .addTo(layout);
+    
+    UILabel *itemB = UILabel.new.flexItem
+    .flex_grow(1)
+    .align_self(MyFlexGravity_Flex_Start)
+    .height(30)
+    .addTo(layout);
+    
+    UILabel *itemC = UILabel.new.flexItem
+    .flex_grow(1)
+    .height(40)
+    .addTo(layout);
+    
+    UILabel *itemD = UILabel.new.flexItem
+    .flex_grow(1)
+    .height(50)
+    .addTo(layout);
+    
+    
+    layout.backgroundColor = [UIColor grayColor];
+    itemA.text = @"A";
+    itemA.backgroundColor = [UIColor redColor];
+    itemB.text = @"B";
+    itemB.backgroundColor = [UIColor greenColor];
+    itemC.text = @"C";
+    itemC.backgroundColor = [UIColor blueColor];
+    itemD.text = @"D";
+    itemD.backgroundColor = [UIColor yellowColor];
+
+}
 
 @end

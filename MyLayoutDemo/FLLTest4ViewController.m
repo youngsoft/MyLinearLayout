@@ -166,7 +166,7 @@
     //第六行因为最后只有一个按钮，所以这里不需要建立占位视图。
     
     //我们可以通过lineGravity属性来实现为每一行进行不同的对齐方式定制，如果返回MyGravity_None则表示用gravity属性设置的对齐方式来进行处理。
-    flowLayout.lineGravity = ^MyGravity(MyFlowLayout *layout, NSInteger lineIndex) {
+    flowLayout.lineGravity = ^MyGravity(MyFlowLayout *layout, NSInteger lineIndex, NSInteger itemCount, BOOL isLastLine) {
         
         switch (lineIndex) {
             case 3:

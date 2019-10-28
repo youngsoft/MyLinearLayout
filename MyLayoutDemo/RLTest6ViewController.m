@@ -96,11 +96,11 @@
     UIButton *clickButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [clickButton setTitle:@"Click me" forState:UIControlStateNormal];
     clickButton.backgroundColor = [CFTool color:10];
-    [clickButton sizeToFit];   //这里直接计算出date的size是自适应的
+    [clickButton sizeToFit];   //这里直接计算出clickButton的size是自适应的
     clickButton.topPos.equalTo(nameLabel.topPos);
     //最新版本的相对布局可以让子视图的位置设置为某些视图位置中的最大或者最小值，也就是极限值，我们可以对一个数组调用扩展分类的方法myMaxPos或者myMinPos来获取
     //到数组中元素的最大或者最小位置值。使用最大最小值的前提是在计算当前位置的约束时，要求数组中的元素的约束都是已经计算好了的，否则得到的结果是未可知，就如本例中
-    //在计算dateLabel的右边距时，detailLabel以及nameLabel的右边距都是已经计算好了的。
+    //在计算clickButton的右边距时，detailLabel以及nameLabel的右边距都是已经计算好了的。
     clickButton.rightPos.equalTo(@[detailLabel.rightPos, nameLabel.rightPos.clone(-1 *(40+clickButton.frame.size.width))].myMaxPos);
     [rootLayout addSubview:clickButton];
     

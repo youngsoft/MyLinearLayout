@@ -43,6 +43,7 @@
 #import "FLLTest6ViewController.h"
 #import "FLLTest7ViewController.h"
 #import "FLLTest8ViewController.h"
+#import "FLLTest9ViewController.h"
 
 #import "FLXTest1ViewController.h"
 
@@ -199,6 +200,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"8.FlowLayout - Flex space", @""),
                                                @"class":[FLLTest8ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"9.FlowLayout - Line gravity", @""),
+                                               @"class":[FLLTest9ViewController class]
                                                }
                                              ]
                             },

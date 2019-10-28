@@ -36,6 +36,7 @@
 "6.FlowLayout - Scroll" = "6.流式布局-不同方向的滚动";
 "7.FlowLayout - Auto Arrange" = "7.流式布局-自动布局和对瀑布流的支持";
 "8.FlowLayout - Flex space" = "8.流式布局-浮动间距";
+"9.FlowLayout - Line gravity" = "9.流式布局-自定义行停靠对齐";
 "1.FloatLayout - Float" = "1.浮动布局-浮动效果的演示";
 "2.FloatLayout - Jagged" = "2.浮动布局-仿天猫淘宝首页实现" ;
 "3.FloatLayout - Card news" = "3.浮动布局-仿ZAKER今日头条实现";
