@@ -22,13 +22,28 @@
 -(void)loadView
 {
     /*
-       这个例子主要演示流式布局中进行行内的自定义停靠对齐属性lineGravity的使用方法。一般情况下我们可以通过gravity来设置布局内所有行的停靠特性，而通过arrangedGravity来设置行内的对齐特性。而如果我们想自定义某行的停靠和对齐特性时则需要实现lineGravity这个block。
+       这个例子主要演示流式布局中进行行内的自定义停靠对齐属性lineGravity的使用方法。
+         在垂直流式布局中，我们可以通过gravity来设置每行的水平停靠对齐特性，并通过arrangedGravity来设置每行行内的垂直停靠对齐特性。
+         在水平流式布局中，我们可以通过gravity来设置每列的垂直停靠对齐特性，并通过arrangedGravity来设置每列列内的水平停靠对齐特性。
+     
+         而如果我们想自定义某行或者某列的水平和垂直停靠对齐特性时则可以通过lineGravity来实现，lineGravity是一个block方法。这个方法的入参有布局对象、行的索引、行内条目的数量、是否是最后一行标志。而方法的返回则是这一行内的水平和垂直停靠对齐特性。如果某个方向返回MyGravity_None则表明用布局指定的gravity和arrangedGravity设置的值。
+     
+            比如在一个垂直流式布局中所有行都是右停靠，并且每行内都是垂直居中对齐。但是我们又想将其中的第1行设置为左停靠，并且是底部对齐。那么我们就可以进行如下设置：
+     layout.gravity = MyGravity_Horz_Right;    //整体右停靠
+     layout.arrangedGravity = MyGravity_Vert_Center;  //每行都是垂直居中对齐
+     layout.lineGravity = ^(MyFlowLayout *layout, NSInteger lineIndex, NSInteger itemCount, BOOL isLastLine)
+     {
+         if (lineIndex == 1)
+             return MyGravity_Horz_Left | MyGravity_Vert_Bottom;  //第一行左边停靠并且底部对齐
+         else
+            return MyGravity_None;
+     };
      
      */
     
     self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
     MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
-    rootLayout.isFlex = YES;
+    rootLayout.isFlex = YES;   //这个属性设置为YES表明让流式布局兼容flexbox的一些特性。
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     rootLayout.subviewSpace = 5;
     self.view = rootLayout;
@@ -45,7 +60,7 @@
     [vertLayoutItemAddButon addTarget:self action:@selector(handleVertLayoutItemAdd:) forControlEvents:UIControlEventTouchUpInside];
     [vertLayoutItemAddButon setTitle:@"Add" forState:UIControlStateNormal];
     [rootLayout addSubview:vertLayoutItemAddButon];
-    vertLayoutItemAddButon.weight = 1.0;
+    vertLayoutItemAddButon.weight = 1.0;   //两个按钮的比重为1表明平分宽度。
     vertLayoutItemAddButon.heightSize.equalTo(@(40));
     
     UIButton *vertLayoutItemRemoveButon = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -59,7 +74,7 @@
     [rootLayout addSubview:vertContentLayout];
     vertContentLayout.widthSize.equalTo(rootLayout.widthSize);
     vertContentLayout.heightSize.equalTo(vertContentLayout.widthSize).multiply(3.0/5);
-    vertContentLayout.gravity = MyGravity_Horz_Fill | MyGravity_Vert_Center;
+    vertContentLayout.gravity = MyGravity_Horz_Fill | MyGravity_Vert_Center;  //整体水平填充和垂直居中
     //单独设置行内的停靠方向。
     vertContentLayout.lineGravity = ^MyGravity(MyFlowLayout *layout, NSInteger lineIndex, NSInteger itemCount, BOOL isLastLine) {
         
@@ -133,6 +148,7 @@
 
 -(void)handleVertLayoutItemAdd:(id)sender
 {
+    //这里子视图不需要设置任何宽高约束。
     UILabel *itemView = [UILabel new];
     itemView.backgroundColor = [CFTool color:arc4random_uniform(14) + 1];
     itemView.text = [NSString stringWithFormat:@"%ld", self.vertContentLayout.subviews.count];
