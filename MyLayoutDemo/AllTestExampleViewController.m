@@ -25,7 +25,8 @@
     
    // [self example1];
    // [self example2];
-    [self example3];
+    //[self example3];
+    [self example4];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -176,6 +177,59 @@
     itemD.text = @"D";
     itemD.backgroundColor = [UIColor yellowColor];
 
+}
+
+
+-(void)example4
+{
+    MyRelativeLayout *_rootLayout = [MyRelativeLayout new];
+    
+    _rootLayout.widthSize.equalTo(self.view.widthSize);
+    _rootLayout.wrapContentHeight = YES;
+    _rootLayout.topPadding = 15;
+    _rootLayout.bottomPadding = 15;
+    _rootLayout.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:_rootLayout];
+    
+   
+    
+    MyLinearLayout *topLayout = [MyLinearLayout linearLayoutWithOrientation:(MyOrientation_Vert)];
+    
+    topLayout.wrapContentWidth = YES;
+    topLayout.myHorzMargin = 0;
+    topLayout.wrapContentHeight = YES;
+    topLayout.subviewVSpace = 5;
+    [_rootLayout addSubview:topLayout];
+    
+    
+    return;
+    
+    UILabel *topLable = [UILabel new];
+    topLable.text = @"宿州学院-皁阳火车站";
+    topLable.myTop = 0;
+    topLable.myLeft = 11;
+    topLable.wrapContentSize = YES;
+    [topLayout addSubview:topLable];
+    
+    
+    
+    UIButton *checkMarkBtn = [UIButton new];
+    [checkMarkBtn setImage:[UIImage imageNamed:@"train_progresscomplete"] forState:(UIControlStateNormal)];
+    checkMarkBtn.widthSize.equalTo(@(13));
+    checkMarkBtn.heightSize.equalTo(@(13));
+    checkMarkBtn.rightPos.equalTo(@(10));
+    checkMarkBtn.centerYPos.equalTo(@(0));
+    [_rootLayout addSubview:checkMarkBtn];
+    
+    
+    UILabel *contentLabel = [UILabel new];
+    contentLabel.text = @"途径：蒙城、嘎县、阜阳师范学院、嘎县、阜阳师范学院、嘎县、阜阳师范学院";
+    contentLabel.myLeft = 11;
+    
+    contentLabel.wrapContentHeight= YES;
+    contentLabel.myRight = 27;
+    contentLabel.hidden = NO;
+    [topLayout addSubview:contentLabel];
 }
 
 @end

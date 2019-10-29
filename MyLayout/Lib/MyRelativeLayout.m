@@ -53,15 +53,25 @@
             if (pHasSubLayout != nil && (sbvsc.heightSizeInner.dimeWrapVal || sbvsc.widthSizeInner.dimeWrapVal))
                 *pHasSubLayout = YES;
             
-            if (isEstimate && (sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal))
+            if (sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal)
             {
-                [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
-                
-                sbvmyFrame.leading = sbvmyFrame.trailing = sbvmyFrame.top = sbvmyFrame.bottom = CGFLOAT_MAX;
-                
-                //因为sizeThatFits执行后会还原，所以这里要重新设置
-                if (sbvmyFrame.multiple)
-                    sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
+                if (isEstimate)
+                {
+                    [(MyBaseLayout*)sbv sizeThatFits:sbvmyFrame.frame.size inSizeClass:sizeClass];
+                    
+                    sbvmyFrame.leading = sbvmyFrame.trailing = sbvmyFrame.top = sbvmyFrame.bottom = CGFLOAT_MAX;
+                    
+                    //因为sizeThatFits执行后会还原，所以这里要重新设置
+                    if (sbvmyFrame.multiple)
+                        sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
+                }
+                else
+                {
+                    if (sbvsc.widthSizeInner.dimeWrapVal)
+                        sbvmyFrame.width = sbv.bounds.size.width;
+                    if (sbvsc.heightSizeInner.dimeWrapVal)
+                        sbvmyFrame.height = sbv.bounds.size.height;
+                }
             }
         }
     }

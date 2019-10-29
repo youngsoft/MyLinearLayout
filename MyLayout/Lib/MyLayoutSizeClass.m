@@ -426,18 +426,30 @@ BOOL _myisRTL = NO;
 -(void)setWrapContentWidth:(BOOL)wrapContentWidth
 {
     if (wrapContentWidth)
+    {
         self.widthSize.myEqualTo(@(MyLayoutSize.wrap));
+    }
     else
-        _widthSize = nil;
+    {
+        //只有是以前设置了宽度自适应，这里取消自适应后才会将尺寸清除！目的是为了兼容老版本。
+         if (_widthSize.isWrap)
+             _widthSize = nil;
+    }
 }
 
 
 -(void)setWrapContentHeight:(BOOL)wrapContentHeight
 {
     if (wrapContentHeight)
+    {
         self.heightSize.myEqualTo(@(MyLayoutSize.wrap));
+    }
     else
-        _heightSize = nil;
+    {
+        //只有是以前设置了高度自适应，这里取消自适应后才会将尺寸清除！目的是为了兼容老版本。
+        if (_heightSize.isWrap)
+            _heightSize = nil;
+    }
 }
 
 -(BOOL)wrapContentSize
