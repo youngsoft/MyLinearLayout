@@ -586,7 +586,6 @@
                         
                         if (_myCGFloatLess(rect.origin.x + rect.size.width + trailingSpace, selfSize.width - paddingTrailing))
                         {
-                           
                             sbvl.trailingBorderline = self.intelligentBorderline;
                         }
                         
@@ -637,10 +636,7 @@
                     [leadingCandidateRects removeObjectAtIndex:i];
                     cRect = CGRectUnion(cRect, candidateRect);
                     cRect.size.width += candidateMaxX - cMinx;
-                    
                 }
-
-                
             }
             
             //记录每一行的最大子视图位置的索引值。
@@ -737,7 +733,6 @@
                         
                         if (_myCGFloatLess(rect.origin.x + rect.size.width + trailingSpace, selfSize.width - paddingTrailing))
                         {
-                        
                             sbvl.trailingBorderline = self.intelligentBorderline;
                         }
                         
@@ -745,10 +740,7 @@
                         {
                             sbvl.bottomBorderline = self.intelligentBorderline;
                         }
-                        
-                        
                     }
-                    
                 }
             }
             

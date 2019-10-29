@@ -526,7 +526,7 @@
     
     BOOL isWeightShrinkSpace = NO;   //是否按比重缩小间距。
     CGFloat weightShrinkSpaceTotalHeight = 0;
-    CGFloat floatingHeight = selfSize.height - fixedHeight - paddingVert;  //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
+    CGFloat spareHeight = selfSize.height - fixedHeight - paddingVert;  //剩余的可浮动的高度，那些weight不为0的从这个高度来进行分发
     //取出shrinkType中的模式和内容类型：
     MySubviewsShrinkType sstMode = lsc.shrinkType & 0x0F; //压缩的模式
     MySubviewsShrinkType sstContent = lsc.shrinkType & 0xF0; //压缩内容
@@ -535,17 +535,17 @@
     if (totalShrink != 0.0)
         sstMode = MySubviewsShrink_None;
     
-    if (_myCGFloatLessOrEqual(floatingHeight, 0))
+    if (_myCGFloatLessOrEqual(spareHeight, 0))
     {
         if (sstMode != MySubviewsShrink_None)
         {
             if (sstContent == MySubviewsShrink_Size)
             {//压缩尺寸
-                if (fixedSizeSbs.count > 0 && floatingHeight < 0 && selfSize.height > 0)
+                if (fixedSizeSbs.count > 0 && spareHeight < 0 && selfSize.height > 0)
                 {
                     if (sstMode == MySubviewsShrink_Average)
                     {//均分。
-                        CGFloat averageHeight = floatingHeight / fixedSizeSbs.count;
+                        CGFloat averageHeight = spareHeight / fixedSizeSbs.count;
                         
                         for (UIView *fsbv in fixedSizeSbs)
                         {
@@ -556,7 +556,7 @@
                     {//按比例分配。
                         for (UIView *fsbv in fixedSizeSbs)
                         {
-                            fsbv.myFrame.height += floatingHeight * (fsbv.myFrame.height / fixedSizeHeight);
+                            fsbv.myFrame.height += spareHeight * (fsbv.myFrame.height / fixedSizeHeight);
                         }
                         
                     }
@@ -564,16 +564,16 @@
             }
             else if (sstContent == MySubviewsShrink_Space)
             {//压缩间距
-                if (fixedSpaceCount > 0 && floatingHeight < 0 && selfSize.height > 0 && fixedSpaceHeight > 0)
+                if (fixedSpaceCount > 0 && spareHeight < 0 && selfSize.height > 0 && fixedSpaceHeight > 0)
                 {
                     if (sstMode == MySubviewsShrink_Average)
                     {
-                        addSpace = floatingHeight / fixedSpaceCount;
+                        addSpace = spareHeight / fixedSpaceCount;
                     }
                     else if (sstMode == MySubviewsShrink_Weight)
                     {
                         isWeightShrinkSpace = YES;
-                        weightShrinkSpaceTotalHeight = floatingHeight;
+                        weightShrinkSpaceTotalHeight = spareHeight;
                     }
                 }
                 
@@ -586,7 +586,7 @@
         }
 
         if (totalShrink == 0.0)
-            floatingHeight = 0.0;
+            spareHeight = 0.0;
     }
     else
     {
@@ -601,7 +601,7 @@
     }
     
     //如果有浮动尺寸或者有压缩模式
-    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingHeight, 0)) || vertGravity != MyGravity_None || lsc.widthSizeInner.dimeWrapVal)
+    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(spareHeight, 0)) || vertGravity != MyGravity_None || lsc.widthSizeInner.dimeWrapVal)
     {
         maxSelfWidth = 0.0;
         CGFloat between = 0.0; //间距扩充
@@ -670,7 +670,7 @@
             if ([self myIsRelativePos:topSpace])
             {
                 CGFloat topSpaceWeight = topSpace;
-                topSpace = _myCGFloatRound((topSpaceWeight / totalWeight) * floatingHeight);
+                topSpace = _myCGFloatRound((topSpaceWeight / totalWeight) * spareHeight);
                 if (_myCGFloatLessOrEqual(topSpace, 0))
                     topSpace = 0;
             }
@@ -690,7 +690,7 @@
             topSpace += sbvsc.topPosInner.offsetVal;
             if (totalShrink != 0.0 && sbvsc.topPosInner.shrink != 0.0)
             {
-                topSpace += (sbvsc.topPosInner.shrink / totalShrink) * floatingHeight;
+                topSpace += (sbvsc.topPosInner.shrink / totalShrink) * spareHeight;
             }
             
             pos += [self myValidMargin:sbvsc.topPosInner sbv:sbv calcPos:topSpace selfLayoutSize:selfSize];
@@ -699,7 +699,7 @@
             //分别处理相对高度和绝对高度
             if (weight != 0)
             {
-                CGFloat h = _myCGFloatRound((weight / totalWeight) * floatingHeight);
+                CGFloat h = _myCGFloatRound((weight / totalWeight) * spareHeight);
                 if (_myCGFloatLessOrEqual(h, 0))
                     h = 0;
                 
@@ -712,7 +712,7 @@
             
             if (totalShrink != 0.0 && sbvsc.heightSizeInner.shrink != 0.0)
             {
-                rect.size.height += (sbvsc.heightSizeInner.shrink / totalShrink) * floatingHeight;
+                rect.size.height += (sbvsc.heightSizeInner.shrink / totalShrink) * spareHeight;
                 if (rect.size.height < 0.0)
                     rect.size.height = 0.0;
             }
@@ -745,7 +745,7 @@
             if ([self myIsRelativePos:bottomSpace])
             {
                 CGFloat bottomSpaceWeight = bottomSpace;
-                bottomSpace = _myCGFloatRound((bottomSpaceWeight / totalWeight) * floatingHeight);
+                bottomSpace = _myCGFloatRound((bottomSpaceWeight / totalWeight) * spareHeight);
                 if ( _myCGFloatLessOrEqual(bottomSpace, 0))
                     bottomSpace = 0;
             }
@@ -765,7 +765,7 @@
             bottomSpace += sbvsc.bottomPosInner.offsetVal;
             if (totalShrink != 0.0 && sbvsc.bottomPosInner.shrink != 0.0)
             {
-                bottomSpace += (sbvsc.bottomPosInner.shrink / totalShrink) * floatingHeight;
+                bottomSpace += (sbvsc.bottomPosInner.shrink / totalShrink) * spareHeight;
             }
             
             pos += [self myValidMargin:sbvsc.bottomPosInner sbv:sbv calcPos:bottomSpace selfLayoutSize:selfSize];
@@ -1035,7 +1035,7 @@
     //剩余的可浮动的宽度，那些weight不为0的从这个宽度来进行分发
     BOOL isWeightShrinkSpace = NO;   //是否按比重缩小间距。。。
     CGFloat weightShrinkSpaceTotalWidth = 0.0;
-    CGFloat floatingWidth = selfSize.width - fixedWidth - paddingHorz;
+    CGFloat spareWidth = selfSize.width - fixedWidth - paddingHorz;
     //取出shrinkType中的模式和内容类型：
     MySubviewsShrinkType sstMode = lsc.shrinkType & 0x0F; //压缩的模式
     MySubviewsShrinkType sstContent = lsc.shrinkType & 0xF0; //压缩内容
@@ -1044,7 +1044,7 @@
     if (totalShrink != 0.0)
         sstMode = MySubviewsShrink_None;
     
-    if (_myCGFloatLessOrEqual(floatingWidth, 0.0))
+    if (_myCGFloatLessOrEqual(spareWidth, 0.0))
     {
         //如果压缩方式为自动，但是浮动宽度子视图数量不为2则压缩类型无效。
         if (sstMode == MySubviewsShrink_Auto && flexedSizeSbs.count != 2)
@@ -1054,12 +1054,12 @@
         {
             if (sstContent == MySubviewsShrink_Size)
             {
-                if (fixedSizeSbs.count > 0 && floatingWidth < 0 && selfSize.width > 0)
+                if (fixedSizeSbs.count > 0 && spareWidth < 0 && selfSize.width > 0)
                 {
                     //均分。
                     if (sstMode == MySubviewsShrink_Average)
                     {
-                        CGFloat averageWidth = floatingWidth / fixedSizeSbs.count;
+                        CGFloat averageWidth = spareWidth / fixedSizeSbs.count;
                         
                         for (UIView *fsbv in fixedSizeSbs)
                         {
@@ -1079,7 +1079,7 @@
                         //如果2个都超过一半则总是一半显示。
                         //如果1个超过了一半则 如果两个没有超过总宽度则正常显示，如果超过了总宽度则超过一半的视图的宽度等于总宽度减去未超过一半的视图的宽度。
                         //如果没有一个超过一半。则正常显示
-                        CGFloat layoutWidth = floatingWidth + leadingWidth + trailingWidth;
+                        CGFloat layoutWidth = spareWidth + leadingWidth + trailingWidth;
                         CGFloat halfLayoutWidth = layoutWidth / 2;
                         
                         if (_myCGFloatGreat(leadingWidth, halfLayoutWidth) && _myCGFloatGreat(trailingWidth,halfLayoutWidth))
@@ -1108,23 +1108,23 @@
                     {//按比例分配。
                         for (UIView *fsbv in fixedSizeSbs)
                         {
-                            fsbv.myFrame.width += floatingWidth * (fsbv.myFrame.width / fixedSizeWidth);
+                            fsbv.myFrame.width += spareWidth * (fsbv.myFrame.width / fixedSizeWidth);
                         }
                     }
                 }
             }
             else if (sstContent == MySubviewsShrink_Space)
             {
-                if (fixedSpaceCount > 0 && floatingWidth < 0 && selfSize.width > 0 && fixedSpaceWidth > 0)
+                if (fixedSpaceCount > 0 && spareWidth < 0 && selfSize.width > 0 && fixedSpaceWidth > 0)
                 {
                     if (sstMode == MySubviewsShrink_Average)
                     {
-                        addSpace = floatingWidth / fixedSpaceCount;
+                        addSpace = spareWidth / fixedSpaceCount;
                     }
                     else if (sstMode == MySubviewsShrink_Weight)
                     {
                         isWeightShrinkSpace = YES;
-                        weightShrinkSpaceTotalWidth = floatingWidth;
+                        weightShrinkSpaceTotalWidth = spareWidth;
                     }
                 }
             }
@@ -1135,7 +1135,7 @@
         }
     
         if (totalShrink == 0.0)
-            floatingWidth = 0;
+            spareWidth = 0;
     }
     else
     {
@@ -1148,7 +1148,7 @@
         fixedWidth = selfSize.width - paddingHorz;
 
     //如果有浮动尺寸或者有压缩模式
-    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(floatingWidth, 0)) || horzGravity != MyGravity_None || lsc.heightSizeInner.dimeWrapVal)
+    if (totalWeight != 0.0 || totalShrink != 0.0 ||  (sstMode != MySubviewsShrink_None && _myCGFloatLessOrEqual(spareWidth, 0)) || horzGravity != MyGravity_None || lsc.heightSizeInner.dimeWrapVal)
     {
         maxSelfHeight = 0.0;
         CGFloat between = 0.0; //间距扩充
@@ -1216,7 +1216,7 @@
             if ([self myIsRelativePos:leadingSpace])
             {
                 CGFloat topSpaceWeight = leadingSpace;
-                leadingSpace = _myCGFloatRound((topSpaceWeight / totalWeight) * floatingWidth);
+                leadingSpace = _myCGFloatRound((topSpaceWeight / totalWeight) * spareWidth);
                 if (_myCGFloatLessOrEqual(leadingSpace, 0))
                     leadingSpace = 0;
             }
@@ -1236,7 +1236,7 @@
             leadingSpace += sbvsc.leadingPosInner.offsetVal;
             if (totalShrink != 0.0 && sbvsc.leadingPosInner.shrink != 0.0)
             {
-                leadingSpace += (sbvsc.leadingPosInner.shrink / totalShrink) * floatingWidth;
+                leadingSpace += (sbvsc.leadingPosInner.shrink / totalShrink) * spareWidth;
             }
             
             pos += [self myValidMargin:sbvsc.leadingPosInner sbv:sbv calcPos:leadingSpace selfLayoutSize:selfSize];
@@ -1245,7 +1245,7 @@
             //分别处理相对高度和绝对高度
             if (weight != 0.0)
             {
-                CGFloat w = _myCGFloatRound((weight / totalWeight) * floatingWidth);
+                CGFloat w = _myCGFloatRound((weight / totalWeight) * spareWidth);
                 if (_myCGFloatLessOrEqual(w, 0))
                     w = 0;
                 
@@ -1258,7 +1258,7 @@
             
             if (totalShrink != 0.0 && sbvsc.widthSizeInner.shrink != 0.0)
             {
-                rect.size.width += (sbvsc.widthSizeInner.shrink / totalShrink) * floatingWidth;
+                rect.size.width += (sbvsc.widthSizeInner.shrink / totalShrink) * spareWidth;
                 if (rect.size.width < 0.0)
                     rect.size.width = 0.0;
             }
@@ -1292,7 +1292,7 @@
             if ([self myIsRelativePos:trailingSpace])
             {
                 CGFloat trailingSpaceWeight = trailingSpace;
-                trailingSpace = _myCGFloatRound((trailingSpaceWeight / totalWeight) * floatingWidth);
+                trailingSpace = _myCGFloatRound((trailingSpaceWeight / totalWeight) * spareWidth);
                 if (_myCGFloatLessOrEqual(trailingSpace, 0))
                     trailingSpace = 0;
             }
@@ -1311,7 +1311,7 @@
             trailingSpace += sbvsc.trailingPosInner.offsetVal;
             if (totalShrink != 0.0 && sbvsc.trailingPosInner.shrink != 0.0)
             {
-                trailingSpace += (sbvsc.trailingPosInner.shrink / totalShrink) * floatingWidth;
+                trailingSpace += (sbvsc.trailingPosInner.shrink / totalShrink) * spareWidth;
             }
             
             pos += [self myValidMargin:sbvsc.trailingPosInner sbv:sbv calcPos:trailingSpace  selfLayoutSize:selfSize];
