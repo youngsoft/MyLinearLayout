@@ -202,8 +202,6 @@
     [_rootLayout addSubview:topLayout];
     
     
-    return;
-    
     UILabel *topLable = [UILabel new];
     topLable.text = @"宿州学院-皁阳火车站";
     topLable.myTop = 0;
@@ -211,7 +209,7 @@
     topLable.wrapContentSize = YES;
     [topLayout addSubview:topLable];
     
-    
+
     
     UIButton *checkMarkBtn = [UIButton new];
     [checkMarkBtn setImage:[UIImage imageNamed:@"train_progresscomplete"] forState:(UIControlStateNormal)];
@@ -220,8 +218,7 @@
     checkMarkBtn.rightPos.equalTo(@(10));
     checkMarkBtn.centerYPos.equalTo(@(0));
     [_rootLayout addSubview:checkMarkBtn];
-    
-    
+        
     UILabel *contentLabel = [UILabel new];
     contentLabel.text = @"途径：蒙城、嘎县、阜阳师范学院、嘎县、阜阳师范学院、嘎县、阜阳师范学院";
     contentLabel.myLeft = 11;

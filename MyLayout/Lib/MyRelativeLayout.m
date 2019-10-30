@@ -65,13 +65,6 @@
                     if (sbvmyFrame.multiple)
                         sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
                 }
-                else
-                {
-                    if (sbvsc.widthSizeInner.dimeWrapVal)
-                        sbvmyFrame.width = sbv.bounds.size.width;
-                    if (sbvsc.heightSizeInner.dimeWrapVal)
-                        sbvmyFrame.height = sbv.bounds.size.height;
-                }
             }
         }
     }
@@ -738,7 +731,13 @@
             sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
         }
-        else;
+        else if (sbvsc.widthSizeInner.dimeWrapVal)
+        {
+            if ([sbv isKindOfClass:[MyBaseLayout class]])
+            {
+                sbvmyFrame.width = sbv.bounds.size.width;
+            }
+        }
         
         if ([self myIsNoLayoutSubview:sbv])
         {
@@ -853,7 +852,13 @@
             sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
         }
-        else;
+        else if (sbvsc.heightSizeInner.dimeWrapVal)
+        {
+            if ([sbv isKindOfClass:[MyBaseLayout class]])
+            {
+                sbvmyFrame.height = sbv.bounds.size.height;
+            }
+        }
         
         if ([self myIsNoLayoutSubview:sbv])
         {
