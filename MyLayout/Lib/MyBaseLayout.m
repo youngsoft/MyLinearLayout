@@ -1196,7 +1196,7 @@ void* _myObserverContextC = (void*)20175283;
 
 
 
--(CGSize)myEstimateLayoutRect:(CGSize)size inSizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+-(CGSize)myEstimateLayoutSize:(CGSize)size inSizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
     MyFrame *selfMyFrame = self.myFrame;
     
@@ -1258,7 +1258,7 @@ void* _myObserverContextC = (void*)20175283;
     NSMutableArray *sbs = [self myGetLayoutSubviews];
     [sbs addObject:subview];
     
-    [self myEstimateLayoutRect:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny sbs:sbs];
+    [self myEstimateLayoutSize:size inSizeClass:MySizeClass_wAny | MySizeClass_hAny sbs:sbs];
     
     return [subview estimatedRect];
 }
@@ -1382,7 +1382,6 @@ void* _myObserverContextC = (void*)20175283;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(UIView*)object change:(NSDictionary *)change context:(void *)context
 {
-    
     //监控非布局父视图的frame的变化，而改变自身的位置和尺寸
     if (context == _myObserverContextC)
     {
@@ -1399,35 +1398,22 @@ void* _myObserverContextC = (void*)20175283;
     //监控子视图的frame的变化以便重新进行布局
     if (!_isMyLayouting)
     {
-        
         if (context == _myObserverContextA)
         {
             [self setNeedsLayout];
             //这里添加的原因是有可能子视图取消隐藏后不会绘制自身，所以这里要求子视图重新绘制自身
             if ([keyPath isEqualToString:@"hidden"] && ![change[NSKeyValueChangeNewKey] boolValue])
-            {
                 [(UIView*)object setNeedsDisplay];
-            }
         }
         else if (context == _myObserverContextB)
         {//针对UILabel特殊处理。。
             
             UIView *sbvsc = object.myCurrentSizeClass;
-            
-            //这是什么意思？ 这就是不注释的悲剧！！！
-           // if (sbvsc.widthSizeInner.dimeWrapVal && sbvsc.heightSizeInner.dimeWrapVal)
-           // {
-           //     [self setNeedsLayout];
-           // }
-            if (sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal)
-           {
-                //[object sizeToFit];
+           if (sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal)
                [self setNeedsLayout];
-            }
         }
     }
 }
-
 
 #pragma mark -- Override Methods
 
@@ -1499,7 +1485,7 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGSize)sizeThatFits:(CGSize)size inSizeClass:(MySizeClass)sizeClass
 {
-    return [self myEstimateLayoutRect:size inSizeClass:sizeClass sbs:nil];
+    return [self myEstimateLayoutSize:size inSizeClass:sizeClass sbs:nil];
 }
 
 

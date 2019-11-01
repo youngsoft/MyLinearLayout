@@ -70,26 +70,23 @@
     }
     
     
-    BOOL reCalc = NO;
-    CGSize maxSize = [self myCalcLayout:&reCalc lsc:lsc selfSize:selfSize];
+    BOOL reCalcWidth = NO;
+    BOOL reCalcHeight = NO;
+    CGSize maxSize = [self myCalcLayout:lsc inSelfSize:selfSize pRecalcWidth:&reCalcWidth pRecalcHeight:&reCalcHeight];
     
+    //如果布局视图的尺寸自适应的，这里要调整一下布局视图的尺寸。但是因为有一些子视图的约束是依赖布局视图的而且可能会引发连锁反应，所以这里要再次进行重新布局处理
     if (lsc.widthSizeInner.dimeWrapVal || lsc.heightSizeInner.dimeWrapVal)
     {
         if (_myCGFloatNotEqual(selfSize.height, maxSize.height)  || _myCGFloatNotEqual(selfSize.width, maxSize.width))
         {
-            
             if (lsc.widthSizeInner.dimeWrapVal)
-            {
                 selfSize.width = maxSize.width;
-            }
             
             if (lsc.heightSizeInner.dimeWrapVal)
-            {
                 selfSize.height = maxSize.height;
-            }
             
             //如果里面有需要重新计算的就重新计算布局
-            if (reCalc)
+            if (reCalcWidth || reCalcHeight)
             {
                 for (UIView *sbv in self.subviews)
                 {
@@ -97,13 +94,21 @@
                     //如果是布局视图则不清除尺寸，其他清除。
                     if (isEstimate  && [sbv isKindOfClass:[MyBaseLayout class]])
                     {
-                        sbvmyFrame.leading = sbvmyFrame.trailing = sbvmyFrame.top = sbvmyFrame.bottom = CGFLOAT_MAX;
+                        if (reCalcWidth)
+                            sbvmyFrame.leading = sbvmyFrame.trailing = CGFLOAT_MAX;
+                        if (reCalcHeight)
+                            sbvmyFrame.top = sbvmyFrame.bottom = CGFLOAT_MAX;
                     }
                     else
-                        [sbvmyFrame reset];
+                    {
+                        if (reCalcWidth)
+                            sbvmyFrame.leading = sbvmyFrame.trailing = sbvmyFrame.width = CGFLOAT_MAX;
+                        if (reCalcHeight)
+                            sbvmyFrame.top = sbvmyFrame.bottom = sbvmyFrame.height = CGFLOAT_MAX;
+                    }
                 }
                 
-                [self myCalcLayout:NULL lsc:lsc selfSize:selfSize];
+                [self myCalcLayout:lsc inSelfSize:selfSize pRecalcWidth:NULL pRecalcHeight:NULL];
             }
         }
         
@@ -731,13 +736,11 @@
             sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:sbvmyFrame.width sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
         }
-        else if (sbvsc.widthSizeInner.dimeWrapVal)
+        else
         {
-            if ([sbv isKindOfClass:[MyBaseLayout class]])
-            {
-                sbvmyFrame.width = sbv.bounds.size.width;
-            }
+            
         }
+        
         
         if ([self myIsNoLayoutSubview:sbv])
         {
@@ -852,12 +855,9 @@
             sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:sbvmyFrame.height sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
             
         }
-        else if (sbvsc.heightSizeInner.dimeWrapVal)
+        else
         {
-            if ([sbv isKindOfClass:[MyBaseLayout class]])
-            {
-                sbvmyFrame.height = sbv.bounds.size.height;
-            }
+            
         }
         
         if ([self myIsNoLayoutSubview:sbv])
@@ -961,10 +961,12 @@
 }
 
 
--(CGSize)myCalcLayout:(BOOL*)pRecalc lsc:(MyRelativeLayout*)lsc selfSize:(CGSize)selfSize
+-(CGSize)myCalcLayout:(MyRelativeLayout*)lsc inSelfSize:(CGSize)selfSize pRecalcWidth:(BOOL*)pRecalcWidth pRecalcHeight:(BOOL*)pRecalcHeight
 {
-    if (pRecalc != NULL)
-        *pRecalc = NO;
+    if (pRecalcWidth != NULL)
+        *pRecalcWidth = NO;
+    if (pRecalcHeight != NULL)
+        *pRecalcHeight = NO;
     
     
     //遍历所有子视图，算出所有宽度和高度根据自身内容确定的子视图的尺寸.以及计算出那些有依赖关系的尺寸限制。。。
@@ -972,7 +974,6 @@
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
-        
         
         [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
         
@@ -1032,8 +1033,8 @@
         
         if (sbvsc.widthSizeInner.dimeArrVal != nil)
         {
-            if (pRecalc != NULL)
-                *pRecalc = YES;
+            if (pRecalcWidth != NULL)
+                *pRecalcWidth = YES;
             
             NSArray *dimeArray = sbvsc.widthSizeInner.dimeArrVal;
             
@@ -1070,13 +1071,13 @@
                 
             }
             
-            CGFloat floatingWidth = selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding + totalAdd;
-            if ( _myCGFloatLessOrEqual(floatingWidth, 0))
-                floatingWidth = 0;
+            CGFloat spareWidth = selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding + totalAdd;
+            if ( _myCGFloatLessOrEqual(spareWidth, 0))
+                spareWidth = 0;
             
             if (totalMulti != 0)
             {
-                CGFloat tempWidth = _myCGFloatRound(floatingWidth * (sbvsc.widthSizeInner.multiVal / totalMulti));
+                CGFloat tempWidth = _myCGFloatRound(spareWidth * (sbvsc.widthSizeInner.multiVal / totalMulti));
                 
                 sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:tempWidth sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
                 
@@ -1086,7 +1087,7 @@
                 }
                 else
                 {
-                    floatingWidth -= tempWidth;
+                    spareWidth -= tempWidth;
                     totalMulti -= sbvsc.widthSizeInner.multiVal;
                 }
                 
@@ -1096,8 +1097,8 @@
                     {
                         if (dime.dimeVal == nil)
                         {
-                            tempWidth = _myCGFloatRound(floatingWidth * (dime.multiVal / totalMulti));
-                            floatingWidth -= tempWidth;
+                            tempWidth = _myCGFloatRound(spareWidth * (dime.multiVal / totalMulti));
+                            spareWidth -= tempWidth;
                             totalMulti -= dime.multiVal;
                             dime.view.myFrame.width = tempWidth;
 
@@ -1115,8 +1116,8 @@
         
         if (sbvsc.heightSizeInner.dimeArrVal != nil)
         {
-            if (pRecalc != NULL)
-                *pRecalc = YES;
+            if (pRecalcHeight != NULL)
+                *pRecalcHeight = YES;
             
             NSArray *dimeArray = sbvsc.heightSizeInner.dimeArrVal;
             
@@ -1149,13 +1150,13 @@
                 }
             }
             
-            CGFloat floatingHeight = selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding + totalAdd;
-            if (_myCGFloatLessOrEqual(floatingHeight, 0))
-                floatingHeight = 0;
+            CGFloat spareHeight = selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding + totalAdd;
+            if (_myCGFloatLessOrEqual(spareHeight, 0))
+                spareHeight = 0;
             
             if (totalMulti != 0)
             {
-                CGFloat tempHeight = _myCGFloatRound(floatingHeight * (sbvsc.heightSizeInner.multiVal / totalMulti));
+                CGFloat tempHeight = _myCGFloatRound(spareHeight * (sbvsc.heightSizeInner.multiVal / totalMulti));
                 sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:tempHeight sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
                 
                 if ([self myIsNoLayoutSubview:sbv])
@@ -1164,7 +1165,7 @@
                 }
                 else
                 {
-                    floatingHeight -= tempHeight;
+                    spareHeight -= tempHeight;
                     totalMulti -= sbvsc.heightSizeInner.multiVal;
                 }
                 
@@ -1174,8 +1175,8 @@
                     {
                         if (dime.dimeVal == nil)
                         {
-                            tempHeight = _myCGFloatRound(floatingHeight * (dime.multiVal / totalMulti));
-                            floatingHeight -= tempHeight;
+                            tempHeight = _myCGFloatRound(spareHeight * (dime.multiVal / totalMulti));
+                            spareHeight -= tempHeight;
                             totalMulti -= dime.multiVal;
                             dime.view.myFrame.height = tempHeight;
                         }
@@ -1195,6 +1196,9 @@
         //表示视图数组水平居中
         if (sbvsc.centerXPosInner.posArrVal != nil)
         {
+            if (pRecalcWidth != NULL)
+                *pRecalcWidth = YES;
+            
             //先算出所有关联视图的宽度。再计算出关联视图的左边和右边的绝对值。
             NSArray *centerArray = sbvsc.centerXPosInner.posArrVal;
             
@@ -1250,6 +1254,9 @@
         //表示视图数组垂直居中
         if (sbvsc.centerYPosInner.posArrVal != nil)
         {
+            if (pRecalcHeight != NULL)
+                *pRecalcHeight = YES;
+            
             NSArray *centerArray = sbvsc.centerYPosInner.posArrVal;
             
             CGFloat totalHeight = 0;
@@ -1329,17 +1336,18 @@
             continue;
         
         
-        if (lsc.widthSizeInner.dimeWrapVal && pRecalc != NULL)
+        if (lsc.widthSizeInner.dimeWrapVal && pRecalcWidth != NULL)
         {
             //当有子视图依赖于父视图的一些设置时，需要重新进行布局(设置了右边或者中间的值，或者宽度依赖父视图)
             if(sbvsc.trailingPosInner.posNumVal != nil ||
+               sbvsc.trailingPosInner.posMostVal != nil ||
                sbvsc.trailingPosInner.posRelaVal.view == self ||
                sbvsc.centerXPosInner.posRelaVal.view == self ||
                sbvsc.centerXPosInner.posNumVal != nil ||
                sbvsc.widthSizeInner.dimeRelaVal.view == self
                )
             {
-                *pRecalc = YES;
+                *pRecalcWidth = YES;
             }
             
             //宽度最小是任何一个子视图的左右偏移和外加内边距和。
@@ -1379,17 +1387,18 @@
             }
         }
         
-        if (lsc.heightSizeInner.dimeWrapVal && pRecalc != NULL)
+        if (lsc.heightSizeInner.dimeWrapVal && pRecalcHeight != NULL)
         {
             //当有子视图依赖于父视图的一些设置时，需要重新进行布局(设置了下边或者中间的值，或者高度依赖父视图)
             if(sbvsc.bottomPosInner.posNumVal != nil ||
+               sbvsc.bottomPosInner.posMostVal != nil ||
                sbvsc.bottomPosInner.posRelaVal.view == self ||
                sbvsc.centerYPosInner.posRelaVal.view == self ||
                sbvsc.centerYPosInner.posNumVal != nil ||
                sbvsc.heightSizeInner.dimeRelaVal.view == self
                )
             {
-                *pRecalc = YES;
+                *pRecalcHeight = YES;
             }
             
             if (_myCGFloatLess(maxHeight, sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding))
@@ -1426,7 +1435,6 @@
                 
                 if (_myCGFloatLess(maxHeight, sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + lsc.myLayoutBottomPadding))
                     maxHeight = sbvmyFrame.bottom + sbvsc.bottomPosInner.absVal + lsc.myLayoutBottomPadding;
-                
             }
         }
     }
