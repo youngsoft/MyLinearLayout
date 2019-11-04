@@ -26,7 +26,8 @@
    // [self example1];
    // [self example2];
     //[self example3];
-    [self example4];
+   // [self example4];
+    [self example5];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -227,6 +228,37 @@
     contentLabel.myRight = 27;
     contentLabel.hidden = NO;
     [topLayout addSubview:contentLabel];
+}
+
+-(void)example5
+{
+    MyLinearLayout  *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    rootLayout.myHorzMargin = 0;
+    rootLayout.tag = 100;
+    [self.view addSubview:rootLayout];
+    
+//    UIView * v = [UIView new];
+//    v.mySize = CGSizeMake(100, 100);
+//    [rootLayout addSubview:v];
+    
+    MyLinearLayout *v = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    v.tag = 200;
+    v.hidden = YES;
+    v.backgroundColor = [UIColor redColor];
+    v.mySize = CGSizeMake(100, 100);
+   // v.myHorzMargin = 0;
+   // v.myHeight = 100;
+    [rootLayout addSubview:v];
+    
+    [NSTimer scheduledTimerWithTimeInterval:30 repeats:NO block:^(NSTimer * _Nonnull timer) {
+        
+        v.hidden = NO;
+        
+//        UIView *vv1 = [UIView new];
+//        vv1.mySize = CGSizeMake(100, 100);
+//        [v addSubview:vv1];
+        
+    }];
 }
 
 @end

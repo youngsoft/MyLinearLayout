@@ -124,7 +124,6 @@
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
     button.titleLabel.font = [CFTool font:14];
-    [button sizeToFit];
     button.heightSize.equalTo(@(MyLayoutSize.wrap)).add(20);  //高度自适应外加20的
     button.layer.borderColor = [UIColor lightGrayColor].CGColor;
     button.layer.borderWidth = 0.5;

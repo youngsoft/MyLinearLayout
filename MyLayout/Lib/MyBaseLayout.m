@@ -1195,54 +1195,6 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
-
--(CGSize)myEstimateLayoutSize:(CGSize)size inSizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
-{
-    MyFrame *selfMyFrame = self.myFrame;
-    
-    if (selfMyFrame.multiple)
-         selfMyFrame.sizeClass = [self myBestSizeClass:sizeClass myFrame:selfMyFrame];
-    
-    for (UIView *sbv in self.subviews)
-    {
-        MyFrame *sbvmyFrame = sbv.myFrame;
-        if (sbvmyFrame.multiple)
-            sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
-    }
-    
-    BOOL hasSubLayout = NO;
-    CGSize selfSize= [self calcLayoutSize:size isEstimate:NO pHasSubLayout:&hasSubLayout sizeClass:sizeClass sbs:sbs];
-    
-    if (hasSubLayout)
-    {
-        selfMyFrame.width = selfSize.width;
-        selfMyFrame.height = selfSize.height;
-        
-        selfSize = [self calcLayoutSize:CGSizeZero isEstimate:YES pHasSubLayout:&hasSubLayout sizeClass:sizeClass sbs:sbs];
-    }
-    
-    selfMyFrame.width = selfSize.width;
-    selfMyFrame.height = selfSize.height;
-    
-    
-    
-    //计算后还原为默认sizeClass
-    for (UIView *sbv in self.subviews)
-    {
-        MyFrame *sbvmyFrame = sbv.myFrame;
-        if (sbvmyFrame.multiple)
-            sbvmyFrame.sizeClass = self.myDefaultSizeClass;
-    }
-    
-    if (selfMyFrame.multiple)
-        selfMyFrame.sizeClass = self.myDefaultSizeClass;
-    
-    if (self.cacheEstimatedRect)
-        _useCacheRects = YES;
-    
-    return CGSizeMake(_myCGFloatRound(selfSize.width), _myCGFloatRound(selfSize.height));
-}
-
 -(void)setCacheEstimatedRect:(BOOL)cacheEstimatedRect
 {
     _cacheEstimatedRect = cacheEstimatedRect;
@@ -1350,7 +1302,6 @@ void* _myObserverContextC = (void*)20175283;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-  
     [_touchEventDelegate touchesBegan:touches withEvent:event];
     
     [super touchesBegan:touches withEvent:event];
@@ -1495,20 +1446,40 @@ void* _myObserverContextC = (void*)20175283;
         return;
     
     [super setHidden:hidden];
-    if (hidden == NO)
+    UIView *superview = self.superview;
+    if ([superview isKindOfClass:[MyBaseLayout class]])
     {
-       
-        [_borderlineLayerDelegate setNeedsLayoutIn:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height) withLayer:self.layer];
-        
-        if ([self.superview isKindOfClass:[MyBaseLayout class]])
-        {
-            [self setNeedsLayout];
-        }
-        
+        if (!((MyBaseLayout*)superview).isMyLayouting)
+            [superview setNeedsLayout];
     }
-   
+    
+    if (hidden == NO)
+        [_borderlineLayerDelegate setNeedsLayoutIn:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height) withLayer:self.layer];
 }
 
+-(void)setCenter:(CGPoint)center
+{
+    CGPoint oldCenter = self.center;
+    [super setCenter:center];
+    UIView *superview = self.superview;
+    if (!CGPointEqualToPoint(oldCenter, center) && [superview isKindOfClass:[MyBaseLayout class]])
+    {
+        if (!((MyBaseLayout*)superview).isMyLayouting)
+            [superview setNeedsLayout];
+    }
+}
+
+-(void)setFrame:(CGRect)frame
+{
+    CGRect oldFrame = self.frame;
+    [super setFrame:frame];
+    UIView *superview = self.superview;
+    if (!CGRectEqualToRect(oldFrame, frame) && [superview isKindOfClass:[MyBaseLayout class]])
+    {
+        if (!((MyBaseLayout*)superview).isMyLayouting)
+            [superview setNeedsLayout];
+    }
+}
 
 
 - (void)didAddSubview:(UIView *)subview
@@ -1667,8 +1638,6 @@ void* _myObserverContextC = (void*)20175283;
                 @finally {
                     
                 }
-                
-                
             }
             
             [newSuperview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:_myObserverContextC];
@@ -1706,8 +1675,6 @@ void* _myObserverContextC = (void*)20175283;
         @finally {
             
         }
-        
-        
     }
     
     
@@ -1737,8 +1704,6 @@ void* _myObserverContextC = (void*)20175283;
         self.beginLayoutBlock = nil;
         self.endLayoutBlock = nil;
     }
-    
-    
 }
 
 
@@ -1783,7 +1748,6 @@ void* _myObserverContextC = (void*)20175283;
 
 -(CGSize)intrinsicContentSize
 {
-    
     CGSize sz = [super intrinsicContentSize];
     if (self.translatesAutoresizingMaskIntoConstraints == NO && (self.widthSizeInner.dimeWrapVal || self.heightSizeInner.dimeWrapVal))
     {
@@ -2015,7 +1979,6 @@ void* _myObserverContextC = (void*)20175283;
                     
                     if (_myCGFloatErrorEqual(sbvTempCenter.y, sbvOldCenter.y, sSizeError))
                         sbvTempCenter.y = sbvOldCenter.y;
-                    
                     
                     if (_myCGFloatErrorNotEqual(sbvTempCenter.x, sbvOldCenter.x, sSizeError)||
                         _myCGFloatErrorNotEqual(sbvTempCenter.y, sbvOldCenter.y, sSizeError))
@@ -2275,6 +2238,56 @@ void* _myObserverContextC = (void*)20175283;
 
 
 #pragma mark -- Private Methods
+
+
+
+-(CGSize)myEstimateLayoutSize:(CGSize)size inSizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+{
+    MyFrame *selfMyFrame = self.myFrame;
+    
+    if (selfMyFrame.multiple)
+        selfMyFrame.sizeClass = [self myBestSizeClass:sizeClass myFrame:selfMyFrame];
+    
+    for (UIView *sbv in self.subviews)
+    {
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        if (sbvmyFrame.multiple)
+            sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
+    }
+    
+    //因为子布局会调用layoutSubviews来进行自身的布局，所以在非评估模式下对于尺寸自适应的子布局不应该调用sizeThatFit方法来获取尺寸。
+    BOOL hasWrapSizeSubLayout = NO;
+    CGSize selfSize= [self calcLayoutSize:size isEstimate:NO pHasSubLayout:&hasWrapSizeSubLayout sizeClass:sizeClass sbs:sbs];
+    
+    if (hasWrapSizeSubLayout)
+    {
+        selfMyFrame.width = selfSize.width;
+        selfMyFrame.height = selfSize.height;
+        
+        selfSize = [self calcLayoutSize:CGSizeZero isEstimate:YES pHasSubLayout:&hasWrapSizeSubLayout sizeClass:sizeClass sbs:sbs];
+    }
+    
+    selfMyFrame.width = selfSize.width;
+    selfMyFrame.height = selfSize.height;
+    
+    
+    
+    //计算后还原为默认sizeClass
+    for (UIView *sbv in self.subviews)
+    {
+        MyFrame *sbvmyFrame = sbv.myFrame;
+        if (sbvmyFrame.multiple)
+            sbvmyFrame.sizeClass = self.myDefaultSizeClass;
+    }
+    
+    if (selfMyFrame.multiple)
+        selfMyFrame.sizeClass = self.myDefaultSizeClass;
+    
+    if (self.cacheEstimatedRect)
+        _useCacheRects = YES;
+    
+    return CGSizeMake(_myCGFloatRound(selfSize.width), _myCGFloatRound(selfSize.height));
+}
 
 
 
@@ -3349,30 +3362,32 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 
 -(void)myRemoveSubviewObserver:(UIView*)subview
 {
-    
     MyFrame *sbvmyFrame = objc_getAssociatedObject(subview, ASSOCIATEDOBJECT_KEY_MYLAYOUT_FRAME);
     if (sbvmyFrame != nil)
     {
         sbvmyFrame.sizeClass.viewLayoutCompleteBlock = nil;
         if (sbvmyFrame.hasObserver)
         {
-            [subview removeObserver:self forKeyPath:@"hidden"];
-            [subview removeObserver:self forKeyPath:@"frame"];
-            
-            //有时候我们可能会把滚动视图加入到布局视图中去，滚动视图的尺寸有可能设置为wrapContent,这样就会调整center。从而需要重新激发滚动视图的布局
-            //这也就是为什么只监听center的原因了。布局子视图也是如此。
-            if ([subview isKindOfClass:[MyBaseLayout class]] || [subview isKindOfClass:[UIScrollView class]])
-            {
-                [subview removeObserver:self forKeyPath:@"center"];
-            }
-            else if ([subview isKindOfClass:[UILabel class]])
-            {
-                [subview removeObserver:self forKeyPath:@"text"];
-                [subview removeObserver:self forKeyPath:@"attributedText"];
-            }
-            else;
-
             sbvmyFrame.hasObserver = NO;
+            if (![subview isKindOfClass:[MyBaseLayout class]])
+            {
+                [subview removeObserver:self forKeyPath:@"hidden"];
+                [subview removeObserver:self forKeyPath:@"frame"];
+                
+                if ([subview isKindOfClass:[UIScrollView class]])
+                {
+                    [subview removeObserver:self forKeyPath:@"center"];
+                }
+                else if ([subview isKindOfClass:[UILabel class]])
+                {
+                    [subview removeObserver:self forKeyPath:@"text"];
+                    [subview removeObserver:self forKeyPath:@"attributedText"];
+                }
+                else
+                {
+                    
+                }
+            }
         }
     }
 }
@@ -3382,23 +3397,30 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     
     if (!sbvmyFrame.hasObserver)
     {
-        //添加hidden, frame,center的属性通知。
-        [subview addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:_myObserverContextA];
-        [subview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:_myObserverContextA];
-        if ([subview isKindOfClass:[MyBaseLayout class]] || [subview isKindOfClass:[UIScrollView class]])
-        {
-            [subview addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:_myObserverContextA];
-        }
-        else if ([subview isKindOfClass:[UILabel class]])
-        {//如果是UILabel则一旦设置了text和attributedText则
-            
-            [subview addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew context:_myObserverContextB];
-            [subview addObserver:self forKeyPath:@"attributedText" options:NSKeyValueObservingOptionNew context:_myObserverContextB];
-        }
-        else;
-
         sbvmyFrame.hasObserver = YES;
-        
+
+        //非布局子视图添加hidden, frame的属性变化通知。
+        if (![subview isKindOfClass:[MyBaseLayout class]])
+        {
+            [subview addObserver:self forKeyPath:@"hidden" options:NSKeyValueObservingOptionNew context:_myObserverContextA];
+            [subview addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:_myObserverContextA];
+            
+            if ([subview isKindOfClass:[UIScrollView class]])
+            {//如果是UIScrollView则需要特殊监听center属性
+                //有时候我们可能会把滚动视图加入到布局视图中去，滚动视图的尺寸有可能设置为高度自适应,这样就会调整center。从而需要重新激发滚动视图的布局
+                //这也就是为什么只监听center的原因了。
+                [subview addObserver:self forKeyPath:@"center" options:NSKeyValueObservingOptionNew context:_myObserverContextA];
+            }
+            else if ([subview isKindOfClass:[UILabel class]])
+            {//如果是UILabel则监听text和attributedText属性
+                [subview addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew context:_myObserverContextB];
+                [subview addObserver:self forKeyPath:@"attributedText" options:NSKeyValueObservingOptionNew context:_myObserverContextB];
+            }
+            else
+            {
+                
+            }
+        }
     }
 }
 
