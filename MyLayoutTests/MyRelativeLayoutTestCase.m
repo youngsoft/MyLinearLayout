@@ -411,10 +411,10 @@
     rightLabel.rightPos.equalTo(rootLayout.rightPos).offset(1);
     [rootLayout addSubview:rightLabel];
     
-    titleLabel.rightPos.equalTo(rightLabel.leftPos).offset(10);
+    rightLabel.leftPos.equalTo(titleLabel.rightPos).offset(10);
     
     
-    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(86, 50)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
+    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(176, 50)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
     
     
     UILabel *allMoneyLabel = [UILabel new];
@@ -451,7 +451,7 @@
     [rootLayout addSubview:orderLabel];
     
     
-    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(86, 125)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
+    XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(176, 125)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
     
 }
 
@@ -991,16 +991,23 @@
     vv.rightPos.equalTo(label.rightPos);
     
     
-    label.text = @"测试12345660392034323";
+    label.text = @"测试";
     vv.backgroundColor = [UIColor redColor];
     
     [rellayout sizeThatFits:CGSizeZero];
     
-    XCTAssertTrue(CGSizeEqualToSize(label.estimatedRect.size, CGSizeMake(90, 61)));
-    XCTAssertTrue(CGSizeEqualToSize(vv.estimatedRect.size, CGSizeMake(90, 61)));
+    XCTAssertTrue(CGSizeEqualToSize(label.estimatedRect.size, CGSizeMake(35, 20.5)));
+    XCTAssertTrue(CGSizeEqualToSize(vv.estimatedRect.size, CGSizeMake(35, 20.5)));
     XCTAssertTrue(CGSizeEqualToSize(vv.estimatedRect.size, label.estimatedRect.size));
 
+    label.text = @"测试12345660392034323";
     
+    [rellayout sizeThatFits:CGSizeZero];
+    
+    XCTAssertTrue(CGSizeEqualToSize(label.estimatedRect.size, CGSizeMake(100, 61)));
+    XCTAssertTrue(CGSizeEqualToSize(vv.estimatedRect.size, CGSizeMake(100, 61)));
+    XCTAssertTrue(CGSizeEqualToSize(vv.estimatedRect.size, label.estimatedRect.size));
+
 }
 
 -(void)test123

@@ -53,6 +53,7 @@
 -(MyLayoutSize*)__max:(CGFloat)val;
 -(MyLayoutSize*)__uBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
 -(void)__clear;
+-(void)__setActive:(BOOL)active;
 
 
 

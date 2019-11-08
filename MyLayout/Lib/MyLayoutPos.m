@@ -168,10 +168,8 @@
 {
     if (_active != active)
     {
-       _active = active;
-        _lBoundVal.active = active;
-        _uBoundVal.active = active;
-      [self setNeedsLayout];
+        [self __setActive:active];
+        [self setNeedsLayout];
     }
 }
 
@@ -551,6 +549,12 @@
     _shrink = 0;
 }
 
+-(void)__setActive:(BOOL)active
+{
+    _active = active;
+    [_lBoundVal __setActive:active];
+    [_uBoundVal __setActive:active];
+}
 
 
 

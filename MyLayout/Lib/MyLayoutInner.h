@@ -77,8 +77,6 @@
                 selfSize:(CGSize)selfSize
                    pRect:(CGRect*)pRect;
 
--(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvmyFrame:(MyFrame*)sbvmyFrame;
-
 -(CGFloat)myHeightFromFlexedHeightView:(UIView*)sbv sbvsc:(UIView*)sbvsc inWidth:(CGFloat)width;
 
 -(CGFloat)myValidMeasure:(MyLayoutSize*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize;
@@ -108,7 +106,7 @@
 -(CGFloat)myLayoutLeadingPadding;
 -(CGFloat)myLayoutTrailingPadding;
 
--(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout;
+-(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout lsc:(MyBaseLayout*)lsc;
 
 
 //根据子视图的宽度约束得到宽度值

@@ -132,21 +132,11 @@
     
     [self myCalcSubviewsWrapContentSize:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
         
-        if (sbvsc.widthSizeInner.dimeWrapVal)
-        {
-            if (orientation == MyOrientation_Vert && sbvsc.weight != 0)
-            {
-                [sbvsc.widthSizeInner __clear];
-            }
-        }
+        if (sbvsc.widthSizeInner.dimeWrapVal && orientation == MyOrientation_Vert && sbvsc.weight != 0)
+            [sbvsc.widthSizeInner __setActive:NO];
         
-        if (sbvsc.heightSizeInner.dimeWrapVal)
-        {
-            if (orientation == MyOrientation_Horz && sbvsc.weight != 0)
-            {
-                [sbvsc.heightSizeInner __clear];
-            }
-        }
+        if (sbvsc.heightSizeInner.dimeWrapVal && orientation == MyOrientation_Horz && sbvsc.weight != 0)
+            [sbvsc.heightSizeInner __setActive:NO];
     }];
     
     if (orientation == MyOrientation_Vert)

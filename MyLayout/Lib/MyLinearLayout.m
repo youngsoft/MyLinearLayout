@@ -145,9 +145,7 @@
 {
     [super willRemoveSubview:subview];
     if (subview == self.baselineBaseView)
-    {
         self.baselineBaseView = nil;
-    }
 }
 
 
@@ -169,7 +167,7 @@
     
     [self myCalcSubviewsWrapContentSize:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
         
-        [self myAdjustSubviewWrapContent:sbv sbvsc:sbvsc orientation:orientation gravity:(orientation == MyOrientation_Vert)? horzGravity : vertGravity];
+        [self myAdjustSubviewWrapContent:sbv sbvsc:sbvsc lsc:(MyLinearLayout*)lsc orientation:orientation gravity:(orientation == MyOrientation_Vert)? horzGravity : vertGravity];
     }];
     
     
@@ -206,35 +204,35 @@
 #pragma mark -- Private Methods
 
 //调整子视图的wrapContent设置
-- (void)myAdjustSubviewWrapContent:(UIView*)sbv sbvsc:(UIView*)sbvsc orientation:(MyOrientation)orientation  gravity:(MyGravity)gravity
+- (void)myAdjustSubviewWrapContent:(UIView*)sbv sbvsc:(UIView*)sbvsc lsc:(MyLinearLayout*)lsc orientation:(MyOrientation)orientation  gravity:(MyGravity)gravity
 {
     if (orientation == MyOrientation_Vert)
     {
         //如果是拉伸处理则需要把包裹宽度取消。
         if (sbvsc.widthSizeInner.dimeWrapVal && gravity == MyGravity_Horz_Fill)
-            [sbvsc.widthSizeInner __clear];
+            [sbvsc.widthSizeInner __setActive:NO];
         
-        //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
-        if (sbvsc.leadingPosInner != nil && sbvsc.trailingPosInner != nil && sbvsc.widthSizeInner.priority == MyPriority_Low)
-            [sbvsc.widthSizeInner __clear];
+        //如果同时设置了左右依赖。并且优先级低时或者布局视图不是宽度自适应则取消自视图宽度自适应，这里是为了兼容老版本。
+        if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil && (sbvsc.widthSizeInner.priority == MyPriority_Low || !lsc.widthSizeInner.dimeWrapVal))
+            [sbvsc.widthSizeInner __setActive:NO];
         
         //只要同时设置了高度或者比重属性则应该把尺寸设置为空
         if (sbvsc.heightSizeInner.dimeWrapVal && sbvsc.weight != 0)
-            [sbvsc.heightSizeInner __clear];
+            [sbvsc.heightSizeInner __setActive:NO];
     }
     else
     {
         //如果是拉伸处理则需要把包裹高度
         if (sbvsc.heightSizeInner.dimeWrapVal && gravity == MyGravity_Vert_Fill)
-            [sbvsc.heightSizeInner __clear];
+            [sbvsc.heightSizeInner __setActive:NO];
         
         //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
-        if (sbvsc.topPosInner != nil && sbvsc.bottomPosInner != nil && sbvsc.heightSizeInner.priority == MyPriority_Low)
-            [sbvsc.heightSizeInner __clear];
+        if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil && (sbvsc.heightSizeInner.priority == MyPriority_Low || !lsc.heightSizeInner.dimeWrapVal))
+            [sbvsc.heightSizeInner __setActive:NO];
         
         //只要同时设置了宽度或者比重属性则应该把宽度置空
         if (sbvsc.widthSizeInner.dimeWrapVal && sbvsc.weight != 0)
-            [sbvsc.widthSizeInner __clear];
+            [sbvsc.widthSizeInner __setActive:NO];
     }
 }
 

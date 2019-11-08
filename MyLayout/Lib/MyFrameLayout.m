@@ -52,7 +52,7 @@
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
-        [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:selfSize vertGravity:vertGravity horzGravity:horzGravity sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
+        [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:selfSize vertGravity:vertGravity horzGravity:horzGravity sizeClass:sizeClass pHasSubLayout:pHasSubLayout lsc:lsc];
         
         //计算自己的位置和高宽
         [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:pMaxWrapSize];

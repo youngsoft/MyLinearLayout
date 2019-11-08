@@ -173,7 +173,7 @@
                 (orientation == MyOrientation_Horz && (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill) ||
                 (orientation == MyOrientation_Vert && ((gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill || sbvsc.weight != 0)))
             {
-                [sbvsc.widthSizeInner __clear];
+                [sbvsc.widthSizeInner __setActive:NO];
             }
         }
         
@@ -183,7 +183,7 @@
                 (orientation == MyOrientation_Vert && (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill) ||
                 (orientation == MyOrientation_Horz && ((gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill || sbvsc.weight != 0)))
             {
-                [sbvsc.heightSizeInner __clear];
+                [sbvsc.heightSizeInner __setActive:NO];
             }
         }
         

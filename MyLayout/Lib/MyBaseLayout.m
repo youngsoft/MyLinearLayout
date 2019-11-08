@@ -2554,38 +2554,6 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
--(void)myCalcSizeOfWrapContentSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc sbvmyFrame:(MyFrame*)sbvmyFrame
-{
-    if (sbvsc.visibility == MyVisibility_Gone)
-    {
-        sbvmyFrame.width = 0;
-        sbvmyFrame.height = 0;
-        return;
-    }
-    
-    BOOL isLayoutView = [sbv isKindOfClass:[MyBaseLayout class]];
-    BOOL isWrapWidth =  (!isLayoutView && sbvsc.widthSizeInner.dimeWrapVal); //宽度包裹特殊处理
-    BOOL isWrapHeight = (!isLayoutView && sbvsc.heightSizeInner.dimeWrapVal);//高度包裹也特殊处理
-    
-    
-    if (isWrapWidth || isWrapHeight)
-    {
-        
-        CGSize thatFits = CGSizeZero;
-        //在一些场景中，计算包裹时有可能设置了最大的尺寸约束，所以这里要进行特殊处理。
-        thatFits.width = sbvsc.widthSizeInner.uBoundValInner.dimeNumVal.doubleValue;
-        thatFits.height = sbvsc.heightSizeInner.uBoundValInner.dimeNumVal.doubleValue;
-        
-        CGSize fitSize = [sbv sizeThatFits:thatFits];
-        if (isWrapWidth)
-            sbvmyFrame.width = [sbvsc.widthSizeInner measureWith:fitSize.width];
-        
-        if (isWrapHeight)
-            sbvmyFrame.height = [sbvsc.heightSizeInner measureWith:fitSize.height];
-    }
-}
-
-
 -(CGSize)myCalcSizeInNoLayoutSuperview:(UIView*)newSuperview currentSize:(CGSize)size
 {
     if (newSuperview == nil || [newSuperview isKindOfClass:[MyBaseLayout class]])
@@ -2724,7 +2692,7 @@ void* _myObserverContextC = (void*)20175283;
         isAdjust = YES;
         //如果宽度约束的优先级很低都按左右边距来决定布局视图的宽度。
         if (lsc.widthSizeInner.priority == MyPriority_Low)
-            [lsc.widthSizeInner __clear];
+            [lsc.widthSizeInner __setActive:NO];
         
         if (lsc.widthSizeInner.dimeVal == nil)
         {
@@ -2822,7 +2790,7 @@ void* _myObserverContextC = (void*)20175283;
         isAdjust = YES;
         //如果高度约束优先级很低则按上下边距来决定布局视图高度。
         if (lsc.heightSizeInner.priority == MyPriority_Low)
-            [lsc.heightSizeInner __clear];
+            [lsc.heightSizeInner __setActive:NO];
         
         if (lsc.heightSizeInner.dimeVal == nil)
         {
@@ -2941,10 +2909,7 @@ void* _myObserverContextC = (void*)20175283;
         // do nothing...
     }
     
-    if (sbvsc.heightSizeInner == nil)
-        return h;
-    else
-        return [sbvsc.heightSizeInner measureWith:h];
+    return [sbvsc.heightSizeInner measureWith:h];
 }
 
 
@@ -3130,7 +3095,7 @@ void* _myObserverContextC = (void*)20175283;
     else
         [sbs addObjectsFromArray:sbsFrom];
     
-    for (NSInteger i = sbs.count - 1; i >=0; i--)
+    for (NSInteger i = sbs.count - 1; i >= 0; i--)
     {
         UIView *sbv = sbs[i];
         if ([self myIsNoLayoutSubview:sbv])
@@ -3425,32 +3390,30 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 
 
--(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout
+-(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout lsc:(MyBaseLayout*)lsc
 {
     if (!isEstimate)
-    {
         sbvmyFrame.frame = sbv.bounds;
-        [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
-    }
     
     //只要子视图是包裹并且布局视图是fill填充，都应该清除子视图的包裹设置。
     if (sbvsc.widthSizeInner.dimeWrapVal && horzGravity == MyGravity_Horz_Fill)
-        [sbvsc.widthSizeInner __clear];
+        [sbvsc.widthSizeInner __setActive:NO];
     if (sbvsc.heightSizeInner.dimeWrapVal && vertGravity == MyGravity_Vert_Fill)
-        [sbvsc.heightSizeInner __clear];
+        [sbvsc.heightSizeInner __setActive:NO];
 
+    
+    if (sbvsc.leadingPosInner.posVal != nil &&
+        sbvsc.trailingPosInner.posVal != nil &&
+        (sbvsc.widthSizeInner.priority == MyPriority_Low || !lsc.widthSizeInner.dimeWrapVal))
+        [sbvsc.widthSizeInner __setActive:NO];
+    
+    if (sbvsc.topPosInner.posVal != nil &&
+        sbvsc.bottomPosInner.posVal != nil &&
+        (sbvsc.heightSizeInner.priority == MyPriority_Low || !lsc.heightSizeInner.dimeWrapVal))
+        [sbvsc.heightSizeInner __setActive:NO];
     
     if ([sbv isKindOfClass:[MyBaseLayout class]])
     {
-        if (sbvsc.leadingPosInner != nil &&
-            sbvsc.trailingPosInner != nil &&
-            sbvsc.widthSizeInner.priority == MyPriority_Low)
-            [sbvsc.widthSizeInner __clear];
-        
-        if (sbvsc.topPosInner != nil &&
-            sbvsc.bottomPosInner != nil &&
-            sbvsc.heightSizeInner.priority == MyPriority_Low)
-            [sbvsc.heightSizeInner __clear];
         
         if (pHasSubLayout != nil && (sbvsc.heightSizeInner.dimeWrapVal || sbvsc.widthSizeInner.dimeWrapVal))
             *pHasSubLayout = YES;
@@ -3463,7 +3426,6 @@ MySizeClass _myGlobalSizeClass = 0xFF;
                 sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
         }
     }
-    
 }
 
 -(CGFloat)myGetSubviewWidthSizeValue:(UIView *)sbv
@@ -3502,6 +3464,11 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             else
                 retVal = [sbvWidthSizeInner measureWith:sbvWidthSizeInner.dimeRelaVal.view.myEstimatedHeight];
         }
+    }
+    else if (sbvWidthSizeInner.dimeWrapVal)
+    {
+        if (![sbv isKindOfClass:[MyBaseLayout class]])
+            retVal = [sbvWidthSizeInner measureWith:[sbv sizeThatFits:CGSizeMake(0, sbvSize.height)].width];
     }
     
     return retVal;
@@ -3683,18 +3650,14 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
+        if (customSetting != nil)
+            customSetting(sbv, sbvsc);
+        
         if (!isEstimate)
-        {
             sbvmyFrame.frame = sbv.bounds;
-            [self myCalcSizeOfWrapContentSubview:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame];
-        }
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])
         {
-            
-            if (customSetting != nil)
-                customSetting(sbv, sbvsc);
-            
             BOOL isSbvWrap = sbvsc.widthSizeInner.dimeWrapVal || sbvsc.heightSizeInner.dimeWrapVal;
             
             if (pHasSubLayout != nil && isSbvWrap)
