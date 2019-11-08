@@ -360,7 +360,7 @@
     leftView.heightSize.equalTo(@8);
     leftView.widthSize.equalTo(@8);
     leftView.leftPos.equalTo(@0);
-    leftView.centerYPos.equalTo(line.centerYPos);  //118,37
+    leftView.centerYPos.equalTo(line.centerYPos);  //118,41
     [midView addSubview:leftView];
     
     line.leftPos.equalTo(leftView.rightPos);
@@ -371,7 +371,7 @@
     rightView.widthSize.equalTo(@8);
     rightView.leftPos.equalTo(line.rightPos);
     rightView.centerYPos.equalTo(line.centerYPos);
-    [midView addSubview:rightView];    //126, 37
+    [midView addSubview:rightView];    //126, 41
     
     UILabel * numLabel = [UILabel new];
     numLabel.mySize = CGSizeMake(40, 20);
@@ -382,7 +382,7 @@
    CGSize sz =  [midView sizeThatFits:CGSizeZero];
     
     NSLog(@"%@",NSStringFromCGSize(sz));
-    
+    MySizeAssert(midView, sz, CGSizeMake(126, 62));
 }
 
 -(void)testWrapContentWidth1
@@ -671,9 +671,11 @@
     MyRelativeLayout *_layoutRoot = nil;
     
     MyRelativeLayout* relative = [MyRelativeLayout new];
-  //  relative.widthSize.equalTo(self.contentView.widthSize);
+    //  relative.widthSize.equalTo(self.contentView.widthSize);
     relative.myHeight = MyLayoutSize.wrap;
+    relative.myHorzMargin = 0;
     _layoutRoot = relative;
+  //  [self.view addSubview:_layoutRoot];
     
     
     // 头像区域
@@ -685,14 +687,8 @@
     MyLinearLayout *_layoutPortrait = linear;
     
     // 头像
-    CGFloat pWidth = 40.0f;
     UIImageView* imgv = [UIImageView new];
-    [imgv setClipsToBounds:YES];
-    [imgv setContentMode:UIViewContentModeScaleAspectFit];
-    imgv.myWidth = pWidth;
-    imgv.myHeight = pWidth;
-    imgv.layer.masksToBounds = YES;
-    imgv.layer.cornerRadius = pWidth/2.0f;
+    imgv.mySize = CGSizeMake(40,40);
     [_layoutPortrait addSubview:imgv];
     
     CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
@@ -731,17 +727,17 @@
     // 勿扰图标
     UIImage* image = [UIImage imageNamed:@"edit"];
     imgv = [[UIImageView alloc] initWithImage:image];
-    [imgv sizeToFit];
-    [imgv setHidden:YES];
+    imgv.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    imgv.visibility = MyVisibility_Gone;
     [_layoutAccessoryBottom addSubview:imgv];
+    UIView *hideView1 = imgv;
     
     // 勿扰状态下，有新消息时的小红点提示
     UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6.0f, 6.0f)];
     [view setBackgroundColor:[UIColor greenColor]];
-    [view setHidden:YES];
-    view.layer.masksToBounds = YES;
-    view.layer.cornerRadius = 3.0f;
+    view.visibility = MyVisibility_Gone;
     [_layoutAccessoryBottom addSubview:view];
+    UIView *hideView2 = view;
     
     // 非勿扰状态下未读消息数
     lbl = [UILabel new];
@@ -754,14 +750,11 @@
     [lbl setNumberOfLines:1];
     lbl.heightSize.equalTo(lbl.heightSize).add(4.0f).lBound(@16,0,1);
     lbl.widthSize.equalTo(lbl.widthSize).add(8.0f).lBound(@16,0,1).uBound(_layoutAccessory.widthSize,0,1);
-    lbl.layer.masksToBounds = YES;
-    lbl.layer.cornerRadius = 8.0f;
-    // [lbl setHidden:YES];
     
     // 中间区域
     linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     linear.myVertMargin = 0.0f;
-    linear.heightSize.min(67.0f);
+    linear.heightSize.equalTo(@(MyLayoutSize.wrap)).min(67.0f);
     linear.leadingPos.equalTo(_layoutPortrait.trailingPos);
     linear.trailingPos.equalTo(_layoutAccessory.leadingPos);
     linear.gravity = MyGravity_Vert_Center;
@@ -786,6 +779,7 @@
     lbl.numberOfLines = 1;
     [_layoutTitle addSubview:lbl];
     UILabel *_lblTitle = lbl;
+    UIView *hideView4 = _lblTitle;
     
     // 名称右侧的标记（例如，选题、部门等，作用是标记会话的类型）
     lbl = [UILabel new];
@@ -814,36 +808,360 @@
     // 发送状态（例如：发送中，发送失败）
     imgv = [UIImageView new];
     [imgv setContentMode:UIViewContentModeScaleAspectFit];
-    imgv.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
-    [imgv setHidden:YES];
+    imgv.mySize = CGSizeMake(50,50);
+    imgv.visibility = MyVisibility_Gone;
     [_layoutSummary addSubview:imgv];
+    UIView *hideView3 = imgv;
     
     // 勿扰状态下，在摘要显示的消息数
     lbl = [UILabel new];
     [lbl setTextAlignment:NSTextAlignmentCenter];
     [lbl setFont:[UIFont systemFontOfSize:12]];
-    lbl.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    lbl.mySize = CGSizeMake(5, 5);
     [lbl setNumberOfLines:1];
-    [lbl setHidden:YES];
+    lbl.visibility = MyVisibility_Gone;
     [_layoutSummary addSubview:lbl];
     
     // 状态（包括：未读，已读，草稿，有人@）
     lbl = [UILabel new];
     [lbl setFont:[UIFont systemFontOfSize:12]];
-    lbl.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    lbl.mySize = CGSizeMake(5,5);
     [lbl setNumberOfLines:1];
-    [lbl setHidden:YES];
+    lbl.visibility = MyVisibility_Gone;
     [_layoutSummary addSubview:lbl];
     
     // 摘要内容
     lbl = [UILabel new];
     [lbl setFont:[UIFont systemFontOfSize:12]];
     lbl.weight = 1.0f;
-    lbl.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    lbl.mySize = CGSizeMake(70, 40);
     [lbl setNumberOfLines:1];
     [_layoutSummary addSubview:lbl];
-
+    
+    //hideView1
+    //hideView2
+    //hideView3
+    CGSize sz = [_layoutRoot sizeThatFits:CGSizeMake(375, 0)];
+    MySizeAssert(midView, sz, CGSizeMake(375, 68.5));
+    
+    hideView3.visibility = MyVisibility_Visible;
+    
+    sz = [_layoutRoot sizeThatFits:CGSizeMake(375, 0)];
+    MySizeAssert(midView, sz, CGSizeMake(375, 78.5));
+    
+    hideView3.visibility = MyVisibility_Gone;
+    hideView4.visibility = MyVisibility_Gone;
+    
+    sz = [_layoutRoot sizeThatFits:CGSizeMake(375, 0)];
+    MySizeAssert(midView, sz, CGSizeMake(375, 67));
+    
 }
+
+-(void)testDemo2
+{
+    MyRelativeLayout *_rootLayout = [MyRelativeLayout new];
+    
+    _rootLayout.wrapContentHeight = YES;
+    _rootLayout.topPadding = 15;
+    _rootLayout.bottomPadding = 15;
+    _rootLayout.backgroundColor = [UIColor whiteColor];
+    
+    
+    
+    MyLinearLayout *topLayout = [MyLinearLayout linearLayoutWithOrientation:(MyOrientation_Vert)];
+    
+    topLayout.wrapContentWidth = YES;
+    topLayout.myHorzMargin = 0;
+    topLayout.wrapContentHeight = YES;
+    topLayout.subviewVSpace = 5;
+    [_rootLayout addSubview:topLayout];
+    
+    
+    UILabel *topLable = [UILabel new];
+    topLable.text = @"宿州学院-皁阳火车站";
+    topLable.myTop = 0;
+    topLable.myLeft = 11;
+    topLable.wrapContentSize = YES;
+    [topLayout addSubview:topLable];
+    
+    
+    
+    UIButton *checkMarkBtn = [UIButton new];
+    [checkMarkBtn setImage:[UIImage imageNamed:@"train_progresscomplete"] forState:(UIControlStateNormal)];
+    checkMarkBtn.widthSize.equalTo(@(13));
+    checkMarkBtn.heightSize.equalTo(@(13));
+    checkMarkBtn.rightPos.equalTo(@(10));
+    checkMarkBtn.centerYPos.equalTo(@(0));
+    [_rootLayout addSubview:checkMarkBtn];
+    
+    UILabel *contentLabel = [UILabel new];
+    contentLabel.text = @"途径：蒙城、嘎县、阜阳师范学院、嘎县、阜阳师范学院、嘎县、阜阳师范学院";
+    contentLabel.myLeft = 11;
+    
+    contentLabel.wrapContentHeight= YES;
+    contentLabel.myRight = 27;
+    contentLabel.hidden = NO;
+    [topLayout addSubview:contentLabel];
+    
+    CGSize sz = [_rootLayout sizeThatFits:CGSizeMake(375, 0)];
+    MySizeAssert(midView, sz, CGSizeMake(375, 96.5));
+}
+
+-(void)testDemo3
+{
+    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.myWidth = MyLayoutSize.wrap;
+    rootLayout.myHeight = MyLayoutSize.wrap;
+    rootLayout.padding = UIEdgeInsetsMake(12, 12, 12, 12);
+    
+    MyLinearLayout *headerLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    headerLayout.topPos.equalTo(rootLayout.topPos);
+    headerLayout.leftPos.equalTo(rootLayout.leftPos);
+    headerLayout.myHeight = MyLayoutSize.wrap;
+    [rootLayout addSubview:headerLayout];
+    
+    UIView *headerView = [UIView new];
+    headerView.mySize = CGSizeMake(32, 32);
+    [headerLayout addSubview:headerView];
+    
+    UILabel *nameLabel = [UILabel new];
+    nameLabel.mySize = CGSizeMake(60, 20);
+    nameLabel.alignment = MyGravity_Vert_Center;
+    nameLabel.myLeft = 5;
+    [headerLayout addSubview:nameLabel];
+    
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.myHeight = 50;
+    titleLabel.leftPos.equalTo(headerLayout.leftPos);
+    titleLabel.topPos.equalTo(headerLayout.bottomPos).offset(5);
+    titleLabel.rightPos.equalTo(rootLayout.rightPos);
+    [rootLayout addSubview:titleLabel];
+    
+    UIView *barView = [UIView new];
+    barView.myHeight = 30;
+    barView.leftPos.equalTo(titleLabel.leftPos);
+    barView.rightPos.equalTo(titleLabel.rightPos);
+    barView.topPos.equalTo(titleLabel.bottomPos);
+    [rootLayout addSubview:barView];
+    
+    CGSize sz = [rootLayout sizeThatFits:CGSizeMake(0, 0)];
+    MySizeAssert(rootLayout, sz, CGSizeMake(121,141));
+}
+
+- (UILabel *)textLabel:(NSString *)text fontSize:(CGFloat)fontSize
+{
+    UILabel *label = [[UILabel alloc] init];
+    label.font = [UIFont systemFontOfSize:fontSize];
+    label.text = text;
+    [label sizeToFit];
+    return label;
+}
+
+- (UILabel *)amountLabel:(NSString *)text fontSize:(CGFloat)fontSize
+{
+    UILabel *label = [[UILabel alloc] init];
+    label.font = [UIFont boldSystemFontOfSize:fontSize];
+    label.text = text;
+    [label sizeToFit];
+    return label;
+}
+
+-(void)testDemo4
+{
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    rootLayout.myHorzMargin = 0;
+    rootLayout.myHeight = MyLayoutSize.wrap;
+    
+    MyLinearLayout *baseLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    [rootLayout addSubview:baseLayout];
+    baseLayout.widthSize.equalTo(rootLayout);
+    
+    ///背景布局
+    CGFloat screen_width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat ten_margin = 10;
+    MyLinearLayout *bgLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+  //  bgLayout.widthSize.equalTo(@(screen_width - 2 * ten_margin));
+    bgLayout.widthSize.equalTo(baseLayout.widthSize).add(-2 * ten_margin);
+    bgLayout.myLeft = ten_margin;
+    bgLayout.myTop = ten_margin;
+    bgLayout.padding = UIEdgeInsetsMake(2 * ten_margin, 0, 2 * ten_margin, 0);
+    [baseLayout addSubview:bgLayout];
+  //  self.bgLayout = bgLayout;
+   // bgLayout.backgroundColor = UIColorFromRGB(0x6095f0);
+    bgLayout.backgroundColor = [UIColor lightGrayColor];
+    
+    ///资产布局
+    MyRelativeLayout *assetsLayout = [[MyRelativeLayout alloc] init];
+    [bgLayout addSubview:assetsLayout];
+    assetsLayout.myHorzMargin = 0;
+    assetsLayout.leftPadding = 1.8 * ten_margin;
+    assetsLayout.wrapContentHeight = YES;
+    
+    ///总资产Lab
+    UILabel *assetsLab = [UILabel new];
+    assetsLab.text = @"TotalAssetsBracketsYuan";
+    [assetsLab sizeToFit];
+    assetsLab.font = [UIFont systemFontOfSize:11];
+    [assetsLayout addSubview:assetsLab];
+    
+    ///总资产金额Lab
+    UILabel *assetsAmountLab = [UILabel new];
+    assetsAmountLab.text = @"0.00";
+    assetsAmountLab.font = [UIFont systemFontOfSize:19];
+    assetsAmountLab.leftPos.equalTo(assetsLab);
+    assetsAmountLab.topPos.equalTo(assetsLab.bottomPos).offset(0.3 * ten_margin);
+    [assetsLayout addSubview:assetsAmountLab];
+    
+    /*************************************************/
+    
+    ///本金布局
+    MyFloatLayout *principalLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+    principalLayout.myHorzMargin = 0;
+    principalLayout.topPadding = 1.5 * ten_margin;
+    principalLayout.leftPadding = 1.8 * ten_margin;
+    principalLayout.wrapContentHeight = YES;
+    [bgLayout addSubview:principalLayout];
+    
+    ///待收本金
+    UILabel *principalLab = [UILabel new];
+    principalLab.text = @"PendingPrincipalBracketsYuan";
+    principalLab.font = [UIFont systemFontOfSize:10];
+    [principalLab sizeToFit];
+    principalLab.weight = 0.33 ;
+    [principalLayout addSubview:principalLab];
+    
+    ///锁定资金金额
+    UILabel *lockLab = [UILabel new];
+    lockLab.text = @"LockFundsBracketsYuan";
+    lockLab.font = [UIFont systemFontOfSize:10];
+    [lockLab sizeToFit];
+    lockLab.weight = 0.5;
+    [principalLayout addSubview:lockLab];
+    
+    ///可用余额
+    UILabel *balanceLab = [UILabel new];
+    balanceLab.text = @"AvailableBalanceBracketsYuan";
+    balanceLab.font = [UIFont systemFontOfSize:10];
+    [balanceLab sizeToFit];
+    balanceLab.weight = 1;
+    [principalLayout addSubview:balanceLab];
+    
+#define QDLabel UILabel
+    ///待收本金金额
+    QDLabel *principalAmountLab = [self amountLabel:@"0.00" fontSize:15];
+    principalAmountLab.weight = 0.33 ;
+    [principalLayout addSubview:principalAmountLab];
+    
+    ///锁定资金金额
+    QDLabel *lockAmountLab = [self amountLabel:@"0.00" fontSize:15];
+    lockAmountLab.weight = 0.5;
+    [principalLayout addSubview:lockAmountLab];
+    
+    ///可用余额金额
+    QDLabel *balanceAmountLab = [self amountLabel:@"0.00" fontSize:15];
+    balanceAmountLab.weight = 1;
+    [principalLayout addSubview:balanceAmountLab];
+    
+    ///可伸缩布局
+    MyLinearLayout *animLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    [bgLayout addSubview:animLayout];
+    animLayout.myHorzMargin = 0;
+    
+    UIView *topLine = [[UIView alloc] init];
+    [animLayout addSubview:topLine];
+   // topLine.backgroundColor = color_bg_white;
+    topLine.myTop = 2 * ten_margin;
+    topLine.myHorzMargin = 0;
+    topLine.heightSize.equalTo(@(1));
+    
+    ///收益布局
+    MyFloatLayout *incomeLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+    incomeLayout.myHorzMargin = 0;
+    incomeLayout.topPadding = 2 * ten_margin;
+    incomeLayout.leftPadding = 1.8 * ten_margin;
+    incomeLayout.wrapContentHeight = YES;
+    [animLayout addSubview:incomeLayout];
+    
+    ///待收收益
+    QDLabel *pendingIncomeLab = [self textLabel:@"PendingIncomeBracketsYuan" fontSize:10];
+    pendingIncomeLab.weight = 0.33 ;
+    [incomeLayout addSubview:pendingIncomeLab];
+    
+    ///累计收益
+    QDLabel *cumulativeIncomeLab = [self textLabel:@"CumulativeIncomeBracketsYuan" fontSize:10];
+    cumulativeIncomeLab.weight = 1;
+    [incomeLayout addSubview:cumulativeIncomeLab];
+    
+    ///待收收益金额
+    QDLabel *pendingIncomeAmountLab = [self amountLabel:@"0.00" fontSize:15];
+    pendingIncomeAmountLab.weight = 0.33 ;
+    [incomeLayout addSubview:pendingIncomeAmountLab];
+    
+    ///累计收益金额
+    QDLabel *cumulativeIncomeAmountLab = [self amountLabel:@"0.00" fontSize:15];
+    cumulativeIncomeAmountLab.weight = 1;
+    [incomeLayout addSubview:cumulativeIncomeAmountLab];
+    
+    UIView *bttomLine = [[UIView alloc] init];
+    [animLayout addSubview:bttomLine];
+  //  bttomLine.backgroundColor = color_bg_white;
+    bttomLine.myTop = 2 * ten_margin;
+    bttomLine.myHorzMargin = 0;
+    bttomLine.heightSize.equalTo(@(1));
+    
+    //出借总额布局
+    MyFloatLayout *totalLoanLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+    totalLoanLayout.myHorzMargin = 0;
+    totalLoanLayout.topPadding = 2 * ten_margin;
+    totalLoanLayout.leftPadding = 1.8 * ten_margin;
+    totalLoanLayout.wrapContentHeight = YES;
+    [animLayout addSubview:totalLoanLayout];
+    
+    ///累积出借总额
+    QDLabel *totalLoanLab = [self textLabel:@"TotalAccumulatedLoanBracketsYuan" fontSize:10];
+    totalLoanLab.weight = 1 ;
+    [totalLoanLayout addSubview:totalLoanLab];
+    
+    ///累计收益金额
+    QDLabel *totalLoanAmountLab = [self amountLabel:@"0.00" fontSize:15];
+    totalLoanAmountLab.weight = 1;
+    [totalLoanLayout addSubview:totalLoanAmountLab];
+    CGRect animRect = [baseLayout subview:animLayout estimatedRectInLayoutSize:CGSizeMake(screen_width - 2 * ten_margin, 100)];
+    animLayout.frame = CGRectMake(animRect.origin.x, animRect.origin.y, animRect.size.width, animRect.size.height);
+    animLayout.visibility = MyVisibility_Visible;
+    
+    ///点击布局
+    MyLinearLayout *stretchLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    stretchLayout.wrapContentHeight = YES;
+    //    stretchLayout.heightSize.equalTo(@100);
+    stretchLayout.widthSize.equalTo(rootLayout);
+    stretchLayout.topPadding = stretchLayout.bottomPadding = 1.2 * ten_margin;
+    stretchLayout.gravity = MyGravity_Horz_Center;
+    [baseLayout addSubview:stretchLayout];
+    
+    UILabel *arrowBtn = [UILabel new];
+    arrowBtn.backgroundColor = [UIColor redColor];
+//    [arrowBtn setImage:[UIImage imageNamed:@"assets_my_assets_header_hide"]
+//              forState:UIControlStateNormal];
+//    [arrowBtn setImage:[UIImage imageNamed:@"assets_my_assets_header_show"]
+//              forState:UIControlStateSelected];
+//    [arrowBtn addTarget:self
+//                 action:@selector(arrowBtnClicked:)
+//       forControlEvents:UIControlEventTouchUpInside];
+    arrowBtn.mySize = CGSizeMake(40, 40);
+    [stretchLayout addSubview:arrowBtn];
+   // self.arrowBtn = arrowBtn;
+    
+    CGSize sz = [rootLayout sizeThatFits:CGSizeMake(screen_width, 0)];
+    MySizeAssert(rootLayout, sz, CGSizeMake(screen_width,324.5));
+    
+    animLayout.visibility = MyVisibility_Gone;
+    
+    sz = [rootLayout sizeThatFits:CGSizeMake(screen_width, 0)];
+    MySizeAssert(rootLayout, sz, CGSizeMake(screen_width,182.5));
+    
+}
+
 
 -(void)testhideandubound
 {
@@ -1010,34 +1328,6 @@
 
 }
 
--(void)test123
-{
-    //创建一个视图。
-    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-    rootLayout.myMargin = 0;
-   // [self.view addSubview:rootLayout];
-    
-    UIView *v1 = [UIView new];
-    v1.myCenter = CGPointMake(0, 0);
-    v1.backgroundColor = [UIColor redColor];
-    v1.widthSize.equalTo(@[rootLayout.widthSize, rootLayout.heightSize].myMinSize).multiply(0.5);
-    v1.heightSize.equalTo(v1.widthSize);
-    [rootLayout addSubview:v1];
-    
-    UILabel *label = [UILabel new];
-    label.myCenterX = 0;
-    label.myBottom = MyLayoutPos.safeAreaMargin;
-    label.text = @"您好！！！";
-    label.backgroundColor = [UIColor redColor];
-    label.widthSize.equalTo(@[@(MyLayoutSize.wrap), v1.widthSize.clone(0, 0.5)].myMaxSize);
-    label.heightSize.equalTo(@(MyLayoutSize.wrap));
-    [rootLayout addSubview:label];
-}
-
--(void)testMaxAndMin
-{
-    
-}
 
 -(void)testExample1
 {

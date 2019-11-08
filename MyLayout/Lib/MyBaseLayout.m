@@ -2264,7 +2264,12 @@ void* _myObserverContextC = (void*)20175283;
         selfMyFrame.width = selfSize.width;
         selfMyFrame.height = selfSize.height;
         
-        selfSize = [self calcLayoutSize:CGSizeZero isEstimate:YES pHasSubLayout:&hasWrapSizeSubLayout sizeClass:sizeClass sbs:sbs];
+        if (selfMyFrame.sizeClass.widthSizeInner.dimeWrapVal)
+            selfSize.width = 0;
+        if (selfMyFrame.sizeClass.heightSizeInner.dimeWrapVal)
+            selfSize.height = 0;
+        
+        selfSize = [self calcLayoutSize:selfSize isEstimate:YES pHasSubLayout:&hasWrapSizeSubLayout sizeClass:sizeClass sbs:sbs];
     }
     
     selfMyFrame.width = selfSize.width;

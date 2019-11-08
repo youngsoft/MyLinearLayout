@@ -1221,7 +1221,7 @@
                     }
                 }
                 else if (sbvsc.trailingPosInner.posVal != nil)
-                {
+                {//如果只有右边约束，则可以认为宽度是反过来算的，所以这里是左边的绝对值加上左边的padding来计算最宽宽度。
                     if (_myCGFloatLess(maxWidth, fabs(sbvmyFrame.leading) + lsc.myLayoutLeadingPadding))
                         maxWidth = fabs(sbvmyFrame.leading) + lsc.myLayoutLeadingPadding;
                 }
@@ -1269,7 +1269,7 @@
                     }
                 }
                 else if (sbvsc.bottomPosInner.posVal != nil)
-                {
+                {//如果只有底边约束，则可以认为高度是反过来算的，所以这里是上边的绝对值加上上边的padding来计算最高高度
                     if (_myCGFloatLess(maxHeight, fabs(sbvmyFrame.top) + lsc.myLayoutTopPadding))
                         maxHeight = fabs(sbvmyFrame.top) + lsc.myLayoutTopPadding;
                 }
