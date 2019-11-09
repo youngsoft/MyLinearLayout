@@ -912,19 +912,9 @@
     
     //处理那些剩余没有放入格子的子视图的frame设置为0
     for (UIView *sbv = enumerator.nextObject; sbv; sbv = enumerator.nextObject)
-    {
         sbv.myFrame.frame = CGRectZero;
-    }
     
-    
-    [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
-    
-    //对所有子视图进行布局变换
-    [self myAdjustSubviewsLayoutTransform:sbs lsc:lsc selfWidth:selfSize.width selfHeight:selfSize.height];
-    //对所有子视图进行RTL设置
-    [self myAdjustSubviewsRTLPos:sbs selfWidth:selfSize.width];
-    
-    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs lsc:lsc];
+    return [self myLayout:lsc adjustSelfSize:selfSize withSubviews:sbs];
 }
 
 -(id)createSizeClassInstance
@@ -1051,13 +1041,13 @@
             //如果尺寸是0则因为前面有算出尺寸，所以这里就不进行调整了。
             if (grid.measure != 0 && [sbv isKindOfClass:[MyBaseLayout class]])
             {
-                [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:grid.gridRect.size vertGravity:vertGravity horzGravity:horzGravity sizeClass:sizeClass pHasSubLayout:pHasSubLayout lsc:lsc];
+                [self myLayout:lsc adjustSizeSettingOfSubview:sbv sbvsc:sbvsc isEstimate:isEstimate sbvmyFrame:sbvmyFrame selfSize:grid.gridRect.size vertGravity:vertGravity horzGravity:horzGravity sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
             }
             else
             {
             }
             
-            [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:vertGravity horzGravity:horzGravity inSelfSize:grid.gridRect.size paddingTop:tempPaddingTop paddingLeading:tempPaddingLeading paddingBottom:tempPaddingBottom paddingTrailing:tempPaddingTrailing pMaxWrapSize:NULL];
+            [self myLayout:lsc calcRectOfSubView:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame vertGravity:vertGravity horzGravity:horzGravity inSelfSize:grid.gridRect.size paddingTop:tempPaddingTop paddingLeading:tempPaddingLeading paddingBottom:tempPaddingBottom paddingTrailing:tempPaddingTrailing pMaxWrapSize:NULL];
             
             sbvmyFrame.leading += gridOrigin.x;
             sbvmyFrame.top += gridOrigin.y;
@@ -1317,7 +1307,7 @@
                             }
                             else
                             {
-                                [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridRect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
+                                [self myLayout:lsc calcRectOfSubView:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame vertGravity:MyGravity_None horzGravity:MyGravity_None inSelfSize:grid.gridRect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
                             }
                             
                             if (grid.superGrid.subGridsType == MySubGridsType_Row)

@@ -88,13 +88,7 @@
 -(NSMutableArray*)myGetLayoutSubviews;
 -(NSMutableArray*)myGetLayoutSubviewsFrom:(NSArray*)sbsFrom;
 
--(CGSize)myAdjustSizeWhenNoSubviews:(CGSize)size sbs:(NSArray*)sbs lsc:(MyBaseLayout*)lsc;
-
-- (void)myAdjustLayoutSelfSize:(CGSize *)pSelfSize lsc:(MyBaseLayout*)lsc;
-
--(void)myAdjustSubviewsRTLPos:(NSArray*)sbs selfWidth:(CGFloat)selfWidth;
-
--(void)myAdjustSubviewsLayoutTransform:(NSArray*)sbs lsc:(MyBaseLayout*)lsc selfWidth:(CGFloat)selfWidth selfHeight:(CGFloat)selfHeight;
+-(CGSize)myLayout:(MyBaseLayout*)lsc adjustSelfSize:(CGSize)selfSize withSubviews:(NSArray*)sbs;
 
 -(MyGravity)myConvertLeftRightGravityToLeadingTrailing:(MyGravity)horzGravity;
 
@@ -106,7 +100,7 @@
 -(CGFloat)myLayoutLeadingPadding;
 -(CGFloat)myLayoutTrailingPadding;
 
--(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout lsc:(MyBaseLayout*)lsc;
+-(void)myLayout:(MyBaseLayout*)lsc adjustSizeSettingOfSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout;
 
 
 //根据子视图的宽度约束得到宽度值
@@ -132,10 +126,9 @@
                               sbvSize:(CGSize)sbvSize;
 
 
--(void)myCalcSubViewRect:(UIView*)sbv
+-(void)myLayout:(MyBaseLayout*)lsc calcRectOfSubView:(UIView*)sbv
                    sbvsc:(UIView*)sbvsc
               sbvmyFrame:(MyFrame*)sbvmyFrame
-                     lsc:(MyBaseLayout*)lsc
              vertGravity:(MyGravity)vertGravity
              horzGravity:(MyGravity)horzGravity
               inSelfSize:(CGSize)selfSize
@@ -152,7 +145,7 @@
 //给父布局视图机会来更改子布局视图的边界线的显示的rect
 -(void)myHookSublayout:(MyBaseLayout*)sublayout borderlineRect:(CGRect*)pRect;
 
--(void)myCalcSubviewsWrapContentSize:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSArray<UIView *>*)sbs withCustomSetting:(void (^)(UIView *sbv, UIView *sbvsc))customSetting;
+-(void)myCalcSubviewsWrapContentSize:(NSArray<UIView *>*)sbs isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass withCustomSetting:(void (^)(UIView *sbv, UIView *sbvsc))customSetting;
 
 @end
 

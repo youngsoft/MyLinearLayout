@@ -130,7 +130,7 @@
     MyFloatLayout *lsc = self.myCurrentSizeClass;
     MyOrientation orientation = lsc.orientation;
     
-    [self myCalcSubviewsWrapContentSize:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
+    [self myCalcSubviewsWrapContentSize:sbs isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
         
         if (sbvsc.widthSizeInner.dimeWrapVal && orientation == MyOrientation_Vert && sbvsc.weight != 0)
             [sbvsc.widthSizeInner __setActive:NO];
@@ -145,14 +145,8 @@
         selfSize = [self myCalcLayoutSizeForHorzOrientation:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
     
     
-    [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
-    
-    //对所有子视图进行布局变换
-    [self myAdjustSubviewsLayoutTransform:sbs lsc:lsc selfWidth:selfSize.width selfHeight:selfSize.height];
-    //对所有子视图进行RTL设置
-    [self myAdjustSubviewsRTLPos:sbs selfWidth:selfSize.width];
-    
-    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs lsc:lsc];
+    return [self myLayout:lsc adjustSelfSize:selfSize withSubviews:sbs];
+
 }
 
 -(id)createSizeClassInstance

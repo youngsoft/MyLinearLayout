@@ -1064,13 +1064,15 @@
 
 
 /**
- *不建议使用这个属性了，而是直接设置视图的宽度为MyLayoutSize.wrap 比如:myWidth = MyLayoutSize.wrap 或者widthSize.equalTo(@(MyLayoutSize.wrap))
+ *！！！不建议使用这个属性了，而是直接设置视图的宽度为MyLayoutSize.wrap。 比如:myWidth = MyLayoutSize.wrap 或者 widthSize.equalTo(@(MyLayoutSize.wrap))。
+ *获取和判断的时候可以通过 myWidth == MyLayoutSize.wrap 或者 widthSize.isWrap 来比较判断
  *视图的宽度包裹属性，表示视图的宽度由所有子视图的整体宽度来确定或者根据视图内容来宽度自适应。默认值是NO(水平线性布局默认这个属性是YES)，表示必须要明确指定视图的宽度，而当设置为YES时则不需要明确的指定视图的宽度了。这个属性不能和widthSize(或者设置了左右边距)同时设置否则可能会产生约束冲突，因为前者表明宽度由子视图或者内容来决定而后者则表示宽度是一个明确的值。如果同时设置了宽度包裹属性又同时设置了明确的宽度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的宽度和宽度包裹则会在布局前将宽度包裹属性置为NO。
  */
 @property(nonatomic,assign) BOOL wrapContentWidth;
 
 /**
- *！！！！不建议使用这个属性了，而是直接设置视图的高度为MyLayoutSize.wrap 比如:myHeight = MyLayoutSize.wrap 或者heightSize.equalTo(@(MyLayoutSize.wrap))
+ *！！！不建议使用这个属性了，而是直接设置视图的高度为MyLayoutSize.wrap。 比如:myHeight = MyLayoutSize.wrap 或者 heightSize.equalTo(@(MyLayoutSize.wrap))。
+ *获取和判断的时候可以通过 myHeight == MyLayoutSize.wrap 或者 heightSize.isWrap 来比较判断
  
  *视图的高度包裹属性，表示视图的高度由所有子视图的整体高度来确定或者根据视图内容来高度自适应。默认值是NO(垂直线性布局默认这个属性是YES)，表示必须要明确指定布局的高度，而当设置为YES时则不需要明确的指定视图的高度了。这个属性不能和heightSize(或者设置了上下边距)同时设置否则可能会产生约束冲突，因为前者表明高度由子视图或者内容来决定而后者则表示高度是一个明确的值。如果同时设置了高度包裹属性又同时设置了明确的高度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的高度和高度包裹则会在布局前将高度包裹属性置为NO。如果某个非布局视图指定了明确的宽度，而又将这个属性设置为了YES的话就能实现在固定宽度的情况下视图的高度根据内容自适应的效果，这个特性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图来实现高度根据内容自适应的场景。UILabel在使用这个属性时会自动设置numberOfLines为0，因此如果您要修改numberOfLines则需要在设置这个属性后进行；UITextView可以用这个属性以及heightSize中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果；UIImageView可以用这个属性来在实现在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放。
  */

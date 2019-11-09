@@ -165,35 +165,24 @@
     MyGravity horzGravity = lsc.gravity & MyGravity_Vert_Mask;
     MyOrientation orientation = lsc.orientation;
     
-    [self myCalcSubviewsWrapContentSize:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
+    [self myCalcSubviewsWrapContentSize:sbs isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
         
-        [self myAdjustSubviewWrapContent:sbv sbvsc:sbvsc lsc:(MyLinearLayout*)lsc orientation:orientation gravity:(orientation == MyOrientation_Vert)? horzGravity : vertGravity];
+        [self myLayout:lsc orientation:orientation gravity:(orientation == MyOrientation_Vert)? horzGravity : vertGravity adjustSizeSettingOfSubview:sbvsc];
     }];
     
     
     if (orientation == MyOrientation_Vert)
-        selfSize = [self myCalcLayoutSizeForVertOrientation:selfSize sbs:sbs lsc:lsc];
+        selfSize = [self myVertOrientationLayout:lsc calcRectOfSubviews:sbs withSelfSize:selfSize];
     else
-        selfSize = [self myCalcLayoutSizeForHorzOrientation:selfSize sbs:sbs lsc:lsc];
+        selfSize = [self myHorzOrientationLayout:lsc calcRectOfSubviews:sbs withSelfSize:selfSize];
     
     //绘制智能线。
     if (!isEstimate)
-    {
-        [self mySetLayoutIntelligentBorderline:sbs lsc:lsc];
-    }
+        [self myLayout:lsc setIntelligentBorderlineOnSubviews:sbs];
     
-
-    //调整布局视图自己的尺寸。
-    [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
-    
-    //对所有子视图进行布局变换
-    [self myAdjustSubviewsLayoutTransform:sbs lsc:lsc selfWidth:selfSize.width selfHeight:selfSize.height];
-    //对所有子视图进行RTL设置
-    [self myAdjustSubviewsRTLPos:sbs selfWidth:selfSize.width];
-    
-    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs lsc:lsc];
-    
+    return [self myLayout:lsc adjustSelfSize:selfSize withSubviews:sbs];
 }
+
 
 -(id)createSizeClassInstance
 {
@@ -204,7 +193,7 @@
 #pragma mark -- Private Methods
 
 //调整子视图的wrapContent设置
-- (void)myAdjustSubviewWrapContent:(UIView*)sbv sbvsc:(UIView*)sbvsc lsc:(MyLinearLayout*)lsc orientation:(MyOrientation)orientation  gravity:(MyGravity)gravity
+- (void)myLayout:(MyLinearLayout*)lsc orientation:(MyOrientation)orientation gravity:(MyGravity)gravity adjustSizeSettingOfSubview:(UIView*)sbvsc
 {
     if (orientation == MyOrientation_Vert)
     {
@@ -237,7 +226,7 @@
 }
 
 //设置智能边界线
--(void)mySetLayoutIntelligentBorderline:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
+-(void)myLayout:(MyLinearLayout*)lsc setIntelligentBorderlineOnSubviews:(NSArray*)sbs
 {
     if (self.intelligentBorderline == nil)
         return;
@@ -269,14 +258,10 @@
         UIView *nextSiblingView = nil;
         
         if (i != 0)
-        {
             prevSiblingView = sbs[i - 1];
-        }
         
         if (i + 1 != sbs.count)
-        {
             nextSiblingView = sbs[i + 1];
-        }
         
         if (prevSiblingView != nil)
         {
@@ -307,7 +292,7 @@
     }
 }
 
--(CGSize)myCalcLayoutSizeForVertOrientation:(CGSize)selfSize sbs:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
+-(CGSize)myVertOrientationLayout:(MyLinearLayout*)lsc calcRectOfSubviews:(NSArray*)sbs withSelfSize:(CGSize)selfSize
 {
     CGFloat subviewSpace = lsc.subviewVSpace;
     CGFloat paddingTop = lsc.myLayoutTopPadding;
@@ -387,14 +372,14 @@
             rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
         
         //计算子视图宽度以及对齐, 先计算宽度的原因是处理那些高度依赖宽度并且是wrap的情况。
-        CGFloat tempSelfWidth = [self myCalcSubviewLeadingTrailingRect:horzGravity
-                                                              selfSize:selfSize
-                                                                 pRect:&rect
-                                                                   sbv:sbv
-                                                       paddingTrailing:paddingTrailing
-                                                        paddingLeading:paddingLeading
-                                                                 sbvsc:sbvsc
-                                                                   lsc:lsc];
+        CGFloat tempSelfWidth = [self myLayout:lsc
+                                   calcSubview:sbv
+                                         sbvsc:sbvsc
+                           leadingTrailingRect:&rect
+                                   horzGravity:horzGravity
+                               paddingTrailing:paddingTrailing
+                                paddingLeading:paddingLeading
+                                      selfSize:selfSize];
         
         
        
@@ -679,17 +664,13 @@
                     pos += addSpace;
                     
                     if (isWeightShrinkSpace)
-                    {
                         pos += weightShrinkSpaceTotalHeight * (topSpace + sbvsc.topPosInner.offsetVal) / fixedSpaceHeight;
-                    }
                 }
             }
             
             topSpace += sbvsc.topPosInner.offsetVal;
             if (totalShrink != 0.0 && sbvsc.topPosInner.shrink != 0.0)
-            {
                 topSpace += (sbvsc.topPosInner.shrink / totalShrink) * spareHeight;
-            }
             
             pos += [self myValidMargin:sbvsc.topPosInner sbv:sbv calcPos:topSpace selfLayoutSize:selfSize];
             rect.origin.y = pos;
@@ -721,14 +702,14 @@
             }
             
             //计算子视图宽度以及对齐
-            CGFloat tempSelfWidth = [self myCalcSubviewLeadingTrailingRect:horzGravity
-                                                                  selfSize:selfSize
-                                                                     pRect:&rect
-                                                                       sbv:sbv
-                                                           paddingTrailing:paddingTrailing
-                                                            paddingLeading:paddingLeading
-                                                                     sbvsc:sbvsc
-                                                                       lsc:lsc];
+            CGFloat tempSelfWidth = [self myLayout:lsc
+                                       calcSubview:sbv
+                                             sbvsc:sbvsc
+                               leadingTrailingRect:&rect
+                                       horzGravity:horzGravity
+                                   paddingTrailing:paddingTrailing
+                                    paddingLeading:paddingLeading
+                                          selfSize:selfSize];
             
             if ((tempSelfWidth > maxSelfWidth) &&
                 (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) &&
@@ -754,17 +735,13 @@
                     pos += addSpace;
                     
                     if (isWeightShrinkSpace)
-                    {
                         pos += weightShrinkSpaceTotalHeight * (bottomSpace + sbvsc.bottomPosInner.offsetVal) / fixedSpaceHeight;
-                    }
                 }
             }
             
             bottomSpace += sbvsc.bottomPosInner.offsetVal;
             if (totalShrink != 0.0 && sbvsc.bottomPosInner.shrink != 0.0)
-            {
                 bottomSpace += (sbvsc.bottomPosInner.shrink / totalShrink) * spareHeight;
-            }
             
             pos += [self myValidMargin:sbvsc.bottomPosInner sbv:sbv calcPos:bottomSpace selfLayoutSize:selfSize];
             
@@ -778,9 +755,7 @@
                     pos += addSpace;
                     
                     if (isWeightShrinkSpace)
-                    {
                         pos += weightShrinkSpaceTotalHeight * subviewSpace / fixedSpaceHeight;
-                    }
                 }
                 
                 pos += between;  //只有mgvert为between才加这个间距拉伸。
@@ -801,7 +776,7 @@
     return selfSize;
 }
 
--(CGSize)myCalcLayoutSizeForHorzOrientation:(CGSize)selfSize sbs:(NSArray*)sbs lsc:(MyLinearLayout*)lsc
+-(CGSize)myHorzOrientationLayout:(MyLinearLayout*)lsc calcRectOfSubviews:(NSArray*)sbs withSelfSize:(CGSize)selfSize
 {
     CGFloat subviewSpace = lsc.subviewHSpace;
     CGFloat paddingTop = lsc.myLayoutTopPadding;
@@ -885,15 +860,15 @@
         }
         
         //计算子视图高度以及对齐
-       CGFloat tempSelfHeight = [self myCalcSubviewTopBottomRect:vertGravity
-                               selfSize:selfSize
-                                 pRect:&rect
-                                    sbv:sbv
-                        paddingTop:paddingTop
-                         paddingBottom:paddingBottom
-                             baselinePos:baselinePos
-                                  sbvsc:sbvsc
-                                    lsc:lsc];
+        CGFloat tempSelfHeight = [self myLayout:lsc
+                                    calcSubview:sbv
+                                          sbvsc:sbvsc
+                                  topBottomRect:&rect
+                                    vertGravity:vertGravity
+                                     paddingTop:paddingTop
+                                  paddingBottom:paddingBottom
+                                    baselinePos:baselinePos
+                                       selfSize:selfSize];
         
         if ((tempSelfHeight > maxSelfHeight) &&
             (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
@@ -1267,15 +1242,15 @@
                 rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
             }
             
-            CGFloat tempSelfHeight = [self myCalcSubviewTopBottomRect:vertGravity
-                                    selfSize:selfSize
-                                       pRect:&rect
-                                         sbv:sbv
-                                  paddingTop:paddingTop
-                               paddingBottom:paddingBottom
-                                 baselinePos:baselinePos
-                                       sbvsc:sbvsc
-                                         lsc:lsc];
+            CGFloat tempSelfHeight = [self myLayout:lsc
+                                        calcSubview:sbv
+                                              sbvsc:sbvsc
+                                      topBottomRect:&rect
+                                        vertGravity:vertGravity
+                                         paddingTop:paddingTop
+                                      paddingBottom:paddingBottom
+                                        baselinePos:baselinePos
+                                           selfSize:selfSize];
             
             if ((tempSelfHeight > maxSelfHeight) &&
                 (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
@@ -1347,7 +1322,7 @@
     return selfSize;
 }
 
-- (CGFloat)myCalcSubviewLeadingTrailingRect:(MyGravity)horzGravity selfSize:(CGSize)selfSize pRect:(CGRect *)pRect sbv:(UIView *)sbv paddingTrailing:(CGFloat)paddingTrailing paddingLeading:(CGFloat)paddingLeading sbvsc:(UIView *)sbvsc lsc:(MyLinearLayout*)lsc
+- (CGFloat)myLayout:(MyLinearLayout*)lsc calcSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc leadingTrailingRect:(CGRect *)pRect horzGravity:(MyGravity)horzGravity  paddingTrailing:(CGFloat)paddingTrailing paddingLeading:(CGFloat)paddingLeading selfSize:(CGSize)selfSize
 {
     
     pRect->size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:lsc.myLayoutTopPadding paddingLeading:paddingLeading paddingBottom:lsc.myLayoutBottomPadding paddingTrailing:paddingTrailing sbvSize:pRect->size];
@@ -1365,7 +1340,7 @@
    return [self myCalcHorzGravity:[self myGetSubviewHorzGravity:sbv sbvsc:sbvsc horzGravity:horzGravity] sbv:sbv sbvsc:sbvsc paddingLeading:paddingLeading paddingTrailing:paddingTrailing selfSize:selfSize pRect:pRect];
 }
 
-- (CGFloat)myCalcSubviewTopBottomRect:(MyGravity)vertGravity selfSize:(CGSize)selfSize pRect:(CGRect *)pRect sbv:(UIView *)sbv paddingTop:(CGFloat)paddingTop paddingBottom:(CGFloat)paddingBottom  baselinePos:(CGFloat)baselinePos sbvsc:(UIView *)sbvsc lsc:(MyLinearLayout*)lsc
+- (CGFloat)myLayout:(MyLinearLayout*)lsc calcSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc topBottomRect:(CGRect *)pRect  vertGravity:(MyGravity)vertGravity paddingTop:(CGFloat)paddingTop paddingBottom:(CGFloat)paddingBottom  baselinePos:(CGFloat)baselinePos selfSize:(CGSize)selfSize
 {
     pRect->size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:lsc.myLayoutLeadingPadding paddingBottom:paddingBottom paddingTrailing:lsc.myLayoutTrailingPadding sbvSize:pRect->size];
 

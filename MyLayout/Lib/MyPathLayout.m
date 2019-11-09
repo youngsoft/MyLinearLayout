@@ -540,7 +540,7 @@
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
     CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     
-    [self myCalcSubviewsWrapContentSize:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs2 withCustomSetting:nil];
+    [self myCalcSubviewsWrapContentSize:sbs2 isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass withCustomSetting:nil];
     
     
     CGFloat minXPos = CGFLOAT_MAX;
@@ -680,15 +680,7 @@
     if (lsc.heightSizeInner.dimeWrapVal)
         selfSize.height = maxYPos - minYPos;
     
-    //调整布局视图自己的尺寸。
-    [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
-    
-    //对所有子视图进行布局变换
-    [self myAdjustSubviewsLayoutTransform:sbs lsc:lsc selfWidth:selfSize.width selfHeight:selfSize.height];
-    
-    //路径布局不支持RTL。
-    
-    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs2 lsc:lsc];
+    return [self myLayout:lsc adjustSelfSize:selfSize withSubviews:sbs2];
 }
 
 -(id)createSizeClassInstance

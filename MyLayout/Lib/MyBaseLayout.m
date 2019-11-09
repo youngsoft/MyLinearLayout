@@ -2188,7 +2188,7 @@ void* _myObserverContextC = (void*)20175283;
             }
             
             //处理父视图是滚动视图时动态调整滚动视图的contentSize
-            [self myAlterScrollViewContentSize:newSelfSize lsc:lsc];
+            [self myLayout:lsc adjustScrollViewContentWithSize:newSelfSize];
         }
        
 
@@ -3003,7 +3003,7 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
--(CGFloat)myGetBoundLimitMargin:(MyLayoutPos*)boundPos sbv:(UIView*)sbv selfLayoutSize:(CGSize)selfLayoutSize
+-(CGFloat)myGetBound:(MyLayoutPos*)boundPos limitMarginOfSubview:(UIView*)sbv
 {
     CGFloat value = 0;
     if (boundPos == nil)
@@ -3064,8 +3064,8 @@ void* _myObserverContextC = (void*)20175283;
         return calcPos;
     
     //算出最大最小值
-    CGFloat min = (pos.isActive && pos.lBoundValInner != nil) ? [self myGetBoundLimitMargin:pos.lBoundValInner sbv:sbv selfLayoutSize:selfLayoutSize] : -CGFLOAT_MAX;
-    CGFloat max = (pos.isActive && pos.uBoundValInner != nil) ? [self myGetBoundLimitMargin:pos.uBoundValInner sbv:sbv selfLayoutSize:selfLayoutSize] : CGFLOAT_MAX;
+    CGFloat min = (pos.isActive && pos.lBoundValInner != nil) ? [self myGetBound:pos.lBoundValInner limitMarginOfSubview:sbv] : -CGFLOAT_MAX;
+    CGFloat max = (pos.isActive && pos.uBoundValInner != nil) ? [self myGetBound:pos.uBoundValInner limitMarginOfSubview:sbv] : CGFLOAT_MAX;
     
     calcPos = _myCGFloatMax(min, calcPos);
     calcPos = _myCGFloatMin(max, calcPos);
@@ -3111,46 +3111,15 @@ void* _myObserverContextC = (void*)20175283;
 
 }
 
--(CGSize)myAdjustSizeWhenNoSubviews:(CGSize)size sbs:(NSArray *)sbs lsc:(MyBaseLayout*)lsc
+
+-(CGSize)myLayout:(MyBaseLayout*)lsc adjustSelfSize:(CGSize)selfSize withSubviews:(NSArray*)sbs
 {
-    //如果没有子视图，并且padding不参与空子视图尺寸计算则尺寸应该扣除padding的值。
-    if (sbs.count == 0 && !lsc.zeroPadding)
-    {
-        if (lsc.widthSizeInner.dimeWrapVal)
-            size.width -= (lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding);
-        if (lsc.heightSizeInner.dimeWrapVal)
-            size.height -= (lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding);
-    }
+    //调整布局视图自己的尺寸。
+    selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:selfSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
-    return size;
-}
-
-- (void)myAdjustLayoutSelfSize:(CGSize *)pSelfSize lsc:(MyBaseLayout*)lsc
-{
-    //调整自己的尺寸。
-    pSelfSize->height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:pSelfSize->height sbvSize:*pSelfSize selfLayoutSize:self.superview.bounds.size];
+    selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
-    pSelfSize->width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:pSelfSize->width sbvSize:*pSelfSize selfLayoutSize:self.superview.bounds.size];
-}
-
--(void)myAdjustSubviewsRTLPos:(NSArray*)sbs selfWidth:(CGFloat)selfWidth
-{
-    if ([MyBaseLayout isRTL])
-    {
-        for (UIView *sbv in sbs)
-        {
-            MyFrame *myFrame = sbv.myFrame;
-            
-            myFrame.leading = selfWidth - myFrame.leading - myFrame.width;
-            myFrame.trailing = myFrame.leading + myFrame.width;
-            
-        }
-    }
-}
-
-
--(void)myAdjustSubviewsLayoutTransform:(NSArray*)sbs lsc:(MyBaseLayout*)lsc selfWidth:(CGFloat)selfWidth selfHeight:(CGFloat)selfHeight
-{
+    //对所有子视图进行布局变换
     CGAffineTransform layoutTransform = lsc.layoutTransform;
     if (!CGAffineTransformIsIdentity(layoutTransform))
     {
@@ -3159,15 +3128,15 @@ void* _myObserverContextC = (void*)20175283;
             MyFrame *myFrame = sbv.myFrame;
             
             //取子视图中心点坐标。因为这个坐标系的原点是布局视图的左上角，所以要转化为数学坐标系的原点坐标, 才能应用坐标变换。
-            CGPoint centerPoint = CGPointMake(myFrame.leading + myFrame.width / 2 - selfWidth / 2,
-                                              myFrame.top + myFrame.height / 2 - selfHeight / 2);
+            CGPoint centerPoint = CGPointMake(myFrame.leading + myFrame.width / 2 - selfSize.width / 2,
+                                              myFrame.top + myFrame.height / 2 - selfSize.height / 2);
             
             //应用坐标变换
             centerPoint = CGPointApplyAffineTransform(centerPoint, layoutTransform);
             
             //还原为左上角坐标系。
-            centerPoint.x +=  selfWidth / 2;
-            centerPoint.y += selfHeight / 2;
+            centerPoint.x +=  selfSize.width / 2;
+            centerPoint.y += selfSize.height / 2;
             
             //根据中心点的变化调整开始和结束位置。
             myFrame.leading = centerPoint.x - myFrame.width / 2;
@@ -3176,6 +3145,28 @@ void* _myObserverContextC = (void*)20175283;
             myFrame.bottom = myFrame.top + myFrame.height;
         }
     }
+    
+    //对所有子视图进行RTL设置
+    if ([MyBaseLayout isRTL])
+    {
+        for (UIView *sbv in sbs)
+        {
+            MyFrame *myFrame = sbv.myFrame;
+            myFrame.leading = selfSize.width - myFrame.leading - myFrame.width;
+            myFrame.trailing = myFrame.leading + myFrame.width;
+        }
+    }
+    
+    //如果没有子视图，并且padding不参与空子视图尺寸计算则尺寸应该扣除padding的值。
+    if (sbs.count == 0 && !lsc.zeroPadding)
+    {
+        if (lsc.widthSizeInner.dimeWrapVal)
+            selfSize.width -= (lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding);
+        if (lsc.heightSizeInner.dimeWrapVal)
+            selfSize.height -= (lsc.myLayoutTopPadding + lsc.myLayoutBottomPadding);
+    }
+    
+    return selfSize;    
 }
 
 -(MyGravity)myConvertLeftRightGravityToLeadingTrailing:(MyGravity)horzGravity
@@ -3239,7 +3230,7 @@ void* _myObserverContextC = (void*)20175283;
 }
 
 
-- (void)myAlterScrollViewContentSize:(CGSize)newSize lsc:(MyBaseLayout*)lsc
+- (void)myLayout:(MyBaseLayout*)lsc adjustScrollViewContentWithSize:(CGSize)newSize
 {
     if (self.adjustScrollViewContentSizeMode == MyAdjustScrollViewContentSizeModeYes && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]])
     {
@@ -3395,7 +3386,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 
 
--(void)myAdjustSubviewWrapContentSet:(UIView*)sbv isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame sbvsc:(UIView*)sbvsc selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout lsc:(MyBaseLayout*)lsc
+-(void)myLayout:(MyBaseLayout*)lsc adjustSizeSettingOfSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame  selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout
 {
     if (!isEstimate)
         sbvmyFrame.frame = sbv.bounds;
@@ -3524,18 +3515,18 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 
 
 
--(void)myCalcSubViewRect:(UIView*)sbv
-                   sbvsc:(UIView*)sbvsc
-              sbvmyFrame:(MyFrame*)sbvmyFrame
-                     lsc:(MyBaseLayout*)lsc
-             vertGravity:(MyGravity)vertGravity
-             horzGravity:(MyGravity)horzGravity
-              inSelfSize:(CGSize)selfSize
-              paddingTop:(CGFloat)paddingTop
-          paddingLeading:(CGFloat)paddingLeading
-           paddingBottom:(CGFloat)paddingBottom
-         paddingTrailing:(CGFloat)paddingTrailing
-            pMaxWrapSize:(CGSize*)pMaxWrapSize
+-(void)myLayout:(MyBaseLayout*)lsc
+calcRectOfSubView:(UIView*)sbv
+          sbvsc:(UIView*)sbvsc
+     sbvmyFrame:(MyFrame*)sbvmyFrame
+    vertGravity:(MyGravity)vertGravity
+    horzGravity:(MyGravity)horzGravity
+     inSelfSize:(CGSize)selfSize
+     paddingTop:(CGFloat)paddingTop
+ paddingLeading:(CGFloat)paddingLeading
+  paddingBottom:(CGFloat)paddingBottom
+paddingTrailing:(CGFloat)paddingTrailing
+   pMaxWrapSize:(CGSize*)pMaxWrapSize
 {
     
     
@@ -3648,7 +3639,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     }
 }
 
--(void)myCalcSubviewsWrapContentSize:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSArray<UIView *>*)sbs withCustomSetting:(void (^)(UIView *sbv, UIView *sbvsc))customSetting
+-(void)myCalcSubviewsWrapContentSize:(NSArray<UIView *>*)sbs isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass withCustomSetting:(void (^)(UIView *sbv, UIView *sbvsc))customSetting
 {
     for (UIView *sbv in sbs)
     {

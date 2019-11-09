@@ -52,24 +52,17 @@
         MyFrame *sbvmyFrame = sbv.myFrame;
         UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
         
-        [self myAdjustSubviewWrapContentSet:sbv isEstimate:isEstimate sbvmyFrame:sbvmyFrame sbvsc:sbvsc selfSize:selfSize vertGravity:vertGravity horzGravity:horzGravity sizeClass:sizeClass pHasSubLayout:pHasSubLayout lsc:lsc];
+        [self myLayout:lsc adjustSizeSettingOfSubview:sbv sbvsc:sbvsc isEstimate:isEstimate sbvmyFrame:sbvmyFrame selfSize:selfSize vertGravity:vertGravity horzGravity:horzGravity sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
         
         //计算自己的位置和高宽
-        [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:pMaxWrapSize];
+        [self myLayout:lsc calcRectOfSubView:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:pMaxWrapSize];
     }
     
     if (lsc.widthSizeInner.dimeWrapVal)
-    {
-        selfSize.width = maxWrapSize.width;
-    }
+         selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:maxWrapSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     if (lsc.heightSizeInner.dimeWrapVal)
-    {
-        selfSize.height = maxWrapSize.height;
-    }
-    
-    //调整布局视图自己的尺寸。
-    [self myAdjustLayoutSelfSize:&selfSize lsc:lsc];
+        selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:maxWrapSize.height sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     //如果布局视图具有包裹属性这里要调整那些依赖父视图宽度和高度的子视图的位置和尺寸。
     if ((lsc.widthSizeInner.dimeWrapVal && horzGravity != MyGravity_Horz_Fill) || (lsc.heightSizeInner.dimeWrapVal && vertGravity != MyGravity_Vert_Fill))
@@ -89,18 +82,12 @@
                 (sbvsc.heightSizeInner.dimeRelaVal.view == self)
                 )
             {
-                [self myCalcSubViewRect:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame lsc:lsc  vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
+                [self myLayout:lsc calcRectOfSubView:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
             }
         }
     }
     
-    
-    //对所有子视图进行布局变换
-    [self myAdjustSubviewsLayoutTransform:sbs lsc:lsc selfWidth:selfSize.width selfHeight:selfSize.height];
-    //对所有子视图进行RTL设置
-    [self myAdjustSubviewsRTLPos:sbs selfWidth:selfSize.width];
-    
-    return [self myAdjustSizeWhenNoSubviews:selfSize sbs:sbs lsc:lsc];
+    return [self myLayout:lsc adjustSelfSize:selfSize withSubviews:sbs];
 }
 
 -(id)createSizeClassInstance
