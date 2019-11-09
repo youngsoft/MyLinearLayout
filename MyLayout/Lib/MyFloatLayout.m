@@ -11,7 +11,6 @@
 
 @implementation  UIView(MyFloatLayoutExt)
 
-
 -(void)setReverseFloat:(BOOL)reverseFloat
 {
     UIView *sc = self.myCurrentSizeClass;
@@ -47,8 +46,6 @@
 @end
 
 
-
-
 @implementation MyFloatLayout
 
 #pragma mark -- Public Methods
@@ -60,7 +57,6 @@
     {
         self.myCurrentSizeClass.orientation = orientation;
     }
-    
     return self;
 }
 
@@ -68,7 +64,6 @@
 {
     return [self initWithFrame:CGRectZero orientation:orientation];
 }
-
 
 +(instancetype)floatLayoutWithOrientation:(MyOrientation)orientation
 {
@@ -91,7 +86,6 @@
     return self.myCurrentSizeClass.orientation;
 }
 
-
 -(void)setNoBoundaryLimit:(BOOL)noBoundaryLimit
 {
     NSLog(@"属性已经过期！请直接设置宽度或者高度值为MyLayoutSize.wrap");
@@ -101,7 +95,6 @@
 {
     return NO;
 }
-
 
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace
 {
@@ -117,7 +110,6 @@
     [self setNeedsLayout];
 }
 
-
 #pragma mark -- Override Methods
 
 -(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
@@ -127,26 +119,30 @@
     if (sbs == nil)
         sbs = [self myGetLayoutSubviews];
     
-    MyFloatLayout *lsc = self.myCurrentSizeClass;
+    MyFloatLayoutViewSizeClass *lsc = (MyFloatLayoutViewSizeClass*)self.myCurrentSizeClass;
     MyOrientation orientation = lsc.orientation;
     
-    [self myCalcSubviewsWrapContentSize:sbs isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass withCustomSetting:^(UIView *sbv, UIView *sbvsc) {
+    [self myCalcSubviewsWrapContentSize:sbs isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass withCustomSetting:^(MyViewSizeClass *sbvsc) {
         
-        if (sbvsc.widthSizeInner.dimeWrapVal && orientation == MyOrientation_Vert && sbvsc.weight != 0)
+        if (sbvsc.widthSizeInner.dimeWrapVal &&
+            orientation == MyOrientation_Vert &&
+            sbvsc.weight != 0 &&
+            [sbvsc.view isKindOfClass:[MyBaseLayout class]])
             [sbvsc.widthSizeInner __setActive:NO];
         
-        if (sbvsc.heightSizeInner.dimeWrapVal && orientation == MyOrientation_Horz && sbvsc.weight != 0)
+        if (sbvsc.heightSizeInner.dimeWrapVal &&
+            orientation == MyOrientation_Horz &&
+            sbvsc.weight != 0 &&
+            [sbvsc.view isKindOfClass:[MyBaseLayout class]])
             [sbvsc.heightSizeInner __setActive:NO];
     }];
     
     if (orientation == MyOrientation_Vert)
-        selfSize = [self myCalcLayoutSizeForVertOrientation:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
+        selfSize = [self myVertOrientationLayout:lsc calcRectOfSubviews:sbs withSelfSize:selfSize isEstimate:isEstimate];
     else
-        selfSize = [self myCalcLayoutSizeForHorzOrientation:selfSize sbs:sbs isEstimate:isEstimate lsc:lsc];
-    
+        selfSize = [self myHorzOrientationLayout:lsc calcRectOfSubviews:sbs withSelfSize:selfSize isEstimate:isEstimate];
     
     return [self myLayout:lsc adjustSelfSize:selfSize withSubviews:sbs];
-
 }
 
 -(id)createSizeClassInstance
@@ -158,13 +154,11 @@
 
 -(CGPoint)myFindTrailingCandidatePoint:(CGRect)leadingCandidateRect  width:(CGFloat)width trailingBoundary:(CGFloat)trailingBoundary trailingCandidateRects:(NSArray*)trailingCandidateRects hasWeight:(BOOL)hasWeight paddingTop:(CGFloat)paddingTop
 {
-    
     CGPoint retPoint = {trailingBoundary,CGFLOAT_MAX};
     
     CGFloat lastHeight = paddingTop;
     for (NSInteger i = trailingCandidateRects.count - 1; i >= 0; i--)
     {
-        
         CGRect trailingCandidateRect = ((NSValue*)trailingCandidateRects[i]).CGRectValue;
         
         //如果有比重则不能相等只能小于。
@@ -187,7 +181,6 @@
         }
         
         lastHeight = CGRectGetMaxY(trailingCandidateRect);
-        
     }
     
     if (retPoint.y == CGFLOAT_MAX)
@@ -204,13 +197,10 @@
 
 -(CGPoint)myFindBottomCandidatePoint:(CGRect)topCandidateRect  height:(CGFloat)height bottomBoundary:(CGFloat)bottomBoundary bottomCandidateRects:(NSArray*)bottomCandidateRects hasWeight:(BOOL)hasWeight paddingLeading:(CGFloat)paddingLeading
 {
-    
     CGPoint retPoint = {CGFLOAT_MAX,bottomBoundary};
-    
     CGFloat lastWidth = paddingLeading;
     for (NSInteger i = bottomCandidateRects.count - 1; i >= 0; i--)
     {
-        
         CGRect bottomCandidateRect = ((NSValue*)bottomCandidateRects[i]).CGRectValue;
 
         if ((hasWeight ? _myCGFloatLess(CGRectGetMaxY(topCandidateRect) + height, CGRectGetMinY(bottomCandidateRect)) :
@@ -232,7 +222,6 @@
         }
         
         lastWidth = CGRectGetMaxX(bottomCandidateRect);
-        
     }
     
     if (retPoint.x == CGFLOAT_MAX)
@@ -247,16 +236,12 @@
     return retPoint;
 }
 
-
 -(CGPoint)myFindLeadingCandidatePoint:(CGRect)trailingCandidateRect  width:(CGFloat)width leadingBoundary:(CGFloat)leadingBoundary leadingCandidateRects:(NSArray*)leadingCandidateRects hasWeight:(BOOL)hasWeight paddingTop:(CGFloat)paddingTop
 {
-    
     CGPoint retPoint = {leadingBoundary,CGFLOAT_MAX};
-    
     CGFloat lastHeight = paddingTop;
     for (NSInteger i = leadingCandidateRects.count - 1; i >= 0; i--)
     {
-        
        CGRect leadingCandidateRect = ((NSValue*)leadingCandidateRects[i]).CGRectValue;
 
         if ((hasWeight ? _myCGFloatGreat(CGRectGetMinX(trailingCandidateRect) - width, CGRectGetMaxX(leadingCandidateRect)) :
@@ -273,12 +258,10 @@
             {
                 retPoint.x = leadingBoundary;
             }
-            
             break;
         }
         
         lastHeight = CGRectGetMaxY(leadingCandidateRect);
-        
     }
     
     if (retPoint.y == CGFLOAT_MAX)
@@ -296,13 +279,11 @@
 
 -(CGPoint)myFindTopCandidatePoint:(CGRect)bottomCandidateRect  height:(CGFloat)height topBoundary:(CGFloat)topBoundary topCandidateRects:(NSArray*)topCandidateRects hasWeight:(BOOL)hasWeight paddingLeading:(CGFloat)paddingLeading
 {
-    
     CGPoint retPoint = {CGFLOAT_MAX, topBoundary};
     
     CGFloat lastWidth = paddingLeading;
     for (NSInteger i = topCandidateRects.count - 1; i >= 0; i--)
     {
-        
         CGRect topCandidateRect = ((NSValue*)topCandidateRects[i]).CGRectValue;
 
         if ((hasWeight ? _myCGFloatGreat(CGRectGetMinY(bottomCandidateRect) - height, CGRectGetMaxY(topCandidateRect)) :
@@ -319,13 +300,10 @@
             {
                 retPoint.y = topBoundary;
             }
-
-            
             break;
         }
         
         lastWidth = CGRectGetMaxX(topCandidateRect);
-        
     }
     
     if (retPoint.x == CGFLOAT_MAX)
@@ -341,13 +319,11 @@
     return retPoint;
 }
 
-
--(CGFloat)myCalcMaxMinSubviewSize:(CGFloat)selfSize lsc:(MyFloatLayoutViewSizeClass*)lsc space:(CGFloat*)pSpace
+-(CGFloat)myLayout:(MyFloatLayoutViewSizeClass*)lsc calcMaxMinSubviewSizeWithSelfSize:(CGFloat)selfSize space:(CGFloat*)pSpace
 {
    CGFloat subviewSize = lsc.subviewSize;
     if (subviewSize != 0)
     {
-        
         CGFloat minSpace = lsc.minSpace;
         CGFloat maxSpace = lsc.maxSpace;
         
@@ -372,22 +348,21 @@
     return subviewSize;
 }
 
-
--(void)myCalcFloatLayoutSubviewsSize:(NSArray<UIView *>*)sbs
-                                 lsc:(MyFloatLayout*)lsc
-                            selfSize:(CGSize)selfSize
-                          paddingTop:(CGFloat)paddingTop
-                      paddingLeading:(CGFloat)paddingLeading
-                       paddingBottom:(CGFloat)paddingBottom
-                     paddingTrailing:(CGFloat)paddingTrailing
-                         subviewSize:(CGFloat)subviewSize
-                             isWidth:(BOOL)isWidth
+-(void)myLayout:(MyFloatLayoutViewSizeClass*)lsc
+calcSizeOfSubviews:(NSArray<UIView *>*)sbs
+       selfSize:(CGSize)selfSize
+     paddingTop:(CGFloat)paddingTop
+ paddingLeading:(CGFloat)paddingLeading
+  paddingBottom:(CGFloat)paddingBottom
+paddingTrailing:(CGFloat)paddingTrailing
+    subviewSize:(CGFloat)subviewSize
+        isWidth:(BOOL)isWidth
 {
     //设置子视图的宽度和高度。
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+        MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
         CGRect rect = sbvmyFrame.frame;
         
         if (subviewSize != 0)
@@ -398,10 +373,10 @@
                 rect.size.height = subviewSize;
         }
         
-        rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        rect.size.width = [self myLayout:lsc widthSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
         rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
-        rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        rect.size.height = [self myLayout:lsc heightSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
@@ -409,7 +384,6 @@
             rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
             rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         }
-        
         
         if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
         {//特殊处理宽度等于高度的情况
@@ -420,14 +394,11 @@
         sbvmyFrame.width = rect.size.width;
         sbvmyFrame.height = rect.size.height;
     }
-    
 }
 
-
--(CGSize)myCalcLayoutSizeForVertOrientation:(CGSize)selfSize sbs:(NSArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFloatLayout*)lsc 
+-(CGSize)myVertOrientationLayout:(MyFloatLayoutViewSizeClass*)lsc calcRectOfSubviews:(NSArray*)sbs withSelfSize:(CGSize)selfSize isEstimate:(BOOL)isEstimate
 {
     //对于垂直浮动布局来说，默认是左浮动,当设置为RTL时则默认是右浮动，因此我们只需要改变一下sbv.reverseFloat的定义就好了。
-    
     CGFloat paddingTop = lsc.myLayoutTopPadding;
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
@@ -439,14 +410,13 @@
     if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = CGFLOAT_MAX;
     
-    
     //支持浮动水平间距。
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
-    CGFloat subviewSize = [self myCalcMaxMinSubviewSize:selfSize.width - paddingHorz lsc:(MyFloatLayoutViewSizeClass *)lsc space:&horzSpace];
+    CGFloat subviewSize = [self myLayout:lsc calcMaxMinSubviewSizeWithSelfSize:selfSize.width - paddingHorz space:&horzSpace];
     
     //设置子视图的宽度和高度。
-    [self myCalcFloatLayoutSubviewsSize:sbs lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing subviewSize:subviewSize isWidth:YES];
+    [self myLayout:lsc calcSizeOfSubviews:sbs selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing subviewSize:subviewSize isWidth:YES];
     
     //左边候选区域数组，保存的是CGRect值。
     NSMutableArray *leadingCandidateRects = [NSMutableArray new];
@@ -476,7 +446,7 @@
     {
         UIView *sbv = sbs[idx];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+        MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         CGFloat topSpace = sbvsc.topPosInner.absVal;
         CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
@@ -529,7 +499,6 @@
             //重新设置宽度
             if (sbvsc.weight != 0)
             {
-                
                 rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:(nextPoint.x - leadingCandidateXBoundary + sbvsc.widthSizeInner.addVal) * sbvsc.weight - leadingSpace - trailingSpace sbvSize:rect.size selfLayoutSize:selfSize];
                 
                 //特殊处理高度等于宽度，并且高度依赖宽度的情况。
@@ -542,13 +511,10 @@
                 //特殊处理高度包裹的场景
                 if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
                 {
-                    rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
+                    rect.size.height = [self mySubview:sbvsc wrapHeightSizeFits:rect.size.width];
                     rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
                 }
-                
-                
             }
-            
             
             rect.origin.x = nextPoint.x - trailingSpace - rect.size.width;
             rect.origin.y = _myCGFloatMin(nextPoint.y, maxHeight) + topSpace;
@@ -567,7 +533,6 @@
                         sbvl.trailingBorderline = nil;
                         sbvl.leadingBorderline = nil;
                         
-                        
                         if (_myCGFloatLess(rect.origin.x + rect.size.width + trailingSpace, selfSize.width - paddingTrailing))
                         {
                             sbvl.trailingBorderline = self.intelligentBorderline;
@@ -582,12 +547,9 @@
                         {
                             sbvl.leadingBorderline = self.intelligentBorderline;
                         }
-                        
                     }
-                    
                 }
             }
-            
             
             //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
             CGRect cRect = CGRectMake(_myCGFloatMax((rect.origin.x - leadingSpace - horzSpace),paddingLeading), rect.origin.y - topSpace, _myCGFloatMin((rect.size.width + leadingSpace + trailingSpace),(selfSize.width - paddingHorz)), rect.size.height + topSpace + bottomSpace + vertSpace);
@@ -625,9 +587,7 @@
             
             //记录每一行的最大子视图位置的索引值。
             if (trailingLastYOffset != rect.origin.y - topSpace)
-            {
                 [lineIndexes addObject:@(idx - 1)];
-            }
             
             [trailingCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             trailingLastYOffset = rect.origin.y - topSpace;
@@ -655,7 +615,6 @@
             }
             else
             {
-                
                 //依次从后往前，每个都比较右边的。
                 for (NSInteger i = leadingCandidateRects.count - 1; i >= 0; i--)
                 {
@@ -692,10 +651,9 @@
                 //特殊处理高度包裹的场景
                 if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
                 {
-                    rect.size.height = [self myHeightFromFlexedHeightView:sbv sbvsc:sbvsc inWidth:rect.size.width];
+                    rect.size.height = [self mySubview:sbvsc wrapHeightSizeFits:rect.size.width];
                     rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
                 }
-                
             }
             
             rect.origin.x = nextPoint.x + leadingSpace;
@@ -728,9 +686,7 @@
                 }
             }
             
-            
             CGRect cRect = CGRectMake(rect.origin.x - leadingSpace, rect.origin.y - topSpace, _myCGFloatMin((rect.size.width + leadingSpace + trailingSpace + horzSpace),(selfSize.width - paddingHorz)), rect.size.height + topSpace + bottomSpace + vertSpace);
-            
             
             //把新添加到候选中去。并删除高度小于的候选键。和高度
             for (NSInteger i = leadingCandidateRects.count - 1; i >= 0; i--)
@@ -772,7 +728,6 @@
             
             if (_myCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, leadingMaxHeight))
                 leadingMaxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
-            
         }
         
         if (_myCGFloatGreat(rect.origin.y + rect.size.height + bottomSpace + vertSpace, maxHeight))
@@ -782,7 +737,6 @@
             maxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
         
         sbvmyFrame.frame = rect;
-        
     }
     
     if (sbs.count > 0)
@@ -827,16 +781,13 @@
         }
     }
     
-    
     //如果有子视图设置了对齐属性，那么就要对处在同一行内的子视图进行对齐设置。
     //对齐的规则是以行内最高的子视图作为参考的对象，其他的子视图按照行内最高子视图进行垂直对齐的调整。
     if (sbvHasAlignment)
     {
         //最后一行。
         if (sbs.count > 0)
-        {
             [lineIndexes addObject:@(sbs.count - 1)];
-        }
         
         NSInteger lineFirstIndex = 0;
         for (NSNumber *idxnum in lineIndexes)
@@ -849,7 +800,7 @@
             {
                 UIView *sbv = sbs[i];
                 MyFrame *sbvmyFrame = sbv.myFrame;
-                UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+                MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
                 if (sbvmyFrame.height > lineMaxHeight)
                     lineMaxHeight = sbvmyFrame.height;
                 
@@ -864,7 +815,7 @@
                 {
                     UIView *sbv = sbs[i];
                     MyFrame *sbvmyFrame = sbv.myFrame;
-                    UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+                    MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
                     MyGravity sbvVertAlignment = sbvsc.alignment & MyGravity_Horz_Mask;
                     UIFont *sbvFont = nil;
                     if (sbvVertAlignment == MyGravity_Vert_Baseline)
@@ -908,14 +859,12 @@
         }
     }
     
-   
     return selfSize;
 }
 
--(CGSize)myCalcLayoutSizeForHorzOrientation:(CGSize)selfSize sbs:(NSArray*)sbs isEstimate:(BOOL)isEstimate lsc:(MyFloatLayout*)lsc
+-(CGSize)myHorzOrientationLayout:(MyFloatLayoutViewSizeClass*)lsc calcRectOfSubviews:(NSArray*)sbs withSelfSize:(CGSize)selfSize isEstimate:(BOOL)isEstimate
 {
     //对于水平浮动布局来说，最终是从左到右排列，而对于RTL则是从右到左排列，因此这里先抽象定义头尾的概念，然后最后再计算时统一将抽象位置转化为CGRect的左边值。
-
     CGFloat paddingTop = lsc.myLayoutTopPadding;
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
@@ -930,10 +879,10 @@
     //支持浮动垂直间距。
     CGFloat horzSpace = lsc.subviewHSpace;
     CGFloat vertSpace = lsc.subviewVSpace;
-    CGFloat subviewSize = [self myCalcMaxMinSubviewSize:selfSize.height - paddingVert lsc:(MyFloatLayoutViewSizeClass*)lsc space:&vertSpace];
+    CGFloat subviewSize = [self myLayout:lsc calcMaxMinSubviewSizeWithSelfSize:selfSize.height - paddingVert space:&vertSpace];
     
     //设置子视图的宽度和高度。
-    [self myCalcFloatLayoutSubviewsSize:sbs lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing subviewSize:subviewSize isWidth:NO];
+    [self myLayout:lsc calcSizeOfSubviews:sbs selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing subviewSize:subviewSize isWidth:NO];
     
     //上边候选区域数组，保存的是CGRect值。
     NSMutableArray *topCandidateRects = [NSMutableArray new];
@@ -963,7 +912,7 @@
     {
         UIView *sbv = sbs[idx];
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+        MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
 
         CGFloat topSpace = sbvsc.topPosInner.absVal;
         CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
@@ -1023,7 +972,6 @@
                 
             }
             
-            
             rect.origin.y = nextPoint.y - bottomSpace - rect.size.height;
             rect.origin.x = _myCGFloatMin(nextPoint.x, maxWidth) + leadingSpace;
             
@@ -1061,7 +1009,6 @@
                 }
             }
             
-            
             //这里有可能子视图本身的高度会超过布局视图本身，但是我们的候选区域则不存储超过的高度部分。
             CGRect cRect = CGRectMake(rect.origin.x - leadingSpace, _myCGFloatMax((rect.origin.y - topSpace - vertSpace),paddingTop), rect.size.width + leadingSpace + trailingSpace + horzSpace, _myCGFloatMin((rect.size.height + topSpace + bottomSpace),(selfSize.height - paddingVert)));
             
@@ -1094,7 +1041,6 @@
                     cRect = CGRectUnion(cRect, candidateRect);
                     cRect.size.height += candidateMaxY - cMinY;
                 }
-
             }
             
             //记录每一列的最大子视图位置的索引值。
@@ -1191,9 +1137,7 @@
                 }
             }
             
-            
             CGRect cRect = CGRectMake(rect.origin.x - leadingSpace, rect.origin.y - topSpace,rect.size.width + leadingSpace + trailingSpace + horzSpace,_myCGFloatMin((rect.size.height + topSpace + bottomSpace + vertSpace),(selfSize.height - paddingVert)));
-            
             
             //把新添加到候选中去。并删除宽度小于的最新候选区域的候选区域
             for (NSInteger i = topCandidateRects.count - 1; i >= 0; i--)
@@ -1228,16 +1172,13 @@
             
             //记录每一列的最大子视图位置的索引值。
             if (topLastXOffset != rect.origin.x - leadingSpace)
-            {
                 [lineIndexes addObject:@(idx - 1)];
-            }
             
             [topCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             topLastXOffset = rect.origin.x - leadingSpace;
             
             if (_myCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace,topMaxWidth))
                 topMaxWidth = rect.origin.x + rect.size.width + trailingSpace + horzSpace;
-            
         }
         
         if (_myCGFloatGreat(rect.origin.x + rect.size.width + trailingSpace + horzSpace, maxWidth))
@@ -1247,7 +1188,6 @@
             maxHeight = rect.origin.y + rect.size.height + bottomSpace + vertSpace;
         
         sbvmyFrame.frame = rect;
-        
     }
     
     if (sbs.count > 0)
@@ -1298,9 +1238,7 @@
     {
         //最后一列。
         if (sbs.count > 0)
-        {
             [lineIndexes addObject:@(sbs.count - 1)];
-        }
         
         NSInteger lineFirstIndex = 0;
         for (NSNumber *idxnum in lineIndexes)
@@ -1313,7 +1251,7 @@
             {
                 UIView *sbv = sbs[i];
                 MyFrame *sbvmyFrame = sbv.myFrame;
-                UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+                MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
                 if (sbvmyFrame.width > lineMaxWidth)
                     lineMaxWidth = sbvmyFrame.width;
                 
@@ -1327,7 +1265,7 @@
                 {
                     UIView *sbv = sbs[i];
                     MyFrame *sbvmyFrame = sbv.myFrame;
-                    UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+                    MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
                     switch ([self myConvertLeftRightGravityToLeadingTrailing:sbvsc.alignment & MyGravity_Vert_Mask]) {
                         case MyGravity_Horz_Center:
                             sbvmyFrame.leading += (lineMaxWidth - sbvmyFrame.width) / 2.0;
@@ -1356,6 +1294,5 @@
     
     return selfSize;
 }
-
 
 @end

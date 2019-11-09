@@ -9,21 +9,9 @@
 #import "MyFrameLayout.h"
 #import "MyLayoutInner.h"
 
-
-
 @implementation MyFrameLayout
 
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
-
-
 #pragma mark -- Override Methods
-
 
 -(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray *)sbs
 {
@@ -32,7 +20,7 @@
     if (sbs == nil)
         sbs = [self myGetLayoutSubviews];
     
-    MyFrameLayout *lsc = self.myCurrentSizeClass;
+    MyFrameLayoutViewSizeClass *lsc = (MyFrameLayoutViewSizeClass*)self.myCurrentSizeClass;
     CGFloat paddingTop = lsc.myLayoutTopPadding;
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
@@ -40,7 +28,6 @@
     
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
-    
     
     CGSize maxWrapSize = CGSizeMake(paddingLeading + paddingTrailing, paddingTop + paddingBottom);
     CGSize *pMaxWrapSize = &maxWrapSize;
@@ -50,12 +37,12 @@
     for (UIView *sbv in sbs)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+        MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
         
-        [self myLayout:lsc adjustSizeSettingOfSubview:sbv sbvsc:sbvsc isEstimate:isEstimate sbvmyFrame:sbvmyFrame selfSize:selfSize vertGravity:vertGravity horzGravity:horzGravity sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
+        [self myLayout:lsc adjustSizeSettingOfSubview:sbvsc isEstimate:isEstimate sbvmyFrame:sbvmyFrame selfSize:selfSize vertGravity:vertGravity horzGravity:horzGravity sizeClass:sizeClass pHasSubLayout:pHasSubLayout];
         
         //计算自己的位置和高宽
-        [self myLayout:lsc calcRectOfSubView:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:pMaxWrapSize];
+        [self myLayout:lsc calcRectOfSubview:sbvsc sbvmyFrame:sbvmyFrame vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:pMaxWrapSize];
     }
     
     if (lsc.widthSizeInner.dimeWrapVal)
@@ -70,7 +57,7 @@
         for (UIView *sbv in sbs)
         {
             MyFrame *sbvmyFrame = sbv.myFrame;
-            UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+            MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
            
             
             //只有子视图的尺寸或者位置依赖父视图的情况下才需要重新计算位置和尺寸。
@@ -82,7 +69,7 @@
                 (sbvsc.heightSizeInner.dimeRelaVal.view == self)
                 )
             {
-                [self myLayout:lsc calcRectOfSubView:sbv sbvsc:sbvsc sbvmyFrame:sbvmyFrame vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
+                [self myLayout:lsc calcRectOfSubview:sbvsc sbvmyFrame:sbvmyFrame vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
             }
         }
     }
@@ -94,10 +81,5 @@
 {
     return [MyFrameLayoutViewSizeClass new];
 }
-
-
-#pragma mark -- Private Methods
-
-
 
 @end

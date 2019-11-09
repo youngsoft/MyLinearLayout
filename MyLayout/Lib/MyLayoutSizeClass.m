@@ -45,7 +45,6 @@ BOOL _myisRTL = NO;
     return _leadingPos;
 }
 
-
 -(MyLayoutPos*)bottomPosInner
 {
     return _bottomPos;
@@ -86,13 +85,10 @@ BOOL _myisRTL = NO;
     return _widthSize;
 }
 
-
 -(MyLayoutSize*)heightSizeInner
 {
     return _heightSize;
 }
-
-
 
 //..
 
@@ -105,7 +101,6 @@ BOOL _myisRTL = NO;
         _topPos.pos = MyGravity_Vert_Top;
         
     }
-    
     return _topPos;
 }
 
@@ -121,7 +116,6 @@ BOOL _myisRTL = NO;
     return _leadingPos;
 }
 
-
 -(MyLayoutPos*)bottomPos
 {
     if (_bottomPos == nil)
@@ -129,12 +123,10 @@ BOOL _myisRTL = NO;
         _bottomPos = [MyLayoutPos new];
         _bottomPos.view = self.view;
         _bottomPos.pos = MyGravity_Vert_Bottom;
-        
     }
     
     return _bottomPos;
 }
-
 
 -(MyLayoutPos*)trailingPos
 {
@@ -146,9 +138,7 @@ BOOL _myisRTL = NO;
     }
     
     return _trailingPos;
-    
 }
-
 
 -(MyLayoutPos*)centerXPos
 {
@@ -157,7 +147,6 @@ BOOL _myisRTL = NO;
         _centerXPos = [MyLayoutPos new];
         _centerXPos.view = self.view;
         _centerXPos.pos = MyGravity_Horz_Center;
-        
     }
     
     return _centerXPos;
@@ -170,13 +159,10 @@ BOOL _myisRTL = NO;
         _centerYPos = [MyLayoutPos new];
         _centerYPos.view = self.view;
         _centerYPos.pos = MyGravity_Vert_Center;
-        
     }
     
     return _centerYPos;
 }
-
-
 
 -(MyLayoutPos*)leftPos
 {
@@ -200,8 +186,6 @@ BOOL _myisRTL = NO;
     return _baselinePos;
 }
 
-
-
 -(CGFloat)myTop
 {
     return self.topPosInner.absVal;
@@ -211,7 +195,6 @@ BOOL _myisRTL = NO;
 {
     self.topPos.myEqualTo(@(myTop));
 }
-
 
 -(CGFloat)myLeading
 {
@@ -223,7 +206,6 @@ BOOL _myisRTL = NO;
     self.leadingPos.myEqualTo(@(myLeading));
 }
 
-
 -(CGFloat)myBottom
 {
     return self.bottomPosInner.absVal;
@@ -234,7 +216,6 @@ BOOL _myisRTL = NO;
     self.bottomPos.myEqualTo(@(myBottom));
 }
 
-
 -(CGFloat)myTrailing
 {
     return self.trailingPosInner.absVal;
@@ -244,7 +225,6 @@ BOOL _myisRTL = NO;
 {
     self.trailingPos.myEqualTo(@(myTrailing));
 }
-
 
 -(CGFloat)myCenterX
 {
@@ -266,7 +246,6 @@ BOOL _myisRTL = NO;
     self.centerYPos.myEqualTo(@(myCenterY));
 }
 
-
 -(CGPoint)myCenter
 {
     return CGPointMake(self.myCenterX, self.myCenterY);
@@ -277,8 +256,6 @@ BOOL _myisRTL = NO;
     self.myCenterX = myCenter.x;
     self.myCenterY = myCenter.y;
 }
-
-
 
 -(CGFloat)myLeft
 {
@@ -300,9 +277,6 @@ BOOL _myisRTL = NO;
     self.rightPos.myEqualTo(@(myRight));
 }
 
-
-
-
 -(CGFloat)myMargin
 {
     return self.leftPosInner.absVal;
@@ -315,7 +289,6 @@ BOOL _myisRTL = NO;
     self.rightPos.myEqualTo(@(myMargin));
     self.bottomPos.myEqualTo(@(myMargin));
 }
-
 
 -(CGFloat)myHorzMargin
 {
@@ -351,7 +324,6 @@ BOOL _myisRTL = NO;
     return _widthSize;
 }
 
-
 -(MyLayoutSize*)heightSize
 {
     if (_heightSize == nil)
@@ -363,7 +335,6 @@ BOOL _myisRTL = NO;
     
     return _heightSize;
 }
-
 
 -(CGFloat)myWidth
 {
@@ -403,7 +374,6 @@ BOOL _myisRTL = NO;
     self.myHeight = mySize.height;
 }
 
-
 -(void)setWeight:(CGFloat)weight
 {
     if (weight < 0)
@@ -437,7 +407,6 @@ BOOL _myisRTL = NO;
     }
 }
 
-
 -(void)setWrapContentHeight:(BOOL)wrapContentHeight
 {
     if (wrapContentHeight)
@@ -457,7 +426,6 @@ BOOL _myisRTL = NO;
     return self.wrapContentWidth && self.wrapContentHeight;
 }
 
-
 -(void)setWrapContentSize:(BOOL)wrapContentSize
 {
     self.wrapContentWidth = self.wrapContentHeight = wrapContentSize;
@@ -465,7 +433,6 @@ BOOL _myisRTL = NO;
 
 -(NSString*)debugDescription
 {
-    
     NSString*dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nvisibility=%c\nalignment=%hu\nreverseFloat=%@\nclearFloat=%@",
                     self.topPosInner,
                     self.leadingPosInner,
@@ -483,10 +450,8 @@ BOOL _myisRTL = NO;
                     self.reverseFloat ? @"YES":@"NO",
                     self.clearFloat ? @"YES":@"NO"];
     
-    
     return dbgDesc;
 }
-
 
 #pragma mark -- NSCopying
 
@@ -516,7 +481,6 @@ BOOL _myisRTL = NO;
     return lsc;
 }
 
-
 @end
 
 @implementation MyLayoutViewSizeClass
@@ -534,7 +498,6 @@ BOOL _myisRTL = NO;
     
     return self;
 }
-
 
 -(UIEdgeInsets)padding
 {
@@ -556,14 +519,10 @@ BOOL _myisRTL = NO;
 
 -(void)setLeftPadding:(CGFloat)leftPadding
 {
-     if ([MyViewSizeClass isRTL])
-     {
-     self.trailingPadding = leftPadding;
-     }
-     else
-     {
-     self.leadingPadding = leftPadding;
-     }
+    if ([MyViewSizeClass isRTL])
+        self.trailingPadding = leftPadding;
+    else
+        self.leadingPadding = leftPadding;
 }
 
 -(CGFloat)rightPadding
@@ -574,15 +533,10 @@ BOOL _myisRTL = NO;
 -(void)setRightPadding:(CGFloat)rightPadding
 {
     if ([MyViewSizeClass isRTL])
-    {
         self.leadingPadding = rightPadding;
-    }
     else
-    {
         self.trailingPadding = rightPadding;
-    }
 }
-
 
 -(CGFloat)myLayoutTopPadding
 {
@@ -741,7 +695,6 @@ BOOL _myisRTL = NO;
     return [MyViewSizeClass isRTL] ? [self myLayoutLeadingPadding] : [self myLayoutTrailingPadding];
 }
 
-
 -(CGFloat)subviewSpace
 {
     return self.subviewVSpace;
@@ -752,7 +705,6 @@ BOOL _myisRTL = NO;
     self.subviewVSpace = subviewSpace;
     self.subviewHSpace = subviewSpace;
 }
-
 
 - (id)copyWithZone:(NSZone *)zone
 {
@@ -776,7 +728,6 @@ BOOL _myisRTL = NO;
 -(NSString*)debugDescription
 {
     NSString *dbgDesc = [super debugDescription];
-    
     dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nzeroPadding=%@\ngravity=%hu\nreverseLayout=%@\nsubviewVertSpace=%f\nsubviewHorzSpace=%f",
                dbgDesc,
                NSStringFromUIEdgeInsets(self.padding),
@@ -787,24 +738,17 @@ BOOL _myisRTL = NO;
                self.subviewHSpace
                ];
     
-    
     return dbgDesc;
 }
 
-
 @end
 
-
 @implementation MySequentLayoutViewSizeClass
-
-
 
 - (id)copyWithZone:(NSZone *)zone
 {
     MySequentLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     lsc.orientation = self.orientation;
-   
-    
      return lsc;
 }
 
@@ -817,11 +761,8 @@ BOOL _myisRTL = NO;
               (unsigned long)self.orientation
                ];
     
-    
     return dbgDesc;
 }
-
-
 
 @end
 
@@ -831,7 +772,6 @@ BOOL _myisRTL = NO;
 - (id)copyWithZone:(NSZone *)zone
 {
     MyLinearLayoutViewSizeClass *lsc = [super copyWithZone:zone];
-    
     lsc.shrinkType = self.shrinkType;
     
     return lsc;
@@ -846,11 +786,8 @@ BOOL _myisRTL = NO;
                (unsigned long)self.shrinkType
                ];
     
-    
     return dbgDesc;
 }
-
-
 
 @end
 
@@ -896,7 +833,6 @@ BOOL _myisRTL = NO;
 -(NSString*)debugDescription
 {
     NSString *dbgDesc = [super debugDescription];
-    
     dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\nautoArrange=%@\nisFlex=%@\narrangedGravity=%hu\npagedCount=%ld",
                                           dbgDesc,
                                           (long)self.arrangedCount,
@@ -918,13 +854,9 @@ BOOL _myisRTL = NO;
 @end
 
 @implementation MyFrameLayoutViewSizeClass
-
-
-
 @end
 
 @implementation MyPathLayoutViewSizeClass
-
 @end
 
 
@@ -937,13 +869,10 @@ BOOL _myisRTL = NO;
 
 @implementation MyGridLayoutViewSizeClass
 
-
 -(MyGridNode*)rootGrid
 {
     if (_rootGrid == nil)
-    {
         _rootGrid = [[MyGridNode alloc] initWithMeasure:0 superGrid:nil];
-    }
     return _rootGrid;
 }
 
@@ -983,7 +912,6 @@ BOOL _myisRTL = NO;
     id<MyGridNode> node = (id<MyGridNode>)[self.rootGrid addRowGrid:grid measure:measure];
     node.superGrid = self;
     return node;
-    
 }
 
 -(id<MyGrid>)addColGrid:(id<MyGrid>)grid measure:(CGFloat)measure
@@ -991,7 +919,6 @@ BOOL _myisRTL = NO;
     id<MyGridNode> node = (id<MyGridNode>)[self.rootGrid addColGrid:grid measure:measure];
     node.superGrid = self;
     return node;
-    
 }
 
 
@@ -1046,7 +973,6 @@ BOOL _myisRTL = NO;
     self.gravity = overlap;
 }
 
-
 -(NSInteger)tag
 {
     return self.view.tag;
@@ -1078,7 +1004,6 @@ BOOL _myisRTL = NO;
     return self.rootGrid.subGrids;
 }
 
-
 -(void)setSubGrids:(NSMutableArray *)subGrids
 {
     self.rootGrid.subGrids = subGrids;
@@ -1094,7 +1019,6 @@ BOOL _myisRTL = NO;
     self.rootGrid.subGridsType = subGridsType;
 }
 
-
 -(MyBorderline*)topBorderline
 {
     return nil;
@@ -1103,7 +1027,6 @@ BOOL _myisRTL = NO;
 -(void)setTopBorderline:(MyBorderline *)topBorderline
 {
 }
-
 
 -(MyBorderline*)bottomBorderline
 {
@@ -1114,7 +1037,6 @@ BOOL _myisRTL = NO;
 {
 }
 
-
 -(MyBorderline*)leftBorderline
 {
     return nil;
@@ -1123,7 +1045,6 @@ BOOL _myisRTL = NO;
 -(void)setLeftBorderline:(MyBorderline *)leftBorderline
 {
 }
-
 
 -(MyBorderline*)rightBorderline
 {
@@ -1141,7 +1062,6 @@ BOOL _myisRTL = NO;
 
 -(void)setLeadingBorderline:(MyBorderline *)leadingBorderline
 {
-    
 }
 
 -(MyBorderline*)trailingBorderline
@@ -1151,9 +1071,7 @@ BOOL _myisRTL = NO;
 
 -(void)setTrailingBorderline:(MyBorderline *)trailingBorderline
 {
-    
 }
-
 
 -(NSDictionary*)gridDictionary
 {
@@ -1206,7 +1124,6 @@ BOOL _myisRTL = NO;
     return [self.rootGrid updateGridOrigin:superOrigin superGrid:superGrid withOffset:offset];
 }
 
-
 -(UIView*)gridLayoutView
 {
     return self.view;
@@ -1232,7 +1149,6 @@ BOOL _myisRTL = NO;
     return [self.rootGrid gridHitTest:point];
 }
 
-
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     //do nothing;
@@ -1253,17 +1169,11 @@ BOOL _myisRTL = NO;
     //do nothing;
 }
 
-
-
-
 - (id)copyWithZone:(NSZone *)zone
 {
     MyGridLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     lsc->_rootGrid = (MyGridNode*)[self.rootGrid cloneGrid];
-    
-    
     return lsc;
 }
-
 
 @end

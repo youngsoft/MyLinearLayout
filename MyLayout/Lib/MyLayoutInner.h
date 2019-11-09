@@ -54,30 +54,28 @@
 //判断margin是否是相对margin
 -(BOOL)myIsRelativePos:(CGFloat)margin;
 
--(MyGravity)myGetSubviewVertGravity:(UIView*)sbv sbvsc:(UIView*)sbvsc vertGravity:(MyGravity)vertGravity;
+-(MyGravity)myGetSubview:(MyViewSizeClass*)sbvsc vertGravity:(MyGravity)vertGravity;
 
 
--(CGFloat)myCalcVertGravity:(MyGravity)vert
-                     sbv:(UIView *)sbv
-                   sbvsc:(UIView*)sbvsc
-              paddingTop:(CGFloat)paddingTop
-           paddingBottom:(CGFloat)paddingBottom
-             baselinePos:(CGFloat)baselinePos
-                selfSize:(CGSize)selfSize
-                   pRect:(CGRect*)pRect;
+-(CGFloat)myCalcSubview:(MyViewSizeClass*)sbvsc
+            vertGravity:(MyGravity)vert
+             paddingTop:(CGFloat)paddingTop
+          paddingBottom:(CGFloat)paddingBottom
+            baselinePos:(CGFloat)baselinePos
+               selfSize:(CGSize)selfSize
+                  pRect:(CGRect*)pRect;
 
--(MyGravity)myGetSubviewHorzGravity:(UIView*)sbv sbvsc:(UIView*)sbvsc horzGravity:(MyGravity)horzGravity;
+-(MyGravity)myGetSubview:(MyViewSizeClass*)sbvsc horzGravity:(MyGravity)horzGravity;
 
 
--(CGFloat)myCalcHorzGravity:(MyGravity)horz
-                     sbv:(UIView *)sbv
-                   sbvsc:(UIView*)sbvsc
+-(CGFloat)myCalcSubview:(MyViewSizeClass*)sbvsc
+            horzGravity:(MyGravity)horz
           paddingLeading:(CGFloat)paddingLeading
          paddingTrailing:(CGFloat)paddingTrailing
                 selfSize:(CGSize)selfSize
                    pRect:(CGRect*)pRect;
 
--(CGFloat)myHeightFromFlexedHeightView:(UIView*)sbv sbvsc:(UIView*)sbvsc inWidth:(CGFloat)width;
+-(CGFloat)mySubview:(MyViewSizeClass*)sbvsc wrapHeightSizeFits:(CGFloat)width;
 
 -(CGFloat)myValidMeasure:(MyLayoutSize*)dime sbv:(UIView*)sbv calcSize:(CGFloat)calcSize sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize;
 
@@ -88,7 +86,7 @@
 -(NSMutableArray*)myGetLayoutSubviews;
 -(NSMutableArray*)myGetLayoutSubviewsFrom:(NSArray*)sbsFrom;
 
--(CGSize)myLayout:(MyBaseLayout*)lsc adjustSelfSize:(CGSize)selfSize withSubviews:(NSArray*)sbs;
+-(CGSize)myLayout:(MyLayoutViewSizeClass*)lsc adjustSelfSize:(CGSize)selfSize withSubviews:(NSArray*)sbs;
 
 -(MyGravity)myConvertLeftRightGravityToLeadingTrailing:(MyGravity)horzGravity;
 
@@ -100,43 +98,42 @@
 -(CGFloat)myLayoutLeadingPadding;
 -(CGFloat)myLayoutTrailingPadding;
 
--(void)myLayout:(MyBaseLayout*)lsc adjustSizeSettingOfSubview:(UIView*)sbv sbvsc:(UIView*)sbvsc isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout;
+-(void)myLayout:(MyLayoutViewSizeClass*)lsc adjustSizeSettingOfSubview:(MyViewSizeClass*)sbvsc isEstimate:(BOOL)isEstimate sbvmyFrame:(MyFrame*)sbvmyFrame selfSize:(CGSize)selfSize vertGravity:(MyGravity)vertGravity horzGravity:(MyGravity)horzGravity sizeClass:(MySizeClass)sizeClass pHasSubLayout:(BOOL*)pHasSubLayout;
 
 
 //根据子视图的宽度约束得到宽度值
--(CGFloat)myGetSubviewWidthSizeValue:(UIView *)sbv
-                               sbvsc:(UIView *)sbvsc
-                                 lsc:(MyBaseLayout *)lsc
-                            selfSize:(CGSize)selfSize
-                          paddingTop:(CGFloat)paddingTop
-                      paddingLeading:(CGFloat)paddingLeading
-                       paddingBottom:(CGFloat)paddingBottom
-                     paddingTrailing:(CGFloat)paddingTrailing
-                             sbvSize:(CGSize)sbvSize;
+-(CGFloat)myLayout:(MyLayoutViewSizeClass*)lsc
+widthSizeValueOfSubview:(MyViewSizeClass *)sbvsc
+          selfSize:(CGSize)selfSize
+           sbvSize:(CGSize)sbvSize
+        paddingTop:(CGFloat)paddingTop
+    paddingLeading:(CGFloat)paddingLeading
+     paddingBottom:(CGFloat)paddingBottom
+   paddingTrailing:(CGFloat)paddingTrailing;
+
 
 //根据子视图的高度约束得到高度值
--(CGFloat)myGetSubviewHeightSizeValue:(UIView *)sbv
-                                sbvsc:(UIView *)sbvsc
-                                  lsc:(MyBaseLayout *)lsc
-                             selfSize:(CGSize)selfSize
-                           paddingTop:(CGFloat)paddingTop
-                       paddingLeading:(CGFloat)paddingLeading
-                        paddingBottom:(CGFloat)paddingBottom
-                      paddingTrailing:(CGFloat)paddingTrailing
-                              sbvSize:(CGSize)sbvSize;
+-(CGFloat)myLayout:(MyLayoutViewSizeClass*)lsc
+heightSizeValueOfSubview:(MyViewSizeClass *)sbvsc
+          selfSize:(CGSize)selfSize
+           sbvSize:(CGSize)sbvSize
+        paddingTop:(CGFloat)paddingTop
+    paddingLeading:(CGFloat)paddingLeading
+     paddingBottom:(CGFloat)paddingBottom
+   paddingTrailing:(CGFloat)paddingTrailing;
 
 
--(void)myLayout:(MyBaseLayout*)lsc calcRectOfSubView:(UIView*)sbv
-                   sbvsc:(UIView*)sbvsc
-              sbvmyFrame:(MyFrame*)sbvmyFrame
-             vertGravity:(MyGravity)vertGravity
-             horzGravity:(MyGravity)horzGravity
-              inSelfSize:(CGSize)selfSize
-              paddingTop:(CGFloat)paddingTop
-          paddingLeading:(CGFloat)paddingLeading
-           paddingBottom:(CGFloat)paddingBottom
-         paddingTrailing:(CGFloat)paddingTrailing
-            pMaxWrapSize:(CGSize*)pMaxWrapSize;
+-(void)myLayout:(MyLayoutViewSizeClass*)lsc
+calcRectOfSubview:(MyViewSizeClass*)sbvsc
+     sbvmyFrame:(MyFrame*)sbvmyFrame
+    vertGravity:(MyGravity)vertGravity
+    horzGravity:(MyGravity)horzGravity
+     inSelfSize:(CGSize)selfSize
+     paddingTop:(CGFloat)paddingTop
+ paddingLeading:(CGFloat)paddingLeading
+  paddingBottom:(CGFloat)paddingBottom
+paddingTrailing:(CGFloat)paddingTrailing
+   pMaxWrapSize:(CGSize*)pMaxWrapSize;
 
 -(UIFont*)myGetSubviewFont:(UIView*)sbv;
 
@@ -145,7 +142,7 @@
 //给父布局视图机会来更改子布局视图的边界线的显示的rect
 -(void)myHookSublayout:(MyBaseLayout*)sublayout borderlineRect:(CGRect*)pRect;
 
--(void)myCalcSubviewsWrapContentSize:(NSArray<UIView *>*)sbs isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass withCustomSetting:(void (^)(UIView *sbv, UIView *sbvsc))customSetting;
+-(void)myCalcSubviewsWrapContentSize:(NSArray<UIView *>*)sbs isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass withCustomSetting:(void (^)(MyViewSizeClass *sbvsc))customSetting;
 
 @end
 

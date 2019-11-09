@@ -307,12 +307,12 @@
     if (full)
     {
         NSMutableArray *pointIndexs = [NSMutableArray new];
-        self.pathPoints = [self myCalcPoints:self.pathSubviews path:nil pointIndexArray:pointIndexs lsc:self.myCurrentSizeClass];
+        self.pathPoints = [self myLayout:(MyPathLayoutViewSizeClass*)self.myCurrentSizeClass calcPointsOfSubviews:self.pathSubviews path:nil pointIndexArray:pointIndexs];
         self.pointIndexs = pointIndexs;
     }
     else
     {
-        self.pathPoints = [self myCalcPoints:self.pathSubviews path:nil pointIndexArray:nil lsc:self.myCurrentSizeClass];
+        self.pathPoints = [self myLayout:(MyPathLayoutViewSizeClass*)self.myCurrentSizeClass calcPointsOfSubviews:self.pathSubviews path:nil pointIndexArray:nil ];
         self.pointIndexs = nil;
     }
 }
@@ -400,14 +400,14 @@
     
     if (self.spaceType.type != MyPathSpace_Fixed)
     {
-        [self myCalcPathPoints:retPath pPathLen:NULL subviewCount:-1 pointIndexArray:nil viewSpace:0 lsc:self.myCurrentSizeClass];
+        [self myLayout:(MyPathLayoutViewSizeClass*)self.myCurrentSizeClass calcPathPoints:retPath pPathLen:NULL subviewCount:-1 pointIndexArray:nil viewSpace:0];
     }
     else
     {
         if (subviewCount == -1)
             subviewCount = self.pathSubviews.count;
         
-        [self myCalcPathPoints:retPath pPathLen:NULL subviewCount:subviewCount pointIndexArray:nil viewSpace:self.spaceType.value lsc:self.myCurrentSizeClass];
+        [self myLayout:(MyPathLayoutViewSizeClass*)self.myCurrentSizeClass calcPathPoints:retPath pPathLen:NULL subviewCount:subviewCount pointIndexArray:nil viewSpace:self.spaceType.value];
     }
     
     return retPath;
@@ -534,7 +534,7 @@
         sbs = [self myGetLayoutSubviews];
     NSArray *sbs2 = sbs;
     
-    MyPathLayout *lsc = self.myCurrentSizeClass;
+    MyPathLayoutViewSizeClass *lsc = (MyPathLayoutViewSizeClass*)self.myCurrentSizeClass;
     CGFloat paddingTop = lsc.myLayoutTopPadding;
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
@@ -556,7 +556,7 @@
     if ([self.layer isKindOfClass:[CAShapeLayer class]] && !isEstimate)
         path = CGPathCreateMutable();
     
-    NSArray *pts = [self myCalcPoints:sbs path:path pointIndexArray:nil lsc:lsc];
+    NSArray *pts = [self myLayout:lsc calcPointsOfSubviews:sbs path:path pointIndexArray:nil];
     
     if (path != nil)
     {
@@ -570,7 +570,7 @@
         UIView *sbv = sbs[i];
         
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+        MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
        
         CGPoint pt = CGPointZero;
         if (pts.count > i)
@@ -580,10 +580,10 @@
         
         CGRect rect = sbvmyFrame.frame;
         
-        rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        rect.size.width = [self myLayout:lsc widthSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
         rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
-        rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        rect.size.height = [self myLayout:lsc heightSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
 
         if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
@@ -624,14 +624,14 @@
     if (sbv != nil)
     {
         MyFrame *sbvmyFrame = sbv.myFrame;
-        UIView *sbvsc = [sbv myCurrentSizeClassFrom:sbvmyFrame];
+        MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         CGRect rect = sbvmyFrame.frame;
         
-        rect.size.width = [self myGetSubviewWidthSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        rect.size.width = [self myLayout:lsc widthSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
         rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
-        rect.size.height = [self myGetSubviewHeightSizeValue:sbv sbvsc:sbvsc lsc:lsc selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing sbvSize:rect.size];
+        rect.size.height = [self myLayout:lsc heightSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
@@ -913,20 +913,19 @@
 /**
  计算曲线路径
 
+ @param lsc lsc
  @param showPath 将计算的路径保存到showPath中，可选参数
  @param pPathLen 返回路径的总长度
  @param subviewCount 子视图的数量，如果为-1则表示只计算路径的长度不会把每个子视图所在的路径点索引保存
  @param pointIndexArray 返回所有子视图在路径点的索引
  @param viewSpace 子视图之间的间距
- @param lsc lsc
  @return 返回所有路径点
  */
--(NSArray*)myCalcPathPoints:(CGMutablePathRef)showPath
+-(NSArray*)myLayout:(MyPathLayoutViewSizeClass*)lsc calcPathPoints:(CGMutablePathRef)showPath
                 pPathLen:(CGFloat*)pPathLen
              subviewCount:(NSInteger)subviewCount
           pointIndexArray:(NSMutableArray*)pointIndexArray
               viewSpace:(CGFloat)viewSpace
-                        lsc:(MyPathLayout*)lsc
 {
     NSMutableArray *pathPointArray = [NSMutableArray new];
     
@@ -1064,7 +1063,7 @@
     return pathPointArray;
 }
 
--(NSArray*)myCalcPoints:(NSArray*)sbs path:(CGMutablePathRef)path pointIndexArray:(NSMutableArray*)pointIndexArray lsc:(MyPathLayout*)lsc
+-(NSArray*)myLayout:(MyPathLayoutViewSizeClass*)lsc calcPointsOfSubviews:(NSArray*)sbs path:(CGMutablePathRef)path pointIndexArray:(NSMutableArray*)pointIndexArray
 {
     if (sbs.count > 0)
     {
@@ -1073,7 +1072,7 @@
             //如果间距不是固定的，那么要先算出路径的长度pathLen,以及是否是封闭曲线标志来算出每个子视图在曲线上的间距viewSpacing
             
             CGFloat pathLen = 0;  //曲线的总长度
-            NSArray *tempArray = [self myCalcPathPoints:path pPathLen:&pathLen subviewCount:-1 pointIndexArray:nil viewSpace:0 lsc:lsc];
+            NSArray *tempArray = [self myLayout:lsc calcPathPoints:path pPathLen:&pathLen subviewCount:-1 pointIndexArray:nil viewSpace:0];
             
             //判断是否是封闭路径，方法为第一个路径点和最后一个之间的距离差小于1
             BOOL bClose = NO;
@@ -1095,11 +1094,11 @@
                 viewSpace = pathLen / (sbvcount - (bClose ? 0 : 1));
             
             //有间距后再重新计算一遍
-            return [self myCalcPathPoints:nil pPathLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpace:viewSpace lsc:lsc];
+            return [self myLayout:lsc calcPathPoints:nil pPathLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpace:viewSpace];
         }
         else
         {
-            return [self myCalcPathPoints:path pPathLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpace:self.spaceType.value lsc:lsc];
+            return [self myLayout:lsc calcPathPoints:path pPathLen:NULL subviewCount:sbs.count pointIndexArray:pointIndexArray viewSpace:self.spaceType.value];
         }
     }
     

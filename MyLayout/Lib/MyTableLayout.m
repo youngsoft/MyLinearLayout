@@ -13,7 +13,6 @@ static CGFloat sColCountTag = -100000;
 
 @interface MyTableRowLayout : MyLinearLayout
 
-
 +(MyTableRowLayout *)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation;
 
 @property(nonatomic,assign, readonly) CGFloat rowSize;
@@ -26,7 +25,6 @@ static CGFloat sColCountTag = -100000;
    CGFloat _rowSize;
    CGFloat _colSize;
 }
-
 
 -(instancetype)initWith:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
 {
@@ -104,12 +102,10 @@ static CGFloat sColCountTag = -100000;
     }
 }
 
-
 +(MyTableRowLayout *)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
 {
     return [[self alloc] initWith:rowSize colSize:colSize orientation:orientation];
 }
-
 
 @end
 
@@ -128,7 +124,6 @@ static CGFloat sColCountTag = -100000;
 
 @end
 
-
 @implementation MyTableLayout
 
 #pragma mark -- Public Methods
@@ -137,7 +132,6 @@ static CGFloat sColCountTag = -100000;
 {
     return [self linearLayoutWithOrientation:orientation];
 }
-
 
 -(MyLinearLayout*)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize
 {
@@ -155,7 +149,6 @@ static CGFloat sColCountTag = -100000;
     return [self  insertRow:rowSize colSize:sColCountTag - colCount atIndex:rowIndex];
 }
 
-
 -(MyLinearLayout*)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex
 {
     MyTableLayout *lsc = self.myCurrentSizeClass;
@@ -171,6 +164,7 @@ static CGFloat sColCountTag = -100000;
         rowView.subviewHSpace = lsc.subviewHSpace;
     else
         rowView.subviewVSpace = lsc.subviewVSpace;
+    
     rowView.intelligentBorderline = self.intelligentBorderline;
     [super insertSubview:rowView atIndex:rowIndex];
     return rowView;
@@ -261,7 +255,6 @@ static CGFloat sColCountTag = -100000;
     if (colView1 == colView2)
         return;
     
-    
     [self removeColAt:indexPath1];
     [self removeColAt:indexPath2];
     
@@ -304,9 +297,7 @@ static CGFloat sColCountTag = -100000;
             [self viewAtRowIndex:i].subviewHSpace = subviewHSpace;
         }
     }
-    
 }
-
 
 //不能直接调用如下的函数。
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index
@@ -333,11 +324,9 @@ static CGFloat sColCountTag = -100000;
     NSCAssert(0, @"Constraint exception!! Can't call insertSubview");
 }
 
-
 -(id)createSizeClassInstance
 {
     return [MyTableLayoutViewSizeClass new];
 }
-
 
 @end

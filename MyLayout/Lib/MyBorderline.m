@@ -59,16 +59,13 @@
     }
     
     return self;
-
 }
 
 -(instancetype)initWithColor:(UIColor *)color thick:(CGFloat)thick headIndent:(CGFloat)headIndent tailIndent:(CGFloat)tailIndent offset:(CGFloat)offset
 {
     self = [self initWithColor:color thick:thick headIndent:headIndent tailIndent:tailIndent];
     if (self != nil)
-    {
         _offset = offset;
-    }
     
     return self;
 }
@@ -78,9 +75,7 @@
     if (thick < 1)
         thick = 1;
     if (_thick != thick)
-    {
         _thick = thick;
-    }
 }
 
 @end

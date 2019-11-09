@@ -37,7 +37,6 @@
     return -99997;  //这么定义纯粹是一个数字没有其他意义
 }
 
-
 -(id)init
 {
     self= [super init];
@@ -58,7 +57,6 @@
     
     return self;
 }
-
 
 -(MyLayoutSize* (^)(id val))myEqualTo
 {
@@ -99,7 +97,6 @@
         [self setNeedsLayout];
         return self;
     };
-    
 }
 
 -(MyLayoutSize* (^)(CGFloat val))myMin
@@ -110,12 +107,10 @@
         [self setNeedsLayout];
         return self;
     };
-    
 }
 
 -(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myLBound
 {
-    
     return ^id(id sizeVal, CGFloat addVal, CGFloat multiVal){
         
         [self __lBound:sizeVal addVal:addVal multiVal:multiVal];
@@ -149,7 +144,6 @@
     [self __clear];
     [self setNeedsLayout];
 }
-
 
 -(MyLayoutSize* (^)(id val))equalTo
 {
@@ -205,7 +199,6 @@
     return _active ? _shrink : 0.0;
 }
 
-
 -(id)dimeVal
 {
     return self.isActive ? _dimeVal : nil;
@@ -225,7 +218,6 @@
 {
     return [self dimeWrapVal];
 }
-
 
 #pragma mark -- NSCopying
 
@@ -260,7 +252,6 @@
 
 #pragma mark -- Private Methods
 
-
 -(NSNumber*)dimeNumVal
 {
     if (_dimeVal == nil || !self.isActive)
@@ -285,7 +276,6 @@
     return nil;
 }
 
-
 -(NSArray*)dimeArrVal
 {
     if (_dimeVal == nil || !self.isActive)
@@ -296,12 +286,10 @@
     return nil;
 }
 
-
 -(BOOL)dimeWrapVal
 {
     return self.isActive && _dimeValType == MyLayoutValueType_Wrap;
 }
-
 
 -(MyLayoutSize*)lBoundVal
 {
@@ -344,7 +332,6 @@
 
 -(MyLayoutSize*)__equalTo:(id)val priority:(NSInteger)priority
 {
-    
     _priority = priority;
     
     if (![_dimeVal isEqual:val])
@@ -353,17 +340,11 @@
         {
             //特殊处理。
             if ([val integerValue] == MyLayoutSize.wrap)
-            {
                 _dimeValType = MyLayoutValueType_Wrap;
-            }
             else if ([val integerValue] == MyLayoutSize.fill)
-            {
                 NSAssert(0, @"oops! 暂时不支持");
-            }
             else
-            {
                 _dimeValType = MyLayoutValueType_NSNumber;
-            }
         }
         else if ([val isMemberOfClass:[MyLayoutSize class]])
         {
@@ -430,44 +411,31 @@
     return self;
 }
 
-
 //加
 -(MyLayoutSize*)__add:(CGFloat)val
 {
-    
     if (_addVal != val)
-    {
         _addVal = val;
-    }
     
     return self;
 }
-
 
 //乘
 -(MyLayoutSize*)__multiply:(CGFloat)val
 {
-    
     if (_multiVal != val)
-    {
         _multiVal = val;
-    }
     
     return self;
-    
 }
-
 
 -(MyLayoutSize*)__min:(CGFloat)val
 {
     if (self.lBoundVal.dimeNumVal.doubleValue != val)
-    {
         [self.lBoundVal __equalTo:@(val)];
-    }
     
     return self;
 }
-
 
 -(MyLayoutSize*)__lBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal
 {
@@ -487,9 +455,7 @@
 -(MyLayoutSize*)__max:(CGFloat)val
 {
     if (self.uBoundVal.dimeNumVal.doubleValue != val)
-    {
         [self.uBoundVal __equalTo:@(val)];
-    }
     
     return self;
 }
@@ -508,8 +474,6 @@
     
     return self;
 }
-
-
 
 -(void)__clear
 {
@@ -531,7 +495,6 @@
     [_uBoundVal __setActive:active];
 }
 
-
 -(CGFloat) measure
 {
     return self.isActive ? _myCGFloatFma(self.dimeNumVal.doubleValue,  _multiVal,  _addVal) : 0;
@@ -541,8 +504,6 @@
 {
     return self.isActive ?  _myCGFloatFma(size, _multiVal , _addVal) : size;
 }
-
-
 
 -(void)setNeedsLayout
 {
@@ -554,15 +515,11 @@
     }
 }
 
-
 +(NSString*)dimestrFromDime:(MyLayoutSize*)dimeobj showView:(BOOL)showView
 {
-    
     NSString *viewstr = @"";
     if (showView)
-    {
         viewstr = [NSString stringWithFormat:@"View:%p.", dimeobj.view];
-    }
     
     NSString *dimeStr = @"";
     
@@ -578,7 +535,6 @@
     }
     
     return [NSString stringWithFormat:@"%@%@",viewstr,dimeStr];
-    
 }
 
 #pragma mark -- Override Methods
@@ -605,29 +561,21 @@
             for (NSObject *obj in _dimeVal)
             {
                 if ([obj isMemberOfClass:[MyLayoutSize class]])
-                {
                     dimeValStr = [dimeValStr stringByAppendingString:[MyLayoutSize dimestrFromDime:(MyLayoutSize*)obj showView:YES]];
-                }
                 else
-                {
                     dimeValStr = [dimeValStr stringByAppendingString:[obj description]];
-                    
-                }
                 
                 if (obj != [_dimeVal lastObject])
                     dimeValStr = [dimeValStr stringByAppendingString:@", "];
-                
             }
             
             dimeValStr = [dimeValStr stringByAppendingString:@"]"];
-            
         }
         default:
             break;
     }
     
     return [NSString stringWithFormat:@"%@=%@, Multiply=%g, Add=%g, Max=%g, Min=%g",[MyLayoutSize dimestrFromDime:self showView:NO], dimeValStr, _multiVal, _addVal, _uBoundVal.dimeNumVal.doubleValue == CGFLOAT_MAX ? NAN : _uBoundVal.dimeNumVal.doubleValue , _lBoundVal.dimeNumVal.doubleValue == -CGFLOAT_MAX ? NAN : _lBoundVal.dimeNumVal.doubleValue];
-    
 }
 
 @end
@@ -669,7 +617,6 @@
     
     return self;
 }
-
 
 -(CGFloat)getMostSizeFrom:(MyLayoutSize *)layoutSize
 {

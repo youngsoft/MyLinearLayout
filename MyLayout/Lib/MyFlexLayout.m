@@ -11,17 +11,13 @@
 #import <objc/runtime.h>
 
 const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM";
-
-
- const int MyFlex_Auto = -1;
-
+const int MyFlex_Auto = -1;
 
 @implementation MyFlexItem
 {
     @package
     __weak UIView *_view;
 }
-
 
 -(instancetype)initWithView:(UIView*)view;
 {
@@ -89,7 +85,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
 {
     self.view.visibility = visibility_val;
 }
-
 
 -(MyFlexItem* (^)(NSInteger))order
 {
@@ -319,7 +314,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
     ((MyFlexLayout*)self.view).subviewHSpace = horz_space_val;
 }
 
-
 -(MyFlex* (^)(MyFlexDirection))flex_direction
 {
     return ^id(MyFlexDirection val){
@@ -349,7 +343,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
 
 -(MyFlex* (^)(MyFlexGravity))justify_content
 {
-    
     return ^id(MyFlexGravity val) {
         self.justify_content_val = val;
         return self;
@@ -400,7 +393,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
 
 @implementation UIView(MyFlexLayout)
 
-
 -(MyFlexItem*)flexItem
 {
     MyFlexItem *obj = nil;
@@ -423,7 +415,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
 @end
 
 
-
 @implementation MyFlexLayout
 
 -(instancetype)init
@@ -439,12 +430,9 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
     return self;
 }
 
-
 -(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
 {
-    
     //将flexbox中的属性映射为MyFlowLayout中的属性。
-    
     MyFlexLayout *lsc = self.myCurrentSizeClass;
 
     //最先设置方向。
@@ -553,7 +541,6 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
                 break;
         }
     }
-    
     
     //设置主轴的水平对齐和拉伸
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
@@ -674,7 +661,5 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KE
     
     return [super calcLayoutSize:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
 }
-
-
 
 @end

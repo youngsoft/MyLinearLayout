@@ -12,7 +12,6 @@
 #import "MyLayoutInner.h"
 
 
-
 @implementation MyLayoutPos
 {
     id _posVal;
@@ -46,8 +45,6 @@
     return self;
 }
 
-
-
 -(MyLayoutPos* (^)(id val))myEqualTo
 {
     return ^id(id val){
@@ -57,7 +54,6 @@
         return self;
     };
 }
-
 
 -(MyLayoutPos* (^)(CGFloat val))myOffset
 {
@@ -69,7 +65,6 @@
     };
 }
 
-
 -(MyLayoutPos* (^)(CGFloat val))myMin
 {
     return ^id(CGFloat val){
@@ -79,7 +74,6 @@
         return self;
     };
 }
-
 
 -(MyLayoutPos* (^)(CGFloat val))myMax
 {
@@ -111,28 +105,21 @@
     };
 }
 
-
-
-
-
 -(void)myClear
 {
     [self __clear];
     [self setNeedsLayout];
 }
 
-
 -(MyLayoutPos* (^)(id val))equalTo
 {
     return self.myEqualTo;
 }
 
-
 -(MyLayoutPos* (^)(CGFloat val))offset
 {
     return self.myOffset;
 }
-
 
 -(MyLayoutPos* (^)(CGFloat val))min
 {
@@ -144,7 +131,6 @@
     return self.myLBound;
 }
 
-
 -(MyLayoutPos* (^)(CGFloat val))max
 {
     return self.myMax;
@@ -155,14 +141,10 @@
     return self.myUBound;
 }
 
-
-
-
 -(void)clear
 {
     [self myClear];
 }
-
 
 -(void)setActive:(BOOL)active
 {
@@ -199,7 +181,6 @@
 }
 
 
-
 #pragma mark -- NSCopying  
 
 -(id)copyWithZone:(NSZone *)zone
@@ -226,12 +207,10 @@
     }
     
     return layoutPos;
-
 }
 
 
 #pragma mark -- Private Methods
-
 
 -(NSNumber*)posNumVal
 {
@@ -308,7 +287,6 @@
     }
     
     return nil;
-    
 }
 
 -(UIViewController*)findContainerVC
@@ -327,13 +305,10 @@
         }
         
     } @catch (NSException *exception) {
-        
     }
     
     return vc;
 }
-
-
 
 -(MyLayoutPos*)posRelaVal
 {
@@ -344,7 +319,6 @@
         return _posVal;
     
     return nil;
-    
 }
 
 
@@ -357,7 +331,6 @@
         return _posVal;
     
     return nil;
-    
 }
 
 -(NSNumber*)posMostVal
@@ -407,24 +380,17 @@
     return _uBoundVal;
 }
 
-
-
 -(MyLayoutPos*)__equalTo:(id)val
 {
-    
     if (![_posVal isEqual:val])
     {
         if ([val isKindOfClass:[NSNumber class]])
         {
             //特殊处理设置为safeAreaMargin边距的值。
             if ([val doubleValue] == [MyLayoutPos safeAreaMargin])
-            {
                 _posValType = MyLayoutValueType_SafeArea;
-            }
             else
-            {
                 _posValType = MyLayoutValueType_NSNumber;
-            }
         }
         else if ([val isKindOfClass:[MyLayoutPos class]])
             _posValType = MyLayoutValueType_LayoutPos;
@@ -475,7 +441,6 @@
                     NSAssert(0, @"oops!");
                     break;
             }
-            
         }
         else
             _posValType = MyLayoutValueType_Nil;
@@ -488,7 +453,6 @@
 
 -(MyLayoutPos*)__offset:(CGFloat)val
 {
-    
     if (_offsetVal != val)
     {
         _offsetVal = val;
@@ -510,33 +474,24 @@
 
 -(MyLayoutPos*)__lBound:(id)posVal offsetVal:(CGFloat)offsetVal
 {
-    
     [[self.lBoundVal __equalTo:posVal] __offset:offsetVal];
     
     return self;
 }
 
-
 -(MyLayoutPos*)__max:(CGFloat)val
 {
-    
     if (self.uBoundVal.posNumVal.doubleValue != val)
-    {
         [self.uBoundVal __equalTo:@(val)];
-    }
     
     return self;
 }
 
 -(MyLayoutPos*)__uBound:(id)posVal offsetVal:(CGFloat)offsetVal
 {
-    
     [[self.uBoundVal __equalTo:posVal] __offset:offsetVal];
-    
     return self;
 }
-
-
 
 -(void)__clear
 {
@@ -555,8 +510,6 @@
     [_lBoundVal __setActive:active];
     [_uBoundVal __setActive:active];
 }
-
-
 
 -(CGFloat)absVal
 {
@@ -588,14 +541,15 @@
         
     }
     else
+    {
         return NO;
+    }
 }
 
 -(BOOL)isSafeAreaPos
 {
     return self.isActive && (_posValType == MyLayoutValueType_SafeArea || _posValType == MyLayoutValueType_UILayoutSupport);
 }
-
 
 -(CGFloat)realPosIn:(CGFloat)size
 {
@@ -616,10 +570,10 @@
         return realPos;
     }
     else
+    {
         return 0;
-    
+    }
 }
-
 
 -(void)setNeedsLayout
 {
@@ -629,19 +583,13 @@
         if (!lb.isMyLayouting)
             [_view.superview setNeedsLayout];
     }
-    
 }
-
-
 
 +(NSString*)posstrFromPos:(MyLayoutPos*)posobj showView:(BOOL)showView
 {
-    
     NSString *viewstr = @"";
     if (showView)
-    {
         viewstr = [NSString stringWithFormat:@"View:%p.", posobj.view];
-    }
     
     NSString *posStr = @"";
     
@@ -672,10 +620,7 @@
     }
     
     return [NSString stringWithFormat:@"%@%@",viewstr,posStr];
-    
-    
 }
-
 
 #pragma mark -- Override Method
 
@@ -698,18 +643,12 @@
             for (NSObject *obj in _posVal)
             {
                 if ([obj isKindOfClass:[MyLayoutPos class]])
-                {
                     posValStr = [posValStr stringByAppendingString:[MyLayoutPos posstrFromPos:(MyLayoutPos*)obj showView:YES]];
-                }
                 else
-                {
                     posValStr = [posValStr stringByAppendingString:[obj description]];
-                    
-                }
                 
                 if (obj != [_posVal lastObject])
                     posValStr = [posValStr stringByAppendingString:@", "];
-                
             }
             
             posValStr = [posValStr stringByAppendingString:@"]"];
@@ -720,7 +659,6 @@
     }
     
     return [NSString stringWithFormat:@"%@=%@, Offset=%g, Max=%g, Min=%g",[MyLayoutPos posstrFromPos:self showView:NO], posValStr, _offsetVal, _uBoundVal.posNumVal.doubleValue == CGFLOAT_MAX ? NAN : _uBoundVal.posNumVal.doubleValue , _uBoundVal.posNumVal.doubleValue == -CGFLOAT_MAX ? NAN : _lBoundVal.posNumVal.doubleValue];
-    
 }
 
 @end
@@ -760,7 +698,6 @@
     return self;
 }
 
-
 -(CGFloat)getMostPosFrom:(MyLayoutPos *)layoutPos
 {
     CGFloat retVal = _isMax ? -CGFLOAT_MAX : CGFLOAT_MAX;
@@ -787,32 +724,20 @@
             if (layoutPos.pos & MyGravity_Vert_Mask)
             {//水平
                 if (lpos.pos == MyGravity_Horz_Leading)
-                {
                     val = myFrame.leading + offsetVal;
-                }
                 else if (lpos.pos == MyGravity_Horz_Center)
-                {
                     val = myFrame.leading + myFrame.width / 2.0 + offsetVal;
-                }
                 else
-                {
                     val = myFrame.trailing - offsetVal;
-                }
             }
             else
             {//垂直
                 if (lpos.pos == MyGravity_Vert_Top)
-                {
                     val = myFrame.top + offsetVal;
-                }
                 else if (lpos.pos == MyGravity_Vert_Center)
-                {
                     val = myFrame.top + myFrame.height / 2.0 + offsetVal;
-                }
                 else
-                {
                     val = myFrame.bottom - offsetVal;
-                }
             }
         }
         else
