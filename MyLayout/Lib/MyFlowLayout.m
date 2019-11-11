@@ -967,6 +967,18 @@
     CGFloat lineMaxWidth = 0.0;   //某一行的最宽值。
     CGFloat maxWidth = 0.0;      //所有行中最宽的值。
     
+    
+    //limitedSelfWidth是用来限制子视图换行的宽度，默认是selfSize.width
+    //但是一种特殊情况就是布局视图宽度自适应，但是设置了最宽宽度的情况。
+    //这种情况下当子视图超过最宽宽度时还是需要进行换行处理。
+    //而如果没有设置最宽宽度的话那么默认限制的宽度就是最大值CGFLOAT_MAX
+    CGFloat limitedSelfWidth = selfSize.width;
+    if (lsc.widthSizeInner.dimeWrapVal)
+    {
+        limitedSelfWidth = [self myGetBoundLimitMeasure:lsc.widthSizeInner.uBoundValInner sbv:self dimeType:lsc.widthSizeInner.dime sbvSize:selfSize selfLayoutSize:self.superview.bounds.size isUBound:YES];
+        limitedSelfWidth = _myCGFloatMin(limitedSelfWidth, CGFLOAT_MAX);
+    }
+    
     if (lsc.autoArrange)
     {
         //计算出每个子视图的宽度。
@@ -1069,9 +1081,11 @@
             place += horzSpace;
         place += paddingTrailing;
         
-        //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。
-        if (!lsc.widthSizeInner.dimeWrapVal && (place - selfSize.width > 0.0001))
+        //sbv所占据的宽度超过了布局视图的限制宽度时需要换行。
+        if (place - limitedSelfWidth > 0.0001)
         {
+            selfSize.width = limitedSelfWidth;
+            
             //保存行首子视图的索引
             [lineFirstSubviewIndexSet addIndex:i - itemIndex];
             
@@ -1107,6 +1121,16 @@
     //最后一行的行首索引
     [lineFirstSubviewIndexSet addIndex:i - itemIndex];
     
+    //在宽度为自适应时，如果没有设置最大宽度限制，那么就一定是单行，因此宽度就是子视图的总和。
+    //如果设置了最大宽度限制时，那就要区分最后一行是单行还是多行，所以我们取限宽和当前计算出的宽度的最小值，并且再取selfSize.width和前面比较结果的最大值。
+    if (lsc.widthSizeInner.dimeWrapVal)
+    {
+        if (limitedSelfWidth == CGFLOAT_MAX)
+            selfSize.width = _myCGFloatMax(xPos + paddingTrailing, [self myGetBoundLimitMeasure:lsc.widthSizeInner.uBoundValInner sbv:self dimeType:lsc.widthSizeInner.dime sbvSize:selfSize selfLayoutSize:self.superview.bounds.size isUBound:NO]);
+        else
+            selfSize.width = _myCGFloatMax(_myCGFloatMin(xPos + paddingTrailing, limitedSelfWidth), selfSize.width);
+    }
+    
     [self myVertLayout:lsc adjustSingleline:lineIndex lineSpareWidth:selfSize.width - paddingTrailing - xPos lineTotalWeight:lineTotalWeight horzGravity:horzGravity sbs:sbs startItemIndex:i - itemIndex count:itemIndex inSelfSize:selfSize];
     
     xPos = paddingLeading;
@@ -1139,8 +1163,6 @@
             rect.size.height = 0;
         }
         
-        
-        
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
@@ -1150,13 +1172,13 @@
         }
         
         //计算xPos的值加上leadingSpace + rect.size.width + trailingSpace 的值要小于整体的宽度。
-        maxWidth= xPos + leadingSpace + rect.size.width + trailingSpace;
+        maxWidth = xPos + leadingSpace + rect.size.width + trailingSpace;
         if (itemIndex != 0)
             maxWidth += horzSpace;
         maxWidth += paddingTrailing;
         
         NSUInteger lineFirstIndex = [lineFirstSubviewIndexSet indexLessThanOrEqualToIndex:i];
-        if (!lsc.widthSizeInner.dimeWrapVal && oldLineFirstIndex != lineFirstIndex)
+        if (oldLineFirstIndex != lineFirstIndex)
         {
             oldLineFirstIndex = lineFirstIndex;
 
@@ -1166,7 +1188,6 @@
             
             [self myVertLayout:lsc calcSingleline:lineIndex vertAlignment:vertAlignment horzGravity:horzGravity lineMaxHeight:lineMaxHeight lineMaxWidth:lineMaxWidth lineTotalShrink:0 sbs:sbs startItemIndex:i - itemIndex count:itemIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate inSelfSize:selfSize];
             
-          
             lineMaxHeight = 0.0;
             lineMaxWidth = 0.0;
             itemIndex = 0;
@@ -1197,10 +1218,10 @@
     
     //内容填充约束布局的宽度包裹计算。
     if (lsc.widthSizeInner.dimeWrapVal)
-        selfSize.width = maxWidth;
+        selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:maxWidth sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     if (lsc.heightSizeInner.dimeWrapVal)
-       selfSize.height =  [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:yPos sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+       selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:yPos sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     NSInteger arranges = lineFirstSubviewIndexSet.count;
     //根据flex规则：如果只有一行则整个高度都作为子视图的拉伸和停靠区域。
@@ -1846,6 +1867,17 @@
     CGFloat lineMaxHeight = 0.0;   //某一列的最高值
     CGFloat maxHeight = 0.0;   //所有列的最宽行
     
+    //limitedSelfHeight是用来限制子视图换行的高度，默认是selfSize.height
+    //但是一种特殊情况就是布局视图高度自适应，但是设置了最高高度的情况。
+    //这种情况下当子视图超过最高高度时还是需要进行换行处理。
+    //而如果没有设置最高高度的话那么默认限制的高度就是最大值CGFLOAT_MAX
+    CGFloat limitedSelfHeight = selfSize.height;
+    if (lsc.heightSizeInner.dimeWrapVal)
+    {
+        limitedSelfHeight = [self myGetBoundLimitMeasure:lsc.heightSizeInner.uBoundValInner sbv:self dimeType:lsc.heightSizeInner.dime sbvSize:selfSize selfLayoutSize:self.superview.bounds.size isUBound:YES];
+        limitedSelfHeight = _myCGFloatMin(limitedSelfHeight, CGFLOAT_MAX);
+    }
+    
     if (lsc.autoArrange)
     {
         //计算出每个子视图的宽度。
@@ -1956,9 +1988,11 @@
             place += vertSpace;
         place += paddingBottom;
         
-        //sbv所占据的宽度要超过了视图的整体宽度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的宽度和布局视图保持一致。
-        if (!lsc.heightSizeInner.dimeWrapVal && (place - selfSize.height > 0.0001))
+        //sbv所占据的高度要超过了视图的整体高度，因此需要换行。但是如果arrangedIndex为0的话表示这个控件的整行的高度和布局视图保持一致。
+        if (place - limitedSelfHeight > 0.0001)
         {
+            selfSize.height = limitedSelfHeight;
+        
             [lineFirstSubviewIndexSet addIndex:i - itemIndex];
 
            //拉伸以及调整行内子视图的高度。
@@ -1993,6 +2027,16 @@
     
     //最后一行的行首索引
     [lineFirstSubviewIndexSet addIndex:i - itemIndex];
+    
+    //在高度为自适应时，如果没有设置最大高度限制，那么就一定是单行，因此高度就是子视图的总和。
+    //如果设置了最大高度限制时，那就要区分最后一行是单行还是多行，所以我们取限高和当前计算出的高度的最小值，并且再取selfSize.height和前面比较结果的最大值。
+    if (lsc.heightSizeInner.dimeWrapVal)
+    {
+        if (limitedSelfHeight == CGFLOAT_MAX)
+            selfSize.height = _myCGFloatMax(yPos + paddingBottom, [self myGetBoundLimitMeasure:lsc.heightSizeInner.uBoundValInner sbv:self dimeType:lsc.heightSizeInner.dime sbvSize:selfSize selfLayoutSize:self.superview.bounds.size isUBound:NO]);
+        else
+            selfSize.height = _myCGFloatMax(_myCGFloatMin(yPos + paddingBottom, limitedSelfHeight), selfSize.height);
+    }
     
     [self myHorzLayout:lsc adjustSingleline:lineIndex lineSpareHeight:selfSize.height - paddingBottom - yPos lineTotalWeight:lineTotalWeight vertGravity:vertGravity sbs:sbs startItemIndex:i - itemIndex count:itemIndex inSelfSize:selfSize];
 
@@ -2031,7 +2075,7 @@
         maxHeight += paddingBottom;
         
         NSUInteger lineFirstIndex = [lineFirstSubviewIndexSet indexLessThanOrEqualToIndex:i];
-        if (!lsc.heightSizeInner.dimeWrapVal && oldLineFirstIndex != lineFirstIndex)
+        if (oldLineFirstIndex != lineFirstIndex)
         {
             oldLineFirstIndex = lineFirstIndex;
             
@@ -2070,8 +2114,7 @@
     xPos += lineMaxWidth + paddingTrailing;
 
     if (lsc.heightSizeInner.dimeWrapVal)
-        selfSize.height = maxHeight;
-
+        selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:maxHeight sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];;
 
     if (lsc.widthSizeInner.dimeWrapVal)
         selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:xPos sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
@@ -2523,7 +2566,7 @@
             lineMaxHeight = yPos - paddingTop;
         
         if (_myCGFloatLess(maxHeight, yPos))
-            maxHeight = yPos;        
+            maxHeight = yPos;
         //不是最后一行以及非自动排列时才添加布局视图设置的行间距。自动排列的情况下上面已经有添加行间距了。
         if (itemIndex != (arrangedCount - 1) && !autoArrange)
             yPos += vertSpace;

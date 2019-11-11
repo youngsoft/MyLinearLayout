@@ -37,26 +37,40 @@ typedef enum : int {
 
 extern const int MyFlex_Auto;
 
+//条目的属性，用于设置和获取。
+@interface MyFlexItemAttrs:NSObject
+
+@property(nonatomic, assign) NSInteger order;
+@property(nonatomic, assign) CGFloat flex_grow;
+@property(nonatomic, assign) CGFloat flex_shrink;
+@property(nonatomic, assign) CGFloat flex_basis;
+@property(nonatomic, assign) MyFlexGravity align_self;
+@property(nonatomic, assign) CGFloat width;
+@property(nonatomic, assign) CGFloat height;
+@property(nonatomic, assign) CGFloat margin_top;
+@property(nonatomic, assign) CGFloat margin_bottom;
+@property(nonatomic, assign) CGFloat margin_left;
+@property(nonatomic, assign) CGFloat margin_right;
+@property(nonatomic, assign) MyVisibility visibility;
+
+@end
+
+@protocol MyFlexItemAttrsContainer
+
+@property(nonatomic, strong, readonly) MyFlexItemAttrs *attrs;
+
+@end
+
+
+
+
 /*
   flexbox中项目的设置类。
  */
-@interface MyFlexItem:NSObject
+@interface MyFlexItem:NSObject<MyFlexItemAttrsContainer>
 
 //您可以用链式语法进行属性设置，也可以直接通过属性赋值进行设置和获取。
 @property(nonatomic, weak, readonly) __kindof UIView *view;
-@property(nonatomic, assign) NSInteger order_val;
-@property(nonatomic, assign) CGFloat flex_grow_val;
-@property(nonatomic, assign) CGFloat flex_shrink_val;
-@property(nonatomic, assign) CGFloat flex_basis_val;
-@property(nonatomic, assign) MyFlexGravity align_self_val;
-@property(nonatomic, assign) CGFloat width_val;
-@property(nonatomic, assign) CGFloat height_val;
-@property(nonatomic, assign) CGFloat margin_top_val;
-@property(nonatomic, assign) CGFloat margin_bottom_val;
-@property(nonatomic, assign) CGFloat margin_left_val;
-@property(nonatomic, assign) CGFloat margin_right_val;
-@property(nonatomic, assign) MyVisibility visibility_val;
-
 
 //条目的顺序设置
 -(MyFlexItem* (^)(NSInteger))order;
@@ -89,16 +103,30 @@ extern const int MyFlex_Auto;
 
 @end
 
+
+//条目的属性，用于设置和获取。
+@interface MyFlexAttrs:MyFlexItemAttrs
+
+@property(nonatomic, assign) MyFlexDirection flex_direction;
+@property(nonatomic, assign) MyFlexWrap flex_wrap;
+@property(nonatomic, assign) MyFlexGravity justify_content;
+@property(nonatomic, assign) MyFlexGravity align_items;
+@property(nonatomic, assign) MyFlexGravity align_content;
+
+@end
+
+@protocol MyFlexAttrsContainer
+
+@property(nonatomic, strong, readonly) MyFlexAttrs *attrs;
+
+@end
+
+
 /*
   flexbox的设置类。
  */
-@interface MyFlex:MyFlexItem
+@interface MyFlex:MyFlexItem<MyFlexAttrsContainer>
 
-@property(nonatomic, assign) MyFlexDirection flex_direction_val;
-@property(nonatomic, assign) MyFlexWrap flex_wrap_val;
-@property(nonatomic, assign) MyFlexGravity justify_content_val;
-@property(nonatomic, assign) MyFlexGravity align_items_val;
-@property(nonatomic, assign) MyFlexGravity align_content_val;
 @property(nonatomic, assign) UIEdgeInsets padding_val;
 @property(nonatomic, assign) CGFloat vert_space_val;
 @property(nonatomic, assign) CGFloat horz_space_val;

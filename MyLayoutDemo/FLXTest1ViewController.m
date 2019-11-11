@@ -234,7 +234,7 @@
 -(void)updateStyleDesc
 {
     NSString *strFlexDirection = @"";
-    switch (self.contentLayout.flex.flex_direction_val) {
+    switch (self.contentLayout.flex.attrs.flex_direction) {
         case MyFlexDirection_Row:
             strFlexDirection =@"row;";
             break;
@@ -252,7 +252,7 @@
     }
     
     NSString *strFlexWrap = @"";
-    switch (self.contentLayout.flex.flex_wrap_val) {
+    switch (self.contentLayout.flex.attrs.flex_wrap) {
         case MyFlexWrap_NoWrap:
             strFlexWrap = @"nowrap;";
             break;
@@ -267,7 +267,7 @@
     }
     
     NSString *strJustifyContent = @"";
-    switch (self.contentLayout.flex.justify_content_val) {
+    switch (self.contentLayout.flex.attrs.justify_content) {
         case MyFlexGravity_Flex_Start:
             strJustifyContent = @"flex-start;";
             break;
@@ -287,7 +287,7 @@
     }
     
     NSString *strAlignItems = @"";
-    switch (self.contentLayout.flex.align_items_val) {
+    switch (self.contentLayout.flex.attrs.align_items) {
         case MyFlexGravity_Flex_End:
             strAlignItems = @"flex-end;";
             break;
@@ -307,7 +307,7 @@
     }
     
     NSString *strAlignContent = @"";
-    switch (self.contentLayout.flex.align_content_val) {
+    switch (self.contentLayout.flex.attrs.align_content) {
         case MyFlexGravity_Flex_End:
             strAlignContent = @"flex-end;";
             break;
@@ -520,40 +520,40 @@
     
     if (itemView != nil)
     {
-        if (itemView.flexItem.width_val == MyLayoutSize.wrap)
+        if (itemView.flexItem.attrs.width == MyLayoutSize.wrap)
             widthTextField.text = @"wrap";
-        else if (itemView.flexItem.width_val == MyLayoutSize.fill)
+        else if (itemView.flexItem.attrs.width == MyLayoutSize.fill)
             widthTextField.text = @"fill";
-        else if (itemView.flexItem.width_val != 0)
-            widthTextField.text = [@(itemView.flexItem.width_val) stringValue];
+        else if (itemView.flexItem.attrs.width != 0)
+            widthTextField.text = [@(itemView.flexItem.attrs.width) stringValue];
         else
             widthTextField.text = @"";
         
         
-        if (itemView.flexItem.height_val == MyLayoutSize.wrap)
+        if (itemView.flexItem.attrs.height == MyLayoutSize.wrap)
             heightTextField.text = @"wrap";
-        else if (itemView.flexItem.height_val == MyLayoutSize.fill)
+        else if (itemView.flexItem.attrs.height == MyLayoutSize.fill)
             heightTextField.text = @"fill";
-        else if (itemView.flexItem.height_val != 0)
-            heightTextField.text = [@(itemView.flexItem.height_val) stringValue];
+        else if (itemView.flexItem.attrs.height != 0)
+            heightTextField.text = [@(itemView.flexItem.attrs.height) stringValue];
         else
             heightTextField.text = @"";
         
         
-        if (itemView.flexItem.order_val != 0)
-            orderTextField.text = [@(itemView.flexItem.order_val) stringValue];
+        if (itemView.flexItem.attrs.order != 0)
+            orderTextField.text = [@(itemView.flexItem.attrs.order) stringValue];
         
         
-        if (itemView.flexItem.flex_grow_val != 0)
-            flex_growTextField.text = [@(itemView.flexItem.flex_grow_val) stringValue];
+        if (itemView.flexItem.attrs.flex_grow != 0)
+            flex_growTextField.text = [@(itemView.flexItem.attrs.flex_grow) stringValue];
         
-        if (itemView.flexItem.flex_shrink_val != 1)
-            flex_shrinkTextField.text = [@(itemView.flexItem.flex_shrink_val) stringValue];
+        if (itemView.flexItem.attrs.flex_shrink != 1)
+            flex_shrinkTextField.text = [@(itemView.flexItem.attrs.flex_shrink) stringValue];
         
-        if (itemView.flexItem.flex_basis_val != MyFlex_Auto)
-            flex_basisTextField.text = [@(itemView.flexItem.flex_basis_val) stringValue];
+        if (itemView.flexItem.attrs.flex_basis != MyFlex_Auto)
+            flex_basisTextField.text = [@(itemView.flexItem.attrs.flex_basis) stringValue];
         
-        switch (itemView.flexItem.align_self_val) {
+        switch (itemView.flexItem.attrs.align_self) {
             case MyFlexGravity_Flex_Start:
                 align_selfTextField.text = @"flex-start";
                 break;
@@ -590,7 +590,7 @@
         case 0:
         {
             self.flex_directionSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.flex_direction_val) {
+            switch (self.contentLayout.flex.attrs.flex_direction) {
                 case MyFlexDirection_Row:
                     self.flex_directionSeg.selectedSegmentIndex = 0;
                     break;
@@ -610,7 +610,7 @@
         case 1:
         {
             self.flex_wrapSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.flex_wrap_val) {
+            switch (self.contentLayout.flex.attrs.flex_wrap) {
                 case MyFlexWrap_Wrap:
                     self.flex_wrapSeg.selectedSegmentIndex = 1;
                     break;
@@ -628,7 +628,7 @@
         case 2:
         {
             self.justify_contentSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.justify_content_val) {
+            switch (self.contentLayout.flex.attrs.justify_content) {
                 case MyFlexGravity_Flex_Start:
                     self.justify_contentSeg.selectedSegmentIndex = 0;
                     break;
@@ -651,7 +651,7 @@
         case 3:
         {
             self.align_itemsSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.align_items_val) {
+            switch (self.contentLayout.flex.attrs.align_items) {
                 case MyFlexGravity_Flex_Start:
                     self.align_itemsSeg.selectedSegmentIndex = 0;
                     break;
@@ -675,7 +675,7 @@
         case 4:
         {
             self.align_contentSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.align_content_val) {
+            switch (self.contentLayout.flex.attrs.align_content) {
                 case MyFlexGravity_Flex_Start:
                     self.align_contentSeg.selectedSegmentIndex = 0;
                     break;
@@ -890,55 +890,56 @@
     
     NSString *widthStr = widthTextField.text;
     if ([widthStr isEqualToString:@"wrap"])
-        itemView.flexItem.width_val = MyLayoutSize.wrap;
+        itemView.flexItem.attrs.width = MyLayoutSize.wrap;
     else if ([widthStr isEqualToString:@"fill"])
-        itemView.flexItem.width_val = MyLayoutSize.fill;
+        itemView.flexItem.attrs.width = MyLayoutSize.fill;
     else
-        itemView.flexItem.width_val = widthStr.doubleValue;
+        itemView.flexItem.attrs.width = widthStr.doubleValue;
     
     NSString *heightStr = heightTextField.text;
     if ([heightStr isEqualToString:@"wrap"])
-        itemView.flexItem.height_val = MyLayoutSize.wrap;
+        itemView.flexItem.attrs.height = MyLayoutSize.wrap;
     else if ([heightStr isEqualToString:@"fill"])
-        itemView.flexItem.height_val = MyLayoutSize.fill;
+        itemView.flexItem.attrs.height = MyLayoutSize.fill;
     else
-        itemView.flexItem.height_val = heightStr.doubleValue;
+        itemView.flexItem.attrs.height = heightStr.doubleValue;
     
     [itemView setTitle:orderTextField.text forState:UIControlStateNormal];
-    itemView.flexItem.order_val = orderTextField.text.integerValue;
+    itemView.flexItem.attrs.order = orderTextField.text.integerValue;
     
     
-    itemView.flexItem.flex_grow_val = flex_growTextField.text.doubleValue;
+    itemView.flexItem.attrs.flex_grow = flex_growTextField.text.doubleValue;
     
     if (flex_shrinkTextField.text.length > 0)
-        itemView.flexItem.flex_shrink_val = flex_shrinkTextField.text.doubleValue;
+        itemView.flexItem.attrs.flex_shrink = flex_shrinkTextField.text.doubleValue;
     else
-        itemView.flexItem.flex_shrink_val = 1;
+        itemView.flexItem.attrs.flex_shrink = 1;
     
      if (flex_basisTextField.text.length > 0)
-         itemView.flexItem.flex_basis_val = flex_basisTextField.text.doubleValue;
+         itemView.flexItem.attrs.flex_basis = flex_basisTextField.text.doubleValue;
     else
-        itemView.flexItem.flex_basis_val = MyFlex_Auto;
+        itemView.flexItem.attrs.flex_basis = MyFlex_Auto;
     
     if (align_selfTextField.text.length > 0)
     {
         if ([align_selfTextField.text isEqualToString:@"flex-start"])
-            itemView.flexItem.align_self_val = MyFlexGravity_Flex_Start;
+            itemView.flexItem.attrs.align_self = MyFlexGravity_Flex_Start;
         else if ([align_selfTextField.text isEqualToString:@"flex-end"])
-            itemView.flexItem.align_self_val = MyFlexGravity_Flex_End;
+            itemView.flexItem.attrs.align_self = MyFlexGravity_Flex_End;
         else if ([align_selfTextField.text isEqualToString:@"center"])
-            itemView.flexItem.align_self_val = MyFlexGravity_Center;
+            itemView.flexItem.attrs.align_self = MyFlexGravity_Center;
         else if ([align_selfTextField.text isEqualToString:@"baseline"])
-            itemView.flexItem.align_self_val = MyFlexGravity_Baseline;
+            itemView.flexItem.attrs.align_self = MyFlexGravity_Baseline;
         else if ([align_selfTextField.text isEqualToString:@"stretch"])
-            itemView.flexItem.align_self_val = MyFlexGravity_Stretch;
+            itemView.flexItem.attrs.align_self = MyFlexGravity_Stretch;
         else
-            itemView.flexItem.align_self_val = MyFlex_Auto;
+            itemView.flexItem.attrs.align_self = MyFlex_Auto;
     }
     else
     {
-        itemView.flexItem.align_self_val = MyFlex_Auto;
+        itemView.flexItem.attrs.align_self = MyFlex_Auto;
     }
+    
     
     //销毁对话框。
     [sender.superview removeFromSuperview];

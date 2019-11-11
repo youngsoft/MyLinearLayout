@@ -2750,7 +2750,7 @@ void* _myObserverContextC = (void*)20175283;
 -(CGFloat)myGetBoundLimitMeasure:(MyLayoutSize*)boundDime sbv:(UIView*)sbv dimeType:(MyGravity)dimeType sbvSize:(CGSize)sbvSize selfLayoutSize:(CGSize)selfLayoutSize isUBound:(BOOL)isUBound
 {
     CGFloat value = isUBound ? CGFLOAT_MAX : -CGFLOAT_MAX;
-    if (boundDime == nil)
+    if (boundDime == nil || !boundDime.isActive)
         return value;
     
     MyLayoutValueType lValueType = boundDime.dimeValType;
