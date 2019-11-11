@@ -1673,15 +1673,15 @@
         rect.origin.y = yPos + topSpace;
         xPos += leadingSpace + rect.size.width + trailingSpace;
         
-        if (itemIndex != (arrangedCount - 1) && !autoArrange)
-            xPos += horzSpace;
-        
         if (_myCGFloatLess(lineMaxWidth, (xPos - paddingLeading)))
             lineMaxWidth = (xPos - paddingLeading);
         
         if (_myCGFloatLess(maxWidth, xPos))
             maxWidth = xPos;
-    
+        
+        if (itemIndex != (arrangedCount - 1) && !autoArrange)
+            xPos += horzSpace;
+        
         sbvmyFrame.frame = rect;
         itemIndex++;
         
@@ -2519,18 +2519,15 @@
         rect.origin.y = yPos + topSpace;
         yPos += topSpace + rect.size.height + bottomSpace;
         
-        //不是最后一行以及非自动排列时才添加布局视图设置的行间距。自动排列的情况下上面已经有添加行间距了。
-        if (itemIndex != (arrangedCount - 1) && !autoArrange)
-            yPos += vertSpace;
-        
-        
         if (_myCGFloatLess(lineMaxHeight, (yPos - paddingTop)))
             lineMaxHeight = yPos - paddingTop;
         
         if (_myCGFloatLess(maxHeight, yPos))
-            maxHeight = yPos;
+            maxHeight = yPos;        
+        //不是最后一行以及非自动排列时才添加布局视图设置的行间距。自动排列的情况下上面已经有添加行间距了。
+        if (itemIndex != (arrangedCount - 1) && !autoArrange)
+            yPos += vertSpace;
         
-    
         sbvmyFrame.frame = rect;
         itemIndex++;
         

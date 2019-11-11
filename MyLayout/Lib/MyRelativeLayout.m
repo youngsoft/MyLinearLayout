@@ -228,9 +228,7 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
         sbvmyFrame.leading = [self myLayout:lsc calcSizeOrPosOfSubview:relaView gravity:sbvsc.centerXPosInner.posRelaVal.pos selfSize:selfSize] - sbvmyFrame.width / 2 +  sbvsc.centerXPosInner.absVal;
         
         if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
-        {
             sbvmyFrame.leading -= sbvsc.centerXPosInner.absVal;
-        }
         
         if (sbvmyFrame.leading < 0 && relaView == self && lsc.widthSizeInner.dimeWrapVal)
             sbvmyFrame.leading = 0;
@@ -447,9 +445,7 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
             sbvmyFrame.top = [self myLayout:lsc calcSizeOrPosOfSubview:relaView gravity:sbvsc.baselinePosInner.posRelaVal.pos selfSize:selfSize] - sbvFont.ascender - (sbvmyFrame.height - sbvFont.lineHeight) / 2 + sbvsc.baselinePosInner.absVal;
             
             if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
-            {
                 sbvmyFrame.top -= sbvsc.baselinePosInner.absVal;
-            }
         }
         else
         {
@@ -497,9 +493,7 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
         
         
         if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
-        {
             sbvmyFrame.top -= sbvsc.centerYPosInner.absVal;
-        }
         
         if (sbvmyFrame.top < 0 && relaView == self && lsc.heightSizeInner.dimeWrapVal)
             sbvmyFrame.top = 0;
@@ -533,9 +527,7 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
             sbvmyFrame.top = [self myLayout:lsc calcSizeOrPosOfSubview:relaView gravity:sbvsc.topPosInner.posRelaVal.pos selfSize:selfSize] + sbvsc.topPosInner.absVal;
             
             if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
-            {
                 sbvmyFrame.top -= sbvsc.topPosInner.absVal;
-            }
             
             sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
         }
@@ -649,7 +641,6 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
             if (sbv == self || sbv == nil)
                 return lsc.myLayoutLeadingPadding;
             
-            
             if (sbvmyFrame.leading != CGFLOAT_MAX)
                 return sbvmyFrame.leading;
             
@@ -676,7 +667,6 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
             if (sbv == self || sbv == nil)
                 return lsc.myLayoutTopPadding;
             
-            
             if (sbvmyFrame.top != CGFLOAT_MAX)
                 return sbvmyFrame.top;
             
@@ -690,7 +680,6 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
         {
             if (sbv == self || sbv == nil)
                 return selfSize.height - lsc.myLayoutBottomPadding;
-            
             
             if (sbvmyFrame.bottom != CGFLOAT_MAX)
                 return sbvmyFrame.bottom;
@@ -730,7 +719,6 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
             if (sbv == self || sbv == nil)
                 return selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding;
             
-            
             if (sbvmyFrame.width != CGFLOAT_MAX)
                 return sbvmyFrame.width;
             
@@ -743,7 +731,6 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
         {
             if (sbv == self || sbv == nil)
                 return selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding;
-            
             
             if (sbvmyFrame.height != CGFLOAT_MAX)
                 return sbvmyFrame.height;
@@ -1246,9 +1233,7 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
         }
     }
     
-    
     return CGSizeMake(maxWidth, maxHeight);
-    
 }
 
 @end

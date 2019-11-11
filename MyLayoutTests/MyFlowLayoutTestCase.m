@@ -455,6 +455,88 @@
     }
 }
 
+-(void)testWrapContentSize3
+{
+    {
+        MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
+        layout.frame = CGRectMake(0, 0, 0, 0);
+        layout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        layout.subviewHSpace = 5;
+        layout.subviewVSpace = 5;
+        
+        for (int i = 0; i < 1; i++)
+        {
+            UIView *sbv = [UIView new];
+            sbv.mySize = CGSizeMake(50, 50);
+            [layout addSubview:sbv];
+        }
+        
+        [layout layoutIfNeeded];
+        MyRectAssert(layout, CGRectMake(0, 0, 50, 50));
+        
+        for (int i = 0; i < 1; i++)
+        {
+            UIView *sbv = [UIView new];
+            sbv.mySize = CGSizeMake(50, 50);
+            [layout addSubview:sbv];
+
+        }
+        [layout layoutIfNeeded];
+        MyRectAssert(layout, CGRectMake(0, 0, 105, 50));
+
+        for (int i =0; i < 4; i++)
+        {
+            UIView *sbv = [UIView new];
+            sbv.mySize = CGSizeMake(50, 50);
+            [layout addSubview:sbv];
+        }
+        
+        [layout layoutIfNeeded];
+        MyRectAssert(layout, CGRectMake(0, 0, 215, 105));
+    }
+    
+    {
+        MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:4];
+        layout.frame = CGRectMake(0, 0, 0, 0);
+        layout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        layout.subviewHSpace = 5;
+        layout.subviewVSpace = 5;
+        
+        for (int i = 0; i < 1; i++)
+        {
+            UIView *sbv = [UIView new];
+            sbv.mySize = CGSizeMake(50, 50);
+            [layout addSubview:sbv];
+
+        }
+        
+        [layout layoutIfNeeded];
+        MyRectAssert(layout, CGRectMake(0, 0, 50, 50));
+        
+        for (int i = 0; i < 1; i++)
+        {
+            UIView *sbv = [UIView new];
+            sbv.mySize = CGSizeMake(50, 50);
+            [layout addSubview:sbv];
+
+        }
+        [layout layoutIfNeeded];
+        MyRectAssert(layout, CGRectMake(0, 0, 50, 105));
+        
+        for (int i =0; i < 4; i++)
+        {
+            UIView *sbv = [UIView new];
+            sbv.mySize = CGSizeMake(50, 50);
+            [layout addSubview:sbv];
+
+        }
+        
+        [layout layoutIfNeeded];
+        MyRectAssert(layout, CGRectMake(0, 0, 105, 215));
+    }
+}
+
+
 -(void)testWeight
 {
     //测试内容约束布局中weight刚好在边界的情况。
@@ -640,6 +722,195 @@
 -(void)testWrapAndGravity
 {
     
+}
+
+-(void)testRightAndBottomGravity
+{
+    //测试
+    {
+        MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
+        layout.frame = CGRectMake(0, 0, 200, 200);
+        layout.gravity = MyGravity_Horz_Right;
+        layout.subviewHSpace = 5;
+        layout.subviewVSpace = 5;
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v1];
+        
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v1, CGRectMake(150, 0, 50, 50));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v2];
+        [layout layoutIfNeeded];
+
+        MyRectAssert(v2, CGRectMake(150, 0, 50, 50));
+
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v3];
+        [layout layoutIfNeeded];
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v4];
+        [layout layoutIfNeeded];
+        
+        UIView *v5 = [UIView new];
+        v5.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v5];
+        [layout layoutIfNeeded];
+        
+        UIView *v6 = [UIView new];
+        v6.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v6];
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v6, CGRectMake(150, 55, 50, 50));
+
+    }
+    {
+        MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:4];
+        layout.frame = CGRectMake(0, 0, 200, 200);
+        layout.gravity = MyGravity_Vert_Bottom;
+        layout.subviewHSpace = 5;
+        layout.subviewVSpace = 5;
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v1];
+        
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v1, CGRectMake(0, 150, 50, 50));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v2];
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v2, CGRectMake(0, 150, 50, 50));
+        
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v3];
+        [layout layoutIfNeeded];
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v4];
+        [layout layoutIfNeeded];
+        
+        UIView *v5 = [UIView new];
+        v5.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v5];
+        [layout layoutIfNeeded];
+        
+        UIView *v6 = [UIView new];
+        v6.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v6];
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v6, CGRectMake(55, 150, 50, 50));
+    }
+    
+    //测试
+    {
+        MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
+        layout.frame = CGRectMake(0, 0, 200, 200);
+        layout.gravity = MyGravity_Horz_Right;
+        layout.subviewHSpace = 5;
+        layout.subviewVSpace = 5;
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v1];
+        
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v1, CGRectMake(150, 0, 50, 50));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v2];
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v2, CGRectMake(150, 0, 50, 50));
+        
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v3];
+        [layout layoutIfNeeded];
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v4];
+        [layout layoutIfNeeded];
+        
+        UIView *v5 = [UIView new];
+        v5.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v5];
+        [layout layoutIfNeeded];
+        
+        UIView *v6 = [UIView new];
+        v6.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v6];
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v6, CGRectMake(150, 55, 50, 50));
+        
+    }
+    {
+        MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:0];
+        layout.frame = CGRectMake(0, 0, 200, 200);
+        layout.gravity = MyGravity_Vert_Bottom;
+        layout.subviewHSpace = 5;
+        layout.subviewVSpace = 5;
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v1];
+        
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v1, CGRectMake(0, 150, 50, 50));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v2];
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v2, CGRectMake(0, 150, 50, 50));
+        
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v3];
+        [layout layoutIfNeeded];
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v4];
+        [layout layoutIfNeeded];
+        
+        UIView *v5 = [UIView new];
+        v5.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v5];
+        [layout layoutIfNeeded];
+        
+        UIView *v6 = [UIView new];
+        v6.mySize = CGSizeMake(50, 50);
+        [layout addSubview:v6];
+        [layout layoutIfNeeded];
+        
+        MyRectAssert(v6, CGRectMake(55, 150, 50, 50));
+    }
 }
 
 @end
