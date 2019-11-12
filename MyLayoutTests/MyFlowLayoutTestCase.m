@@ -913,4 +913,124 @@
     }
 }
 
+-(void)testFlex1
+{
+    {
+        MyFlexLayout *flexLayout = MyFlexLayout.new.flex
+        .align_items(MyFlexGravity_Center)
+        .justify_content(MyFlexGravity_Center)
+        .margin(0)
+        .view;
+        
+        flexLayout.frame = CGRectMake(0, 0, 300, 300);
+        flexLayout.backgroundColor = [UIColor redColor];
+        
+        
+        MyFlexLayout *contentLayout = MyFlexLayout.new.flex
+        .flex_wrap(MyFlexWrap_Wrap)
+        .width(MyLayoutSize.wrap)
+        .max_width(100)
+        .height(MyLayoutSize.wrap)
+        .addTo(flexLayout);
+        
+        contentLayout.backgroundColor = [UIColor greenColor];
+        
+        UILabel *lb1 = UILabel.new.flexItem
+        .width(30)
+        .height(30)
+        .addTo(contentLayout);
+        
+        lb1.backgroundColor = [UIColor blueColor];
+        
+        UILabel *lb2 = UILabel.new.flexItem
+        .width(40)
+        .height(40)
+        .addTo(contentLayout);
+        
+        lb2.backgroundColor = [UIColor yellowColor];
+        
+        UILabel *lb3 = UILabel.new.flexItem
+        .width(50)
+        .height(50)
+        .addTo(contentLayout);
+        
+        lb3.backgroundColor = [UIColor grayColor];
+        
+        [flexLayout layoutIfNeeded];
+        [contentLayout layoutIfNeeded];
+        
+        MyRectAssert(contentLayout, CGRectMake((300-100)/2.0, (300-90)/2.0, 100, 90));
+        MyRectAssert(lb3, CGRectMake(0, 40, 50, 50));
+        
+        contentLayout.flex.height(30);
+        [flexLayout setNeedsLayout];
+        [contentLayout setNeedsLayout];
+        [contentLayout layoutIfNeeded];
+        [flexLayout layoutIfNeeded];
+        
+        MyRectAssert(contentLayout, CGRectMake((300-100)/2.0, (300-30)/2.0, 100, 30));
+        MyRectAssert(lb3, CGRectMake(0, 40, 50, 50));
+
+    }
+    
+    {
+        MyFlexLayout *flexLayout = MyFlexLayout.new.flex
+        .align_items(MyFlexGravity_Center)
+        .justify_content(MyFlexGravity_Center)
+        .margin(0)
+        .view;
+        
+        flexLayout.frame = CGRectMake(0, 0, 300, 300);
+        flexLayout.backgroundColor = [UIColor redColor];
+        
+        
+        MyFlexLayout *contentLayout = MyFlexLayout.new.flex
+        .flex_wrap(MyFlexWrap_Wrap)
+        .flex_direction(MyFlexDirection_Column)
+        .width(MyLayoutSize.wrap)
+        .max_height(100)
+        .height(MyLayoutSize.wrap)
+        .addTo(flexLayout);
+        
+        contentLayout.backgroundColor = [UIColor greenColor];
+        
+        UILabel *lb1 = UILabel.new.flexItem
+        .width(30)
+        .height(30)
+        .addTo(contentLayout);
+        
+        lb1.backgroundColor = [UIColor blueColor];
+        
+        UILabel *lb2 = UILabel.new.flexItem
+        .width(40)
+        .height(40)
+        .addTo(contentLayout);
+        
+        lb2.backgroundColor = [UIColor yellowColor];
+        
+        UILabel *lb3 = UILabel.new.flexItem
+        .width(50)
+        .height(50)
+        .addTo(contentLayout);
+        
+        lb3.backgroundColor = [UIColor grayColor];
+        
+        [flexLayout layoutIfNeeded];
+        [contentLayout layoutIfNeeded];
+        
+        MyRectAssert(contentLayout, CGRectMake((300-90)/2.0,(300-100)/2.0,90,100));
+        MyRectAssert(lb3, CGRectMake(40, 0, 50, 50));
+        
+        contentLayout.flex.width(30);
+        [flexLayout setNeedsLayout];
+        [contentLayout setNeedsLayout];
+        [contentLayout layoutIfNeeded];
+        [flexLayout layoutIfNeeded];
+        
+        MyRectAssert(contentLayout, CGRectMake((300-30)/2.0, (300-100)/2.0, 30, 100));
+        MyRectAssert(lb3, CGRectMake(40, 0, 50, 50));
+    }
+    
+}
+
 @end
