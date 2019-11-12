@@ -37,7 +37,8 @@ typedef enum : int {
 
 extern const int MyFlex_Auto;
 
-//条目的属性，用于设置和获取。
+
+//条目的属性，用于条目视图的属性设置和获取。
 @interface MyFlexItemAttrs:NSObject
 
 @property(nonatomic, assign) NSInteger order;
@@ -96,15 +97,19 @@ extern const int MyFlex_Auto;
 -(MyFlexItem* (^)(CGFloat))margin_left;
 -(MyFlexItem* (^)(CGFloat))margin_right;
 -(MyFlexItem* (^)(CGFloat))margin;
+
 //是否可见
 -(MyFlexItem* (^)(MyVisibility))visibility;
+
 //添加到父视图中
 -(__kindof UIView* (^)(UIView*))addTo;
 
 @end
 
 
-//条目的属性，用于设置和获取。
+
+
+//布局的属性，用于布局视图的属性设置和获取。
 @interface MyFlexAttrs:MyFlexItemAttrs
 
 @property(nonatomic, assign) MyFlexDirection flex_direction;
@@ -112,6 +117,9 @@ extern const int MyFlex_Auto;
 @property(nonatomic, assign) MyFlexGravity justify_content;
 @property(nonatomic, assign) MyFlexGravity align_items;
 @property(nonatomic, assign) MyFlexGravity align_content;
+@property(nonatomic, assign) UIEdgeInsets padding;
+@property(nonatomic, assign) CGFloat vert_space;
+@property(nonatomic, assign) CGFloat horz_space;
 
 @end
 
@@ -126,11 +134,6 @@ extern const int MyFlex_Auto;
   flexbox的设置类。
  */
 @interface MyFlex:MyFlexItem<MyFlexAttrsContainer>
-
-@property(nonatomic, assign) UIEdgeInsets padding_val;
-@property(nonatomic, assign) CGFloat vert_space_val;
-@property(nonatomic, assign) CGFloat horz_space_val;
-
 
 //方向设置
 -(MyFlex* (^)(MyFlexDirection))flex_direction;
@@ -152,6 +155,11 @@ extern const int MyFlex_Auto;
 
 @end
 
+
+
+
+
+
 //条目视图在应用flexbox时的分类扩展，只有MyFlexLayout中的子视图才有用。
 @interface UIView(MyFlexLayout)
 
@@ -163,7 +171,7 @@ extern const int MyFlex_Auto;
 
 /*
  * 弹性布局是为了兼容flexbox语法而建立了一个布局，它是从MyFlowLayout派生。在MyFlowLayout中也是支持类似flexbox的一些特性的
- * 但是它的属性和flexbox不兼容和一致，因此提供一个新的类MyFlexLayout来完全支持flexbox.
+ * 因为它的属性和flexbox不兼容，所以提供一个新的类MyFlexLayout来完全支持flexbox.
  */
 @interface MyFlexLayout:MyFlowLayout
 
