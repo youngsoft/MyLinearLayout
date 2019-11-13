@@ -358,7 +358,7 @@
         //左右依赖的，或者依赖父视图宽度的不参数最宽计算！！
         if ((tempSelfWidth > maxSelfWidth) &&
             (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) &&
-            (sbvsc.leadingPosInner == nil || sbvsc.trailingPosInner == nil || sbvsc.widthSizeInner.dimeVal != nil))
+            (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil || sbvsc.widthSizeInner.dimeVal != nil))
         {
             maxSelfWidth = tempSelfWidth;
         }
@@ -677,7 +677,7 @@
             
             if ((tempSelfWidth > maxSelfWidth) &&
                 (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) &&
-                (sbvsc.leadingPosInner == nil || sbvsc.trailingPosInner == nil || sbvsc.widthSizeInner.dimeVal != nil))
+                (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil || sbvsc.widthSizeInner.dimeVal != nil))
             {
                 maxSelfWidth = tempSelfWidth;
             }
@@ -827,7 +827,7 @@
         
         if ((tempSelfHeight > maxSelfHeight) &&
             (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
-            (sbvsc.topPosInner == nil || sbvsc.bottomPosInner == nil || sbvsc.heightSizeInner.dimeVal != nil))
+            (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil || sbvsc.heightSizeInner.dimeVal != nil))
         {
             maxSelfHeight = tempSelfHeight;
         }
@@ -1201,7 +1201,7 @@
             
             if ((tempSelfHeight > maxSelfHeight) &&
                 (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
-                (sbvsc.topPosInner == nil || sbvsc.bottomPosInner == nil || sbvsc.heightSizeInner.dimeVal != nil))
+                (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil || sbvsc.heightSizeInner.dimeVal != nil ))
             {
                 maxSelfHeight = tempSelfHeight;
             }

@@ -65,7 +65,7 @@
 4. 修复了布局视图的尺寸自适应能力和AutoLayout结合后，布局视图添加删除子视图后要手动代码进行布局视图尺寸自适应的刷新问题。[issue#95](https://github.com/youngsoft/MyLinearLayout/issues/95)
 5. 修复相对布局子视图隐藏时，其他依赖这个子视图的子视图的位置和尺寸不正确更新的问题。
 6. 修复UIImageView的宽度固定高度自适应的问题。
-7. 支持通过对isLayouting进行KVO监听来实现布局的通知处理机制，我们可以通过KVO布局视图的isLayouting属性来或者布局完成后子视图的frame以及布局视图的frame值了。
+7. 支持通过对isMyLayouting进行KVO监听来实现布局的通知处理机制，我们可以通过KVO布局视图的isMyLayouting属性来或者布局完成后子视图的frame以及布局视图的frame值了。
 8. 下列方法或属性名被列为过期，并推荐使用新的方法名和属性名：
 
 ```

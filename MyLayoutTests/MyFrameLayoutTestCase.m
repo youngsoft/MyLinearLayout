@@ -324,6 +324,22 @@
     
 }
 
+-(void)testWrapContent4
+{
+    //没有约束，原生的frame值设置。
+    MyFrameLayout *rootLayout = [MyFrameLayout new];
+    rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    
+    UIView *v = [UIView new];
+    v.frame = CGRectMake(0, 0, 150, 150);
+    [rootLayout addSubview:v];
+    
+    [rootLayout layoutIfNeeded];
+    MyRectAssert(rootLayout, CGRectMake(0, 0, 170, 170));
+    
+}
+
 -(void)testPerformanceExample
 {
     [self measureBlock:^{
