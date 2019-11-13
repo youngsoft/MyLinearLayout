@@ -406,9 +406,12 @@ paddingTrailing:(CGFloat)paddingTrailing
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
  //   CGFloat paddingVert = paddingTop + paddingBottom;
     
-    //如果没有边界限制我们将高度设置为最大。。
+    //如果没有边界限制我们将宽度设置为最大。。
     if (lsc.widthSizeInner.dimeWrapVal)
-        selfSize.width = CGFLOAT_MAX;
+    {
+        //如果有最大限制则取最大值，解决那种宽度自适应，但是有最大值需要换行的情况。
+        selfSize.width = [self myGetBoundLimitMeasure:lsc.widthSizeInner.uBoundValInner sbv:self dimeType:lsc.widthSizeInner.dime sbvSize:selfSize selfLayoutSize:self.superview.bounds.size isUBound:YES];
+    }
     
     //支持浮动水平间距。
     CGFloat vertSpace = lsc.subviewVSpace;
@@ -874,7 +877,10 @@ paddingTrailing:(CGFloat)paddingTrailing
     
     //如果没有边界限制我们将高度设置为最大。。
     if (lsc.heightSizeInner.dimeWrapVal)
-        selfSize.height = CGFLOAT_MAX;
+    {
+        //如果有最大限制则取最大值，解决那种高度自适应，但是有最大值需要换行的情况。
+        selfSize.height = [self myGetBoundLimitMeasure:lsc.heightSizeInner.uBoundValInner sbv:self dimeType:lsc.heightSizeInner.dime sbvSize:selfSize selfLayoutSize:self.superview.bounds.size isUBound:YES];
+    }
     
     //支持浮动垂直间距。
     CGFloat horzSpace = lsc.subviewHSpace;

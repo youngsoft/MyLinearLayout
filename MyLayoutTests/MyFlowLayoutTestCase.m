@@ -719,8 +719,195 @@
 
 }
 
--(void)testWrapAndGravity
+-(void)testWrapAndWeightAndShrink
 {
+    //测试数量约束布局的宽度和高度是自适应，并且有最大，最小值约束下的用例。
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:1];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        rootLayout.padding = UIEdgeInsetsMake(10, 5, 5, 10);
+        rootLayout.subviewHSpace = 20;
+        rootLayout.subviewVSpace = 20;
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));
+        
+        {
+            UIView *v1 = [UIView new];
+            v1.mySize = CGSizeMake(30, 30);
+            [rootLayout addSubview:v1];
+        }
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15+30, 15+30));
+        
+        {
+            UIView *v1 = [UIView new];
+            v1.mySize = CGSizeMake(30, 30);
+            [rootLayout addSubview:v1];
+        }
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15+30, 15+30+20+30));
+        
+        rootLayout.arrangedCount = 2;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+30+5, 10+30+5));
+        
+        {
+            UIView *v1 = [UIView new];
+            v1.mySize = CGSizeMake(30, 30);
+            [rootLayout addSubview:v1];
+        }
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+30+5, 10+30+20+30+5));
+        
+        {
+            UIView *v1 = [UIView new];
+            v1.mySize = CGSizeMake(40, 40);
+            [rootLayout addSubview:v1];
+        }
+        rootLayout.subviews.firstObject.weight = 1;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+40+5, 10+30+20+40+5));
+        MyRectAssert(rootLayout.subviews.firstObject, CGRectMake(5,10, 40, 30));
+        
+        rootLayout.widthSize.max(70);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 70, 10+30+20+40+5));
+        MyRectAssert(rootLayout.subviews.firstObject, CGRectMake(5,10, 30, 30));
+        MyRectAssert(rootLayout.subviews.lastObject, CGRectMake(5+30+20, 10+30+20, 40, 40));
+        
+        rootLayout.subviews.lastObject.widthSize.shrink = 1;
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout.subviews.lastObject, CGRectMake(5+30+20, 10+30+20, 5, 40));
+    }
+    
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:1];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        rootLayout.padding = UIEdgeInsetsMake(5, 10, 10, 5);
+        rootLayout.subviewHSpace = 20;
+        rootLayout.subviewVSpace = 20;
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));
+        
+        {
+            UIView *v1 = [UIView new];
+            v1.mySize = CGSizeMake(30, 30);
+            [rootLayout addSubview:v1];
+        }
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15+30, 15+30));
+        
+        {
+            UIView *v1 = [UIView new];
+            v1.mySize = CGSizeMake(30, 30);
+            [rootLayout addSubview:v1];
+        }
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15+30+20+30, 15+30));
+        
+        rootLayout.arrangedCount = 2;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0,10+30+5,10+30+20+30+5));
+        
+        {
+            UIView *v1 = [UIView new];
+            v1.mySize = CGSizeMake(30, 30);
+            [rootLayout addSubview:v1];
+        }
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+30+5, 10+30+20+30+5));
+        
+        {
+            UIView *v1 = [UIView new];
+            v1.mySize = CGSizeMake(40, 40);
+            [rootLayout addSubview:v1];
+        }
+        rootLayout.subviews.firstObject.weight = 1;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+40+5,10+30+20+40+5));
+        MyRectAssert(rootLayout.subviews.firstObject, CGRectMake(10,5,30,40));
+        
+        rootLayout.heightSize.max(70);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+40+5, 70));
+        MyRectAssert(rootLayout.subviews.firstObject, CGRectMake(10,5,30, 30));
+        MyRectAssert(rootLayout.subviews.lastObject, CGRectMake(10+30+20,5+30+20,40, 40));
+        
+        rootLayout.subviews.lastObject.heightSize.shrink = 1;
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout.subviews.lastObject, CGRectMake(10+30+20,5+30+20,40,5));
+    }
+}
+
+-(void)testWrapAndMinSize
+{
+    //测试自适应并且是最小高宽约束的情况。
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:2];
+        rootLayout.widthSize.equalTo(@(MyLayoutSize.wrap)).min(50);
+        rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0,0,50,0));
+        
+        UIView *v = [UIView new];
+        v.mySize = CGSizeMake(20, 20);
+        [rootLayout addSubview:v];
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0,0,50,20));
+        
+        rootLayout.subviews.firstObject.weight = 1;
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0,0,50,20));
+        MyRectAssert(rootLayout.subviews.firstObject, CGRectMake(0,0,50,20));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v2];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0,0,20+40,40));
+        MyRectAssert(rootLayout.subviews.firstObject, CGRectMake(0,0,20,20));
+    }
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:2];
+        rootLayout.widthSize.equalTo(@(MyLayoutSize.wrap));
+        rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap)).min(50);
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0,0,0,50));
+        
+        UIView *v = [UIView new];
+        v.mySize = CGSizeMake(20, 20);
+        [rootLayout addSubview:v];
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0,0,20,50));
+        
+        rootLayout.subviews.firstObject.weight = 1;
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0,0,20,50));
+        MyRectAssert(rootLayout.subviews.firstObject, CGRectMake(0,0,20,50));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v2];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0,0,40,20+40));
+        MyRectAssert(rootLayout.subviews.firstObject, CGRectMake(0,0,20,20));
+    }
     
 }
 
@@ -915,6 +1102,8 @@
 
 -(void)testFlex1
 {
+    //测试内容约束布局下的尺寸自适应，以及最大最小值设置的场景。
+    
     {
         MyFlexLayout *flexLayout = MyFlexLayout.new.flex
         .align_items(MyFlexGravity_Center)

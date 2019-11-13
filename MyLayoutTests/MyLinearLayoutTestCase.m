@@ -882,6 +882,47 @@
 
 }
 
+-(void)testNoLayoutConstraint1
+{
+    //这用来测试没有设置约束，直接通过frame来得到布局尺寸自适应的情况。
+    {
+        MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        
+        UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+        [rootLayout addSubview:v2];
+        
+        UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+        [rootLayout addSubview:v3];
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 300, 100+200+300));
+    }
+    
+    {
+        MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        
+        UIView *v1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+        [rootLayout addSubview:v2];
+        
+        UIView *v3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+        [rootLayout addSubview:v3];
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 100+200+300,300));
+    }
+    
+    
+    
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     

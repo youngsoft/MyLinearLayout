@@ -12,6 +12,11 @@
 
 @interface FLLTest5ViewController ()
 
+@property(nonatomic, strong) UIScrollView *scrollView1;
+@property(nonatomic, strong) UIScrollView *scrollView2;
+@property(nonatomic, strong) UIScrollView *scrollView3;
+@property(nonatomic, strong) UIScrollView *scrollView4;
+
 
 @end
 
@@ -46,16 +51,13 @@
     //创建一个垂直数量流式布局分页从左到右滚动
     [self createVertPagingFlowLayout2:rootLayout];
     
-    
-    
-    
-    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    UIBarButtonItem *bar =[[UIBarButtonItem alloc] initWithTitle:@"paging" style:UIBarButtonItemStylePlain target:self action:@selector(handlePagingSwitch:)];
+    self.navigationItem.rightBarButtonItem = bar;
 }
 
 
@@ -101,6 +103,7 @@
     scrollView.pagingEnabled = YES;  //开启分页滚动模式！！您可以注释这句话看看非分页滚动的布局滚动效果。
     scrollView.myHeight = 200;   //设置明确的高度为200，因为宽度已经由父线性布局的gravity属性确定了，所以不需要设置了。
     [rootLayout addSubview:scrollView];
+    self.scrollView1 = scrollView;
     
     
     //建立一个水平数量约束流式布局:每列展示3个子视图,每页展示9个子视图，整体从左往右滚动。
@@ -141,7 +144,7 @@
     scrollView.pagingEnabled = YES;  //开启分页滚动模式！！您可以注释这句话看看非分页滚动的布局滚动效果。
     scrollView.myHeight = 250;   //设置明确的高度为250，因为宽度已经由父线性布局的gravity属性确定了，所以不需要设置了。
     [rootLayout addSubview:scrollView];
-    
+    self.scrollView2 = scrollView;
     
     //建立一个水平数量约束流式布局:每列展示3个子视图,每页展示9个子视图，整体从上往下滚动。
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:3];
@@ -183,7 +186,8 @@
     scrollView.pagingEnabled = YES;  //开启分页滚动模式！！您可以注释这句话看看非分页滚动的布局滚动效果。
     scrollView.myHeight = 250;   //设置明确的高度为250，因为宽度已经由父线性布局的gravity属性确定了，所以不需要设置了。
     [rootLayout addSubview:scrollView];
-    
+    self.scrollView3 = scrollView;
+
     //建立一个垂直数量约束流式布局:每列展示3个子视图,每页展示9个子视图，整体从上往下滚动。
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     flowLayout.pagedCount = 9; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
@@ -227,6 +231,7 @@
     scrollView.pagingEnabled = YES;  //开启分页滚动模式！！您可以注释这句话看看非分页滚动的布局滚动效果。
     scrollView.myHeight = 200;   //设置明确的高度为200，因为宽度已经由父线性布局的gravity属性确定了，所以不需要设置了。
     [rootLayout addSubview:scrollView];
+    self.scrollView4 = scrollView;
     
     //建立一个垂直数量约束流式布局:每列展示3个子视图,每页展示9个子视图，整体从左往右滚动。
     MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
@@ -255,6 +260,29 @@
 
 
 #pragma mark -- Handle Method
+
+-(void)handlePagingSwitch:(UIBarButtonItem*)sender
+{
+    if ([sender.title isEqualToString:@"paging"])
+    {
+        sender.title = @"scroll";
+    }
+    else
+    {
+        self.title = @"paging";
+    }
+    
+    self.scrollView1.pagingEnabled = !self.scrollView1.pagingEnabled;
+    self.scrollView2.pagingEnabled = !self.scrollView2.pagingEnabled;
+    self.scrollView3.pagingEnabled = !self.scrollView3.pagingEnabled;
+    self.scrollView4.pagingEnabled = !self.scrollView4.pagingEnabled;
+    
+    [self.scrollView1.subviews.firstObject setNeedsLayout];
+    [self.scrollView2.subviews.firstObject setNeedsLayout];
+    [self.scrollView3.subviews.firstObject setNeedsLayout];
+    [self.scrollView4.subviews.firstObject setNeedsLayout];
+
+}
 
 /*
  #pragma mark - Navigation

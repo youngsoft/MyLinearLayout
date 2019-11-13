@@ -389,6 +389,68 @@
     }
 }
 
+-(void)testWrapAndMaxMinLimit
+{
+    {
+        MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        rootLayout.widthSize.max(80);
+        rootLayout.padding = UIEdgeInsetsMake(10, 5, 5, 10);
+        rootLayout.subviewSpace = 20;
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(30, 30);
+        [rootLayout addSubview:v1];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 5+30+10, 10+30+5));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(10, 10);
+        [rootLayout addSubview:v2];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 5+30+20+10+10, 10+30+5));
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v3];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 75, 10+30+20+50+5));
+    }
+    
+    {
+        MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        rootLayout.heightSize.max(80);
+        rootLayout.padding = UIEdgeInsetsMake(5, 10, 10, 5);
+        rootLayout.subviewSpace = 20;
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(30, 30);
+        [rootLayout addSubview:v1];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+5,5+30+10));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(10, 10);
+        [rootLayout addSubview:v2];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+5,5+30+20+10+10));
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v3];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+50+5,75));
+    }
+    
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     

@@ -210,6 +210,9 @@
 //计算垂直流式布局下每行的比重值。
 - (void)myVertLayout:(MyFlowLayoutViewSizeClass*)lsc calcSinglelineWeight:(CGFloat)lineTotalWeight lineSpareWidth:(CGFloat)lineSpareWidth  sbs:(NSArray *)sbs startItemIndex:(NSInteger)startItemIndex count:(NSInteger)count inSelfSize:(CGSize)selfSize
 {
+    if (count == 0)
+        return;
+    
     //如果浮动宽度都是小于等于0因为没有拉升必要，所以直接返回
     if (lineSpareWidth <= 0.0)
         return;
@@ -238,6 +241,9 @@
 //计算水平流式布局下每行的比重值。
 - (void)myHorzLayout:(MyFlowLayoutViewSizeClass*)lsc calcSinglelineWeight:(CGFloat)lineTotalWeight lineSpareHeight:(CGFloat)lineSpareHeight sbs:(NSArray *)sbs startItemIndex:(NSInteger)startItemIndex count:(NSInteger)count inSelfSize:(CGSize)selfSize
 {
+    if (count == 0)
+        return;
+    
     if (lineSpareHeight <= 0.0)
         return;
     
@@ -270,6 +276,9 @@
 //调整内容约束垂直流式布局的每行的宽度
 - (void)myVertLayout:(MyFlowLayoutViewSizeClass*)lsc adjustSingleline:(NSInteger)lineIndex lineSpareWidth:(CGFloat)lineSpareWidth lineTotalWeight:(CGFloat)lineTotalWeight horzGravity:(MyGravity)horzGravity sbs:(NSArray *)sbs startItemIndex:(NSInteger)startItemIndex count:(NSInteger)count inSelfSize:(CGSize)selfSize
 {
+    if (count == 0)
+        return;
+    
     if (lineSpareWidth <= 0.0)
         return;
 
@@ -320,6 +329,9 @@
 //调整内容约束水平流式布局的每行的高度
 - (void)myHorzLayout:(MyFlowLayoutViewSizeClass*)lsc adjustSingleline:(NSInteger)lineIndex lineSpareHeight:(CGFloat)lineSpareHeight lineTotalWeight:(CGFloat)lineTotalWeight vertGravity:(MyGravity)vertGravity sbs:(NSArray *)sbs startItemIndex:(NSInteger)startItemIndex count:(NSInteger)count inSelfSize:(CGSize)selfSize
 {
+    if (count == 0)
+        return;
+    
     if (lineSpareHeight <= 0.0)
         return;
     
@@ -368,6 +380,9 @@
 
 - (void)myVertLayout:(MyFlowLayoutViewSizeClass*)lsc calcSinglelineShrink:(CGFloat)lineTotalShrink lineSpareWidth:(CGFloat)lineSpareWidth sbs:(NSArray *)sbs startItemIndex:(NSInteger)startItemIndex count:(NSInteger)count inSelfSize:(CGSize)selfSize
 {
+    if (count == 0)
+        return;
+    
     if (_myCGFloatGreatOrEqual(lineSpareWidth, 0.0))
         lineTotalShrink = 0.0;
     
@@ -396,6 +411,9 @@
 
 - (void)myHorzLayout:(MyFlowLayoutViewSizeClass*)lsc calcSinglelineShrink:(CGFloat)lineTotalShrink lineSpareHeight:(CGFloat)lineSpareHeight sbs:(NSArray *)sbs startItemIndex:(NSInteger)startItemIndex count:(NSInteger)count inSelfSize:(CGSize)selfSize
 {
+    if (count == 0)
+        return;
+    
     if (_myCGFloatGreatOrEqual(lineSpareHeight, 0.0))
         lineTotalShrink = 0.0;
     
@@ -425,6 +443,9 @@
 
 - (void)myVertLayout:(MyFlowLayoutViewSizeClass*)lsc calcSingleline:(NSInteger)lineIndex vertAlignment:(MyGravity)vertAlignment horzGravity:(MyGravity)horzGravity lineMaxHeight:(CGFloat)lineMaxHeight lineMaxWidth:(CGFloat)lineMaxWidth lineTotalShrink:(CGFloat)lineTotalShrink sbs:(NSArray *)sbs startItemIndex:(NSInteger)startItemIndex count:(NSInteger)count vertSpace:(CGFloat)vertSpace horzSpace:(CGFloat)horzSpace isEstimate:(BOOL)isEstimate inSelfSize:(CGSize)selfSize
 {
+    if (count == 0)
+        return;
+    
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
     CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
     CGFloat paddingHorz = paddingLeading + paddingTrailing;
@@ -624,6 +645,9 @@
 
 - (void)myHorzLayout:(MyFlowLayoutViewSizeClass*)lsc calcSingleline:(NSInteger)lineIndex horzAlignment:(MyGravity)horzAlignment vertGravity:(MyGravity)vertGravity lineMaxWidth:(CGFloat)lineMaxWidth lineMaxHeight:(CGFloat)lineMaxHeight lineTotalShrink:(CGFloat)lineTotalShrink sbs:(NSArray *)sbs startItemIndex:(NSInteger)startItemIndex count:(NSInteger)count vertSpace:(CGFloat)vertSpace horzSpace:(CGFloat)horzSpace isEstimate:(BOOL)isEstimate inSelfSize:(CGSize)selfSize
 {
+    if (count == 0)
+        return;
+    
     CGFloat paddingTop = lsc.myLayoutTopPadding;
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
     CGFloat paddingVert = paddingTop + paddingBottom;
@@ -1417,12 +1441,12 @@
     //得到行数
     NSInteger arranges = floor((sbs.count + arrangedCount - 1.0) / arrangedCount);
     CGFloat lineTotalFixedWidths[arranges]; //所有行的固定宽度。
-    CGFloat lineTotalShrinks[arranges];  //所有行的总压缩
     CGFloat lineTotalWeights[arranges];   //所有行的总比重
+    CGFloat lineTotalShrinks[arranges];  //所有行的总压缩
 
     CGFloat lineTotalFixedWidth = 0.0;
-    CGFloat lineTotalShrink = 0.0;  //某一行的总压缩比重。
     CGFloat lineTotalWeight = 0.0;
+    CGFloat lineTotalShrink = 0.0;  //某一行的总压缩比重。
     BOOL hasTotalWeight = NO; //是否有比重计算，这个标志用于加快处理速度
     BOOL hasTotalShrink = NO; //是否有压缩计算，这个标志用于加快处理速度
     //行内子视图的索引号
@@ -1502,6 +1526,11 @@
         sbvmyFrame.frame = rect;
         itemIndex++;
 
+        lineTotalFixedWidth += rect.size.width;
+        lineTotalFixedWidth += leadingSpace + trailingSpace;
+        if (itemIndex < arrangedCount)
+            lineTotalFixedWidth += horzSpace;
+        
         //计算总拉伸比。
         if (sbvsc.weight != 0.0)
             lineTotalWeight += sbvsc.weight;
@@ -1509,11 +1538,6 @@
         //计算总的压缩比
         lineTotalShrink += sbvsc.leadingPosInner.shrink + sbvsc.trailingPosInner.shrink;
         lineTotalShrink += sbvsc.widthSizeInner.shrink;
-        
-        lineTotalFixedWidth += rect.size.width;
-        lineTotalFixedWidth += leadingSpace + trailingSpace;
-        if (itemIndex < arrangedCount)
-            lineTotalFixedWidth += horzSpace;
     }
     
     //最后一行。
@@ -1523,8 +1547,8 @@
             lineTotalFixedWidth -= horzSpace;
         
         lineTotalWeights[lineIndex] = lineTotalWeight;
-        lineTotalShrinks[lineIndex] = lineTotalShrink;
         lineTotalFixedWidths[lineIndex] = lineTotalFixedWidth;
+        lineTotalShrinks[lineIndex] = lineTotalShrink;
         
         if(!hasTotalWeight)
             hasTotalWeight = lineTotalWeight > 0;
@@ -1540,7 +1564,7 @@
         selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:maxWidth sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     //进行所有行的宽度拉伸和压缩。
-    if (horzGravity != MyGravity_Horz_Fill && (hasTotalShrink || hasTotalWeight))
+    if (horzGravity != MyGravity_Horz_Fill && (hasTotalWeight || hasTotalShrink))
     {
         NSInteger remainedCount = sbs.count;
         lineIndex = 0;
@@ -1563,7 +1587,6 @@
             remainedCount -= arrangedCount;
         }
     }
-    
     
     //初始化每行的下一个子视图的位置。
     NSMutableArray<NSValue*> *nextPointOfRows = nil;
@@ -2294,7 +2317,7 @@
     CGFloat yPos = paddingTop;
     CGFloat lineMaxWidth = 0.0;  //每一列的最大宽度
     CGFloat lineMaxHeight = 0.0; //每一列的最大高度
-    CGFloat maxHeight = paddingTop; //全列的最大高度
+    CGFloat maxHeight = 0.0; //全列的最大高度
     CGFloat maxWidth = paddingLeading; //最大的宽度。
     
     //父滚动视图是否分页滚动。
@@ -2346,41 +2369,35 @@
         
     }
     
+    //在高度自适应的情况下有可能有最大最小高度约束。
+    if (lsc.heightSizeInner.dimeWrapVal)
+        selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:0 sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    
     //平均高度，当布局的gravity设置为Vert_Fill时指定这个平均高度值。
     CGFloat averageHeight = 0.0;
     if (vertGravity == MyGravity_Vert_Fill)
         averageHeight = (selfSize.height - paddingVert - (arrangedCount - 1) * vertSpace) / arrangedCount;
 
-    NSInteger itemIndex = 0;
-    NSInteger i = 0;
-    CGFloat lineTotalShrink = 0.0;  //某一行的总压缩比重。
-    CGFloat lineTotalWeight = 0.0;
+    //得到行数
+    NSInteger arranges = floor((sbs.count + arrangedCount - 1.0) / arrangedCount);
+    CGFloat lineTotalFixedHeights[arranges]; //所有行的固定高度。
+    CGFloat lineTotalWeights[arranges];   //所有行的总比重
+    CGFloat lineTotalShrinks[arranges];  //所有行的总压缩
+    
     CGFloat lineTotalFixedHeight = 0.0;
+    CGFloat lineTotalWeight = 0.0;
+    CGFloat lineTotalShrink = 0.0;  //某一行的总压缩比重。
+    BOOL hasTotalWeight = NO; //是否有比重计算，这个标志用于加快处理速度
+    BOOL hasTotalShrink = NO; //是否有压缩计算，这个标志用于加快处理速度
+    
+    NSInteger i = 0;
+    NSInteger itemIndex = 0;
+    NSInteger lineIndex = 0;  //行索引
     for (; i < sbs.count; i++)
     {
         UIView *sbv = sbs[i];
         MyFrame *sbvmyFrame = sbv.myFrame;
         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
-        
-        if (itemIndex >= arrangedCount)
-        {
-            itemIndex = 0;
-            
-            if (lineTotalWeight != 0 && vertGravity != MyGravity_Vert_Fill)
-            {
-                [self myHorzLayout:lsc calcSinglelineWeight:lineTotalWeight lineSpareHeight:selfSize.height - paddingVert - lineTotalFixedHeight sbs:sbs startItemIndex:i - arrangedCount count:arrangedCount inSelfSize:selfSize];
-            }
-            
-            if (lineTotalShrink != 0 && vertGravity != MyGravity_Vert_Fill)
-            {
-                [self myHorzLayout:lsc calcSinglelineShrink:lineTotalShrink lineSpareHeight:selfSize.height - paddingVert - lineTotalFixedHeight sbs:sbs startItemIndex:i - arrangedCount count:arrangedCount inSelfSize:selfSize];
-            }
-            
-            lineTotalWeight = 0.0;
-            lineTotalFixedHeight = 0.0;
-            lineTotalShrink = 0.0;
-            
-        }
         
         CGFloat topSpace = sbvsc.topPosInner.absVal;
         CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
@@ -2388,6 +2405,26 @@
         CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
         CGRect rect = sbvmyFrame.frame;
         
+        if (itemIndex >= arrangedCount)
+        {
+            lineTotalFixedHeights[lineIndex] = lineTotalFixedHeight;
+            lineTotalWeights[lineIndex] = lineTotalWeight;
+            lineTotalShrinks[lineIndex] = lineTotalShrink;
+            
+            if(!hasTotalWeight)
+                hasTotalWeight = lineTotalWeight > 0;
+            if (!hasTotalShrink)
+                hasTotalShrink = lineTotalShrink > 0;
+            
+            if (lineTotalFixedHeight > maxHeight)
+                maxHeight = lineTotalFixedHeight;
+            
+            lineTotalFixedHeight = 0.0;
+            lineTotalWeight = 0.0;
+            lineTotalShrink = 0.0;
+            itemIndex = 0;
+            lineIndex++;
+        }
         //水平流式布局因为高度依赖宽度自适应的情况比较少，所以这里直接先计算宽度
         if (pagingItemWidth != 0.0)
             rect.size.width = pagingItemWidth - leadingSpace - trailingSpace;
@@ -2438,34 +2475,69 @@
             rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         }
         
+        sbvmyFrame.frame = rect;
+        itemIndex++;
+        
+        lineTotalFixedHeight += rect.size.height;
+        lineTotalFixedHeight += topSpace + bottomSpace;
+        if (itemIndex < arrangedCount)
+            lineTotalFixedHeight += vertSpace;
+        
         if (sbvsc.weight != 0)
             lineTotalWeight += sbvsc.weight;
         
         //计算总的压缩比
         lineTotalShrink += sbvsc.topPosInner.shrink + sbvsc.bottomPosInner.shrink;
         lineTotalShrink += sbvsc.heightSizeInner.shrink;
-        
-        lineTotalFixedHeight += rect.size.height;
-        lineTotalFixedHeight += topSpace + bottomSpace;
-        if (itemIndex != (arrangedCount - 1))
-            lineTotalFixedHeight += vertSpace;
-        
-        sbvmyFrame.frame = rect;
-        itemIndex++;
-    }
+     }
     
     //最后一行。
-    if (itemIndex < arrangedCount)
-        lineTotalFixedHeight -= vertSpace;
-    
-    if (lineTotalWeight != 0.0 && vertGravity != MyGravity_Vert_Fill)
+    if (arranges > 0)
     {
-        [self myHorzLayout:lsc calcSinglelineWeight:lineTotalWeight lineSpareHeight:selfSize.height - paddingVert - lineTotalFixedHeight sbs:sbs startItemIndex:i - itemIndex count:itemIndex inSelfSize:selfSize];
+        if (itemIndex < arrangedCount)
+            lineTotalFixedHeight -= vertSpace;
+        
+        lineTotalFixedHeights[lineIndex] = lineTotalFixedHeight;
+        lineTotalWeights[lineIndex] = lineTotalWeight;
+        lineTotalShrinks[lineIndex] = lineTotalShrink;
+        
+        if(!hasTotalWeight)
+            hasTotalWeight = lineTotalWeight > 0;
+        if (!hasTotalShrink)
+            hasTotalShrink = lineTotalShrink > 0;
+        
+        if (lineTotalFixedHeight > maxHeight)
+            maxHeight = lineTotalFixedHeight;
     }
     
-    if (lineTotalShrink != 0.0 && vertGravity != MyGravity_Vert_Fill)
+    maxHeight += paddingTop + paddingBottom;
+    if (lsc.heightSizeInner.dimeWrapVal)
+        selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:maxHeight sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    
+    
+    //进行所有行的宽度拉伸和压缩。
+    if (vertGravity != MyGravity_Vert_Fill && (hasTotalWeight || hasTotalShrink))
     {
-        [self myHorzLayout:lsc calcSinglelineShrink:lineTotalShrink lineSpareHeight:selfSize.height - paddingVert - lineTotalFixedHeight sbs:sbs startItemIndex:i - itemIndex count:itemIndex inSelfSize:selfSize];
+        NSInteger remainedCount = sbs.count;
+        lineIndex = 0;
+        for (;lineIndex < arranges; lineIndex++)
+        {
+            lineTotalFixedHeight = lineTotalFixedHeights[lineIndex];
+            lineTotalWeight = lineTotalWeights[lineIndex];
+            lineTotalShrink = lineTotalShrinks[lineIndex];
+            
+            if (lineTotalWeight != 0)
+            {
+                [self myHorzLayout:lsc calcSinglelineWeight:lineTotalWeight lineSpareHeight:selfSize.height - paddingVert - lineTotalFixedHeight sbs:sbs startItemIndex:lineIndex*arrangedCount count:MIN(arrangedCount,remainedCount) inSelfSize:selfSize];
+            }
+            
+            if (lineTotalShrink != 0)
+            {
+                 [self myHorzLayout:lsc calcSinglelineShrink:lineTotalShrink lineSpareHeight:selfSize.height - paddingVert - lineTotalFixedHeight sbs:sbs startItemIndex:lineIndex*arrangedCount count:MIN(arrangedCount,remainedCount) inSelfSize:selfSize];
+            }
+            
+            remainedCount -= arrangedCount;
+        }
     }
     
     //初始化每行的下一个子视图的位置。
@@ -2479,8 +2551,9 @@
         }
     }
    
-    NSInteger lineIndex = 0;
     CGFloat pageHeight = 0.0; //页高
+    maxHeight = paddingTop;
+    lineIndex = 0;
     itemIndex = 0;
     lineTotalShrink = 0.0;
     i = 0;
@@ -2642,9 +2715,6 @@
         
         selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     }
-    
-    //得到行数
-    NSInteger arranges = floor((sbs.count + arrangedCount - 1.0) / arrangedCount); //行数
     //根据flex规则：如果只有一行则整个高度都作为子视图的拉伸和停靠区域。
     if (lsc.isFlex && arranges == 1)
         lineMaxWidth = selfSize.width - paddingHorz;
@@ -2652,7 +2722,6 @@
     //最后一行
     [self myHorzLayout:lsc calcSingleline:lineIndex horzAlignment:horzAlignment vertGravity:vertGravity lineMaxWidth:lineMaxWidth lineMaxHeight:lineMaxHeight lineTotalShrink:lineTotalShrink sbs:sbs startItemIndex:i - itemIndex count:itemIndex vertSpace:vertSpace horzSpace:horzSpace isEstimate:isEstimate inSelfSize:selfSize];
     
-
     //整体的停靠。
     if (horzGravity != MyGravity_None && selfSize.width != maxWidth && !(isHorzPaging && isPagingScroll))
     {

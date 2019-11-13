@@ -31,8 +31,9 @@
 
 10. 浮动布局添加对尺寸自适应的支持。您可以在垂直浮动布局中将布局视图的宽度设置为自适应，同时可以在水平浮动布局中将布局视图的高度设置为自适应。
 
-
 11. 在线性布局、流式布局、浮动布局中实现了可以在尺寸自适应的模式下gravity的停靠属性生效的能力。解决了[issue#102](https://github.com/youngsoft/MyLinearLayout/issues/102)
+12. 在线性布局、流式布局、浮动布局中实现了设置尺寸自适应并且设置了最大最小值约束的情况下子视图被正确布局的功能。
+13. 扩充的流式布局中的pagedCount的能力，由原先的必须是在滚动视图的子视图下生效改为可以在任意时刻生效。
 
 ### Update
 1. 更新了对尺寸自适应属性的设置方式。不再建议使用wrapContentWidth进行宽度自适应设置，而是改为`myWidth = MyLayoutSize.wrap`或者`widthSize.equalTo(@(MyLayoutSize.wrap))`进行宽度自适应设置。不再建议使用wrapContentHeight进行高度尺寸自适应设置，而是改为`myHeight= MyLayoutSize.wrap`或者`heightSize.equalTo(@(MyLayoutSize.wrap))`进行高度自适应设置。 对于宽度是否自适应的判断则可以用`myWidth == MyLayoutSize.wrap`或widthSize.iswrap进行判断，高度也是一样的。
@@ -43,12 +44,13 @@
 3. 线性布局中的shrinkType属性用于控制所有子视图的压缩特性，如果子视图的尺寸设置shrink属性值则以子视图的设置优先,布局视图的shrinkType将不再起作用。
 
 
+
 ### Fixed
 
 1. 修复在使用sizeclass时对位置对象进行克隆的一个BUG。这个BUG可能导致在不同sizeclass下位置设置被覆盖的问题。
 2. 修复相对布局下一组视图在高度或者宽度自适应下无法垂直居中或者水平居中的[BUG#103](https://github.com/youngsoft/MyLinearLayout/issues/103)
 3. 修复框架布局MyFrameLayout设置高度自适应时，当其中的子视图隐藏或者恢复隐藏时自适应高度无法更新的[BUG#99](https://github.com/youngsoft/MyLinearLayout/issues/99)
-
+4. 修复了流式布局在设置了子视图水平间距和垂直间距的情况下右对齐和底部对齐的BUG。
 
 
 
