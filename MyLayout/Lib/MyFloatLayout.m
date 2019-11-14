@@ -840,7 +840,7 @@ paddingTrailing:(CGFloat)paddingTrailing
                             break;
                         case MyGravity_Vert_Stretch:
                         {
-                            if (sbvsc.heightSizeInner.dimeVal == nil)
+                            if (sbvsc.heightSizeInner.dimeVal == nil || (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
                                 sbvmyFrame.height = lineMaxHeight;
                         }
                             break;
@@ -1284,7 +1284,7 @@ paddingTrailing:(CGFloat)paddingTrailing
                             break;
                         case MyGravity_Horz_Stretch:
                         {
-                            if (sbvsc.widthSizeInner.dimeVal == nil)
+                            if (sbvsc.widthSizeInner.dimeVal == nil || (sbvsc.widthSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
                                 sbvmyFrame.width = lineMaxWidth;
                         }
                             break;

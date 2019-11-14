@@ -293,10 +293,10 @@
     CGFloat addSpace = 0.0;      //用于压缩时的间距压缩增量。
     CGFloat maxSelfWidth = 0.0;
    
-    //高度不是包裹的子视图集合
-    NSMutableSet *noWrapsbsSet = [NSMutableSet new];
-    //固定高度尺寸的子视图集合
-    NSMutableArray *fixedSizeSbs = [NSMutableArray new];
+    //高度可以被伸缩的子视图集合
+    NSMutableSet *flexSbsSet = [NSMutableSet new];
+    //高度是固定尺寸的子视图集合
+    NSMutableArray *fixedSbsSet = [NSMutableArray new];
     CGFloat fixedSizeHeight = 0.0;
     NSInteger fixedSpaceCount = 0.0;  //固定间距的子视图数量。
     CGFloat  fixedSpaceHeight = 0.0;  //固定间距的子视图的高度。
@@ -309,29 +309,32 @@
         
         if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
         {
-            BOOL canAddToNoWrapSbs = YES;
+            BOOL isFlexSbv = YES;
             
+            //比重高度的子视图不能被伸缩。
             if (sbvsc.weight != 0.0)
-                canAddToNoWrapSbs = NO;
+                isFlexSbv = NO;
             
-            //判断是否是添加到参与布局视图包裹计算的子视图。
+            //高度依赖于父视图的不能被伸缩
             if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == lsc.heightSizeInner)
-                canAddToNoWrapSbs = NO;
+                isFlexSbv = NO;
             
-            //如果子视图高度是包裹的也不进行扩展
-            if (sbvsc.heightSizeInner.dimeWrapVal)
-                canAddToNoWrapSbs = NO;
+            //布局视图的高度自适应尺寸的不能被伸缩。
+            if (sbvsc.heightSizeInner.dimeWrapVal && [sbv isKindOfClass:[MyBaseLayout class]])
+                isFlexSbv = NO;
             
-            //如果子视图的最小高度就是自身则也不进行扩展。
+            //高度最小是自身尺寸的不能被伸缩。
             if (sbvsc.heightSizeInner.lBoundValInner.dimeWrapVal)
-                canAddToNoWrapSbs = NO;
+                isFlexSbv = NO;
             
-            //对于尺寸拉升来说，只要设置了高度约束就都不拉升。
-            if (vertGravity == MyGravity_Vert_Stretch && sbvsc.heightSizeInner.dimeVal != nil)
-                canAddToNoWrapSbs = NO;
+            //对于拉伸来说，只要是设置了高度约束(除了非布局子视图的高度自适应除外)都不会被伸缩
+            if (vertGravity == MyGravity_Vert_Stretch &&
+                sbvsc.heightSizeInner.dimeVal != nil &&
+                (!sbvsc.heightSizeInner.dimeWrapVal || [sbv isKindOfClass:[MyBaseLayout class]]))
+                isFlexSbv = NO;
             
-            if (canAddToNoWrapSbs)
-                [noWrapsbsSet addObject:sbv];
+            if (isFlexSbv)
+                [flexSbsSet addObject:sbv];
             
             //在计算拉伸时，如果没有设置宽度约束则将宽度设置为0
             if (sbvsc.heightSizeInner.dimeVal == nil && !sbvsc.heightSizeInner.lBoundValInner.dimeWrapVal)
@@ -412,7 +415,7 @@
             if (!sbvsc.heightSizeInner.lBoundValInner.dimeWrapVal)
             {
                 fixedSizeHeight += rect.size.height;
-                [fixedSizeSbs addObject:sbv];
+                [fixedSbsSet addObject:sbv];
             }
         }
 
@@ -495,20 +498,20 @@
         {
             if (sstContent == MySubviewsShrink_Size)
             {//压缩尺寸
-                if (fixedSizeSbs.count > 0 && spareHeight < 0 && selfSize.height > 0)
+                if (fixedSbsSet.count > 0 && spareHeight < 0 && selfSize.height > 0)
                 {
                     if (sstMode == MySubviewsShrink_Average)
                     {//均分。
-                        CGFloat averageHeight = spareHeight / fixedSizeSbs.count;
+                        CGFloat averageHeight = spareHeight / fixedSbsSet.count;
                         
-                        for (UIView *fsbv in fixedSizeSbs)
+                        for (UIView *fsbv in fixedSbsSet)
                         {
                             fsbv.myFrame.height += averageHeight;
                         }
                     }
                     else if (_myCGFloatNotEqual(fixedSizeHeight, 0))
                     {//按比例分配。
-                        for (UIView *fsbv in fixedSizeSbs)
+                        for (UIView *fsbv in fixedSbsSet)
                         {
                             fsbv.myFrame.height += spareHeight * (fsbv.myFrame.height / fixedSizeHeight);
                         }
@@ -596,8 +599,8 @@
         else if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
         {
             pos = paddingTop;
-            if (noWrapsbsSet.count > 0)
-                fill = (selfSize.height - fixedHeight - paddingVert) / noWrapsbsSet.count;
+            if (flexSbsSet.count > 0)
+                fill = (selfSize.height - fixedHeight - paddingVert) / flexSbsSet.count;
         }
         else
         {
@@ -651,7 +654,7 @@
             }
             
             //加上扩充的宽度。
-            if (fill != 0 && [noWrapsbsSet containsObject:sbv])
+            if (fill != 0 && [flexSbsSet containsObject:sbv])
                 rect.size.height += fill;
             
             if (totalShrink != 0.0 && sbvsc.heightSizeInner.shrink != 0.0)
@@ -756,12 +759,12 @@
     CGFloat totalShrink = 0.0;    //总的压缩比重
     CGFloat addSpace = 0.0;      //用于压缩时的间距压缩增量。
     
-    //宽度不是包裹的子视图集合
-    NSMutableSet *noWrapsbsSet = [NSMutableSet new];
-    //固定宽度尺寸的子视图集合
-    NSMutableArray *fixedSizeSbs = [NSMutableArray new];
-    //浮动宽度尺寸的子视图集合
-    NSMutableArray *flexedSizeSbs = [NSMutableArray new];
+    //宽度是可伸缩的子视图集合
+    NSMutableSet *flexSbsSet = [NSMutableSet new];
+    //宽度是固定尺寸的子视图集合
+    NSMutableArray *fixedSbsSet = [NSMutableArray new];
+    //左右拉伸宽度尺寸的子视图集合
+    NSMutableArray *leftRightFlexSbs = [NSMutableArray new];
     CGFloat fixedSizeWidth = 0.0;   //固定尺寸视图的宽度
     NSInteger fixedSpaceCount = 0.0;  //固定间距的子视图数量。
     CGFloat  fixedSpaceWidth = 0.0;  //固定间距的子视图的宽度。
@@ -778,28 +781,32 @@
         
         if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
         {
-            BOOL canAddToNoWrapSbs = YES;
+            BOOL isFlexSbv = YES;
             
+            //设置了比重宽度的子视图不伸缩
             if (sbvsc.weight != 0.0)
-                canAddToNoWrapSbs = NO;
+                isFlexSbv = NO;
             
-            //判断是否是添加到参与布局视图包裹计算的子视图。
+            //宽度依赖父视图宽度的不伸缩
             if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == lsc.widthSizeInner)
-                canAddToNoWrapSbs = NO;
+                isFlexSbv = NO;
             
-            //如果子视图宽度是包裹的也不进行扩展
-            if (sbvsc.widthSizeInner.dimeWrapVal)
-                canAddToNoWrapSbs = NO;
+            //布局子视图宽度自适应时不伸缩
+            if (sbvsc.widthSizeInner.dimeWrapVal && [sbv isKindOfClass:[MyBaseLayout class]])
+                isFlexSbv = NO;
             
-            //如果子视图的最小宽度就是自身则也不进行扩展。
+            //子视图宽度最小为自身宽度时不伸缩。
             if (sbvsc.widthSizeInner.lBoundValInner.dimeWrapVal)
-                canAddToNoWrapSbs = NO;
+                isFlexSbv = NO;
             
-            if (horzGravity == MyGravity_Horz_Stretch && sbvsc.widthSizeInner.dimeVal != nil)
-                canAddToNoWrapSbs = NO;
+            //对于拉伸来说，只要是设置了宽度约束(除了非布局子视图的宽度自适应除外)都不会被伸缩
+            if (horzGravity == MyGravity_Horz_Stretch &&
+                sbvsc.widthSizeInner.dimeVal != nil &&
+                (!sbvsc.widthSizeInner.dimeWrapVal || [sbv isKindOfClass:[MyBaseLayout class]]))
+                isFlexSbv = NO;
             
-            if (canAddToNoWrapSbs)
-                [noWrapsbsSet addObject:sbv];
+            if (isFlexSbv)
+                [flexSbsSet addObject:sbv];
             
             //在计算拉伸时，如果没有设置宽度约束则将宽度设置为0
             if (sbvsc.widthSizeInner.dimeVal == nil && !sbvsc.widthSizeInner.lBoundValInner.dimeWrapVal)
@@ -884,12 +891,12 @@
             if (!sbvsc.widthSizeInner.lBoundValInner.dimeWrapVal)
             {
                 fixedSizeWidth += rect.size.width;
-                [fixedSizeSbs addObject:sbv];
+                [fixedSbsSet addObject:sbv];
             }
             
             if (sbvsc.widthSizeInner.dimeWrapVal)
             {
-                [flexedSizeSbs addObject:sbv];
+                [leftRightFlexSbs addObject:sbv];
             }
         }
         
@@ -971,29 +978,29 @@
     if (_myCGFloatLessOrEqual(spareWidth, 0.0))
     {
         //如果压缩方式为自动，但是浮动宽度子视图数量不为2则压缩类型无效。
-        if (sstMode == MySubviewsShrink_Auto && flexedSizeSbs.count != 2)
+        if (sstMode == MySubviewsShrink_Auto && leftRightFlexSbs.count != 2)
             sstMode = MySubviewsShrink_None;
         
         if (sstMode != MySubviewsShrink_None)
         {
             if (sstContent == MySubviewsShrink_Size)
             {
-                if (fixedSizeSbs.count > 0 && spareWidth < 0 && selfSize.width > 0)
+                if (fixedSbsSet.count > 0 && spareWidth < 0 && selfSize.width > 0)
                 {
                     //均分。
                     if (sstMode == MySubviewsShrink_Average)
                     {
-                        CGFloat averageWidth = spareWidth / fixedSizeSbs.count;
+                        CGFloat averageWidth = spareWidth / fixedSbsSet.count;
                         
-                        for (UIView *fsbv in fixedSizeSbs)
+                        for (UIView *fsbv in fixedSbsSet)
                         {
                             fsbv.myFrame.width += averageWidth;
                         }
                     }
                     else if (sstMode == MySubviewsShrink_Auto)
                     {
-                        UIView *leadingView = flexedSizeSbs[0];
-                        UIView *trailingView = flexedSizeSbs[1];
+                        UIView *leadingView = leftRightFlexSbs[0];
+                        UIView *trailingView = leftRightFlexSbs[1];
                         CGFloat leadingWidth = leadingView.myFrame.width;
                         CGFloat trailingWidth = trailingView.myFrame.width;
                         
@@ -1027,7 +1034,7 @@
                     }
                     else if (_myCGFloatNotEqual(fixedSizeWidth, 0))
                     {//按比例分配。
-                        for (UIView *fsbv in fixedSizeSbs)
+                        for (UIView *fsbv in fixedSbsSet)
                         {
                             fsbv.myFrame.width += spareWidth * (fsbv.myFrame.width / fixedSizeWidth);
                         }
@@ -1115,8 +1122,8 @@
         else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
         {
             pos = paddingLeading;
-            if (noWrapsbsSet.count > 0)
-                fill = (selfSize.width - fixedWidth - paddingHorz) / noWrapsbsSet.count;
+            if (flexSbsSet.count > 0)
+                fill = (selfSize.width - fixedWidth - paddingHorz) / flexSbsSet.count;
         }
         else
         {
@@ -1174,7 +1181,7 @@
             }
             
             //加上扩充的宽度。
-            if (fill != 0.0 && [noWrapsbsSet containsObject:sbv])
+            if (fill != 0.0 && [flexSbsSet containsObject:sbv])
                 rect.size.width += fill;
             
             if (totalShrink != 0.0 && sbvsc.widthSizeInner.shrink != 0.0)

@@ -88,7 +88,7 @@ typedef enum : unsigned short {
     MyGravity_Horz_Around = 128,
     /**水平宽度填充*/
     MyGravity_Horz_Fill = MyGravity_Horz_Left | MyGravity_Horz_Center | MyGravity_Horz_Right,
-    /**水平宽度拉伸,它跟宽度填充的区别是如果子视图指定了宽度则不会被拉伸*/
+    /**水平宽度拉伸,它跟宽度填充的区别是如果子视图指定了宽度(非布局子视图宽度自适应除外)则不会被拉伸*/
     MyGravity_Horz_Stretch = MyGravity_Horz_Left | MyGravity_Horz_Right,
     /**水平掩码，用来获取水平方向的枚举值*/
     MyGravity_Horz_Mask = 0xFF00,
@@ -110,7 +110,7 @@ typedef enum : unsigned short {
     MyGravity_Vert_Around = 64 << 8,
     /**垂直高度填充*/
     MyGravity_Vert_Fill = MyGravity_Vert_Top | MyGravity_Vert_Center | MyGravity_Vert_Bottom,
-    /**垂直高度拉伸,它跟高度填充的区别是如果子视图指定了高度则不会被拉伸*/
+    /**垂直高度拉伸,它跟高度填充的区别是如果子视图指定了高度(非布局子视图高度自适应除外)则不会被拉伸*/
     MyGravity_Vert_Stretch = MyGravity_Vert_Top | MyGravity_Vert_Bottom,
     /**垂直掩码，用来获取垂直方向的枚举值*/
     MyGravity_Vert_Mask = 0x00FF,

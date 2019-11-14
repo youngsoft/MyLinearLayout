@@ -622,7 +622,7 @@
                     break;
                 case MyGravity_Vert_Stretch:
                 {
-                    if (sbvsc.heightSizeInner.dimeVal == nil)
+                    if (sbvsc.heightSizeInner.dimeVal == nil || (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
                     {
                         sbvmyFrame.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:lineMaxHeight - sbvsc.topPosInner.absVal - sbvsc.bottomPosInner.absVal sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
                     }
@@ -813,7 +813,7 @@
                     break;
                 case MyGravity_Horz_Stretch:
                 {
-                    if (sbvsc.widthSizeInner.dimeVal == nil)
+                    if (sbvsc.widthSizeInner.dimeVal == nil || (sbvsc.widthSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
                     {
                         sbvmyFrame.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:lineMaxWidth - sbvsc.leadingPosInner.absVal - sbvsc.trailingPosInner.absVal sbvSize:sbvmyFrame.frame.size selfLayoutSize:selfSize];
                     }
@@ -1316,7 +1316,8 @@
                     if (vertGravity == MyGravity_Vert_Stretch)
                     {
                         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
-                        if (sbvsc.heightSizeInner.dimeVal == nil)
+                        //只有在没有约束，或者非布局视图下的高度自适应约束才会被拉伸。
+                        if (sbvsc.heightSizeInner.dimeVal == nil || (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
                         {
                             sbvmyFrame.height += fill;
                         }
@@ -1857,7 +1858,7 @@
                     if (vertGravity == MyGravity_Vert_Stretch)
                     {
                         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
-                        if (sbvsc.heightSizeInner.dimeVal == nil)
+                        if (sbvsc.heightSizeInner.dimeVal == nil || (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
                         {
                             sbvmyFrame.height += fill;
                         }
@@ -2255,7 +2256,7 @@
                     if (horzGravity == MyGravity_Horz_Stretch)
                     {
                         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
-                        if (sbvsc.widthSizeInner.dimeVal == nil)
+                        if (sbvsc.widthSizeInner.dimeVal == nil || (sbvsc.widthSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
                         {
                             sbvmyFrame.width += fill;
                         }
@@ -2773,7 +2774,7 @@
                     if (horzGravity == MyGravity_Horz_Stretch)
                     {
                         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
-                        if (sbvsc.widthSizeInner.dimeVal == nil)
+                        if (sbvsc.widthSizeInner.dimeVal == nil || (sbvsc.widthSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
                         {
                             sbvmyFrame.width += fill;
                         }

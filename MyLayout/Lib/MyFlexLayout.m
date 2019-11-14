@@ -31,8 +31,9 @@ const int MyFlex_Auto = -1;
         _flex_shrink = 1;
         _flex_basis = MyFlex_Auto;
         _align_self = MyFlex_Auto;
-        _width = 0;
-        _height = 0;
+        //默认子视图的宽高都是自适应的。
+        _width = MyLayoutSize.wrap;
+        _height = MyLayoutSize.wrap;
     }
     
     return self;
