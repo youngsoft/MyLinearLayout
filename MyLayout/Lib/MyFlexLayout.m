@@ -159,9 +159,7 @@ const int MyFlex_Auto = -1;
     __weak UIView *_view;
     MyFlexItemAttrs *_attrs;
 }
-
 @dynamic attrs;
-
 
 -(instancetype)initWithView:(UIView*)view attrs:(MyFlexItemAttrs*)attrs
 {
@@ -378,13 +376,6 @@ const int MyFlex_Auto = -1;
     
     return self;
 }
-
-//@property(nonatomic, assign) MyFlexDirection flex_direction;
-//@property(nonatomic, assign) MyFlexWrap flex_wrap;
-//@property(nonatomic, assign) MyFlexGravity justify_content;
-//@property(nonatomic, assign) MyFlexGravity align_items;
-//@property(nonatomic, assign) MyFlexGravity align_content;
-
 
 -(void)setFlex_direction:(MyFlexDirection)flex_direction
 {
