@@ -38,6 +38,69 @@ const int MyFlex_Auto = -1;
     return self;
 }
 
+-(void)setOrder:(NSInteger)order
+{
+    if (_order != order)
+    {
+        _order = order;
+        [self.view.superview setNeedsLayout];
+    }
+}
+
+-(void)setFlex_grow:(CGFloat)flex_grow
+{
+    if (_flex_grow != flex_grow)
+    {
+        _flex_grow = flex_grow;
+        [self.view.superview setNeedsLayout];
+    }
+}
+
+-(void)setFlex_shrink:(CGFloat)flex_shrink
+{
+    if (_flex_shrink != flex_shrink)
+    {
+        _flex_shrink = flex_shrink;
+        [self.view.superview setNeedsLayout];
+    }
+}
+
+-(void)setFlex_basis:(CGFloat)flex_basis
+{
+    if (_flex_basis != flex_basis)
+    {
+        _flex_basis = flex_basis;
+        [self.view.superview setNeedsLayout];
+    }
+}
+
+-(void)setAlign_self:(MyFlexGravity)align_self
+{
+    if (_align_self != align_self)
+    {
+        _align_self = align_self;
+        [self.view.superview setNeedsLayout];
+    }
+}
+
+-(void)setWidth:(CGFloat)width
+{
+    if (_width != width)
+    {
+        _width = width;
+        [self.view.superview setNeedsLayout];
+    }
+}
+
+-(void)setHeight:(CGFloat)height
+{
+    if (_height != height)
+    {
+        _height = height;
+        [self.view.superview setNeedsLayout];
+    }
+}
+
 -(CGFloat)margin_top
 {
     return self.view.myTop;
@@ -108,9 +171,7 @@ const int MyFlex_Auto = -1;
         _view = view;
         _attrs = attrs;
         _attrs.view = view;
-       // _attrs = [MyFlexItemAttrs new];
-       // _attrs.view = view;
-    }
+     }
     return self;
 }
 
@@ -318,6 +379,58 @@ const int MyFlex_Auto = -1;
     return self;
 }
 
+//@property(nonatomic, assign) MyFlexDirection flex_direction;
+//@property(nonatomic, assign) MyFlexWrap flex_wrap;
+//@property(nonatomic, assign) MyFlexGravity justify_content;
+//@property(nonatomic, assign) MyFlexGravity align_items;
+//@property(nonatomic, assign) MyFlexGravity align_content;
+
+
+-(void)setFlex_direction:(MyFlexDirection)flex_direction
+{
+    if (_flex_direction != flex_direction)
+    {
+        _flex_direction = flex_direction;
+        [self.view setNeedsLayout];
+    }
+}
+
+-(void)setFlex_wrap:(MyFlexWrap)flex_wrap
+{
+    if (_flex_wrap != flex_wrap)
+    {
+        _flex_wrap = flex_wrap;
+        [self.view setNeedsLayout];
+    }
+}
+
+-(void)setJustify_content:(MyFlexGravity)justify_content
+{
+    if (_justify_content != justify_content)
+    {
+        _justify_content = justify_content;
+        [self.view setNeedsLayout];
+    }
+}
+
+-(void)setAlign_items:(MyFlexGravity)align_items
+{
+    if (_align_items != align_items)
+    {
+        _align_items = align_items;
+        [self.view setNeedsLayout];
+    }
+}
+
+-(void)setAlign_content:(MyFlexGravity)align_content
+{
+    if (_align_content != align_content)
+    {
+        _align_content = align_content;
+        [self.view setNeedsLayout];
+    }
+}
+
 -(UIEdgeInsets)padding
 {
     return ((MyFlexLayout*)self.view).padding;
@@ -437,12 +550,12 @@ const int MyFlex_Auto = -1;
 
 @implementation UIView(MyFlexLayout)
 
--(MyFlexItem*)flexItem
+-(MyFlexItem*)myFlex
 {
     MyFlexItem *obj = nil;
     if ([self isKindOfClass:[MyFlexLayout class]] )
     {
-        obj = ((MyFlexLayout*)self).flex;
+        obj = ((MyFlexLayout*)self).myFlex;
     }
     else
     {
@@ -466,7 +579,7 @@ const int MyFlex_Auto = -1;
     self = [super init];
     if (self != nil)
     {
-        _flex = [[MyFlex alloc] initWithView:self attrs:[MyFlexAttrs new]];
+        _myFlex = [[MyFlex alloc] initWithView:self attrs:[MyFlexAttrs new]];
         self.orientation = MyOrientation_Vert; //默认row
         self.arrangedCount = NSIntegerMax; //默认单行
         self.isFlex = YES; //满足flexbox的需求。
@@ -480,7 +593,7 @@ const int MyFlex_Auto = -1;
     MyFlexLayout *lsc = self.myCurrentSizeClass;
 
     //最先设置方向。
-    switch (self.flex.attrs.flex_direction) {
+    switch (self.myFlex.attrs.flex_direction) {
         case MyFlexDirection_Column_Reverse:  //column_reverse
             lsc.orientation = MyOrientation_Horz;
             lsc.layoutTransform =  CGAffineTransformMake(1,0,0,-1,0,0);  //垂直翻转
@@ -501,7 +614,7 @@ const int MyFlex_Auto = -1;
     }
     
     //设置换行.
-    switch (self.flex.attrs.flex_wrap) {
+    switch (self.myFlex.attrs.flex_wrap) {
         case MyFlexWrap_Wrap:
             lsc.arrangedCount = 0;
             break;
@@ -522,12 +635,12 @@ const int MyFlex_Auto = -1;
     //按order排序。
     [sbs sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(UIView*  _Nonnull obj1, UIView*  _Nonnull obj2) {
         
-        return obj1.flexItem.attrs.order - obj2.flexItem.attrs.order;
+        return obj1.myFlex.attrs.order - obj2.myFlex.attrs.order;
     }];
     
     for (UIView *sbv in sbs)
     {
-        MyFlexItem *flexItem = sbv.flexItem;
+        MyFlexItem *flexItem = sbv.myFlex;
         UIView *sbvsc = sbv.myCurrentSizeClass;
         
         //flex_grow，如果子视图有设置grow则父视图的换行不起作用。
@@ -589,7 +702,7 @@ const int MyFlex_Auto = -1;
     //设置主轴的水平对齐和拉伸
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    switch (self.flex.attrs.justify_content) {
+    switch (self.myFlex.attrs.justify_content) {
         case MyFlexGravity_Flex_End:
             if (lsc.orientation == MyOrientation_Vert)
                 lsc.gravity = MyGravity_Horz_Trailing | vertGravity;
@@ -626,7 +739,7 @@ const int MyFlex_Auto = -1;
     //次轴的对齐处理。
     MyGravity vertArrangedGravity = lsc.arrangedGravity & MyGravity_Horz_Mask;
     MyGravity horzArrangedGravity = lsc.arrangedGravity & MyGravity_Vert_Mask;
-    switch (self.flex.attrs.align_items) {
+    switch (self.myFlex.attrs.align_items) {
         case MyFlexGravity_Flex_End:
             if (lsc.orientation == MyOrientation_Vert)
                 lsc.arrangedGravity = MyGravity_Vert_Bottom | horzArrangedGravity;
@@ -663,7 +776,7 @@ const int MyFlex_Auto = -1;
     //多行下的整体停靠处理。
     vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    switch (self.flex.attrs.align_content) {
+    switch (self.myFlex.attrs.align_content) {
         case MyFlexGravity_Flex_End:
             if (lsc.orientation == MyOrientation_Horz)
                 lsc.gravity = MyGravity_Horz_Trailing | vertGravity;

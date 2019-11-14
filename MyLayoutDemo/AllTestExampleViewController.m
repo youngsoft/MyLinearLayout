@@ -132,7 +132,7 @@
 -(void)example3
 {
     //用链式语法创建一个弹性布局，宽度和父视图一致，高度为100
-    MyFlexLayout *layout = MyFlexLayout.new.flex
+    MyFlexLayout *layout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Row)
     .flex_wrap(MyFlexWrap_Wrap)
     .align_content(MyFlexGravity_Center)
@@ -146,23 +146,23 @@
     .addTo(self.view);
     
     
-    UILabel *itemA = UILabel.new.flexItem
+    UILabel *itemA = UILabel.new.myFlex
     .width(MyLayoutSize.fill)
     .height(30)
     .addTo(layout);
     
-    UILabel *itemB = UILabel.new.flexItem
+    UILabel *itemB = UILabel.new.myFlex
     .flex_grow(1)
     .align_self(MyFlexGravity_Flex_Start)
     .height(30)
     .addTo(layout);
     
-    UILabel *itemC = UILabel.new.flexItem
+    UILabel *itemC = UILabel.new.myFlex
     .flex_grow(1)
     .height(40)
     .addTo(layout);
     
-    UILabel *itemD = UILabel.new.flexItem
+    UILabel *itemD = UILabel.new.myFlex
     .flex_grow(1)
     .height(50)
     .addTo(layout);

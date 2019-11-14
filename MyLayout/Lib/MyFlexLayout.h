@@ -64,7 +64,6 @@ extern const int MyFlex_Auto;
 
 
 
-
 /*
   flexbox中项目的设置类。
  */
@@ -163,8 +162,8 @@ extern const int MyFlex_Auto;
 //条目视图在应用flexbox时的分类扩展，只有MyFlexLayout中的子视图才有用。
 @interface UIView(MyFlexLayout)
 
-//我们可以借助视图的flexItem来设置条目视图在弹性布局视图中的一些属性。
-@property(nonatomic, readonly, strong) MyFlexItem *flexItem;
+//我们可以借助视图的myFlex来设置条目视图在弹性布局视图中的一些属性。
+@property(nonatomic, readonly, strong) MyFlexItem *myFlex;
 
 @end
 
@@ -176,6 +175,6 @@ extern const int MyFlex_Auto;
 @interface MyFlexLayout:MyFlowLayout
 
 //用于flexbox约束的设置。
-@property(nonatomic, readonly, strong, readonly) MyFlex *flex;
+@property(nonatomic, readonly, strong) MyFlex *myFlex;
 
 @end

@@ -29,29 +29,30 @@
 
 -(void)loadView
 {
+    
     //根视图为flexbox布局视图。
-    MyFlexLayout *rootLayout = MyFlexLayout.new.flex
+    MyFlexLayout *rootLayout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Column)
     .vert_space(10)
     .view;
     self.view = rootLayout;
     
     //布局属性设置。
-    MyFlexLayout *flexAttrLayout = MyFlexLayout.new.flex
+    MyFlexLayout *flexAttrLayout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Row)
     .align_items(MyFlexGravity_Center)
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(rootLayout);
     
-    UILabel *flexAttrTitleLabel = UILabel.new.flexItem
+    UILabel *flexAttrTitleLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(flexAttrLayout);
     
     flexAttrTitleLabel.text = @"flex:";
     
-    UISegmentedControl *flexAttrSeg = UISegmentedControl.new.flexItem
+    UISegmentedControl *flexAttrSeg = UISegmentedControl.new.myFlex
     .flex_grow(1)
     .height(MyLayoutSize.wrap)
     .addTo(flexAttrLayout);
@@ -63,7 +64,7 @@
     [flexAttrSeg insertSegmentWithTitle:@"align_content" atIndex:4 animated:NO];
     [flexAttrSeg addTarget:self action:@selector(handleFlexLayoutAttributeChange:) forControlEvents:UIControlEventValueChanged];
     
-    UISegmentedControl *flex_directionSeg = UISegmentedControl.new.flexItem
+    UISegmentedControl *flex_directionSeg = UISegmentedControl.new.myFlex
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(rootLayout);
@@ -76,7 +77,7 @@
     [flex_directionSeg addTarget:self action:@selector(handleFlex_Direction:) forControlEvents:UIControlEventValueChanged];
     self.flex_directionSeg = flex_directionSeg;
     
-    UISegmentedControl *flex_wrapSeg = UISegmentedControl.new.flexItem
+    UISegmentedControl *flex_wrapSeg = UISegmentedControl.new.myFlex
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .visibility(MyVisibility_Gone)
@@ -88,7 +89,7 @@
     [flex_wrapSeg addTarget:self action:@selector(handleFlex_Wrap:) forControlEvents:UIControlEventValueChanged];
     self.flex_wrapSeg = flex_wrapSeg;
     
-    UISegmentedControl *justify_contentSeg = UISegmentedControl.new.flexItem
+    UISegmentedControl *justify_contentSeg = UISegmentedControl.new.myFlex
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .visibility(MyVisibility_Gone)
@@ -102,7 +103,7 @@
     [justify_contentSeg addTarget:self action:@selector(handleJustify_Content:) forControlEvents:UIControlEventValueChanged];
     self.justify_contentSeg = justify_contentSeg;
     
-    UISegmentedControl *align_itemsSeg = UISegmentedControl.new.flexItem
+    UISegmentedControl *align_itemsSeg = UISegmentedControl.new.myFlex
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .visibility(MyVisibility_Gone)
@@ -117,7 +118,7 @@
     self.align_itemsSeg = align_itemsSeg;
 
     
-    UISegmentedControl *align_contentSeg = UISegmentedControl.new.flexItem
+    UISegmentedControl *align_contentSeg = UISegmentedControl.new.myFlex
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .visibility(MyVisibility_Gone)
@@ -133,42 +134,42 @@
     self.align_contentSeg = align_contentSeg;
 
     
-    MyFlexLayout *paddingLayout = MyFlexLayout.new.flex
+    MyFlexLayout *paddingLayout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Row)
     .align_items(MyFlexGravity_Center)
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(rootLayout);
     
-    UILabel *paddingTitleLabel = UILabel.new.flexItem
+    UILabel *paddingTitleLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(paddingLayout);
     
     paddingTitleLabel.text = @"padding:";
     
-    UISwitch *paddingSwitch = UISwitch.new.flexItem
+    UISwitch *paddingSwitch = UISwitch.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(paddingLayout);
     
     [paddingSwitch addTarget:self action:@selector(handlePaddingChange:) forControlEvents:UIControlEventValueChanged];
     
-    MyFlexLayout *spaceLayout = MyFlexLayout.new.flex
+    MyFlexLayout *spaceLayout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Row)
     .align_items(MyFlexGravity_Center)
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(rootLayout);
     
-    UILabel *spaceTitleLabel = UILabel.new.flexItem
+    UILabel *spaceTitleLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(spaceLayout);
     
     spaceTitleLabel.text = @"space:";
     
-    UISwitch *spaceSwitch = UISwitch.new.flexItem
+    UISwitch *spaceSwitch = UISwitch.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(spaceLayout);
@@ -176,7 +177,7 @@
     [spaceSwitch addTarget:self action:@selector(handleSpaceChange:) forControlEvents:UIControlEventValueChanged];
     
     
-    UILabel *flexlayoutStyleDescLabel = UILabel.new.flexItem
+    UILabel *flexlayoutStyleDescLabel = UILabel.new.myFlex
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(rootLayout);
@@ -185,7 +186,7 @@
     flexlayoutStyleDescLabel.textColor = [CFTool color:6];
     self.flexlayoutStyleDescLabel = flexlayoutStyleDescLabel;
     
-    UIButton *button = UIButton.new.flexItem
+    UIButton *button = UIButton.new.myFlex
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(rootLayout);
@@ -195,7 +196,7 @@
     [button addTarget:self action:@selector(handleAddItem:) forControlEvents:UIControlEventTouchUpInside];
     
     
-    MyFlexLayout *contentLayout = MyFlexLayout.new.flex
+    MyFlexLayout *contentLayout = MyFlexLayout.new.myFlex
     .width(MyLayoutSize.fill)
     .flex_grow(1)
     .addTo(rootLayout);
@@ -234,7 +235,7 @@
 -(void)updateStyleDesc
 {
     NSString *strFlexDirection = @"";
-    switch (self.contentLayout.flex.attrs.flex_direction) {
+    switch (self.contentLayout.myFlex.attrs.flex_direction) {
         case MyFlexDirection_Row:
             strFlexDirection =@"row;";
             break;
@@ -252,7 +253,7 @@
     }
     
     NSString *strFlexWrap = @"";
-    switch (self.contentLayout.flex.attrs.flex_wrap) {
+    switch (self.contentLayout.myFlex.attrs.flex_wrap) {
         case MyFlexWrap_NoWrap:
             strFlexWrap = @"nowrap;";
             break;
@@ -267,7 +268,7 @@
     }
     
     NSString *strJustifyContent = @"";
-    switch (self.contentLayout.flex.attrs.justify_content) {
+    switch (self.contentLayout.myFlex.attrs.justify_content) {
         case MyFlexGravity_Flex_Start:
             strJustifyContent = @"flex-start;";
             break;
@@ -287,7 +288,7 @@
     }
     
     NSString *strAlignItems = @"";
-    switch (self.contentLayout.flex.attrs.align_items) {
+    switch (self.contentLayout.myFlex.attrs.align_items) {
         case MyFlexGravity_Flex_End:
             strAlignItems = @"flex-end;";
             break;
@@ -307,7 +308,7 @@
     }
     
     NSString *strAlignContent = @"";
-    switch (self.contentLayout.flex.attrs.align_content) {
+    switch (self.contentLayout.myFlex.attrs.align_content) {
         case MyFlexGravity_Flex_End:
             strAlignContent = @"flex-end;";
             break;
@@ -342,7 +343,7 @@
 -(void)editFlexItem:(UIView*)itemView
 {
     //创建一个
-    MyFlexLayout *dialogLayout = MyFlexLayout.new.flex
+    MyFlexLayout *dialogLayout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Row)
     .align_items(MyFlexGravity_Center)
     .flex_wrap(MyFlexWrap_Wrap)
@@ -357,14 +358,14 @@
     
     dialogLayout.backgroundColor = [CFTool color:2];
     
-    UILabel *widthLabel = UILabel.new.flexItem
+    UILabel *widthLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(dialogLayout);
     
     widthLabel.text = @"width:";
     
-    UITextField *widthTextField = UITextField.new.flexItem
+    UITextField *widthTextField = UITextField.new.myFlex
     .width(100)
     .flex_grow(1)
     .height(30)
@@ -374,14 +375,14 @@
     widthTextField.borderStyle =  UITextBorderStyleRoundedRect;
     widthTextField.placeholder = @"数字|wrap|fill|空";
     
-    UILabel *heightLabel = UILabel.new.flexItem
+    UILabel *heightLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(dialogLayout);
     
     heightLabel.text = @"height:";
     
-    UITextField *heightTextField = UITextField.new.flexItem
+    UITextField *heightTextField = UITextField.new.myFlex
     .width(100)
     .flex_grow(1)
     .height(30)
@@ -392,14 +393,14 @@
     heightTextField.placeholder = @"数字|wrap|fill|空";
 
     
-    UILabel *orderLabel = UILabel.new.flexItem
+    UILabel *orderLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(dialogLayout);
     
     orderLabel.text = @"order:";
     
-    UITextField *orderTextField = UITextField.new.flexItem
+    UITextField *orderTextField = UITextField.new.myFlex
     .width(100)
     .flex_grow(1)
     .height(30)
@@ -410,14 +411,14 @@
     orderTextField.placeholder = @"数字|空";
 
     
-    UILabel *flex_growLabel = UILabel.new.flexItem
+    UILabel *flex_growLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(dialogLayout);
     
     flex_growLabel.text = @"flex-grow:";
     
-    UITextField *flex_growTextField = UITextField.new.flexItem
+    UITextField *flex_growTextField = UITextField.new.myFlex
     .width(100)
     .flex_grow(1)
     .height(30)
@@ -428,14 +429,14 @@
     flex_growTextField.placeholder = @"数字|空";
 
     
-    UILabel *flex_shrinkLabel = UILabel.new.flexItem
+    UILabel *flex_shrinkLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(dialogLayout);
     
     flex_shrinkLabel.text = @"flex-shrink:";
     
-    UITextField *flex_shrinkTextField = UITextField.new.flexItem
+    UITextField *flex_shrinkTextField = UITextField.new.myFlex
     .width(100)
     .flex_grow(1)
     .height(30)
@@ -446,14 +447,14 @@
     flex_shrinkTextField.placeholder = @"数字|空";
 
     
-    UILabel *flex_basisLabel = UILabel.new.flexItem
+    UILabel *flex_basisLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(dialogLayout);
     
     flex_basisLabel.text = @"flex-basis:";
     
-    UITextField *flex_basisTextField = UITextField.new.flexItem
+    UITextField *flex_basisTextField = UITextField.new.myFlex
     .width(100)
     .flex_grow(1)
     .height(30)
@@ -464,14 +465,14 @@
     flex_basisTextField.placeholder = @"数字|空";
 
     
-    UILabel *align_selfLabel = UILabel.new.flexItem
+    UILabel *align_selfLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(dialogLayout);
     
     align_selfLabel.text = @"align-self:";
     
-    UITextField *align_selfTextField = UITextField.new.flexItem
+    UITextField *align_selfTextField = UITextField.new.myFlex
     .width(100)
     .flex_grow(1)
     .height(30)
@@ -482,7 +483,7 @@
     align_selfTextField.placeholder = @"flex-start|flex-end|center|stretch|baseline|auto";
 
     
-    UIButton *addButton = UIButton.new.flexItem
+    UIButton *addButton = UIButton.new.myFlex
     .flex_grow(1)
     .width(50)
     .height(30)
@@ -500,7 +501,7 @@
     [addButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [addButton addTarget:self action:@selector(handleSaveItem:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIButton *closeButton = UIButton.new.flexItem
+    UIButton *closeButton = UIButton.new.myFlex
     .flex_grow(1)
     .width(50)
     .height(30)
@@ -511,7 +512,7 @@
     
     [closeButton addTarget:self action:@selector(handleCloseDialog:) forControlEvents:UIControlEventTouchUpInside];
     
-    UILabel *tipLabel = UILabel.new.flexItem
+    UILabel *tipLabel = UILabel.new.myFlex
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(dialogLayout);
@@ -520,40 +521,40 @@
     
     if (itemView != nil)
     {
-        if (itemView.flexItem.attrs.width == MyLayoutSize.wrap)
+        if (itemView.myFlex.attrs.width == MyLayoutSize.wrap)
             widthTextField.text = @"wrap";
-        else if (itemView.flexItem.attrs.width == MyLayoutSize.fill)
+        else if (itemView.myFlex.attrs.width == MyLayoutSize.fill)
             widthTextField.text = @"fill";
-        else if (itemView.flexItem.attrs.width != 0)
-            widthTextField.text = [@(itemView.flexItem.attrs.width) stringValue];
+        else if (itemView.myFlex.attrs.width != 0)
+            widthTextField.text = [@(itemView.myFlex.attrs.width) stringValue];
         else
             widthTextField.text = @"";
         
         
-        if (itemView.flexItem.attrs.height == MyLayoutSize.wrap)
+        if (itemView.myFlex.attrs.height == MyLayoutSize.wrap)
             heightTextField.text = @"wrap";
-        else if (itemView.flexItem.attrs.height == MyLayoutSize.fill)
+        else if (itemView.myFlex.attrs.height == MyLayoutSize.fill)
             heightTextField.text = @"fill";
-        else if (itemView.flexItem.attrs.height != 0)
-            heightTextField.text = [@(itemView.flexItem.attrs.height) stringValue];
+        else if (itemView.myFlex.attrs.height != 0)
+            heightTextField.text = [@(itemView.myFlex.attrs.height) stringValue];
         else
             heightTextField.text = @"";
         
         
-        if (itemView.flexItem.attrs.order != 0)
-            orderTextField.text = [@(itemView.flexItem.attrs.order) stringValue];
+        if (itemView.myFlex.attrs.order != 0)
+            orderTextField.text = [@(itemView.myFlex.attrs.order) stringValue];
         
         
-        if (itemView.flexItem.attrs.flex_grow != 0)
-            flex_growTextField.text = [@(itemView.flexItem.attrs.flex_grow) stringValue];
+        if (itemView.myFlex.attrs.flex_grow != 0)
+            flex_growTextField.text = [@(itemView.myFlex.attrs.flex_grow) stringValue];
         
-        if (itemView.flexItem.attrs.flex_shrink != 1)
-            flex_shrinkTextField.text = [@(itemView.flexItem.attrs.flex_shrink) stringValue];
+        if (itemView.myFlex.attrs.flex_shrink != 1)
+            flex_shrinkTextField.text = [@(itemView.myFlex.attrs.flex_shrink) stringValue];
         
-        if (itemView.flexItem.attrs.flex_basis != MyFlex_Auto)
-            flex_basisTextField.text = [@(itemView.flexItem.attrs.flex_basis) stringValue];
+        if (itemView.myFlex.attrs.flex_basis != MyFlex_Auto)
+            flex_basisTextField.text = [@(itemView.myFlex.attrs.flex_basis) stringValue];
         
-        switch (itemView.flexItem.attrs.align_self) {
+        switch (itemView.myFlex.attrs.align_self) {
             case MyFlexGravity_Flex_Start:
                 align_selfTextField.text = @"flex-start";
                 break;
@@ -580,17 +581,17 @@
 
 -(IBAction)handleFlexLayoutAttributeChange:(UISegmentedControl*)sender
 {
-    self.flex_directionSeg.flexItem.visibility(MyVisibility_Gone);
-    self.flex_wrapSeg.flexItem.visibility(MyVisibility_Gone);
-    self.justify_contentSeg.flexItem.visibility(MyVisibility_Gone);
-    self.align_itemsSeg.flexItem.visibility(MyVisibility_Gone);
-    self.align_contentSeg.flexItem.visibility(MyVisibility_Gone);
+    self.flex_directionSeg.myFlex.visibility(MyVisibility_Gone);
+    self.flex_wrapSeg.myFlex.visibility(MyVisibility_Gone);
+    self.justify_contentSeg.myFlex.visibility(MyVisibility_Gone);
+    self.align_itemsSeg.myFlex.visibility(MyVisibility_Gone);
+    self.align_contentSeg.myFlex.visibility(MyVisibility_Gone);
 
     switch (sender.selectedSegmentIndex) {
         case 0:
         {
-            self.flex_directionSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.attrs.flex_direction) {
+            self.flex_directionSeg.myFlex.visibility(MyVisibility_Visible);
+            switch (self.contentLayout.myFlex.attrs.flex_direction) {
                 case MyFlexDirection_Row:
                     self.flex_directionSeg.selectedSegmentIndex = 0;
                     break;
@@ -609,8 +610,8 @@
             break;
         case 1:
         {
-            self.flex_wrapSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.attrs.flex_wrap) {
+            self.flex_wrapSeg.myFlex.visibility(MyVisibility_Visible);
+            switch (self.contentLayout.myFlex.attrs.flex_wrap) {
                 case MyFlexWrap_Wrap:
                     self.flex_wrapSeg.selectedSegmentIndex = 1;
                     break;
@@ -627,8 +628,8 @@
             break;
         case 2:
         {
-            self.justify_contentSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.attrs.justify_content) {
+            self.justify_contentSeg.myFlex.visibility(MyVisibility_Visible);
+            switch (self.contentLayout.myFlex.attrs.justify_content) {
                 case MyFlexGravity_Flex_Start:
                     self.justify_contentSeg.selectedSegmentIndex = 0;
                     break;
@@ -650,8 +651,8 @@
             break;
         case 3:
         {
-            self.align_itemsSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.attrs.align_items) {
+            self.align_itemsSeg.myFlex.visibility(MyVisibility_Visible);
+            switch (self.contentLayout.myFlex.attrs.align_items) {
                 case MyFlexGravity_Flex_Start:
                     self.align_itemsSeg.selectedSegmentIndex = 0;
                     break;
@@ -674,8 +675,8 @@
             break;
         case 4:
         {
-            self.align_contentSeg.flexItem.visibility(MyVisibility_Visible);
-            switch (self.contentLayout.flex.attrs.align_content) {
+            self.align_contentSeg.myFlex.visibility(MyVisibility_Visible);
+            switch (self.contentLayout.myFlex.attrs.align_content) {
                 case MyFlexGravity_Flex_Start:
                     self.align_contentSeg.selectedSegmentIndex = 0;
                     break;
@@ -707,95 +708,91 @@
 {
     switch (sender.selectedSegmentIndex) {
         case 0:
-            self.contentLayout.flex.flex_direction(MyFlexDirection_Row);
+            self.contentLayout.myFlex.flex_direction(MyFlexDirection_Row);
             break;
         case 1:
-            self.contentLayout.flex.flex_direction(MyFlexDirection_Row_Reverse);
+            self.contentLayout.myFlex.flex_direction(MyFlexDirection_Row_Reverse);
             break;
         case 2:
-            self.contentLayout.flex.flex_direction(MyFlexDirection_Column);
+            self.contentLayout.myFlex.flex_direction(MyFlexDirection_Column);
             break;
         case 3:
-            self.contentLayout.flex.flex_direction(MyFlexDirection_Column_Reverse);
+            self.contentLayout.myFlex.flex_direction(MyFlexDirection_Column_Reverse);
         case 4:
         default:
             break;
     }
     
     [self updateStyleDesc];
-    [self.contentLayout setNeedsLayout];
 }
 
 -(void)handleFlex_Wrap:(UISegmentedControl*)sender
 {
     switch (sender.selectedSegmentIndex) {
         case 0:
-            self.contentLayout.flex.flex_wrap(MyFlexWrap_NoWrap);
+            self.contentLayout.myFlex.flex_wrap(MyFlexWrap_NoWrap);
             break;
         case 1:
-            self.contentLayout.flex.flex_wrap(MyFlexWrap_Wrap);
+            self.contentLayout.myFlex.flex_wrap(MyFlexWrap_Wrap);
             break;
         case 2:
-            self.contentLayout.flex.flex_wrap(MyFlexWrap_Wrap_Reverse);
+            self.contentLayout.myFlex.flex_wrap(MyFlexWrap_Wrap_Reverse);
             break;
         default:
             break;
     }
     
     [self updateStyleDesc];
-    [self.contentLayout setNeedsLayout];
 }
 
 -(void)handleJustify_Content:(UISegmentedControl*)sender
 {
     switch (sender.selectedSegmentIndex) {
         case 0:
-            self.contentLayout.flex.justify_content(MyFlexGravity_Flex_Start);
+            self.contentLayout.myFlex.justify_content(MyFlexGravity_Flex_Start);
             break;
         case 1:
-            self.contentLayout.flex.justify_content(MyFlexGravity_Flex_End);
+            self.contentLayout.myFlex.justify_content(MyFlexGravity_Flex_End);
             break;
         case 2:
-            self.contentLayout.flex.justify_content(MyFlexGravity_Center);
+            self.contentLayout.myFlex.justify_content(MyFlexGravity_Center);
             break;
         case 3:
-            self.contentLayout.flex.justify_content(MyFlexGravity_Space_Between);
+            self.contentLayout.myFlex.justify_content(MyFlexGravity_Space_Between);
             break;
         case 4:
-            self.contentLayout.flex.justify_content(MyFlexGravity_Space_Around);
+            self.contentLayout.myFlex.justify_content(MyFlexGravity_Space_Around);
             break;
         default:
             break;
     }
     
     [self updateStyleDesc];
-    [self.contentLayout setNeedsLayout];
 }
 
 -(void)handleAlign_Items:(UISegmentedControl*)sender
 {
     switch (sender.selectedSegmentIndex) {
         case 0:
-            self.contentLayout.flex.align_items(MyFlexGravity_Flex_Start);
+            self.contentLayout.myFlex.align_items(MyFlexGravity_Flex_Start);
             break;
         case 1:
-            self.contentLayout.flex.align_items(MyFlexGravity_Flex_End);
+            self.contentLayout.myFlex.align_items(MyFlexGravity_Flex_End);
             break;
         case 2:
-            self.contentLayout.flex.align_items(MyFlexGravity_Center);
+            self.contentLayout.myFlex.align_items(MyFlexGravity_Center);
             break;
         case 3:
-            self.contentLayout.flex.align_items(MyFlexGravity_Stretch);
+            self.contentLayout.myFlex.align_items(MyFlexGravity_Stretch);
             break;
         case 4:
-            self.contentLayout.flex.align_items(MyFlexGravity_Baseline);
+            self.contentLayout.myFlex.align_items(MyFlexGravity_Baseline);
             break;
         default:
             break;
     }
     
     [self updateStyleDesc];
-    [self.contentLayout setNeedsLayout];
 }
 
 
@@ -803,46 +800,45 @@
 {
     switch (sender.selectedSegmentIndex) {
         case 0:
-            self.contentLayout.flex.align_content(MyFlexGravity_Flex_Start);
+            self.contentLayout.myFlex.align_content(MyFlexGravity_Flex_Start);
             break;
         case 1:
-            self.contentLayout.flex.align_content(MyFlexGravity_Flex_End);
+            self.contentLayout.myFlex.align_content(MyFlexGravity_Flex_End);
             break;
         case 2:
-            self.contentLayout.flex.align_content(MyFlexGravity_Center);
+            self.contentLayout.myFlex.align_content(MyFlexGravity_Center);
             break;
         case 3:
-            self.contentLayout.flex.align_content(MyFlexGravity_Space_Between);
+            self.contentLayout.myFlex.align_content(MyFlexGravity_Space_Between);
             break;
         case 4:
-            self.contentLayout.flex.align_content(MyFlexGravity_Space_Around);
+            self.contentLayout.myFlex.align_content(MyFlexGravity_Space_Around);
             break;
         case 5:
-            self.contentLayout.flex.align_content(MyFlexGravity_Stretch);
+            self.contentLayout.myFlex.align_content(MyFlexGravity_Stretch);
             break;
         default:
             break;
     }
     
     [self updateStyleDesc];
-    [self.contentLayout setNeedsLayout];
 }
 
 -(IBAction)handleSpaceChange:(UISwitch*)sender
 {
     if (sender.isOn)
-        self.contentLayout.flex.vert_space(10).horz_space(10);
+        self.contentLayout.myFlex.vert_space(10).horz_space(10);
     else
-        self.contentLayout.flex.vert_space(0).horz_space(0);
+        self.contentLayout.myFlex.vert_space(0).horz_space(0);
 }
 
 
 -(IBAction)handlePaddingChange:(UISwitch*)sender
 {
     if (sender.isOn)
-        self.contentLayout.flex.padding(UIEdgeInsetsMake(20, 20, 20, 20));
+        self.contentLayout.myFlex.padding(UIEdgeInsetsMake(20, 20, 20, 20));
     else
-        self.contentLayout.flex.padding(UIEdgeInsetsZero);
+        self.contentLayout.myFlex.padding(UIEdgeInsetsZero);
 }
 
 
@@ -890,61 +886,59 @@
     
     NSString *widthStr = widthTextField.text;
     if ([widthStr isEqualToString:@"wrap"])
-        itemView.flexItem.attrs.width = MyLayoutSize.wrap;
+        itemView.myFlex.attrs.width = MyLayoutSize.wrap;
     else if ([widthStr isEqualToString:@"fill"])
-        itemView.flexItem.attrs.width = MyLayoutSize.fill;
+        itemView.myFlex.attrs.width = MyLayoutSize.fill;
     else
-        itemView.flexItem.attrs.width = widthStr.doubleValue;
+        itemView.myFlex.attrs.width = widthStr.doubleValue;
     
     NSString *heightStr = heightTextField.text;
     if ([heightStr isEqualToString:@"wrap"])
-        itemView.flexItem.attrs.height = MyLayoutSize.wrap;
+        itemView.myFlex.attrs.height = MyLayoutSize.wrap;
     else if ([heightStr isEqualToString:@"fill"])
-        itemView.flexItem.attrs.height = MyLayoutSize.fill;
+        itemView.myFlex.attrs.height = MyLayoutSize.fill;
     else
-        itemView.flexItem.attrs.height = heightStr.doubleValue;
+        itemView.myFlex.attrs.height = heightStr.doubleValue;
     
     [itemView setTitle:orderTextField.text forState:UIControlStateNormal];
-    itemView.flexItem.attrs.order = orderTextField.text.integerValue;
+    itemView.myFlex.attrs.order = orderTextField.text.integerValue;
     
     
-    itemView.flexItem.attrs.flex_grow = flex_growTextField.text.doubleValue;
+    itemView.myFlex.attrs.flex_grow = flex_growTextField.text.doubleValue;
     
     if (flex_shrinkTextField.text.length > 0)
-        itemView.flexItem.attrs.flex_shrink = flex_shrinkTextField.text.doubleValue;
+        itemView.myFlex.attrs.flex_shrink = flex_shrinkTextField.text.doubleValue;
     else
-        itemView.flexItem.attrs.flex_shrink = 1;
+        itemView.myFlex.attrs.flex_shrink = 1;
     
      if (flex_basisTextField.text.length > 0)
-         itemView.flexItem.attrs.flex_basis = flex_basisTextField.text.doubleValue;
+         itemView.myFlex.attrs.flex_basis = flex_basisTextField.text.doubleValue;
     else
-        itemView.flexItem.attrs.flex_basis = MyFlex_Auto;
+        itemView.myFlex.attrs.flex_basis = MyFlex_Auto;
     
     if (align_selfTextField.text.length > 0)
     {
         if ([align_selfTextField.text isEqualToString:@"flex-start"])
-            itemView.flexItem.attrs.align_self = MyFlexGravity_Flex_Start;
+            itemView.myFlex.attrs.align_self = MyFlexGravity_Flex_Start;
         else if ([align_selfTextField.text isEqualToString:@"flex-end"])
-            itemView.flexItem.attrs.align_self = MyFlexGravity_Flex_End;
+            itemView.myFlex.attrs.align_self = MyFlexGravity_Flex_End;
         else if ([align_selfTextField.text isEqualToString:@"center"])
-            itemView.flexItem.attrs.align_self = MyFlexGravity_Center;
+            itemView.myFlex.attrs.align_self = MyFlexGravity_Center;
         else if ([align_selfTextField.text isEqualToString:@"baseline"])
-            itemView.flexItem.attrs.align_self = MyFlexGravity_Baseline;
+            itemView.myFlex.attrs.align_self = MyFlexGravity_Baseline;
         else if ([align_selfTextField.text isEqualToString:@"stretch"])
-            itemView.flexItem.attrs.align_self = MyFlexGravity_Stretch;
+            itemView.myFlex.attrs.align_self = MyFlexGravity_Stretch;
         else
-            itemView.flexItem.attrs.align_self = MyFlex_Auto;
+            itemView.myFlex.attrs.align_self = MyFlex_Auto;
     }
     else
     {
-        itemView.flexItem.attrs.align_self = MyFlex_Auto;
+        itemView.myFlex.attrs.align_self = MyFlex_Auto;
     }
     
     
     //销毁对话框。
-    [sender.superview removeFromSuperview];
-    
-    [self.contentLayout setNeedsLayout];
+    [sender.superview removeFromSuperview];    
 }
 
 -(IBAction)handleModifyItemView:(UITapGestureRecognizer*)sender
