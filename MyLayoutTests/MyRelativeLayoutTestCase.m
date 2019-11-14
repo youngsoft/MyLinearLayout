@@ -1432,6 +1432,67 @@
     //MyRectAssert(rootLayout, CGRectMake(0, 0, sz.width, sz.height));
 }
 
+-(void)testWrapContentHeight5
+{
+    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.myWidth = MyLayoutSize.wrap;
+    rootLayout.myHeight = MyLayoutSize.wrap;
+    
+    //放一个高宽都是wrap的子布局视图。
+    MyRelativeLayout *layout1 = [MyRelativeLayout new];
+    layout1.myWidth = MyLayoutSize.wrap;
+    layout1.myHeight = MyLayoutSize.wrap;
+    layout1.myMargin = 10;
+    [rootLayout addSubview:layout1];
+    
+    MyRelativeLayout *layout11 = [MyRelativeLayout new];
+    layout11.myWidth = MyLayoutSize.wrap;
+    layout11.myHeight = MyLayoutSize.wrap;
+    layout11.myMargin = 10;
+    [layout1 addSubview:layout11];
+    
+    UIView *v111 = [UIView new];
+    v111.mySize = CGSizeMake(10, 10);
+    v111.myMargin = 10;
+    [layout11 addSubview:v111];
+    
+    CGSize sz = [rootLayout sizeThatFits:CGSizeMake(0, 0)];
+    MySizeAssert(rootLayout,sz,CGSizeMake(70, 70));
+    
+    v111.visibility = MyVisibility_Gone;
+    sz = [rootLayout sizeThatFits:CGSizeMake(0, 0)];
+    MySizeAssert(rootLayout,sz,CGSizeMake(40, 40));
+    
+    v111.visibility = MyVisibility_Visible;
+    
+    
+    MyFlowLayout *layout2 = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
+    layout2.widthSize.equalTo(@(MyLayoutSize.wrap)).max(80);
+    layout2.myHeight = MyLayoutSize.wrap;
+    layout2.topPos.equalTo(layout1.centerYPos);
+    layout2.leftPos.equalTo(layout1.rightPos);
+    layout2.rightPos.equalTo(rootLayout.rightPos).offset(20);
+    [rootLayout addSubview:layout2];
+    
+    UIView *v21 = [UIView new];
+    v21.mySize = CGSizeMake(60, 60);
+    [layout2 addSubview:v21];
+    
+    sz = [rootLayout sizeThatFits:CGSizeMake(0, 0)];
+    MySizeAssert(rootLayout,sz,CGSizeMake(150, 95));
+    
+    
+    UIView *v22 = [UIView new];
+    v22.mySize = CGSizeMake(60, 60);
+    [layout2 addSubview:v22];
+    
+    sz = [rootLayout sizeThatFits:CGSizeMake(0, 0)];
+    MySizeAssert(rootLayout,sz,CGSizeMake(170, 35+60+60));
+    
+    
+}
+
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

@@ -263,17 +263,17 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
             if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
                 sbvmyFrame.leading -= sbvsc.leadingPosInner.absVal;
             
-            sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
+            sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width + sbvsc.trailingPosInner.absVal;
         }
         else if (sbvsc.leadingPosInner.posMostVal != nil)
         {
             sbvmyFrame.leading = sbvsc.leadingPosInner.posMostVal.doubleValue + sbvsc.leadingPosInner.absVal;
-            sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
+            sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width + sbvsc.trailingPosInner.absVal;
         }
         else if (sbvsc.leadingPosInner.posNumVal != nil)
         {
             sbvmyFrame.leading = sbvsc.leadingPosInner.absVal + lsc.myLayoutLeadingPadding;
-            sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width;
+            sbvmyFrame.trailing = sbvmyFrame.leading + sbvmyFrame.width + sbvsc.trailingPosInner.absVal;
         }
         else if (sbvsc.trailingPosInner.posRelaVal != nil)
         {
@@ -531,17 +531,17 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
             if (relaView != nil && relaView != self && [self myIsNoLayoutSubview:relaView])
                 sbvmyFrame.top -= sbvsc.topPosInner.absVal;
             
-            sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
+            sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height + sbvsc.bottomPosInner.absVal;
         }
         else if (sbvsc.topPosInner.posMostVal != nil)
         {
             sbvmyFrame.top = sbvsc.topPosInner.posMostVal.doubleValue + sbvsc.topPosInner.absVal;
-            sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
+            sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height + sbvsc.bottomPosInner.absVal;
         }
         else if (sbvsc.topPosInner.posNumVal != nil)
         {
             sbvmyFrame.top = sbvsc.topPosInner.absVal + lsc.myLayoutTopPadding;
-            sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height;
+            sbvmyFrame.bottom = sbvmyFrame.top + sbvmyFrame.height + sbvsc.bottomPosInner.absVal;
         }
         else if (sbvsc.bottomPosInner.posRelaVal != nil)
         {
@@ -787,7 +787,6 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
     {
         if (sbvsc.widthSizeInner.dimeArrVal != nil)
         {
-            
             NSArray *dimeArray = sbvsc.widthSizeInner.dimeArrVal;
             
             BOOL isViewHidden = [self myIsNoLayoutSubview:sbv];
