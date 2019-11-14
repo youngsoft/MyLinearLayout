@@ -232,33 +232,45 @@
 
 -(void)example5
 {
-    MyLinearLayout  *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.myHeight = MyLayoutSize.wrap;
     rootLayout.myHorzMargin = 0;
-    rootLayout.tag = 100;
+    rootLayout.padding = UIEdgeInsetsMake(12, 12, 12, 12);
+    
+    MyLinearLayout *headerLayout = [MyLinearLayout linearLayoutWithOrientation:(MyOrientation_Horz)];
+    headerLayout.topPos.equalTo(rootLayout.topPos);
+    headerLayout.leftPos.equalTo(rootLayout.leftPos);
+    headerLayout.wrapContentHeight = YES;
+    [rootLayout addSubview:headerLayout];
+    
+    UIImageView *headerView = UIImageView.alloc.init;
+    headerView.mySize = CGSizeMake(32, 32);
+    [headerLayout addSubview:headerView];
+    
+    UILabel *nameLabel = [UILabel new];
+    nameLabel.text = @"欧阳大哥";
+    nameLabel.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    nameLabel.alignment = MyGravity_Vert_Center;
+    nameLabel.myLeft = 5;
+    [headerLayout addSubview:nameLabel];
+    
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = @"大师傅阿萨德阿斯蒂芬阿斯蒂芬";
+    titleLabel.myHeight = MyLayoutSize.wrap;
+    titleLabel.leftPos.equalTo(headerLayout.leftPos).offset(32 + 5);
+    titleLabel.topPos.equalTo(headerLayout.bottomPos).offset(5);
+    titleLabel.rightPos.equalTo(rootLayout.rightPos);
+    [rootLayout addSubview:titleLabel];
+    
+    MyLinearLayout *barView = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    barView.myHeight = 20;
+    barView.leftPos.equalTo(titleLabel.leftPos);
+    barView.rightPos.equalTo(rootLayout.rightPos);
+    barView.topPos.equalTo(titleLabel.bottomPos);
+    [rootLayout addSubview:barView];
+    
     [self.view addSubview:rootLayout];
     
-//    UIView * v = [UIView new];
-//    v.mySize = CGSizeMake(100, 100);
-//    [rootLayout addSubview:v];
-    
-    MyLinearLayout *v = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    v.tag = 200;
-    v.hidden = YES;
-    v.backgroundColor = [UIColor redColor];
-    v.mySize = CGSizeMake(100, 100);
-   // v.myHorzMargin = 0;
-   // v.myHeight = 100;
-    [rootLayout addSubview:v];
-    
-    [NSTimer scheduledTimerWithTimeInterval:30 repeats:NO block:^(NSTimer * _Nonnull timer) {
-        
-        v.hidden = NO;
-        
-//        UIView *vv1 = [UIView new];
-//        vv1.mySize = CGSizeMake(100, 100);
-//        [v addSubview:vv1];
-        
-    }];
 }
 
 @end

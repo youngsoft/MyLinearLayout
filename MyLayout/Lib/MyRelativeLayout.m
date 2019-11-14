@@ -65,6 +65,8 @@
                         sbvmyFrame.sizeClass = [sbv myBestSizeClass:sizeClass myFrame:sbvmyFrame];
                 }
             }
+            else
+                [sbvmyFrame reset];
         }
         else
         {

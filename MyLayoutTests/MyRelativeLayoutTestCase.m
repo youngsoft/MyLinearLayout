@@ -1389,6 +1389,49 @@
     XCTAssertTrue(CGRectEqualToRect(v7.frame, CGRectMake(0,-16,100,100)), @"the v7.frame = %@",NSStringFromCGRect(v7.frame));
 }
 
+-(void)testWrapContentHeight4
+{
+    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    rootLayout.myHeight = MyLayoutSize.wrap;
+    rootLayout.padding = UIEdgeInsetsMake(12, 12, 12, 12);
+    
+    MyLinearLayout *headerLayout = [MyLinearLayout linearLayoutWithOrientation:(MyOrientation_Horz)];
+    headerLayout.topPos.equalTo(rootLayout.topPos);
+    headerLayout.leftPos.equalTo(rootLayout.leftPos);
+    headerLayout.wrapContentHeight = YES;
+    [rootLayout addSubview:headerLayout];
+    
+    UIImageView *headerView = UIImageView.alloc.init;
+    headerView.mySize = CGSizeMake(32, 32);
+    [headerLayout addSubview:headerView];
+    
+    UILabel *nameLabel = [UILabel new];
+    nameLabel.text = @"欧阳大哥";
+    nameLabel.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    nameLabel.alignment = MyGravity_Vert_Center;
+    nameLabel.myLeft = 5;
+    [headerLayout addSubview:nameLabel];
+    
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = @"大师傅阿萨德阿斯蒂芬阿斯蒂芬";
+    titleLabel.myHeight = MyLayoutSize.wrap;
+    titleLabel.leftPos.equalTo(headerLayout.leftPos).offset(32 + 5);
+    titleLabel.topPos.equalTo(headerLayout.bottomPos).offset(5);
+    titleLabel.rightPos.equalTo(rootLayout.rightPos);
+    [rootLayout addSubview:titleLabel];
+    
+    MyLinearLayout *barView = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    barView.myHeight = 20;
+    barView.leftPos.equalTo(titleLabel.leftPos);
+    barView.rightPos.equalTo(rootLayout.rightPos);
+    barView.topPos.equalTo(titleLabel.bottomPos);
+    [rootLayout addSubview:barView];
+    
+   CGSize sz = [rootLayout sizeThatFits:CGSizeMake(375, 0)];
+    MySizeAssert(rootLayout,sz,CGSizeMake(375, 101.5));
+    //MyRectAssert(rootLayout, CGRectMake(0, 0, sz.width, sz.height));
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

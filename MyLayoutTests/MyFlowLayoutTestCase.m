@@ -1105,7 +1105,7 @@
     //测试内容约束布局下的尺寸自适应，以及最大最小值设置的场景。
     
     {
-        MyFlexLayout *flexLayout = MyFlexLayout.new.flex
+        MyFlexLayout *flexLayout = MyFlexLayout.new.myFlex
         .align_items(MyFlexGravity_Center)
         .justify_content(MyFlexGravity_Center)
         .margin(0)
@@ -1115,7 +1115,7 @@
         flexLayout.backgroundColor = [UIColor redColor];
         
         
-        MyFlexLayout *contentLayout = MyFlexLayout.new.flex
+        MyFlexLayout *contentLayout = MyFlexLayout.new.myFlex
         .flex_wrap(MyFlexWrap_Wrap)
         .width(MyLayoutSize.wrap)
         .max_width(100)
@@ -1124,21 +1124,21 @@
         
         contentLayout.backgroundColor = [UIColor greenColor];
         
-        UILabel *lb1 = UILabel.new.flexItem
+        UILabel *lb1 = UILabel.new.myFlex
         .width(30)
         .height(30)
         .addTo(contentLayout);
         
         lb1.backgroundColor = [UIColor blueColor];
         
-        UILabel *lb2 = UILabel.new.flexItem
+        UILabel *lb2 = UILabel.new.myFlex
         .width(40)
         .height(40)
         .addTo(contentLayout);
         
         lb2.backgroundColor = [UIColor yellowColor];
         
-        UILabel *lb3 = UILabel.new.flexItem
+        UILabel *lb3 = UILabel.new.myFlex
         .width(50)
         .height(50)
         .addTo(contentLayout);
@@ -1151,7 +1151,7 @@
         MyRectAssert(contentLayout, CGRectMake((300-100)/2.0, (300-90)/2.0, 100, 90));
         MyRectAssert(lb3, CGRectMake(0, 40, 50, 50));
         
-        contentLayout.flex.height(30);
+        contentLayout.myFlex.height(30);
         [flexLayout setNeedsLayout];
         [contentLayout setNeedsLayout];
         [contentLayout layoutIfNeeded];
@@ -1163,7 +1163,7 @@
     }
     
     {
-        MyFlexLayout *flexLayout = MyFlexLayout.new.flex
+        MyFlexLayout *flexLayout = MyFlexLayout.new.myFlex
         .align_items(MyFlexGravity_Center)
         .justify_content(MyFlexGravity_Center)
         .margin(0)
@@ -1173,7 +1173,7 @@
         flexLayout.backgroundColor = [UIColor redColor];
         
         
-        MyFlexLayout *contentLayout = MyFlexLayout.new.flex
+        MyFlexLayout *contentLayout = MyFlexLayout.new.myFlex
         .flex_wrap(MyFlexWrap_Wrap)
         .flex_direction(MyFlexDirection_Column)
         .width(MyLayoutSize.wrap)
@@ -1183,21 +1183,21 @@
         
         contentLayout.backgroundColor = [UIColor greenColor];
         
-        UILabel *lb1 = UILabel.new.flexItem
+        UILabel *lb1 = UILabel.new.myFlex
         .width(30)
         .height(30)
         .addTo(contentLayout);
         
         lb1.backgroundColor = [UIColor blueColor];
         
-        UILabel *lb2 = UILabel.new.flexItem
+        UILabel *lb2 = UILabel.new.myFlex
         .width(40)
         .height(40)
         .addTo(contentLayout);
         
         lb2.backgroundColor = [UIColor yellowColor];
         
-        UILabel *lb3 = UILabel.new.flexItem
+        UILabel *lb3 = UILabel.new.myFlex
         .width(50)
         .height(50)
         .addTo(contentLayout);
@@ -1210,7 +1210,7 @@
         MyRectAssert(contentLayout, CGRectMake((300-90)/2.0,(300-100)/2.0,90,100));
         MyRectAssert(lb3, CGRectMake(40, 0, 50, 50));
         
-        contentLayout.flex.width(30);
+        contentLayout.myFlex.width(30);
         [flexLayout setNeedsLayout];
         [contentLayout setNeedsLayout];
         [contentLayout layoutIfNeeded];
