@@ -407,6 +407,7 @@ paddingTrailing:(CGFloat)paddingTrailing
  //   CGFloat paddingVert = paddingTop + paddingBottom;
     
     //如果没有边界限制我们将宽度设置为最大。。
+    BOOL isBeyondFlag = NO;  //子视图是否超出剩余空间需要换行。
     if (lsc.widthSizeInner.dimeWrapVal)
     {
         //如果有最大限制则取最大值，解决那种宽度自适应，但是有最大值需要换行的情况。
@@ -630,6 +631,10 @@ paddingTrailing:(CGFloat)paddingTrailing
                         trailingCandidateXBoundary = trailingPoint.x;
                         break;
                     }
+                    else
+                    {//这里表明剩余空间放不下了。
+                        isBeyondFlag = YES;
+                    }
                     
                     nextPoint.y = CGRectGetMaxY(candidateRect);
                 }
@@ -750,7 +755,11 @@ paddingTrailing:(CGFloat)paddingTrailing
     
     maxWidth += paddingTrailing;
     if (lsc.widthSizeInner.dimeWrapVal)
-        selfSize.width = maxWidth;
+    {
+        //只有在设置了最大宽度限制并且超出了才认为最大宽度是限制宽度，否则是最大子视图宽度。
+        if (selfSize.width == CGFLOAT_MAX || !isBeyondFlag)
+            selfSize.width = maxWidth;
+    }
     
     maxHeight += paddingBottom;
     if (lsc.heightSizeInner.dimeWrapVal)
@@ -876,6 +885,7 @@ paddingTrailing:(CGFloat)paddingTrailing
     CGFloat paddingVert = paddingTop + paddingBottom;
     
     //如果没有边界限制我们将高度设置为最大。。
+    BOOL isBeyondFlag = NO; //子视图是否超出剩余空间需要换行。
     if (lsc.heightSizeInner.dimeWrapVal)
     {
         //如果有最大限制则取最大值，解决那种高度自适应，但是有最大值需要换行的情况。
@@ -1092,6 +1102,10 @@ paddingTrailing:(CGFloat)paddingTrailing
                         bottomCandidateYBoundary = bottomPoint.y;
                         break;
                     }
+                    else
+                    {
+                        isBeyondFlag = YES;
+                    }
                     
                     nextPoint.x = CGRectGetMaxX(candidateRect);
                 }
@@ -1204,7 +1218,10 @@ paddingTrailing:(CGFloat)paddingTrailing
     
     maxHeight += paddingBottom;
     if (lsc.heightSizeInner.dimeWrapVal)
-        selfSize.height = maxHeight;
+    {
+        if (selfSize.height == CGFLOAT_MAX || !isBeyondFlag)
+            selfSize.height = maxHeight;
+    }
 
     maxWidth += paddingTrailing;
     if (lsc.widthSizeInner.dimeWrapVal)

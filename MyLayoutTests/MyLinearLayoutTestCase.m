@@ -503,11 +503,11 @@
         
         XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,190,400)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
         
-         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(20,10,140,20.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
-         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(100,30.5,50,67.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
-         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(55,98,70,107.5)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
-         XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(40,205.5,100,67.5)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
-         XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(10,272.5,80,107.5)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
+         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(20,10,140,74.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(100,84.5,50,54)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+         XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(55,138.5,70,94)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+         XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(40,232,100,54)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
+         XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(10,286,80,94)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
     }
 
     if (1){
@@ -553,10 +553,10 @@
         
         XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,190,400)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
         
-        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(20,10,140,20.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
-        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(100,30.5,50,135)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
-        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(55,165.5,70,40)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
-        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(40,205.5,100,135)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(20,10,140,110.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(100,120.5,50,90)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(55,210,70,40)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(40,250,100,90)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
         XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(10,340,80,40)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
     }
 
@@ -604,11 +604,11 @@
         
         XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,400,190)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
 
-        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,20,35,140)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
-        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(45,100,64,50)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
-        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(109,55,104,70)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
-        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(212.5,40,64,100)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
-        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(276.5,10,104,80)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,20,86,140)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(96,100,51,50)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(147,55,91,70)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(238,40,51,100)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
+        XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(289,10,91,80)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
     }
     
     if (1){
@@ -654,10 +654,10 @@
         
         XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,400,190)), @"the rootLayout.frame = %@",NSStringFromCGRect(rootLayout.frame));
         
-        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,20,35,140)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
-        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(45,100,127.5,50)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
-        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(172.5,55,40,70)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
-        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(212.5,40,127.5,100)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
+        XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,20,120,140)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
+        XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(130,100,85,50)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
+        XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(215,55,40,70)), @"the v3.frame = %@",NSStringFromCGRect(v3.frame));
+        XCTAssertTrue(CGRectEqualToRect(v4.frame, CGRectMake(255,40,85,100)), @"the v4 .frame = %@",NSStringFromCGRect(v4.frame));
         XCTAssertTrue(CGRectEqualToRect(v5.frame, CGRectMake(340,10,40,80)), @"the v5 .frame = %@",NSStringFromCGRect(v5.frame));
     }
 

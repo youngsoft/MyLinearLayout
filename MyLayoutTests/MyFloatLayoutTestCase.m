@@ -414,10 +414,17 @@
         MyRectAssert(rootLayout, CGRectMake(0, 0, 5+30+20+10+10, 10+30+5));
         
         UIView *v3 = [UIView new];
+        v3.clearFloat = YES;
         v3.mySize = CGSizeMake(50, 50);
         [rootLayout addSubview:v3];
         [rootLayout layoutIfNeeded];
-        MyRectAssert(rootLayout, CGRectMake(0, 0, 75, 10+30+20+50+5));
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 5+30+20+10+10, 10+30+20+50+5));
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v4];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 80, 10+30+20+50+20+50+5));
     }
     
     {
@@ -443,10 +450,17 @@
         MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+5,5+30+20+10+10));
         
         UIView *v3 = [UIView new];
+        v3.clearFloat = YES;
         v3.mySize = CGSizeMake(50, 50);
         [rootLayout addSubview:v3];
         [rootLayout layoutIfNeeded];
-        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+50+5,75));
+        MyRectAssert(rootLayout, CGRectMake(0, 0,10+30+20+50+5,5+30+20+10+10));
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v4];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+50+20+50+5,80));
     }
     
 }
