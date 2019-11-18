@@ -26,14 +26,14 @@
 @interface MyLayoutSize : NSObject<NSCopying>
 
 #if UIKIT_DEFINE_AS_PROPERTIES
-/**特殊的尺寸，表示尺寸由子视图决定或者由内容决定。目前只用在表格布局MyTableLayout和栅格布局MyGridLayout中。*/
+/**特殊的尺寸，表示尺寸由子视图决定或者由内容决定，也就是说尺寸自适应*/
 @property(class, nonatomic, assign,readonly) NSInteger wrap;
 #else
 +(NSInteger)wrap;
 #endif
 
 #if UIKIT_DEFINE_AS_PROPERTIES
-/**特殊的尺寸，表示尺寸会填充满父视图的剩余空间。目前只用在表格布局MyTableLayout和栅格布局MyGridLayout中。*/
+/**特殊的尺寸，表示尺寸会填充满父视图的剩余空间。*/
 @property(class, nonatomic, assign,readonly) NSInteger fill;
 #else
 +(NSInteger)fill;
@@ -65,7 +65,7 @@
 /**
  设置尺寸的具体值，这个具体值可以设置为NSNumber, MyLayoutSize以及NSArray<MyLayoutSize*>数组,UIView, MyLayoutMostSize和nil值。
  
- 1. 设置为NSNumber值表示指定具体的宽度或者高度数值
+ 1. 设置为NSNumber值表示指定具体的宽度或者高度数值，如果设置为特殊值MyLayoutSize.wrap则表示尺寸自适应，如果设置为LayoutSize.fill则表示等于父视图的尺寸。
  
  2. 设置为MyLayoutSize值表示宽度和高度与设置的对象有依赖关系, 甚至可以依赖对象本身
  
@@ -216,8 +216,16 @@
 @property(nonatomic, assign, readonly) CGFloat minVal;
 @property(nonatomic, assign, readonly) CGFloat maxVal;
 
-//判断尺寸值是否是自适应值。
+/**
+ 判断尺寸值是否是自适应值。
+ */
 @property(nonatomic, assign, readonly) BOOL isWrap;
+
+
+/**
+ 判断尺寸是不是填充比重值。
+ */
+@property(nonatomic, assign, readonly) BOOL isFill;
 
 @end
 

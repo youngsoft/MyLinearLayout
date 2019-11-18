@@ -23,6 +23,7 @@
 @property(nonatomic, readonly, strong) NSArray *dimeArrVal;
 
 @property(nonatomic, readonly, assign) BOOL dimeWrapVal;
+@property(nonatomic, readonly, assign) BOOL dimeFillVal;
 
 @property(nonatomic, readonly, strong) MyLayoutSize *lBoundVal;
 @property(nonatomic, readonly, strong) MyLayoutSize *uBoundVal;

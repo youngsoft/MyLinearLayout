@@ -316,7 +316,7 @@
                 isFlexSbv = NO;
             
             //高度依赖于父视图的不能被伸缩
-            if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == lsc.heightSizeInner)
+            if ((sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == lsc.heightSizeInner) || sbvsc.heightSizeInner.dimeFillVal)
                 isFlexSbv = NO;
             
             //布局视图的高度自适应尺寸的不能被伸缩。
@@ -361,6 +361,7 @@
         //左右依赖的，或者依赖父视图宽度的不参数最宽计算！！
         if ((tempSelfWidth > maxSelfWidth) &&
             (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) &&
+            !sbvsc.widthSizeInner.dimeFillVal &&
             (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil || sbvsc.widthSizeInner.dimeVal != nil))
         {
             maxSelfWidth = tempSelfWidth;
@@ -680,6 +681,7 @@
             
             if ((tempSelfWidth > maxSelfWidth) &&
                 (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) &&
+                !sbvsc.widthSizeInner.dimeFillVal &&
                 (sbvsc.leadingPosInner.posVal == nil || sbvsc.trailingPosInner.posVal == nil || sbvsc.widthSizeInner.dimeVal != nil))
             {
                 maxSelfWidth = tempSelfWidth;
@@ -788,7 +790,7 @@
                 isFlexSbv = NO;
             
             //宽度依赖父视图宽度的不伸缩
-            if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == lsc.widthSizeInner)
+            if ((sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == lsc.widthSizeInner) || sbvsc.widthSizeInner.dimeFillVal)
                 isFlexSbv = NO;
             
             //布局子视图宽度自适应时不伸缩
@@ -834,6 +836,7 @@
         
         if ((tempSelfHeight > maxSelfHeight) &&
             (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
+            !sbvsc.heightSizeInner.dimeFillVal &&
             (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil || sbvsc.heightSizeInner.dimeVal != nil))
         {
             maxSelfHeight = tempSelfHeight;
@@ -1208,6 +1211,7 @@
             
             if ((tempSelfHeight > maxSelfHeight) &&
                 (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) &&
+                !sbvsc.heightSizeInner.dimeFillVal &&
                 (sbvsc.topPosInner.posVal == nil || sbvsc.bottomPosInner.posVal == nil || sbvsc.heightSizeInner.dimeVal != nil ))
             {
                 maxSelfHeight = tempSelfHeight;

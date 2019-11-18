@@ -789,7 +789,6 @@
 @property(nonatomic,getter=isSelected) BOOL selected;                                // default is NO may be used by some subclasses or by application
 
 
-
 /**
  *设置布局视图在布局开始之前的处理块。系统会在每次布局完成前调用对应的处理块后将处理块清空为nil。系统会在调用layoutSubviews方法前执行beginLayoutBlock。
  */
@@ -799,36 +798,12 @@
  */
 @property(nonatomic,copy) void (^endLayoutBlock)(void);
 
-
-
-
 /**
- 删除所有子视图的方便方法
- */
--(void)removeAllSubviews;
-
-
-/**
- *设置布局时的动画。并指定时间。这个函数是下面方法的简单实现：
- 
- @code
-  self.beginLayoutBlock = ^{
- 
- [UIView beginAnimations:nil context:nil];
- [UIView setAnimationDuration:duration];
- };
- 
- self.endLayoutBlock = ^{
- 
- [UIView commitAnimations];
- };
-
-@endcode
- 
+ *设置布局时的动画。并指定时间,选项,和完成时的处理，这个动画只会在调用后的下次布局时执行一次。
  @param duration 指定动画的时间间隔
  */
 -(void)layoutAnimationWithDuration:(NSTimeInterval)duration;
-
+-(void)layoutAnimationWithDuration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion;
 
 /**
  设置布局视图在第一次布局完成之后或者有横竖屏切换时进行处理的block。这个block不像beginLayoutBlock以及endLayoutBlock那样只会执行一次,而是会一直存在
@@ -842,6 +817,12 @@
  isPortrait 表明当前是横屏还是竖屏。
  */
 @property(nonatomic,copy) void (^rotationToDeviceOrientationBlock)(MyBaseLayout *layout, BOOL isFirst, BOOL isPortrait);
+
+
+/**
+ 删除所有子视图的方便方法
+ */
+-(void)removeAllSubviews;
 
 
 /**

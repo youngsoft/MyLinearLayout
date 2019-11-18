@@ -1124,9 +1124,7 @@
         
         MyFlexLayout *contentLayout = MyFlexLayout.new.myFlex
         .flex_wrap(MyFlexWrap_Wrap)
-        .width(MyLayoutSize.wrap)
         .max_width(100)
-        .height(MyLayoutSize.wrap)
         .addTo(flexLayout);
         
         contentLayout.backgroundColor = [UIColor greenColor];

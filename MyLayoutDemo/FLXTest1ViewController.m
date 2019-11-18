@@ -37,6 +37,8 @@
     .view;
     self.view = rootLayout;
     
+    
+    
     //布局属性设置。
     MyFlexLayout *flexAttrLayout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Row)
@@ -148,6 +150,13 @@
     
     paddingTitleLabel.text = @"padding:";
     
+
+    
+    
+    
+    
+    
+    
     UISwitch *paddingSwitch = UISwitch.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
@@ -195,10 +204,11 @@
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(handleAddItem:) forControlEvents:UIControlEventTouchUpInside];
     
+
     
     MyFlexLayout *contentLayout = MyFlexLayout.new.myFlex
-    .width(MyLayoutSize.fill)
     .flex_grow(1)
+    .width(MyLayoutSize.fill)
     .addTo(rootLayout);
     
     contentLayout.backgroundColor = [UIColor lightGrayColor];
@@ -366,8 +376,8 @@
     widthLabel.text = @"width:";
     
     UITextField *widthTextField = UITextField.new.myFlex
-    .width(100)
     .flex_grow(1)
+    .width(100)
     .height(30)
     .addTo(dialogLayout);
     
@@ -383,8 +393,8 @@
     heightLabel.text = @"height:";
     
     UITextField *heightTextField = UITextField.new.myFlex
-    .width(100)
     .flex_grow(1)
+    .width(100)
     .height(30)
     .addTo(dialogLayout);
     
@@ -401,8 +411,8 @@
     orderLabel.text = @"order:";
     
     UITextField *orderTextField = UITextField.new.myFlex
-    .width(100)
     .flex_grow(1)
+    .width(100)
     .height(30)
     .addTo(dialogLayout);
     
@@ -419,8 +429,8 @@
     flex_growLabel.text = @"flex-grow:";
     
     UITextField *flex_growTextField = UITextField.new.myFlex
-    .width(100)
     .flex_grow(1)
+    .width(100)
     .height(30)
     .addTo(dialogLayout);
     
@@ -437,8 +447,8 @@
     flex_shrinkLabel.text = @"flex-shrink:";
     
     UITextField *flex_shrinkTextField = UITextField.new.myFlex
-    .width(100)
     .flex_grow(1)
+    .width(100)
     .height(30)
     .addTo(dialogLayout);
     
@@ -455,8 +465,8 @@
     flex_basisLabel.text = @"flex-basis:";
     
     UITextField *flex_basisTextField = UITextField.new.myFlex
-    .width(100)
     .flex_grow(1)
+    .width(100)
     .height(30)
     .addTo(dialogLayout);
     
@@ -473,8 +483,8 @@
     align_selfLabel.text = @"align-self:";
     
     UITextField *align_selfTextField = UITextField.new.myFlex
-    .width(100)
     .flex_grow(1)
+    .width(100)
     .height(30)
     .addTo(dialogLayout);
     

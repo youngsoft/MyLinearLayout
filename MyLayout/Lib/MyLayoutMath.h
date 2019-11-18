@@ -59,7 +59,6 @@ typedef enum : unsigned char
     MyLayoutValueType_SafeArea,
     MyLayoutValueType_Most,
     MyLayoutValueType_LayoutDimeClone,
-    MyLayoutValueType_Weight,
-    MyLayoutValueType_Wrap,
     MyLayoutValueType_Fill,
+    MyLayoutValueType_Wrap,
 }MyLayoutValueType;

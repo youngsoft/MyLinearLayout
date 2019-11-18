@@ -341,6 +341,8 @@ BOOL _myisRTL = NO;
     //特殊处理设置为MyLayoutSize.wrap的返回
     if (self.widthSizeInner.dimeValType == MyLayoutValueType_Wrap)
         return MyLayoutSize.wrap;
+    else if (self.widthSizeInner.dimeValType == MyLayoutValueType_Fill)
+        return MyLayoutSize.fill;
     else
         return self.widthSizeInner.measure;
 }
@@ -354,6 +356,8 @@ BOOL _myisRTL = NO;
 {
     if (self.heightSizeInner.dimeValType == MyLayoutValueType_Wrap)
         return MyLayoutSize.wrap;
+    else if (self.heightSizeInner.dimeValType == MyLayoutValueType_Fill)
+        return MyLayoutSize.fill;
     else
         return self.heightSizeInner.measure;
 }

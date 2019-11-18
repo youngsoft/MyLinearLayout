@@ -7,39 +7,57 @@
 //
 
 #import "MyFlowLayout.h"
+#import "MyLayoutUI.h"
 
-
-//定义flex的方向类型。
+/**定义flex的方向类型*/
 typedef enum : int {
+    /**横向从左到右排列（左对齐），默认的排列方式*/
     MyFlexDirection_Row,
+    /**纵向排列*/
     MyFlexDirection_Column,
+    /**反转横向排列（右对齐，从后往前排，最后一项排在最前面*/
     MyFlexDirection_Row_Reverse,
+    /**反转纵向排列，从后往前排，最后一项排在最上面*/
     MyFlexDirection_Column_Reverse
 } MyFlexDirection;
 
-//定义flex的换行类型
+/**定义flex的换行类型*/
 typedef enum : int {
+    /**当子元素溢出父容器时不换行*/
     MyFlexWrap_NoWrap = 0,
+    /**当子元素溢出父容器时自动换行*/
     MyFlexWrap_Wrap = 4,
+    /**反转 wrap 排列*/
     MyFlexWrap_Wrap_Reverse = 12
 }MyFlexWrap;
 
-//定义flex的停靠对齐
+/**定义弹性盒以及条目的停靠对齐类型*/
 typedef enum : int {
+    /**开始位置对齐或停靠*/
     MyFlexGravity_Flex_Start,
+    /**结束位置对齐或停靠*/
     MyFlexGravity_Flex_End,
+    /**居中位置对齐或停靠*/
     MyFlexGravity_Center,
+    /**拉伸行或者列之间的间距*/
     MyFlexGravity_Space_Between,
+    /**拉伸行或者列之间的间距，头尾间距是其他间距的一半*/
     MyFlexGravity_Space_Around,
+    /**基线对齐*/
     MyFlexGravity_Baseline,
+    /**拉伸条目尺寸*/
     MyFlexGravity_Stretch
 }MyFlexGravity;
 
+/**默认自动值*/
 extern const int MyFlex_Auto;
 
 
-//条目的属性，用于条目视图的属性设置和获取。
-@interface MyFlexItemAttrs:NSObject
+
+/**
+ 条目视图属性
+ */
+@protocol MyFlexItemAttrs
 
 @property(nonatomic, assign) NSInteger order;
 @property(nonatomic, assign) CGFloat flex_grow;
@@ -48,122 +66,125 @@ extern const int MyFlex_Auto;
 @property(nonatomic, assign) MyFlexGravity align_self;
 @property(nonatomic, assign) CGFloat width;
 @property(nonatomic, assign) CGFloat height;
-@property(nonatomic, assign) CGFloat margin_top;
-@property(nonatomic, assign) CGFloat margin_bottom;
-@property(nonatomic, assign) CGFloat margin_left;
-@property(nonatomic, assign) CGFloat margin_right;
-@property(nonatomic, assign) MyVisibility visibility;
-
-@end
-
-@protocol MyFlexItemAttrsContainer
-
-@property(nonatomic, strong, readonly) MyFlexItemAttrs *attrs;
 
 @end
 
 
-
-/*
-  flexbox中项目的设置类。
+/**
+ 布局视图属性
  */
-@interface MyFlexItem:NSObject<MyFlexItemAttrsContainer>
-
-//您可以用链式语法进行属性设置，也可以直接通过属性赋值进行设置和获取。
-@property(nonatomic, weak, readonly) __kindof UIView *view;
-
-//条目的顺序设置
--(MyFlexItem* (^)(NSInteger))order;
-//条目的尺寸比重设置，默认为0表示不按比重
--(MyFlexItem* (^)(CGFloat))flex_grow;
-//条目的压缩比重设置，默认为1，表示当会进行压缩
--(MyFlexItem* (^)(CGFloat))flex_shrink;
-//条目的尺寸设置，可以设置为MyFlex_Auto,固定值,相对值。你可以使用这个属性也可以通过width/height来设置。
--(MyFlexItem* (^)(CGFloat))flex_basis;
-//行内条目自身的对齐方式。
--(MyFlexItem* (^)(MyFlexGravity))align_self;
-//设置具体的宽度或高度值，当宽度值大于0小于1是表明的是相对宽度或高度，你也可以设置MyLayoutSize.wrap和MyLayoutSize.fill来设置特殊宽度或高度。
--(MyFlexItem* (^)(CGFloat))width;
--(MyFlexItem* (^)(CGFloat))min_width;
--(MyFlexItem* (^)(CGFloat))max_width;
--(MyFlexItem* (^)(CGFloat))height;
--(MyFlexItem* (^)(CGFloat))min_height;
--(MyFlexItem* (^)(CGFloat))max_height;
-
-//条目的外间距设置。
--(MyFlexItem* (^)(CGFloat))margin_top;
--(MyFlexItem* (^)(CGFloat))margin_bottom;
--(MyFlexItem* (^)(CGFloat))margin_left;
--(MyFlexItem* (^)(CGFloat))margin_right;
--(MyFlexItem* (^)(CGFloat))margin;
-
-//是否可见
--(MyFlexItem* (^)(MyVisibility))visibility;
-
-//添加到父视图中
--(__kindof UIView* (^)(UIView*))addTo;
-
-@end
-
-
-
-
-//布局的属性，用于布局视图的属性设置和获取。
-@interface MyFlexAttrs:MyFlexItemAttrs
+@protocol MyFlexBoxAttrs <MyFlexItemAttrs>
 
 @property(nonatomic, assign) MyFlexDirection flex_direction;
 @property(nonatomic, assign) MyFlexWrap flex_wrap;
 @property(nonatomic, assign) MyFlexGravity justify_content;
 @property(nonatomic, assign) MyFlexGravity align_items;
 @property(nonatomic, assign) MyFlexGravity align_content;
+@property(nonatomic, assign) NSInteger item_size;
 @property(nonatomic, assign) UIEdgeInsets padding;
 @property(nonatomic, assign) CGFloat vert_space;
 @property(nonatomic, assign) CGFloat horz_space;
 
 @end
 
-@protocol MyFlexAttrsContainer
-
-@property(nonatomic, strong, readonly) MyFlexAttrs *attrs;
-
-@end
 
 
-/*
-  flexbox的设置类。
+@protocol MyFlexItem<MyUIViewUI>
+
+@property(nonatomic, strong, readonly) id<MyFlexItemAttrs> attrs;
+
+/**
+ 条目在弹盒中的排列顺序，值越大越往后排。
  */
-@interface MyFlex:MyFlexItem<MyFlexAttrsContainer>
+-(id<MyFlexItem> (^)(NSInteger))order;
+/**
+ 设置或检索弹性盒的扩展比率。默认值为0表示不扩展
+ */
+-(id<MyFlexItem> (^)(CGFloat))flex_grow;
+/**
+ 设置或检索弹性盒的收缩比率。默认值为1表示当条目尺寸超过弹性盒尺寸后会进行压缩。值越大压缩比越大
+ */
+-(id<MyFlexItem> (^)(CGFloat))flex_shrink;
+/**
+ 设置或检索弹性盒伸缩基准值。默认值为MyFlex_Auto表示由其他属性决定，如果值为大于0小于1则表示相对值，其他为一个固定的尺寸值。
+ */
+-(id<MyFlexItem> (^)(CGFloat))flex_basis;
+/**
+ 设置或检索弹性盒子元素自身在侧轴（纵轴）方向上的对齐方式。可选值为：MyFlexGravity_Flex_Start | MyFlexGravity_Flex_End | MyFlexGravity_Center | MyFlexGravity_Baseline | MyFlexGravity_Stretch中的一个，默认值为MyFlex_Auto
+ */
+-(id<MyFlexItem> (^)(MyFlexGravity))align_self;
 
-//方向设置
--(MyFlex* (^)(MyFlexDirection))flex_direction;
-//换行设置
--(MyFlex* (^)(MyFlexWrap))flex_wrap;
-//通过 | 运算来结合 wrap 和direction
--(MyFlex* (^)(int))flex_flow;
-//行的停靠设置
--(MyFlex* (^)(MyFlexGravity))justify_content;
-//行内条目的对齐设置
--(MyFlex* (^)(MyFlexGravity))align_items;
-//整体的停靠设置
--(MyFlex* (^)(MyFlexGravity))align_content;
-//内边距设置
--(MyFlex* (^)(UIEdgeInsets))padding;
-//条目之间的垂直和水平间距设置
--(MyFlex* (^)(CGFloat))vert_space;
--(MyFlex* (^)(CGFloat))horz_space;
+@end
+
+
+@protocol MyFlexBox <MyFlexItem>
+
+@property(nonatomic, strong) id<MyFlexBoxAttrs> attrs;
+
+/**
+ 设置或检索伸缩盒对象的子元素在父容器中的位置。默认值：MyFlexDirection_Row
+ */
+-(id<MyFlexBox> (^)(MyFlexDirection))flex_direction;
+/**
+ 设置或检索伸缩盒对象的子元素超出父容器时是否换行。默认值：MyFlexWrap_NoWrap
+ */
+-(id<MyFlexBox> (^)(MyFlexWrap))flex_wrap;
+/**
+ 同时设置检索伸缩盒对象的子元素在父容器中的位置和伸缩盒对象的子元素超出父容器时是否换行。二者通过 | 运算进行组合
+ */
+-(id<MyFlexBox> (^)(int))flex_flow;
+/**
+ 设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式。可选值为：MyFlexGravity_Flex_Start | MyFlexGravity_Flex_End | MyFlexGravity_Center | MyFlexGravity_Space_Between | MyFlexGravity_Space_Around 中的一个，默认值为MyFlexGravity_Flex_Start
+ */
+-(id<MyFlexBox> (^)(MyFlexGravity))justify_content;
+/**
+ 设置或检索弹性盒子元素在侧轴（纵轴）方向上的对齐方式。可选值为：MyFlexGravity_Flex_Start | MyFlexGravity_Flex_End | MyFlexGravity_Center | MyFlexGravity_Baseline | MyFlexGravity_Stretch中的一个，默认值为MyFlexGravity_Flex_Start
+ */
+-(id<MyFlexBox> (^)(MyFlexGravity))align_items;
+/**
+ 设置或检索弹性盒堆叠伸缩行的对齐方式。可选值为：MyFlexGravity_Flex_Start | MyFlexGravity_Flex_End | MyFlexGravity_Center | MyFlexGravity_Between | MyFlexGravity_Around | MyFlexGravity_Stretch中的一个，默认值为MyFlexGravity_Stretch
+ */
+-(id<MyFlexBox> (^)(MyFlexGravity))align_content;
+
+
+/**
+ 指定主轴的子条目的数量。只有在flex_wrap设置为wrap时才有效。默认值是0表示会根据条目的尺寸自动进行换行。
+ */
+-(id<MyFlexBox> (^)(NSInteger))item_size;
+/**
+ 指定布局视图中每页的条目数量。这个值必须是item_size的倍数。
+ */
+-(id<MyFlexBox> (^)(NSInteger))page_size;
+/**
+ 指定布局会根据条目的尺寸自动排列，默认值是NO。
+ */
+-(id<MyFlexBox> (^)(BOOL))auto_arrange;
+
+
+/**
+ 设置弹性盒的内边距
+ */
+-(id<MyFlexBox> (^)(UIEdgeInsets))padding;
+/**
+ 设置弹性盒内所有条目视图之间的垂直间距
+ */
+-(id<MyFlexBox> (^)(CGFloat))vert_space;
+/**
+ 设置弹性盒内所有条目视图之间的水平间距
+ */
+-(id<MyFlexBox> (^)(CGFloat))horz_space;
 
 @end
 
 
 
-
-
-
-//条目视图在应用flexbox时的分类扩展，只有MyFlexLayout中的子视图才有用。
 @interface UIView(MyFlexLayout)
 
-//我们可以借助视图的myFlex来设置条目视图在弹性布局视图中的一些属性。
-@property(nonatomic, readonly, strong) MyFlexItem *myFlex;
+
+/**
+ 用于弹盒视图中的子视图的布局设置。
+ */
+@property(nonatomic, strong, readonly) id<MyFlexItem> myFlex;
 
 @end
 
@@ -174,7 +195,10 @@ extern const int MyFlex_Auto;
  */
 @interface MyFlexLayout:MyFlowLayout
 
-//用于flexbox约束的设置。
-@property(nonatomic, readonly, strong) MyFlex *myFlex;
+
+/**
+ 用于弹盒布局视图自身的布局设置
+ */
+@property(nonatomic, strong, readonly) id<MyFlexBox> myFlex;
 
 @end

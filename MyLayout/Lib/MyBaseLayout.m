@@ -717,16 +717,14 @@ void* _myObserverContextC = (void*)20175283;
     MyLayoutTouchEventDelegate *_touchEventDelegate;
     MyBorderlineLayerDelegate *_borderlineLayerDelegate;
     BOOL _isAddSuperviewKVO;
-    int _lastScreenOrientation; //为0为初始状态，为1为竖屏，为2为横屏。内部使用。
     BOOL _useCacheRects;
+    MyBaseLayoutOptionalData *_optionalData;
 }
 
 -(void)dealloc
 {
     //如果您在使用时出现了KVO的异常崩溃，原因是您将这个视图被多次加入为子视图，请检查您的代码，是否这个视图被多次加入！！
-    _endLayoutBlock = nil;
-    _beginLayoutBlock = nil;
-    _rotationToDeviceOrientationBlock = nil;
+    _optionalData = nil;
 }
 
 #pragma  mark -- Public Methods
@@ -997,19 +995,7 @@ void* _myObserverContextC = (void*)20175283;
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
--(void)layoutAnimationWithDuration:(NSTimeInterval)duration
-{
-    self.beginLayoutBlock = ^{
-        
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:duration];
-    };
-    
-    self.endLayoutBlock = ^{
-        
-        [UIView commitAnimations];
-    };
-}
+
 
 -(MyBorderline*)topBorderline
 {
@@ -1201,6 +1187,55 @@ void* _myObserverContextC = (void*)20175283;
     dragger.hasDragging = NO;
     dragger.layout = self;
     return dragger;
+}
+
+-(void)setBeginLayoutBlock:(void (^)(void))beginLayoutBlock
+{
+    if (_optionalData == nil)
+        _optionalData = [MyBaseLayoutOptionalData new];
+    _optionalData.beginLayoutBlock = beginLayoutBlock;
+}
+
+-(void (^)(void))beginLayoutBlock
+{
+    return _optionalData.beginLayoutBlock;
+}
+
+-(void)setEndLayoutBlock:(void (^)(void))endLayoutBlock
+{
+    if (_optionalData == nil)
+        _optionalData = [MyBaseLayoutOptionalData new];
+    _optionalData.endLayoutBlock = endLayoutBlock;
+}
+
+-(void (^)(void))endLayoutBlock
+{
+    return _optionalData.endLayoutBlock;
+}
+
+-(void)setRotationToDeviceOrientationBlock:(void (^)(MyBaseLayout *, BOOL, BOOL))rotationToDeviceOrientationBlock
+{
+    if (_optionalData == nil)
+        _optionalData = [MyBaseLayoutOptionalData new];
+    _optionalData.rotationToDeviceOrientationBlock = rotationToDeviceOrientationBlock;
+}
+
+-(void (^)(MyBaseLayout *, BOOL, BOOL))rotationToDeviceOrientationBlock
+{
+    return _optionalData.rotationToDeviceOrientationBlock;
+}
+
+-(void)layoutAnimationWithDuration:(NSTimeInterval)duration
+{
+    [self layoutAnimationWithDuration:duration options:0 completion:nil];
+}
+-(void)layoutAnimationWithDuration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^ __nullable)(BOOL finished))completion
+{
+    if (_optionalData == nil)
+        _optionalData = [MyBaseLayoutOptionalData new];
+    _optionalData.aniDuration = duration;
+    _optionalData.aniOptions = options;
+    _optionalData.aniCompletion = completion;
 }
 
 
@@ -1576,8 +1611,11 @@ void* _myObserverContextC = (void*)20175283;
     }
     else
     {
-        self.beginLayoutBlock = nil;
-        self.endLayoutBlock = nil;
+        _optionalData.aniDuration = 0.0;
+        _optionalData.beginLayoutBlock = nil;
+        _optionalData.endLayoutBlock = nil;
+        if (_optionalData.rotationToDeviceOrientationBlock == nil)
+            _optionalData = nil;
     }
 }
 
@@ -1745,21 +1783,15 @@ void* _myObserverContextC = (void*)20175283;
     return sz;
 }
 
--(void)layoutSubviews
-{
-    if (!self.autoresizesSubviews)
-        return;
-    
-    if (self.beginLayoutBlock != nil)
-        self.beginLayoutBlock();
-    self.beginLayoutBlock = nil;
 
+-(void)doLayoutSubviews
+{
     int  currentScreenOrientation = 0;
     
     if (!self.isMyLayouting)
     {
         self.isMyLayouting = YES;
-
+        
         if (self.priorAutoresizingMask)
             [super layoutSubviews];
         
@@ -1782,9 +1814,9 @@ void* _myObserverContextC = (void*)20175283;
             if (!sbvmyFrame.hasObserver && sbvmyFrame.sizeClass != nil && !sbvmyFrame.sizeClass.useFrame)
                 [self myAddSubviewObserver:sbv sbvmyFrame:sbvmyFrame];
         }
-     
+        
         MyBaseLayout *lsc = (MyBaseLayout*)selfMyFrame.sizeClass;
-
+        
         //计算布局
         CGSize oldSelfSize = self.bounds.size;
         CGSize newSelfSize;
@@ -1799,13 +1831,13 @@ void* _myObserverContextC = (void*)20175283;
         static CGFloat sSizeError = 0;
         if (sSizeError == 0)
             sSizeError = 1 / [UIScreen mainScreen].scale + 0.0001;  //误差量。
-
+        
         //设置子视图的frame并还原
         for (UIView *sbv in self.subviews)
         {
             CGRect sbvOldBounds = sbv.bounds;
             CGPoint sbvOldCenter = sbv.center;
-
+            
             MyFrame *sbvmyFrame = sbv.myFrame;
             MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
             
@@ -1824,7 +1856,7 @@ void* _myObserverContextC = (void*)20175283;
                 CGRect rc;
                 if ([sbv isKindOfClass:[MyBaseLayout class]])
                 {
-                   rc  = _myLayoutCGRectRound(sbvmyFrame.frame);
+                    rc  = _myLayoutCGRectRound(sbvmyFrame.frame);
                     
                     CGRect sbvTempBounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, rc.size.width, rc.size.height);
                     
@@ -1928,10 +1960,10 @@ void* _myObserverContextC = (void*)20175283;
                         currentBounds.size.height = newSelfSize.height;
                         currentCenter.y += (newSelfSize.height - oldSelfSize.height) * self.layer.anchorPoint.y * superViewZoomScale;
                     }
-
+                    
                     self.bounds = currentBounds;
                     self.center = currentCenter;
-                 }
+                }
             }
         }
         
@@ -1949,9 +1981,9 @@ void* _myObserverContextC = (void*)20175283;
                     //比如一些表格或者其他的情况。默认情况下这个函数什么也不做。
                     [((MyBaseLayout*)supv) myHookSublayout:self borderlineRect:&borderlineRect];
                 }
-
+                
                 [_borderlineLayerDelegate setNeedsLayoutIn:borderlineRect withLayer:self.layer];
-
+                
             }
             //如果自己的父视图是非UIScrollView以及非布局视图。以及自己的宽度或者高度是包裹的，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
             if (supv != nil && ![supv isKindOfClass:[MyBaseLayout class]])
@@ -1959,7 +1991,7 @@ void* _myObserverContextC = (void*)20175283;
                 CGPoint centerPonintSelf = self.center;
                 CGRect rectSelf = self.bounds;
                 CGRect rectSuper = supv.bounds;
-
+                
                 //特殊处理低版本下的top和bottom的两种安全区域的场景。
                 if ((lsc.topPosInner.isSafeAreaPos || lsc.bottomPosInner.isSafeAreaPos) && [UIDevice currentDevice].systemVersion.doubleValue < 11 )
                 {
@@ -1968,7 +2000,7 @@ void* _myObserverContextC = (void*)20175283;
                     else
                         centerPonintSelf.y  = rectSuper.size.height - rectSelf.size.height - [lsc.bottomPosInner realPosIn:rectSuper.size.height] + self.layer.anchorPoint.y * rectSelf.size.height;
                 }
-
+                
                 //如果自己的父视图是非UIScrollView以及非布局视图。以及自己的宽度或者高度是包裹的时，并且如果设置了在父视图居中或者居下或者居右时要在父视图中更新自己的位置。
                 if (![supv isKindOfClass:[UIScrollView class]] && (lsc.widthSizeInner.dimeWrapVal || lsc.heightSizeInner.dimeWrapVal))
                 {
@@ -2045,35 +2077,68 @@ void* _myObserverContextC = (void*)20175283;
             //处理父视图是滚动视图时动态调整滚动视图的contentSize
             [self myLayout:lsc adjustScrollViewContentWithSize:newSelfSize];
         }
-       
+        
         if (selfMyFrame.multiple)
             selfMyFrame.sizeClass = [self myDefaultSizeClass];
         self.isMyLayouting = NO;
     }
     
-    if (self.endLayoutBlock != nil)
-        self.endLayoutBlock();
-    self.endLayoutBlock = nil;
-
     //执行屏幕旋转的处理逻辑。
-    if (currentScreenOrientation != 0 && self.rotationToDeviceOrientationBlock != nil)
+    if (currentScreenOrientation != 0 && _optionalData.rotationToDeviceOrientationBlock != nil)
     {
-        if (_lastScreenOrientation == 0)
+        if (_optionalData.lastScreenOrientation == 0)
         {
-            _lastScreenOrientation = currentScreenOrientation;
-            self.rotationToDeviceOrientationBlock(self,YES, currentScreenOrientation == 1);
+            _optionalData.lastScreenOrientation = currentScreenOrientation;
+            _optionalData.rotationToDeviceOrientationBlock(self,YES, currentScreenOrientation == 1);
         }
         else
         {
-            if (_lastScreenOrientation != currentScreenOrientation)
+            if (_optionalData.lastScreenOrientation != currentScreenOrientation)
             {
-                _lastScreenOrientation = currentScreenOrientation;
-                self.rotationToDeviceOrientationBlock(self, NO, currentScreenOrientation == 1);
+                _optionalData.lastScreenOrientation = currentScreenOrientation;
+                _optionalData.rotationToDeviceOrientationBlock(self, NO, currentScreenOrientation == 1);
             }
         }
         
-        _lastScreenOrientation = currentScreenOrientation;
+        _optionalData.lastScreenOrientation = currentScreenOrientation;
     }
+}
+
+-(void)layoutSubviews
+{
+    if (!self.autoresizesSubviews)
+        return;
+    
+    if (_optionalData.beginLayoutBlock != nil)
+    {
+        _optionalData.beginLayoutBlock();
+        _optionalData.beginLayoutBlock = nil;
+    }
+    
+    if (_optionalData == nil || _optionalData.aniDuration <= 0)
+    {
+        [self doLayoutSubviews];
+    }
+    else
+    {
+        [UIView animateWithDuration:_optionalData.aniDuration delay:0 options:_optionalData.aniOptions animations:^{
+            [self doLayoutSubviews];
+        } completion:_optionalData.aniCompletion];
+        
+        _optionalData.aniDuration = 0.0;
+        _optionalData.aniCompletion = nil;
+    }
+    
+    if (_optionalData.endLayoutBlock != nil)
+    {
+        _optionalData.endLayoutBlock();
+        _optionalData.endLayoutBlock = nil;
+    }
+
+    //因为rotationToDeviceOrientationBlock设置后不会在内部被清除，而其他的都会被清除。
+    //所有只要rotationToDeviceOrientationBlock为空就可以将可选的多余数据给清除掉了。
+    if (_optionalData != nil && _optionalData.rotationToDeviceOrientationBlock == nil)
+        _optionalData = nil;
 }
 
 -(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -2414,6 +2479,10 @@ void* _myObserverContextC = (void*)20175283;
             
             size.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:size.width sbvSize:size selfLayoutSize:rectSuper.size];
         }
+        else if (lsc.widthSizeInner.dimeFillVal)
+        {
+            size.width = [lsc.widthSizeInner measureWith:rectSuper.size.width];
+        }
         
         if (lsc.leadingPosInner.posVal != nil && lsc.trailingPosInner.posVal != nil)
         {
@@ -2440,6 +2509,10 @@ void* _myObserverContextC = (void*)20175283;
                 size.height = [lsc.heightSizeInner measureWith:rectSuper.size.width];
 
             size.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:size.height sbvSize:size selfLayoutSize:rectSuper.size];
+        }
+        else if (lsc.heightSizeInner.dimeFillVal)
+        {
+            size.height = [lsc.heightSizeInner measureWith:rectSuper.size.height];
         }
         
         if (lsc.topPosInner.posVal != nil && lsc.bottomPosInner.posVal != nil)
@@ -2507,9 +2580,14 @@ void* _myObserverContextC = (void*)20175283;
         {
             rectSelf.size.width = lsc.widthSizeInner.measure;
         }
+        else if (lsc.widthSizeInner.dimeFillVal)
+        {
+            isAdjust = YES;
+            rectSelf.size.width = [lsc.widthSizeInner measureWith:rectSuper.size.width];
+        }
         else
         {
-            //do nothing...
+            
         }
      }
     
@@ -2606,6 +2684,11 @@ void* _myObserverContextC = (void*)20175283;
         else if (lsc.heightSizeInner.dimeNumVal != nil)
         {
             rectSelf.size.height = lsc.heightSizeInner.measure;
+        }
+        else if (lsc.heightSizeInner.dimeFillVal)
+        {
+            isAdjust = YES;
+            rectSelf.size.height = [lsc.heightSizeInner measureWith:rectSuper.size.height];
         }
         else
         {
@@ -3278,6 +3361,10 @@ widthSizeValueOfSubview:(MyViewSizeClass *)sbvsc
                 retVal = [sbvWidthSizeInner measureWith:sbvWidthSizeInner.dimeRelaVal.view.myEstimatedHeight];
         }
     }
+    else if (sbvWidthSizeInner.dimeFillVal)
+    {
+        retVal = [sbvWidthSizeInner measureWith:selfSize.width - paddingLeading - paddingTrailing];
+    }
     else if (sbvWidthSizeInner.dimeWrapVal)
     {
         if (![sbvsc.view isKindOfClass:[MyBaseLayout class]])
@@ -3321,10 +3408,16 @@ heightSizeValueOfSubview:(MyViewSizeClass *)sbvsc
                 retVal = [sbvHeightSizeInner measureWith:sbvHeightSizeInner.dimeRelaVal.view.myEstimatedHeight];
         }
     }
+    else if (sbvHeightSizeInner.dimeFillVal)
+    {
+        retVal = [sbvHeightSizeInner measureWith:selfSize.height - paddingTop - paddingBottom];
+    }
+    else if (sbvHeightSizeInner.dimeWrapVal)
+    {
+        if (![sbvsc.view isKindOfClass:[MyBaseLayout class]])
+            retVal = [self mySubview:sbvsc wrapHeightSizeFits:sbvSize.width];
+    }
     
-    //高度等于内容的高度,特殊处理。
-    if (sbvsc.heightSizeInner.dimeWrapVal && ![sbvsc.view isKindOfClass:[MyBaseLayout class]])
-        retVal = [self mySubview:sbvsc wrapHeightSizeFits:sbvSize.width];
     
     return retVal;
 }
@@ -3389,10 +3482,9 @@ paddingTrailing:(CGFloat)paddingTrailing
                     pMaxWrapSize->width = sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing;
             }
             
-            //宽度不依赖布局并且没有同时设置左右边距则参与最大宽度计算。
-            if (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)
+            //宽度不依赖布局则参与最大宽度计算。
+            if ((sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) && !sbvsc.widthSizeInner.dimeFillVal)
             {
-                
                 if (_myCGFloatLess(pMaxWrapSize->width, sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing))
                     pMaxWrapSize->width = sbvmyFrame.width + sbvsc.leadingPosInner.absVal + sbvsc.centerXPosInner.absVal + sbvsc.trailingPosInner.absVal + paddingLeading + paddingTrailing;
                 
@@ -3415,8 +3507,8 @@ paddingTrailing:(CGFloat)paddingTrailing
                     pMaxWrapSize->height = sbvsc.topPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom;
             }
             
-            //高度不依赖布局并且没有同时设置上下边距则参与最大高度计算。
-             if (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner)
+            //高度不依赖布局则参与最大高度计算。
+             if ((sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) && !sbvsc.heightSizeInner.dimeFillVal)
             {
                 if (_myCGFloatLess(pMaxWrapSize->height, sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom))
                     pMaxWrapSize->height = sbvmyFrame.height + sbvsc.topPosInner.absVal + sbvsc.centerYPosInner.absVal + sbvsc.bottomPosInner.absVal + paddingTop + paddingBottom;
@@ -3477,6 +3569,12 @@ paddingTrailing:(CGFloat)paddingTrailing
         }
     }
 }
+
+@end
+
+
+@implementation MyBaseLayoutOptionalData
+
 
 @end
 

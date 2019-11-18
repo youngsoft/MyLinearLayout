@@ -862,12 +862,15 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
         }
         else if (sbvsc.widthSizeInner.dimeRelaVal != nil)
         {
-            
             sbvmyFrame.width = [sbvsc.widthSizeInner measureWith:[self myLayout:lsc calcSizeOrPosOfSubview:sbvsc.widthSizeInner.dimeRelaVal.view gravity:sbvsc.widthSizeInner.dimeRelaVal.dime selfSize:selfSize] ];
         }
         else if (sbvsc.widthSizeInner.dimeNumVal != nil)
         {
             sbvmyFrame.width = sbvsc.widthSizeInner.measure;
+        }
+        else if (sbvsc.widthSizeInner.dimeFillVal)
+        {
+            sbvmyFrame.width = [sbvsc.widthSizeInner measureWith:selfSize.width - lsc.myLayoutLeadingPadding - lsc.myLayoutTrailingPadding];
         }
         else if (sbvsc.widthSizeInner.dimeWrapVal)
         {
@@ -1037,6 +1040,10 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
         {
             sbvmyFrame.height = sbvsc.heightSizeInner.measure;
         }
+        else if (sbvsc.heightSizeInner.dimeFillVal)
+        {
+            sbvmyFrame.height = [sbvsc.heightSizeInner measureWith:selfSize.height - lsc.myLayoutTopPadding - lsc.myLayoutBottomPadding];
+        }
         else if (sbvsc.heightSizeInner.dimeWrapVal)
         {
              if (![sbv isKindOfClass:[MyBaseLayout class]])
@@ -1156,7 +1163,8 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
                sbvsc.trailingPosInner.posRelaVal.view == self ||
                sbvsc.centerXPosInner.posRelaVal.view == self ||
                sbvsc.centerXPosInner.posNumVal != nil ||
-               sbvsc.widthSizeInner.dimeRelaVal.view == self
+               sbvsc.widthSizeInner.dimeRelaVal.view == self ||
+               sbvsc.widthSizeInner.dimeFillVal
                )
             {
                 *pRecalcWidth = YES;
@@ -1168,7 +1176,7 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
                 maxWidth = sbvsc.leadingPosInner.absVal + sbvsc.trailingPosInner.absVal + lsc.myLayoutLeadingPadding + lsc.myLayoutTrailingPadding;
             }
             
-            if ( sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner)
+            if ( (sbvsc.widthSizeInner.dimeRelaVal == nil || sbvsc.widthSizeInner.dimeRelaVal != lsc.widthSizeInner) && !sbvsc.widthSizeInner.dimeFillVal)
             {
                 if (sbvsc.centerXPosInner.posVal != nil)
                 {
@@ -1198,7 +1206,8 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
                sbvsc.bottomPosInner.posRelaVal.view == self ||
                sbvsc.centerYPosInner.posRelaVal.view == self ||
                sbvsc.centerYPosInner.posNumVal != nil ||
-               sbvsc.heightSizeInner.dimeRelaVal.view == self
+               sbvsc.heightSizeInner.dimeRelaVal.view == self ||
+               sbvsc.heightSizeInner.dimeFillVal
                )
             {
                 *pRecalcHeight = YES;
@@ -1211,7 +1220,7 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
             }
             
             //高度不依赖父视图
-            if (sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner)
+            if ((sbvsc.heightSizeInner.dimeRelaVal == nil || sbvsc.heightSizeInner.dimeRelaVal != lsc.heightSizeInner) && !sbvsc.heightSizeInner.dimeFillVal)
             {
                 if (sbvsc.centerYPosInner.posVal != nil)
                 {

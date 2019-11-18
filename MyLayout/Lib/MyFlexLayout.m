@@ -7,16 +7,23 @@
 //
 
 #import "MyFlexLayout.h"
+#import "MyLayoutUIInner.h"
 #import "MyLayoutInner.h"
 #import <objc/runtime.h>
 
 const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM = "ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM";
 const int MyFlex_Auto = -1;
 
-@interface MyFlexItemAttrs()
 
+#pragma mark -- MyFlexItemAttrs
+
+@interface MyFlexItemAttrs:NSObject<MyFlexItemAttrs>
 @property(nonatomic, weak) UIView *view;
-
+@property(nonatomic, assign) NSInteger order;
+@property(nonatomic, assign) CGFloat flex_grow;
+@property(nonatomic, assign) CGFloat flex_shrink;
+@property(nonatomic, assign) CGFloat flex_basis;
+@property(nonatomic, assign) MyFlexGravity align_self;
 @end
 
 @implementation MyFlexItemAttrs
@@ -31,11 +38,7 @@ const int MyFlex_Auto = -1;
         _flex_shrink = 1;
         _flex_basis = MyFlex_Auto;
         _align_self = MyFlex_Auto;
-        //默认子视图的宽高都是自适应的。
-        _width = MyLayoutSize.wrap;
-        _height = MyLayoutSize.wrap;
     }
-    
     return self;
 }
 
@@ -84,284 +87,64 @@ const int MyFlex_Auto = -1;
     }
 }
 
+-(CGFloat)width
+{
+    if (self.view.widthSizeInner.isWrap)
+        return MyLayoutSize.wrap;
+    else if (self.view.widthSizeInner.isFill)
+        return self.view.widthSizeInner.multiVal == 1 ? MyLayoutSize.fill : self.view.widthSizeInner.multiVal;
+    else if (self.view.widthSizeInner.dimeNumVal != nil)
+        return self.view.widthSizeInner.dimeNumVal.doubleValue;
+    else
+        return MyLayoutSize.wrap;
+}
+
 -(void)setWidth:(CGFloat)width
 {
-    if (_width != width)
-    {
-        _width = width;
-        [self.view.superview setNeedsLayout];
-    }
+    if (width > 0 && width < 1)
+        self.view.widthSize.equalTo(@(MyLayoutSize.fill)).multiply(width);
+    else
+        self.view.widthSize.equalTo(@(width));
+}
+
+-(CGFloat)height
+{
+    if (self.view.heightSizeInner.isWrap)
+        return MyLayoutSize.wrap;
+    else if (self.view.heightSizeInner.isFill)
+        return self.view.heightSizeInner.multiVal == 1 ? MyLayoutSize.fill : self.view.heightSizeInner.multiVal;
+    else if (self.view.heightSizeInner.dimeNumVal != nil)
+        return self.view.heightSizeInner.dimeNumVal.doubleValue;
+    else
+        return MyLayoutSize.wrap;
 }
 
 -(void)setHeight:(CGFloat)height
 {
-    if (_height != height)
-    {
-        _height = height;
-        [self.view.superview setNeedsLayout];
-    }
-}
-
--(CGFloat)margin_top
-{
-    return self.view.myTop;
-}
-
--(void)setMargin_top:(CGFloat)margin_top
-{
-    self.view.myTop = margin_top;
-}
-
--(CGFloat)margin_bottom
-{
-    return self.view.myBottom;
-}
-
--(void)setMargin_bottom:(CGFloat)margin_bottom
-{
-    self.view.myBottom = margin_bottom;
-}
-
--(CGFloat)margin_left
-{
-    return self.view.myLeft;
-}
-
--(void)setMargin_left:(CGFloat)margin_left
-{
-    self.view.myLeft = margin_left;
-}
-
--(CGFloat)margin_right
-{
-    return self.view.myRight;
-}
-
--(void)setMargin_right:(CGFloat)margin_right
-{
-    self.view.myRight = margin_right;
-}
-
--(MyVisibility)visibility
-{
-    return self.view.visibility;
-}
-
--(void)setVisibility:(MyVisibility)visibility
-{
-    self.view.visibility = visibility;
-}
-
-@end
-
-@implementation MyFlexItem
-{
-    @package
-    __weak UIView *_view;
-    MyFlexItemAttrs *_attrs;
-}
-@dynamic attrs;
-
--(instancetype)initWithView:(UIView*)view attrs:(MyFlexItemAttrs*)attrs
-{
-    self = [super init];
-    if (self != nil)
-    {
-        _view = view;
-        _attrs = attrs;
-        _attrs.view = view;
-     }
-    return self;
-}
-
--(MyFlexItemAttrs*)attrs
-{
-    return _attrs;
-}
-
--(MyFlexItem* (^)(NSInteger))order
-{
-    return ^id(NSInteger val) {
-        self.attrs.order = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))flex_grow
-{
-    return ^id(CGFloat val) {
-        self.attrs.flex_grow = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))flex_shrink
-{
-    return ^id(CGFloat val) {
-        self.attrs.flex_shrink = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))flex_basis
-{
-    return ^id(CGFloat val) {
-        self.attrs.flex_basis = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(MyFlexGravity))align_self
-{
-    return ^id(MyFlexGravity val) {
-        self.attrs.align_self = val;
-        return self;
-    };
-}
-
--(__kindof UIView* (^)(UIView*))addTo
-{
-    return ^(UIView *val) {
-        
-        //当前是布局视图，并且父视图是非布局视图则特殊设置。
-        if ([self.view isKindOfClass:[MyFlexLayout class]] && ![val isKindOfClass:[MyBaseLayout class]])
-            [self setSizeConstraintWithSuperview:val];
-        
-        [val addSubview:self.view];
-        return self.view;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))width
-{
-    return ^id(CGFloat val) {
-        self.attrs.width = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))min_width
-{
-    return ^id(CGFloat val) {
-        self.view.widthSize.min(val);
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))max_width
-{
-    return ^id(CGFloat val) {
-        self.view.widthSize.max(val);
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))height
-{
-    return ^id(CGFloat val) {
-        self.attrs.height = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))min_height
-{
-    return ^id(CGFloat val) {
-        self.view.heightSize.min(val);
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))max_height
-{
-    return ^id(CGFloat val) {
-        self.view.heightSize.max(val);
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))margin_top
-{
-    return ^id(CGFloat val) {
-        self.view.myTop = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))margin_bottom
-{
-    return ^id(CGFloat val) {
-        self.view.myBottom = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))margin_left
-{
-    return ^id(CGFloat val) {
-        self.view.myLeft = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))margin_right
-{
-    return ^id(CGFloat val) {
-        self.view.myRight = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(CGFloat))margin
-{
-    return ^id(CGFloat val) {
-        self.view.myLeft = val;
-        self.view.myRight = val;
-        self.view.myTop = val;
-        self.view.myBottom = val;
-        return self;
-    };
-}
-
--(MyFlexItem* (^)(MyVisibility))visibility
-{
-    return ^id(MyVisibility val) {
-        self.view.visibility = val;
-        return self;
-    };
-}
-
--(void)setSizeConstraintWithSuperview:(UIView*)superview
-{
-    //宽度设置
-    if (self.attrs.width == MyLayoutSize.wrap)
-        [self.view.widthSize __equalTo:@(MyLayoutSize.wrap)];
-    else if (self.attrs.width == MyLayoutSize.fill)
-        [self.view.widthSize __equalTo:superview.widthSize];
-    else if (self.attrs.width > 0 && self.attrs.width < 1)
-        [[self.view.widthSize __equalTo:superview.widthSize] __multiply:self.attrs.width];
-    else if (self.attrs.width == 0.0)
-        [self.view.widthSize __equalTo:nil];
+    if (height > 0 && height < 1)
+        self.view.heightSize.equalTo(@(MyLayoutSize.fill)).multiply(height);
     else
-        [self.view.widthSize __equalTo:@(self.attrs.width)];
-    
-    //高度设置
-    if (self.attrs.height == MyLayoutSize.wrap)
-        [self.view.heightSize __equalTo:@(MyLayoutSize.wrap)];
-    else if (self.attrs.height == MyLayoutSize.fill)
-        [self.view.heightSize __equalTo:superview.heightSize];
-    else if (self.attrs.height > 0 && self.attrs.height < 1)
-        [[self.view.heightSize __equalTo:superview.heightSize] __multiply:self.attrs.height];
-    else if (self.attrs.height == 0.0)
-        [self.view.heightSize __equalTo:nil];
-    else
-        [self.view.heightSize __equalTo:@(self.attrs.height)];
+        self.view.heightSize.equalTo(@(height));
 }
 
 @end
 
 
-@implementation MyFlexAttrs
+#pragma mark -- MyFlexBoxAttrs
+
+@interface MyFlexBoxAttrs :MyFlexItemAttrs<MyFlexBoxAttrs>
+@property(nonatomic, assign) MyFlexDirection flex_direction;
+@property(nonatomic, assign) MyFlexWrap flex_wrap;
+@property(nonatomic, assign) MyFlexGravity justify_content;
+@property(nonatomic, assign) MyFlexGravity align_items;
+@property(nonatomic, assign) MyFlexGravity align_content;
+@property(nonatomic, assign) NSInteger item_size;
+@property(nonatomic, assign) UIEdgeInsets padding;
+@property(nonatomic, assign) CGFloat vert_space;
+@property(nonatomic, assign) CGFloat horz_space;
+@end
+
+@implementation MyFlexBoxAttrs
 
 -(instancetype)init
 {
@@ -373,6 +156,7 @@ const int MyFlex_Auto = -1;
         _justify_content = MyFlexGravity_Flex_Start;
         _align_items = MyFlexGravity_Stretch;
         _align_content = MyFlexGravity_Stretch;
+        _item_size = 0;
     }
     
     return self;
@@ -423,6 +207,15 @@ const int MyFlex_Auto = -1;
     }
 }
 
+-(void)setItem_size:(NSInteger)item_size
+{
+   if (_item_size != item_size)
+   {
+       _item_size = item_size;
+       [self.view setNeedsLayout];
+   }
+}
+
 -(UIEdgeInsets)padding
 {
     return ((MyFlexLayout*)self.view).padding;
@@ -456,14 +249,92 @@ const int MyFlex_Auto = -1;
 @end
 
 
-@implementation MyFlex
+#pragma mark -- MyFlexItem
+@interface MyFlexItem:NSObject<MyFlexItem>
+@property(nonatomic, weak, readonly) UIView *view;
+@end
 
--(MyFlexAttrs*)attrs
+@implementation MyFlexItem
 {
-    return (MyFlexAttrs*)_attrs;
+    @package
+    id<MyFlexItemAttrs> _attrs;
+}
+@dynamic attrs;
+
+-(instancetype)initWithView:(UIView*)view attrs:(id<MyFlexItemAttrs>)attrs
+{
+    self = [super init];
+    if (self != nil)
+    {
+        _attrs = attrs;
+        _view = view;
+    }
+    return self;
 }
 
--(MyFlex* (^)(MyFlexDirection))flex_direction
+-(id<MyFlexItemAttrs>)attrs
+{
+    return _attrs;
+}
+
+-(id<MyFlexItem> (^)(NSInteger))order
+{
+    return ^id(NSInteger val) {
+        self.attrs.order = val;
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))flex_grow
+{
+    return ^id(CGFloat val) {
+        self.attrs.flex_grow = val;
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))flex_shrink
+{
+    return ^id(CGFloat val) {
+        self.attrs.flex_shrink = val;
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))flex_basis
+{
+    return ^id(CGFloat val) {
+        self.attrs.flex_basis = val;
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(MyFlexGravity))align_self
+{
+    return ^id(MyFlexGravity val) {
+        self.attrs.align_self = val;
+        return self;
+    };
+}
+
+//其他请求跳转到myUI中去。
+-(id)forwardingTargetForSelector:(SEL)aSelector
+{
+    return self.view.myUI;
+}
+
+@end
+
+
+#pragma mark -- MyFlexBox
+
+@interface MyFlexBox:MyFlexItem<MyFlexBox>
+
+@end
+
+@implementation MyFlexBox
+
+-(id<MyFlexBox> (^)(MyFlexDirection))flex_direction
 {
     return ^id(MyFlexDirection val){
         self.attrs.flex_direction = val;
@@ -471,7 +342,7 @@ const int MyFlex_Auto = -1;
     };
 }
 
--(MyFlex* (^)(MyFlexWrap))flex_wrap
+-(id<MyFlexBox> (^)(MyFlexWrap))flex_wrap
 {
     return ^id(MyFlexWrap val){
         self.attrs.flex_wrap = val;
@@ -479,7 +350,7 @@ const int MyFlex_Auto = -1;
     };
 }
 
--(MyFlex* (^)(int))flex_flow
+-(id<MyFlexBox> (^)(int))flex_flow
 {
     return ^id(int val) {
         //取方向值。
@@ -490,7 +361,7 @@ const int MyFlex_Auto = -1;
     };
 }
 
--(MyFlex* (^)(MyFlexGravity))justify_content
+-(id<MyFlexBox> (^)(MyFlexGravity))justify_content
 {
     return ^id(MyFlexGravity val) {
         self.attrs.justify_content = val;
@@ -498,7 +369,7 @@ const int MyFlex_Auto = -1;
     };
 }
 
--(MyFlex* (^)(MyFlexGravity))align_items
+-(id<MyFlexBox> (^)(MyFlexGravity))align_items
 {
     return ^id(MyFlexGravity val) {
         self.attrs.align_items = val;
@@ -506,7 +377,32 @@ const int MyFlex_Auto = -1;
     };
 }
 
--(MyFlex* (^)(MyFlexGravity))align_content
+
+-(id<MyFlexBox> (^)(NSInteger))item_size
+{
+    return ^id(NSInteger val) {
+        self.attrs.item_size = val;
+        return self;
+    };
+}
+
+-(id<MyFlexBox> (^)(NSInteger))page_size
+{
+    return ^id(NSInteger val) {
+        ((MyFlexLayout*)self.view).pagedCount = val;
+        return self;
+    };
+}
+
+-(id<MyFlexBox> (^)(BOOL))auto_arrange
+{
+    return ^id(BOOL val) {
+        ((MyFlexLayout*)self.view).autoArrange = val;
+        return self;
+    };
+}
+
+-(id<MyFlexBox> (^)(MyFlexGravity))align_content
 {
     return ^id(MyFlexGravity val) {
         self.attrs.align_content = val;
@@ -514,7 +410,7 @@ const int MyFlex_Auto = -1;
     };
 }
 
--(MyFlex* (^)(UIEdgeInsets))padding
+-(id<MyFlexBox> (^)(UIEdgeInsets))padding
 {
     return ^id(UIEdgeInsets val) {
         ((MyFlexLayout*)self.view).padding = val;
@@ -522,7 +418,7 @@ const int MyFlex_Auto = -1;
     };
 }
 
--(MyFlex* (^)(CGFloat))vert_space
+-(id<MyFlexBox> (^)(CGFloat))vert_space
 {
     return ^id(CGFloat val) {
         ((MyFlexLayout*)self.view).subviewVSpace = val;
@@ -530,7 +426,7 @@ const int MyFlex_Auto = -1;
     };
 }
 
--(MyFlex* (^)(CGFloat))horz_space
+-(id<MyFlexBox> (^)(CGFloat))horz_space
 {
     return ^id(CGFloat val) {
         ((MyFlexLayout*)self.view).subviewHSpace = val;
@@ -540,25 +436,31 @@ const int MyFlex_Auto = -1;
 
 @end
 
+
+#pragma mark - UIView
+
 @implementation UIView(MyFlexLayout)
 
--(MyFlexItem*)myFlex
+-(id<MyFlexItem>)myFlex
 {
-    MyFlexItem *obj = nil;
-    if ([self isKindOfClass:[MyFlexLayout class]] )
+    if ([self isKindOfClass:[MyFlexLayout class]])
     {
-        obj = ((MyFlexLayout*)self).myFlex;
+        return ((MyFlexLayout*)self).myFlex;
     }
     else
     {
-        obj = (MyFlexItem*)objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM);
+        id<MyFlexItem> obj = (id<MyFlexItem>)objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM);
         if (obj == nil)
         {
-            obj = [[MyFlexItem alloc] initWithView:self attrs:[MyFlexItemAttrs new]];
-            objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            MyFlexItemAttrs *attrs = [MyFlexItemAttrs new];
+            attrs.view = self;
+            obj = [[MyFlexItem alloc] initWithView:self attrs:attrs];
         }
+        
+        objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_FLEXITEM, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
+        return obj;
     }
-    return obj;
 }
 
 @end
@@ -571,10 +473,13 @@ const int MyFlex_Auto = -1;
     self = [super init];
     if (self != nil)
     {
-        _myFlex = [[MyFlex alloc] initWithView:self attrs:[MyFlexAttrs new]];
         self.orientation = MyOrientation_Vert; //默认row
         self.arrangedCount = NSIntegerMax; //默认单行
         self.isFlex = YES; //满足flexbox的需求。
+        
+        MyFlexBoxAttrs *attrs = [MyFlexBoxAttrs new];
+        attrs.view = self;
+        _myFlex = [[MyFlexBox alloc] initWithView:self attrs:attrs];
     }
     return self;
 }
@@ -583,9 +488,10 @@ const int MyFlex_Auto = -1;
 {
     //将flexbox中的属性映射为MyFlowLayout中的属性。
     MyFlexLayout *lsc = self.myCurrentSizeClass;
-
+    id<MyFlexBox> myFlex = self.myFlex;
+    
     //最先设置方向。
-    switch (self.myFlex.attrs.flex_direction) {
+    switch (myFlex.attrs.flex_direction) {
         case MyFlexDirection_Column_Reverse:  //column_reverse
             lsc.orientation = MyOrientation_Horz;
             lsc.layoutTransform =  CGAffineTransformMake(1,0,0,-1,0,0);  //垂直翻转
@@ -605,13 +511,13 @@ const int MyFlex_Auto = -1;
             break;
     }
     
-    //设置换行.
-    switch (self.myFlex.attrs.flex_wrap) {
+    //设置换行
+    switch (myFlex.attrs.flex_wrap) {
         case MyFlexWrap_Wrap:
-            lsc.arrangedCount = 0;
+            lsc.arrangedCount = myFlex.attrs.item_size;
             break;
         case MyFlexWrap_Wrap_Reverse:
-            lsc.arrangedCount = 0;
+            lsc.arrangedCount = myFlex.attrs.item_size;
             lsc.layoutTransform = CGAffineTransformConcat(lsc.layoutTransform, (lsc.orientation == MyOrientation_Vert)? CGAffineTransformMake(1,0,0,-1,0,0):CGAffineTransformMake(-1,0,0,1,0,0));
             break;
         case MyFlexWrap_NoWrap:
@@ -632,7 +538,7 @@ const int MyFlex_Auto = -1;
     
     for (UIView *sbv in sbs)
     {
-        MyFlexItem *flexItem = sbv.myFlex;
+        id<MyFlexItem> flexItem = sbv.myFlex;
         UIView *sbvsc = sbv.myCurrentSizeClass;
         
         //flex_grow，如果子视图有设置grow则父视图的换行不起作用。
@@ -644,22 +550,26 @@ const int MyFlex_Auto = -1;
         else
             sbvsc.heightSize.shrink = flexItem.attrs.flex_shrink != MyFlex_Auto? flexItem.attrs.flex_shrink:0;
         
-        [flexItem setSizeConstraintWithSuperview:self];
-                
+        //如果没有设置尺寸约束则默认是自适应。
+        if (sbvsc.widthSizeInner.dimeVal == nil)
+            [sbvsc.widthSize __equalTo:@(MyLayoutSize.wrap)];
+        if (sbvsc.heightSizeInner.dimeVal == nil)
+            [sbvsc.heightSize __equalTo:@(MyLayoutSize.wrap)];
+        
         //基准值设置。
         if (flexItem.attrs.flex_basis != MyFlex_Auto)
         {
             if (lsc.orientation == MyOrientation_Vert)
             {
-                if (flexItem.attrs.flex_basis < 1 && flexItem.attrs.flex_basis > 0)
-                    [[sbvsc.widthSize __equalTo:lsc.widthSize] __multiply:flexItem.attrs.flex_basis];
+                if (flexItem.attrs.flex_basis > 0 && flexItem.attrs.flex_basis < 1)
+                    [[sbvsc.widthSize __equalTo:@(MyLayoutSize.fill)] __multiply:flexItem.attrs.flex_basis];
                 else
                     [sbvsc.widthSize __equalTo:@(flexItem.attrs.flex_basis)];
             }
             else
             {
-                if (flexItem.attrs.flex_basis < 1 && flexItem.attrs.flex_basis > 0)
-                    [[sbvsc.heightSize __equalTo:lsc.heightSize] __multiply:flexItem.attrs.flex_basis];
+                if (flexItem.attrs.flex_basis > 0 && flexItem.attrs.flex_basis < 1)
+                    [[sbvsc.heightSize __equalTo:@(MyLayoutSize.fill)] __multiply:flexItem.attrs.flex_basis];
                 else
                     [sbvsc.heightSize __equalTo:@(flexItem.attrs.flex_basis)];
             }
@@ -668,7 +578,7 @@ const int MyFlex_Auto = -1;
         //对齐方式设置。
         int align_self = flexItem.attrs.align_self;
         switch (align_self) {
-            case MyFlex_Auto:
+            case -1:
                 sbvsc.alignment = MyGravity_None;
                 break;
             case MyFlexGravity_Flex_Start:
@@ -694,7 +604,7 @@ const int MyFlex_Auto = -1;
     //设置主轴的水平对齐和拉伸
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    switch (self.myFlex.attrs.justify_content) {
+    switch (myFlex.attrs.justify_content) {
         case MyFlexGravity_Flex_End:
             if (lsc.orientation == MyOrientation_Vert)
                 lsc.gravity = MyGravity_Horz_Trailing | vertGravity;
@@ -731,7 +641,7 @@ const int MyFlex_Auto = -1;
     //次轴的对齐处理。
     MyGravity vertArrangedGravity = lsc.arrangedGravity & MyGravity_Horz_Mask;
     MyGravity horzArrangedGravity = lsc.arrangedGravity & MyGravity_Vert_Mask;
-    switch (self.myFlex.attrs.align_items) {
+    switch (myFlex.attrs.align_items) {
         case MyFlexGravity_Flex_End:
             if (lsc.orientation == MyOrientation_Vert)
                 lsc.arrangedGravity = MyGravity_Vert_Bottom | horzArrangedGravity;
@@ -768,7 +678,7 @@ const int MyFlex_Auto = -1;
     //多行下的整体停靠处理。
     vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     horzGravity = lsc.gravity & MyGravity_Vert_Mask;
-    switch (self.myFlex.attrs.align_content) {
+    switch (myFlex.attrs.align_content) {
         case MyFlexGravity_Flex_End:
             if (lsc.orientation == MyOrientation_Horz)
                 lsc.gravity = MyGravity_Horz_Trailing | vertGravity;

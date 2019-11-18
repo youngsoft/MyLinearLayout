@@ -66,8 +66,9 @@
                 (sbvsc.centerXPosInner.posVal != nil) ||
                 (sbvsc.centerYPosInner.posVal != nil) ||
                 (sbvsc.widthSizeInner.dimeRelaVal.view == self) ||
-                (sbvsc.heightSizeInner.dimeRelaVal.view == self)
-                )
+                (sbvsc.heightSizeInner.dimeRelaVal.view == self) ||
+                sbvsc.widthSizeInner.dimeFillVal ||
+                sbvsc.heightSizeInner.dimeFillVal)
             {
                 [self myLayout:lsc calcRectOfSubview:sbvsc sbvmyFrame:sbvmyFrame vertGravity:vertGravity horzGravity:horzGravity inSelfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing pMaxWrapSize:NULL];
             }

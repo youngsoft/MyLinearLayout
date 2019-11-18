@@ -214,3 +214,19 @@ paddingTrailing:(CGFloat)paddingTrailing
 @property(nonatomic, readonly) CGFloat myEstimatedHeight;
 
 @end
+
+//为了减少布局视图不必要的内存占用，这里将一些可选数据保存到这个类中来
+@interface MyBaseLayoutOptionalData:NSObject
+
+//特定场景处理的回调block
+@property(nonatomic,copy) void (^beginLayoutBlock)(void);
+@property(nonatomic,copy) void (^endLayoutBlock)(void);
+@property(nonatomic,copy) void (^rotationToDeviceOrientationBlock)(MyBaseLayout *layout, BOOL isFirst, BOOL isPortrait);
+@property(nonatomic, assign) int lastScreenOrientation; //为0为初始状态，为1为竖屏，为2为横屏。内部使用。
+
+//动画扩展
+@property(nonatomic, assign) NSTimeInterval aniDuration;
+@property(nonatomic, assign) UIViewAnimationOptions aniOptions;
+@property(nonatomic, copy) void (^aniCompletion)(BOOL finished);
+
+@end

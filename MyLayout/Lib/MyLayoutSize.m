@@ -219,6 +219,11 @@
     return [self dimeWrapVal];
 }
 
+-(BOOL)isFill
+{
+    return [self dimeFillVal];
+}
+
 #pragma mark -- NSCopying
 
 -(id)copyWithZone:(NSZone *)zone
@@ -291,6 +296,12 @@
     return self.isActive && _dimeValType == MyLayoutValueType_Wrap;
 }
 
+-(BOOL)dimeFillVal
+{
+    return self.isActive && _dimeValType == MyLayoutValueType_Fill;
+}
+
+
 -(MyLayoutSize*)lBoundVal
 {
     if (_lBoundVal == nil)
@@ -342,7 +353,7 @@
             if ([val integerValue] == MyLayoutSize.wrap)
                 _dimeValType = MyLayoutValueType_Wrap;
             else if ([val integerValue] == MyLayoutSize.fill)
-                NSAssert(0, @"oops! 暂时不支持");
+                _dimeValType = MyLayoutValueType_Fill;
             else
                 _dimeValType = MyLayoutValueType_NSNumber;
         }
