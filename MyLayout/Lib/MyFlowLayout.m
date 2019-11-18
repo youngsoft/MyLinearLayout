@@ -1405,7 +1405,9 @@
             else
                 pagingItemWidth = (CGRectGetWidth(self.superview.bounds) - paddingLeading - arrangedCount * horzSpace ) / arrangedCount;
             
-            pagingItemHeight = (selfSize.height - paddingVert - (rows - 1) * vertSpace) / rows;
+            //如果是水平滚动则如果布局不是高度自适应才让条目的高度生效。
+            if (!lsc.heightSizeInner.dimeWrapVal)
+                pagingItemHeight = (selfSize.height - paddingVert - (rows - 1) * vertSpace) / rows;
         }
         else
         {
@@ -1680,7 +1682,11 @@
         
         
         //再算一次宽度,只有比重为0并且不压缩的情况下计算。否则有可能前面被压缩或者被拉升而又会在这里重置了
-        if (sbvsc.weight == 0.0 && sbvsc.widthSizeInner.shrink == 0 && horzGravity != MyGravity_Horz_Fill)
+        if (sbvsc.weight == 0.0 &&
+            sbvsc.widthSizeInner.shrink == 0 &&
+            horzGravity != MyGravity_Horz_Fill &&
+            pagingItemWidth == 0.0 &&
+            subviewSize == 0.0)
         {
             rect.size.width = [self myLayout:lsc widthSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
         }
@@ -1759,7 +1765,8 @@
         else
         {//正常排列。
             //这里的最大其实就是最后一个视图的位置加上最高的子视图的尺寸。
-            maxHeight = yPos + lineMaxHeight;
+            if (_myCGFloatLess(maxHeight, yPos + lineMaxHeight))
+                maxHeight = yPos + lineMaxHeight;
         }
         
         rect.origin.x = xPos + leadingSpace;
@@ -2347,7 +2354,9 @@
             else
                 pagingItemHeight = (CGRectGetHeight(self.superview.bounds) - paddingTop - arrangedCount * vertSpace ) / arrangedCount;
             
-            pagingItemWidth = (selfSize.width - paddingHorz - (cols - 1) * horzSpace) / cols;
+            //如果是水平滚动则如果布局不是高度自适应才让条目的高度生效。
+            if (!lsc.widthSizeInner.dimeWrapVal)
+                pagingItemWidth = (selfSize.width - paddingHorz - (cols - 1) * horzSpace) / cols;
         }
         else
         {
@@ -2675,7 +2684,8 @@
         else
         {//正常排列。
             //这里的最大其实就是最后一个视图的位置加上最宽的子视图的尺寸。
-            maxWidth = xPos + lineMaxWidth;
+            if (_myCGFloatLess(maxWidth, xPos + lineMaxWidth))
+                maxWidth = xPos + lineMaxWidth;
         }
         
         rect.origin.x = xPos + leadingSpace;

@@ -51,6 +51,9 @@
     //创建一个垂直数量流式布局分页从左到右滚动
     [self createVertPagingFlowLayout2:rootLayout];
     
+    //创建一个垂直数量流式布局分页从左到右滚动,这里高度自适应。
+    [self createVertPagingFlowLayout3:rootLayout];
+    
 }
 
 - (void)viewDidLoad {
@@ -79,6 +82,7 @@
         label.backgroundColor = [CFTool color:random() % 14 + 1];
         label.text = [NSString stringWithFormat:@"%d",i];
         label.myMargin = 5; //同时带有四边的间距！
+        label.mySize = CGSizeMake(60, 60); //在分页的情况下一般不需要设置条目视图的尺寸。而且即使设置了也无效。
         [flowLayout addSubview:label];
         
     }
@@ -256,6 +260,49 @@
     flowLayoutSC.arrangedCount = 6;
     flowLayoutSC.pagedCount = 18;
     
+}
+
+/**
+ *  创建一个垂直分页从左向右滚动的流式布局,高度自适应。
+ */
+-(void)createVertPagingFlowLayout3:(UIView*)rootLayout
+{
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.text = @"垂直流式布局分页从左往右滚动(高度自适应):➡︎";
+    [titleLabel sizeToFit];
+    [rootLayout addSubview:titleLabel];
+    titleLabel.myTop = 20;
+    
+    //要开启分页功能，必须要将流式布局加入到一个滚动视图里面作为子视图！！！
+    UIScrollView *scrollView = [UIScrollView new];
+    scrollView.pagingEnabled = YES;  //开启分页滚动模式！！您可以注释这句话看看非分页滚动的布局滚动效果。
+    scrollView.myHeight = MyLayoutSize.wrap;   //高度自适应
+    [rootLayout addSubview:scrollView];
+    self.scrollView4 = scrollView;
+    
+    //建立一个垂直数量约束流式布局:每列展示3个子视图,每页展示9个子视图，整体从左往右滚动。
+    MyFlowLayout *flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
+    flowLayout.pagedCount = 9; //pagedCount设置为非0时表示开始分页展示的功能，这里表示每页展示9个子视图，这个数量必须是arrangedCount的倍数。
+    
+    //设置流式布局的高度和宽度都是自适应。
+    flowLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    /*
+     上面是实现一个垂直流式布局分页且从左往右滚动的标准属性设置方法。
+     */
+    
+    
+    flowLayout.subviewHSpace = 10;
+    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
+    [scrollView addSubview:flowLayout];
+    flowLayout.backgroundColor = [CFTool color:0];
+    
+    [self addAllItemSubviews:flowLayout];
+    
+    //获取流式布局的横屏size classes，并且设置设备处于横屏时,每排数量由3个变为6个，每页的数量由9个变为18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
+    MyFlowLayout *flowLayoutSC = [flowLayout fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    flowLayoutSC.arrangedCount = 6;
+    flowLayoutSC.pagedCount = 18;
 }
 
 

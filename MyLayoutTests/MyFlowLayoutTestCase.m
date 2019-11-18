@@ -1105,38 +1105,131 @@
     //测试填充和拉伸。垂直数量约束流式布局的行内拉升和填充。以及整体
     
     //垂直流式布局主要是高度的填充和拉伸。
-    
-    MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
-    rootLayout.gravity = MyGravity_Vert_Fill;
-    rootLayout.arrangedGravity = MyGravity_Vert_Fill;
-    rootLayout.frame = CGRectMake(0, 0, 200, 200);
-    
-    //一个子视图高度有约束， 一个高度为自适应， 一个没有设置任何高度约束。一个标杆高度视图。
-    UIView *v1 = [UIView new];
-    v1.mySize = CGSizeMake(40, 40);
-    [rootLayout addSubview:v1];
-    
-    UILabel *v2 = [UILabel new];
-    v2.text = @"hello";
-    v2.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
-    [rootLayout addSubview:v2];
-    
-    UIView *v3 = [UIView new];
-    v3.frame = CGRectMake(0, 0, 30, 30);
-    [rootLayout addSubview:v3];
-    
-    UIView *v4 = [UIView new];
-    v4.mySize = CGSizeMake(50, 50);
-    [rootLayout addSubview:v4];
-    
-    UIView *v5 = [UIView new];
-    v5.mySize = CGSizeMake(60, 60);
-    
-    
-    
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
+        rootLayout.arrangedGravity = MyGravity_Vert_Fill;
+        rootLayout.frame = CGRectMake(0, 0, 200, 200);
+        
+        //一个子视图高度有约束， 一个高度为自适应， 一个没有设置任何高度约束。一个标杆高度视图。
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v1];
+        
+        UILabel *v2 = [UILabel new];
+        v2.text = @"hello";
+        v2.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        [rootLayout addSubview:v2];
+        
+        UIView *v3 = [UIView new];
+        v3.frame = CGRectMake(0, 0, 30, 30);
+        [rootLayout addSubview:v3];
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v4];
+        
+        UIView *v5 = [UIView new];
+        v5.mySize = CGSizeMake(60, 60);
+        [rootLayout addSubview:v5];
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 200, 200));
+        
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 50));
+        MyRectAssert(v2, CGRectMake(40, 0, 36.5, 50));
+        MyRectAssert(v3, CGRectMake(76.5, 0, 30, 50));
+        MyRectAssert(v4, CGRectMake(106.5, 0, 50, 50));
+        MyRectAssert(v5, CGRectMake(0, 50, 60, 60));
+        
+        rootLayout.arrangedGravity = MyGravity_Vert_Stretch;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
+        MyRectAssert(v2, CGRectMake(40, 0, 36.5, 50));
+        MyRectAssert(v3, CGRectMake(76.5, 0, 30, 50));
+        MyRectAssert(v4, CGRectMake(106.5, 0, 50, 50));
+        MyRectAssert(v5, CGRectMake(0, 50, 60, 60));
+        
+        
+        rootLayout.gravity = MyGravity_Vert_Fill;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 85));
+        MyRectAssert(v2, CGRectMake(40, 0, 36.5, 95));
+        MyRectAssert(v3, CGRectMake(76.5, 0, 30, 95));
+        MyRectAssert(v4, CGRectMake(106.5, 0, 50, 95));
+        MyRectAssert(v5, CGRectMake(0, 95, 60, 105));
+        
+        
+        rootLayout.gravity = MyGravity_Vert_Stretch;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
+        MyRectAssert(v2, CGRectMake(40, 0, 36.5, 95));
+        MyRectAssert(v3, CGRectMake(76.5, 0, 30, 95));
+        MyRectAssert(v4, CGRectMake(106.5, 0, 50, 50));
+        MyRectAssert(v5, CGRectMake(0, 95, 60, 60));
+    }
     
     //水平流式布局主要是宽度和填充和拉伸
-    
+    {
+        MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:4];
+        rootLayout.arrangedGravity = MyGravity_Horz_Fill;
+        rootLayout.frame = CGRectMake(0, 0, 200, 200);
+        
+        //一个子视图高度有约束， 一个高度为自适应， 一个没有设置任何高度约束。一个标杆高度视图。
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v1];
+        
+        UILabel *v2 = [UILabel new];
+        v2.text = @"hello";
+        v2.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        [rootLayout addSubview:v2];
+        
+        UIView *v3 = [UIView new];
+        v3.frame = CGRectMake(0, 0, 30, 30);
+        [rootLayout addSubview:v3];
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v4];
+        
+        UIView *v5 = [UIView new];
+        v5.mySize = CGSizeMake(60, 60);
+        [rootLayout addSubview:v5];
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 200, 200));
+        
+        MyRectAssert(v1, CGRectMake(0, 0, 50, 40));
+        MyRectAssert(v2, CGRectMake(0, 40,50,20.5));
+        MyRectAssert(v3, CGRectMake(0,60.5, 50, 30));
+        MyRectAssert(v4, CGRectMake(0,90.5, 50, 50));
+        MyRectAssert(v5, CGRectMake(50, 0, 60, 60));
+        
+        rootLayout.arrangedGravity = MyGravity_Horz_Stretch;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
+        MyRectAssert(v2, CGRectMake(0, 40, 50,20.5));
+        MyRectAssert(v3, CGRectMake(0,60.5, 50, 30));
+        MyRectAssert(v4, CGRectMake(0,90.5, 50, 50));
+        MyRectAssert(v5, CGRectMake(50, 0, 60, 60));
+        
+        
+        rootLayout.gravity = MyGravity_Horz_Fill;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(v1, CGRectMake(0, 0, 85, 40));
+        MyRectAssert(v2, CGRectMake(0, 40, 95, 20.5));
+        MyRectAssert(v3, CGRectMake(0,60.5, 50+45, 30));
+        MyRectAssert(v4, CGRectMake(0,90.5, 50+45, 50));
+        MyRectAssert(v5, CGRectMake(50+45, 0, 60+45, 60));
+        
+        rootLayout.gravity = MyGravity_Horz_Stretch;
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
+        MyRectAssert(v2, CGRectMake(0, 40, 95, 20.5));
+        MyRectAssert(v3, CGRectMake(0,60.5, 50+45, 30));
+        MyRectAssert(v4, CGRectMake(0,90.5, 50, 50));
+        MyRectAssert(v5, CGRectMake(95, 0, 60, 60));
+    }
     
     
 }
