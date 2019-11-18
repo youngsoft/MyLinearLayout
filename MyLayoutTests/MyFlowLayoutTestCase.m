@@ -1104,6 +1104,40 @@
 {
     //测试填充和拉伸。垂直数量约束流式布局的行内拉升和填充。以及整体
     
+    //垂直流式布局主要是高度的填充和拉伸。
+    
+    MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
+    rootLayout.gravity = MyGravity_Vert_Fill;
+    rootLayout.arrangedGravity = MyGravity_Vert_Fill;
+    rootLayout.frame = CGRectMake(0, 0, 200, 200);
+    
+    //一个子视图高度有约束， 一个高度为自适应， 一个没有设置任何高度约束。一个标杆高度视图。
+    UIView *v1 = [UIView new];
+    v1.mySize = CGSizeMake(40, 40);
+    [rootLayout addSubview:v1];
+    
+    UILabel *v2 = [UILabel new];
+    v2.text = @"hello";
+    v2.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    [rootLayout addSubview:v2];
+    
+    UIView *v3 = [UIView new];
+    v3.frame = CGRectMake(0, 0, 30, 30);
+    [rootLayout addSubview:v3];
+    
+    UIView *v4 = [UIView new];
+    v4.mySize = CGSizeMake(50, 50);
+    [rootLayout addSubview:v4];
+    
+    UIView *v5 = [UIView new];
+    v5.mySize = CGSizeMake(60, 60);
+    
+    
+    
+    
+    //水平流式布局主要是宽度和填充和拉伸
+    
+    
     
 }
 

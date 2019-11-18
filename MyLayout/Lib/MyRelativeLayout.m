@@ -20,6 +20,10 @@
     CGSize selfSize = [super calcLayoutSize:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
     
     MyRelativeLayoutViewSizeClass *lsc = (MyRelativeLayoutViewSizeClass*)self.myCurrentSizeClass;
+    if (lsc.widthSizeInner.dimeWrapVal)
+        selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:0 sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
+    if (lsc.heightSizeInner.dimeWrapVal)
+        selfSize.height = [self myValidMeasure:lsc.heightSizeInner sbv:self calcSize:0 sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     
     for (UIView *sbv in self.subviews)
     {

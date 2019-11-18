@@ -34,6 +34,7 @@
 11. 在线性布局、流式布局、浮动布局中实现了可以在尺寸自适应的模式下gravity的停靠属性生效的能力。解决了[issue#102](https://github.com/youngsoft/MyLinearLayout/issues/102)
 12. 在线性布局、流式布局、浮动布局中实现了设置尺寸自适应并且设置了最大最小值约束的情况下子视图被正确布局的功能。
 13. 扩充的流式布局中的pagedCount的能力，由原先的必须是在滚动视图的子视图下生效改为可以在任意时刻生效。
+14. 改变对布局动画方法:`layoutAnimationWithDuration:`的实现逻辑，并新增加了动画的选项以及动画完成后的处理block机制，具体使用请参见方法：`layoutAnimationWithDuration:options:completion:`
 
 ### Update
 1. 更新了对尺寸自适应属性的设置方式。不再建议使用wrapContentWidth进行宽度自适应设置，而是改为`myWidth = MyLayoutSize.wrap`或者`widthSize.equalTo(@(MyLayoutSize.wrap))`进行宽度自适应设置。不再建议使用wrapContentHeight进行高度尺寸自适应设置，而是改为`myHeight= MyLayoutSize.wrap`或者`heightSize.equalTo(@(MyLayoutSize.wrap))`进行高度自适应设置。 对于宽度是否自适应的判断则可以用`myWidth == MyLayoutSize.wrap`或widthSize.iswrap进行判断，高度也是一样的。
@@ -42,6 +43,8 @@
 2. 将浮动布局的noBoundaryLimit属性设置为过期，这个属性将不再生效，而是直接将布局的宽度或者高度设置为自适应即可实现相同的功能。
 
 3. 线性布局中的shrinkType属性用于控制所有子视图的压缩特性，如果子视图的尺寸设置shrink属性值则以子视图的设置优先,布局视图的shrinkType将不再起作用。
+4. 修改布局视图监听子布局视图frame和center变化的实现，由原来的KVO形式变化为直接调用。这样就可以减少布局计算的耗时处理。
+5. 重构了流式布局、相对布局，加快了布局计算时间，尤其是相对布局的重构。
 
 
 

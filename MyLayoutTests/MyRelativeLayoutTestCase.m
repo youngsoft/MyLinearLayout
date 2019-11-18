@@ -1492,6 +1492,37 @@
     
 }
 
+-(void)testWrapContentHeight6
+{
+   MyRelativeLayout* _layoutRoot = [[MyRelativeLayout alloc] init];
+    _layoutRoot.myTop =
+    _layoutRoot.myLeft =
+    _layoutRoot.myRight = 0;
+    _layoutRoot.wrapContentHeight = YES;
+    _layoutRoot.bottomPadding = 12;
+   // _layoutRoot.backgroundColor = [UIColor whiteColor];
+    //_layoutRoot.clipsToBounds = YES;
+    _layoutRoot.frame = CGRectMake(0, 0, 100, 0);
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    imageView.myLeft =
+    imageView.myRight = 0;
+    imageView.myBottom = -12;
+    [_layoutRoot addSubview:imageView];
+    
+    [_layoutRoot layoutIfNeeded];
+    
+    MyRectAssert(_layoutRoot, CGRectMake(0, 0, 100, 50));
+    
+    
+    [_layoutRoot setNeedsLayout];
+    [_layoutRoot layoutIfNeeded];
+    
+    MyRectAssert(_layoutRoot, CGRectMake(0, 0, 100, 50));
+
+    
+}
+
 
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
