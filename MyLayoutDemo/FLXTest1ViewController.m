@@ -899,6 +899,8 @@
         itemView.myFlex.attrs.width = MyLayoutSize.wrap;
     else if ([widthStr isEqualToString:@"fill"])
         itemView.myFlex.attrs.width = MyLayoutSize.fill;
+    else if (widthStr.length == 0)
+        itemView.myFlex.attrs.width = MyLayoutSize.wrap;
     else
         itemView.myFlex.attrs.width = widthStr.doubleValue;
     
@@ -907,6 +909,8 @@
         itemView.myFlex.attrs.height = MyLayoutSize.wrap;
     else if ([heightStr isEqualToString:@"fill"])
         itemView.myFlex.attrs.height = MyLayoutSize.fill;
+    else if (heightStr.length == 0)
+        itemView.myFlex.attrs.height = MyLayoutSize.wrap;
     else
         itemView.myFlex.attrs.height = heightStr.doubleValue;
     
