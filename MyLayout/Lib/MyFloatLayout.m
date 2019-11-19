@@ -86,16 +86,6 @@
     return self.myCurrentSizeClass.orientation;
 }
 
--(void)setNoBoundaryLimit:(BOOL)noBoundaryLimit
-{
-    NSLog(@"属性已经过期！请直接设置宽度或者高度值为MyLayoutSize.wrap");
-}
-
--(BOOL)noBoundaryLimit
-{
-    return NO;
-}
-
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace
 {
     [self setSubviewsSize:subviewSize minSpace:minSpace maxSpace:maxSpace inSizeClass:MySizeClass_hAny | MySizeClass_wAny];

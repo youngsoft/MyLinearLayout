@@ -1448,6 +1448,7 @@ void* _myObserverContextC = (void*)20175283;
     MyBaseLayout *lsc = self.myCurrentSizeClass;
     
     //特殊处理如果视图是控制器根视图则取消高度或者宽度包裹,以及adjustScrollViewContentSizeMode的设置。
+    //但是有一种特殊情况是控制器是子视图控制器。因此还需要添加判断父视图是否是非布局父视图，只有是非布局父视图下才将自适应设置清除
     @try {
         
         if (newSuperview != nil)
@@ -1456,10 +1457,13 @@ void* _myObserverContextC = (void*)20175283;
             id vc = [self valueForKey:@"viewDelegate"];
             if (vc != nil)
             {
-                if (lsc.widthSizeInner.dimeWrapVal)
-                    [lsc.widthSizeInner __equalTo:nil];
-                if (lsc.heightSizeInner.dimeWrapVal)
-                    [lsc.heightSizeInner __equalTo:nil];
+                if (![newSuperview isKindOfClass:[MyBaseLayout class]])
+                {
+                    if (lsc.widthSizeInner.dimeWrapVal)
+                        [lsc.widthSizeInner __equalTo:nil];
+                    if (lsc.heightSizeInner.dimeWrapVal)
+                        [lsc.heightSizeInner __equalTo:nil];
+                }
                 
                 if (lsc.insetsPaddingFromSafeArea == defRectEdge)
                     lsc.insetsPaddingFromSafeArea = ~UIRectEdgeTop;

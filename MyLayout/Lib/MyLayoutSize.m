@@ -67,9 +67,9 @@
         //如果尺寸是自适应，并且当前视图是布局视图则直接布局视图自身刷新布局，否则由视图的父视图来刷新布局，这里特殊处理。
         if ([val isKindOfClass:[NSNumber class]])
         {
-            if ([val integerValue] == MyLayoutSize.wrap && [_view isKindOfClass:[MyBaseLayout class]])
+            if ([val integerValue] == MyLayoutSize.wrap && [self->_view isKindOfClass:[MyBaseLayout class]])
             {
-                [_view setNeedsLayout];
+                [self->_view setNeedsLayout];
                 return self;
             }
         }
