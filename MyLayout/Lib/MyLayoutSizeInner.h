@@ -18,6 +18,7 @@
 @property(nonatomic, assign) MyGravity dime;
 @property(nonatomic, assign) MyLayoutValueType dimeValType;
 
+@property(nonatomic, strong, readonly) id dimeVal;
 @property(nonatomic, readonly, strong) NSNumber *dimeNumVal;
 @property(nonatomic, readonly, strong) MyLayoutSize *dimeRelaVal;
 @property(nonatomic, readonly, strong) NSArray *dimeArrVal;

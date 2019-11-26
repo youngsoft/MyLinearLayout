@@ -170,17 +170,6 @@
     return self.isActive? _offsetVal : 0;
 }
 
--(CGFloat)minVal
-{
-    return self.isActive && _lBoundVal != nil ? _lBoundVal.posNumVal.doubleValue : -CGFLOAT_MAX;
-}
-
--(CGFloat)maxVal
-{
-    return self.isActive && _uBoundVal != nil ?  _uBoundVal.posNumVal.doubleValue : CGFLOAT_MAX;
-}
-
-
 #pragma mark -- NSCopying  
 
 -(id)copyWithZone:(NSZone *)zone

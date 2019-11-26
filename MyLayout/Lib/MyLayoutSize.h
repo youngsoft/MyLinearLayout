@@ -39,6 +39,14 @@
 +(NSInteger)fill;
 #endif
 
+
+#if UIKIT_DEFINE_AS_PROPERTIES
+/**特殊的尺寸，表示清除尺寸的约束设置，等价于:equalTo(nil)*/
+@property(class, nonatomic, assign,readonly) NSInteger empty;
+#else
++(NSInteger)empty;
+#endif
+
 #if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸会均分父视图的剩余空间。目前只用在表格布局MyTableLayout */
 @property(class, nonatomic, assign,readonly) NSInteger average;
@@ -65,7 +73,7 @@
 /**
  设置尺寸的具体值，这个具体值可以设置为NSNumber, MyLayoutSize以及NSArray<MyLayoutSize*>数组,UIView, MyLayoutMostSize和nil值。
  
- 1. 设置为NSNumber值表示指定具体的宽度或者高度数值，如果设置为特殊值MyLayoutSize.wrap则表示尺寸自适应，如果设置为LayoutSize.fill则表示等于父视图的尺寸。
+ 1. 设置为NSNumber值表示指定具体的宽度或者高度数值，如果设置为特殊值MyLayoutSize.wrap则表示尺寸自适应，如果设置为MyLayoutSize.fill则表示等于父视图的尺寸，如果设置为MyLayoutSize.empty则表示清空尺寸约束。
  
  2. 设置为MyLayoutSize值表示宽度和高度与设置的对象有依赖关系, 甚至可以依赖对象本身
  
@@ -210,11 +218,9 @@
 
 
 //上面方法设置的属性的获取。
-@property(nonatomic, strong, readonly) id dimeVal;
 @property(nonatomic, assign, readonly) CGFloat addVal;
 @property(nonatomic, assign, readonly) CGFloat multiVal;
-@property(nonatomic, assign, readonly) CGFloat minVal;
-@property(nonatomic, assign, readonly) CGFloat maxVal;
+
 
 /**
  判断尺寸值是否是自适应值。

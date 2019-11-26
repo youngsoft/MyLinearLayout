@@ -21,6 +21,10 @@
     MyLayoutSize *_uBoundVal;
 }
 
++(NSInteger)empty
+{
+    return -100000; //这么定义存粹是一个数字没有其他意义
+}
 
 +(NSInteger)wrap
 {
@@ -82,7 +86,6 @@
 -(MyLayoutSize* (^)(CGFloat val))myAdd
 {
     return ^id(CGFloat val){
-        
         [self __add:val];
         [self setNeedsLayout];
         return self;
@@ -92,7 +95,6 @@
 -(MyLayoutSize* (^)(CGFloat val))myMultiply
 {
     return ^id(CGFloat val){
-        
         [self __multiply:val];
         [self setNeedsLayout];
         return self;
@@ -102,7 +104,6 @@
 -(MyLayoutSize* (^)(CGFloat val))myMin
 {
     return ^id(CGFloat val){
-        
         [self __min:val];
         [self setNeedsLayout];
         return self;
@@ -112,7 +113,6 @@
 -(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myLBound
 {
     return ^id(id sizeVal, CGFloat addVal, CGFloat multiVal){
-        
         [self __lBound:sizeVal addVal:addVal multiVal:multiVal];
         [self setNeedsLayout];
         return self;
@@ -122,7 +122,6 @@
 -(MyLayoutSize* (^)(CGFloat val))myMax
 {
     return ^id(CGFloat val){
-        
         [self __max:val];
         [self setNeedsLayout];
         return self;
@@ -132,7 +131,6 @@
 -(MyLayoutSize* (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myUBound
 {
     return ^id(id sizeVal, CGFloat addVal, CGFloat multiVal){
-        
         [self __uBound:sizeVal addVal:addVal multiVal:multiVal];
         [self setNeedsLayout];
         return self;
@@ -204,24 +202,14 @@
     return self.isActive ? _dimeVal : nil;
 }
 
--(CGFloat)minVal
-{
-    return (self.isActive && _lBoundVal != nil) ?  _lBoundVal.dimeNumVal.doubleValue : -CGFLOAT_MAX;
-}
-
--(CGFloat)maxVal
-{
-    return (self.isActive && _uBoundVal != nil) ?  _uBoundVal.dimeNumVal.doubleValue : CGFLOAT_MAX;
-}
-
 -(BOOL)isWrap
 {
-    return [self dimeWrapVal];
+    return _dimeValType == MyLayoutValueType_Wrap;
 }
 
 -(BOOL)isFill
 {
-    return [self dimeFillVal];
+    return _dimeValType == MyLayoutValueType_Fill;
 }
 
 #pragma mark -- NSCopying
@@ -354,6 +342,11 @@
                 _dimeValType = MyLayoutValueType_Wrap;
             else if ([val integerValue] == MyLayoutSize.fill)
                 _dimeValType = MyLayoutValueType_Fill;
+            else if ([val integerValue] == MyLayoutSize.empty)
+            {
+                _dimeValType = MyLayoutValueType_Nil;
+                val = nil;
+            }
             else
                 _dimeValType = MyLayoutValueType_NSNumber;
         }

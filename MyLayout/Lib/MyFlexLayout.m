@@ -93,6 +93,8 @@ const int MyFlex_Auto = -1;
         return MyLayoutSize.wrap;
     else if (self.view.widthSizeInner.isFill)
         return self.view.widthSizeInner.multiVal == 1 ? MyLayoutSize.fill : self.view.widthSizeInner.multiVal;
+    else if (self.view.widthSizeInner != nil && self.view.widthSizeInner.dimeValType == MyLayoutValueType_Nil)
+        return MyLayoutSize.empty;
     else if (self.view.widthSizeInner.dimeNumVal != nil)
         return self.view.widthSizeInner.dimeNumVal.doubleValue;
     else
@@ -113,6 +115,8 @@ const int MyFlex_Auto = -1;
         return MyLayoutSize.wrap;
     else if (self.view.heightSizeInner.isFill)
         return self.view.heightSizeInner.multiVal == 1 ? MyLayoutSize.fill : self.view.heightSizeInner.multiVal;
+    else if (self.view.heightSizeInner != nil && self.view.heightSizeInner.dimeValType == MyLayoutValueType_Nil)
+        return MyLayoutSize.empty;
     else if (self.view.heightSizeInner.dimeNumVal != nil)
         return self.view.heightSizeInner.dimeNumVal.doubleValue;
     else
@@ -551,9 +555,9 @@ const int MyFlex_Auto = -1;
             sbvsc.heightSize.shrink = flexItem.attrs.flex_shrink != MyFlex_Auto? flexItem.attrs.flex_shrink:0;
         
         //如果没有设置尺寸约束则默认是自适应。
-        if (sbvsc.widthSizeInner.dimeVal == nil)
+        if (sbvsc.widthSizeInner == nil)
             [sbvsc.widthSize __equalTo:@(MyLayoutSize.wrap)];
-        if (sbvsc.heightSizeInner.dimeVal == nil)
+        if (sbvsc.heightSizeInner == nil)
             [sbvsc.heightSize __equalTo:@(MyLayoutSize.wrap)];
         
         //基准值设置。

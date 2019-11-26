@@ -383,7 +383,8 @@
     
     widthTextField.tag = 100;
     widthTextField.borderStyle =  UITextBorderStyleRoundedRect;
-    widthTextField.placeholder = @"数字|wrap|fill|空";
+    widthTextField.placeholder = @"数字|wrap|fill|empty";
+    widthTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     
     UILabel *heightLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
@@ -400,7 +401,8 @@
     
     heightTextField.tag = 200;
     heightTextField.borderStyle =  UITextBorderStyleRoundedRect;
-    heightTextField.placeholder = @"数字|wrap|fill|空";
+    heightTextField.placeholder = @"数字|wrap|fill|empty";
+    heightTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
 
     
     UILabel *orderLabel = UILabel.new.myFlex
@@ -535,6 +537,8 @@
             widthTextField.text = @"wrap";
         else if (itemView.myFlex.attrs.width == MyLayoutSize.fill)
             widthTextField.text = @"fill";
+        else if (itemView.myFlex.attrs.width == MyLayoutSize.empty)
+            widthTextField.text = @"empty";
         else if (itemView.myFlex.attrs.width != 0)
             widthTextField.text = [@(itemView.myFlex.attrs.width) stringValue];
         else
@@ -545,6 +549,8 @@
             heightTextField.text = @"wrap";
         else if (itemView.myFlex.attrs.height == MyLayoutSize.fill)
             heightTextField.text = @"fill";
+        else if (itemView.myFlex.attrs.height == MyLayoutSize.empty)
+            heightTextField.text = @"empty";
         else if (itemView.myFlex.attrs.height != 0)
             heightTextField.text = [@(itemView.myFlex.attrs.height) stringValue];
         else
@@ -899,6 +905,8 @@
         itemView.myFlex.attrs.width = MyLayoutSize.wrap;
     else if ([widthStr isEqualToString:@"fill"])
         itemView.myFlex.attrs.width = MyLayoutSize.fill;
+    else if ([widthStr isEqualToString:@"empty"])
+        itemView.myFlex.attrs.width = MyLayoutSize.empty;
     else if (widthStr.length == 0)
         itemView.myFlex.attrs.width = MyLayoutSize.wrap;
     else
@@ -909,6 +917,8 @@
         itemView.myFlex.attrs.height = MyLayoutSize.wrap;
     else if ([heightStr isEqualToString:@"fill"])
         itemView.myFlex.attrs.height = MyLayoutSize.fill;
+    else if ([heightStr isEqualToString:@"empty"])
+        itemView.myFlex.attrs.height = MyLayoutSize.empty;
     else if (heightStr.length == 0)
         itemView.myFlex.attrs.height = MyLayoutSize.wrap;
     else

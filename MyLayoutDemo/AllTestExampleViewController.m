@@ -232,7 +232,27 @@
 
 -(void)example5
 {
-    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
+    //一个row 下两个宽度均分高度为填充的子视图。
+    
+    MyFlexLayout *rootLayout = MyFlexLayout.new.myFlex
+    .margin(0)
+    .addTo(self.view);
+    
+    UIView *v1 = MyFlexLayout.new.myFlex
+    .flex_grow(1)
+    .margin_top(30)
+    .backgroundColor(UIColor.redColor)
+    .addTo(rootLayout);
+    
+    UIView *v2 = MyFlexLayout.new.myFlex
+    .flex_grow(1)
+    .margin_top(30)
+    .backgroundColor(UIColor.greenColor)
+    .addTo(rootLayout);
+    
+    
+    
+    /*MyRelativeLayout *rootLayout = [MyRelativeLayout new];
     rootLayout.myHeight = MyLayoutSize.wrap;
     rootLayout.myHorzMargin = 0;
     rootLayout.padding = UIEdgeInsetsMake(12, 12, 12, 12);
@@ -270,7 +290,7 @@
     [rootLayout addSubview:barView];
     
     [self.view addSubview:rootLayout];
-    
+    */
 }
 
 @end

@@ -99,7 +99,6 @@ BOOL _myisRTL = NO;
         _topPos = [MyLayoutPos new];
         _topPos.view = self.view;
         _topPos.pos = MyGravity_Vert_Top;
-        
     }
     return _topPos;
 }
@@ -338,7 +337,7 @@ BOOL _myisRTL = NO;
 
 -(CGFloat)myWidth
 {
-    //特殊处理设置为MyLayoutSize.wrap的返回
+    //特殊处理设置为MyLayoutSize.wrap和MyLayoutSize.fill的返回。
     if (self.widthSizeInner.dimeValType == MyLayoutValueType_Wrap)
         return MyLayoutSize.wrap;
     else if (self.widthSizeInner.dimeValType == MyLayoutValueType_Fill)

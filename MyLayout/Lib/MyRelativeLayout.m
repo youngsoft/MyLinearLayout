@@ -855,7 +855,7 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
                             
                         }
                         
-                        dime.view.myFrame.width = [self myValidMeasure:dime.view.widthSize sbv:dime.view calcSize:dime.view.myFrame.width sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
+                        dime.view.myFrame.width = [self myValidMeasure:dime.view.widthSizeInner sbv:dime.view calcSize:dime.view.myFrame.width sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
                     }
                     else
                     {
@@ -1026,7 +1026,7 @@ calcLeadingTrailingOfSubview:(MyViewSizeClass*)sbvsc
                             dime.view.myFrame.height = tempHeight;
                         }
                         
-                        dime.view.myFrame.height = [self myValidMeasure:dime.view.heightSize sbv:dime.view calcSize:dime.view.myFrame.height sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
+                        dime.view.myFrame.height = [self myValidMeasure:dime.view.heightSizeInner sbv:dime.view calcSize:dime.view.myFrame.height sbvSize:dime.view.myFrame.frame.size selfLayoutSize:selfSize];
                         
                     }
                     else

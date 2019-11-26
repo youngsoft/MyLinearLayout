@@ -16,7 +16,7 @@
 @property(nonatomic, weak) UIView *view;
 @property(nonatomic, assign) MyGravity pos;
 @property(nonatomic, assign) MyLayoutValueType posValType;
-
+@property(nonatomic, strong, readonly) id posVal;
 @property(nonatomic, readonly, strong) NSNumber *posNumVal;
 @property(nonatomic, readonly, strong) MyLayoutPos *posRelaVal;
 @property(nonatomic, readonly, strong) NSArray *posArrVal;

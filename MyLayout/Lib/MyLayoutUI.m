@@ -39,6 +39,14 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_MYUI = "ASSOCIATEDOBJECT_KEY_MY
     };
 }
 
+-(id<MyUIViewUI> (^)(CGFloat percent, CGFloat inc))width_percent
+{
+    return ^id(CGFloat percent, CGFloat inc) {
+        self.view.widthSize.equalTo(@(MyLayoutSize.fill)).multiply(percent).add(inc);
+        return self;
+    };
+}
+
 -(id<MyUIViewUI> (^)(CGFloat))min_width
 {
     return ^id(CGFloat val) {
@@ -62,6 +70,14 @@ const char * const ASSOCIATEDOBJECT_KEY_MYLAYOUT_MYUI = "ASSOCIATEDOBJECT_KEY_MY
             self.view.heightSize.equalTo(@(MyLayoutSize.fill)).multiply(val);
         else
             self.view.heightSize.equalTo(@(val));
+        return self;
+    };
+}
+
+-(id<MyUIViewUI> (^)(CGFloat percent, CGFloat inc))height_percent
+{
+    return ^id(CGFloat percent, CGFloat inc) {
+        self.view.heightSize.equalTo(@(MyLayoutSize.fill)).multiply(percent).add(inc);
         return self;
     };
 }

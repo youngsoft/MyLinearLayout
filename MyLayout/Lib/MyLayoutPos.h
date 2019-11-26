@@ -248,10 +248,7 @@
 
 
 //通过如下属性获取上面方法设置的值。
-@property(nonatomic, strong, readonly) id posVal;
 @property(nonatomic, assign, readonly) CGFloat offsetVal;
-@property(nonatomic, assign, readonly) CGFloat minVal;
-@property(nonatomic, assign, readonly) CGFloat maxVal;
 
 
 @end

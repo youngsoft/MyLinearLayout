@@ -3550,6 +3550,7 @@ paddingTrailing:(CGFloat)paddingTrailing
         MyFrame *sbvmyFrame = sbv.myFrame;
         MyViewSizeClass *sbvsc = (MyViewSizeClass *)[sbv myCurrentSizeClassFrom:sbvmyFrame];
         
+        
         if (customSetting != nil)
             customSetting(sbvsc);
         

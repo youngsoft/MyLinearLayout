@@ -161,9 +161,11 @@
         
         if (sbvsc.widthSizeInner.dimeWrapVal)
         {
-            if (lsc.pagedCount > 0  ||
-                (orientation == MyOrientation_Horz && (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill) ||
-                (orientation == MyOrientation_Vert && ((gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill || sbvsc.weight != 0)))
+            if (lsc.pagedCount > 0 ||
+                (orientation == MyOrientation_Vert && sbvsc.weight != 0.0) ||
+                (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill ||
+                (arrangedGravity & MyGravity_Vert_Mask) == MyGravity_Horz_Stretch ||
+                (gravity & MyGravity_Vert_Mask) == MyGravity_Horz_Fill )
             {
                 if ([sbvsc.view isKindOfClass:[MyBaseLayout class]])
                     [sbvsc.widthSizeInner __setActive:NO];
@@ -173,8 +175,10 @@
         if (sbvsc.heightSizeInner.dimeWrapVal)
         {
             if (lsc.pagedCount > 0 ||
-                (orientation == MyOrientation_Vert && (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill) ||
-                (orientation == MyOrientation_Horz && ((gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill || sbvsc.weight != 0)))
+                (orientation == MyOrientation_Horz && sbvsc.weight != 0.0) ||
+                (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill ||
+                (arrangedGravity & MyGravity_Horz_Mask) == MyGravity_Vert_Stretch ||
+                (gravity & MyGravity_Horz_Mask) == MyGravity_Vert_Fill)
             {
                 if ([sbvsc.view isKindOfClass:[MyBaseLayout class]])
                     [sbvsc.heightSizeInner __setActive:NO];
@@ -1317,7 +1321,7 @@
                     {
                         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
                         //只有在没有约束，或者非布局视图下的高度自适应约束才会被拉伸。
-                        if (sbvsc.heightSizeInner.dimeVal == nil || (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
+                        if (sbvsc.heightSizeInner.dimeVal == nil)
                         {
                             sbvmyFrame.height += fill;
                         }
@@ -1865,7 +1869,7 @@
                     if (vertGravity == MyGravity_Vert_Stretch)
                     {
                         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
-                        if (sbvsc.heightSizeInner.dimeVal == nil || (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
+                        if (sbvsc.heightSizeInner.dimeVal == nil)
                         {
                             sbvmyFrame.height += fill;
                         }
@@ -2000,13 +2004,27 @@
         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
         
         CGFloat topSpace = sbvsc.topPosInner.absVal;
+        CGFloat leadingSpace = sbvsc.leadingPosInner.absVal;
         CGFloat bottomSpace = sbvsc.bottomPosInner.absVal;
+        CGFloat trailingSpace = sbvsc.trailingPosInner.absVal;
         CGRect rect = sbvmyFrame.frame;
 
         //这里先计算一下宽度，因为有可能有宽度固定，高度自适应的情况。
         if (sbvsc.widthSizeInner.dimeVal != nil)
         {
             rect.size.width = [self myLayout:lsc widthSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
+            
+            //当只有一行而且是flex标准并且是stretch时会把所有子视图的宽度都强制拉伸为布局视图的宽度
+            //所以如果这里是宽度自适应时需要将宽度强制设置为和布局等宽，以便解决同时高度自适应时高度计算不正确的问题。
+            if (lineIndex == 0 &&
+                sbvsc.widthSizeInner.dimeWrapVal &&
+                lsc.isFlex &&
+                horzGravity == MyGravity_Horz_Stretch &&
+                rect.size.width > selfSize.width - paddingHorz - leadingSpace - trailingSpace)
+            {
+                rect.size.width = selfSize.width - paddingHorz - leadingSpace - trailingSpace;
+            }
+            
             rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         }
         else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
@@ -2263,7 +2281,7 @@
                     if (horzGravity == MyGravity_Horz_Stretch)
                     {
                         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
-                        if (sbvsc.widthSizeInner.dimeVal == nil || (sbvsc.widthSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
+                        if (sbvsc.widthSizeInner.dimeVal == nil)
                         {
                             sbvmyFrame.width += fill;
                         }
@@ -2441,6 +2459,17 @@
         else if (sbvsc.widthSizeInner.dimeVal != nil)
         {
             rect.size.width = [self myLayout:lsc widthSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
+            
+         //   当只有一行而且是flex标准并且是stretch时会把所有子视图的宽度都强制拉伸为布局视图的宽度
+         //   所以如果这里是宽度自适应时需要将宽度强制设置为和布局等宽，以便解决同时高度自适应时高度计算不正确的问题。
+            if (arranges == 1 &&
+                sbvsc.widthSizeInner.dimeWrapVal &&
+                lsc.isFlex &&
+                horzGravity == MyGravity_Horz_Stretch &&
+                rect.size.width > selfSize.width - paddingHorz - leadingSpace - trailingSpace)
+            {
+                rect.size.width = selfSize.width - paddingHorz - leadingSpace - trailingSpace;
+            }
         }
         else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
         {
@@ -2726,7 +2755,7 @@
         
         selfSize.width = [self myValidMeasure:lsc.widthSizeInner sbv:self calcSize:selfSize.width sbvSize:selfSize selfLayoutSize:self.superview.bounds.size];
     }
-    //根据flex规则：如果只有一行则整个高度都作为子视图的拉伸和停靠区域。
+    //根据flex规则：如果只有一行则整个宽度都作为子视图的拉伸和停靠区域。
     if (lsc.isFlex && arranges == 1)
         lineMaxWidth = selfSize.width - paddingHorz;
     
@@ -2784,7 +2813,7 @@
                     if (horzGravity == MyGravity_Horz_Stretch)
                     {
                         MyViewSizeClass *sbvsc = (MyViewSizeClass*)[sbv myCurrentSizeClassFrom:sbvmyFrame];
-                        if (sbvsc.widthSizeInner.dimeVal == nil || (sbvsc.widthSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]]))
+                        if (sbvsc.widthSizeInner.dimeVal == nil)
                         {
                             sbvmyFrame.width += fill;
                         }
