@@ -171,10 +171,6 @@
 		20DF42422318F4EA0078CAA0 /* MyFlexLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DF42402318F4EA0078CAA0 /* MyFlexLayout.m */; };
 		20F0DFFD2111749A00CFCE8C /* AllTest11ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F0DFFC2111749A00CFCE8C /* AllTest11ViewController.m */; };
 		20F0E00021120A8D00CFCE8C /* FLLTest8ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F0DFFF21120A8D00CFCE8C /* FLLTest8ViewController.m */; };
-		20F4A803237EF0E000D464E7 /* MyLayoutUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 20F4A801237EF0E000D464E7 /* MyLayoutUI.h */; };
-		20F4A804237EF0E000D464E7 /* MyLayoutUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F4A802237EF0E000D464E7 /* MyLayoutUI.m */; };
-		20F4A805237EF46200D464E7 /* MyLayoutUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F4A802237EF0E000D464E7 /* MyLayoutUI.m */; };
-		20F4A807237FC40900D464E7 /* MyLayoutUIInner.h in Headers */ = {isa = PBXBuildFile; fileRef = 20F4A806237FC40900D464E7 /* MyLayoutUIInner.h */; };
 		20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F783551F60399700BE5B31 /* GLTest3ViewController.m */; };
 		4411977B1F6AE78E00C22557 /* GridLayoutDemo5.json in Resources */ = {isa = PBXBuildFile; fileRef = 4411977A1F6AE78E00C22557 /* GridLayoutDemo5.json */; };
 		444B71911F6A3E3F00331872 /* GLTest5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 444B71901F6A3E3F00331872 /* GLTest5ViewController.m */; };
@@ -430,9 +426,6 @@
 		20F0DFFC2111749A00CFCE8C /* AllTest11ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AllTest11ViewController.m; sourceTree = "<group>"; };
 		20F0DFFE21120A8D00CFCE8C /* FLLTest8ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FLLTest8ViewController.h; sourceTree = "<group>"; };
 		20F0DFFF21120A8D00CFCE8C /* FLLTest8ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FLLTest8ViewController.m; sourceTree = "<group>"; };
-		20F4A801237EF0E000D464E7 /* MyLayoutUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutUI.h; sourceTree = "<group>"; };
-		20F4A802237EF0E000D464E7 /* MyLayoutUI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyLayoutUI.m; sourceTree = "<group>"; };
-		20F4A806237FC40900D464E7 /* MyLayoutUIInner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutUIInner.h; sourceTree = "<group>"; };
 		20F783541F60398C00BE5B31 /* GLTest3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTest3ViewController.h; sourceTree = "<group>"; };
 		20F783551F60399700BE5B31 /* GLTest3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTest3ViewController.m; sourceTree = "<group>"; };
 		4411977A1F6AE78E00C22557 /* GridLayoutDemo5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayoutDemo5.json; sourceTree = "<group>"; };
@@ -822,9 +815,6 @@
 				182225B41E77E5930081AA4B /* MyFlowLayout.m */,
 				20DF423F2318F4EA0078CAA0 /* MyFlexLayout.h */,
 				20DF42402318F4EA0078CAA0 /* MyFlexLayout.m */,
-				20F4A801237EF0E000D464E7 /* MyLayoutUI.h */,
-				20F4A802237EF0E000D464E7 /* MyLayoutUI.m */,
-				20F4A806237FC40900D464E7 /* MyLayoutUIInner.h */,
 				182225AC1E77E5930081AA4B /* MyLinearLayout.h */,
 				182225B21E77E5930081AA4B /* MyLinearLayout.m */,
 				182225AD1E77E5930081AA4B /* MyFloatLayout.h */,
@@ -939,7 +929,6 @@
 				18C15AF21EDF13F900AADEAC /* MyPathLayout.h in Headers */,
 				205643161F55A03000E8BDDE /* MyLayoutMath.h in Headers */,
 				18C15AF31EDF13FF00AADEAC /* MyFrameLayout.h in Headers */,
-				20F4A803237EF0E000D464E7 /* MyLayoutUI.h in Headers */,
 				18C15AF41EDF140400AADEAC /* MyBaseLayout.h in Headers */,
 				18C15AF51EDF140D00AADEAC /* MyLayoutPos.h in Headers */,
 				18C15AF61EDF141000AADEAC /* MyLayoutSize.h in Headers */,
@@ -953,7 +942,6 @@
 				18C15AFA1EDF142300AADEAC /* MyLayoutDef.h in Headers */,
 				205E0C6020B907CC001A8B99 /* MyLayoutPosInner.h in Headers */,
 				205E0C6120B907D1001A8B99 /* MyLayoutSizeInner.h in Headers */,
-				20F4A807237FC40900D464E7 /* MyLayoutUIInner.h in Headers */,
 				205E0C6220B907DB001A8B99 /* MyLayoutInner.h in Headers */,
 				205E0C6320B907EC001A8B99 /* MyLayoutDelegate.h in Headers */,
 			);
@@ -1163,7 +1151,6 @@
 				20DF42422318F4EA0078CAA0 /* MyFlexLayout.m in Sources */,
 				182DB6441EF7876200E2D65D /* MyGridLayout.m in Sources */,
 				18C15B001EDF144B00AADEAC /* MyPathLayout.m in Sources */,
-				20F4A804237EF0E000D464E7 /* MyLayoutUI.m in Sources */,
 				18C15B011EDF144B00AADEAC /* MyFrameLayout.m in Sources */,
 				18C15B021EDF144B00AADEAC /* MyBaseLayout.m in Sources */,
 				18C15B031EDF144B00AADEAC /* MyLayoutPos.m in Sources */,
@@ -1195,7 +1182,6 @@
 				18D3C9731EDF082800D3DE43 /* AllTest2TableViewCell.m in Sources */,
 				18D3C95F1EDF07F800D3DE43 /* FOLTest6ViewController.m in Sources */,
 				182225D51E77E5930081AA4B /* MyLayoutSize.m in Sources */,
-				20F4A805237EF46200D464E7 /* MyLayoutUI.m in Sources */,
 				6740E20120A52DC100AFBC5A /* AllTest10Cell.m in Sources */,
 				18D3C93A1EDF07C000D3DE43 /* FLLTest2ViewController.m in Sources */,
 				467E63CF228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m in Sources */,

@@ -336,12 +336,18 @@
  */
 
 /**
- *视图的宽度布局尺寸,是widthSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！
+ *视图的宽度布局尺寸,是widthSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！除了设置常规的数字外您还可以设置一些特殊的值：
+ MyLayoutSize.wrap  表示宽度自适应
+ MyLayoutSize.fill  表明宽度填充父视图剩余宽度
+ MyLayoutSize.empty 表明清除宽度约束。
  */
 @property(nonatomic,assign) IBInspectable CGFloat myWidth;
 
 /**
- *视图的高度布局尺寸,是heightSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！
+ *视图的高度布局尺寸,是heightSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！除了设置常规的数字外您还可以设置一些特殊的值：
+ MyLayoutSize.wrap  表示高度自适应
+ MyLayoutSize.fill  表明高度填充父视图剩余高度
+ MyLayoutSize.empty 表明清除高度约束。
  */
 @property(nonatomic,assign) IBInspectable CGFloat myHeight;
 

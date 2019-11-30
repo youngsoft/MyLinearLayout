@@ -7,7 +7,6 @@
 //
 
 #import "MyFlexLayout.h"
-#import "MyLayoutUIInner.h"
 #import "MyLayoutInner.h"
 #import <objc/runtime.h>
 
@@ -281,6 +280,144 @@ const int MyFlex_Auto = -1;
     return _attrs;
 }
 
+-(id<MyFlexItem> (^)(CGFloat))width
+{
+    return ^id(CGFloat val) {
+        if (val > 0 && val < 1)
+            self.view.widthSize.equalTo(@(MyLayoutSize.fill)).multiply(val);
+        else
+            self.view.widthSize.equalTo(@(val));
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat percent, CGFloat inc))width_percent
+{
+    return ^id(CGFloat percent, CGFloat inc) {
+        self.view.widthSize.equalTo(@(MyLayoutSize.fill)).multiply(percent).add(inc);
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))min_width
+{
+    return ^id(CGFloat val) {
+        self.view.widthSize.min(val);
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))max_width
+{
+    return ^id(CGFloat val) {
+        self.view.widthSize.max(val);
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))height
+{
+    return ^id(CGFloat val) {
+        if (val > 0 && val < 1)
+            self.view.heightSize.equalTo(@(MyLayoutSize.fill)).multiply(val);
+        else
+            self.view.heightSize.equalTo(@(val));
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat percent, CGFloat inc))height_percent
+{
+    return ^id(CGFloat percent, CGFloat inc) {
+        self.view.heightSize.equalTo(@(MyLayoutSize.fill)).multiply(percent).add(inc);
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))min_height
+{
+    return ^id(CGFloat val) {
+        self.view.heightSize.min(val);
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))max_height
+{
+    return ^id(CGFloat val) {
+        self.view.heightSize.max(val);
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))margin_top
+{
+    return ^id(CGFloat val) {
+        self.view.myTop = val;
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))margin_bottom
+{
+    return ^id(CGFloat val) {
+        self.view.myBottom = val;
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))margin_left
+{
+    return ^id(CGFloat val) {
+        self.view.myLeft = val;
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))margin_right
+{
+    return ^id(CGFloat val) {
+        self.view.myRight = val;
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(CGFloat))margin
+{
+    return ^id(CGFloat val) {
+        self.view.myLeft = val;
+        self.view.myRight = val;
+        self.view.myTop = val;
+        self.view.myBottom = val;
+        return self;
+    };
+}
+
+-(id<MyFlexItem> (^)(MyVisibility))visibility
+{
+    return ^id(MyVisibility val) {
+        self.view.visibility = val;
+        return self;
+    };
+}
+
+-(__kindof UIView* (^)(UIView*))addTo
+{
+    return ^(UIView *val) {
+        [val addSubview:self.view];
+        return self.view;
+    };
+}
+
+-(id<MyFlexItem> (^)(UIView*))add
+{
+    return ^(UIView *val) {
+        [self.view addSubview:val];
+        return self;
+    };
+}
+
+
 -(id<MyFlexItem> (^)(NSInteger))order
 {
     return ^id(NSInteger val) {
@@ -319,12 +456,6 @@ const int MyFlex_Auto = -1;
         self.attrs.align_self = val;
         return self;
     };
-}
-
-//其他请求跳转到myUI中去。
--(id)forwardingTargetForSelector:(SEL)aSelector
-{
-    return self.view.myUI;
 }
 
 @end

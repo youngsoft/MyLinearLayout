@@ -33,6 +33,8 @@
      子视图的扩展属性useFrame表示某个子视图不受布局视图的布局控制，而是用最原始的frame属性设置来实现自定义的位置和尺寸的设定。
      子视图的扩展属性noLayout表示某个子视图会参与布局，但是并不会正真的调整布局后的frame值。
      
+     在新版本1.9.0中将这些能力进行了统一的封装，通过一个拖放类来实现这些功能。
+     
      */
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];

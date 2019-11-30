@@ -2,7 +2,7 @@
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
 ---
-## [V1.9.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.0)(2019/10/21)
+## [V1.9.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.0)(2019/11/30)
 
 ### Added
 

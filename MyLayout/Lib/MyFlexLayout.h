@@ -7,7 +7,6 @@
 //
 
 #import "MyFlowLayout.h"
-#import "MyLayoutUI.h"
 
 /**定义flex的方向类型*/
 typedef enum : int {
@@ -89,9 +88,86 @@ extern const int MyFlex_Auto;
 
 
 
-@protocol MyFlexItem<MyUIViewUI>
+@protocol MyFlexItem
 
 @property(nonatomic, strong, readonly) id<MyFlexItemAttrs> attrs;
+@property(nonatomic, weak, readonly) __kindof UIView *view;
+
+
+/**
+ 视图的宽度设置，如果宽度设置为大于0小于1则表明是相对于父视图宽度的比重值，如果是MyLayoutSize.wrap则表明宽度自适应，如果是MyLayoutSize.fill则表明宽度和父视图相等，如果是MyLayoutSize.empty则表明不设置宽度值。 其他的值就是一个固定宽度值。
+ */
+-(id<MyFlexItem> (^)(CGFloat))width;
+
+
+/**
+ 视图的宽度设置，percent表明占用父视图宽度的百分比值，inc表明在百分比值的基础上的增量值。
+ */
+-(id<MyFlexItem> (^)(CGFloat percent, CGFloat inc))width_percent;
+
+
+/**
+ 最小宽度限制设置
+ */
+-(id<MyFlexItem> (^)(CGFloat))min_width;
+
+/**
+ 最大宽度限制设置
+ */
+-(id<MyFlexItem> (^)(CGFloat))max_width;
+/**
+ 视图的高度设置，如果高度设置为大于0小于1则表明是相对于父视图高度的比重值，如果是MyLayoutSize.wrap则表明高度自适应，如果是MyLayoutSize.fill则表明高度和父视图相等，如果是MyLayoutSize.empty则表明不设置高度值，其他的值就是一个固定高度值。
+ */
+-(id<MyFlexItem> (^)(CGFloat))height;
+
+/**
+ 视图的高度设置，percent表明占用父视图高度的百分比值，inc表明在百分比值的基础上的增量值。
+ */
+-(id<MyFlexItem> (^)(CGFloat percent, CGFloat inc))height_percent;
+
+
+/**
+ 最小高度限制设置
+ */
+-(id<MyFlexItem> (^)(CGFloat))min_height;
+
+/**
+ 最大高度限制设置
+ */
+-(id<MyFlexItem> (^)(CGFloat))max_height;
+
+//视图的外间距设置。
+/**
+ 视图的顶部外间距设置
+ */
+-(id<MyFlexItem> (^)(CGFloat))margin_top;
+/**
+ 视图的底部外间距设置
+ */
+-(id<MyFlexItem> (^)(CGFloat))margin_bottom;
+/**
+ 视图的左边外间距设置
+ */
+-(id<MyFlexItem> (^)(CGFloat))margin_left;
+/**
+ 视图的右边外间距设置
+ */
+-(id<MyFlexItem> (^)(CGFloat))margin_right;
+/**
+ 视图的四周外间距设置
+ */
+-(id<MyFlexItem> (^)(CGFloat))margin;
+/**
+ 视图的可视设置
+ */
+-(id<MyFlexItem> (^)(MyVisibility))visibility;
+
+
+//添加到父视图中
+-(__kindof UIView* (^)(UIView*))addTo;
+
+//添加子视图
+-(id<MyFlexItem> (^)(UIView*))add;
 
 /**
  条目在弹盒中的排列顺序，值越大越往后排。
