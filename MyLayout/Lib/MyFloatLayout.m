@@ -93,12 +93,34 @@
 
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass
 {
-    MyFloatLayoutViewSizeClass *lsc = (MyFloatLayoutViewSizeClass*)[self fetchLayoutSizeClass:sizeClass];
-    lsc.subviewSize = subviewSize;
-    lsc.minSpace = minSpace;
-    lsc.maxSpace = maxSpace;
+    [self setSubviewsSize:subviewSize minSpace:minSpace maxSpace:maxSpace centered:NO inSizeClass:sizeClass];
+}
+
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered
+{
+    [self setSubviewsSize:subviewSize minSpace:minSpace maxSpace:maxSpace centered:centered inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+}
+
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass
+{
+    MySequentLayoutViewSizeClass *lsc = (MySequentLayoutViewSizeClass*)[self fetchLayoutSizeClass:sizeClass];
+    if (subviewSize == 0)
+    {
+        lsc.flexSpace = nil;
+    }
+    else
+    {
+        if (lsc.flexSpace == nil)
+            lsc.flexSpace = [MySequentLayoutFlexSpace new];
+        
+        lsc.flexSpace.subviewSize = subviewSize;
+        lsc.flexSpace.minSpace = minSpace;
+        lsc.flexSpace.maxSpace = maxSpace;
+        lsc.flexSpace.centered = centered;
+    }
     [self setNeedsLayout];
 }
+
 
 #pragma mark -- Override Methods
 
@@ -118,13 +140,13 @@
             orientation == MyOrientation_Vert &&
             sbvsc.weight != 0 &&
             [sbvsc.view isKindOfClass:[MyBaseLayout class]])
-            [sbvsc.widthSizeInner __setActive:NO];
+            [sbvsc.widthSizeInner __equalTo:nil];
         
         if (sbvsc.heightSizeInner.dimeWrapVal &&
             orientation == MyOrientation_Horz &&
             sbvsc.weight != 0 &&
             [sbvsc.view isKindOfClass:[MyBaseLayout class]])
-            [sbvsc.heightSizeInner __setActive:NO];
+            [sbvsc.heightSizeInner __equalTo:nil];
     }];
     
     if (orientation == MyOrientation_Vert)
@@ -309,35 +331,6 @@
     return retPoint;
 }
 
--(CGFloat)myLayout:(MyFloatLayoutViewSizeClass*)lsc calcMaxMinSubviewSizeWithSelfSize:(CGFloat)selfSize space:(CGFloat*)pSpace
-{
-   CGFloat subviewSize = lsc.subviewSize;
-    if (subviewSize != 0)
-    {
-        CGFloat minSpace = lsc.minSpace;
-        CGFloat maxSpace = lsc.maxSpace;
-        
-        NSInteger rowCount =  floor((selfSize  + minSpace) / (subviewSize + minSpace));
-        if (rowCount > 1)
-        {
-            *pSpace = (selfSize - subviewSize * rowCount)/(rowCount - 1);
-            
-            //如果超过最大间距或者小于最小间距则调整子视图的宽度。
-            if (_myCGFloatGreat(*pSpace, maxSpace) || _myCGFloatLess(*pSpace, minSpace))
-            {
-                if (_myCGFloatGreat(*pSpace, maxSpace))
-                    *pSpace = maxSpace;
-                if (_myCGFloatLess(*pSpace, minSpace))
-                    *pSpace = minSpace;
-                
-                subviewSize =  (selfSize -  (*pSpace) * (rowCount - 1)) / rowCount;
-            }
-        }
-    }
-    
-    return subviewSize;
-}
-
 -(void)myLayout:(MyFloatLayoutViewSizeClass*)lsc
 calcSizeOfSubviews:(NSArray<UIView *>*)sbs
        selfSize:(CGSize)selfSize
@@ -393,8 +386,6 @@ paddingTrailing:(CGFloat)paddingTrailing
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
     CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
-    CGFloat paddingHorz = paddingLeading + paddingTrailing;
- //   CGFloat paddingVert = paddingTop + paddingBottom;
     
     //如果没有边界限制我们将宽度设置为最大。。
     BOOL isBeyondFlag = NO;  //子视图是否超出剩余空间需要换行。
@@ -407,8 +398,9 @@ paddingTrailing:(CGFloat)paddingTrailing
     //支持浮动水平间距。
     CGFloat vertSpace = lsc.subviewVSpace;
     CGFloat horzSpace = lsc.subviewHSpace;
-    CGFloat subviewSize = [self myLayout:lsc calcMaxMinSubviewSizeWithSelfSize:selfSize.width - paddingHorz space:&horzSpace];
-    
+    CGFloat subviewSize = [lsc.flexSpace calcMaxMinSubviewSizeForContent:selfSize.width startPadding:&paddingLeading endPadding:&paddingTrailing space:&horzSpace];
+    CGFloat paddingHorz = paddingLeading + paddingTrailing;
+
     //设置子视图的宽度和高度。
     [self myLayout:lsc calcSizeOfSubviews:sbs selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing subviewSize:subviewSize isWidth:YES];
     
@@ -871,8 +863,6 @@ paddingTrailing:(CGFloat)paddingTrailing
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
     CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
- //   CGFloat paddingHorz = paddingLeading + paddingTrailing;
-    CGFloat paddingVert = paddingTop + paddingBottom;
     
     //如果没有边界限制我们将高度设置为最大。。
     BOOL isBeyondFlag = NO; //子视图是否超出剩余空间需要换行。
@@ -885,8 +875,9 @@ paddingTrailing:(CGFloat)paddingTrailing
     //支持浮动垂直间距。
     CGFloat horzSpace = lsc.subviewHSpace;
     CGFloat vertSpace = lsc.subviewVSpace;
-    CGFloat subviewSize = [self myLayout:lsc calcMaxMinSubviewSizeWithSelfSize:selfSize.height - paddingVert space:&vertSpace];
-    
+    CGFloat subviewSize = [lsc.flexSpace calcMaxMinSubviewSizeForContent:selfSize.height startPadding:&paddingTop endPadding:&paddingBottom space:&vertSpace];
+    CGFloat paddingVert = paddingTop + paddingBottom;
+
     //设置子视图的宽度和高度。
     [self myLayout:lsc calcSizeOfSubviews:sbs selfSize:selfSize paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing subviewSize:subviewSize isWidth:NO];
     

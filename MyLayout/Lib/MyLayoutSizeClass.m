@@ -746,13 +746,90 @@ BOOL _myisRTL = NO;
 
 @end
 
+@implementation MySequentLayoutFlexSpace
+
+-(CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize startPadding:(CGFloat*)pStarPadding endPadding:(CGFloat*)pEndPadding space:(CGFloat*)pSpace
+{
+    CGFloat subviewSize = self.subviewSize;
+    
+    CGFloat extralSpace = self.minSpace;
+    if (self.centered)
+        extralSpace *= -1;
+    
+    NSInteger rowCount = MAX(floor((selfSize - (*pStarPadding) - (*pEndPadding) + extralSpace) / (subviewSize + self.minSpace)) , 1);
+    NSInteger spaceCount = rowCount - 1;
+    if (self.centered)
+        spaceCount += 2;
+    
+    if (spaceCount > 0) {
+        *pSpace = (selfSize -  (*pStarPadding) - (*pEndPadding) - subviewSize * rowCount) / spaceCount;
+        
+        if (_myCGFloatGreat(*pSpace , self.maxSpace)) {
+            *pSpace = self.maxSpace;
+            subviewSize =  (selfSize - (*pStarPadding) - (*pEndPadding) - (*pSpace) * spaceCount) / rowCount;
+        }
+        
+        if (self.centered) {
+            *pStarPadding = (*pStarPadding + *pSpace);
+            *pEndPadding = (*pEndPadding + *pSpace);
+        }
+    }
+    
+    return subviewSize;
+}
+
+
+-(CGFloat)calcMaxMinSubviewSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount startPadding:(CGFloat*)pStarPadding endPadding:(CGFloat*)pEndPadding space:(CGFloat*)pSpace
+{
+    CGFloat subviewSize = self.subviewSize;
+    
+    NSInteger spaceCount = arrangedCount - 1;
+    if (self.centered) {
+        spaceCount += 2;
+    }
+    
+    if (spaceCount > 0) {
+        *pSpace = (selfSize - *pStarPadding - *pEndPadding - subviewSize * arrangedCount) / spaceCount;
+        
+        if (_myCGFloatGreat(*pSpace , self.maxSpace) || _myCGFloatLess(*pSpace, self.minSpace))
+        {
+            if (_myCGFloatGreat(*pSpace , self.maxSpace))
+                *pSpace = self.maxSpace;
+            
+            if (_myCGFloatLess(*pSpace, self.minSpace))
+                *pSpace = self.minSpace;
+            
+            subviewSize =  (selfSize - *pStarPadding - *pEndPadding - (*pSpace) * spaceCount) / arrangedCount;
+        }
+        
+        if (self.centered) {
+            *pStarPadding = (*pStarPadding + *pSpace);
+            *pEndPadding = (*pEndPadding + *pSpace);
+        }
+    }
+    
+    return subviewSize;
+}
+
+@end
+
+
 @implementation MySequentLayoutViewSizeClass
 
 - (id)copyWithZone:(NSZone *)zone
 {
     MySequentLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     lsc.orientation = self.orientation;
-     return lsc;
+    if (self.flexSpace != nil)
+    {
+        lsc.flexSpace = [MySequentLayoutFlexSpace new];
+        lsc.flexSpace.subviewSize = self.flexSpace.subviewSize;
+        lsc.flexSpace.minSpace = self.flexSpace.minSpace;
+        lsc.flexSpace.maxSpace = self.flexSpace.maxSpace;
+        lsc.flexSpace.centered = self.flexSpace.centered;
+    }
+    
+    return lsc;
 }
 
 -(NSString*)debugDescription
@@ -805,9 +882,6 @@ BOOL _myisRTL = NO;
 {
     MyFloatLayoutViewSizeClass *lsc = [super copyWithZone:zone];
     
-    lsc.subviewSize = self.subviewSize;
-    lsc.minSpace = self.minSpace;
-    lsc.maxSpace = self.maxSpace;
     return lsc;
 }
 
@@ -823,10 +897,8 @@ BOOL _myisRTL = NO;
     lsc.arrangedCount = self.arrangedCount;
     lsc.autoArrange = self.autoArrange;
     lsc.isFlex = self.isFlex;
+    lsc.lastlineGravityPolicy = self.lastlineGravityPolicy;
     lsc.arrangedGravity = self.arrangedGravity;
-    lsc.subviewSize = self.subviewSize;
-    lsc.minSpace = self.minSpace;
-    lsc.maxSpace = self.maxSpace;
     lsc.pagedCount = self.pagedCount;
     
     return lsc;

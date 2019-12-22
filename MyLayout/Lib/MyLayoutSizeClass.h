@@ -122,9 +122,23 @@
 
 @end
 
+
+@interface MySequentLayoutFlexSpace:NSObject
+@property(nonatomic,assign) CGFloat subviewSize;
+@property(nonatomic,assign) CGFloat minSpace;
+@property(nonatomic,assign) CGFloat maxSpace;
+@property(nonatomic,assign) BOOL centered;
+
+-(CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize startPadding:(CGFloat*)pStarPadding endPadding:(CGFloat*)pEndPadding space:(CGFloat*)pSpace;
+-(CGFloat)calcMaxMinSubviewSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount startPadding:(CGFloat*)pStarPadding endPadding:(CGFloat*)pEndPadding space:(CGFloat*)pSpace;
+
+@end
+
+
 @interface MySequentLayoutViewSizeClass : MyLayoutViewSizeClass
 
 @property(nonatomic,assign) MyOrientation orientation;
+@property(nonatomic,strong) MySequentLayoutFlexSpace *flexSpace;
 
 @end
 
@@ -143,21 +157,14 @@
 @property(nonatomic,assign) MyGravity arrangedGravity;
 @property(nonatomic,assign) BOOL autoArrange;
 @property(nonatomic,assign) BOOL isFlex;
+@property(nonatomic,assign) MyGravityPolicy lastlineGravityPolicy;
 
 @property(nonatomic,assign) NSInteger arrangedCount;
 @property(nonatomic, assign) NSInteger pagedCount;
 
-@property(nonatomic, assign) CGFloat subviewSize;
-@property(nonatomic, assign) CGFloat minSpace;
-@property(nonatomic, assign) CGFloat maxSpace;
-
 @end
 
 @interface MyFloatLayoutViewSizeClass : MySequentLayoutViewSizeClass
-
-@property(nonatomic, assign) CGFloat subviewSize;
-@property(nonatomic, assign) CGFloat minSpace;
-@property(nonatomic, assign) CGFloat maxSpace;
 
 @end
 

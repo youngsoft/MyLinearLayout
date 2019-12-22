@@ -196,6 +196,23 @@
 -(void)equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 
+/**
+ 在一些应用场景中我们希望子视图的宽度是固定的但间距是浮动的，这样就尽可能在一排中容纳更多的子视图。比如设置每个子视图的宽度固定为80，那么在小屏幕下每排只能放3个，而大屏幕则每排能放4个或者5个子视图。 因此您可以通过如下方法来设置子视图的固定尺寸和最小最大浮动间距。这个方法会根据您当前布局的方向不同而具有不同的意义：
+ 
+ 1.如果您的布局方向是垂直的则设置的是每行内子视图的水平浮动间距，其中的subviewSize指定的是子视图的固定宽度；minSpace指定的是最小的水平间距；maxSpace指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于最大间距maxSpace则会缩小subviewSize的宽度值。
+ 
+ 2.如果您的布局方向是水平的则设置的是每列内子视图的垂直浮动间距，其中的subviewSize指定的是子视图的固定高度；minSpace指定的是最小的垂直间距；maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于最大间距maxSpace则会调整subviewSize的高度值。
+ 
+ @note 如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
+ 
+ @param subviewSize 指定子视图的尺寸。
+ @param minSpace 指定子视图之间的最小间距
+ @param maxSpace 指定子视图之间的最大间距
+ @param centered 指定是否所有子视图居中
+ */
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+
 @end
 
 

@@ -611,6 +611,7 @@ const int MyFlex_Auto = -1;
         self.orientation = MyOrientation_Vert; //默认row
         self.arrangedCount = NSIntegerMax; //默认单行
         self.isFlex = YES; //满足flexbox的需求。
+        self.lastlineGravityPolicy = MyGravityPolicy_Always;
         
         MyFlexBoxAttrs *attrs = [MyFlexBoxAttrs new];
         attrs.view = self;
@@ -686,9 +687,9 @@ const int MyFlex_Auto = -1;
             sbvsc.heightSize.shrink = flexItem.attrs.flex_shrink != MyFlex_Auto? flexItem.attrs.flex_shrink:0;
         
         //如果没有设置尺寸约束则默认是自适应。
-        if (sbvsc.widthSizeInner == nil)
+        if (sbvsc.widthSizeInner.dimeVal == nil)
             [sbvsc.widthSize __equalTo:@(MyLayoutSize.wrap)];
-        if (sbvsc.heightSizeInner == nil)
+        if (sbvsc.heightSizeInner.dimeVal == nil)
             [sbvsc.heightSize __equalTo:@(MyLayoutSize.wrap)];
         
         //基准值设置。

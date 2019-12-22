@@ -2611,7 +2611,7 @@ void* _myObserverContextC = (void*)20175283;
         isAdjust = YES;
         //如果宽度约束的优先级很低都按左右边距来决定布局视图的宽度。
         if (lsc.widthSizeInner.priority == MyPriority_Low)
-            [lsc.widthSizeInner __setActive:NO];
+            [lsc.widthSizeInner __equalTo:nil];
         
         if (lsc.widthSizeInner.dimeVal == nil)
         {
@@ -2713,7 +2713,7 @@ void* _myObserverContextC = (void*)20175283;
         isAdjust = YES;
         //如果高度约束优先级很低则按上下边距来决定布局视图高度。
         if (lsc.heightSizeInner.priority == MyPriority_Low)
-            [lsc.heightSizeInner __setActive:NO];
+            [lsc.heightSizeInner __equalTo:nil];
         
         if (lsc.heightSizeInner.dimeVal == nil)
         {
@@ -3175,23 +3175,11 @@ void* _myObserverContextC = (void*)20175283;
             contsize.height = newSize.height + topMargin + bottomMargin;
         if (contsize.width != newSize.width + leadingMargin + trailingMargin)
             contsize.width = newSize.width + leadingMargin + trailingMargin;
-        
-        //因为调整contentsize可能会调整contentOffset，所以为了保持一致性这里要还原掉原来的contentOffset
-        CGPoint oldOffset = scrolv.contentOffset;
-        
+    
         contsize.width *= scrolv.zoomScale;
         contsize.height *= scrolv.zoomScale;
-        
-        
         if (!CGSizeEqualToSize(scrolv.contentSize, contsize))
             scrolv.contentSize =  contsize;
-        
-        if ((oldOffset.x <= 0 || oldOffset.x <= contsize.width - rectSuper.size.width) &&
-            (oldOffset.y <= 0 || oldOffset.y <= contsize.height - rectSuper.size.height))
-        {
-            if (!CGPointEqualToPoint(scrolv.contentOffset, oldOffset))
-                scrolv.contentOffset = oldOffset;
-        }
     }
 }
 
@@ -3299,19 +3287,19 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     
     //只要子视图是包裹并且布局视图是fill填充，都应该清除子视图的包裹设置。
     if (sbvsc.widthSizeInner.dimeWrapVal && horzGravity == MyGravity_Horz_Fill)
-        [sbvsc.widthSizeInner __setActive:NO];
+        [sbvsc.widthSizeInner __equalTo:nil];
     if (sbvsc.heightSizeInner.dimeWrapVal && vertGravity == MyGravity_Vert_Fill)
-        [sbvsc.heightSizeInner __setActive:NO];
+        [sbvsc.heightSizeInner __equalTo:nil];
     
     if (sbvsc.leadingPosInner.posVal != nil &&
         sbvsc.trailingPosInner.posVal != nil &&
         (sbvsc.widthSizeInner.priority == MyPriority_Low || !lsc.widthSizeInner.dimeWrapVal))
-        [sbvsc.widthSizeInner __setActive:NO];
+        [sbvsc.widthSizeInner __equalTo:nil];
     
     if (sbvsc.topPosInner.posVal != nil &&
         sbvsc.bottomPosInner.posVal != nil &&
         (sbvsc.heightSizeInner.priority == MyPriority_Low || !lsc.heightSizeInner.dimeWrapVal))
-        [sbvsc.heightSizeInner __setActive:NO];
+        [sbvsc.heightSizeInner __equalTo:nil];
     
     if ([sbv isKindOfClass:[MyBaseLayout class]])
     {

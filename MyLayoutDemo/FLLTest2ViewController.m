@@ -130,7 +130,10 @@
 
 -(IBAction)handleGravityAlwaysChange:(id)sender
 {
-    self.flowLayout.isFlex = !self.flowLayout.isFlex;
+    if (self.flowLayout.lastlineGravityPolicy == MyGravityPolicy_No)
+        self.flowLayout.lastlineGravityPolicy = MyGravityPolicy_Always;
+    else
+        self.flowLayout.lastlineGravityPolicy = MyGravityPolicy_No;
 }
 
 

@@ -214,7 +214,7 @@
      MyGravity_Horz_Right   右边对齐
      MyGravity_Horz_Fill    两端对齐
      MyGravity_Horz_Stretch 如果子视图未设置约束或者非布局子视图宽度自适应则子视图宽度被拉伸
-     MyGravity_Horz_Between  数量约束垂直流式布局有效，子视图会紧凑进行排列，当设置为这个属性值时，子视图的x轴的位置总是从对应行的上一列的结尾开始，而不是上一列的最宽位置开始。
+     MyGravity_Horz_Between  数量约束水平流式布局有效，子视图会紧凑进行排列，当设置为这个属性值时，子视图的x轴的位置总是从对应行的上一列的结尾开始，而不是上一列的最宽位置开始。
      MyGravity_Horz_Around 如果列内子视图没有设置宽度约束，则子视图的宽度填充整行，否则按子视图的宽度是宽度约束决定。
    @endcode
  @note 如果您想单独设置某个子视图在行内的对齐方式则请使用子视图的扩展属性alignment。
@@ -222,6 +222,18 @@
  */
 @property(nonatomic,assign)  MyGravity arrangedGravity;
 
+/**
+指定流式布局最后一行的尺寸或间距的拉伸策略。默认值是MyGravityPolicy_No,表示最后一行的尺寸或间接拉伸策略不生效。如果布局只有一行则不会受到这个策略的影响。
+在流式布局中我们可以通过gravity属性来对每一行的尺寸或间距进行拉伸处理。但是在实际情况中最后一行的子视图数量可能会小于等于前面行的数量。
+在这种情况下如果对最后一行进行相同的尺寸或间距的拉伸处理则有可能会影响整体的布局效果。因此我们可通过这个属性来指定最后一行的尺寸或间距的生效策略。
+这个策略在不同的流式布局中效果不一样：
+
+1.在数量约束布局中如果最后一行的子视图数量小于arrangedCount的值时，那么当我们使用gravity来对行内视图进间距拉伸时(between,around,among)
+可以指定三种策略：no表示最后一行不进行任何间距拉伸处理，always表示最后一行总是进行间距拉伸处理，auto表示最后一行的每个子视图都和上一行对应位置视图左对齐。
+
+2.在内容约束布局中因为每行的子视图数量不固定,所以只有no和always两种策略有效，并且这两种策略不仅影响子视图的尺寸的拉伸(fill,stretch)还影响间距的拉伸效果(between,around,among)。
+ */
+@property(nonatomic, assign) MyGravityPolicy lastlineGravityPolicy;
 
 
 /**
@@ -263,6 +275,18 @@
  */
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
+
+
+/**
+ 上面函数的加强版本。
+
+ @param subviewSize 指定子视图的尺寸
+ @param minSpace 指定子视图之间的最小间距
+ @param maxSpace 指定子视图之间的最大间距
+ @param isCenter 指定是否所有子视图居中
+ */
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 
 @end

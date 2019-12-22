@@ -131,6 +131,31 @@
         sbv.myFrame.sizeClass = sbv.myDefaultSizeClass;
 }
 
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered
+{
+    [self setSubviewsSize:subviewSize minSpace:minSpace maxSpace:maxSpace centered:centered inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+}
+
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass
+{
+    MySequentLayoutViewSizeClass *lsc = (MySequentLayoutViewSizeClass*)[self fetchLayoutSizeClass:sizeClass];
+    if (subviewSize == 0)
+    {
+        lsc.flexSpace = nil;
+    }
+    else
+    {
+        if (lsc.flexSpace == nil)
+            lsc.flexSpace = [MySequentLayoutFlexSpace new];
+        
+        lsc.flexSpace.subviewSize = subviewSize;
+        lsc.flexSpace.minSpace = minSpace;
+        lsc.flexSpace.maxSpace = maxSpace;
+        lsc.flexSpace.centered = centered;
+    }
+    [self setNeedsLayout];
+}
+
 
 #pragma mark -- Override Methods
 
@@ -183,29 +208,29 @@
     {
         //如果是拉伸处理则需要把包裹宽度取消。
         if (sbvsc.widthSizeInner.dimeWrapVal && gravity == MyGravity_Horz_Fill)
-            [sbvsc.widthSizeInner __setActive:NO];
+            [sbvsc.widthSizeInner __equalTo:nil];
         
         //如果同时设置了左右依赖。并且优先级低时或者布局视图不是宽度自适应则取消自视图宽度自适应，这里是为了兼容老版本。
         if (sbvsc.leadingPosInner.posVal != nil && sbvsc.trailingPosInner.posVal != nil && (sbvsc.widthSizeInner.priority == MyPriority_Low || !lsc.widthSizeInner.dimeWrapVal))
-            [sbvsc.widthSizeInner __setActive:NO];
+            [sbvsc.widthSizeInner __equalTo:nil];
         
         //只要同时设置了高度或者比重属性则应该把尺寸设置为空
         if (sbvsc.heightSizeInner.dimeWrapVal && sbvsc.weight != 0)
-            [sbvsc.heightSizeInner __setActive:NO];
+            [sbvsc.heightSizeInner __equalTo:nil];
     }
     else
     {
         //如果是拉伸处理则需要把包裹高度
         if (sbvsc.heightSizeInner.dimeWrapVal && gravity == MyGravity_Vert_Fill)
-            [sbvsc.heightSizeInner __setActive:NO];
+            [sbvsc.heightSizeInner __equalTo:nil];
         
         //如果同时设置了左右依赖。并且优先级低时则取消宽度自适应，这里是为了兼容老版本。
         if (sbvsc.topPosInner.posVal != nil && sbvsc.bottomPosInner.posVal != nil && (sbvsc.heightSizeInner.priority == MyPriority_Low || !lsc.heightSizeInner.dimeWrapVal))
-            [sbvsc.heightSizeInner __setActive:NO];
+            [sbvsc.heightSizeInner __equalTo:nil];
         
         //只要同时设置了宽度或者比重属性则应该把宽度置空
         if (sbvsc.widthSizeInner.dimeWrapVal && sbvsc.weight != 0)
-            [sbvsc.widthSizeInner __setActive:NO];
+            [sbvsc.widthSizeInner __equalTo:nil];
     }
 }
 
@@ -278,20 +303,22 @@
 
 -(CGSize)myVertOrientationLayout:(MyLinearLayoutViewSizeClass*)lsc calcRectOfSubviews:(NSArray*)sbs withSelfSize:(CGSize)selfSize
 {
-    CGFloat subviewSpace = lsc.subviewVSpace;
     CGFloat paddingTop = lsc.myLayoutTopPadding;
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
     CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
-    CGFloat paddingVert = paddingTop + paddingBottom;
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
 
+    CGFloat subviewSpace = lsc.subviewVSpace;
+    CGFloat subviewSize = [lsc.flexSpace calcMaxMinSubviewSize:selfSize.height arrangedCount:sbs.count startPadding:&paddingTop endPadding:&paddingBottom space:&subviewSpace];
+    CGFloat paddingVert = paddingTop + paddingBottom;
     CGFloat fixedHeight = 0.0;   //计算固定部分的高度
     CGFloat totalWeight = 0.0;    //剩余部分的总比重
     CGFloat totalShrink = 0.0;    //总的压缩比重
     CGFloat addSpace = 0.0;      //用于压缩时的间距压缩增量。
     CGFloat maxSelfWidth = 0.0;
+
    
     //高度可以被伸缩的子视图集合
     NSMutableSet *flexSbsSet = [NSMutableSet new];
@@ -342,7 +369,10 @@
         }
     
         //计算子视图的高度
-        rect.size.height = [self myLayout:lsc heightSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
+        if (subviewSize != 0.0)
+            rect.size.height = subviewSize;
+        else
+            rect.size.height = [self myLayout:lsc heightSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
         rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
 
         //特殊处理宽度等于高度的情况
@@ -367,18 +397,21 @@
             maxSelfWidth = tempSelfWidth;
         }
         
-        if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
-        {//特殊处理高度等于宽度的情况
-            
-            rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
-            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
-        }
-        
-        //再次特殊处理高度包裹的场景
-        if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
+        if (subviewSize == 0.0)
         {
-            rect.size.height = [self mySubview:sbvsc wrapHeightSizeFits:rect.size.width];
-            rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+            if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
+            {//特殊处理高度等于宽度的情况
+                
+                rect.size.height = [sbvsc.heightSizeInner measureWith:rect.size.width];
+                rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+            }
+            
+            //再次特殊处理高度包裹的场景
+            if (sbvsc.heightSizeInner.dimeWrapVal && ![sbv isKindOfClass:[MyBaseLayout class]])
+            {
+                rect.size.height = [self mySubview:sbvsc wrapHeightSizeFits:rect.size.width];
+                rect.size.height = [self myValidMeasure:sbvsc.heightSizeInner sbv:sbv calcSize:rect.size.height sbvSize:rect.size selfLayoutSize:selfSize];
+            }
         }
         
         //计算固定高度尺寸和浮动高度尺寸部分
@@ -597,6 +630,11 @@
                 pos = (selfSize.height - fixedHeight - paddingVert)/2.0 + paddingTop;
             }
         }
+        else if (vertGravity == MyGravity_Vert_Among)
+        {
+            between = (selfSize.height - fixedHeight - paddingVert) / (sbs.count + 1);
+            pos = paddingTop + between;
+        }
         else if (vertGravity == MyGravity_Vert_Fill || vertGravity == MyGravity_Vert_Stretch)
         {
             pos = paddingTop;
@@ -747,20 +785,21 @@
 
 -(CGSize)myHorzOrientationLayout:(MyLinearLayoutViewSizeClass*)lsc calcRectOfSubviews:(NSArray*)sbs withSelfSize:(CGSize)selfSize
 {
-    CGFloat subviewSpace = lsc.subviewHSpace;
     CGFloat paddingTop = lsc.myLayoutTopPadding;
     CGFloat paddingBottom = lsc.myLayoutBottomPadding;
     CGFloat paddingLeading = lsc.myLayoutLeadingPadding;
     CGFloat paddingTrailing = lsc.myLayoutTrailingPadding;
-    CGFloat paddingHorz = paddingLeading + paddingTrailing;
     MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
     MyGravity horzGravity = [self myConvertLeftRightGravityToLeadingTrailing:lsc.gravity & MyGravity_Vert_Mask];
     
+    CGFloat subviewSpace = lsc.subviewHSpace;
+    CGFloat subviewSize = [lsc.flexSpace calcMaxMinSubviewSize:selfSize.width arrangedCount:sbs.count startPadding:&paddingLeading endPadding:&paddingTrailing space:&subviewSpace];
     CGFloat fixedWidth = 0.0;   //计算固定部分的宽度
     CGFloat totalWeight = 0.0;    //剩余部分的总比重
     CGFloat totalShrink = 0.0;    //总的压缩比重
     CGFloat addSpace = 0.0;      //用于压缩时的间距压缩增量。
-    
+    CGFloat paddingHorz = paddingLeading + paddingTrailing;
+
     //宽度是可伸缩的子视图集合
     NSMutableSet *flexSbsSet = [NSMutableSet new];
     //宽度是固定尺寸的子视图集合
@@ -816,7 +855,10 @@
         }
         
         //计算子视图的宽度，这里不管是否设置约束以及是否宽度是weight的都是进行计算。
-        rect.size.width = [self myLayout:lsc widthSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
+        if (subviewSize != 0.0)
+            rect.size.width = subviewSize;
+        else
+            rect.size.width = [self myLayout:lsc widthSizeValueOfSubview:sbvsc selfSize:selfSize sbvSize:rect.size paddingTop:paddingTop paddingLeading:paddingLeading paddingBottom:paddingBottom paddingTrailing:paddingTrailing];
         rect.size.width = [self myValidMeasure:sbvsc.widthSizeInner sbv:sbv calcSize:rect.size.width sbvSize:rect.size selfLayoutSize:selfSize];
         
         if (sbvsc.heightSizeInner.dimeRelaVal != nil && sbvsc.heightSizeInner.dimeRelaVal == sbvsc.widthSizeInner)
@@ -851,7 +893,7 @@
             baselinePos = rect.origin.y + (rect.size.height - sbvFont.lineHeight) / 2.0 + sbvFont.ascender;
         }
         
-        if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner)
+        if (sbvsc.widthSizeInner.dimeRelaVal != nil && sbvsc.widthSizeInner.dimeRelaVal == sbvsc.heightSizeInner && subviewSize == 0.0)
         {//特殊处理宽度等于高度的情况
             
             rect.size.width = [sbvsc.widthSizeInner measureWith:rect.size.height];
@@ -1121,6 +1163,11 @@
             {
                 pos = (selfSize.width - fixedWidth - paddingHorz)/2.0 + paddingLeading;
             }
+        }
+        else if (horzGravity == MyGravity_Horz_Among)
+        {
+            between = (selfSize.width - fixedWidth - paddingHorz) / (sbs.count + 1);
+            pos = paddingLeading + between;
         }
         else if (horzGravity == MyGravity_Horz_Fill || horzGravity == MyGravity_Horz_Stretch)
         {

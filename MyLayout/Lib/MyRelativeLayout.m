@@ -41,13 +41,13 @@
         if (sbvsc.leadingPosInner.posVal != nil &&
             sbvsc.trailingPosInner.posVal != nil &&
             (sbvsc.widthSizeInner.priority == MyPriority_Low || !lsc.widthSizeInner.dimeWrapVal))
-            [sbvsc.widthSizeInner __setActive:NO];
+            [sbvsc.widthSizeInner __equalTo:nil];
         
         //只要同时设置了上下边距且高度优先级很低则把高度值置空
         if (sbvsc.topPosInner.posVal != nil &&
             sbvsc.bottomPosInner.posVal != nil &&
             (sbvsc.heightSizeInner.priority == MyPriority_Low || !lsc.heightSizeInner.dimeWrapVal))
-            [sbvsc.heightSizeInner __setActive:NO];
+            [sbvsc.heightSizeInner __equalTo:nil];
 
         
         if ([sbv isKindOfClass:[MyBaseLayout class]])

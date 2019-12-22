@@ -133,6 +133,7 @@
                          NSLocalizedString(@"screen horz center",@""),
                          NSLocalizedString(@"between",@""),
                          NSLocalizedString(@"around",@""),
+                         NSLocalizedString(@"among",@""),
                          NSLocalizedString(@"horz fill",@""),
                          NSLocalizedString(@"vert fill", @""),
                          NSLocalizedString(@"horz stretch", @""),
@@ -223,6 +224,7 @@
                          NSLocalizedString(@"screen horz center",@""),
                          NSLocalizedString(@"between",@""),
                          NSLocalizedString(@"around",@""),
+                         NSLocalizedString(@"among",@""),
                          NSLocalizedString(@"horz fill",@""),
                          NSLocalizedString(@"vert fill", @""),
                          NSLocalizedString(@"horz stretch",@""),
@@ -339,16 +341,19 @@
         case 10:  //垂直间距环绕
             vertGravity = MyGravity_Vert_Around;
             break;
-        case 11:   //水平填充
+        case 11:  //垂直间距等分
+            vertGravity = MyGravity_Vert_Among;
+            break;
+        case 12:   //水平填充
             horzGravity  = MyGravity_Horz_Fill;
             break;
-        case 12:  //垂直填充
+        case 13:  //垂直填充
             vertGravity = MyGravity_Vert_Fill;  //这里模拟器顶部出现黑线，真机是不会出现的。。
             break;
-        case 13:   //水平拉伸
+        case 14:   //水平拉伸
             horzGravity  = MyGravity_Horz_Stretch;
             break;
-        case 14:  //垂直拉伸
+        case 15:  //垂直拉伸
             vertGravity = MyGravity_Vert_Stretch;  //这里模拟器顶部出现黑线，真机是不会出现的。。
             break;
         default:
@@ -401,16 +406,19 @@
         case 10:  //水平间距环绕
             horzGravity = MyGravity_Horz_Around;
             break;
-        case 11:   //水平填充
+        case 11:  //水平间距等分
+            horzGravity = MyGravity_Horz_Among;
+            break;
+        case 12:   //水平填充
             horzGravity  = MyGravity_Horz_Fill;
             break;
-        case 12:
+        case 13:
             vertGravity = MyGravity_Vert_Fill;
             break;
-        case 13:   //水平拉伸
+        case 14:   //水平拉伸
             horzGravity  = MyGravity_Horz_Stretch;
             break;
-        case 14:  //垂直拉伸
+        case 15:  //垂直拉伸
             vertGravity = MyGravity_Vert_Stretch;
             break;
         default:
@@ -500,6 +508,9 @@
         case MyGravity_Vert_Around:
             vertGravityStr = @"MyGravity_Vert_Around";
             break;
+        case MyGravity_Vert_Among:
+            vertGravityStr = @"MyGravity_Vert_Among";
+            break;
         case MyGravity_Vert_Window_Center:
             vertGravityStr = @"MyGravity_Vert_Window_Center";
             break;
@@ -530,6 +541,9 @@
             break;
         case MyGravity_Horz_Around:
             horzGravityStr = @"MyGravity_Horz_Around";
+            break;
+        case MyGravity_Horz_Among:
+            horzGravityStr = @"MyGravity_Horz_Among";
             break;
         case MyGravity_Horz_Window_Center:
             horzGravityStr = @"MyGravity_Horz_Window_Center";

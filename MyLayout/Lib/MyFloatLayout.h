@@ -120,6 +120,16 @@
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
 
+/**
+ 上面函数的加强版本。
+ 
+ @param subviewSize 指定子视图的尺寸
+ @param minSpace 指定子视图之间的最小间距
+ @param maxSpace 指定子视图之间的最大间距
+ @param centered 指定是否所有子视图居中
+ */
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 
 @end
