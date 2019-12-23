@@ -1,6 +1,13 @@
 # 版本变更日志
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
+## [V1.9.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.1)(2019/12/23)
+### Added
+1. 流式布局和线性布局添加对停靠属性`gravity`的两个新枚举值： `MyGravity_Vert_Among、MyGravity_Horz_Among`的支持。这两个枚举值可以实现间距的等分拉伸功能。between、around、among这三个拉伸的区别在于和父视图之间的间距上。
+2. 流式布局添加最后一行的停靠策略属性`lastlineGravityPolicy`，用来指定流式布局最后行的停靠策略。
+3. 流式布局、浮动布局、线性布局添加对行内浮动间距的支持。我们可使用`setSubviewsSize`函数中的centered参数来指定每一行的头尾视图和父布局视图之间的间距也是浮动的。
+
+
 ---
 ## [V1.9.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.0)(2019/11/30)
 
