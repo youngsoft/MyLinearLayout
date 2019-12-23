@@ -337,7 +337,6 @@
     //只有最后一行，并且数量小于arrangedCount，并且不是第一行才应用策略。
     BOOL applyLastlineGravityPolicy = ((startItemIndex + count) == sbs.count &&
                                        count != lsc.arrangedCount &&
-                                       startItemIndex != 0 &&
                                        lineHorzGravity == MyGravity_Horz_Fill);
 
     
@@ -396,7 +395,6 @@
     //只有最后一行，并且数量小于arrangedCount，并且不是第一行才应用策略。
     BOOL applyLastlineGravityPolicy = ((startItemIndex + count) == sbs.count &&
                                        count != lsc.arrangedCount &&
-                                       startItemIndex != 0 &&
                                        lineVertGravity == MyGravity_Vert_Fill);
     
     
@@ -532,7 +530,6 @@
     //只有最后一行，并且数量小于arrangedCount，并且不是第一行才应用策略。
     BOOL applyLastlineGravityPolicy = ((startItemIndex + count) == sbs.count &&
                                            count != lsc.arrangedCount &&
-                                           startItemIndex != 0 &&
                                        (lineHorzGravity == MyGravity_Horz_Between || lineHorzGravity == MyGravity_Horz_Around || lineHorzGravity == MyGravity_Horz_Among));
     
     switch (lineHorzGravity)
@@ -661,7 +658,7 @@
             }
             
             sbvmyFrame.leading += addXPosInc * (itemIndex - startItemIndex);
-            if (applyLastlineGravityPolicy && lsc.lastlineGravityPolicy == MyGravityPolicy_Auto) {
+            if (lineIndex != 0 && applyLastlineGravityPolicy && lsc.lastlineGravityPolicy == MyGravityPolicy_Auto) {
                 //对齐前一行对应位置的
                 sbvmyFrame.leading = sbs[itemIndex - lsc.arrangedCount].myFrame.leading;
             }
@@ -736,10 +733,9 @@
             lineVertGravity = vertGravity;
     }
     
-    //只有最后一行，并且数量小于arrangedCount，并且不是第一行才应用策略。
+    //只有最后一行，并且数量小于arrangedCount才应用策略。
     BOOL applyLastlineGravityPolicy = ((startItemIndex + count) == sbs.count &&
                                        count != lsc.arrangedCount &&
-                                       startItemIndex != 0 &&
                                        (lineVertGravity == MyGravity_Vert_Between || lineVertGravity == MyGravity_Vert_Around || lineVertGravity == MyGravity_Vert_Among));
 
     
@@ -860,7 +856,7 @@
             }
             
             sbvmyFrame.top += addYPosInc * (itemIndex - startItemIndex);
-            if (applyLastlineGravityPolicy && lsc.lastlineGravityPolicy == MyGravityPolicy_Auto) {
+            if (lineIndex != 0 && applyLastlineGravityPolicy && lsc.lastlineGravityPolicy == MyGravityPolicy_Auto) {
                 //对齐前一行对应位置的
                 sbvmyFrame.top = sbs[itemIndex - lsc.arrangedCount].myFrame.top;
             }
