@@ -86,7 +86,7 @@ typedef enum : unsigned short {
     MyGravity_Horz_Trailing = 64,
     /**水平宽度填充*/
     MyGravity_Horz_Fill = MyGravity_Horz_Left | MyGravity_Horz_Center | MyGravity_Horz_Right,
-    /**水平掩码，用来获取水平方向的枚举值*/
+    /**水平掩码，用来获取垂直方向的枚举值*/
     MyGravity_Horz_Mask = 0xFF00,
 
     //垂直方向
@@ -104,7 +104,7 @@ typedef enum : unsigned short {
     MyGravity_Vert_Baseline = 32 << 8,
     /**垂直高度填充*/
     MyGravity_Vert_Fill = MyGravity_Vert_Top | MyGravity_Vert_Center | MyGravity_Vert_Bottom,
-    /**垂直掩码，用来获取垂直方向的枚举值*/
+    /**垂直掩码，用来获水平方向的枚举值*/
     MyGravity_Vert_Mask = 0x00FF,
 
     /**整体居中*/

@@ -2987,9 +2987,9 @@ void* _myObserverContextC = (void*)20175283;
         if (boundDime.dimeRelaVal.view == self)
         {
             if (boundDime.dimeRelaVal.dime == MyGravity_Horz_Fill)
-                value = selfLayoutSize.width - (boundDime.dimeRelaVal.view == self ? (self.myLayoutLeadingPadding + self.myLayoutTrailingPadding) : 0);
+                value = selfLayoutSize.width - (self.myLayoutLeadingPadding + self.myLayoutTrailingPadding);
             else
-                value = selfLayoutSize.height - (boundDime.dimeRelaVal.view == self ? (self.myLayoutTopPadding + self.myLayoutBottomPadding) :0);
+                value = selfLayoutSize.height - (self.myLayoutTopPadding + self.myLayoutBottomPadding);
         }
         else if (boundDime.dimeRelaVal.view == sbv)
         {
