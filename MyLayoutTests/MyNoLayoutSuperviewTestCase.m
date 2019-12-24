@@ -28,7 +28,7 @@
     
     //测试停靠到非布局父视图上的布局。
     
-    [MyBaseLayout setIsRTL:YES];
+    [MyBaseLayout setIsRTL:NO];
     
     UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 400)];
     
@@ -64,8 +64,7 @@
     
     
     MyFrameLayout *layout6 = [MyFrameLayout new];
-    layout6.wrapContentWidth = YES;
-    layout6.wrapContentHeight = YES;
+    layout6.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     layout6.myCenterX = 20;
     layout6.myBottom = 20;
     [containerView addSubview:layout6];
@@ -76,6 +75,12 @@
     v1.mySize = CGSizeMake(60, 60);
     [layout6 addSubview:v1];
     [layout6 layoutIfNeeded];
+    
+    MyFrameLayout *layout7 = [MyFrameLayout new];
+    layout7.mySize = CGSizeMake(40, 40);
+    layout7.myMargin = 20;
+    [containerView addSubview:layout7];
+    
 
     
     if ([MyBaseLayout isRTL])
@@ -86,6 +91,7 @@
         XCTAssertTrue(CGRectEqualToRect(layout4.frame, CGRectMake(70, 60, 40, 300)), @"layout4 frame=%@", NSStringFromCGRect(layout4.frame));
         XCTAssertTrue(CGRectEqualToRect(layout5.frame, CGRectMake(100, 200, 40, 80)), @"layout5 frame=%@", NSStringFromCGRect(layout5.frame));
         XCTAssertTrue(CGRectEqualToRect(layout6.frame, CGRectMake(45, 310, 70, 70)), @"layout6 frame=%@", NSStringFromCGRect(layout6.frame));
+        XCTAssertTrue(CGRectEqualToRect(layout7.frame, CGRectMake(140, 20, 40, 40)), @"layout7 frame=%@", NSStringFromCGRect(layout7.frame));
 
     }
     else
@@ -97,6 +103,8 @@
         XCTAssertTrue(CGRectEqualToRect(layout4.frame, CGRectMake(90, 60, 40, 300)), @"layout4 frame=%@", NSStringFromCGRect(layout4.frame));
         XCTAssertTrue(CGRectEqualToRect(layout5.frame, CGRectMake(100, 200, 40, 80)), @"layout5 frame=%@", NSStringFromCGRect(layout5.frame));
         XCTAssertTrue(CGRectEqualToRect(layout6.frame, CGRectMake(85, 310, 70, 70)), @"layout6 frame=%@", NSStringFromCGRect(layout6.frame));
+        XCTAssertTrue(CGRectEqualToRect(layout7.frame, CGRectMake(20, 20, 40, 40)), @"layout7 frame=%@", NSStringFromCGRect(layout7.frame));
+
 
     }
     

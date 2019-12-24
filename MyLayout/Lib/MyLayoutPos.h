@@ -8,6 +8,9 @@
 
 #import "MyLayoutDef.h"
 
+@class MyLayoutMostPos;
+
+
 /**
  *视图的布局位置类，用于定位视图在布局视图中的位置。位置可分为水平方向的位置和垂直方向的位置，在视图定位时必要同时指定水平方向的位置和垂直方向的位置。水平方向的位置可以分为左，水平居中，右三种位置，垂直方向的位置可以分为上，垂直居中，下三种位置。
  其中的offset方法可以用来设置布局位置的偏移值,一般只在equalTo设置为MyLayoutPos或者NSArray时配合使用。比如A.leftPos.equalTo(B.rightPos).offset(5)表示A在B的右边再偏移5个点
@@ -130,7 +133,7 @@
 #else
 
 /**
- 设置布局位置的值。参数val可以接收下面六种类型的值：
+ 设置布局位置的值。参数val可以接收下面七种类型的值：
  
  1. NSNumber表示位置是一个具体的数值。
     对于框架布局和线性布局中的子视图来说，如果数值是一个大于0而小于1的数值时表示的是相对的间距或者边距。如果是相对边距那么真实的位置 = 布局视图尺寸*相对边距值；如果是相对间距那么真实的位置 = 布局视图剩余尺寸 * 相对间距值 /(所有相对间距值的总和)。
@@ -143,7 +146,9 @@
  
  5. UIView表示位置依赖指定视图的对应位置。
  
- 6. nil表示位置的值被清除。
+ 6.MyLayoutMostPos表示位置是表示取数组中所有元素位置中的最大的一个或者最小的一个元素的位置值, 只有相对布局中的子视图的位置才能设置这种类型。
+ 
+ 7. nil表示位置的值被清除。
  */
 -(MyLayoutPos* (^)(id val))equalTo;
 
@@ -236,12 +241,36 @@
  */
 @property(nonatomic, assign, getter=isActive) BOOL active;
 
+/**
+ 在布局视图的宽度或者高度是固定的情况下，当某一列或者行中的所有子视图的间距值和尺寸超过父视图的尺寸时子视图的间距压缩比重，默认值为0表示不压缩。数字越大表明压缩的比重越大。目前只有线性布局和框架布局和流式布局中的子视图支持这个属性，而且这特性只在子视图的间距超过布局视图时才有效。
+ */
+@property(nonatomic, assign) CGFloat shrink;
+
 
 //通过如下属性获取上面方法设置的值。
-@property(nonatomic, strong, readonly) id posVal;
 @property(nonatomic, assign, readonly) CGFloat offsetVal;
-@property(nonatomic, assign, readonly) CGFloat minVal;
-@property(nonatomic, assign, readonly) CGFloat maxVal;
 
+
+@end
+
+
+@interface MyLayoutPos(Clone)
+
+//从布局位置中克隆出一个位置对象来。这个克隆出来的位置值是源位置对象的值加上offsetVal。这个方法通常用于下面数组元素的构造
+-(MyLayoutPos* (^)(CGFloat offsetVal))clone;
+
+@end
+
+
+/**
+ 我们可以从一个数组中获取众多位置的最大最小的位置值。
+ 这里要求数组的元素只能是MyLayoutPos或者NSNumber两种对象类型的值。如果是NSNumber类型则是一个绝对位置值，也就是包括布局视图padding设置的偏移值。
+ */
+@interface NSArray(MyLayoutMostPos)
+
+//从数组中得到最大的位置值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
+@property(nonatomic, readonly) MyLayoutMostPos *myMinPos;
+//从数组中得到最小的位置值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
+@property(nonatomic, readonly) MyLayoutMostPos *myMaxPos;
 
 @end

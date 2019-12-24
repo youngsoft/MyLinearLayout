@@ -35,7 +35,7 @@
     
     //添加操作按钮。
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:2];
-    actionLayout.wrapContentHeight = YES;
+    actionLayout.myHeight = MyLayoutSize.wrap;
     actionLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平填充，也就是所有子视图的宽度相等。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewHSpace = 5;
@@ -53,14 +53,16 @@
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust align", @"")
                                                action:@selector(handleAdjustArrangeGravity:)]];
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust spacing", @"")
-                                               action:@selector(handleAdjustMargin:)]];
+                                               action:@selector(handleAdjustSpace:)]];
+    [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust gravity policy", @"")
+                                               action:@selector(handleAdjustGravityPolicy:)]];
     
     UILabel *flowLayoutSetLabel = [UILabel new];
     flowLayoutSetLabel.font = [CFTool font:13];
     flowLayoutSetLabel.textColor = [UIColor redColor];
     flowLayoutSetLabel.adjustsFontSizeToFitWidth = YES;
-    flowLayoutSetLabel.wrapContentHeight = YES;
-    flowLayoutSetLabel.numberOfLines = 5;
+    flowLayoutSetLabel.myHeight = MyLayoutSize.wrap;
+    flowLayoutSetLabel.numberOfLines = 6;
     [rootLayout addSubview:flowLayoutSetLabel];
     self.flowLayoutSetLabel = flowLayoutSetLabel;
     
@@ -172,9 +174,18 @@
             vertGravity = MyGravity_Vert_Between;
             break;
         case MyGravity_Vert_Between:
+            vertGravity = MyGravity_Vert_Around;
+            break;
+        case MyGravity_Vert_Around:
+            vertGravity = MyGravity_Vert_Among;
+            break;
+        case MyGravity_Vert_Among:
             vertGravity = MyGravity_Vert_Fill;
             break;
         case MyGravity_Vert_Fill:
+            vertGravity = MyGravity_Vert_Stretch;
+            break;
+        case MyGravity_Vert_Stretch:
         {
             vertGravity = MyGravity_Vert_Top;
             [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
@@ -209,9 +220,18 @@
             horzGravity = MyGravity_Horz_Between;
             break;
         case MyGravity_Horz_Between:
+            horzGravity = MyGravity_Horz_Around;
+            break;
+        case MyGravity_Horz_Around:
+            horzGravity = MyGravity_Horz_Among;
+            break;
+        case MyGravity_Horz_Among:
             horzGravity = MyGravity_Horz_Fill;
             break;
         case MyGravity_Horz_Fill:
+            horzGravity = MyGravity_Horz_Stretch;
+            break;
+        case MyGravity_Horz_Stretch:
         {
             horzGravity = MyGravity_Horz_Left;
             [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
@@ -248,6 +268,9 @@
                 vertArrangeGravity = MyGravity_Vert_Fill;
                 break;
             case MyGravity_Vert_Fill:
+                vertArrangeGravity = MyGravity_Vert_Stretch;
+                break;
+            case MyGravity_Vert_Stretch:
             {
                 vertArrangeGravity = MyGravity_Vert_Top;
                 [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
@@ -271,6 +294,8 @@
                 horzArrangeGravity = MyGravity_Horz_Fill;
                 break;
             case MyGravity_Horz_Fill:
+                horzArrangeGravity = MyGravity_Horz_Stretch;
+            case MyGravity_Horz_Stretch:
             {
                 horzArrangeGravity = MyGravity_Horz_Left;
                 [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
@@ -288,7 +313,7 @@
     
 }
 
--(void)handleAdjustMargin:(id)sender
+-(void)handleAdjustSpace:(id)sender
 {
     //调整所有子视图的水平和垂直间距。
     if (self.flowLayout.subviewHSpace == 0)
@@ -301,6 +326,26 @@
     else
         self.flowLayout.subviewVSpace = 0;
     
+    [self.flowLayout layoutAnimationWithDuration:0.4];
+    [self flowlayoutInfo];
+}
+
+-(void)handleAdjustGravityPolicy:(id)sender
+{
+    switch (self.flowLayout.lastlineGravityPolicy) {
+        case MyGravityPolicy_No:
+            self.flowLayout.lastlineGravityPolicy = MyGravityPolicy_Always;
+            break;
+        case MyGravityPolicy_Always:
+            self.flowLayout.lastlineGravityPolicy = MyGravityPolicy_Auto;
+            break;
+        case MyGravityPolicy_Auto:
+            self.flowLayout.lastlineGravityPolicy = MyGravityPolicy_No;
+        default:
+            break;
+    }
+    
+    [self.flowLayout.subviews makeObjectsPerformSelector:@selector(sizeToFit)];
     [self.flowLayout layoutAnimationWithDuration:0.4];
     [self flowlayoutInfo];
 }
@@ -323,8 +368,9 @@
     
     NSString *subviewSpaceStr = [NSString stringWithFormat:@"vert:%.0f,horz:%.0f",self.flowLayout.subviewVSpace, self.flowLayout.subviewHSpace];
     
+    NSString *gravityPolicyStr = [self gravityPolicyInfo:self.flowLayout.lastlineGravityPolicy];
     
-    self.flowLayoutSetLabel.text = [NSString stringWithFormat:@"flowLayout:\norientation=%@, arrangedCount=%@\ngravity=%@\narrangedGravity=%@\nsubviewSpace=(%@)",orientationStr,arrangeCountStr,gravityStr,arrangedGravityStr,subviewSpaceStr];
+    self.flowLayoutSetLabel.text = [NSString stringWithFormat:@"flowLayout:\norientation=%@, arrangedCount=%@\ngravity=%@\narrangedGravity=%@\nsubviewSpace=(%@)\n%@",orientationStr,arrangeCountStr,gravityStr,arrangedGravityStr,subviewSpaceStr,gravityPolicyStr];
 }
 
 -(NSString*)gravityInfo:(MyGravity)gravity
@@ -349,6 +395,15 @@
             break;
         case MyGravity_Vert_Between:
             vertGravityStr = @"MyGravity_Vert_Between";
+            break;
+        case MyGravity_Vert_Around:
+            vertGravityStr = @"MyGravity_Vert_Around";
+            break;
+        case MyGravity_Vert_Among:
+            vertGravityStr = @"MyGravity_Vert_Among";
+            break;
+        case MyGravity_Vert_Stretch:
+            vertGravityStr = @"MyGravity_Vert_Stretch";
             break;
         case MyGravity_Vert_Window_Center:
             vertGravityStr = @"MyGravity_Vert_Window_Center";
@@ -375,6 +430,15 @@
         case MyGravity_Horz_Between:
             horzGravityStr = @"MyGravity_Horz_Between";
             break;
+        case MyGravity_Horz_Around:
+            horzGravityStr = @"MyGravity_Horz_Around";
+            break;
+        case MyGravity_Horz_Among:
+            horzGravityStr = @"MyGravity_Horz_Among";
+            break;
+        case MyGravity_Horz_Stretch:
+            horzGravityStr = @"MyGravity_Horz_Stretch";
+            break;
         case MyGravity_Horz_Window_Center:
             horzGravityStr = @"MyGravity_Horz_Window_Center";
             break;
@@ -388,6 +452,22 @@
     
 }
 
+-(NSString*)gravityPolicyInfo:(MyGravityPolicy)gravityPolicy
+{
+    switch (gravityPolicy) {
+        case MyGravityPolicy_No:
+            return @"policy:No";
+            break;
+        case MyGravityPolicy_Always:
+            return @"policy:Always";
+        case MyGravityPolicy_Auto:
+            return @"policy:Auto";
+        default:
+            break;
+    }
+    
+    return @"";
+}
 
 /*
 #pragma mark - Navigation

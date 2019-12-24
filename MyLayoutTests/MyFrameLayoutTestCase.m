@@ -7,6 +7,8 @@
 //
 
 #import "MyLayoutTestCaseBase.h"
+#import "FLTest1ViewController.h"
+#import "FLTest2ViewController.h"
 
 @interface MyFrameLayoutTestCase : MyLayoutTestCaseBase
 
@@ -24,6 +26,19 @@
     [super tearDown];
 }
 
+-(void)testExample
+{
+   
+    for (int i = 1; i <=2; i++)
+    {
+        Class cls = NSClassFromString([NSString stringWithFormat:@"FLTest%dViewController", i]);
+        UIViewController *vc = [cls new];
+        UIView *v = vc.view;
+        [v layoutIfNeeded];
+    }
+
+}
+
 -(void)testblurred
 {
     //测试位置偏移不正确或者尺寸不正确将会产生模糊显示的效果。
@@ -38,7 +53,7 @@
     label1.font = [UIFont systemFontOfSize:17];
     label1.myCenterY = 0;
     label1.myLeft = 10;
-    label1.wrapContentSize = YES;
+    label1.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     
     [frameLayout addSubview:label1];
     
@@ -48,7 +63,7 @@
     label2.font = [UIFont systemFontOfSize:17];
     label2.myTop = 200;
     label2.myLeft = 10;
-    label2.wrapContentSize = YES;
+    label2.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [frameLayout addSubview:label2];
     
 
@@ -75,7 +90,7 @@
     
     MyFrameLayout *frameLayout = [MyFrameLayout new];
     frameLayout.padding = UIEdgeInsetsMake(20, 10, 5, 6);
-    frameLayout.wrapContentSize = YES;
+    frameLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     
     frameLayout.zeroPadding = NO;
     
@@ -159,6 +174,199 @@
     XCTAssertTrue(CGRectEqualToRect(v1.estimatedRect, CGRectMake(0,0,100, 100)), @"v1 rect is:%@", NSStringFromCGRect(v1.estimatedRect));
     XCTAssertTrue(CGRectEqualToRect(v2.estimatedRect, CGRectMake(0,0,50, 50)), @"v2 rect is:%@", NSStringFromCGRect(v2.estimatedRect));
     XCTAssertTrue(CGRectEqualToRect(v3.estimatedRect, CGRectMake(0,0,100,50)), @"v3 rect is:%@", NSStringFromCGRect(v3.estimatedRect));
+
+}
+
+-(void)testWrapContent2
+{
+    MyFrameLayout * dataview = [[MyFrameLayout alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0)];
+    dataview.heightSize.equalTo(@(MyLayoutSize.wrap)).min([UIScreen mainScreen].bounds.size.height);
+    //上面在滚动视图下。
+    
+    MyLinearLayout * dataContentV = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    dataContentV.topPadding = 64;
+    dataContentV.bottomPadding = 64;      // + 10;
+    dataContentV.myCenterX = 0;
+    dataContentV.myCenterY = 0;
+    dataContentV.myHeight = MyLayoutSize.wrap;
+    dataContentV.myHorzMargin = 0;
+    [dataview addSubview:dataContentV];
+
+    
+    MyLinearLayout * subrootview1 = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    subrootview1.gravity = MyGravity_Horz_Fill;
+    subrootview1.myHeight = MyLayoutSize.wrap;
+    subrootview1.myHorzMargin = 0;
+    subrootview1.padding = UIEdgeInsetsMake(0, 10, 0, 10);
+    [dataContentV addSubview:subrootview1];
+
+    
+    UILabel * view1 = [UILabel new];
+    view1.myTop = 120;
+    view1.myHeight = 140 + 180;
+    [subrootview1 addSubview:view1];
+    
+    
+    UILabel * view2 = [UILabel new];
+    view2.myHeight = 160 + 200;
+    [subrootview1 addSubview:view2];
+    
+    
+    UILabel * subrootview2 = [UILabel new];
+    subrootview2.myHeight = 150;
+    subrootview2.myHorzMargin = 0;
+    subrootview2.text = @"subrootview2";
+    [dataContentV addSubview:subrootview2];
+    
+    view2.hidden = YES;
+    subrootview2.hidden = YES;
+    
+    [dataview layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(dataview.frame, CGRectMake(0,0,375,667)), @"dataview rect is:%@", NSStringFromCGRect(dataview.frame));
+     XCTAssertTrue(CGRectEqualToRect(dataContentV.frame, CGRectMake(0,49.5,375,568)), @"dataContentV rect is:%@", NSStringFromCGRect(dataContentV.frame));
+    
+    
+    subrootview2.hidden = NO;
+    
+    [dataview layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(dataview.frame, CGRectMake(0,0,375,718)), @"dataview rect is:%@", NSStringFromCGRect(dataview.frame));
+    XCTAssertTrue(CGRectEqualToRect(dataContentV.frame, CGRectMake(0,0,375,718)), @"dataContentV rect is:%@", NSStringFromCGRect(dataContentV.frame));
+    
+    
+    view2.hidden = NO;
+    subrootview2.hidden = YES;
+    
+    [dataview layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(dataview.frame, CGRectMake(0,0,375,928)), @"dataview rect is:%@", NSStringFromCGRect(dataview.frame));
+    XCTAssertTrue(CGRectEqualToRect(dataContentV.frame, CGRectMake(0,0,375,928)), @"dataContentV rect is:%@", NSStringFromCGRect(dataContentV.frame));
+    
+    
+    view2.hidden = YES;
+    subrootview2.hidden = YES;
+    
+    [dataview layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(dataview.frame, CGRectMake(0,0,375,667)), @"dataview rect is:%@", NSStringFromCGRect(dataview.frame));
+    XCTAssertTrue(CGRectEqualToRect(dataContentV.frame, CGRectMake(0,49.5,375,568)), @"dataContentV rect is:%@", NSStringFromCGRect(dataContentV.frame));
+
+}
+
+-(void)testWrapContent3
+{
+    //测试一个布局视图的尺寸是包裹的，同时里面的子视图设置了宽高。
+    MyFrameLayout *rootLayout = [MyFrameLayout new];
+    rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
+    
+    //1.同时设置了上下和左右。没有设置高度。
+    UIView *v1 = [UIView new];
+    v1.myLeft = 10;
+    v1.myRight = 20;
+    v1.myTop = 30;
+    v1.myBottom = 40;
+    [rootLayout addSubview:v1];
+    
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,90,110)), @"rootLayout rect is:%@", NSStringFromCGRect(rootLayout.frame));
+    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(30,40,0,0)), @"v1 rect is:%@", NSStringFromCGRect(v1.frame));
+
+    
+    
+    UIView *v2 = [UIView new];
+    v2.myLeft = 40;
+    v2.myRight = 30;
+    v2.myTop = 20;
+    v2.myBottom = 10;
+    v2.myWidth = 100;
+    v2.myHeight = 200;
+    [rootLayout addSubview:v2];
+    
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,230,270)), @"rootLayout rect is:%@", NSStringFromCGRect(rootLayout.frame));
+    XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(30,40,140,160)), @"v1 rect is:%@", NSStringFromCGRect(v1.frame));
+    XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(60,30,100,200)), @"v2 rect is:%@", NSStringFromCGRect(v2.frame));
+
+    [v1 removeFromSuperview];
+    [v2 removeFromSuperview];
+    
+    UILabel *label = [UILabel new];
+    label.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    label.text = @"您好！";
+    label.myMargin = 20;
+    CGSize lablesz = [label sizeThatFits:CGSizeZero];
+    [rootLayout addSubview:label];
+    
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,60+40+lablesz.width,40+40+lablesz.height)), @"rootLayout rect is:%@", NSStringFromCGRect(rootLayout.frame));
+    XCTAssertTrue(CGRectEqualToRect(label.frame, CGRectMake(20+20,10+20,lablesz.width,lablesz.height)), @"label rect is:%@", NSStringFromCGRect(label.frame));
+    
+    
+    UIView *v3 = [UIView new];
+    v3.myRight = 30;
+    v3.myBottom = 30;
+    v3.mySize = CGSizeMake(100, 100);
+    [rootLayout addSubview:v3];
+    
+    [rootLayout layoutIfNeeded];
+    
+    XCTAssertTrue(CGRectEqualToRect(rootLayout.frame, CGRectMake(0,0,20+40+30+100,10+30+30+100)), @"rootLayout rect is:%@", NSStringFromCGRect(rootLayout.frame));
+    
+     XCTAssertTrue(CGRectEqualToRect(label.frame, CGRectMake(20+20,10+20,lablesz.width,lablesz.height)), @"label rect is:%@", NSStringFromCGRect(label.frame));
+    
+    XCTAssertTrue(CGRectEqualToRect(v3.frame, CGRectMake(rootLayout.frame.size.width - 40 - 30 - 100 ,rootLayout.frame.size.height - 30 - 30 - 100, 100,100)), @"v3 rect is:%@", NSStringFromCGRect(v3.frame));
+    
+    
+}
+
+-(void)testWrapContent4
+{
+    //没有约束，原生的frame值设置。
+    MyFrameLayout *rootLayout = [MyFrameLayout new];
+    rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    
+    UIView *v = [UIView new];
+    v.frame = CGRectMake(0, 0, 150, 150);
+    [rootLayout addSubview:v];
+    
+    [rootLayout layoutIfNeeded];
+    MyRectAssert(rootLayout, CGRectMake(0, 0, 170, 170));
+    
+}
+
+-(void)testWrapContent5
+{
+    MyFrameLayout* _layoutRoot = [[MyFrameLayout alloc] init];
+    _layoutRoot.myTop =
+    _layoutRoot.myLeft =
+    _layoutRoot.myRight = 0;
+    _layoutRoot.wrapContentHeight = YES;
+    _layoutRoot.bottomPadding = 12;
+    // _layoutRoot.backgroundColor = [UIColor whiteColor];
+    //_layoutRoot.clipsToBounds = YES;
+    _layoutRoot.frame = CGRectMake(0, 0, 100, 0);
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    imageView.myLeft =
+    imageView.myRight = 0;
+    imageView.myBottom = -12;
+    [_layoutRoot addSubview:imageView];
+    
+    [_layoutRoot layoutIfNeeded];
+    
+    MyRectAssert(_layoutRoot, CGRectMake(0, 0, 100, 50));
+    
+    
+    [_layoutRoot setNeedsLayout];
+    [_layoutRoot layoutIfNeeded];
+    
+    MyRectAssert(_layoutRoot, CGRectMake(0, 0, 100, 50));
 
 }
 

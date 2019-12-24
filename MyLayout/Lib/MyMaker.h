@@ -82,9 +82,6 @@
 -(MyMaker*)clearFloat;
 
 
-//浮动布局独有。
--(MyMaker*)noBoundaryLimit;
-
 //赋值操支持NSNumber,UIView,MyLayoutPos,MyLayoutSize, NSArray[MyLayoutSize]
 -(MyMaker* (^)(id val))equalTo;
 -(MyMaker* (^)(id val))min;

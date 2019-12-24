@@ -314,12 +314,12 @@
 
 
 /**
- *视图的宽度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,nil这四种值
+ *视图的宽度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,MyLayoutMostSize,UIView,nil这六种值
  */
 @property(nonatomic, readonly)  MyLayoutSize *widthSize;
 
 /**
- *视图的高度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,nil这四种值
+ *视图的高度布局尺寸对象，可以通过其中的euqalTo方法来设置NSNumber,MyLayoutSize,NSArray<MyLayoutSize*>,MyLayoutMostSize,UIView,nil这六种值
  */
 @property(nonatomic, readonly)  MyLayoutSize *heightSize;
 
@@ -336,12 +336,18 @@
  */
 
 /**
- *视图的宽度布局尺寸,是widthSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！
+ *视图的宽度布局尺寸,是widthSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！除了设置常规的数字外您还可以设置一些特殊的值：
+ MyLayoutSize.wrap  表示宽度自适应
+ MyLayoutSize.fill  表明宽度填充父视图剩余宽度
+ MyLayoutSize.empty 表明清除宽度约束。
  */
 @property(nonatomic,assign) IBInspectable CGFloat myWidth;
 
 /**
- *视图的高度布局尺寸,是heightSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！
+ *视图的高度布局尺寸,是heightSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！除了设置常规的数字外您还可以设置一些特殊的值：
+ MyLayoutSize.wrap  表示高度自适应
+ MyLayoutSize.fill  表明高度填充父视图剩余高度
+ MyLayoutSize.empty 表明清除高度约束。
  */
 @property(nonatomic,assign) IBInspectable CGFloat myHeight;
 
@@ -349,27 +355,6 @@
  *视图的宽度高度布局尺寸,是myWidth,myHeight方法的简化版本。此属性只用于赋值不用于读取！
  */
 @property(nonatomic,assign) IBInspectable  CGSize  mySize;
-
-
-
-/**
- *视图的宽度包裹属性，表示视图的宽度由所有子视图的整体宽度来确定或者根据视图内容来宽度自适应。默认值是NO(水平线性布局默认这个属性是YES)，表示必须要明确指定视图的宽度，而当设置为YES时则不需要明确的指定视图的宽度了。这个属性不能和widthSize(或者设置了左右边距)同时设置否则可能会产生约束冲突，因为前者表明宽度由子视图或者内容来决定而后者则表示宽度是一个明确的值。如果同时设置了宽度包裹属性又同时设置了明确的宽度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的宽度和宽度包裹则会在布局前将宽度包裹属性置为NO。
- */
-@property(nonatomic,assign) IBInspectable BOOL wrapContentWidth;
-
-/**
- *视图的高度包裹属性，表示视图的高度由所有子视图的整体高度来确定或者根据视图内容来高度自适应。默认值是NO(垂直线性布局默认这个属性是YES)，表示必须要明确指定布局的高度，而当设置为YES时则不需要明确的指定视图的高度了。这个属性不能和heightSize(或者设置了上下边距)同时设置否则可能会产生约束冲突，因为前者表明高度由子视图或者内容来决定而后者则表示高度是一个明确的值。如果同时设置了高度包裹属性又同时设置了明确的高度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的高度和高度包裹则会在布局前将高度包裹属性置为NO。如果某个非布局视图指定了明确的宽度，而又将这个属性设置为了YES的话就能实现在固定宽度的情况下视图的高度根据内容自适应的效果，这个特性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图来实现高度根据内容自适应的场景。UILabel在使用这个属性时会自动设置numberOfLines为0，因此如果您要修改numberOfLines则需要在设置这个属性后进行；UITextView可以用这个属性以及heightSize中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果；UIImageView可以用这个属性来在实现在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放。
- */
-@property(nonatomic,assign) IBInspectable BOOL wrapContentHeight;
-
-
-/**
- *视图的尺寸根据内容来决定，也就是视图的尺寸由内容包裹。这个属性是: A.wrapContentWidth = YES; A.wrapContentHeight = YES;的简化版本。
- *在历史版本中对UILabel进行text赋值后总要手动调用sizeToFit来重新更新布局，在1.3.6以后的新版本中，如果你希望视图的尺寸根据内容而确定则请将这个属性
- *设置为YES。这样就可以在设置完毕text后系统会自动激发布局处理。
- */
-@property(nonatomic, assign) IBInspectable BOOL wrapContentSize;
-
 
 /**
  设置子视图的相对比重尺寸。也就是子视图的尺寸并不是一个绝对值而是一个相对值，在最终布局时系统会根据布局视图的剩余尺寸来将这个相对的值转化为绝对的值。通过对子视图设置相对的尺寸可以很方便的适配各种屏幕尺寸的设备，以便达到完美的布局效果。这个属性默认值是0表示不使用相对尺寸。weight属性的引入是参考android中的weight的概念而来的。
@@ -379,66 +364,66 @@
  
  @note
  1.在线性布局和表格布局下：
-
-    1.1. 当线性布局是垂直线性布局时这个属性用来设置子视图高度占用父线性布局剩余高度的比重，这样子视图就不需要明确的设定高度值。
  
-    1.2. 当线性布局是水平线性布局时这个属性用来设置子视图宽度占用父线性布局剩余宽度的比重，这样子视图就不需要明确的设定宽度值。
+ 1.1. 当线性布局是垂直线性布局时这个属性用来设置子视图高度占用父线性布局剩余高度的比重，这样子视图就不需要明确的设定高度值。
  
-    @code
-    视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重/(布局视图内所有设置了weight比重值的子视图比重之和)。
-    @endcode
+ 1.2. 当线性布局是水平线性布局时这个属性用来设置子视图宽度占用父线性布局剩余宽度的比重，这样子视图就不需要明确的设定宽度值。
  
-    对一个垂直线性布局举例来说：假设布局视图的高度是100，A子视图占据了20的固定高度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么:
-    @code
-    A子视图的高度 = 20
-    B子视图的高度 = (100-20)*0.4/(0.4+0.6) = 32
-    C子视图的高度 = (100-20)*0.6/(0.4+0.6) = 48
-    @endcode
+ @code
+ 视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重/(布局视图内所有设置了weight比重值的子视图比重之和)。
+ @endcode
+ 
+ 对一个垂直线性布局举例来说：假设布局视图的高度是100，A子视图占据了20的固定高度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么:
+ @code
+ A子视图的高度 = 20
+ B子视图的高度 = (100-20)*0.4/(0.4+0.6) = 32
+ C子视图的高度 = (100-20)*0.6/(0.4+0.6) = 48
+ @endcode
  
  子视图设置weight属性时要注意如下几点：
  
-    - 垂直线性布局必须指定明确的高度，而不能使用wrapContentHeight属性；水平线性布局必须指定明确的宽度，而不能使用wrapContentWidth属性。
+ - 垂直线性布局必须指定明确的高度，而高度不能设置为自适应；水平线性布局必须指定明确的宽度，而不能使用wrapContentWidth属性。
  
-    - 如果比重属性设置为0的话则表示视图的尺寸必须要明确的被指定，这也是默认值。
+ - 如果比重属性设置为0的话则表示视图的尺寸必须要明确的被指定，这也是默认值。
  
-    - 线性布局里面的所有子视图的比重值的和不一定要求是1，比如线性布局里面两个视图的比重都设置为1和都设置为0.5以及都设置为0.1的意义是一样的，都是占用50%。
-
+ - 线性布局里面的所有子视图的比重值的和不一定要求是1，比如线性布局里面两个视图的比重都设置为1和都设置为0.5以及都设置为0.1的意义是一样的，都是占用50%。
+ 
  @note
  2.在流式布局下：
  
-    2.1. 当流式布局是垂直流式布局时这个属性用来设置子视图宽度占用父流式布局当前行的剩余宽度的比重，这样子视图就不需要明确的设定宽度值。
-    
-    2.2. 当流式布局是水平流式布局时这个属性用来设置子视图高度占用父流式布局当前列的剩余高度的比重，这样子视图就不需要明确的设定高度值。
+ 2.1. 当流式布局是垂直流式布局时这个属性用来设置子视图宽度占用父流式布局当前行的剩余宽度的比重，这样子视图就不需要明确的设定宽度值。
  
-    同时在数量约束和内容约束两种布局中视图设置的比重值在最终计算出真实尺寸时也是有差异的：
+ 2.2. 当流式布局是水平流式布局时这个属性用来设置子视图高度占用父流式布局当前列的剩余高度的比重，这样子视图就不需要明确的设定高度值。
  
-    @code
-    数量约束流式布局内的视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重/(视图所在行的所有设置了weight比重值的视图比重之和)。
+ 同时在数量约束和内容约束两种布局中视图设置的比重值在最终计算出真实尺寸时也是有差异的：
  
-    内容约束流式布局内的视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重。
+ @code
+ 数量约束流式布局内的视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重/(视图所在行的所有设置了weight比重值的视图比重之和)。
  
-    对一个垂直数量约束流式布局举例来说：假设布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么:
-    A子视图的宽度 = 20
-    B子视图的宽度 = (100-20)*0.4/(0.4+0.6) = 32
-    C子视图的宽度 = (100-20)*0.6/(0.4+0.6) = 48
+ 内容约束流式布局内的视图的真实尺寸值 = 布局视图剩余尺寸 * 当前视图的weight比重。
  
-    对一个垂直内容约束流式布局举例来说：假设布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么：
-    A子视图的宽度 = 20
-    B子视图的宽度 = (100-20)*0.4 = 32
-    C子视图的宽度 = (100-20-32)*0.6 = 28.8
+ 对一个垂直数量约束流式布局举例来说：假设布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么:
+ A子视图的宽度 = 20
+ B子视图的宽度 = (100-20)*0.4/(0.4+0.6) = 32
+ C子视图的宽度 = (100-20)*0.6/(0.4+0.6) = 48
+ 
+ 对一个垂直内容约束流式布局举例来说：假设布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么：
+ A子视图的宽度 = 20
+ B子视图的宽度 = (100-20)*0.4 = 32
+ C子视图的宽度 = (100-20-32)*0.6 = 28.8
  @endcode
  
-
+ 
  @note
  3. 在浮动布局下：
  
-    3.1. 当浮动布局的方向是垂直布局时，这个属性用来设置视图宽度占用当前浮动布局父视图剩余宽度的比重，这样视图就不需要明确的设定宽度值。
-  
-    3.2. 当浮动布局的方向是水平布局时，这个属性用来设置视图高度占用当前浮动布局父视图剩余高度的比重，这样子视图就不需要明确的设定高度值。
+ 3.1. 当浮动布局的方向是垂直布局时，这个属性用来设置视图宽度占用当前浮动布局父视图剩余宽度的比重，这样视图就不需要明确的设定宽度值。
  
-  @code
+ 3.2. 当浮动布局的方向是水平布局时，这个属性用来设置视图高度占用当前浮动布局父视图剩余高度的比重，这样子视图就不需要明确的设定高度值。
+ 
+ @code
  视图的真实尺寸 = 布局父视图的剩余尺寸 * 视图的weight比重值。
-  @endcode
+ @endcode
  
  举例来说：假设一个垂直浮动布局视图的宽度是100，A子视图占据了20的固定宽度，B子视图的weight设置为0.4，C子视图的weight设置为0.6 那么：
  
@@ -450,8 +435,6 @@
  
  */
 @property(nonatomic, assign) IBInspectable CGFloat weight;
-
-
 
 /**
  设置视图不受布局父视图的布局约束控制和不再参与视图的布局，所有设置的其他扩展属性都将失效而必须用frame来设置视图的位置和尺寸，默认值是NO。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
@@ -559,9 +542,9 @@
  
  2. 在垂直线性布局中只支持左、中、右、水平拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
  
- 3. 在水平线性布局中只支持上、中、下、垂直拉伸对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
+ 3. 在水平线性布局中只支持上、中、下、垂直拉伸、基线对齐。(如果父布局视图设置了gravity，子视图设置了这个属性则这个属性优先级最高)
  
- 4. 在垂直流式布局和垂直浮动布局中用来设置一行内的上、中、下、垂直拉伸对齐。(如果流式父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
+ 4. 在垂直流式布局和垂直浮动布局中用来设置一行内的上、中、下、垂直拉伸、基线对齐。(如果流式父布局视图设置了arrangedGravity，子视图设置了这个属性则这个属性优先级最高)
  
  5. 在水平流式布局和水平浮动布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果流式父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
  */
@@ -620,10 +603,10 @@
 /**
  布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
  布局视图通过重载layoutSubviews方法来完成子视图的布局和排列的工作。对于每个加入到布局视图中的子视图，都会在加入时通过KVO机制监控子视图的center和bounds以及frame值的变化，每当子视图的这些属性一变化时就又会重新引发布局视图的布局动作。同时对每个视图的布局扩展属性的设置以及对布局视图的布局属性的设置都会引发布局视图的布局动作。布局视图在添加到非布局父视图时也会通过KVO机制来监控非布局父视图的frame值和bounds值，这样每当非布局父视图的尺寸变更时也会引发布局视图的布局动作。前面说的引起变动的方法就是会在KVO处理逻辑以及布局扩展属性和布局属性设置完毕后通过调用setNeedLayout来实现的，当布局视图收到setNeedLayout的请求后，会在下一个runloop中对布局视图进行重新布局而这就是通过调用layoutSubviews方法来实现的。布局视图基类只提供了更新所有子视图的位置和尺寸以及一些基础的设置，而至于如何排列和布局这些子视图则要根据应用的场景和需求来确定，因此布局基类视图提供了一个：
-   -(CGSize)calcLayoutRect:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+   -(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
      的方法，要求派生类去重载这个方法，这样不同的派生类就可以实现不同的应用场景，这就是布局视图的核心实现机制。
  
- MyLayout布局库根据实际中常见的场景实现了7种不同的布局视图派生类他们分别是：线性布局、表格布局、相对布局、框架布局、流式布局、浮动布局、路径布局。
+ MyLayout布局库根据实际中常见的场景实现了8种不同的布局视图派生类他们分别是：线性布局、表格布局、相对布局、框架布局、流式布局、浮动布局、路径布局、栅格布局。
  */
 @interface MyBaseLayout : UIView
 
@@ -711,7 +694,7 @@
 
 /**
  * 设置当布局的尺寸由子视图决定并且在没有子视图加入的情况下padding的设置值是否会加入到布局的尺寸值里面。默认是YES，表示当布局视图没有子视图时padding值也会加入到尺寸里面。
- * 举例来说假设某个布局视图的高度是wrapContentHeight,并且设置了topPadding为10，bottomPadding为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为NO时，那么在没有任何子视图时布局视图的高度就是0，也就是说topPadding和bottomPadding不会参与高度的计算了。
+ * 举例来说假设某个布局视图的高度是自适应,并且设置了topPadding为10，bottomPadding为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为NO时，那么在没有任何子视图时布局视图的高度就是0，也就是说topPadding和bottomPadding不会参与高度的计算了。
  */
 @property(nonatomic, assign) BOOL zeroPadding;
 
@@ -746,7 +729,7 @@
  布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
  
  @note
- 只有框架布局、线性布局、表格布局、流式布局、浮动布局支持gravity属性，相对布局和路径布局不支持。
+ 只有框架布局、线性布局、表格布局、流式布局、浮动布局、栅格布局支持gravity属性，相对布局和路径布局不支持。
  
  1. MyGravity_Vert_Top,MyGravity_Vert_Center,MyGravity_Vert_Bottom 表示整体垂直居上，居中，居下 (支持：框架布局,线性布局,表格布局,流式布局,垂直浮动布局)
  
@@ -756,10 +739,20 @@
  
  4. MyGravity_Horz_Between 表示每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图。 (支持：水平线性布局,水平表格布局，流式布局)
  
- 5. MyGravity_Vert_Fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
+ 5. MyGravity_Vert_Around 表示每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图，首尾子视图和父视图的间距是子视图兄弟之间的一半。 (支持：垂直线性布局,垂直表格布局，流式布局)
  
- 6. MyGravity_Horz_Fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
- 7. MyGravity_Vert_Baseline 表示布局里面的子视图都基线对齐，目前只支持水平线性布局。
+ 6. MyGravity_Horz_Around 表示每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图，首尾子视图和父视图的间距是子视图兄弟之间的一半。 (支持：水平线性布局,水平表格布局，流式布局)
+ 
+ 7. MyGravity_Vert_Among 表示每行之间的行间距都被拉伸，以便使里面的子视图垂直方向填充满整个布局视图，首尾子视图和父视图的间距和子视图兄弟之间的间距相等。 (支持：垂直线性布局,垂直表格布局，流式布局)
+ 
+ 8. MyGravity_Horz_Among 表示每列之间的列间距都被拉伸，以便使里面的子视图水平方向填充满整个布局视图，首尾子视图和父视图的间距和子视图兄弟之间的间距相等。 (支持：水平线性布局,水平表格布局，流式布局)
+ 
+ 9. MyGravity_Vert_Fill 表示布局会拉伸子视图的高度，以便使里面的子视图垂直方向填充满整个布局视图的高度或者子视图平分布局视图的高度。(支持：框架布局，水平线性布局，水平表格布局，流式布局)
+ 
+ 10. MyGravity_Horz_Fill 表示布局会拉伸子视图的宽度，以便使里面的子视图水平方向填充满整个布局视图的宽度或者子视图平分布局视图的宽度。 (支持：框架布局，垂直线性布局，垂直表格布局，流式布局)
+ 11. MyGravity_Vert_Baseline 表示布局里面的子视图都基线对齐，目前只支持水平线性布局。
+ 12.MyGravity_Vert_Stretch 表示当布局中的子视图没有设置高度约束时或者非布局子视图高度自适应时，会拉伸子视图的高度。(支持：线性布局、流式布局)
+ 13.MyGravity_Horz_Stretch 表示当布局中的子视图没有设置宽度约束或者非布局子视图宽度自适应时，会拉伸子视图的宽度。(支持：线性布局、流式布局)
  */
 @property(nonatomic, assign) IBInspectable MyGravity gravity;
 
@@ -806,7 +799,6 @@
 @property(nonatomic,getter=isSelected) BOOL selected;                                // default is NO may be used by some subclasses or by application
 
 
-
 /**
  *设置布局视图在布局开始之前的处理块。系统会在每次布局完成前调用对应的处理块后将处理块清空为nil。系统会在调用layoutSubviews方法前执行beginLayoutBlock。
  */
@@ -816,36 +808,12 @@
  */
 @property(nonatomic,copy) void (^endLayoutBlock)(void);
 
-
-
-
 /**
- 删除所有子视图的方便方法
- */
--(void)removeAllSubviews;
-
-
-/**
- *设置布局时的动画。并指定时间。这个函数是下面方法的简单实现：
- 
- @code
-  self.beginLayoutBlock = ^{
- 
- [UIView beginAnimations:nil context:nil];
- [UIView setAnimationDuration:duration];
- };
- 
- self.endLayoutBlock = ^{
- 
- [UIView commitAnimations];
- };
-
-@endcode
- 
+ *设置布局时的动画。并指定时间,选项,和完成时的处理，这个动画只会在调用后的下次布局时执行一次。
  @param duration 指定动画的时间间隔
  */
 -(void)layoutAnimationWithDuration:(NSTimeInterval)duration;
-
+-(void)layoutAnimationWithDuration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion;
 
 /**
  设置布局视图在第一次布局完成之后或者有横竖屏切换时进行处理的block。这个block不像beginLayoutBlock以及endLayoutBlock那样只会执行一次,而是会一直存在
@@ -859,6 +827,12 @@
  isPortrait 表明当前是横屏还是竖屏。
  */
 @property(nonatomic,copy) void (^rotationToDeviceOrientationBlock)(MyBaseLayout *layout, BOOL isFirst, BOOL isPortrait);
+
+
+/**
+ 删除所有子视图的方便方法
+ */
+-(void)removeAllSubviews;
 
 
 /**
@@ -955,7 +929,7 @@
  MyXXXLayout *rootLayout= [MyXXXLayout new];
  rootLayout.cacheEstimatedRect = YES;   //设置缓存评估的rect,如果您的cell是高度自适应的话，强烈建立打开这个属性，这会大大的增强您的tableview的性能！！
  rootLayout.myHorzMargin = 0;           //宽度和父视图相等
- rootLayout.wrapContentHeight = YES;    //高度动态包裹。
+ rootLayout.myHeight = MyLayoutSize.wrap;    //高度动态包裹。
  [self.contentView addSubview:rootLayout];
  self.rootLayout = rootLayout;
   
@@ -1022,4 +996,86 @@
 @end
 
 
+#pragma mark -- MyLayoutDragger
 
+//布局视图拖动器类，用来实现布局内的视图的拖动封装。用于实现布局子视图的拖放处理。
+//布局视图的拖动器类，只支持那些按顺序添加的布局视图，不支持相对布局、框架布局、栅格布局、路径布局。
+//一般情况下我们要实现布局内子视图的：
+//  1.UIControlEventTouchDown 事件来处理拖动开始
+//  2.UIControlEventTouchDragInside UIControlEventTouchDragOutside 事件来处理拖动进行中
+//  3. UIControlEventTouchUpInside UIControlEventTouchCancel 事件来处理拖动结束。
+
+@interface MyLayoutDragger:NSObject
+
+//子视图拖动时，拖动区域当前所归属的子视图位置索引。
+@property(nonatomic, assign, readonly) NSUInteger currentIndex;
+//子视图拖动时，拖动视图的老的位置索引。
+@property(nonatomic, assign, readonly) NSUInteger oldIndex;
+
+//当前是否正在拖动中。
+@property(nonatomic, assign, readonly) BOOL hasDragging;
+
+//设置拖动时不会调整的子视图列表。也就是说数组中指定的子视图在拖动时不会被移动而是总是固定在原有的位置。
+@property(nonatomic,strong) NSArray<UIView*> *exclusiveViews;
+
+//设置拖动时位置调整的动画时长，默认是0.2秒，设置为0时拖动不产生动画效果。
+@property(nonatomic, assign) NSTimeInterval animateDuration;
+
+//当拖动的视图和现有视图重叠时是否支持悬停功能，默认为NO。当开启开关后，并且oldIndex和currentIndex相等时则处于悬停状态。开启悬停功能的目的是为了支持一些替换或者更新的能力。
+@property(nonatomic, assign) BOOL canHover;
+
+//当前是否正在悬停中。我们可以借助这个属性值判断来做一些操作处理。
+@property(nonatomic, assign, readonly) BOOL isHovering;
+
+//下列方法请在子视图的相应事件处理中调用。
+
+//开始拖动,请在子视图view的拖动开始事件处调用这个方法，其中view指定要开始拖动的视图。
+-(void)dragView:(UIView *)view withEvent:(UIEvent *)event;
+//拖动中,请在子视图view的拖动过程事件中调用这个方法，其中的view指定拖动中的视图。
+-(void)dragginView:(UIView *)view withEvent:(UIEvent *)event;
+//结束拖动，请在子视图view的结束拖动事件中调用这个方法，其中的view指定要结束拖动的视图。
+-(void)dropView:(UIView *)view withEvent:(UIEvent *)event;
+
+@end
+
+
+@interface MyBaseLayout(MyLayoutDragger)
+
+//创建一个布局视图拖动器。要求拖动的视图必须是布局视图中的子视图。
+-(MyLayoutDragger*)createLayoutDragger;
+
+@end
+
+
+
+#pragma mark -- Deprecated
+
+
+@interface UIView(MyDeprecated)
+
+
+/**
+ *！！！不建议使用这个属性了，而是直接设置视图的宽度为MyLayoutSize.wrap。 比如:myWidth = MyLayoutSize.wrap 或者 widthSize.equalTo(@(MyLayoutSize.wrap))。
+ *获取和判断的时候可以通过 myWidth == MyLayoutSize.wrap 或者 widthSize.isWrap 来比较判断
+ *视图的宽度包裹属性，表示视图的宽度由所有子视图的整体宽度来确定或者根据视图内容来宽度自适应。默认值是NO(水平线性布局默认这个属性是YES)，表示必须要明确指定视图的宽度，而当设置为YES时则不需要明确的指定视图的宽度了。这个属性不能和widthSize(或者设置了左右边距)同时设置否则可能会产生约束冲突，因为前者表明宽度由子视图或者内容来决定而后者则表示宽度是一个明确的值。如果同时设置了宽度包裹属性又同时设置了明确的宽度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的宽度和宽度包裹则会在布局前将宽度包裹属性置为NO。
+ */
+@property(nonatomic,assign) BOOL wrapContentWidth;
+
+/**
+ *！！！不建议使用这个属性了，而是直接设置视图的高度为MyLayoutSize.wrap。 比如:myHeight = MyLayoutSize.wrap 或者 heightSize.equalTo(@(MyLayoutSize.wrap))。
+ *获取和判断的时候可以通过 myHeight == MyLayoutSize.wrap 或者 heightSize.isWrap 来比较判断
+ 
+ *视图的高度包裹属性，表示视图的高度由所有子视图的整体高度来确定或者根据视图内容来高度自适应。默认值是NO(垂直线性布局默认这个属性是YES)，表示必须要明确指定布局的高度，而当设置为YES时则不需要明确的指定视图的高度了。这个属性不能和heightSize(或者设置了上下边距)同时设置否则可能会产生约束冲突，因为前者表明高度由子视图或者内容来决定而后者则表示高度是一个明确的值。如果同时设置了高度包裹属性又同时设置了明确的高度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的高度和高度包裹则会在布局前将高度包裹属性置为NO。如果某个非布局视图指定了明确的宽度，而又将这个属性设置为了YES的话就能实现在固定宽度的情况下视图的高度根据内容自适应的效果，这个特性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图来实现高度根据内容自适应的场景。UILabel在使用这个属性时会自动设置numberOfLines为0，因此如果您要修改numberOfLines则需要在设置这个属性后进行；UITextView可以用这个属性以及heightSize中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果；UIImageView可以用这个属性来在实现在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放。
+ */
+@property(nonatomic,assign) BOOL wrapContentHeight;
+
+
+/**
+ *不建议使用这个属性了！直接设置尺寸为MyLayoutSize.wrap即可。
+ *视图的尺寸根据内容来决定，也就是视图的尺寸由内容包裹。这个属性是: A.wrapContentWidth = YES; A.wrapContentHeight = YES;的简化版本。
+ *在历史版本中对UILabel进行text赋值后总要手动调用sizeToFit来重新更新布局，在1.3.6以后的新版本中，如果你希望视图的尺寸根据内容而确定则请将这个属性
+ *设置为YES。这样就可以在设置完毕text后系统会自动激发布局处理。
+ */
+@property(nonatomic, assign) BOOL wrapContentSize;
+
+@end

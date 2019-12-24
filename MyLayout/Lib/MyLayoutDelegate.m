@@ -25,7 +25,6 @@
         _layoutLayer = layoutLayer;
         _layoutRect = CGRectZero;
     }
-    
     return self;
 }
 
@@ -58,9 +57,6 @@
         [_trailingBorderlineLayer removeFromSuperlayer];
         _trailingBorderlineLayer = nil;
     }
-        
-    
-    
 }
 
 -(void)setTopBorderline:(MyBorderline *)topBorderline
@@ -72,7 +68,6 @@
         CAShapeLayer *borderLayer = _topBorderlineLayer;
         [self updateBorderLayer:&borderLayer withBorderline:_topBorderline];
         _topBorderlineLayer = borderLayer;
-        
     }
 }
 
@@ -100,7 +95,6 @@
     }
 }
 
-
 -(void)setTrailingBorderline:(MyBorderline *)trailingBorderline
 {
     if (_trailingBorderline != trailingBorderline)
@@ -111,7 +105,6 @@
         [self updateBorderLayer:&borderLayer withBorderline:_trailingBorderline];
         _trailingBorderlineLayer = borderLayer;
     }
-    
 }
 
 -(MyBorderline*)leftBorderline
@@ -130,7 +123,6 @@
         self.leadingBorderline = leftBorderline;
 }
 
-
 -(MyBorderline*)rightBorderline
 {
     if ([MyBaseLayout isRTL])
@@ -147,14 +139,10 @@
         self.trailingBorderline = rightBorderline;
 }
 
-
-
 -(void)updateBorderLayer:(CAShapeLayer**)ppLayer withBorderline:(MyBorderline*)borderline
 {
-    
     if (borderline == nil)
     {
-        
         if (*ppLayer != nil)
         {
             [(*ppLayer) removeFromSuperlayer];
@@ -164,7 +152,6 @@
     }
     else
     {
-        
         if ( *ppLayer == nil)
         {
             *ppLayer = [[CAShapeLayer alloc] init];
@@ -184,7 +171,6 @@
             (*ppLayer).strokeColor = borderline.color.CGColor;
             (*ppLayer).lineWidth = borderline.thick;
             (*ppLayer).backgroundColor = nil;
-            
         }
         else
         {
@@ -194,14 +180,11 @@
             (*ppLayer).strokeColor = nil;
             (*ppLayer).lineWidth = 0;
             (*ppLayer).backgroundColor = borderline.color.CGColor;
-            
         }
         
         [(*ppLayer) setNeedsLayout];
-        
     }
 }
-
 
 -(void)layoutSublayersOfLayer:(CAShapeLayer *)layer
 {
@@ -267,13 +250,9 @@
     }
     
     if ([MyBaseLayout isRTL])
-    {
         layerRect.origin.x = layoutSize.width - layerRect.origin.x - layerRect.size.width;
-    }
     
     //把动画效果取消。
-    
-    
     if (!_myCGRectEqual(layer.frame, layerRect))
     {
         if (layer.lineDashPhase == 0)
@@ -289,17 +268,13 @@
             CGPathRelease(path);
         }
         layer.frame = layerRect;
-        
     }
-    
 }
-
 
 - (nullable id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event
 {
     return [NSNull null];
 }
-
 
 -(void)setNeedsLayoutIn:(CGRect)rect withLayer:(CALayer*)layer
 {
@@ -344,9 +319,30 @@
             _trailingBorderlineLayer.hidden = NO;
         [_trailingBorderlineLayer setNeedsLayout];
     }
-    
 }
 
+-(void)updateAllBorderlineColor
+{
+    [self updateBorderlineColorHelper:_topBorderlineLayer borderline:_topBorderline];
+    [self updateBorderlineColorHelper:_bottomBorderlineLayer borderline:_bottomBorderline];
+    [self updateBorderlineColorHelper:_leadingBorderlineLayer borderline:_leadingBorderline];
+    [self updateBorderlineColorHelper:_trailingBorderlineLayer borderline:_trailingBorderline];
+}
+
+-(void)updateBorderlineColorHelper:(CAShapeLayer*)layer borderline:(MyBorderline*)borderline
+{
+    if (layer != nil && borderline != nil)
+    {
+        if (borderline.dash != 0.0)
+        {
+            layer.strokeColor = borderline.color.CGColor;
+        }
+        else
+        {
+            layer.backgroundColor = borderline.color.CGColor;
+        }
+    }
+}
 
 @end
 
@@ -361,11 +357,9 @@
     SEL _touchCancelAction;
     BOOL _hasDoCancel;
     
-    
     BOOL _forbidTouch;
     BOOL _canCallAction;
     CGPoint _beginPoint;
-    
 }
 
 BOOL _hasBegin;
@@ -417,9 +411,7 @@ __weak MyBaseLayout * _currentLayout;
                     [self myPerformTouch:_touchCancelTarget withAction:_touchCancelAction];
                     
                     _hasDoCancel = YES;
-                    
                 }
-                
             }
         }
     }
@@ -427,7 +419,6 @@ __weak MyBaseLayout * _currentLayout;
 
 -(void)doTargetAction:(UITouch*)touch
 {
-    
     [self myResetTouchHighlighted];
     
     //距离太远则不会处理
@@ -444,17 +435,13 @@ __weak MyBaseLayout * _currentLayout;
             [self myPerformTouch:_touchCancelTarget withAction:_touchCancelAction];
             _hasDoCancel = YES;
         }
-        
     }
-    
     _forbidTouch = NO;
-    
 }
 
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
     if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
     {
         //设置一个延时.
@@ -471,7 +458,6 @@ __weak MyBaseLayout * _currentLayout;
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
     if (_layout != nil && _target != nil && _hasBegin && (_layout == _currentLayout || _currentLayout == nil))
     {
         [self myResetTouchHighlighted];
@@ -482,13 +468,10 @@ __weak MyBaseLayout * _currentLayout;
         if (!_hasDoCancel)
         {
             [self myPerformTouch:_touchCancelTarget withAction:_touchCancelAction];
-            
             _hasDoCancel = YES;
         }
-        
     }
 }
-
 
 ///设置触摸时的高亮
 -(void)mySetTouchHighlighted
@@ -505,12 +488,10 @@ __weak MyBaseLayout * _currentLayout;
     
 }
 
-
 -(id)myActionSender
 {
     return _layout;
 }
-
 
 -(void)myPerformTouch:(id)target withAction:(SEL)action
 {
@@ -540,12 +521,9 @@ __weak MyBaseLayout * _currentLayout;
 {
     _touchCancelTarget = target;
     _touchCancelAction = action;
-    
 }
 
-
 @end
-
 
 
 @implementation MyLayoutTouchEventDelegate
@@ -586,7 +564,6 @@ __weak MyBaseLayout * _currentLayout;
         _oldBackgroundImage = self.layout.backgroundImage;
         self.layout.backgroundImage = self.highlightedBackgroundImage;
     }
-    
 }
 
 //恢复触摸时的高亮。
@@ -604,13 +581,11 @@ __weak MyBaseLayout * _currentLayout;
         _oldBackgroundColor = nil;
     }
     
-    
     if (self.highlightedBackgroundImage != nil)
     {
         self.layout.backgroundImage = _oldBackgroundImage;
         _oldBackgroundImage = nil;
     }
-    
 }
 
 -(void)myResetTouchHighlighted2

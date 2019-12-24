@@ -42,8 +42,7 @@
     _rootLayout.padding = UIEdgeInsetsMake(10, 10, 0.3, 10);
     _rootLayout.backgroundColor = [UIColor whiteColor];
     _rootLayout.myHorzMargin = MyLayoutPos.safeAreaMargin;
-    _rootLayout.wrapContentHeight = YES;
-    _rootLayout.wrapContentWidth = NO;
+    _rootLayout.myHeight = MyLayoutSize.wrap;
     [self.contentView addSubview:_rootLayout];
     
     _headImageView = [UIImageView new];
@@ -72,7 +71,7 @@
     _textMessageLabel.text = @"";
     _textMessageLabel.myLeading = 0;
     _textMessageLabel.myTrailing = 0;
-    _textMessageLabel.wrapContentHeight = YES;
+    _textMessageLabel.myHeight = MyLayoutSize.wrap;
     [messageLayout addSubview:_textMessageLabel];
     
     _nineFlowLayout = [[MyFlowLayout alloc] initWithOrientation:MyOrientation_Vert arrangedCount:3];
@@ -80,8 +79,7 @@
     _nineFlowLayout.myHorzMargin = 0;
     _nineFlowLayout.subviewHSpace = 5;
     _nineFlowLayout.subviewVSpace = 5;
-    _nineFlowLayout.wrapContentHeight = YES;
-    _nineFlowLayout.wrapContentWidth = NO;
+    _nineFlowLayout.myHeight = MyLayoutSize.wrap;
     [messageLayout addSubview:_nineFlowLayout];
     
     _timeLabel = [UILabel new];
@@ -90,7 +88,7 @@
     [messageLayout addSubview:_timeLabel];
     
     MyLinearLayout *hLinearLayout = [[MyLinearLayout alloc] initWithOrientation:MyOrientation_Horz];
-    hLinearLayout.wrapContentHeight = YES;
+    hLinearLayout.myHeight = MyLayoutSize.wrap;
     hLinearLayout.gravity = MyGravity_Horz_Between | MyGravity_Vert_Center;
     hLinearLayout.myHorzMargin = 0;
     [messageLayout addSubview:hLinearLayout];
@@ -98,13 +96,12 @@
     _browLabel = [UILabel new];
     _browLabel.text = @"";
     _browLabel.font = [UIFont systemFontOfSize:14];
-    _browLabel.wrapContentWidth = YES;
-    _browLabel.wrapContentHeight = YES; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
+    _browLabel.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap); //尺寸自适应。
     [hLinearLayout addSubview:_browLabel];
     
     MyLinearLayout *actionshLinearLayout = [[MyLinearLayout alloc] initWithOrientation:MyOrientation_Horz];
     actionshLinearLayout.rightPadding = 5;
-    actionshLinearLayout.wrapContentHeight = YES;
+    actionshLinearLayout.myHeight = MyLayoutSize.wrap;
     actionshLinearLayout.gravity =  MyGravity_Vert_Center;
     actionshLinearLayout.myHorzMargin = 0;
     [hLinearLayout addSubview:actionshLinearLayout];
@@ -136,7 +133,7 @@
     _giveLikeLabel.textColor = [UIColor blueColor];
     _giveLikeLabel.font = [UIFont systemFontOfSize:12];
     _giveLikeLabel.myHorzMargin = 0;
-    _giveLikeLabel.wrapContentHeight = YES;
+    _giveLikeLabel.myHeight = MyLayoutSize.wrap;
     [giveLikeLayout addSubview:_giveLikeLabel];
     
 }

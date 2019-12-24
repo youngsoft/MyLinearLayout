@@ -67,9 +67,6 @@ CGFloat _hrate = 1;
     return _myCGRectRound(rect);
 }
 
-
-
-
 @end
 
 #endif

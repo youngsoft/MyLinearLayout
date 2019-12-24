@@ -72,14 +72,13 @@
 
 -(void)createUserProfile1Layout:(MyLinearLayout*)rootLayout
 {
-    //这个例子建立一个只向上浮动的浮动布局视图，注意这里要想布局高度由子视图包裹的话则必须要同时设置noBoundaryLimit为YES。
-    //在常规情况下，如果使用左右浮动布局时，要求必须有明确的宽度，也就是不要用wrapContentWidth。同样使用上下浮动布局时，要求必须要有明确的高度，也就是不要用wrapContentHeight。这样设置明确宽度或者高度的原因是浮动布局需要根据这些宽度或者高度的约束自动换行浮动。但是在实践的场景中，有时候我们在浮动方向上没有尺寸约束限制，而是人为的来控制子视图的换行，并且还要布局视图的宽度和高度具有包裹属性，那么这时候我们就可以用浮动布局的noBoundaryLimit属性来进行控制了。
-    //设置noBoundaryLimit为YES时必要同时设置包裹属性。具体情况见属性noBoundaryLimit的说明。
+    //这个例子建立一个只向上浮动的浮动布局视图，注意这里要想布局高度由子视图包裹的话则必须要设置布局视图的高度自适应。
+    //当在水平浮动布局中设置高度自适应，子视图不能逆向浮动只能向上浮动，并且子视图的weight不能设置为非0.
+    //当在水平浮动布局中设置高度自适应，需要我们设置某个子视图的clearFloat为YES进行手动换行处理。
     
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.backgroundColor = [UIColor whiteColor];
-    contentLayout.noBoundaryLimit = YES;
-    contentLayout.wrapContentHeight = YES;  //对于上下浮动布局来说，如果只想向上浮动，而高度又希望是由子视图决定，则必须要设置noBoundaryLimit的值为YES。
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewHSpace = 5;
@@ -112,7 +111,7 @@
     addressLabel.text = @"联系地址：中华人民共和国北京市朝阳区盈科中心B座2楼,其他的我就不会再告诉你了。";
     addressLabel.font = [CFTool font:15];
     addressLabel.textColor = [CFTool color:4];
-    addressLabel.wrapContentHeight = YES;
+    addressLabel.heightSize.equalTo(@(MyLayoutSize.wrap));
     addressLabel.widthSize.equalTo(contentLayout.widthSize).add(-45); //40的头像宽度外加5的左右间距。
     [addressLabel sizeToFit];
     [contentLayout addSubview:addressLabel];
@@ -151,7 +150,7 @@
     
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.backgroundColor = [UIColor whiteColor];
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
@@ -235,11 +234,11 @@
 
 -(void)createUserProfile3Layout:(MyLinearLayout*)rootLayout
 {
-    //这个例子里面上下浮动布局还是可以设置wrapContentHeight的，并且这里用了viewLayoutCompleteBlock来实现一些特殊化处理。
+    //这个例用了viewLayoutCompleteBlock来实现一些特殊化处理。
     
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.backgroundColor = [UIColor whiteColor];
-    contentLayout.wrapContentHeight = YES;   //虽然说上下浮动布局一般要明确有高度，但是我们依然可以用wrapContentHeight属性，这时候布局视图的高度就是子视图里面高度最高的子视图了。
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
@@ -277,6 +276,7 @@
     nameLabel.text = @"欧阳大哥";
     nameLabel.font = [CFTool font:17];
     nameLabel.textColor = [CFTool color:4];
+    nameLabel.clearFloat = YES;
     [nameLabel sizeToFit];
     [contentLayout addSubview:nameLabel];
     
@@ -293,11 +293,8 @@
     detailLabel.textColor = [CFTool color:2];
     detailLabel.font = [CFTool font:20];
     detailLabel.adjustsFontSizeToFitWidth = YES;
-    detailLabel.reverseFloat = YES;
     [detailLabel sizeToFit];
     [contentLayout addSubview:detailLabel];
-
-    
 
 }
 
@@ -306,7 +303,7 @@
 {
     MyFloatLayout *contentLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.backgroundColor = [UIColor whiteColor];
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [rootLayout addSubview:contentLayout];
@@ -327,8 +324,8 @@
     editButton.textColor = [CFTool color:4];
     editButton.layer.cornerRadius = 5;
     editButton.layer.masksToBounds = YES;
-    editButton.widthSize.equalTo(editButton.widthSize).add(20);
-    editButton.heightSize.equalTo(editButton.heightSize).add(4);
+    editButton.widthSize.equalTo(@(MyLayoutSize.wrap)).add(20);
+    editButton.heightSize.equalTo(@(MyLayoutSize.wrap)).add(4);
     editButton.reverseFloat = YES;
     [contentLayout addSubview:editButton];
     

@@ -1,6 +1,71 @@
 # 版本变更日志
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
+## [V1.9.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.1)(2019/12/23)
+### Added
+1. 流式布局和线性布局添加对停靠属性`gravity`的两个新枚举值： `MyGravity_Vert_Among、MyGravity_Horz_Among`的支持。这两个枚举值可以实现间距的等分拉伸功能。between、around、among这三个拉伸的区别在于和父视图之间的间距上。
+2. 流式布局添加最后一行的停靠策略属性`lastlineGravityPolicy`，用来指定流式布局最后行的停靠策略。
+3. 流式布局、浮动布局、线性布局添加对行内浮动间距的支持。我们可使用`setSubviewsSize`函数中的centered参数来指定每一行的头尾视图和父布局视图之间的间距也是浮动的。
+
+
+---
+## [V1.9.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.0)(2019/11/30)
+
+### Added
+
+1. 添加新的布局:**MyFlexLayout**。 MyFlexLayout布局是从MyFlowLayout派生的布局,它兼容flexbox的所有特性,以及提供了和flexbox相同的设置语法。您可以通过MyFlexLayout中提供的flex属性并用链式语法的形式来设置布局特性，同时还可以通过视图提供的扩展分类flexItem属性来设置布局内子视图的布局特性。具体可以参考:[FLXTest1ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/FLXTest1ViewController.m) 中的介绍和使用方法
+
+2. 添加尺寸对象MyLayoutSize和位置对象MyLayoutPos的最值约束的设置。您可以将视图的尺寸设置为某一个尺寸集合中的最大值或者最小值。在相对布局中您也可以将视图的位置设置为某一个位置集合中的最大值和最小值。比如A的宽度是B,C,D三个视图宽度中的最大值，则可以设置为：`A.widthSize.equalTo(@[B.widthSize,C.widthSize,D.widthSize].myMaxSize)` 具体实例请参考：[RLTest6ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/RLTest6ViewController.m)
+
+3. 添加对视图尺寸和位置进行压缩的设置。在线性布局和流式布局以及框架布局中当子视图的尺寸和间距总和大于布局视图的尺寸时，您可以通过MyLayoutSize以及MyLayoutPos中提供的新属性**shrink**来设置压缩的比重，默认情况下压缩比重的值是0表示不压缩，比重越大压缩度越大。具体的使用方法可以参考：[AllTest7ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/AllTest7ViewController.m) 中的第12个demo。
+
+
+4. 针对线性布局、流式布局中的gravity属性添加了Around和Stretch两种停靠和对齐能力，其中的Around和Between的区别是前者的首行和尾行的拉伸间距是其他行之间间距的一半，而后者则首行和尾行的间距不会被拉伸。Stretch和Fill的区别是前者对明确设置了尺寸的视图不进行尺寸拉伸，而后者则是对所有视图都进行尺寸拉伸
+
+
+5. 添加和抽象对拖动的支持，系统提供了一个新的类**MyLayoutDragger**，你可以用这个类中提供的方法就可以很轻易的实现对布局视图中的子视图进行拖放操作。具体使用方法可以参考：[FLLTest3ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/FLLTest3ViewController.m)
+
+6. 添加对iOS13的黑白模式适配的支持，解决了边界线的黑白模式适配的问题。
+
+7. 流式布局MyFlowLayout中添加单独设置行内停靠对齐的支持属性：**lineGravity**，这个属性是一个block类型的对象，我们可以借助这个属性来实现对布局内每行的停靠对齐操作。具体实例可以参考：[FLLTest4ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/FLLTest4ViewController.m)
+
+
+
+8. 流式布局MyFlowLayout添加属性**isFlex**，这个属性默认是NO，当设置为YES时则表明让流式布局来兼容flexbox的特性。具体兼容可以参考属性中的注释。
+
+
+9. 流式布局和浮动布局添加了行内的基线对齐的功能。您可以将gravity或者arrangedGravity的值设置为MyGravity_Baseline。
+
+10. 浮动布局添加对尺寸自适应的支持。您可以在垂直浮动布局中将布局视图的宽度设置为自适应，同时可以在水平浮动布局中将布局视图的高度设置为自适应。
+
+11. 在线性布局、流式布局、浮动布局中实现了可以在尺寸自适应的模式下gravity的停靠属性生效的能力。解决了[issue#102](https://github.com/youngsoft/MyLinearLayout/issues/102)
+12. 在线性布局、流式布局、浮动布局中实现了设置尺寸自适应并且设置了最大最小值约束的情况下子视图被正确布局的功能。
+13. 扩充的流式布局中的pagedCount的能力，由原先的必须是在滚动视图的子视图下生效改为可以在任意时刻生效。
+14. 改变对布局动画方法:`layoutAnimationWithDuration:`的实现逻辑，并新增加了动画的选项以及动画完成后的处理block机制，具体使用请参见方法：`layoutAnimationWithDuration:options:completion:`
+
+### Update
+1. 更新了对尺寸自适应属性的设置方式。不再建议使用wrapContentWidth进行宽度自适应设置，而是改为`myWidth = MyLayoutSize.wrap`或者`widthSize.equalTo(@(MyLayoutSize.wrap))`进行宽度自适应设置。不再建议使用wrapContentHeight进行高度尺寸自适应设置，而是改为`myHeight= MyLayoutSize.wrap`或者`heightSize.equalTo(@(MyLayoutSize.wrap))`进行高度自适应设置。 对于宽度是否自适应的判断则可以用`myWidth == MyLayoutSize.wrap`或widthSize.iswrap进行判断，高度也是一样的。
+2. 在框架布局、线性布局、相对布局中子视图如果同时设置了上下边距或者左右边距，并且同时设置了高度或者宽度约束时则子视图的高度或者宽度不再是由布局视图决定而是由自身设置的高度或者宽度约束决定。解决了[issue#100](https://github.com/youngsoft/MyLinearLayout/issues/100)
+
+2. 将浮动布局的noBoundaryLimit属性设置为过期，这个属性将不再生效，而是直接将布局的宽度或者高度设置为自适应即可实现相同的功能。
+
+3. 线性布局中的shrinkType属性用于控制所有子视图的压缩特性，如果子视图的尺寸设置shrink属性值则以子视图的设置优先,布局视图的shrinkType将不再起作用。
+4. 修改布局视图监听子布局视图frame和center变化的实现，由原来的KVO形式变化为直接调用。这样就可以减少布局计算的耗时处理。
+5. 重构了流式布局、相对布局，加快了布局计算时间，尤其是相对布局的重构。
+
+
+
+### Fixed
+
+1. 修复在使用sizeclass时对位置对象进行克隆的一个BUG。这个BUG可能导致在不同sizeclass下位置设置被覆盖的问题。
+2. 修复相对布局下一组视图在高度或者宽度自适应下无法垂直居中或者水平居中的[BUG#103](https://github.com/youngsoft/MyLinearLayout/issues/103)
+3. 修复框架布局MyFrameLayout设置高度自适应时，当其中的子视图隐藏或者恢复隐藏时自适应高度无法更新的[BUG#99](https://github.com/youngsoft/MyLinearLayout/issues/99)
+4. 修复了流式布局在设置了子视图水平间距和垂直间距的情况下右对齐和底部对齐的BUG。
+
+
+
+
+
 ---
 ## [V1.8.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.8.0)(2019/06/25)
 
@@ -12,7 +77,7 @@
 4. 修复了布局视图的尺寸自适应能力和AutoLayout结合后，布局视图添加删除子视图后要手动代码进行布局视图尺寸自适应的刷新问题。[issue#95](https://github.com/youngsoft/MyLinearLayout/issues/95)
 5. 修复相对布局子视图隐藏时，其他依赖这个子视图的子视图的位置和尺寸不正确更新的问题。
 6. 修复UIImageView的宽度固定高度自适应的问题。
-7. 支持通过对isLayouting进行KVO监听来实现布局的通知处理机制，我们可以通过KVO布局视图的isLayouting属性来或者布局完成后子视图的frame以及布局视图的frame值了。
+7. 支持通过对isMyLayouting进行KVO监听来实现布局的通知处理机制，我们可以通过KVO布局视图的isMyLayouting属性来或者布局完成后子视图的frame以及布局视图的frame值了。
 8. 下列方法或属性名被列为过期，并推荐使用新的方法名和属性名：
 
 ```

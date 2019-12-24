@@ -30,8 +30,8 @@
         /**
          * 您可以尝试用不同的布局来实现相同的功能。
          */
-          [self createLinearRootLayout];
-       // [self createRelativeRootLayout];
+       //   [self createLinearRootLayout];
+        [self createRelativeRootLayout];
        // [self createFloatRootLayout];
        
         
@@ -116,12 +116,11 @@
     /*
      在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
      _rootLayout.widthSize.equalTo(self.contentView.widthSize);
-     _rootLayout.wrapContentHeight = YES;
+     _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
      */
    // _rootLayout.widthSize.equalTo(self.contentView.widthSize);
     _rootLayout.myHorzMargin = MyLayoutPos.safeAreaMargin;
-    _rootLayout.wrapContentHeight = YES;
-    _rootLayout.wrapContentWidth = NO;
+    _rootLayout.myHeight = MyLayoutSize.wrap;
     [self.contentView addSubview:_rootLayout];  //如果您将布局视图作为子视图添加到UITableViewCell本身，并且同时用了myLeft和myRight来做边界的话，那么有可能最终展示的宽度会不正确。经过试验是因为对UITableViewCell本身的KVO监控所得到的新老尺寸的问题导致的这应该是iOS的一个BUG。所以这里建议最好是把布局视图添加到UITableViewCell的子视图contentView里面去。
     
     
@@ -153,7 +152,7 @@
     _textMessageLabel.textColor = [CFTool color:4];
     _textMessageLabel.myLeading = 0;
     _textMessageLabel.myTrailing = 0; //垂直线性布局里面如果同时设置了左右边距则能确定子视图的宽度，这里表示宽度和父视图相等。
-    _textMessageLabel.wrapContentHeight = YES; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
+    _textMessageLabel.myHeight = MyLayoutSize.wrap; //如果想让文本的高度是动态的,请将高度设置为自适应
     [messageLayout addSubview:_textMessageLabel];
     
     
@@ -173,10 +172,10 @@
     /*
      在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
      _rootLayout.widthSize.equalTo(self.contentView.widthSize);
-     _rootLayout.wrapContentHeight = YES;
+     _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
      */
     _rootLayout.widthSize.equalTo(self.contentView.widthSize);
-    _rootLayout.wrapContentHeight = YES;
+    _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     [self.contentView addSubview:_rootLayout];
     
   
@@ -201,7 +200,7 @@
     _textMessageLabel.leadingPos.equalTo(_headImageView.trailingPos).offset(5); //文本消息的左边在头像视图的右边并偏移5个点。
     _textMessageLabel.trailingPos.equalTo(_rootLayout.trailingPos);    //文本消息的右边和父布局的右边对齐。上面2行代码也同时确定了文本消息的宽度。
     _textMessageLabel.topPos.equalTo(_nickNameLabel.bottomPos).offset(5); //文本消息的顶部在昵称文本的底部并偏移5个点。
-    _textMessageLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
+    _textMessageLabel.heightSize.equalTo(@(MyLayoutSize.wrap)); //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将高度设置为自适应
     [_rootLayout addSubview:_textMessageLabel];
     
     
@@ -223,10 +222,10 @@
     /*
      在UITableViewCell中使用MyLayout中的布局时请将布局视图作为contentView的子视图。如果我们的UITableViewCell的高度是动态的，请务必在将布局视图添加到contentView之前进行如下设置：
      _rootLayout.widthSize.equalTo(self.contentView.widthSize);
-     _rootLayout.wrapContentHeight = YES;
+     _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
      */
     _rootLayout.widthSize.equalTo(self.contentView.widthSize);
-    _rootLayout.wrapContentHeight = YES;
+    _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     [self.contentView addSubview:_rootLayout];
 
     /*
@@ -250,7 +249,7 @@
     _textMessageLabel.font = [CFTool font:15];
     _textMessageLabel.textColor = [CFTool color:4];
     _textMessageLabel.weight = 1;  //占用剩余宽度
-    _textMessageLabel.wrapContentHeight = YES; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
+    _textMessageLabel.myHeight = MyLayoutSize.wrap; //如果想让文本消息的高度是动态的，请在设置明确宽度的情况下将高度设置为自适应。
     [_rootLayout addSubview:_textMessageLabel];
     
     _imageMessageImageView = [UIImageView new];

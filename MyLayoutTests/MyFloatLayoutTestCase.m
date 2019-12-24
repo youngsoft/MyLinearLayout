@@ -7,7 +7,7 @@
 //
 
 #import "MyLayoutTestCaseBase.h"
-#import "FOLTest2ViewController.h"
+
 
 @interface MyFloatLayoutTestCase : MyLayoutTestCaseBase
 
@@ -28,18 +28,14 @@
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
-    FOLTest2ViewController *vc = [FOLTest2ViewController new];
-    
-    [self startClock];
-    UIView *v1 = vc.view;
-    [self endClock:@"load view:"];       //>60ms
-    
-    [self startClock];
-    
-    [v1 layoutIfNeeded];
-    
-    [self endClock:@"layout:"];
-    
+    for (int i = 1; i <= 7; i++)
+    {
+        Class cls = NSClassFromString([NSString stringWithFormat:@"FOLTest%dViewController", i]);
+        UIViewController *vc = [[cls alloc] init];
+        UIView *v = vc.view;
+        [v setNeedsLayout];
+        [v layoutIfNeeded];
+    }
     
 }
 
@@ -50,7 +46,6 @@
     //垂直线性布局
     {
         MyFloatLayout *rootLayout1 = [[MyFloatLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Vert];
-        rootLayout1.wrapContentHeight = NO;
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -60,7 +55,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];
@@ -109,7 +104,6 @@
     //水平线性布局
     {
         MyFloatLayout *rootLayout1 = [[MyFloatLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Horz];
-        rootLayout1.wrapContentWidth = NO;
         //1. 子视图宽度等于自身高度
         UILabel *label1 = [UILabel new];
         label1.myHeight = 100;
@@ -119,7 +113,7 @@
         
         //2. 子视图高度等于自身宽度
         UILabel *label2 = [UILabel new];
-        label2.wrapContentWidth = YES;
+        label2.widthSize.equalTo(@(MyLayoutSize.wrap));
         label2.heightSize.equalTo(label2.widthSize);
         label2.text = @"hello World";
         [rootLayout1 addSubview:label2];
@@ -268,6 +262,206 @@
     [layout sizeThatFits:CGSizeMake(375, 667)];
     
     XCTAssert(CGRectEqualToRect(segmentedControl.estimatedRect, CGRectMake(0, 60, 375, 40)), @"segmentedControl' rect:%@", NSStringFromCGRect(segmentedControl.estimatedRect));
+    
+}
+
+-(void)testWrapAndGravity
+{
+    //测试尺寸自适应，但是又设置了停靠的例子。
+    {
+        MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+        rootLayout.mySize = CGSizeMake(100, MyLayoutSize.wrap);
+        rootLayout.frame = CGRectMake(0, 0, 100, 0);
+        rootLayout.gravity = MyGravity_Vert_Center;
+        rootLayout.heightSize.min(90);
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = [UIView new];
+        v2.reverseFloat = YES;
+        v2.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v2];
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(10, 10);
+        [rootLayout addSubview:v3];
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 100, 90));
+        MyRectAssert(v1, CGRectMake(0, 20, 40, 40));
+        MyRectAssert(v2, CGRectMake(50, 20, 50, 50));
+        MyRectAssert(v3, CGRectMake(40, 20, 10, 10));
+        
+        
+        v3.mySize = CGSizeMake(20, 20);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 100, 90));
+        MyRectAssert(v1, CGRectMake(0, 15, 40, 40));
+        MyRectAssert(v2, CGRectMake(50, 15, 50, 50));
+        MyRectAssert(v3, CGRectMake(0, 55, 20, 20));
+        
+        
+        
+        v3.mySize = CGSizeMake(60, 60);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 100, 110));
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
+        MyRectAssert(v2, CGRectMake(50, 0, 50, 50));
+        MyRectAssert(v3, CGRectMake(0, 50, 60, 60));
+        
+        rootLayout.gravity = MyGravity_Vert_Bottom;
+        v3.mySize = CGSizeMake(10, 10);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 100, 90));
+        MyRectAssert(v1, CGRectMake(0, 40, 40, 40));
+        MyRectAssert(v2, CGRectMake(50, 40, 50, 50));
+        MyRectAssert(v3, CGRectMake(40,40,10,10));
+    }
+    
+    {
+        MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap,100);
+        rootLayout.frame = CGRectMake(0, 0, 0,100);
+        rootLayout.gravity = MyGravity_Horz_Center;
+        rootLayout.widthSize.min(90);
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(40, 40);
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = [UIView new];
+        v2.reverseFloat = YES;
+        v2.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v2];
+        
+        UIView *v3 = [UIView new];
+        v3.mySize = CGSizeMake(10, 10);
+        [rootLayout addSubview:v3];
+        
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 90, 100));
+        MyRectAssert(v1, CGRectMake(20,0, 40, 40));
+        MyRectAssert(v2, CGRectMake(20,50, 50, 50));
+        MyRectAssert(v3, CGRectMake(20,40, 10, 10));
+        
+        
+        v3.mySize = CGSizeMake(20, 20);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 90, 100));
+        MyRectAssert(v1, CGRectMake(15,0, 40, 40));
+        MyRectAssert(v2, CGRectMake(15,50, 50, 50));
+        MyRectAssert(v3, CGRectMake(55, 0,20, 20));
+        
+        
+        
+        v3.mySize = CGSizeMake(60, 60);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 110, 100));
+        MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
+        MyRectAssert(v2, CGRectMake(0,50, 50, 50));
+        MyRectAssert(v3, CGRectMake(50,0, 60, 60));
+        
+        rootLayout.gravity = MyGravity_Horz_Trailing;
+        v3.mySize = CGSizeMake(10, 10);
+        [rootLayout setNeedsLayout];
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 90, 100));
+        MyRectAssert(v1, CGRectMake(40,0, 40, 40));
+        MyRectAssert(v2, CGRectMake(40,50, 50, 50));
+        MyRectAssert(v3, CGRectMake(40,40,10,10));
+    }
+}
+
+-(void)testWrapAndMaxMinLimit
+{
+    {
+        MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        rootLayout.widthSize.max(80);
+        rootLayout.padding = UIEdgeInsetsMake(10, 5, 5, 10);
+        rootLayout.subviewSpace = 20;
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(30, 30);
+        [rootLayout addSubview:v1];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 5+30+10, 10+30+5));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(10, 10);
+        [rootLayout addSubview:v2];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 5+30+20+10+10, 10+30+5));
+        
+        UIView *v3 = [UIView new];
+        v3.clearFloat = YES;
+        v3.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v3];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 5+30+20+10+10, 10+30+20+50+5));
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v4];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 80, 10+30+20+50+20+50+5));
+    }
+    
+    {
+        MyFloatLayout *rootLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
+        rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+        rootLayout.heightSize.max(80);
+        rootLayout.padding = UIEdgeInsetsMake(5, 10, 10, 5);
+        rootLayout.subviewSpace = 20;
+        
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));
+        
+        UIView *v1 = [UIView new];
+        v1.mySize = CGSizeMake(30, 30);
+        [rootLayout addSubview:v1];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+5,5+30+10));
+        
+        UIView *v2 = [UIView new];
+        v2.mySize = CGSizeMake(10, 10);
+        [rootLayout addSubview:v2];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+5,5+30+20+10+10));
+        
+        UIView *v3 = [UIView new];
+        v3.clearFloat = YES;
+        v3.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v3];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0,10+30+20+50+5,5+30+20+10+10));
+        
+        UIView *v4 = [UIView new];
+        v4.mySize = CGSizeMake(50, 50);
+        [rootLayout addSubview:v4];
+        [rootLayout layoutIfNeeded];
+        MyRectAssert(rootLayout, CGRectMake(0, 0, 10+30+20+50+20+50+5,80));
+    }
     
 }
 

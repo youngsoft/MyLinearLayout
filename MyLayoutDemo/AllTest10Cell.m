@@ -53,8 +53,7 @@
     _rootLayout.padding = UIEdgeInsetsMake(0, 65, 0, 10);
     _rootLayout.cacheEstimatedRect = YES;
     _rootLayout.myHorzMargin = MyLayoutPos.safeAreaMargin;
-    _rootLayout.wrapContentHeight = YES;
-    _rootLayout.wrapContentWidth = NO;
+    _rootLayout.myHeight = MyLayoutSize.wrap;
     //这里设置其他位置有间隔线而最后一行没有下划线。我们可以借助布局视图本身所提供的边界线来代替掉系统默认的cell之间的间隔线，因为布局视图的边界线所提供的能力要大于默认的间隔线。
     MyBorderline  *bld = [[MyBorderline alloc] initWithColor:[UIColor whiteColor]];
     self.rootLayout.bottomBorderline = bld;
@@ -71,7 +70,7 @@
     _commentsLabel.textColor = [UIColor blueColor];
     _commentsLabel.font = [UIFont systemFontOfSize:12];
     _commentsLabel.myHorzMargin = 0;
-    _commentsLabel.wrapContentHeight = YES; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将wrapContentHeight设置为YES。
+    _commentsLabel.myHeight = MyLayoutSize.wrap; //如果想让文本的高度是动态的，请在设置明确宽度的情况下将高度设置为自适应
     [giveLikeLayout addSubview:_commentsLabel];
 }
 

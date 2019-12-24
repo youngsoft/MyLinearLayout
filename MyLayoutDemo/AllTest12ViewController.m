@@ -26,8 +26,8 @@
     // Do any additional setup after loading the view.
     /*
         这个DEMO演示MyLayout和AutoLayout的代码结合的例子。因为布局视图也是一个普通的视图，因此可以把一个布局视图添加到现有的其他非布局父视图中并且对布局视图设置
-        约束。 因为布局视图具有wrapContent的特性，就如UILabel一样因为具有intrinsicContentSize的能力，因此不需要在约束中明确设置宽度或者高度约束。当一个布局视图
-        的高度或者宽度都是由子视图决定的，也就是wrapContent为YES时，布局视图也不需要明确的设置宽度或者高度的约束。而且其他视图还可以依赖这种布局视图尺寸的自包含的能力。
+        约束。 因为布局视图可以设置尺寸自适应，就如UILabel一样因为具有intrinsicContentSize的能力，因此不需要在约束中明确设置宽度或者高度约束。当一个布局视图
+        的高度或者宽度都是由子视图决定的，也就是尺寸设置为自适应时，布局视图也不需要明确的设置宽度或者高度的约束。而且其他视图还可以依赖这种布局视图尺寸的自包含的能力。
      
          本例子由3个子示例组成。
      
@@ -85,7 +85,7 @@
     
     //MyLayout中的约束设置方法
     linelayout.orientation = MyOrientation_Vert;
-    linelayout.wrapContentSize = YES;
+    linelayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     linelayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     linelayout.subviewSpace = 10;
 
@@ -138,7 +138,7 @@
     
     //MyLayout中的约束设置
     linelayout.orientation = MyOrientation_Vert;
-    linelayout.wrapContentHeight = YES;
+    linelayout.myHeight = MyLayoutSize.wrap;
     linelayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     linelayout.subviewSpace = 10;
     
@@ -191,7 +191,7 @@
     
     //MyLayout中的约束设置
     linelayout.orientation = MyOrientation_Horz;
-    linelayout.wrapContentWidth = YES;
+    linelayout.myWidth = MyLayoutSize.wrap;
     linelayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     linelayout.subviewSpace = 10;
     linelayout.gravity = MyGravity_Vert_Fill;

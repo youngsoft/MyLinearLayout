@@ -36,8 +36,7 @@
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //分别设置表格布局里面的行间距、列间距、内部padding边距。
     
     rootLayout.widthSize.equalTo(scrollView.widthSize);
-    rootLayout.wrapContentHeight = YES; //布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
-    rootLayout.wrapContentWidth = NO;
+    rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));//布局宽度和父视图一致，高度则由内容包裹。这是实现将布局视图加入滚动条视图并垂直滚动的标准方法。
     [scrollView addSubview:rootLayout];
     self.rootLayout = rootLayout;
     
@@ -73,7 +72,6 @@
 {
     MyLinearLayout *colLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     colLayout.gravity = MyGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
-    colLayout.wrapContentHeight = YES;
     colLayout.subviewVSpace = 5;  //设置布局视图里面子视图之间的间距为5个点。
     colLayout.backgroundColor = [CFTool color:0];
     colLayout.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
@@ -81,7 +79,7 @@
     
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:image]];
-    imageView.wrapContentHeight = YES;   //这个属性重点注意！！ 对于UIImageView来说，如果我们设置了这个属性为YES的话，表示视图的高度会根据视图的宽度进行等比例的缩放来确定，从而防止图片显示时出现变形的情况。
+    imageView.myHeight = MyLayoutSize.wrap; //这个属性重点注意！！ 对于UIImageView来说，如果我们设置了高度自适应的话，表示视图的高度会根据视图的宽度进行等比例的缩放来确定，从而防止图片显示时出现变形的情况。
     [colLayout addSubview:imageView];
     
     UILabel *titleLabel = [UILabel new];

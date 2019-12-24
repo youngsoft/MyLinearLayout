@@ -35,3 +35,30 @@ extern CGFloat _myCGFloatMin(CGFloat a, CGFloat b);
 
 //a*b + c
 extern CGFloat _myCGFloatFma(CGFloat a, CGFloat b, CGFloat c);
+
+
+/**
+ * 定义优先级
+ */
+typedef enum : short {
+    MyPriority_Low = 0,
+    MyPriority_Normal = 500,   //默认值。
+    MyPriority_High = 1000,
+}MyPriority;
+
+
+//内部使用先放在这里。后续再移到合适位置。
+typedef enum : unsigned char
+{
+    MyLayoutValueType_Nil,
+    MyLayoutValueType_NSNumber,
+    MyLayoutValueType_LayoutDime,
+    MyLayoutValueType_LayoutPos,
+    MyLayoutValueType_Array,
+    MyLayoutValueType_UILayoutSupport,
+    MyLayoutValueType_SafeArea,
+    MyLayoutValueType_Most,
+    MyLayoutValueType_LayoutDimeClone,
+    MyLayoutValueType_Fill,
+    MyLayoutValueType_Wrap,
+}MyLayoutValueType;

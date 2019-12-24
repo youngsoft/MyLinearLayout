@@ -182,7 +182,7 @@
     
     [UIView animateWithDuration:0.08 animations:^{
         
-        [_pathLayout layoutIfNeeded];
+        [self.pathLayout layoutIfNeeded];
         
     } completion:^(BOOL finished) {
         
@@ -190,7 +190,7 @@
         
         [UIView animateWithDuration:0.08 animations:^{
             
-            [_pathLayout layoutIfNeeded];
+            [self.pathLayout layoutIfNeeded];
             
         } completion:^(BOOL finished) {
             
@@ -198,7 +198,7 @@
             
             [UIView animateWithDuration:0.08 animations:^{
                 
-                [_pathLayout layoutIfNeeded];
+                [self.pathLayout layoutIfNeeded];
                 
             }];
             

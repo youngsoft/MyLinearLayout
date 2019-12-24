@@ -42,14 +42,12 @@
     rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.gravity = MyGravity_Horz_Fill;  //设置里面所有子视图的宽度填充布局视图的宽度。
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    rootLayout.wrapContentHeight = NO;
-    rootLayout.wrapContentWidth = NO;
     rootLayout.subviewVSpace = 5;
     self.view = rootLayout;
     
     //创建动作布局
     MyLinearLayout *action1Layout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    action1Layout.wrapContentHeight = YES;
+    action1Layout.heightSize.equalTo(@(MyLayoutSize.wrap));
     action1Layout.topPos.equalTo(self.topLayoutGuide);
     [rootLayout addSubview:action1Layout];
     
@@ -60,7 +58,7 @@
 
     //创建动作布局
     MyLinearLayout *action2Layout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    action2Layout.wrapContentHeight = YES;
+    action2Layout.heightSize.equalTo(@(MyLayoutSize.wrap));
     [rootLayout addSubview:action2Layout];
     
     [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average size centered",@"") tag:400]];
@@ -72,8 +70,6 @@
     self.testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     self.testLayout.backgroundColor = [CFTool color:0];
     self.testLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
-    self.testLayout.wrapContentHeight = NO;
-    self.testLayout.wrapContentWidth = NO;
     self.testLayout.weight = 1.0;
     self.testLayout.leftPadding = 10;
     self.testLayout.rightPadding = 10;
@@ -128,8 +124,7 @@
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
     button.titleLabel.font = [CFTool font:14];
-    [button sizeToFit];
-    button.heightSize.equalTo(button.heightSize).add(20);  //高度等于内容的高度再加20
+    button.heightSize.equalTo(@(MyLayoutSize.wrap)).add(20);  //高度自适应外加20的
     button.layer.borderColor = [UIColor lightGrayColor].CGColor;
     button.layer.borderWidth = 0.5;
     button.layer.cornerRadius = 4;

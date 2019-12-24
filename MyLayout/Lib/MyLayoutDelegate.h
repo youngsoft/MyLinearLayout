@@ -36,6 +36,8 @@
 
 -(void)setNeedsLayoutIn:(CGRect)rect withLayer:(CALayer*)layer;
 
+-(void)updateAllBorderlineColor;
+
 @end
 
 

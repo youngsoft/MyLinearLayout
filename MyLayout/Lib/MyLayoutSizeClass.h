@@ -37,12 +37,10 @@
 @property(nonatomic, strong)  MyLayoutPos *centerXPos;
 @property(nonatomic, strong)  MyLayoutPos *centerYPos;
 
-
 @property(nonatomic, strong,readonly)  MyLayoutPos *leftPos;
 @property(nonatomic, strong,readonly)  MyLayoutPos *rightPos;
 
 @property(nonatomic, strong)  MyLayoutPos *baselinePos;
-
 
 @property(nonatomic, assign) CGFloat myTop;
 @property(nonatomic, assign) CGFloat myLeading;
@@ -52,16 +50,12 @@
 @property(nonatomic, assign) CGFloat myCenterY;
 @property(nonatomic, assign) CGPoint myCenter;
 
-
 @property(nonatomic, assign) CGFloat myLeft;
 @property(nonatomic, assign) CGFloat myRight;
-
-
 
 @property(nonatomic, assign) CGFloat myMargin;
 @property(nonatomic, assign) CGFloat myHorzMargin;
 @property(nonatomic, assign) CGFloat myVertMargin;
-
 
 @property(nonatomic, strong)  MyLayoutSize *widthSize;
 @property(nonatomic, strong)  MyLayoutSize *heightSize;
@@ -69,7 +63,6 @@
 @property(nonatomic, assign) CGFloat myWidth;
 @property(nonatomic, assign) CGFloat myHeight;
 @property(nonatomic, assign) CGSize  mySize;
-
 
 @property(nonatomic, assign) BOOL wrapContentWidth;
 @property(nonatomic, assign) BOOL wrapContentHeight;
@@ -84,7 +77,7 @@
 
 @property(nonatomic, copy) void (^viewLayoutCompleteBlock)(MyBaseLayout* layout, UIView *v);
 
-//线性布局和浮动布局子视图专用
+//线性布局和浮动布局和流式布局子视图专用
 @property(nonatomic, assign) CGFloat weight;
 
 //浮动布局子视图专用
@@ -92,7 +85,6 @@
 @property(nonatomic,assign) BOOL clearFloat;
 
 @end
-
 
 @interface MyLayoutViewSizeClass : MyViewSizeClass
 
@@ -111,24 +103,34 @@
 @property(nonatomic, assign) CGFloat trailingPadding;
 @property(nonatomic, assign) UIEdgeInsets padding;
 
-
 @property(nonatomic, assign) CGFloat leftPadding;
 @property(nonatomic, assign) CGFloat rightPadding;
 
-
+//为支持iOS11的safeArea而进行的padding的转化
+-(CGFloat)myLayoutTopPadding;
+-(CGFloat)myLayoutBottomPadding;
+-(CGFloat)myLayoutLeftPadding;
+-(CGFloat)myLayoutRightPadding;
+-(CGFloat)myLayoutLeadingPadding;
+-(CGFloat)myLayoutTrailingPadding;
 
 @property(nonatomic, assign) UIRectEdge insetsPaddingFromSafeArea;
-
-
 
 @property(nonatomic ,assign) CGFloat subviewVSpace;
 @property(nonatomic, assign) CGFloat subviewHSpace;
 @property(nonatomic, assign) CGFloat subviewSpace;
 
+@end
 
 
+@interface MySequentLayoutFlexSpace:NSObject
+@property(nonatomic,assign) CGFloat subviewSize;
+@property(nonatomic,assign) CGFloat minSpace;
+@property(nonatomic,assign) CGFloat maxSpace;
+@property(nonatomic,assign) BOOL centered;
 
-
+-(CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize startPadding:(CGFloat*)pStarPadding endPadding:(CGFloat*)pEndPadding space:(CGFloat*)pSpace;
+-(CGFloat)calcMaxMinSubviewSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount startPadding:(CGFloat*)pStarPadding endPadding:(CGFloat*)pEndPadding space:(CGFloat*)pSpace;
 
 @end
 
@@ -136,13 +138,9 @@
 @interface MySequentLayoutViewSizeClass : MyLayoutViewSizeClass
 
 @property(nonatomic,assign) MyOrientation orientation;
-
-
+@property(nonatomic,strong) MySequentLayoutFlexSpace *flexSpace;
 
 @end
-
-
-
 
 @interface MyLinearLayoutViewSizeClass : MySequentLayoutViewSizeClass
 
@@ -150,56 +148,37 @@
 
 @end
 
-
-
 @interface MyTableLayoutViewSizeClass : MyLinearLayoutViewSizeClass
 
 @end
-
 
 @interface MyFlowLayoutViewSizeClass : MySequentLayoutViewSizeClass
 
 @property(nonatomic,assign) MyGravity arrangedGravity;
 @property(nonatomic,assign) BOOL autoArrange;
+@property(nonatomic,assign) BOOL isFlex;
+@property(nonatomic,assign) MyGravityPolicy lastlineGravityPolicy;
 
 @property(nonatomic,assign) NSInteger arrangedCount;
 @property(nonatomic, assign) NSInteger pagedCount;
 
-@property(nonatomic, assign) CGFloat subviewSize;
-@property(nonatomic, assign) CGFloat minSpace;
-@property(nonatomic, assign) CGFloat maxSpace;
-
-
-
 @end
-
 
 @interface MyFloatLayoutViewSizeClass : MySequentLayoutViewSizeClass
 
-@property(nonatomic, assign) CGFloat subviewSize;
-@property(nonatomic, assign) CGFloat minSpace;
-@property(nonatomic, assign) CGFloat maxSpace;
-@property(nonatomic,assign) BOOL noBoundaryLimit;
-
 @end
-
 
 @interface MyRelativeLayoutViewSizeClass : MyLayoutViewSizeClass
 
-
 @end
 
-
 @interface MyFrameLayoutViewSizeClass : MyLayoutViewSizeClass
-
 
 @end
 
 @interface MyPathLayoutViewSizeClass  : MyLayoutViewSizeClass
 
-
 @end
-
 
 @interface MyGridLayoutViewSizeClass : MyLayoutViewSizeClass<MyGrid>
 

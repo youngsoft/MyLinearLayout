@@ -41,7 +41,7 @@
     
     //添加操作按钮。
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
-    actionLayout.wrapContentHeight = YES;
+    actionLayout.myHeight = MyLayoutSize.wrap;
     actionLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平填充，也就是所有子视图的宽度相等。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewHSpace = 5;

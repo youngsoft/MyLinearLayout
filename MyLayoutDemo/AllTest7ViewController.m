@@ -38,8 +38,7 @@
     tipLabel.font = [CFTool font:16];
     tipLabel.textColor = [CFTool color:3];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
-    [tipLabel sizeToFit];
+    tipLabel.heightSize.equalTo(@(MyLayoutSize.wrap));
     [rootLayout addSubview:tipLabel];
     
     [self createDemo1:rootLayout];
@@ -64,7 +63,8 @@
     
     [self createDemo11:rootLayout];
 
-    
+    [self createDemo12:rootLayout];
+
 }
 
 
@@ -77,18 +77,15 @@
     tipLabel.text = @"1.下面的例子实现一行内多个子视图从左往右排列。如果在小屏幕下显示则会压缩所有子视图的空间，如果能够被容纳的话则正常显示。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
-    [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    contentLayout.wrapContentWidth = NO;
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewHSpace = 5;
-    contentLayout.shrinkType = MySubviewsShrink_Weight; //这个属性用来设置当子视图的总尺寸大于布局视图的尺寸时如何压缩这些具有固定尺寸的方法为按比例缩小。您可以分别试试设置为：MySubviewsShrink_Weight，MySubviewsShrink_Average,MySubviewsShrink_None，MySubviewsShrink_Auto四种值的效果。
-
+ 
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
     
@@ -98,8 +95,9 @@
     label1.font = [CFTool font:16];
     label1.backgroundColor = [CFTool color:5];
     label1.adjustsFontSizeToFitWidth = YES;
-    label1.wrapContentSize = YES; //尺寸等于视图的内容包裹。
-    label1.widthSize.lBound(label1.widthSize,0,1); //并且最小宽度也等于自己，这样设置的话可以保证这个视图永远不会被压缩。您可以注释掉这句看看效果。
+    label1.heightSize.equalTo(@(MyLayoutSize.wrap));
+    label1.widthSize.equalTo(@(MyLayoutSize.wrap));
+    label1.widthSize.shrink = 0; //不压缩！
     [contentLayout addSubview:label1];
     
     //第二个子视图。
@@ -108,7 +106,9 @@
     label2.font = [CFTool font:16];
     label2.backgroundColor = [CFTool color:6];
     label2.adjustsFontSizeToFitWidth = YES;
-    label2.wrapContentSize = YES; //尺寸等于自身的内容
+    label2.heightSize.equalTo(@(MyLayoutSize.wrap));
+    label2.widthSize.equalTo(@(MyLayoutSize.wrap));
+    label2.widthSize.shrink = 1; //压缩
     label2.numberOfLines = 1; //如果你只想要一行，那么要记得在设置包裹后设置行数。。
     [contentLayout addSubview:label2];
 
@@ -118,7 +118,9 @@
     label3.font = [CFTool font:15];
     label3.backgroundColor = [CFTool color:7];
     label3.adjustsFontSizeToFitWidth = YES;
-    label3.wrapContentSize = YES;
+    label3.heightSize.equalTo(@(MyLayoutSize.wrap));
+    label3.widthSize.equalTo(@(MyLayoutSize.wrap));
+    label3.widthSize.shrink = 1; //压缩
     [contentLayout addSubview:label3];
     label3.myTrailing = 0.5;  //这句设置非常重要，设置为右间距为相对间距，从而达到如果屏幕小则会缩小固定尺寸，如果大则不会的效果。
 
@@ -132,14 +134,12 @@
     tipLabel.text = @"2.下面的例子里面最右边的两个子视图的宽度是固定的，而第一个子视图则占用剩余的空间。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
-    [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    contentLayout.wrapContentWidth = NO;
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewHSpace = 5;
     contentLayout.backgroundColor = [CFTool color:0];
@@ -151,8 +151,7 @@
     label1.font = [CFTool font:15];
     label1.backgroundColor = [CFTool color:5];
     label1.adjustsFontSizeToFitWidth = YES;
-    [label1 sizeToFit];
-    label1.wrapContentHeight = YES; //自动换行。
+    label1.myHeight = MyLayoutSize.wrap;
     label1.weight = 1;  //占用剩余的空间。
     [contentLayout addSubview:label1];
     
@@ -198,14 +197,13 @@
     tipLabel.text = @"3.下面的例子里面最右边的两个子视图的宽度是固定的，而第一个子视图的尺寸动态变化，但是最宽不能超过布局剩余的宽度。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上分别测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    contentLayout.wrapContentWidth = NO;
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewHSpace = 5;
     contentLayout.backgroundColor = [CFTool color:0];
@@ -217,7 +215,7 @@
     label1.font = [CFTool font:14];
     label1.backgroundColor = [CFTool color:5];
     label1.tag = 1000; //为了测试用。。
-    label1.wrapContentSize = YES;   //尺寸由内容包裹
+    label1.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);  //尺寸由内容包裹
     label1.myTrailing = 0.5;  //设置相对间距
     [contentLayout addSubview:label1];
     
@@ -271,7 +269,7 @@
     tipLabel.text = @"4.下面的例子展示左右2个子视图的内容分别向两边延伸，但是不会重叠。这样做的好处就是不会产生空间的浪费。一个具体例子就是UITableviewCell中展示内容时，一部分在左边而一部分在右边，两边的内容长度都不确定，但是不能重叠以及浪费空间。 您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -283,8 +281,7 @@
     [changeButton addTarget:self action:@selector(handleChangeText:) forControlEvents:UIControlEventTouchUpInside];
     
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    contentLayout.wrapContentWidth = NO;
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewHSpace = 20;
     contentLayout.shrinkType = MySubviewsShrink_Auto;  //为了实现左右两边文本的自动缩放调整，必须要将线性布局的属性设置MySubviewsShrink_Auto。当设置为Auto属性时，必要要满足当前子视图中只有2个子视图的宽度设置为等于自身内容，否则无效。这个属性用来实现左右2个子视图根据内容来占用最佳的空间的例子。
@@ -305,7 +302,7 @@
     UILabel *leadingLabel = [UILabel new];
     leadingLabel.font = [UIFont systemFontOfSize:14];
     leadingLabel.textColor = [UIColor redColor];
-    leadingLabel.wrapContentSize = YES;
+    leadingLabel.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     leadingLabel.trailingPos.equalTo(@0.5); //设置右边的相对间距.
     [contentLayout addSubview:leadingLabel];
     leadingLabel.tag = 1000;
@@ -315,7 +312,7 @@
     UILabel *trailingLabel = [UILabel new];
     trailingLabel.font = [UIFont systemFontOfSize:14];
     trailingLabel.textColor = [UIColor blueColor];
-    trailingLabel.wrapContentSize = YES;
+    trailingLabel.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     trailingLabel.leadingPos.equalTo(@0.5); //设置右边的相对间距.
     [contentLayout addSubview:trailingLabel];
     trailingLabel.tag = 2000;
@@ -359,7 +356,7 @@
     tipLabel.text = @"5.下面的例子中(响应式布局！！)，您可以添加按钮来添加多个按钮形成多行多列的布局。在不同的屏幕尺寸下，子视图之间的间距会自动调整以便满足最佳的布局状态。比如多个子视图有规律排列，每个子视图的宽度是固定的，在iPhone4下以及iPhone6下都能放置4个子视图，但是iPhone4中子视图之间的间距要比iPhone6上的小，而在iPhone6+上则因为空间足够可以放置5个子视图。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -369,7 +366,7 @@
     MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
     contentLayout.backgroundColor = [CFTool color:0];
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.subviewVSpace = 5; //设置流式布局里面子视图之间的垂直间距。
     [contentLayout setSubviewsSize:subviewWidth minSpace:5 maxSpace:10];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为60，最小的间距为5,最大间距为10。注意这里要求所有子视图的宽度都是60。
     [rootLayout addSubview:contentLayout];
@@ -450,7 +447,7 @@
     tipLabel.text = @"6.下面的例子用来实现子视图依次从左往右添加，并且当空间不够时会自动压缩前面的所有子视图的宽度。而当所有子视图的宽度都到达了最小的阈值时就会自动换行，并继续添加上去。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上分别测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -480,14 +477,14 @@
     tipLabel.text = @"7.下面的例子里面有多个宽度不一致的子视图，但是布局会根据屏幕的大小而智能的排列这些子视图，从而充分的利用好布局视图的空间。您可以分别在横竖屏下测试以及在iPhone4/5/6/6+上分别测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
     
     MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
-    contentLayout.wrapContentHeight = YES;
+    contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewSpace = 5;
     contentLayout.backgroundColor = [CFTool color:0];
@@ -520,7 +517,7 @@
     tipLabel.text = @"8.下面的例子中如果屏幕足够宽则左边视图居左，中间视图居中，右边视图居右。这时候不会产生滚动，而当屏幕宽度不足时则会压缩中间视图和两边视图之间的间距并且产生滚动效果。这样的例子也可以同样应用在纵向屏幕中：通常在大屏幕设备上中间的部分要居中显示，而在小屏幕上则依次排列产生滚动效果。 您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -537,7 +534,7 @@
     contentLayout.gravity = MyGravity_Vert_Fill;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewHSpace = 5;
-    contentLayout.widthSize.lBound(scrollView.widthSize,0,1); //默认水平线性布局的宽度是wrapContentWidth的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
+    contentLayout.widthSize.lBound(scrollView.widthSize,0,1); //默认水平线性布局的宽度是自适应但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
     [scrollView addSubview:contentLayout];
     
     
@@ -555,7 +552,7 @@
     label2.font = [CFTool font:15];
     label2.backgroundColor = [CFTool color:6];
     [label2 sizeToFit];
-    //中间视图的左边间距是0.5,右边间距是0.5。表明中间视图的左右间距占用剩余的空间而达到居中的效果。这样在屏幕尺寸足够时则会产生居中效果，而屏幕尺寸不足时则会缩小间距，但是这里面最左边的最小间距是0而最右边的最小间距是30，这样布局视图因为具有wrapContentWidth属性所以会扩充宽度而达到滚动的效果。
+    //中间视图的左边间距是0.5,右边间距是0.5。表明中间视图的左右间距占用剩余的空间而达到居中的效果。这样在屏幕尺寸足够时则会产生居中效果，而屏幕尺寸不足时则会缩小间距，但是这里面最左边的最小间距是0而最右边的最小间距是30，这样布局视图因为具有宽度自适应属性所以会扩充宽度而达到滚动的效果。
     label2.leadingPos.equalTo(@0.5).min(0);
     label2.trailingPos.equalTo(@0.5).min(30);
     [contentLayout addSubview:label2];
@@ -578,7 +575,7 @@
     tipLabel.text = @"9.下面的例子中最右边的视图如果能够被屏幕容纳则放在最右边，否则就会产生滚动效果。这个例子同样也可以应用在纵向屏幕中:很多页面里面最下边需要放一个按钮，如果屏幕尺寸够高则总是放在最底部，如果屏幕尺寸不够则会产生滚动效果。 您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
@@ -594,7 +591,7 @@
     contentLayout.gravity = MyGravity_Vert_Fill;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.subviewHSpace = 5;
-    contentLayout.widthSize.lBound(scrollView.widthSize,0,1); //默认水平线性布局的宽度是wrapContentWidth的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
+    contentLayout.widthSize.lBound(scrollView.widthSize,0,1); //默认水平线性布局的宽度是自适应的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
     [scrollView addSubview:contentLayout];
     
     
@@ -620,7 +617,7 @@
     label3.font = [CFTool font:15];
     label3.backgroundColor = [CFTool color:7];
     [label3 sizeToFit];
-    label3.leadingPos.equalTo(@0.5).min(30); //最后一个视图的左边距占用剩余的空间，但是最低不能小于30。这样设置的意义是如果布局视图够宽则第三个子视图的左边间距是剩余的空间，这样就保证了第三个子视图总是在最右边。而如果剩余空间不够时，则因为这里最小的宽度是30，而布局视图又是wrapContentWidth,所以就会扩充布局视图的宽度，而产生滚动效果。这里的最小值30很重要，也就是第三个子视图和其他子视图的最小间距，具体设置多少就要看UI的界面效果图了。
+    label3.leadingPos.equalTo(@0.5).min(30); //最后一个视图的左边距占用剩余的空间，但是最低不能小于30。这样设置的意义是如果布局视图够宽则第三个子视图的左边间距是剩余的空间，这样就保证了第三个子视图总是在最右边。而如果剩余空间不够时，则因为这里最小的宽度是30，而布局视图又是宽度自适应,所以就会扩充布局视图的宽度，而产生滚动效果。这里的最小值30很重要，也就是第三个子视图和其他子视图的最小间距，具体设置多少就要看UI的界面效果图了。
     [contentLayout addSubview:label3];
     
 }
@@ -646,13 +643,12 @@
     tipLabel.text = @"10.下面的例子中展示了一行中各个子视图的宽度和间距都将根据屏幕的尺寸来进行拉伸和收缩，这样不管在任何尺寸的屏幕下都能达到完美的适配。在实践中UI人员往往会按某个设备的尺寸给出一张效果图，那么我们只需要按这个效果图中的子视图的宽度来计算好所占用的宽度和间距的比例，然后我们通过对视图的宽度和间距按比例值进行设置，这样就会使得子视图的真实宽度和间距将根据屏幕的尺寸进行拉升和收缩。您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    contentLayout.wrapContentWidth = NO;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.myHeight = 60;  //高度为60.
     contentLayout.gravity = MyGravity_Vert_Center;  //内容垂直居中。
@@ -714,13 +710,12 @@
     tipLabel.text = @"11.下面一个例子展示了当某个布局视图的尺寸能够容纳里面所有子视图的尺寸和间距时就按正常显示，而当尺寸不足以容纳所有子视图的尺寸和间距之和时我们就对子视图之间的间距进行压缩，以便能将所有子视图的内容都显示出来。您可以分别在iPhone4/5/6/6+上以及横竖屏测试效果:";
     tipLabel.font = [CFTool font:14];
     tipLabel.adjustsFontSizeToFitWidth = YES;
-    tipLabel.wrapContentHeight = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
     tipLabel.myTop = 10;
     [tipLabel sizeToFit];
     [rootLayout addSubview:tipLabel];
     
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    contentLayout.wrapContentWidth = NO;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.myHeight = 60;  //高度为60.
     contentLayout.gravity = MyGravity_Vert_Center;  //内容垂直居中。
@@ -745,6 +740,53 @@
     UILabel *D = [self createLabel:@"JAVA" color:8];
     [contentLayout addSubview:D];
     
+}
+
+-(void)createDemo12:(MyLinearLayout*)rootLayout
+{
+    //一行内的子视图的间距会根据屏幕尺寸自动缩小。
+    UILabel *tipLabel = [UILabel new];
+    tipLabel.text = @"12. 当布局视图下有多个子视图时有可能无法将这些子视图显示完全，而是需要将某些子视图的尺寸或者子视图之间的间距进行压缩处理。这里可以通过设置子视图尺寸中的shrink或者间距中的shrink值来进行处理。默认情况下这些值都是0表明不压缩，值越大压缩就越大";
+    tipLabel.font = [CFTool font:14];
+    tipLabel.adjustsFontSizeToFitWidth = YES;
+    tipLabel.myHeight = MyLayoutSize.wrap;
+    tipLabel.myTop = 10;
+    [tipLabel sizeToFit];
+    [rootLayout addSubview:tipLabel];
+    
+    MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
+    contentLayout.heightSize.equalTo(@(MyLayoutSize.wrap)).min(60);
+    contentLayout.gravity = MyGravity_Vert_Center;  //内容垂直居中。
+    contentLayout.backgroundColor = [CFTool color:0];
+    [rootLayout addSubview:contentLayout];
+    
+    UILabel *A = [self createLabel:@"不压缩" color:5];
+    A.widthSize.equalTo(@(MyLayoutSize.wrap));
+    A.heightSize.equalTo(@(MyLayoutSize.wrap));
+    A.widthSize.shrink = 0;
+    [contentLayout addSubview:A];
+    
+    UILabel *B = [self createLabel:@"压缩1,间距不压缩" color:6];
+    B.widthSize.equalTo(@(MyLayoutSize.wrap));
+    B.heightSize.equalTo(@(MyLayoutSize.wrap));
+    B.widthSize.shrink = 1;
+    B.leftPos.equalTo(@(20)).shrink = 0;
+    [contentLayout addSubview:B];
+    
+    UILabel *C  = [self createLabel:@"压缩2,间距压缩1" color:7];
+    C.widthSize.equalTo(@(MyLayoutSize.wrap));
+    C.heightSize.equalTo(@(MyLayoutSize.wrap));
+    C.widthSize.shrink = 2;
+    C.leftPos.equalTo(@(20)).shrink = 1;
+    [contentLayout addSubview:C];
+    
+    UILabel *D = [self createLabel:@"压缩3,间距压缩2" color:8];
+    D.widthSize.equalTo(@(MyLayoutSize.wrap));
+    D.heightSize.equalTo(@(MyLayoutSize.wrap));
+    D.widthSize.shrink = 3;
+    D.leftPos.equalTo(@(20)).shrink = 2;
+    [contentLayout addSubview:D];
 }
 
 

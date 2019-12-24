@@ -78,14 +78,21 @@ typedef enum : unsigned short {
     MyGravity_Horz_Right = 4,
     /**窗口水平中心停靠，表示在屏幕窗口的水平中心停靠*/
     MyGravity_Horz_Window_Center = 8,
-    /**水平间距拉伸*/
+    /**水平间距拉伸，并且头尾部分的间距是0, 如果只有一个子视图则变为左边停靠*/
     MyGravity_Horz_Between = 16,
     /**头部对齐,对于阿拉伯国家来说是和Right等价的,对于非阿拉伯国家则是和Left等价的*/
     MyGravity_Horz_Leading = 32,
     /**尾部对齐,对于阿拉伯国家来说是和Left等价的,对于非阿拉伯国家则是和Right等价的*/
     MyGravity_Horz_Trailing = 64,
+    /**水平间距环绕拉伸,并且头尾部分为其他部分间距的一半,如果只有一个子视图则变为水平居中停靠*/
+    MyGravity_Horz_Around = 128,
+    /**水平间距等分拉伸，并且头尾部分和其他部分间距的一样, 如果只有一个子视图则变为水平居中停靠*/
+    MyGravity_Horz_Among = MyGravity_Horz_Between | MyGravity_Horz_Around,
     /**水平宽度填充*/
     MyGravity_Horz_Fill = MyGravity_Horz_Left | MyGravity_Horz_Center | MyGravity_Horz_Right,
+ 
+    /**水平宽度拉伸,它跟宽度填充的区别是如果子视图指定了宽度(非布局子视图宽度自适应除外)则不会被拉伸*/
+    MyGravity_Horz_Stretch = MyGravity_Horz_Left | MyGravity_Horz_Right,
     /**水平掩码，用来获取垂直方向的枚举值*/
     MyGravity_Horz_Mask = 0xFF00,
 
@@ -98,13 +105,19 @@ typedef enum : unsigned short {
     MyGravity_Vert_Bottom = 4 << 8,
     /**窗口垂直中心停靠，表示在屏幕窗口的垂直中心停靠*/
     MyGravity_Vert_Window_Center = 8 << 8,
-    /**垂直间距拉伸*/
+    /**垂直间距拉伸，并且头尾部分的间距是0, 如果只有一个子视图则变为上边停靠*/
     MyGravity_Vert_Between = 16 << 8,
     /**基线对齐,只支持水平线性布局，指定基线对齐必须要指定出一个基线标准的子视图*/
     MyGravity_Vert_Baseline = 32 << 8,
+    /**垂直间距环绕拉伸,并且头尾部分为其他部分间距的一半, 如果只有一个子视图则变为垂直居中停靠*/
+    MyGravity_Vert_Around = 64 << 8,
+    /**垂直间距等分拉伸，并且头尾部分和其他部分间距的一样, 如果只有一个子视图则变为垂直居中停靠*/
+    MyGravity_Vert_Among = MyGravity_Vert_Between | MyGravity_Vert_Around,
     /**垂直高度填充*/
     MyGravity_Vert_Fill = MyGravity_Vert_Top | MyGravity_Vert_Center | MyGravity_Vert_Bottom,
-    /**垂直掩码，用来获水平方向的枚举值*/
+    /**垂直高度拉伸,它跟高度填充的区别是如果子视图指定了高度(非布局子视图高度自适应除外)则不会被拉伸*/
+    MyGravity_Vert_Stretch = MyGravity_Vert_Top | MyGravity_Vert_Bottom,
+    /**垂直掩码，用来获取水平方向的枚举值*/
     MyGravity_Vert_Mask = 0x00FF,
 
     /**整体居中*/
@@ -117,6 +130,18 @@ typedef enum : unsigned short {
     MyGravity_Between = MyGravity_Horz_Between | MyGravity_Vert_Between,
     
 } MyGravity;
+
+/**
+ 停靠对齐的生效策略，主要用于流式布局中的最后一行。
+ */
+typedef enum : unsigned char {
+    /**不做任何停靠对齐*/
+    MyGravityPolicy_No,
+    /**总是停靠对齐*/
+    MyGravityPolicy_Always,
+    /**自动使用前面的停靠对齐策略*/
+    MyGravityPolicy_Auto,
+} MyGravityPolicy;
 
 
 /**
@@ -238,17 +263,3 @@ typedef enum : unsigned char{
     MySizeClass_Portrait = 0x40,  //竖屏
     MySizeClass_Landscape = 0x80,  //横屏,注意横屏和竖屏不支持 | 运算操作，只能指定一个。
 }MySizeClass;
-
-
-
-//内部使用
-typedef enum : unsigned char
-{
-    MyLayoutValueType_Nil,
-    MyLayoutValueType_NSNumber,
-    MyLayoutValueType_LayoutDime,
-    MyLayoutValueType_LayoutPos,
-    MyLayoutValueType_Array,
-    MyLayoutValueType_UILayoutSupport,
-    MyLayoutValueType_SafeArea,
-}MyLayoutValueType;

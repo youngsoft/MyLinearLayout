@@ -185,7 +185,7 @@ static CGFloat sTagWidth = 70;
         MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
         floatLayout.backgroundColor = [UIColor whiteColor];
         floatLayout.padding = UIEdgeInsetsMake(20, 10, 20, 10);
-        floatLayout.wrapContentHeight = YES;
+        floatLayout.myHeight = MyLayoutSize.wrap;
         floatLayout.subviewHSpace = 30; //设置浮动布局里面子视图之间的水平间距。
         floatLayout.subviewVSpace = 10; //设置浮动布局里面子视图之间的垂直间距。
         [contentLayout addSubview:floatLayout];
@@ -265,7 +265,7 @@ static CGFloat sTagWidth = 70;
         MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
         floatLayout.backgroundColor = [UIColor whiteColor];
         floatLayout.padding = UIEdgeInsetsMake(20, 5, 20, 5);
-        floatLayout.wrapContentHeight = YES;
+        floatLayout.myHeight = MyLayoutSize.wrap;
         floatLayout.subviewVSpace = 10; //设置浮动布局里面子视图之间的垂直间距。
         [floatLayout setSubviewsSize:sTagWidth minSpace:8 maxSpace:CGFLOAT_MAX];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为70，最小的间距为8.
         [contentLayout addSubview:floatLayout];
@@ -338,7 +338,7 @@ static CGFloat sTagWidth = 70;
     MyFloatLayout *actionLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     actionLayout.subviewHSpace = 5;
-    actionLayout.wrapContentHeight = YES;
+    actionLayout.myHeight = MyLayoutSize.wrap;
     actionLayout.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor]];
     
     
@@ -370,7 +370,7 @@ static CGFloat sTagWidth = 70;
 {
     
     MyLinearLayout *sectionLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    sectionLayout.wrapContentHeight = NO;
+    sectionLayout.heightSize.equalTo(nil);
     sectionLayout.layer.cornerRadius = 5;
     sectionLayout.layer.borderColor = [UIColor lightGrayColor].CGColor;
     sectionLayout.layer.borderWidth = 0.5;

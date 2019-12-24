@@ -27,15 +27,14 @@
 
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    rootLayout.wrapContentHeight = NO;
     rootLayout.gravity = MyGravity_Horz_Fill;
     rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
     
     //创建顶部的菜单布局部分。
     MyFlowLayout *menuLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
-    menuLayout.gravity = MyGravity_Fill; //填充所有尺寸。
-    menuLayout.wrapContentHeight = YES;
+    menuLayout.gravity = MyGravity_Horz_Fill; //水平填充所有尺寸。
+    menuLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     menuLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     menuLayout.subviewSpace = 10;
     [rootLayout addSubview:menuLayout];
@@ -46,7 +45,7 @@
     menu1Label.backgroundColor = [CFTool color:5];
     menu1Label.font = [CFTool font:16];
     menu1Label.heightSize.equalTo(menu1Label.widthSize);
-    menu1Label.widthSize.equalTo(menu1Label.heightSize);
+   // menu1Label.widthSize.equalTo(menu1Label.heightSize);
     [menuLayout addSubview:menu1Label];
     
     UILabel *menu2Label = [UILabel new];
@@ -55,7 +54,7 @@
     menu2Label.backgroundColor = [CFTool color:6];
     menu2Label.font = [CFTool font:16];
     menu2Label.heightSize.equalTo(menu2Label.widthSize);
-    menu2Label.widthSize.equalTo(menu2Label.heightSize);
+ //   menu2Label.widthSize.equalTo(menu2Label.heightSize);
     [menuLayout addSubview:menu2Label];
     
     UILabel *menu3Label = [UILabel new];
@@ -64,7 +63,7 @@
     menu3Label.backgroundColor = [CFTool color:7];
     menu3Label.font = [CFTool font:16];
     menu3Label.heightSize.equalTo(menu3Label.widthSize);
-    menu3Label.widthSize.equalTo(menu3Label.heightSize);
+  //  menu3Label.widthSize.equalTo(menu3Label.heightSize);
     [menuLayout addSubview:menu3Label];
     
     MyRelativeLayout *contentLayout = [MyRelativeLayout new];
@@ -113,7 +112,18 @@
     
     MyFlowLayout *menuLayoutSC = [menuLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_hAny | MySizeClass_wAny];
     menuLayoutSC.orientation = MyOrientation_Horz;
-    menuLayoutSC.wrapContentWidth = YES;
+    menuLayoutSC.gravity = MyGravity_Vert_Fill;
+    menuLayoutSC.widthSize.equalTo(@(MyLayoutSize.wrap));
+    
+    UILabel *menu1LabelSC = [menu1Label fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
+    UILabel *menu2LabelSC = [menu2Label fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
+    UILabel *menu3LabelSC = [menu3Label fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
+
+    menu1LabelSC.widthSize.equalTo(menu1LabelSC.heightSize);
+    menu2LabelSC.widthSize.equalTo(menu2LabelSC.heightSize);
+    menu3LabelSC.widthSize.equalTo(menu3LabelSC.heightSize);
+
+    
     
     
     UILabel *func1LabelSC = [func1Label fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact];
@@ -128,12 +138,12 @@
     func3LabelSC.heightSize.equalTo(contentLayout.heightSize);
     
     //下面是定义在iPad上设备的横屏的界面布局，因为iPad上的SizeClass都是regular，所以这里要区分横竖屏的方法是使用MySizeClass_Portrait和MySizeClass_Landscape
-    UILabel *menu1LabelSC = [menu1Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-    menu1LabelSC.heightSize.max(200);
-    UILabel *menu2LabelSC = [menu2Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-    menu2LabelSC.heightSize.max(200);
-    UILabel *menu3LabelSC = [menu3Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-    menu3LabelSC.heightSize.max(200);
+    UILabel *menu1LabelSCForiPad = [menu1Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    menu1LabelSCForiPad.heightSize.max(200);
+    UILabel *menu2LabelSCForiPad = [menu2Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    menu2LabelSCForiPad.heightSize.max(200);
+    UILabel *menu3LabelSCForiPad = [menu3Label fetchLayoutSizeClass:MySizeClass_wRegular | MySizeClass_hRegular | MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    menu3LabelSCForiPad.heightSize.max(200);
 
 
 }

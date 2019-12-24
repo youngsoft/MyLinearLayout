@@ -41,7 +41,7 @@
     // Do any additional setup after loading the view.
     
     /*
-        本例子演示当把一个布局视图加入到非布局视图时的各种场景。当把一个布局视图加入到非布局父视图时，因为无法完全对非布局父视图进行控制。所以一些布局视图的属性将不再起作用了，但是基本的视图扩展属性： leftPos,rightPos,topPos,bottomPos,centerXPos,centerYPos，widthSize,heightSize,wrapContentWidth, wrapContentHeight这几个属性仍然有意义，只不过这些属性的equalTo方法能设置的类型有限，而且这些设置都只是基于父视图的。
+        本例子演示当把一个布局视图加入到非布局视图时的各种场景。当把一个布局视图加入到非布局父视图时，因为无法完全对非布局父视图进行控制。所以一些布局视图的属性将不再起作用了，但是基本的视图扩展属性： leftPos,rightPos,topPos,bottomPos,centerXPos,centerYPos，widthSize,heightSize这几个属性仍然有意义，只不过这些属性的equalTo方法能设置的类型有限，而且这些设置都只是基于父视图的。
      */
     
     
@@ -128,10 +128,8 @@
 
 
 /*
-   这个例子用来演示让一个布局视图在非布局视图中居中，并且其尺寸是由子视图决定的，也就是wrapContentHeight设置为YES。
+   这个例子用来演示让一个布局视图在非布局视图中居中，并且其尺寸是由子视图决定的，也就是尺寸自适应
  */
-
-
 
 -(void)handleDemo1AddText:(UIButton*)sender
 {
@@ -164,7 +162,6 @@
     layout.myTrailing = 0.2;  //左右边距0.2表示相对边距，也就是左右边距都是父视图总宽度的20%，这样布局视图的宽度就默认为父视图的60%了。
     layout.myCenterY = 0;  //布局视图在父视图中垂直居中出现。
     //layout.myBottom = 0;  //布局视图在父视图中底部出现。您可以注释上面居中的代码并解开这句看看效果。
-    [self.view addSubview:layout];
     
     //标题
     UILabel *titleLabel = [UILabel new];
@@ -177,7 +174,7 @@
     
     //文本
     UILabel *label = [UILabel new];
-    label.wrapContentHeight = YES;
+    label.myHeight = MyLayoutSize.wrap;
     label.font = [CFTool font:14];
     label.text = @"这是一段具有动态高度的文本，同时他也会影响着布局视图的高度。您可以单击下面的按钮来添加文本来查看效果：";
     [layout addSubview:label];
@@ -185,7 +182,6 @@
     
     //按钮容器。如果您想让两个按钮水平排列则只需在btnContainer初始化中把方向改为：MyOrientation_Horz 。您可以尝试看看效果。
     MyLinearLayout *btnContainer = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert /*MyOrientation_Horz*/];
-    btnContainer.wrapContentHeight = YES;  //高度由子视图确定。
     btnContainer.subviewVSpace = 5;   //视图之间的间距设置为5
     btnContainer.subviewHSpace = 5;   //视图之间的间距设置为5
     btnContainer.gravity = MyGravity_Horz_Fill; //里面的子视图的宽度水平填充，如果是垂直线性布局则里面的所有子视图的宽度都和父视图相等。如果是水平线性布局则会均分所有子视图的宽度。

@@ -65,15 +65,13 @@
      
      如果布局视图里面的子视图使用了相对尺寸和相对间距我们必须要满足如下的条件：
      
-     1.垂直线性布局里面如果有子视图设置了weight或者指定了垂直相对间距，则wrapContentHeight设置将失效；水平线性布局里面如果有子视图设置为weight或者指定了水平相对间距，则wrapContentWidth设置将失效。
+     1.垂直线性布局里面如果有子视图设置了weight，则高度约束设置将失效；水平线性布局里面如果有子视图设置为weight，则宽度约束设置将失效。
      2.如果布局视图里面的子视图使用了相对间距和相对尺寸则必须要明确指定布局视图的宽度或者高度，否则相对设置可能会失效。
      
      */
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.backgroundColor = [CFTool color:0];
-    rootLayout.wrapContentWidth = NO;
-    rootLayout.wrapContentHeight = NO;
     self.view = rootLayout;
 
     

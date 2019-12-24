@@ -132,7 +132,7 @@
 {
     MyRelativeLayout *headerLayout = [MyRelativeLayout new];
     headerLayout.backgroundImage = [UIImage imageNamed:@"bk1"];  //可以为布局直接设备背景图片。
-    headerLayout.wrapContentHeight = YES;
+    headerLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     [contentLayout addSubview:headerLayout];
     
     UIImageView *headerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"head2"]];
@@ -278,7 +278,7 @@
     leftLabel.backgroundColor = [CFTool color:5];
     leftLabel.font = [CFTool font:14];
     leftLabel.trailingPos.equalTo(@0.5).min(0); //右边浮动间距为0.5,最小为0
-    leftLabel.wrapContentWidth = YES;  //宽度由内容包裹
+    leftLabel.widthSize.equalTo(@(MyLayoutSize.wrap));
     [testLayout addSubview:leftLabel];
     self.leftFlexedLabel = leftLabel;
     
@@ -289,7 +289,7 @@
     rightLabel.backgroundColor = [CFTool color:6];
     rightLabel.font = [CFTool font:14];
     rightLabel.leadingPos.equalTo(@0.5).min(0);   //左边浮动间距为0.5，最小为0
-    rightLabel.wrapContentWidth = YES; //宽度由内容包裹
+    rightLabel.widthSize.equalTo(@(MyLayoutSize.wrap)); //宽度由内容包裹
     [testLayout addSubview:rightLabel];
     self.rightFlexedLabel = rightLabel;
     
@@ -348,7 +348,8 @@
     [testButton setTitle:@"Click me" forState:UIControlStateNormal];
     testButton.backgroundColor = [CFTool color:0];
     testButton.heightSize.equalTo(@50);
-    testButton.widthSize.equalTo(testButton.widthSize).add(20);
+   // testButton.widthSize.equalTo(testButton.widthSize).add(20);
+    testButton.widthSize.equalTo(@(MyLayoutSize.wrap)).add(20);
     testButton.leadingPos.equalTo(@10).active = YES;  //左边边距是10，设置active为YES表示左边位置对象的设置是生效的。
     testButton.trailingPos.equalTo(@10).active = NO;  //右边边距是10，设置active为NO表示右边位置对象的设置是不生效的。
     
@@ -368,7 +369,7 @@
     //左右内边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
     actionLayout.leftPadding = 10;
     actionLayout.rightPadding = 10;
-    actionLayout.wrapContentWidth = NO;
+    actionLayout.widthSize.equalTo(nil);
     actionLayout.heightSize.equalTo(@50);
     actionLayout.gravity = MyGravity_Vert_Center;
     
@@ -401,7 +402,7 @@
     //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
     switchLayout.leftPadding = 10;
     switchLayout.rightPadding = 10;
-    switchLayout.wrapContentWidth = NO;
+    switchLayout.widthSize.equalTo(nil);
     switchLayout.heightSize.equalTo(@50);
     switchLayout.gravity = MyGravity_Vert_Center;
     
@@ -539,15 +540,9 @@
 -(void)handleShrinkSwitch:(UISwitch *)sender
 {
     if (sender.isOn)
-    {
-        self.shrinkLayout.heightSize.equalTo(nil);
-        self.shrinkLayout.wrapContentHeight = YES;
-    }
+        self.shrinkLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     else
-    {
         self.shrinkLayout.heightSize.equalTo(@50);
-        self.shrinkLayout.wrapContentHeight = NO;
-    }
     
     [self.shrinkLayout layoutAnimationWithDuration:0.3];
 }
@@ -592,7 +587,7 @@
     itemLayout.gravity = MyGravity_Horz_Fill;
     itemLayout.subviewHSpace = 10;
     itemLayout.subviewVSpace = 10;
-    itemLayout.wrapContentHeight = YES;
+    itemLayout.myHeight = MyLayoutSize.wrap;
     [scrollView addSubview:itemLayout];
     self.popmenuItemLayout = itemLayout;
     
@@ -716,16 +711,19 @@
     {
         sender.leadingPos.active = YES;
         sender.trailingPos.active = NO;  //按钮将停靠在父布局的左边。
+        sender.widthSize.active = YES;
     }
     else if (sender.leadingPos.isActive)
     {
         sender.leadingPos.active = NO;
         sender.trailingPos.active = YES;  //按钮将停靠在父布局的右边
+        sender.widthSize.active = YES;
     }
     else if (sender.trailingPos.isActive)
     {
         sender.leadingPos.active = YES;
         sender.trailingPos.active = YES;  //按钮的左右边距都生效，并且会拉伸按钮的宽度。
+        sender.widthSize.active = NO;
     }
     
     MyLinearLayout *superLayout = (MyLinearLayout*)sender.superview;

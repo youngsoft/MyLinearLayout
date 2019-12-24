@@ -74,7 +74,7 @@
     }
     
     //第四行
-    MyLinearLayout *row4 = [tableLayout addRow:50 colCount:titles.count];
+    /*MyLinearLayout *row4 =*/ [tableLayout addRow:50 colCount:titles.count];
     for (NSString *title in titles)
     {
         [tableLayout addSubview:[self itemFrom:title alignment:NSTextAlignmentCenter  isFitWidth:YES]];
@@ -82,21 +82,21 @@
     
     
     //第五行
-    MyLinearLayout *row5 = [tableLayout addRow:MyLayoutSize.wrap colCount:values.count];
+    /*MyLinearLayout *row5 =*/ [tableLayout addRow:MyLayoutSize.wrap colCount:values.count];
     for (NSString *value in values)
     {
         [tableLayout addSubview:[self itemFrom:value alignment:NSTextAlignmentLeft  isFitWidth:NO]];
     }
     
     //第六行
-    MyLinearLayout *row6 = [tableLayout addRow:MyLayoutSize.wrap colCount:values.count];
+    /*MyLinearLayout *row6 =*/ [tableLayout addRow:MyLayoutSize.wrap colCount:values.count];
     for (NSString *value in values)
     {
         [tableLayout addSubview:[self itemFrom:value alignment:NSTextAlignmentCenter  isFitWidth:NO]];
     }
     
     //第7行
-    MyLinearLayout *row7 = [tableLayout addRow:MyLayoutSize.wrap colCount:values.count];
+    /*MyLinearLayout *row7 =*/ [tableLayout addRow:MyLayoutSize.wrap colCount:values.count];
     for (NSString *value in values)
     {
         [tableLayout addSubview:[self itemFrom:value alignment:NSTextAlignmentRight  isFitWidth:NO]];
@@ -137,8 +137,8 @@
     else
     {
         itemLayout.gravity = MyGravity_Horz_Fill;
-        itemLayout.wrapContentHeight = YES;
-        label.wrapContentHeight = YES;
+        itemLayout.myHeight = MyLayoutSize.wrap;
+        label.myHeight = MyLayoutSize.wrap;
     }
     
     

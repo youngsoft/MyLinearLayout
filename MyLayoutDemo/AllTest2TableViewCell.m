@@ -31,7 +31,7 @@
         /**
          * 您可以尝试用不同的布局来实现相同的功能。
          */
-        //[self createLinearRootLayout];
+       // [self createLinearRootLayout];
         [self createRelativeRootLayout];
        //  [self createFloatRootLayout];
     }
@@ -94,7 +94,7 @@
     
     //中间用户信息是一个垂直线性布局：上部分是姓名，以及一些小图标这部分组成一个水平线性布局。下面是一行长的描述文字。
     MyLinearLayout *userInfoLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    userInfoLayout.wrapContentHeight = YES;  //高度由子视图决定
+    userInfoLayout.myHeight = MyLayoutSize.wrap;  //高度由子视图决定
     userInfoLayout.weight = 1;               //中间部分的宽度占用整个水平线性布局剩余的空间。
     userInfoLayout.gravity = MyGravity_Horz_Fill;   //里面的子视图宽度和布局视图相等。
     userInfoLayout.subviewVSpace = 5;       //子视图间距为5。
@@ -103,8 +103,7 @@
     
     //姓名信息部分，一个水平线性布局：左边名称，后面两个操作按钮，整体底部对齐。
     MyLinearLayout *userNameLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    userNameLayout.wrapContentHeight = YES;   //高度由子视图决定
-    userNameLayout.wrapContentWidth  = NO;    //因为布局的宽度是和父布局相等，因此这里必须要设置为NO！！否则会有约束冲突。
+    userNameLayout.myHeight = MyLayoutSize.wrap;   //高度由子视图决定
     userNameLayout.subviewHSpace = 5;    //子视图之间宽度间隔是5
     userNameLayout.gravity = MyGravity_Vert_Bottom;  //整体垂直底部对齐。
     [userInfoLayout addSubview:userNameLayout];
@@ -115,7 +114,7 @@
     //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
     //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
     //您可以通过uBound方法设置尺寸的最大上边界。具体参见对uBound的方法的详细介绍。
-    _nameLabel.widthSize.equalTo(_nameLabel.widthSize).uBound(userNameLayout.widthSize, -(5 + 14 + 5 + 14), 1);
+    _nameLabel.widthSize.equalTo(@(MyLayoutSize.wrap)).uBound(userNameLayout.widthSize, -(5 + 14 + 5 + 14), 1);
     _nameLabel.heightSize.equalTo(@25);
     [userNameLayout addSubview:_nameLabel];
     
@@ -130,7 +129,7 @@
     _descLabel.textColor = [CFTool color:4];
     _descLabel.font = [CFTool font:15];
     _descLabel.adjustsFontSizeToFitWidth = YES;
-    _descLabel.wrapContentHeight = YES;  //2行高度，高度根据内容确定。
+    _descLabel.myHeight = MyLayoutSize.wrap;  //2行高度，高度根据内容确定。
     _descLabel.numberOfLines = 2;
     [userInfoLayout addSubview:_descLabel];
     
@@ -143,7 +142,7 @@
     _priceLabel.textAlignment = NSTextAlignmentRight;
     _priceLabel.adjustsFontSizeToFitWidth = YES;
     //宽度最宽为100,注意到这里使用了宏MYDIMESCALEW表示会根据屏幕的宽度来对100进行缩放。这个100是按iPhone6为标准设置的。具体请参考MyDimeScale类。
-    _priceLabel.widthSize.equalTo(_priceLabel.widthSize).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
+    _priceLabel.widthSize.equalTo(@(MyLayoutSize.wrap)).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
     _priceLabel.heightSize.equalTo(@25);
     _priceLabel.myLeading = 10;
     [rootLayout addSubview:_priceLabel];
@@ -181,7 +180,7 @@
     _priceLabel.trailingPos.equalTo(rootLayout.trailingPos);
     _priceLabel.centerYPos.equalTo(rootLayout.centerYPos);
     //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了宏MYDIMESCALEW表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考MyDimeScale类的介绍。
-    _priceLabel.widthSize.equalTo(_priceLabel.widthSize).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
+    _priceLabel.widthSize.equalTo(@(MyLayoutSize.wrap)).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
     _priceLabel.heightSize.equalTo(@25);
     [rootLayout addSubview:_priceLabel];
 
@@ -189,7 +188,7 @@
     _nameLabel = [UILabel new];
     _nameLabel.font = [CFTool font:17];
     _nameLabel.textColor = [CFTool color:3];
-    _nameLabel.widthSize.equalTo(_nameLabel.widthSize); //视图的宽度由内容包裹
+    _nameLabel.widthSize.equalTo(@(MyLayoutSize.wrap)); //视图的宽度由内容包裹
     _nameLabel.heightSize.equalTo(@25);
     _nameLabel.leadingPos.equalTo(_headImageView.trailingPos);
     //1.3.0版本最新支持。设置_nameLabel的右边距最大是_priceLabel的左边距，再偏移两个小图标和间距的距离。这样当_nameLabel的尺寸超过这个最大的右边距时就会自动的缩小视图的宽度。
@@ -213,7 +212,7 @@
     _descLabel.textColor = [CFTool color:4];
     _descLabel.font = [CFTool font:15];
     _descLabel.adjustsFontSizeToFitWidth = YES;
-    _descLabel.wrapContentHeight = YES;  //2行高度，高度根据内容确定。
+    _descLabel.myHeight = MyLayoutSize.wrap;  //2行高度，高度根据内容确定。
     _descLabel.numberOfLines = 2;
     _descLabel.leadingPos.equalTo(_nameLabel.leadingPos);
     _descLabel.trailingPos.equalTo(_priceLabel.leadingPos).offset(10);
@@ -253,7 +252,7 @@
     _priceLabel.reverseFloat = YES;
     _priceLabel.myLeading = 10;
     //priceLabel的宽度根据内容自适应，但是最大的宽度是100，最小的宽度是50。注意到这里使用了宏MYDIMESCALEW表示会根据屏幕的宽度来对100进行缩放。这个100是在DEMO中是按iPhone6为标准设置的。具体请参考MyDimeScale类的介绍。
-    _priceLabel.widthSize.equalTo(_priceLabel.widthSize).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
+    _priceLabel.widthSize.equalTo(@(MyLayoutSize.wrap)).uBound(@(MYDIMESCALEW(100)), 0, 1).lBound(@(MYDIMESCALEW(50)), 0, 1);
     _priceLabel.heightSize.equalTo(rootLayout.heightSize);
     [rootLayout addSubview:_priceLabel];
     
@@ -272,7 +271,7 @@
     //_nameLabel的宽度根据内容自适应，但是最大的宽度是父视图的宽度的1倍，再减去5+14+5+14。这里的5是视图之间的间距，14是后面两个图片的宽度。
     //这个设置的意思是_nameLabel的宽可以动态增长，但是不能超过父视图的宽度，并且要保证后面的2个图片视图显示出来。
     //您可以通过uBound方法设置尺寸的最大上边界。具体参见对uBound的方法的详细介绍。
-    _nameLabel.widthSize.equalTo(_nameLabel.widthSize).uBound(userInfoLayout.widthSize, -(5 + 14 + 5 + 14), 1);
+    _nameLabel.widthSize.equalTo(@(MyLayoutSize.wrap)).uBound(userInfoLayout.widthSize, -(5 + 14 + 5 + 14), 1);
     _nameLabel.heightSize.equalTo(@25);
     [userInfoLayout addSubview:_nameLabel];
     
@@ -286,7 +285,7 @@
     _descLabel.textColor = [CFTool color:4];
     _descLabel.font = [CFTool font:15];
     _descLabel.adjustsFontSizeToFitWidth = YES;
-    _descLabel.wrapContentHeight = YES;  //2行高度，高度根据内容确定。
+    _descLabel.myHeight = MyLayoutSize.wrap;  //2行高度，高度根据内容确定。
     _descLabel.numberOfLines = 2;
     _descLabel.clearFloat = YES;
     _descLabel.weight = 1;

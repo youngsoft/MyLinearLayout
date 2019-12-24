@@ -162,8 +162,13 @@
 		208157BD1F586AA700E945B6 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157BC1F586AA700E945B6 /* DetailViewController.m */; };
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
+		2094619E2341FD6F005F5C8E /* AllTestExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2094619D2341FD6F005F5C8E /* AllTestExampleViewController.m */; };
+		20A45EC52318FCA50026A18C /* MyFlexLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DF42402318F4EA0078CAA0 /* MyFlexLayout.m */; };
 		20B46A8D1F8A79C300826372 /* layoutdemo8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 20B46A8C1F8A79C300826372 /* layoutdemo8.gif */; };
 		20DCF333208C3BFB007A879B /* FOLTest7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DCF332208C3BFB007A879B /* FOLTest7ViewController.m */; };
+		20DF423E2318A6000078CAA0 /* FLXTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DF423D2318A6000078CAA0 /* FLXTest1ViewController.m */; };
+		20DF42412318F4EA0078CAA0 /* MyFlexLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 20DF423F2318F4EA0078CAA0 /* MyFlexLayout.h */; };
+		20DF42422318F4EA0078CAA0 /* MyFlexLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DF42402318F4EA0078CAA0 /* MyFlexLayout.m */; };
 		20F0DFFD2111749A00CFCE8C /* AllTest11ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F0DFFC2111749A00CFCE8C /* AllTest11ViewController.m */; };
 		20F0E00021120A8D00CFCE8C /* FLLTest8ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F0DFFF21120A8D00CFCE8C /* FLLTest8ViewController.m */; };
 		20F783561F60399700BE5B31 /* GLTest3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F783551F60399700BE5B31 /* GLTest3ViewController.m */; };
@@ -173,6 +178,10 @@
 		44EBDA8E1F619C9000B47CBD /* GridLayoutDemo4.json in Resources */ = {isa = PBXBuildFile; fileRef = 44EBDA8D1F619C9000B47CBD /* GridLayoutDemo4.json */; };
 		467E63CC228C4D6F0065D080 /* AllTest12ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 467E63CB228C4D6F0065D080 /* AllTest12ViewController.m */; };
 		467E63CF228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 467E63CE228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m */; };
+		4689881D23430A8400BFE829 /* MyPathLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4689881C23430A8400BFE829 /* MyPathLayoutTestCase.m */; };
+		4689881F23430AA000BFE829 /* MyGridLayoutTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4689881E23430AA000BFE829 /* MyGridLayoutTestCase.m */; };
+		4689882223449E8300BFE829 /* RLTest6ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4689882123449E8300BFE829 /* RLTest6ViewController.m */; };
+		46898847236733AC00BFE829 /* FLLTest9ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46898846236733AC00BFE829 /* FLLTest9ViewController.m */; };
 		6740E1F820A52D9E00AFBC5A /* AllTest10ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740E1F620A52D9E00AFBC5A /* AllTest10ViewController.m */; };
 		6740E1FB20A52DA900AFBC5A /* AllTest10Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740E1F920A52DA900AFBC5A /* AllTest10Model.m */; };
 		6740E1FE20A52DB100AFBC5A /* AllTest10HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740E1FC20A52DB000AFBC5A /* AllTest10HeaderView.m */; };
@@ -211,13 +220,13 @@
 		182225AE1E77E5930081AA4B /* MyTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyTableLayout.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182225AF1E77E5930081AA4B /* MyBaseLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyBaseLayout.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182225B01E77E5930081AA4B /* MyLayoutPos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutPos.h; sourceTree = "<group>"; };
-		182225B11E77E5930081AA4B /* MyBaseLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyBaseLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		182225B11E77E5930081AA4B /* MyBaseLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyBaseLayout.m; sourceTree = "<group>"; };
 		182225B21E77E5930081AA4B /* MyLinearLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLinearLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225B31E77E5930081AA4B /* MyLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDef.h; sourceTree = "<group>"; };
 		182225B41E77E5930081AA4B /* MyFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyFlowLayout.m; sourceTree = "<group>"; };
 		182225B51E77E5930081AA4B /* MyRelativeLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyRelativeLayout.m; sourceTree = "<group>"; };
 		182225B61E77E5930081AA4B /* MyPathLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyPathLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		182225B71E77E5930081AA4B /* MyFrameLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyFrameLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		182225B71E77E5930081AA4B /* MyFrameLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyFrameLayout.m; sourceTree = "<group>"; };
 		182225B81E77E5930081AA4B /* MyLayoutInner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutInner.h; sourceTree = "<group>"; };
 		182225B91E77E5930081AA4B /* MyFloatLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyFloatLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		182225BA1E77E5930081AA4B /* MyFrameLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFrameLayout.h; sourceTree = "<group>"; };
@@ -404,9 +413,15 @@
 		208157BC1F586AA700E945B6 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		208157C01F5A886300E945B6 /* MyLayoutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDelegate.h; sourceTree = "<group>"; };
 		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
+		2094619C2341FD5E005F5C8E /* AllTestExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTestExampleViewController.h; sourceTree = "<group>"; };
+		2094619D2341FD6F005F5C8E /* AllTestExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTestExampleViewController.m; sourceTree = "<group>"; };
 		20B46A8C1F8A79C300826372 /* layoutdemo8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo8.gif; sourceTree = "<group>"; };
 		20DCF331208C3BEF007A879B /* FOLTest7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOLTest7ViewController.h; sourceTree = "<group>"; };
 		20DCF332208C3BFB007A879B /* FOLTest7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOLTest7ViewController.m; sourceTree = "<group>"; };
+		20DF423C2318A5EE0078CAA0 /* FLXTest1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLXTest1ViewController.h; sourceTree = "<group>"; };
+		20DF423D2318A6000078CAA0 /* FLXTest1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLXTest1ViewController.m; sourceTree = "<group>"; };
+		20DF423F2318F4EA0078CAA0 /* MyFlexLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyFlexLayout.h; sourceTree = "<group>"; };
+		20DF42402318F4EA0078CAA0 /* MyFlexLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyFlexLayout.m; sourceTree = "<group>"; };
 		20F0DFFB2111749A00CFCE8C /* AllTest11ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AllTest11ViewController.h; sourceTree = "<group>"; };
 		20F0DFFC2111749A00CFCE8C /* AllTest11ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AllTest11ViewController.m; sourceTree = "<group>"; };
 		20F0DFFE21120A8D00CFCE8C /* FLLTest8ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FLLTest8ViewController.h; sourceTree = "<group>"; };
@@ -423,6 +438,12 @@
 		467E63CB228C4D6F0065D080 /* AllTest12ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest12ViewController.m; sourceTree = "<group>"; };
 		467E63CD228CDA550065D080 /* AllTest1TableViewCellForAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest1TableViewCellForAutoLayout.h; sourceTree = "<group>"; };
 		467E63CE228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest1TableViewCellForAutoLayout.m; sourceTree = "<group>"; };
+		4689881C23430A8400BFE829 /* MyPathLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPathLayoutTestCase.m; sourceTree = "<group>"; };
+		4689881E23430AA000BFE829 /* MyGridLayoutTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGridLayoutTestCase.m; sourceTree = "<group>"; };
+		4689882023449E7900BFE829 /* RLTest6ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLTest6ViewController.h; sourceTree = "<group>"; };
+		4689882123449E8300BFE829 /* RLTest6ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLTest6ViewController.m; sourceTree = "<group>"; };
+		468988452367339C00BFE829 /* FLLTest9ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLLTest9ViewController.h; sourceTree = "<group>"; };
+		46898846236733AC00BFE829 /* FLLTest9ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLLTest9ViewController.m; sourceTree = "<group>"; };
 		6740E1F520A52D9D00AFBC5A /* AllTest10ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTest10ViewController.h; sourceTree = "<group>"; };
 		6740E1F620A52D9E00AFBC5A /* AllTest10ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest10ViewController.m; sourceTree = "<group>"; };
 		6740E1F920A52DA900AFBC5A /* AllTest10Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTest10Model.m; sourceTree = "<group>"; };
@@ -518,6 +539,7 @@
 				18D3C8FC1EDF053000D3DE43 /* RelativeLayoutDemo */,
 				18D3C9001EDF056900D3DE43 /* TableLayoutDemo */,
 				18D3C8FD1EDF053D00D3DE43 /* FlowLayoutDemo */,
+				20BA39E0234DD6BF003F22D2 /* FlexLayoutDemo */,
 				18D3C8FF1EDF055C00D3DE43 /* FloatLayoutDemo */,
 				205CFA8B1F49BCAF00355489 /* GridLayoutDemo */,
 				18D3C8FE1EDF055000D3DE43 /* PathLayoutDemo */,
@@ -571,6 +593,8 @@
 				18D3C9251EDF07A700D3DE43 /* RLTest4ViewController.m */,
 				18D3C9261EDF07A700D3DE43 /* RLTest5ViewController.h */,
 				18D3C9271EDF07A700D3DE43 /* RLTest5ViewController.m */,
+				4689882023449E7900BFE829 /* RLTest6ViewController.h */,
+				4689882123449E8300BFE829 /* RLTest6ViewController.m */,
 			);
 			name = RelativeLayoutDemo;
 			sourceTree = "<group>";
@@ -595,6 +619,8 @@
 				2075CC3120A0B2A400BA6F65 /* FLLTest7ViewController.m */,
 				20F0DFFE21120A8D00CFCE8C /* FLLTest8ViewController.h */,
 				20F0DFFF21120A8D00CFCE8C /* FLLTest8ViewController.m */,
+				468988452367339C00BFE829 /* FLLTest9ViewController.h */,
+				46898846236733AC00BFE829 /* FLLTest9ViewController.m */,
 			);
 			name = FlowLayoutDemo;
 			sourceTree = "<group>";
@@ -680,6 +706,8 @@
 				20F0DFFC2111749A00CFCE8C /* AllTest11ViewController.m */,
 				467E63CA228C4D630065D080 /* AllTest12ViewController.h */,
 				467E63CB228C4D6F0065D080 /* AllTest12ViewController.m */,
+				2094619C2341FD5E005F5C8E /* AllTestExampleViewController.h */,
+				2094619D2341FD6F005F5C8E /* AllTestExampleViewController.m */,
 				18D3C9021EDF068200D3DE43 /* AllTestModel&View */,
 			);
 			name = IntegratedDemo;
@@ -785,6 +813,8 @@
 				18D684001C4F421400A48BB4 /* MyLayout.h */,
 				182225AB1E77E5930081AA4B /* MyFlowLayout.h */,
 				182225B41E77E5930081AA4B /* MyFlowLayout.m */,
+				20DF423F2318F4EA0078CAA0 /* MyFlexLayout.h */,
+				20DF42402318F4EA0078CAA0 /* MyFlexLayout.m */,
 				182225AC1E77E5930081AA4B /* MyLinearLayout.h */,
 				182225B21E77E5930081AA4B /* MyLinearLayout.m */,
 				182225AD1E77E5930081AA4B /* MyFloatLayout.h */,
@@ -841,6 +871,8 @@
 				18B2CCE71EAF5066001AE0E1 /* MyLinearLayoutTestCase.m */,
 				18B2CCE91EB046AB001AE0E1 /* MyFlowLayoutTestCase.m */,
 				205AE95D22BC4C2900BE8E76 /* MyFloatLayoutTestCase.m */,
+				4689881C23430A8400BFE829 /* MyPathLayoutTestCase.m */,
+				4689881E23430AA000BFE829 /* MyGridLayoutTestCase.m */,
 				1810AC211EB966D30022CBFF /* MyLayoutPerformanceTestCase.m */,
 			);
 			path = MyLayoutTests;
@@ -871,6 +903,15 @@
 			name = GridLayoutDemo;
 			sourceTree = "<group>";
 		};
+		20BA39E0234DD6BF003F22D2 /* FlexLayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				20DF423C2318A5EE0078CAA0 /* FLXTest1ViewController.h */,
+				20DF423D2318A6000078CAA0 /* FLXTest1ViewController.m */,
+			);
+			name = FlexLayoutDemo;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -894,6 +935,7 @@
 				205E0C5F20B90347001A8B99 /* MyGrid.h in Headers */,
 				182DB6421EF7876200E2D65D /* MyGridLayout.h in Headers */,
 				205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */,
+				20DF42412318F4EA0078CAA0 /* MyFlexLayout.h in Headers */,
 				18C15AF81EDF141A00AADEAC /* MyMaker.h in Headers */,
 				18C15AF71EDF141600AADEAC /* MyLayoutSizeClass.h in Headers */,
 				18C15AF91EDF142000AADEAC /* MyDimeScale.h in Headers */,
@@ -985,7 +1027,7 @@
 		184082851B2C46E8003F378B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = YoungSoft;
 				TargetAttributes = {
 					181A10B41EDF12CF00996203 = {
@@ -1013,12 +1055,12 @@
 			};
 			buildConfigurationList = 184082881B2C46E8003F378B /* Build configuration list for PBXProject "MyLayout" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				Base,
 				"zh-Hans",
+				en,
 			);
 			mainGroup = 184082841B2C46E8003F378B;
 			productRefGroup = 1840828E1B2C46E8003F378B /* Products */;
@@ -1106,6 +1148,7 @@
 				2056430B1F4E53CD00E8BDDE /* MyGridNode.m in Sources */,
 				205643171F55A03000E8BDDE /* MyLayoutMath.m in Sources */,
 				18C15AFF1EDF144B00AADEAC /* MyRelativeLayout.m in Sources */,
+				20DF42422318F4EA0078CAA0 /* MyFlexLayout.m in Sources */,
 				182DB6441EF7876200E2D65D /* MyGridLayout.m in Sources */,
 				18C15B001EDF144B00AADEAC /* MyPathLayout.m in Sources */,
 				18C15B011EDF144B00AADEAC /* MyFrameLayout.m in Sources */,
@@ -1144,14 +1187,17 @@
 				467E63CF228CDA660065D080 /* AllTest1TableViewCellForAutoLayout.m in Sources */,
 				18D3C95A1EDF07F800D3DE43 /* FOLTest1ViewController.m in Sources */,
 				182225D01E77E5930081AA4B /* MyLayoutPos.m in Sources */,
+				2094619E2341FD6F005F5C8E /* AllTestExampleViewController.m in Sources */,
 				18D3C98B1EDF084000D3DE43 /* AllTest7ViewController.m in Sources */,
 				20F0E00021120A8D00CFCE8C /* FLLTest8ViewController.m in Sources */,
 				200A26DC1FA96B2400B06E7B /* AllTest9CollectionViewCell.m in Sources */,
+				4689882223449E8300BFE829 /* RLTest6ViewController.m in Sources */,
 				18D3C9881EDF084000D3DE43 /* AllTest4ViewController.m in Sources */,
 				18D3C9131EDF074900D3DE43 /* LLTest3ViewController.m in Sources */,
 				18D3C95E1EDF07F800D3DE43 /* FOLTest5ViewController.m in Sources */,
 				18D3C99C1EDF09BE00D3DE43 /* CFTool.m in Sources */,
 				18D3C9141EDF074900D3DE43 /* LLTest4ViewController.m in Sources */,
+				20DF423E2318A6000078CAA0 /* FLXTest1ViewController.m in Sources */,
 				18D3C9931EDF08F800D3DE43 /* ViewController.m in Sources */,
 				18D3C93B1EDF07C000D3DE43 /* FLLTest3ViewController.m in Sources */,
 				205643181F55A16400E8BDDE /* MyLayoutMath.m in Sources */,
@@ -1163,6 +1209,7 @@
 				18D3C9941EDF08F800D3DE43 /* YYFPSLabel.m in Sources */,
 				18D3C91D1EDF078200D3DE43 /* FLTest2ViewController.m in Sources */,
 				18D3C9661EDF080800D3DE43 /* TLTest1ViewController.m in Sources */,
+				46898847236733AC00BFE829 /* FLLTest9ViewController.m in Sources */,
 				467E63CC228C4D6F0065D080 /* AllTest12ViewController.m in Sources */,
 				6740E1FE20A52DB100AFBC5A /* AllTest10HeaderView.m in Sources */,
 				18D3C94A1EDF07E700D3DE43 /* PLTest2ViewController.m in Sources */,
@@ -1177,6 +1224,7 @@
 				18D3C9891EDF084000D3DE43 /* AllTest5ViewController.m in Sources */,
 				182225CC1E77E5930081AA4B /* MyRelativeLayout.m in Sources */,
 				18D3C94C1EDF07E700D3DE43 /* PLTest4ViewController.m in Sources */,
+				20A45EC52318FCA50026A18C /* MyFlexLayout.m in Sources */,
 				2056430C1F4E8B1E00E8BDDE /* MyGridNode.m in Sources */,
 				182225D11E77E5930081AA4B /* MyLayoutSizeClass.m in Sources */,
 				444B71911F6A3E3F00331872 /* GLTest5ViewController.m in Sources */,
@@ -1219,10 +1267,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4689881D23430A8400BFE829 /* MyPathLayoutTestCase.m in Sources */,
 				18B2CCE81EAF5066001AE0E1 /* MyLinearLayoutTestCase.m in Sources */,
 				205AE95E22BC4C2900BE8E76 /* MyFloatLayoutTestCase.m in Sources */,
 				18D684591C4F423400A48BB4 /* MyLayoutTests.m in Sources */,
 				1810AC221EB966D30022CBFF /* MyLayoutPerformanceTestCase.m in Sources */,
+				4689881F23430AA000BFE829 /* MyGridLayoutTestCase.m in Sources */,
 				181836951EAB1CB10031F337 /* MyNoLayoutSuperviewTestCase.m in Sources */,
 				180BD8A11EA9EF9A00C6980B /* MyFrameLayoutTestCase.m in Sources */,
 				1897384F1E1631E3004F80D6 /* MyRelativeLayoutTestCase.m in Sources */,
@@ -1370,6 +1420,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1378,12 +1429,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1423,6 +1476,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1431,12 +1485,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1479,7 +1535,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.MyLayoutDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.meituan.MyLayoutDemo;
 				PRODUCT_NAME = MyLayoutDemo;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1501,7 +1557,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.youngsoft.MyLayoutDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.meituan.MyLayoutDemo;
 				PRODUCT_NAME = MyLayoutDemo;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

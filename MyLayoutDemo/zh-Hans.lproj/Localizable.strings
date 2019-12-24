@@ -23,6 +23,7 @@
 "3.RelativeLayout - Centered" = "3.相对布局-子视图整体居中";
 "4.RelativeLayout - Scroll&Dock" = "4.相对布局-滚动和停靠";
 "5.RelativeLayout - Boundary limit" = "5.相对布局-边界约束";
+"6.RelativeLayout - MostSize&MostPos" = "6.相对布局-最值约束";
 "1.TableLayout - Vert" = "1.表格布局-垂直表格";
 "2.TableLayout - Waterfall(Horz)" = "2.表格布局-水平表格实现瀑布流";
 "3.TableLayout - Intelligent Borderline" = "3.表格布局-表格和智能边界线";
@@ -35,6 +36,7 @@
 "6.FlowLayout - Scroll" = "6.流式布局-不同方向的滚动";
 "7.FlowLayout - Auto Arrange" = "7.流式布局-自动布局和对瀑布流的支持";
 "8.FlowLayout - Flex space" = "8.流式布局-浮动间距";
+"9.FlowLayout - Line gravity" = "9.流式布局-自定义行停靠对齐";
 "1.FloatLayout - Float" = "1.浮动布局-浮动效果的演示";
 "2.FloatLayout - Jagged" = "2.浮动布局-仿天猫淘宝首页实现" ;
 "3.FloatLayout - Card news" = "3.浮动布局-仿ZAKER今日头条实现";
@@ -88,7 +90,7 @@
 "Show&Hide the Text"="点击按钮显示隐藏文本";
 "Show more》"="点击查看更多》";
 "Close up《" ="点击收起《";
-"This is a can automatically wrap text.To realize this function, you need to set the clear width, and set the wrapContentHeight to YES.You can try to switch different simulator or different orientation screen to see the effect."="这是一段可以自动换行的文本。为了实现这个功能，您需要设置明确的宽度，并且把属性wrapContentHeight设置为YES。您可以尝试着切换不同尺寸的模拟器或者横竖屏来看看效果。";
+"This is a can automatically wrap text.To realize this function, you need to set the width exact, and set the heightSize to MyLayoutSize.wrap.You can try to switch different simulator or different orientation screen to see the effect."="这是一段可以自动换行的文本。为了实现这个功能，您需要设置明确的宽度，并且把heightSize设置为MyLayoutSize.wrap。您可以尝试着切换不同尺寸的模拟器或者横竖屏来看看效果。";
 
 //LLTest3ViewController
 "centered title" = "标题居中";
@@ -103,10 +105,14 @@
 "right" = "右停靠";
 "horz fill"="水平填充";
 "vert fill"="垂直填充";
+"horz stretch"="水平拉伸";
+"vert stretch"="垂直拉伸";
 "screen vert center" = "屏幕垂直居中";
 "screen horz center" ="屏幕水平居中";
 "space" = "间距调整";
 "between" = "间距拉伸";
+"around" = "间距环绕";
+"among" = "间距等分";
 "test text1"="测试文本1";
 "always alignment to left"="总是停靠在左边";
 "always alignment to top"="总是停靠在上边";
@@ -176,7 +182,8 @@
 "adjust horz gravity"="填充水平停靠";
 "adjust vert gravity"="调整垂直停靠";
 "adjust align"="调整对齐方式";
-"adjust spacing"="调整间隔";
+"adjust spacing"="调整间距";
+"adjust gravity policy"="调整拉伸策略";
 
 //FLLTest2ViewController
 "click to remove tag"="点击标签可删除";
@@ -226,7 +233,7 @@
 
 //AllTest1ViewController
 "add tableHeaderView(please touch me)"="设置tableHeaderView(点我试试)";
-" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and use wrapContentHeight to set view's height. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView."="  布局视图实现具有动态高度的tableHeaderView时，宽度需要用frame指定，高度则设置wrapContentHeight为YES，并且在赋值给UITableview的tableHeaderView之前需要调用layoutIfNeeded方法来明确高度。";
+" if you use layout view to realize the dynamic height tableHeaderView, please use frame to set view's width and set view's heightSize to MyLayoutSize.wrap. the layoutIfNeeded method is needed to call before the layout view assignment to the UITableview's tableHeaderView."="  布局视图实现具有动态高度的tableHeaderView时，宽度需要用frame指定，高度heightSize设置为MyLayoutSize.wrap，并且在赋值给UITableview的tableHeaderView之前需要调用layoutIfNeeded方法来明确高度。";
 "add tableFooterView"="设置tableFooterView";
 "the layoutIfNeeded is not need to call when you use frame to set layout view's size"="如果通过frame设置了明确的尺寸则不需要调用layoutIfNeeded";
 

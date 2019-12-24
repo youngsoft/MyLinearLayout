@@ -214,7 +214,7 @@ static NSInteger sPartTag4 = 1003;
         scrollView.pagingEnabled = YES;
         MyFlowLayout *scrollFlowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:1];
         scrollFlowLayout.pagedCount = 1;
-        scrollFlowLayout.wrapContentWidth = YES;
+        scrollFlowLayout.widthSize.equalTo(@(MyLayoutSize.wrap));
         scrollFlowLayout.heightSize.equalTo(scrollView.heightSize); 
         [scrollView addSubview:scrollFlowLayout];
         NSArray *temp = @[@"bk1",@"bk2",@"bk3",@"bk1",@"bk2"];

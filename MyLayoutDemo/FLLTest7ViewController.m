@@ -20,7 +20,7 @@
     {
         UILabel *label = [UILabel new];
         label.text = title;
-        label.wrapContentSize = YES;  //内容自适应。
+        label.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
         label.backgroundColor = [CFTool color:(random()%14 + 1)];
         label.font = [CFTool font:16];
         [flowLayout addSubview:label];
@@ -55,13 +55,14 @@
     
     //水平瀑布流1。
     UIScrollView *scrollView1 = [UIScrollView new];
-    scrollView1.wrapContentHeight = YES;  //这里可以设置滚动视图的高度为包裹属性，表示他的高度依赖于布局视图的高度。
+    scrollView1.myHeight = MyLayoutSize.wrap; //这里可以设置滚动视图的高度为包裹属性，表示他的高度依赖于布局视图的高度。
     [rootLayout addSubview:scrollView1];
     
     MyFlowLayout *flowLayout1 = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:3];
     flowLayout1.backgroundColor = [CFTool color:5];
-    flowLayout1.wrapContentSize = YES;  //流式布局的尺寸由里面的子视图的整体尺寸决定。
-    flowLayout1.widthSize.lBound(scrollView1.widthSize, 0, 1);  //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
+    //流式布局的尺寸由里面的子视图的整体尺寸决定。
+    flowLayout1.heightSize.equalTo(@(MyLayoutSize.wrap));
+    flowLayout1.widthSize.equalTo(@(MyLayoutSize.wrap)).lBound(scrollView1.widthSize, 0, 1);  //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
     flowLayout1.autoArrange = YES;  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
     flowLayout1.subviewSpace = 10;
     flowLayout1.padding = UIEdgeInsetsMake(10, 10, 10, 10);
@@ -71,13 +72,13 @@
     
     //水平瀑布流2。
     UIScrollView *scrollView2 = [UIScrollView new];
-    scrollView2.wrapContentHeight = YES;
+    scrollView2.myHeight = MyLayoutSize.wrap;
     [rootLayout addSubview:scrollView2];
     
     MyFlowLayout *flowLayout2 = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:3];
     flowLayout2.backgroundColor = [CFTool color:6];
-    flowLayout2.wrapContentSize = YES;
-    flowLayout2.widthSize.lBound(scrollView2.widthSize, 0, 1);  //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
+    flowLayout2.heightSize.equalTo(@(MyLayoutSize.wrap));
+    flowLayout2.widthSize.equalTo(@(MyLayoutSize.wrap)).lBound(scrollView2.widthSize, 0, 1);  //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
     flowLayout2.subviewSpace = 10;
     flowLayout2.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     flowLayout2.arrangedGravity = MyGravity_Horz_Between;  //通过将水平流式布局的arrangeGravity属性设置为MyGravity_Horz_Between，我们将得到里面的子视图在每行都会被紧凑的排列。大家可以看到和上面的将autoArrange设置为YES的不同的效果。
@@ -92,8 +93,7 @@
     
     MyFlowLayout *flowLayout3 = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     flowLayout3.backgroundColor = [CFTool color:5];
-    flowLayout3.wrapContentHeight = YES;
-    flowLayout3.heightSize.lBound(scrollView3.heightSize, 0, 1); //虽然是包裹尺寸，但是最小不能小于父视图的高度。
+    flowLayout3.heightSize.equalTo(@(MyLayoutSize.wrap)).lBound(scrollView3.heightSize, 0, 1); //虽然是包裹尺寸，但是最小不能小于父视图的高度。
     flowLayout3.myHorzMargin = 0;
     flowLayout3.gravity = MyGravity_Horz_Fill; //均分宽度。
     flowLayout3.autoArrange = YES;  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
@@ -110,8 +110,7 @@
     
     MyFlowLayout *flowLayout4 = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     flowLayout4.backgroundColor = [CFTool color:6];
-    flowLayout4.wrapContentHeight = YES;
-    flowLayout4.heightSize.lBound(scrollView4.heightSize, 0, 1);
+    flowLayout4.heightSize.equalTo(@(MyLayoutSize.wrap)).lBound(scrollView4.heightSize, 0, 1);
     flowLayout4.myHorzMargin = 0;
     flowLayout4.gravity = MyGravity_Horz_Fill; //均分宽度。
     flowLayout4.arrangedGravity = MyGravity_Vert_Between;  //通过将垂直流式布局的arrangeGravity属性设置为MyGravity_Vert_Between，我们将得到里面的子视图在每列都会被紧凑的排列。大家可以看到和上面的将autoArrange设置为YES的不同的效果。

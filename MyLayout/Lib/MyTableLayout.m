@@ -13,7 +13,6 @@ static CGFloat sColCountTag = -100000;
 
 @interface MyTableRowLayout : MyLinearLayout
 
-
 +(MyTableRowLayout *)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation;
 
 @property(nonatomic,assign, readonly) CGFloat rowSize;
@@ -26,7 +25,6 @@ static CGFloat sColCountTag = -100000;
    CGFloat _rowSize;
    CGFloat _colSize;
 }
-
 
 -(instancetype)initWith:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
 {
@@ -50,9 +48,9 @@ static CGFloat sColCountTag = -100000;
         else if (rowSize == MyLayoutSize.wrap)
         {
             if (orientation == MyOrientation_Horz)
-                lsc.wrapContentHeight = YES;
+                [lsc.heightSize __equalTo:@(MyLayoutSize.wrap)];
             else
-                lsc.wrapContentWidth = YES;
+                [lsc.widthSize __equalTo:@(MyLayoutSize.wrap)];
         }
         else
         {
@@ -63,12 +61,12 @@ static CGFloat sColCountTag = -100000;
         {
             if (orientation == MyOrientation_Horz)
             {
-                lsc.wrapContentWidth = NO;
+                [lsc.widthSize __equalTo:nil];
                 lsc.myHorzMargin = 0;
             }
             else
             {
-                lsc.wrapContentHeight = NO;
+                [lsc.heightSize __equalTo:nil];
                 lsc.myVertMargin = 0;
             }
             
@@ -104,12 +102,10 @@ static CGFloat sColCountTag = -100000;
     }
 }
 
-
 +(MyTableRowLayout *)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation
 {
     return [[self alloc] initWith:rowSize colSize:colSize orientation:orientation];
 }
-
 
 @end
 
@@ -128,7 +124,6 @@ static CGFloat sColCountTag = -100000;
 
 @end
 
-
 @implementation MyTableLayout
 
 #pragma mark -- Public Methods
@@ -137,7 +132,6 @@ static CGFloat sColCountTag = -100000;
 {
     return [self linearLayoutWithOrientation:orientation];
 }
-
 
 -(MyLinearLayout*)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize
 {
@@ -155,7 +149,6 @@ static CGFloat sColCountTag = -100000;
     return [self  insertRow:rowSize colSize:sColCountTag - colCount atIndex:rowIndex];
 }
 
-
 -(MyLinearLayout*)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex
 {
     MyTableLayout *lsc = self.myCurrentSizeClass;
@@ -168,13 +161,10 @@ static CGFloat sColCountTag = -100000;
     
     MyTableRowLayout *rowView = [MyTableRowLayout rowSize:rowSize colSize:colSize orientation:ori];
     if (ori == MyOrientation_Horz)
-    {
         rowView.subviewHSpace = lsc.subviewHSpace;
-    }
     else
-    {
         rowView.subviewVSpace = lsc.subviewVSpace;
-    }
+    
     rowView.intelligentBorderline = self.intelligentBorderline;
     [super insertSubview:rowView atIndex:rowIndex];
     return rowView;
@@ -213,7 +203,6 @@ static CGFloat sColCountTag = -100000;
     MyLinearLayout *rowsc = rowView.myCurrentSizeClass;
     UIView *colsc = colView.myCurrentSizeClass;
     
-    //colSize为0表示均分尺寸，为-1表示由子视图决定尺寸，大于0表示固定尺寸。
     if (rowView.colSize == MyLayoutSize.average)
     {
         colsc.weight = 1;
@@ -223,19 +212,11 @@ static CGFloat sColCountTag = -100000;
         NSUInteger colCount = sColCountTag - rowView.colSize;
         if (rowsc.orientation == MyOrientation_Horz)
         {
-#ifdef MY_USEPREFIXMETHOD
-            colsc.widthSize.myEqualTo(rowView.widthSize).myMultiply(1.0 / colCount).myAdd(-1 * rowView.subviewHSpace * (colCount - 1.0)/ colCount);
-#else
-            colsc.widthSize.equalTo(rowView.widthSize).multiply(1.0 / colCount).add(-1 * rowView.subviewHSpace * (colCount - 1.0)/ colCount);
-#endif
+            [[[colsc.widthSize __equalTo:rowView.widthSize] __multiply:(1.0 / colCount)] __add:-1 * rowView.subviewHSpace * (colCount - 1.0)/ colCount];
         }
         else
         {
-#ifdef MY_USEPREFIXMETHOD
-            colsc.heightSize.myEqualTo(rowView.heightSize).myMultiply(1.0 / colCount).myAdd(-1 * rowView.subviewVSpace * (colCount - 1.0)/ colCount);
-#else
-            colsc.heightSize.equalTo(rowView.heightSize).multiply(1.0 / colCount).add(-1 * rowView.subviewVSpace * (colCount - 1.0)/ colCount);
-#endif
+            [[[colsc.heightSize __equalTo:rowView.heightSize] __multiply:(1.0 / colCount)] __add:-1 * rowView.subviewVSpace * (colCount - 1.0)/ colCount];
         }
 
     }
@@ -250,32 +231,13 @@ static CGFloat sColCountTag = -100000;
     if (rowsc.orientation == MyOrientation_Horz)
     {
         if (CGRectGetHeight(colView.bounds) == 0 && colsc.heightSizeInner.dimeVal == nil)
-        {
-            if ([colView isKindOfClass:[MyBaseLayout class]])
-            {
-                if (!colsc.wrapContentHeight)
-                    [colsc.heightSize __equalTo:rowsc.heightSize];
-            }
-            else
-                [colsc.heightSize __equalTo:rowsc.heightSize];
-        }
+            [colsc.heightSize __equalTo:rowsc.heightSize priority:MyPriority_Low];
     }
     else
     {
         if (CGRectGetWidth(colView.bounds) == 0 && colsc.widthSizeInner.dimeVal == nil)
-        {
-            
-            if ([colView isKindOfClass:[MyBaseLayout class]])
-            {
-                if (!colsc.wrapContentWidth)
-                    [colsc.widthSize __equalTo:rowsc.widthSize];
-            }
-            else
-                [colsc.widthSize __equalTo:rowsc.widthSize];
-        }
-        
+            [colsc.widthSize __equalTo:rowsc.widthSize priority:MyPriority_Low];
     }
-    
     
     [rowView insertSubview:colView atIndex:indexPath.col];
 }
@@ -292,7 +254,6 @@ static CGFloat sColCountTag = -100000;
     
     if (colView1 == colView2)
         return;
-    
     
     [self removeColAt:indexPath1];
     [self removeColAt:indexPath2];
@@ -336,9 +297,7 @@ static CGFloat sColCountTag = -100000;
             [self viewAtRowIndex:i].subviewHSpace = subviewHSpace;
         }
     }
-    
 }
-
 
 //不能直接调用如下的函数。
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index
@@ -365,11 +324,9 @@ static CGFloat sColCountTag = -100000;
     NSCAssert(0, @"Constraint exception!! Can't call insertSubview");
 }
 
-
 -(id)createSizeClassInstance
 {
     return [MyTableLayoutViewSizeClass new];
 }
-
 
 @end

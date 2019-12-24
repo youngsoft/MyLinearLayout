@@ -104,21 +104,6 @@
 @property(nonatomic,assign) IBInspectable MyOrientation orientation;
 
 
-
-
-/**
- 不做布局边界尺寸的限制，子视图不会自动换行。因此当设置为YES时，子视图需要明确设置clearFloat来实现主动换行的处理。默认为NO。这个属性设置的意义使得我们可以自定义子视图的换行，而不是让子视图根据布局视图的尺寸限制自动换行。
- 
- 1. 当布局的orientation为MyOrientation_Vert并且wrapContentWidth为YES时,这个属性设置为YES才生效。
- 
- 2. 当布局的orientation为MyOrientation_Horz并且wrapContentHeight为YES时，这个属性设置为YES才生效。
- 
- @note 当属性设置为YES时，子视图不能将扩展属性reverseFloat设置为YES，同时不能设置weight属性，否则将导致结果异常。
- @note 这个属性设置为YES时，在左右浮动布局中，子视图只能向左浮动，并且没有右边界的限制，因此如果子视图没有clearFloat时则总是排列在前一个子视图的右边，并不会自动换行,因此为了让这个属性生效，布局视图必须要同时设置wrapContentWidth为YES。
- @note 这个属性设置为YES时，在上下浮动布局中，子视图只能向上浮动，并且没有下边界的限制，因此如果子视图没有设置clearFloat时则总是排列在前一个子视图的下边，并不会自动换行，因此为了让这个属性生效，布局视图必须要同时设置wrapContentHeight为YES.
- */
-@property(nonatomic,assign) IBInspectable BOOL noBoundaryLimit;
-
 /**
  在一些应用场景中我们希望子视图的宽度是固定的但间距是浮动的，这样就尽可能在一排中容纳更多的子视图。比如设置每个子视图的宽度固定为80，那么在小屏幕下每排只能放3个，而大屏幕则每排能放4个或者5个子视图。 因此您可以通过如下方法来设置子视图的固定尺寸和最小最大浮动间距。这个方法会根据您当前布局的方向不同而具有不同的意义：
  
@@ -135,8 +120,35 @@
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
 -(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
 
+/**
+ 上面函数的加强版本。
+ 
+ @param subviewSize 指定子视图的尺寸
+ @param minSpace 指定子视图之间的最小间距
+ @param maxSpace 指定子视图之间的最大间距
+ @param centered 指定是否所有子视图居中
+ */
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
+-(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 
 @end
 
 
+@interface MyFloatLayout(MyDeprecated)
+
+
+/**
+ 不做布局边界尺寸的限制，子视图不会自动换行。因此当设置为YES时，子视图需要明确设置clearFloat来实现主动换行的处理。默认为NO。这个属性设置的意义使得我们可以自定义子视图的换行，而不是让子视图根据布局视图的尺寸限制自动换行。
+ 
+ 1. 当布局的orientation为MyOrientation_Vert并且宽度自适应时,这个属性设置为YES才生效。
+ 
+ 2. 当布局的orientation为MyOrientation_Horz并且高度自适应时，这个属性设置为YES才生效。
+ 
+ @note 当属性设置为YES时，子视图不能将扩展属性reverseFloat设置为YES，同时不能设置weight属性，否则将导致结果异常。
+ @note 这个属性设置为YES时，在左右浮动布局中，子视图只能向左浮动，并且没有右边界的限制，因此如果子视图没有clearFloat时则总是排列在前一个子视图的右边，并不会自动换行,因此为了让这个属性生效，布局视图必须要同时设置宽度为自适应。
+ @note 这个属性设置为YES时，在上下浮动布局中，子视图只能向上浮动，并且没有下边界的限制，因此如果子视图没有设置clearFloat时则总是排列在前一个子视图的下边，并不会自动换行，因此为了让这个属性生效，布局视图必须要同时设置高度为自适应。
+ */
+@property(nonatomic,assign) IBInspectable BOOL noBoundaryLimit MYDEPRECATED("此属性已经过期,请直接设置布局视图的高度或者宽度值为MyLayoutSize.wrap即可");
+
+@end

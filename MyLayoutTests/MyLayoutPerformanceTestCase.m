@@ -7,6 +7,8 @@
 //
 
 #import "MyLayoutTestCaseBase.h"
+//#import "FlexBoxLayout.h"
+//#import "FBFeedView.h"
 
 //对SDAutoLayout和Masonry的测试请单独引入这两个第三方库进行测试。
 
@@ -151,7 +153,7 @@
 -(UIView*)linearlayout_createMyLayout
 {
     MyLinearLayout *containerView = [[MyLinearLayout alloc] initWithFrame:CGRectMake(0, 0, 100, 100) orientation:MyOrientation_Vert];
-    containerView.wrapContentHeight = NO;
+    containerView.heightSize.equalTo(nil);
     
     for (int i = 0; i < self.counts; i++)
     {
@@ -1899,6 +1901,207 @@
         
     }];
 }
+
+-(void)testPerformance_flexlayout {
+    
+    [self measureBlock:^{
+        
+        UIScrollView *contentView = [UIScrollView new];
+        contentView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-44);
+        
+        
+        MyFlexLayout *root = MyFlexLayout.new.myFlex
+        .justify_content(MyFlexGravity_Space_Around)
+        .align_items(MyFlexGravity_Center)
+        .width([UIScreen mainScreen].bounds.size.width)
+        .height([UIScreen mainScreen].bounds.size.height)
+        .addTo(contentView);
+        
+        
+        MyFlexLayout *div1 = MyFlexLayout.new.myFlex
+        .flex_direction(MyFlexDirection_Column)
+        .justify_content(MyFlexGravity_Space_Between)
+        .align_items(MyFlexGravity_Center)
+        .width(150)
+        .margin_top(20)
+        .addTo(root);
+        
+        UIView *child1 = UIView.new.myFlex
+        .width(100)
+        .height(100)
+        .addTo(div1);
+        
+        child1.backgroundColor = [UIColor blueColor];
+        
+        
+        UIView *child2 = UIView.new.myFlex
+        .width(100)
+        .height(100)
+        .addTo(div1);
+        
+        child2.backgroundColor = [UIColor greenColor];
+        
+        UILabel *child3 = UILabel.new.myFlex
+        .addTo(div1);
+        
+        child3.numberOfLines = 0;
+        child3.backgroundColor = [UIColor yellowColor];
+        [child3 setAttributedText:[[NSAttributedString alloc] initWithString:@"testfdsfdsfdsfdsfdsfdsafdsafdsafasdkkk" attributes:@{NSFontAttributeName :[UIFont systemFontOfSize:18]}] ];
+        
+        
+        
+        MyFlexLayout *div2 = MyFlexLayout.new.myFlex
+        .flex_direction(MyFlexDirection_Column)
+        .justify_content(MyFlexGravity_Space_Around)
+        .align_items(MyFlexGravity_Center)
+        .width(150)
+        .margin_top(20)
+        .addTo(root);
+        
+        UIView *child5 = UIView.new.myFlex
+        .flex_grow(1)
+        .width(50)
+        .height(50)
+        .margin_bottom(10)
+        .addTo(div2);
+        
+        child5.backgroundColor = [UIColor blueColor];
+        
+        
+        
+        UIView *child6 = UIView.new.myFlex
+        .flex_grow(2)
+        .width(50)
+        .height(50)
+        .margin(10)
+        .addTo(div2);
+        
+        child6.backgroundColor = [UIColor greenColor];
+        
+        
+        UIView *child7 = UIView.new.myFlex
+        .flex_grow(1)
+        .width(50)
+        .height(50)
+        .margin_bottom(10)
+        .addTo(div2);
+        
+        child7.backgroundColor = [UIColor yellowColor];
+        
+        
+        UIView *child8 = UIView.new.myFlex
+        .flex_grow(1)
+        .width(50)
+        .height(50)
+        .margin_bottom(10)
+        .addTo(div2);
+        
+        child8.backgroundColor = [UIColor blackColor];
+        
+        [root layoutIfNeeded];
+        
+    }];
+    
+}
+
+//-(void)testPerformance_yoga {
+//
+//    [self measureBlock:^{
+//        UIScrollView *contentView = [UIScrollView new];
+//        contentView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-44);
+//
+//
+//        UIView *child1 = [UIView new];
+//        child1.backgroundColor = [UIColor blueColor];
+//
+//        [child1 fb_makeLayout:^(FBLayout *layout) {
+//            layout.width.height.equalTo(@100);
+//        }];
+//
+//        UIView *child2 = [UIView new];
+//        child2.backgroundColor = [UIColor greenColor];
+//        [child2 fb_makeLayout:^(FBLayout *layout) {
+//            layout.equalTo(child1);
+//        }];
+//
+//
+//        UILabel *child3 = [UILabel new];
+//        child3.numberOfLines = 0;
+//        child3.backgroundColor = [UIColor yellowColor];
+//        [child3 fb_wrapContent];
+//        [child3 setAttributedText:[[NSAttributedString alloc] initWithString:@"testfdsfdsfdsfdsfdsfdsafdsafdsafasdkkk" attributes:@{NSFontAttributeName :[UIFont systemFontOfSize:18]}] ];
+//
+//        [contentView addSubview:child1];
+//        [contentView addSubview:child2];
+//        [contentView addSubview:child3];
+//
+//
+//        FBLayoutDiv *div1 = [FBLayoutDiv layoutDivWithFlexDirection:FBFlexDirectionColumn
+//                                                     justifyContent:FBJustifySpaceBetween
+//                                                         alignItems:FBAlignCenter
+//                                                           children:@[child1, child2,child3]];
+//
+//
+//
+//        [div1 fb_makeLayout:^(FBLayout *layout) {
+//            layout.margin.equalToEdgeInsets(UIEdgeInsetsMake(20, 0, 0, 0));
+//            layout.width.equalTo(@(150));
+//        }];
+//
+//
+//        UIView *child5 = [UIView new];
+//        child5.backgroundColor = [UIColor blueColor];
+//        [child5 fb_makeLayout:^(FBLayout *layout) {
+//            layout.width.height.equalTo(@(50)).margin.equalToEdgeInsets(UIEdgeInsetsMake(0, 0, 10, 0)).flexGrow.equalTo(@1.0);
+//        }];
+//
+//        UIView *child6 = [UIView new];
+//        child6.backgroundColor = [UIColor greenColor];
+//        [child6 fb_makeLayout:^(FBLayout *layout) {
+//            layout.equalTo(child5);
+//            layout.flexGrow.equalTo(@(2.0));
+//            layout.margin.equalToEdgeInsets(UIEdgeInsetsMake(10, 10, 10, 10));
+//        }];
+//
+//
+//        UIView *child7 = [UIView new];
+//        child7.backgroundColor = [UIColor yellowColor];
+//        [child7 fb_makeLayout:^(FBLayout *layout) {
+//            layout.equalTo(child5);
+//        }];
+//
+//        UIView *child8 = [UIView new];
+//        child8.backgroundColor = [UIColor blackColor];
+//
+//        [child8 fb_makeLayout:^(FBLayout *layout) {
+//            layout.equalTo(child5);
+//        }];
+//
+//        FBLayoutDiv *div2 =[FBLayoutDiv layoutDivWithFlexDirection:FBFlexDirectionColumn
+//                                                    justifyContent:FBJustifySpaceAround
+//                                                        alignItems:FBAlignCenter
+//                                                          children:@[child5,child6,child7,child8]];
+//        [div2 fb_makeLayout:^(FBLayout *layout) {
+//            layout.margin.equalToEdgeInsets(UIEdgeInsetsMake(20, 0, 0, 0));
+//            layout.width.equalTo(@(150));
+//        }];
+//
+//        [contentView addSubview:child5];
+//        [contentView addSubview:child6];
+//        [contentView addSubview:child7];
+//        [contentView addSubview:child8];
+//
+//        FBLayoutDiv *root = [FBLayoutDiv layoutDivWithFlexDirection:FBFlexDirectionRow
+//                                                     justifyContent:FBJustifySpaceAround
+//                                                         alignItems:FBAlignCenter
+//                                                           children:@[div1,div2]];
+//
+//        contentView.fb_contentDiv = root;
+//
+//        [root fb_applyLayouWithSize:[UIScreen mainScreen].bounds.size];
+//    }];
+//
+//}
 
 
 

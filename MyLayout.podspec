@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MyLayout"
-  s.version      = "1.8.0"
+  s.version      = "1.9.1"
   s.summary      = "MyLayout is an iOS UI framework integrates the functions with Android,AutoLayout,SizeClass,HTML CSS float and flexbox,UIView UITableView."
 
   s.description  = <<-DESC
@@ -90,6 +90,7 @@ Pod::Spec.new do |s|
   #s.exclude_files = "Classes/Exclude"
 
   s.public_header_files = "MyLayout/Lib/*.h"
+  s.private_header_files = "MyLayout/Lib/{*Inner.h,MyLayoutDelegate.h,MyLayoutMath.h,MyGridNode.h,MyLayoutSizeClass.h}"
 
 
 end

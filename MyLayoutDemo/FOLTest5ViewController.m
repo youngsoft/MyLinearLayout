@@ -52,7 +52,7 @@
     
     MyFloatLayout *rootLayout = [[MyFloatLayout alloc] initWithOrientation:MyOrientation_Vert];
     rootLayout.myHorzMargin = 0;  //宽度和滚动条视图保持一致。
-    rootLayout.wrapContentHeight = YES;
+    rootLayout.myHeight = MyLayoutSize.wrap;
     rootLayout.subviewVSpace = 5;
     [scrollView addSubview:rootLayout];
     
@@ -70,7 +70,7 @@
     label2.font = [CFTool font:15];
     label2.weight = 1;   //宽度占据全部
     label2.clearFloat = YES;
-    label2.wrapContentHeight = YES;
+    label2.myHeight = MyLayoutSize.wrap;
     [rootLayout addSubview:label2];
     
     //添加4个子图片。
@@ -101,7 +101,7 @@
         descLabel.textColor = [CFTool color:4];
         descLabel.font = [CFTool font:13];
         descLabel.weight = 1;      //占用剩余的宽度
-        descLabel.wrapContentHeight = YES; //多行自动换行。
+        descLabel.myHeight = MyLayoutSize.wrap; //多行自动换行。
         [descLabel sizeToFit];
         [rootLayout addSubview:descLabel];
         
