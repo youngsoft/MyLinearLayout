@@ -8,8 +8,6 @@
 
 #import "MyBaseLayout.h"
 
-
-
 /**
  流式布局是一种里面的子条目视图按照添加的顺序依次排列，当满足某种规则限制后会另起一行再重新排列，最终呈现为多行多列展示的布局视图。这里的换行规则限制主要有数量规则限制和尺寸内容规则限制两种，整体排列增长的方向又分为垂直和水平方向，因此流式布局一共有垂直数量约束流式布局、垂直内容约束流式布局、水平数量约束流式布局、水平内容约束流式布局。流式布局主要应用于那些有规律排列的场景，在某种程度上可以作为UICollectionView的替代品，同时流式布局实现了CSS3的flexbox的几乎全部功能。
  
@@ -100,7 +98,7 @@
  @param arrangedCount 每行内的子条目视图的数量，如果每行内的子条目视图的数量不固定则设置为0表示为内容约束流式布局。
  @return 返回流式布局对象实例。
  */
--(instancetype)initWithOrientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
+- (instancetype)initWithOrientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
 
 /**
  初始化一个流式布局并指定布局视图的frame值以及方向和每行条目视图的数量,如果数量为0则表示内容约束流式布局。
@@ -110,8 +108,7 @@
  @param arrangedCount 每行内的子条目视图的数量，如果每行内的子条目视图的数量不固定则设置为0表示为内容约束流式布局。
  @return 返回流式布局对象实例
  */
--(instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
-
+- (instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
 
 /**
  初始化一个流式布局并指定布局的方向和行内条目视图的数量,如果数量为0则表示内容约束流式布局。
@@ -120,8 +117,7 @@
  @param arrangedCount 每行内的子条目视图的数量，如果每行内的子视图的数量不固定则设置为0表示为内容约束流式布局。
  @return 返回流式布局对象实例。
  */
-+(instancetype)flowLayoutWithOrientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
-
++ (instancetype)flowLayoutWithOrientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
 
 /**
  流式布局的布局方向:
@@ -130,16 +126,12 @@
  
  2. MyOrientation_Horz 表示行内子视图从上到下垂直排列，行与行之间依次从左到右(RTL从右到左)水平排列。
  */
-@property(nonatomic,assign) IBInspectable MyOrientation orientation;
-
-
+@property (nonatomic, assign) IBInspectable MyOrientation orientation;
 
 /**
  每行内的子条目视图数量。默认是0表示每行内的子条目视图的数量不固定，而是根据子视图的尺寸自动换行或者换列处理。如果非0则每行内的子视图数量等于这个值后会自动换行。
  */
-@property(nonatomic, assign) IBInspectable  NSInteger arrangedCount;
-
-
+@property (nonatomic, assign) IBInspectable NSInteger arrangedCount;
 
 /**
  为流式布局提供分页展示的能力,默认是0表不支持分页展示。当设置为非0时则要求必须是arrangedCount的整数倍数，表示每页的子视图的数量。而arrangedCount则表示每行内的子视图的数量。当启用pagedCount时如果流式布局的父视图是UIScrollView或者其派生类就会有分页滚动的效果。只有数量约束流式布局才支持分页展示的功能，通过pagedCount和设置尺寸的高度或者宽度自适应配合使用能实现不同的分页展示能力:
@@ -176,9 +168,7 @@
      8  10 12
  @endcode
  */
-@property(nonatomic, assign) IBInspectable NSInteger pagedCount;
-
-
+@property (nonatomic, assign) IBInspectable NSInteger pagedCount;
 
 /**
  布局内子视图自动排列或者让布局内的子视图的排列尽可能的紧凑，默认为NO
@@ -190,8 +180,7 @@
  @note
  如果在内容填充约束流式布局中使用此属性时，请在将所有子视图添加完毕并且初始布局完成后再设置这个属性，否则如果预先设置这个属性则在后续添加子视图时可能会非常耗性能。
  */
-@property(nonatomic,assign) IBInspectable BOOL autoArrange;
-
+@property (nonatomic, assign) IBInspectable BOOL autoArrange;
 
 /**
  设置流式布局中每行内所有子视图的对齐停靠方式。具体的对齐停靠方式依赖于布局视图的方向：
@@ -220,7 +209,7 @@
  @note 如果您想单独设置某个子视图在行内的对齐方式则请使用子视图的扩展属性alignment。
  
  */
-@property(nonatomic,assign)  MyGravity arrangedGravity;
+@property (nonatomic, assign) MyGravity arrangedGravity;
 
 /**
 指定流式布局最后一行的尺寸或间距的拉伸策略。默认值是MyGravityPolicy_No表示最后一行的尺寸或间接拉伸策略不生效。。
@@ -233,8 +222,7 @@
 
 2.在内容约束布局中因为每行的子视图数量不固定,所以只有no和always两种策略有效，并且这两种策略不仅影响子视图的尺寸的拉伸(fill,stretch)还影响间距的拉伸效果(between,around,among)。
  */
-@property(nonatomic, assign) MyGravityPolicy lastlineGravityPolicy;
-
+@property (nonatomic, assign) MyGravityPolicy lastlineGravityPolicy;
 
 /**
  布局是否是兼容flexbox规则的布局，默认是NO。当设置为YES时有两个特性会产生差异：
@@ -245,8 +233,7 @@
     而在水平流式布局中如果子视图设置了weight属性则子视图的高度约束将不起作用。另外在流式内容约束布局中weight表示的是剩余空间的比重。
     因此当isFlex设置为YES时，表示子视图的weight可以和尺寸约束共存，并且weight就是表示行内的剩余空间的比重。
  */
-@property(nonatomic, assign) BOOL isFlex;
-
+@property (nonatomic, assign) BOOL isFlex;
 
 /**
  单独为某一行定制的水平和垂直停靠对齐属性，默认情况下布局视图的gravity和arrangedGravity作用于所有行以及行内的停靠对齐。如果你想单独定制某一行的停靠对齐方式时
@@ -254,9 +241,7 @@
  lineGravity的入参分别是布局对象、当前行的索引(0开始)、当前行的条目视图数量、是否是最后一行四个参数。
  函数返回的是此行以及行内的停靠对齐方式，如果返回MyGravity_None则表示使用布局默认的gravity和arrangedGravity停靠对齐属性。
  */
-@property(nonatomic, copy) MyGravity (^lineGravity)(MyFlowLayout *layout, NSInteger lineIndex, NSInteger itemCount, BOOL isLastLine);
-
-
+@property (nonatomic, copy) MyGravity (^lineGravity)(MyFlowLayout *layout, NSInteger lineIndex, NSInteger itemCount, BOOL isLastLine);
 
 /**
  在流式布局的一些应用场景中我们希望子视图的宽度或者高度是固定的但间距是浮动的，这样就尽可能在一行中容纳更多的子视图。比如设置每个子视图的宽度固定为80，那么在小屏幕下每行只能放3个，而大屏幕则每行能放4个或者5个子视图。 因此您可以通过如下方法来设置子视图的固定尺寸和最小最大浮动间距。这个方法会根据您当前布局的方向不同而具有不同的意义：
@@ -273,9 +258,8 @@
  @param minSpace 指定子视图之间的最小间距
  @param maxSpace 指定子视图之间的最大间距
  */
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
-
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
 
 /**
  上面函数的加强版本。
@@ -285,9 +269,7 @@
  @param maxSpace 指定子视图之间的最大间距
  @param centered 指定是否所有子视图居中
  */
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
-
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 @end
-

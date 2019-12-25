@@ -14,19 +14,19 @@
 //
 /*
  The MIT License (MIT)
- 
+
  Copyright (c) 2015 YoungSoft
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in all
  copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,26 +36,23 @@
  SOFTWARE.
  */
 
-
-//Current version is 1.9.1, please open: https://github.com/youngsoft/MyLinearLayout/blob/master/CHANGELOG.md to show the changes.
-
+// Current version is 1.9.1, please open:https://github.com/youngsoft/MyLinearLayout/blob/master/CHANGELOG.md to show the changes.
 
 #ifndef MyLayout_MyLayout_h
 #define MyLayout_MyLayout_h
 
-
-#import "MyLayoutDef.h"
 #import "MyDimeScale.h"
+#import "MyFlexLayout.h"
+#import "MyFloatLayout.h"
+#import "MyFlowLayout.h"
+#import "MyFrameLayout.h"
+#import "MyGridLayout.h"
+#import "MyLayoutDef.h"
 #import "MyLayoutPos.h"
 #import "MyLayoutSize.h"
 #import "MyLinearLayout.h"
-#import "MyFrameLayout.h"
+#import "MyMaker.h"
+#import "MyPathLayout.h"
 #import "MyRelativeLayout.h"
 #import "MyTableLayout.h"
-#import "MyFlowLayout.h"
-#import "MyFlexLayout.h"
-#import "MyFloatLayout.h"
-#import "MyPathLayout.h"
-#import "MyGridLayout.h"
-#import "MyMaker.h"
 #endif

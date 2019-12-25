@@ -8,9 +8,7 @@
 
 #import "MyBaseLayout.h"
 
-
-
-@interface UIView(MyFloatLayoutExt)
+@interface UIView (MyFloatLayoutExt)
 
 /**
  是否反方向浮动，默认是NO表示正向浮动。正向浮动和反向浮动的意义根据所在的父浮动布局视图的方向的不同而不同：
@@ -47,8 +45,7 @@
  
  @note 这个属性的定义是完全参考CSS样式表中float属性的定义
  */
-@property(nonatomic,assign,getter=isReverseFloat) IBInspectable BOOL reverseFloat;
-
+@property (nonatomic, assign, getter=isReverseFloat) IBInspectable BOOL reverseFloat;
 
 /**
  清除浮动，默认是NO。这个属性的意义也跟父浮动布局视图的方向相关。如果设置为了清除浮动属性则表示本子视图不会在浮动方向上紧跟在前一个浮动子视图的后面，而是会另外新起一行或者一列来重新排列。
@@ -69,11 +66,9 @@
  @note 这个属性的定义是完全参考CSS样式表中clear属性的定义。
  
  */
-@property(nonatomic,assign) IBInspectable BOOL clearFloat;
+@property (nonatomic, assign) IBInspectable BOOL clearFloat;
 
 @end
-
-
 
 /**
  浮动布局是一种里面的子视图按照约定的方向浮动停靠，当浮动布局的剩余空间不足容纳要加入的子视图的尺寸时会自动寻找最佳的位置进行浮动停靠的布局视图。浮动布局的理念源于HTML/CSS中的浮动定位技术,因此浮动布局可以专门用来实现那些不规则布局或者图文环绕的布局。
@@ -83,16 +78,15 @@
  */
 @interface MyFloatLayout : MyBaseLayout
 
-
 /**
  初始化一个浮动布局并指定布局的方向。当方向设置为MyOrientation_Vert时表示为左右浮动布局视图，而设置为MyOrientation_Horz则表示为上下浮动布局视图。
  
  @param orientation 指定浮动布局的方向，要注意的这个方向是整体排列的方向。
  @return 返回浮动布局的实例对象。
  */
-+(instancetype)floatLayoutWithOrientation:(MyOrientation)orientation;
--(instancetype)initWithOrientation:(MyOrientation)orientation;
--(instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation;
++ (instancetype)floatLayoutWithOrientation:(MyOrientation)orientation;
+- (instancetype)initWithOrientation:(MyOrientation)orientation;
+- (instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation;
 
 /**
   浮动布局的方向。
@@ -101,8 +95,7 @@
 
  2.MyOrientation_Horz 表示里面的子视图可以进行上下的浮动，但整体从左到右进行排列的布局方式，这个方式是默认方式。
  */
-@property(nonatomic,assign) IBInspectable MyOrientation orientation;
-
+@property (nonatomic, assign) IBInspectable MyOrientation orientation;
 
 /**
  在一些应用场景中我们希望子视图的宽度是固定的但间距是浮动的，这样就尽可能在一排中容纳更多的子视图。比如设置每个子视图的宽度固定为80，那么在小屏幕下每排只能放3个，而大屏幕则每排能放4个或者5个子视图。 因此您可以通过如下方法来设置子视图的固定尺寸和最小最大浮动间距。这个方法会根据您当前布局的方向不同而具有不同的意义：
@@ -117,8 +110,8 @@
  @param minSpace 指定子视图之间的最小间距
  @param maxSpace 指定子视图之间的最大间距
  */
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace;
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass;
 
 /**
  上面函数的加强版本。
@@ -128,15 +121,12 @@
  @param maxSpace 指定子视图之间的最大间距
  @param centered 指定是否所有子视图居中
  */
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
-
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 @end
 
-
-@interface MyFloatLayout(MyDeprecated)
-
+@interface MyFloatLayout (MyDeprecated)
 
 /**
  不做布局边界尺寸的限制，子视图不会自动换行。因此当设置为YES时，子视图需要明确设置clearFloat来实现主动换行的处理。默认为NO。这个属性设置的意义使得我们可以自定义子视图的换行，而不是让子视图根据布局视图的尺寸限制自动换行。
@@ -149,6 +139,6 @@
  @note 这个属性设置为YES时，在左右浮动布局中，子视图只能向左浮动，并且没有右边界的限制，因此如果子视图没有clearFloat时则总是排列在前一个子视图的右边，并不会自动换行,因此为了让这个属性生效，布局视图必须要同时设置宽度为自适应。
  @note 这个属性设置为YES时，在上下浮动布局中，子视图只能向上浮动，并且没有下边界的限制，因此如果子视图没有设置clearFloat时则总是排列在前一个子视图的下边，并不会自动换行，因此为了让这个属性生效，布局视图必须要同时设置高度为自适应。
  */
-@property(nonatomic,assign) IBInspectable BOOL noBoundaryLimit MYDEPRECATED("此属性已经过期,请直接设置布局视图的高度或者宽度值为MyLayoutSize.wrap即可");
+@property (nonatomic, assign) IBInspectable BOOL noBoundaryLimit MYDEPRECATED("此属性已经过期,请直接设置布局视图的高度或者宽度值为MyLayoutSize.wrap即可");
 
 @end
