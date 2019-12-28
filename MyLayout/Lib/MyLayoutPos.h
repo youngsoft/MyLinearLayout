@@ -10,7 +10,6 @@
 
 @class MyLayoutMostPos;
 
-
 /**
  *视图的布局位置类，用于定位视图在布局视图中的位置。位置可分为水平方向的位置和垂直方向的位置，在视图定位时必要同时指定水平方向的位置和垂直方向的位置。水平方向的位置可以分为左，水平居中，右三种位置，垂直方向的位置可以分为上，垂直居中，下三种位置。
  其中的offset方法可以用来设置布局位置的偏移值,一般只在equalTo设置为MyLayoutPos或者NSArray时配合使用。比如A.leftPos.equalTo(B.rightPos).offset(5)表示A在B的右边再偏移5个点
@@ -61,7 +60,6 @@
  
  */
 
-
 /**
  视图的布局位置类是用来描述视图与其他视图之间的位置关系的类。视图在进行定位时需要明确的指出其在父视图坐标轴上的水平位置(x轴上的位置）和垂直位置(y轴上的位置）。
  视图的水平位置可以用左、水平中、右三个方位的值来描述，垂直位置则可以用上、垂直中、下三个方位的值来描述。
@@ -76,7 +74,7 @@
     uBound.posVal,uBound.offsetVal是通过uBound方法设置。
  @endcode
  */
-@interface MyLayoutPos : NSObject<NSCopying>
+@interface MyLayoutPos : NSObject <NSCopying>
 
 #if UIKIT_DEFINE_AS_PROPERTIES
 
@@ -114,21 +112,21 @@
  需要注意的是这个值并不是一个真值，只是一个特殊值，不能用于读取。而且只能用于在MyLayoutPos的equalTo方法和布局视图上的padding属性上使用，其他地方使用后果未可知。
  
  */
-@property(class, nonatomic, assign,readonly) CGFloat safeAreaMargin;
+@property (class, nonatomic, assign, readonly) CGFloat safeAreaMargin;
 #else
-+(CGFloat)safeAreaMargin;
++ (CGFloat)safeAreaMargin;
 #endif
 
 //because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
 //if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.
 #ifdef MY_USEPREFIXMETHOD
--(MyLayoutPos* (^)(id val))myEqualTo;
--(MyLayoutPos* (^)(CGFloat val))myOffset;
--(MyLayoutPos* (^)(CGFloat val))myMin;
--(MyLayoutPos* (^)(id posVal, CGFloat offset))myLBound;
--(MyLayoutPos* (^)(CGFloat val))myMax;
--(MyLayoutPos* (^)(id posVal, CGFloat offset))myUBound;
--(void)myClear;
+- (MyLayoutPos * (^)(id val))myEqualTo;
+- (MyLayoutPos * (^)(CGFloat val))myOffset;
+- (MyLayoutPos * (^)(CGFloat val))myMin;
+- (MyLayoutPos * (^)(id posVal, CGFloat offset))myLBound;
+- (MyLayoutPos * (^)(CGFloat val))myMax;
+- (MyLayoutPos * (^)(id posVal, CGFloat offset))myUBound;
+- (void)myClear;
 
 #else
 
@@ -150,8 +148,7 @@
  
  7. nil表示位置的值被清除。
  */
--(MyLayoutPos* (^)(id val))equalTo;
-
+- (MyLayoutPos * (^)(id val))equalTo;
 
 /**
  设置布局位置值的偏移量。 所谓偏移量是指布局位置在设置了某种值后增加或减少的偏移值。
@@ -171,13 +168,12 @@
  2.比如：A.rightPos.equalTo(B.rightPos).offset(5)表示A视图的右边位置等于B视图的右边位置再往左偏移5。
  @endcode
  */
--(MyLayoutPos* (^)(CGFloat val))offset;
-
+- (MyLayoutPos * (^)(CGFloat val))offset;
 
 /**
  *设置位置的最小边界数值，min方法是lBound方法的简化版本。比如：A.min(10) <==>  A.lBound(@10, 0)
  */
--(MyLayoutPos* (^)(CGFloat val))min;
+- (MyLayoutPos * (^)(CGFloat val))min;
 
 /**
  *设置布局位置的最小边界值。 如果位置对象没有设置最小边界值，那么最小边界默认就是无穷小-CGFLOAT_MAX。lBound方法除了能设置为NSNumber外，还可以设置为MyLayoutPos值，并且还可以指定最小位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最小边界值为MyLayoutPos类型的值，其他类型布局中的子视图只支持NSNumber类型的最小边界值。
@@ -196,13 +192,12 @@
  A.leftPos.lBound(B.rightPos, 20); //这时A是不必要指定明确的宽度的。
  @endcode
  */
--(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))lBound;
-
+- (MyLayoutPos * (^)(id posVal, CGFloat offsetVal))lBound;
 
 /**
  *设置位置的最大边界数值，max方法是uBound方法的简化版本。比如：A.max(10) <==>  A.uBound(@10, 0)
  */
--(MyLayoutPos* (^)(CGFloat val))max;
+- (MyLayoutPos * (^)(CGFloat val))max;
 
 /**
  设置布局位置的最大边界值。 如果位置对象没有设置最大边界值，那么最大边界默认就是无穷大CGFLOAT_MAX。uBound方法除了能设置为NSNumber外，还可以设置为MyLayoutPos值，并且还可以指定最大位置的偏移量值。只有在相对布局中的子视图的位置对象才能设置最大边界值为MyLayoutPos类型的值，其他类型布局中的子视图只支持NSNumber类型的最大边界值。
@@ -225,13 +220,12 @@
  
  offsetVal 指定位置边界值的偏移量。
  */
--(MyLayoutPos* (^)(id posVal, CGFloat offsetVal))uBound;
-
+- (MyLayoutPos * (^)(id posVal, CGFloat offsetVal))uBound;
 
 /**
  *清除所有设置的约束值，这样位置对象将不会再生效了。
  */
--(void)clear;
+- (void)clear;
 
 #endif
 
@@ -239,38 +233,34 @@
  *设置布局位置是否是活动的,默认是YES表示活动的，如果设置为NO则表示这个布局位置对象设置的约束值将不会起作用。
  *active设置为YES和clear的相同点是位置对象设置的约束值都不会生效了，区别是前者不会清除所有设置的约束，而后者则会清除所有设置的约束。
  */
-@property(nonatomic, assign, getter=isActive) BOOL active;
+@property (nonatomic, assign, getter=isActive) BOOL active;
 
 /**
  在布局视图的宽度或者高度是固定的情况下，当某一列或者行中的所有子视图的间距值和尺寸超过父视图的尺寸时子视图的间距压缩比重，默认值为0表示不压缩。数字越大表明压缩的比重越大。目前只有线性布局和框架布局和流式布局中的子视图支持这个属性，而且这特性只在子视图的间距超过布局视图时才有效。
  */
-@property(nonatomic, assign) CGFloat shrink;
-
+@property (nonatomic, assign) CGFloat shrink;
 
 //通过如下属性获取上面方法设置的值。
-@property(nonatomic, assign, readonly) CGFloat offsetVal;
-
+@property (nonatomic, assign, readonly) CGFloat offsetVal;
 
 @end
 
-
-@interface MyLayoutPos(Clone)
+@interface MyLayoutPos (Clone)
 
 //从布局位置中克隆出一个位置对象来。这个克隆出来的位置值是源位置对象的值加上offsetVal。这个方法通常用于下面数组元素的构造
--(MyLayoutPos* (^)(CGFloat offsetVal))clone;
+- (MyLayoutPos * (^)(CGFloat offsetVal))clone;
 
 @end
-
 
 /**
  我们可以从一个数组中获取众多位置的最大最小的位置值。
  这里要求数组的元素只能是MyLayoutPos或者NSNumber两种对象类型的值。如果是NSNumber类型则是一个绝对位置值，也就是包括布局视图padding设置的偏移值。
  */
-@interface NSArray(MyLayoutMostPos)
+@interface NSArray (MyLayoutMostPos)
 
 //从数组中得到最大的位置值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
-@property(nonatomic, readonly) MyLayoutMostPos *myMinPos;
+@property (nonatomic, readonly) MyLayoutMostPos *myMinPos;
 //从数组中得到最小的位置值。要求数组的元素必须是MyLayoutPos或者NSNumber类型
-@property(nonatomic, readonly) MyLayoutMostPos *myMaxPos;
+@property (nonatomic, readonly) MyLayoutMostPos *myMaxPos;
 
 @end

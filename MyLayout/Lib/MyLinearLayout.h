@@ -8,7 +8,6 @@
 
 #import "MyBaseLayout.h"
 
-
 /**
  线性布局是一种里面的子视图按添加的顺序从上到下或者从左到右依次排列的单行(单列)布局视图。线性布局里面的子视图是通过添加的顺序建立约束和依赖关系的。
  
@@ -36,7 +35,6 @@
  */
 @interface MyLinearLayout : MyBaseLayout
 
-
 /**
  初始化一个线性布局，并指定子视图排列的方向。如果不明确指定方向则默认是建立一个垂直线性布局。
  @note 建立一个垂直线性布局时默认的高度是自适应，表示高度默认由所有子视图的高度决定；而建立一个水平线性布局时默认的宽度是自适应，表示宽度默认由所有子视图的宽度决定。
@@ -44,9 +42,9 @@
  @param orientation 布局视图内子视图的排列方向。
  @return 返回线性布局对象实例。
  */
-+(instancetype)linearLayoutWithOrientation:(MyOrientation)orientation;
--(instancetype)initWithOrientation:(MyOrientation)orientation;
--(instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation;
++ (instancetype)linearLayoutWithOrientation:(MyOrientation)orientation;
+- (instancetype)initWithOrientation:(MyOrientation)orientation;
+- (instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation;
 
 /**
  线性布局的布局方向:
@@ -55,12 +53,7 @@
  
  2. MyOrientation_Horz 表示布局内子视图依次从左到右(RTL从右到左)水平排列。
  */
-@property(nonatomic,assign) IBInspectable MyOrientation orientation;
-
-
-
-
-
+@property (nonatomic, assign) IBInspectable MyOrientation orientation;
 
 /**
  用来设置当线性布局中的所有子视图的尺寸和间距的和大于线性布局的尺寸时子视图压缩策略。默认值是MySubviewsShrink_None，表示什么不压缩子视图的尺寸和间距。
@@ -148,18 +141,14 @@
    你可以将子视图的尺寸和位置的shrink属性设置为非0，这样这些子视图的尺寸的和位置的压缩策略将优先于这个属性的设置。一旦有子视图设置压缩策略则这个属性设置将失效。
  
  */
-@property(nonatomic, assign) MySubviewsShrinkType shrinkType;
-
-
+@property (nonatomic, assign) MySubviewsShrinkType shrinkType;
 
 /**
  设置水平线性布局里面的基线对齐基准视图，所有其他子视图的基线都以这个为准。
  这个属性要和gravity属性设置为MyGravity_Vert_Baseline配合使用。并且要求这个属性所指定的视图，必须具有font属性。
  目前支持具有font属性的有UILabel，UITextField,UITextView, UIButton几个系统控件。
  */
-@property(nonatomic, assign) UIView *baselineBaseView;
-
-
+@property (nonatomic, assign) UIView *baselineBaseView;
 
 /**
  均分子视图的尺寸和间距。布局会根据里面的子视图的数量来平均分配子视图的高度或者宽度以及间距。
@@ -168,10 +157,8 @@
  
  @param centered 指定是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不留出间距。水平线性布局则是指头部和尾部。
  */
--(void)equalizeSubviews:(BOOL)centered;
--(void)equalizeSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
-
-
+- (void)equalizeSubviews:(BOOL)centered;
+- (void)equalizeSubviews:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 /**
  均分子视图尺寸，并指定固定的间距。上面的方法会导致子视图的高度或者宽度和他们之间的间距相等，而这个方法则指定间距为一个固定的值而子视图的高度或者宽度则会被均分。
@@ -180,10 +167,8 @@
  @param centered 指定是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不留出间距。水平线性布局则是指头部和尾部
  @param space 子视图之间的间距。
  */
--(void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space;
--(void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space inSizeClass:(MySizeClass)sizeClass;
-
-
+- (void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space;
+- (void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space inSizeClass:(MySizeClass)sizeClass;
 
 /**
  均分子视图之间的间距，上面方法会均分子视图的尺寸以及间距，而这个方法则子视图的尺寸保持不变而间距自动平均分配，也就是用布局视图的剩余空间来均分间距
@@ -192,9 +177,8 @@
 
  @param centered 参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距。水平线性布局则是指头部和尾部
  */
--(void)equalizeSubviewsSpace:(BOOL)centered;
--(void)equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
-
+- (void)equalizeSubviewsSpace:(BOOL)centered;
+- (void)equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 /**
  在一些应用场景中我们希望子视图的宽度是固定的但间距是浮动的，这样就尽可能在一排中容纳更多的子视图。比如设置每个子视图的宽度固定为80，那么在小屏幕下每排只能放3个，而大屏幕则每排能放4个或者5个子视图。 因此您可以通过如下方法来设置子视图的固定尺寸和最小最大浮动间距。这个方法会根据您当前布局的方向不同而具有不同的意义：
@@ -210,10 +194,7 @@
  @param maxSpace 指定子视图之间的最大间距
  @param centered 指定是否所有子视图居中
  */
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
--(void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 @end
-
-
-

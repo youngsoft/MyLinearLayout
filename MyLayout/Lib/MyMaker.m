@@ -11,413 +11,323 @@
 #if TARGET_OS_IPHONE
 
 #import "MyLayoutPos.h"
-#import "MyLayoutSize.h"
 #import "MyLayoutPosInner.h"
+#import "MyLayoutSize.h"
 #import "MyLayoutSizeInner.h"
 
-@implementation MyMaker
-{
+@implementation MyMaker {
     NSArray *_myViews;
     NSMutableArray *_keys;
-    BOOL  _clear;
+    BOOL _clear;
 }
 
--(id)initWithView:(NSArray *)v
-{
+- (id)initWithView:(NSArray *)v {
     self = [self init];
-    if (self != nil)
-    {
+    if (self != nil) {
         _myViews = v;
         _keys = [[NSMutableArray alloc] init];
         _clear = NO;
     }
-    
     return self;
 }
 
--(MyMaker*)addMethod:(NSString*)method
-{
-    if (_clear)
+- (MyMaker *)addMethod:(NSString *)method {
+    if (_clear) {
         [_keys removeAllObjects];
+    }
     _clear = NO;
-    
+
     [_keys addObject:method];
     return self;
 }
 
--(MyMaker*)top
-{
+- (MyMaker *)top {
     return [self addMethod:@"topPos"];
 }
 
--(MyMaker*)left
-{
+- (MyMaker *)left {
     return [self addMethod:@"leftPos"];
 }
 
--(MyMaker*)bottom
-{
+- (MyMaker *)bottom {
     return [self addMethod:@"bottomPos"];
 }
 
--(MyMaker*)right
-{
+- (MyMaker *)right {
     return [self addMethod:@"rightPos"];
 }
 
--(MyMaker*)margin
-{
+- (MyMaker *)margin {
     [self top];
     [self left];
     [self right];
-   return [self bottom];
+    return [self bottom];
 }
 
--(MyMaker*)leading
-{
+- (MyMaker *)leading {
     return [self addMethod:@"leadingPos"];
 }
 
--(MyMaker*)trailing
-{
+- (MyMaker *)trailing {
     return [self addMethod:@"trailingPos"];
 }
 
--(MyMaker*)height
-{
+- (MyMaker *)height {
     return [self addMethod:@"heightSize"];
 }
 
--(MyMaker*)width
-{
+- (MyMaker *)width {
     return [self addMethod:@"widthSize"];
 }
 
--(MyMaker*)useFrame
-{
+- (MyMaker *)useFrame {
     return [self addMethod:@"useFrame"];
 }
 
--(MyMaker*)noLayout
-{
+- (MyMaker *)noLayout {
     return [self addMethod:@"noLayout"];
 }
 
--(MyMaker*)wrapContentHeight
-{
+- (MyMaker *)wrapContentHeight {
     return [self addMethod:@"wrapContentHeight"];
 }
 
--(MyMaker*)wrapContentWidth
-{
+- (MyMaker *)wrapContentWidth {
     return [self addMethod:@"wrapContentWidth"];
 }
 
--(MyMaker*)reverseLayout
-{
+- (MyMaker *)reverseLayout {
     return [self addMethod:@"reverseLayout"];
 }
 
--(MyMaker*)weight
-{
+- (MyMaker *)weight {
     return [self addMethod:@"weight"];
 }
 
--(MyMaker*)reverseFloat
-{
+- (MyMaker *)reverseFloat {
     return [self addMethod:@"reverseFloat"];
 }
 
--(MyMaker*)clearFloat
-{
+- (MyMaker *)clearFloat {
     return [self addMethod:@"clearFloat"];
 }
 
--(MyMaker*)topPadding
-{
+- (MyMaker *)topPadding {
     return [self addMethod:@"topPadding"];
 }
 
--(MyMaker*)leftPadding
-{
+- (MyMaker *)leftPadding {
     return [self addMethod:@"leftPadding"];
 }
 
--(MyMaker*)bottomPadding
-{
+- (MyMaker *)bottomPadding {
     return [self addMethod:@"bottomPadding"];
 }
 
--(MyMaker*)rightPadding
-{
+- (MyMaker *)rightPadding {
     return [self addMethod:@"rightPadding"];
 }
 
--(MyMaker*)leadingPadding
-{
+- (MyMaker *)leadingPadding {
     return [self addMethod:@"leadingPadding"];
 }
 
--(MyMaker*)trailingPadding
-{
+- (MyMaker *)trailingPadding {
     return [self addMethod:@"trailingPadding"];
 }
 
--(MyMaker*)padding
-{
+- (MyMaker *)padding {
     [self addMethod:@"topPadding"];
     [self addMethod:@"leftPadding"];
     [self addMethod:@"bottomPadding"];
     return [self addMethod:@"rightPadding"];
 }
 
--(MyMaker*)zeroPadding
-{
+- (MyMaker *)zeroPadding {
     return [self addMethod:@"zeroPadding"];
 }
 
--(MyMaker*)orientation
-{
+- (MyMaker *)orientation {
     return [self addMethod:@"orientation"];
 }
 
--(MyMaker*)gravity
-{
+- (MyMaker *)gravity {
     return [self addMethod:@"gravity"];
 }
 
--(MyMaker*)centerX
-{
-  return [self addMethod:@"centerXPos"];
+- (MyMaker *)centerX {
+    return [self addMethod:@"centerXPos"];
 }
 
--(MyMaker*)centerY
-{
+- (MyMaker *)centerY {
     return [self addMethod:@"centerYPos"];
 }
 
--(MyMaker*)center
-{
+- (MyMaker *)center {
     [self addMethod:@"centerXPos"];
     return [self addMethod:@"centerYPos"];
 }
--(MyMaker*)baseline
-{
+- (MyMaker *)baseline {
     return [self addMethod:@"baselinePos"];
 }
 
--(MyMaker*)visibility
-{
+- (MyMaker *)visibility {
     return [self addMethod:@"visibility"];
 }
 
--(MyMaker*)alignment
-{
+- (MyMaker *)alignment {
     return [self addMethod:@"alignment"];
 }
 
--(MyMaker*)sizeToFit
-{
-    for (UIView *myView in _myViews)
-    {
+- (MyMaker *)sizeToFit {
+    for (UIView *myView in _myViews) {
         [myView sizeToFit];
     }
-    
+
     return self;
 }
 
--(MyMaker*)space
-{
+- (MyMaker *)space {
     return [self addMethod:@"subviewSpace"];
 }
 
--(MyMaker*)shrinkType
-{
+- (MyMaker *)shrinkType {
     return [self addMethod:@"shrinkType"];
 }
 
--(MyMaker*)arrangedCount
-{
+- (MyMaker *)arrangedCount {
     return [self addMethod:@"arrangedCount"];
 }
 
--(MyMaker*)autoArrange
-{
+- (MyMaker *)autoArrange {
     return [self addMethod:@"autoArrange"];
 }
 
--(MyMaker*)arrangedGravity
-{
+- (MyMaker *)arrangedGravity {
     return [self addMethod:@"arrangedGravity"];
 }
 
--(MyMaker*)vertSpace
-{
+- (MyMaker *)vertSpace {
     return [self addMethod:@"subviewVSpace"];
 }
 
--(MyMaker*)horzSpace
-{
+- (MyMaker *)horzSpace {
     return [self addMethod:@"subviewHSpace"];
 }
 
--(MyMaker*)pagedCount
-{
+- (MyMaker *)pagedCount {
     return [self addMethod:@"pagedCount"];
 }
 
--(MyMaker* (^)(id val))equalTo
-{
+- (MyMaker * (^)(id val))equalTo {
     _clear = YES;
     return ^id(id val) {
-        
-        for (NSString *key in self->_keys)
-        {
-            for (UIView * myView in self->_myViews)
-            {
-                if ([val isKindOfClass:[NSNumber class]])
-                {
+        for (NSString *key in self->_keys) {
+            for (UIView *myView in self->_myViews) {
+                if ([val isKindOfClass:[NSNumber class]]) {
                     id oldVal = [myView valueForKey:key];
-                    if ([oldVal isKindOfClass:[MyLayoutPos class]])
-                        ((MyLayoutPos*)oldVal).myEqualTo(val);
-                    else if ([oldVal isKindOfClass:[MyLayoutSize class]])
-                        ((MyLayoutSize*)oldVal).myEqualTo(val);
-                    else
+                    if ([oldVal isKindOfClass:[MyLayoutPos class]]) {
+                        ((MyLayoutPos *)oldVal).myEqualTo(val);
+                    } else if ([oldVal isKindOfClass:[MyLayoutSize class]]) {
+                        ((MyLayoutSize *)oldVal).myEqualTo(val);
+                    } else {
                         [myView setValue:val forKey:key];
-                }
-                else if ([val isKindOfClass:[MyLayoutPos class]])
-                {
-                    ((MyLayoutPos*)[myView valueForKey:key]).myEqualTo(val);
-                }
-                else if ([val isKindOfClass:[MyLayoutSize class]])
-                {
-                    ((MyLayoutSize*)[myView valueForKey:key]).myEqualTo(val);
-                }
-                else if ([val isKindOfClass:[NSArray class]])
-                {
-                    ((MyLayoutSize*)[myView valueForKey:key]).myEqualTo(val);
-                }
-                else if ([val isKindOfClass:[UIView class]])
-                {
+                    }
+                } else if ([val isKindOfClass:[MyLayoutPos class]]) {
+                    ((MyLayoutPos *)[myView valueForKey:key]).myEqualTo(val);
+                } else if ([val isKindOfClass:[MyLayoutSize class]]) {
+                    ((MyLayoutSize *)[myView valueForKey:key]).myEqualTo(val);
+                } else if ([val isKindOfClass:[NSArray class]]) {
+                    ((MyLayoutSize *)[myView valueForKey:key]).myEqualTo(val);
+                } else if ([val isKindOfClass:[UIView class]]) {
                     id oldVal = [val valueForKey:key];
-                    if ([oldVal isKindOfClass:[MyLayoutPos class]])
-                        ((MyLayoutPos*)[myView valueForKey:key]).myEqualTo(oldVal);
-                    else if ([oldVal isKindOfClass:[MyLayoutSize class]])
-                        ((MyLayoutSize*)[myView valueForKey:key]).myEqualTo(oldVal);
-                    else
+                    if ([oldVal isKindOfClass:[MyLayoutPos class]]) {
+                        ((MyLayoutPos *)[myView valueForKey:key]).myEqualTo(oldVal);
+                    } else if ([oldVal isKindOfClass:[MyLayoutSize class]]) {
+                        ((MyLayoutSize *)[myView valueForKey:key]).myEqualTo(oldVal);
+                    } else {
                         [myView setValue:oldVal forKey:key];
+                    }
                 }
             }
         }
-        
         return self;
     };
 }
 
--(MyMaker* (^)(CGFloat val))offset
-{
+- (MyMaker * (^)(CGFloat val))offset {
     _clear = YES;
-    
-    return ^id(CGFloat val) {
-        
-        for (NSString *key in self->_keys)
-        {
-            for (UIView *myView in self->_myViews)
-            {
-                [((MyLayoutPos*)[myView valueForKey:key]) __offset:val];
-            }
-        }
-        
-        return self;
-    };
-}
 
--(MyMaker* (^)(CGFloat val))multiply
-{
-    _clear = YES;
     return ^id(CGFloat val) {
-        
-        for (NSString *key in self->_keys)
-        {
-            for (UIView *myView in self->_myViews)
-            {
-                [((MyLayoutSize*)[myView valueForKey:key]) __multiply:val];
+        for (NSString *key in self->_keys) {
+            for (UIView *myView in self->_myViews) {
+                [((MyLayoutPos *)[myView valueForKey:key]) __offset:val];
             }
         }
         return self;
     };
 }
 
--(MyMaker* (^)(CGFloat val))add
-{
+- (MyMaker * (^)(CGFloat val))multiply {
     _clear = YES;
     return ^id(CGFloat val) {
-        
-        for (NSString *key in self->_keys)
-        {
-            for (UIView *myView in self->_myViews)
-            {
-                [((MyLayoutSize*)[myView valueForKey:key]) __add:val];
+        for (NSString *key in self->_keys) {
+            for (UIView *myView in self->_myViews) {
+                [((MyLayoutSize *)[myView valueForKey:key]) __multiply:val];
             }
         }
         return self;
     };
 }
 
--(MyMaker* (^)(id val))min
-{
+- (MyMaker * (^)(CGFloat val))add {
+    _clear = YES;
+    return ^id(CGFloat val) {
+        for (NSString *key in self->_keys) {
+            for (UIView *myView in self->_myViews) {
+                [((MyLayoutSize *)[myView valueForKey:key]) __add:val];
+            }
+        }
+        return self;
+    };
+}
+
+- (MyMaker * (^)(id val))min {
     _clear = YES;
     return ^id(id val) {
-        
-        for (NSString *key in self->_keys)
-        {
-            for (UIView *myView in self->_myViews)
-            {
+        for (NSString *key in self->_keys) {
+            for (UIView *myView in self->_myViews) {
                 id val2 = val;
-                if ([val isKindOfClass:[UIView class]])
+                if ([val isKindOfClass:[UIView class]]) {
                     val2 = [val valueForKey:key];
-                
+                }
                 id oldVal = [myView valueForKey:key];
-                if ([oldVal isKindOfClass:[MyLayoutPos class]])
-                {
-                    [((MyLayoutPos*)oldVal) __lBound:val2 offsetVal:0];
+                if ([oldVal isKindOfClass:[MyLayoutPos class]]) {
+                    [((MyLayoutPos *)oldVal) __lBound:val2 offsetVal:0];
+                } else if ([oldVal isKindOfClass:[MyLayoutSize class]]) {
+                    [((MyLayoutSize *)oldVal) __lBound:val2 addVal:0 multiVal:1];
                 }
-                else if ([oldVal isKindOfClass:[MyLayoutSize class]])
-                {
-                    [((MyLayoutSize*)oldVal) __lBound:val2 addVal:0 multiVal:1];
-                }
-                else
-                    ;
             }
         }
         return self;
     };
 }
 
--(MyMaker* (^)(id val))max
-{
+- (MyMaker * (^)(id val))max {
     _clear = YES;
     return ^id(id val) {
-        
-        for (NSString *key in self->_keys)
-        {
-            for (UIView *myView in self->_myViews)
-            {
+        for (NSString *key in self->_keys) {
+            for (UIView *myView in self->_myViews) {
                 id val2 = val;
-                if ([val isKindOfClass:[UIView class]])
+                if ([val isKindOfClass:[UIView class]]) {
                     val2 = [val valueForKey:key];
-                
+                }
                 id oldVal = [myView valueForKey:key];
-                if ([oldVal isKindOfClass:[MyLayoutPos class]])
-                {
-                    [((MyLayoutPos*)oldVal) __uBound:val2 offsetVal:0];
+                if ([oldVal isKindOfClass:[MyLayoutPos class]]) {
+                    [((MyLayoutPos *)oldVal) __uBound:val2 offsetVal:0];
+                } else if ([oldVal isKindOfClass:[MyLayoutSize class]]) {
+                    [((MyLayoutSize *)oldVal) __uBound:val2 addVal:0 multiVal:1];
                 }
-                else if ([oldVal isKindOfClass:[MyLayoutSize class]])
-                {
-                    [((MyLayoutSize*)oldVal) __uBound:val2 addVal:0 multiVal:1];
-                }
-                else
-                    ;
             }
         }
         return self;
@@ -426,17 +336,14 @@
 
 @end
 
+@implementation UIView (MyMakerExt)
 
-@implementation UIView(MyMakerExt)
-
--(void)makeLayout:(void(^)(MyMaker *make))layoutMaker
-{
+- (void)makeLayout:(void (^)(MyMaker *make))layoutMaker {
     MyMaker *myMaker = [[MyMaker alloc] initWithView:@[self]];
     layoutMaker(myMaker);
 }
 
--(void)allSubviewMakeLayout:(void(^)(MyMaker *make))layoutMaker
-{
+- (void)allSubviewMakeLayout:(void (^)(MyMaker *make))layoutMaker {
     MyMaker *myMaker = [[MyMaker alloc] initWithView:self.subviews];
     layoutMaker(myMaker);
 }
@@ -444,4 +351,3 @@
 @end
 
 #endif
-

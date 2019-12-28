@@ -15,99 +15,86 @@
  */
 @interface MyMaker : NSObject
 
--(MyMaker*)top;
--(MyMaker*)left;
--(MyMaker*)bottom;
--(MyMaker*)right;
--(MyMaker*)margin;
+- (MyMaker *)top;
+- (MyMaker *)left;
+- (MyMaker *)bottom;
+- (MyMaker *)right;
+- (MyMaker *)margin;
 
--(MyMaker*)leading;
--(MyMaker*)trailing;
+- (MyMaker *)leading;
+- (MyMaker *)trailing;
 
+- (MyMaker *)wrapContentHeight;
+- (MyMaker *)wrapContentWidth;
 
--(MyMaker*)wrapContentHeight;
--(MyMaker*)wrapContentWidth;
+- (MyMaker *)height;
+- (MyMaker *)width;
+- (MyMaker *)useFrame;
+- (MyMaker *)noLayout;
 
--(MyMaker*)height;
--(MyMaker*)width;
--(MyMaker*)useFrame;
--(MyMaker*)noLayout;
+- (MyMaker *)centerX;
+- (MyMaker *)centerY;
+- (MyMaker *)center;
+- (MyMaker *)baseline;
 
--(MyMaker*)centerX;
--(MyMaker*)centerY;
--(MyMaker*)center;
--(MyMaker*)baseline;
+- (MyMaker *)visibility;
+- (MyMaker *)alignment;
 
--(MyMaker*)visibility;
--(MyMaker*)alignment;
-
--(MyMaker*)sizeToFit;
-
+- (MyMaker *)sizeToFit;
 
 //布局独有
--(MyMaker*)topPadding;
--(MyMaker*)leftPadding;
--(MyMaker*)bottomPadding;
--(MyMaker*)rightPadding;
--(MyMaker*)leadingPadding;
--(MyMaker*)trailingPadding;
--(MyMaker*)padding;
--(MyMaker*)zeroPadding;
--(MyMaker*)reverseLayout;
--(MyMaker*)vertSpace;
--(MyMaker*)horzSpace;
--(MyMaker*)space;
-
-
+- (MyMaker *)topPadding;
+- (MyMaker *)leftPadding;
+- (MyMaker *)bottomPadding;
+- (MyMaker *)rightPadding;
+- (MyMaker *)leadingPadding;
+- (MyMaker *)trailingPadding;
+- (MyMaker *)padding;
+- (MyMaker *)zeroPadding;
+- (MyMaker *)reverseLayout;
+- (MyMaker *)vertSpace;
+- (MyMaker *)horzSpace;
+- (MyMaker *)space;
 
 //线性布局和流式布局独有
--(MyMaker*)orientation;
--(MyMaker*)gravity;
+- (MyMaker *)orientation;
+- (MyMaker *)gravity;
 
 //线性布局独有
--(MyMaker*)shrinkType;
+- (MyMaker *)shrinkType;
 
 //流式布局独有
--(MyMaker*)arrangedCount;
--(MyMaker*)autoArrange;
--(MyMaker*)arrangedGravity;
--(MyMaker*)pagedCount;
-
+- (MyMaker *)arrangedCount;
+- (MyMaker *)autoArrange;
+- (MyMaker *)arrangedGravity;
+- (MyMaker *)pagedCount;
 
 //线性布局和浮动布局和流式布局子视图独有
--(MyMaker*)weight;
+- (MyMaker *)weight;
 
 //浮动布局子视图独有
--(MyMaker*)reverseFloat;
--(MyMaker*)clearFloat;
-
+- (MyMaker *)reverseFloat;
+- (MyMaker *)clearFloat;
 
 //赋值操支持NSNumber,UIView,MyLayoutPos,MyLayoutSize, NSArray[MyLayoutSize]
--(MyMaker* (^)(id val))equalTo;
--(MyMaker* (^)(id val))min;
--(MyMaker* (^)(id val))max;
+- (MyMaker * (^)(id val))equalTo;
+- (MyMaker * (^)(id val))min;
+- (MyMaker * (^)(id val))max;
 
--(MyMaker* (^)(CGFloat val))offset;
--(MyMaker* (^)(CGFloat val))multiply;
--(MyMaker* (^)(CGFloat val))add;
-
-
-
+- (MyMaker * (^)(CGFloat val))offset;
+- (MyMaker * (^)(CGFloat val))multiply;
+- (MyMaker * (^)(CGFloat val))add;
 
 @end
 
-
-@interface UIView(MyMakerExt)
+@interface UIView (MyMakerExt)
 
 //对视图进行统一的布局，方便操作，请参考DEMO1中的使用方法。
--(void)makeLayout:(void(^)(MyMaker *make))layoutMaker;
+- (void)makeLayout:(void (^)(MyMaker *make))layoutMaker;
 
 //布局内所有子视图的布局构造，会影响到有所的子视图。
--(void)allSubviewMakeLayout:(void(^)(MyMaker *make))layoutMaker;
-
+- (void)allSubviewMakeLayout:(void (^)(MyMaker *make))layoutMaker;
 
 @end
 
 #endif
-
-

@@ -8,12 +8,10 @@
 
 #import "MyLinearLayout.h"
 
-
 /**
   表格布局行列索引描述扩展对象。
  */
-@interface NSIndexPath(MyTableLayoutExt)
-
+@interface NSIndexPath (MyTableLayoutExt)
 
 /**
  构建一个单元格索引对象
@@ -22,13 +20,11 @@
  @param row 行索引
  @return 返回单元格索引实例对象
  */
-+(instancetype)indexPathForCol:(NSInteger)col inRow:(NSInteger)row;
++ (instancetype)indexPathForCol:(NSInteger)col inRow:(NSInteger)row;
 
-@property(nonatomic,assign,readonly) NSInteger col;
+@property (nonatomic, assign, readonly) NSInteger col;
 
 @end
-
-
 
 /**
  表格布局是一种里面的子视图可以像表格一样进行多行多列排列的布局视图。子视图添加到表格布局视图前必须先要建立并添加行子视图，然后再将列子视图添加到行子视图里面。
@@ -40,16 +36,13 @@
  */
 @interface MyTableLayout : MyLinearLayout
 
-
 /**
  构建一个表格布局视图
 
  @param orientation 表格布局的方向
  @return 表格布局实例对象
  */
-+(instancetype)tableLayoutWithOrientation:(MyOrientation)orientation;
-
-
++ (instancetype)tableLayoutWithOrientation:(MyOrientation)orientation;
 
 /**
   添加一个新行。对于垂直表格来说每一行是从上往下排列的，而水平表格则每一行是从左往右排列的。
@@ -75,8 +68,7 @@
  @param colSize 列的尺寸值，请参考上面的列能设置的值。
  @return 返回行布局视图对象
  */
--(MyLinearLayout*)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize;
-
+- (MyLinearLayout *)addRow:(CGFloat)rowSize colSize:(CGFloat)colSize;
 
 /**
  添加行并指定列的数量，这样每列将会平分行的宽度或者高度。
@@ -85,74 +77,70 @@
  @param colCount 指定行里面列的数量，必须大于0
  @return 返回行布局视图对象。
  */
--(MyLinearLayout*)addRow:(CGFloat)rowSize colCount:(NSUInteger)colCount;
-
+- (MyLinearLayout *)addRow:(CGFloat)rowSize colCount:(NSUInteger)colCount;
 
 /**
  * 在指定的位置插入一个新行
  */
--(MyLinearLayout*)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex;
--(MyLinearLayout*)insertRow:(CGFloat)rowSize colCount:(NSUInteger)colCount atIndex:(NSInteger)rowIndex;
-
+- (MyLinearLayout *)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex;
+- (MyLinearLayout *)insertRow:(CGFloat)rowSize colCount:(NSUInteger)colCount atIndex:(NSInteger)rowIndex;
 
 /**
  *删除一行
  */
--(void)removeRowAt:(NSInteger)rowIndex;
+- (void)removeRowAt:(NSInteger)rowIndex;
 
 /**
  * 交换两行的位置
  */
--(void)exchangeRowAt:(NSInteger)rowIndex1 withRow:(NSInteger)rowIndex2;
+- (void)exchangeRowAt:(NSInteger)rowIndex1 withRow:(NSInteger)rowIndex2;
 
 /**
  *返回行对象
  */
--(MyLinearLayout*)viewAtRowIndex:(NSInteger)rowIndex;
+- (MyLinearLayout *)viewAtRowIndex:(NSInteger)rowIndex;
 
 /**
  *返回行的数量
  */
--(NSUInteger)countOfRow;
+- (NSUInteger)countOfRow;
 
 /**
  * 添加一个新的列。再添加一个新的列前必须要先添加行，对于垂直表格来说每一列是从左到右排列的，而对于水平表格来说每一列是从上到下排列的。
  * @param colView  列视图
  * @param rowIndex 指定要添加列的行的索引
  */
--(void)addCol:(UIView*)colView atRow:(NSInteger)rowIndex;
+- (void)addCol:(UIView *)colView atRow:(NSInteger)rowIndex;
 
 /**
  * 在指定的indexPath下插入一个新的列indexPath用[NSIndexPath indexPathForCol:inRow:]来构建
  */
--(void)insertCol:(UIView*)colView atIndexPath:(NSIndexPath*)indexPath;
+- (void)insertCol:(UIView *)colView atIndexPath:(NSIndexPath *)indexPath;
 
 /**
  * 删除一列
  */
--(void)removeColAt:(NSIndexPath*)indexPath;
+- (void)removeColAt:(NSIndexPath *)indexPath;
 
 /**
  * 交换两个列视图，这两个列视图是可以跨行的
  */
--(void)exchangeColAt:(NSIndexPath*)indexPath1 withCol:(NSIndexPath*)indexPath2;
+- (void)exchangeColAt:(NSIndexPath *)indexPath1 withCol:(NSIndexPath *)indexPath2;
 
 /**
  * 返回列视图
  */
--(UIView*)viewAtIndexPath:(NSIndexPath*)indexPath;
+- (UIView *)viewAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
  * 返回某行的列的数量
  */
--(NSUInteger)countOfColInRow:(NSInteger)rowIndex;
-
+- (NSUInteger)countOfColInRow:(NSInteger)rowIndex;
 
 /**
  *表格布局的addSubView被重新定义，是addCol:atRow的精简版本，表示插入当前行的最后一列
  */
 - (void)addSubview:(UIView *)view;
-
 
 //不能直接调用如下的函数，否则会崩溃。
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index;
@@ -160,8 +148,4 @@
 - (void)insertSubview:(UIView *)view belowSubview:(UIView *)siblingSubview;
 - (void)insertSubview:(UIView *)view aboveSubview:(UIView *)siblingSubview;
 
-
 @end
-
-
-
