@@ -94,8 +94,8 @@
     containerLayout.leadingPos.equalTo(rootLayout.leadingPos);
     containerLayout.trailingPos.equalTo(rootLayout.trailingPos);
     containerLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
-    containerLayout.topPadding = 6;
-    containerLayout.bottomPadding = 6;
+    containerLayout.paddingTop = 6;
+    containerLayout.paddingBottom = 6;
     containerLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:containerLayout];
     

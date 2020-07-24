@@ -187,8 +187,8 @@
     
     _rootLayout.widthSize.equalTo(self.view.widthSize);
     _rootLayout.wrapContentHeight = YES;
-    _rootLayout.topPadding = 15;
-    _rootLayout.bottomPadding = 15;
+    _rootLayout.paddingTop = 15;
+    _rootLayout.paddingBottom = 15;
     _rootLayout.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_rootLayout];
     

@@ -127,6 +127,9 @@ typedef enum : unsigned short {
 
 } MyGravity;
 
+#define MYHORZGRAVITY(gravity) (gravity&MyGravity_Vert_Mask)
+#define MYVERTGRAVITY(gravity) (gravity&MyGravity_Horz_Mask)
+
 /**
  停靠对齐的生效策略，主要用于流式布局中的最后一行。
  */

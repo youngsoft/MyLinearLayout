@@ -13,16 +13,16 @@
 @interface MyLayoutSize ()
 
 @property (nonatomic, weak) UIView *view;
-@property (nonatomic, assign) MyGravity dime;
-@property (nonatomic, assign) MyLayoutValueType dimeValType;
+@property (nonatomic, assign) MyLayoutAnchorType anchorType;
 
-@property (nonatomic, strong, readonly) id dimeVal;
-@property (nonatomic, readonly, strong) NSNumber *dimeNumVal;
-@property (nonatomic, readonly, strong) MyLayoutSize *dimeRelaVal;
-@property (nonatomic, readonly, strong) NSArray *dimeArrVal;
+@property (nonatomic, assign) MyLayoutValType valType;
+@property (nonatomic, readonly, strong) id val;
+@property (nonatomic, readonly, strong) NSNumber *numberVal;
+@property (nonatomic, readonly, strong) MyLayoutSize *anchorVal;
+@property (nonatomic, readonly, strong) NSArray *arrayVal;
 
-@property (nonatomic, readonly, assign) BOOL dimeWrapVal;
-@property (nonatomic, readonly, assign) BOOL dimeFillVal;
+@property (nonatomic, readonly, assign) BOOL wrapVal;
+@property (nonatomic, readonly, assign) BOOL fillVal;
 
 @property (nonatomic, readonly, strong) MyLayoutSize *lBoundVal;
 @property (nonatomic, readonly, strong) MyLayoutSize *uBoundVal;
@@ -42,16 +42,16 @@
 - (MyLayoutSize * (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))myUBound;
 - (void)myClear;
 
-- (MyLayoutSize *)__equalTo:(id)val;
-- (MyLayoutSize *)__equalTo:(id)val priority:(NSInteger)priority;
-- (MyLayoutSize *)__add:(CGFloat)val;
-- (MyLayoutSize *)__multiply:(CGFloat)val;
-- (MyLayoutSize *)__min:(CGFloat)val;
-- (MyLayoutSize *)__lBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
-- (MyLayoutSize *)__max:(CGFloat)val;
-- (MyLayoutSize *)__uBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
-- (void)__clear;
-- (void)__setActive:(BOOL)active;
+- (MyLayoutSize *)_myEqualTo:(id)val;
+- (MyLayoutSize *)_myEqualTo:(id)val priority:(NSInteger)priority;
+- (MyLayoutSize *)_myAdd:(CGFloat)val;
+- (MyLayoutSize *)_myMultiply:(CGFloat)val;
+- (MyLayoutSize *)_myMin:(CGFloat)val;
+- (MyLayoutSize *)_myLBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
+- (MyLayoutSize *)_myMax:(CGFloat)val;
+- (MyLayoutSize *)_myUBound:(id)sizeVal addVal:(CGFloat)addVal multiVal:(CGFloat)multiVal;
+- (void)_myClear;
+- (void)_mySetActive:(BOOL)active;
 
 //只有为数值时才有意义。
 @property (nonatomic, readonly, assign) CGFloat measure;
@@ -65,6 +65,6 @@
 - (instancetype)initWith:(NSArray *)sizes isMax:(BOOL)isMax;
 
 //获取极限值
-- (CGFloat)getMostSizeFrom:(MyLayoutSize *)layoutSize;
+- (CGFloat)getMostDimenValFrom:(MyLayoutSize *)layoutSize;
 
 @end

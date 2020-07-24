@@ -503,7 +503,6 @@
  
  */
 @property (nonatomic, assign) MyVisibility visibility;
-@property (nonatomic, assign) MyVisibility myVisibility MYDEPRECATED("use visibility instead");
 
 /**
  指定子在布局视图上的对齐方式，默认是None表示未指定，这个属性目前只支持框架布局，线性布局，流式布局，浮动布局下的属性设置。
@@ -519,13 +518,12 @@
  5. 在水平流式布局和水平浮动布局中用来设置一列内的左、中、右、水平拉伸对齐。(如果流式父布局视图设置了arrangedGravity，子视图时设置了这个属性则这个属性优先级最高)
  */
 @property (nonatomic, assign) MyGravity alignment;
-@property (nonatomic, assign) MyGravity myAlignment MYDEPRECATED("use alignment instead");
 
 /**
  视图在父布局视图中布局完成后也就是视图的frame更新完成后执行的block，执行完block后会被重置为nil。通过在viewLayoutCompleteBlock中我们可以得到这个视图真实的frame值,当然您也可以在里面进行其他业务逻辑的操作和属性的获取和更新。block方法中layout参数就是父布局视图，而v就是视图本身，block中这两个参数目的是为了防止循环引用的问题。
  
  不再建议使用这个block进行获取子视图最终frame值，因为这个block只会执行一次，所以得到的frame值可能不准确。
- 建议通过KVO来观察布局视图的isLayouting属性来获取布局完成后子视图的frame值。
+ 建议通过KVO来观察布局视图的isMyLayouting属性来获取布局完成后子视图的frame值。
  
  */
 @property (nonatomic, copy) void (^viewLayoutCompleteBlock)(MyBaseLayout *layout, UIView *v);
@@ -564,22 +562,18 @@
 /**
  布局视图基类，基类不支持实例化对象。在编程时我们经常会用到一些视图，这种视图只是负责将里面的子视图按照某种规则进行排列和布局，而别无其他的作用。因此我们称这种视图为容器视图或者称为布局视图。
  布局视图通过重载layoutSubviews方法来完成子视图的布局和排列的工作。对于每个加入到布局视图中的子视图，都会在加入时通过KVO机制监控子视图的center和bounds以及frame值的变化，每当子视图的这些属性一变化时就又会重新引发布局视图的布局动作。同时对每个视图的布局扩展属性的设置以及对布局视图的布局属性的设置都会引发布局视图的布局动作。布局视图在添加到非布局父视图时也会通过KVO机制来监控非布局父视图的frame值和bounds值，这样每当非布局父视图的尺寸变更时也会引发布局视图的布局动作。前面说的引起变动的方法就是会在KVO处理逻辑以及布局扩展属性和布局属性设置完毕后通过调用setNeedLayout来实现的，当布局视图收到setNeedLayout的请求后，会在下一个runloop中对布局视图进行重新布局而这就是通过调用layoutSubviews方法来实现的。布局视图基类只提供了更新所有子视图的位置和尺寸以及一些基础的设置，而至于如何排列和布局这些子视图则要根据应用的场景和需求来确定，因此布局基类视图提供了一个：
-   -(CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL*)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray*)sbs
+   -(CGSize)calcLayoutSize:(CGSize)size subviewEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines context:(MyLayoutContext *)context
      的方法，要求派生类去重载这个方法，这样不同的派生类就可以实现不同的应用场景，这就是布局视图的核心实现机制。
  
  MyLayout布局库根据实际中常见的场景实现了8种不同的布局视图派生类他们分别是：线性布局、表格布局、相对布局、框架布局、流式布局、浮动布局、路径布局、栅格布局。
  */
 @interface MyBaseLayout : UIView
 
-#if UIKIT_DEFINE_AS_PROPERTIES
 /**
   用于实现对阿拉伯国家的布局适配。对于非阿拉伯国家来说，界面布局都是默认从左到右排列。而对于阿拉伯国家来说界面布局则默认是从右往左排列。默认这个属性是NO，您可以将这个属性设置为YES，这样布局里面的所有视图都将从右到左进行排列布局。如果您需要考虑国际化布局的问题，那么您应该用leadingPos来表示头部的位置，而用trailingPos来表示尾部的位置，这样当布局方向是LTR时那么leadingPos就表示的是左边而trailingPos则表示的是右边；而当布局方向是RTL时那么leadingPos表示的是右边而trailingPos则表示的是左边。如果您的界面布局不会考虑到国际化以及不需要考虑RTL时那么您可以用leftPos和rightPos来表示左右而不需要用leadingPos和trailingPos。
  */
 @property (class, nonatomic, assign) BOOL isRTL;
-#else
-+ (BOOL)isRTL;
-+ (void)setIsRTL:(BOOL)isRTL;
-#endif
+
 
 /**
  直接更新window下所有布局视图的RTL特性。
@@ -592,25 +586,25 @@
  内边距是在自己的尺寸内离子视图的距离，而外边距则不是自己尺寸内离其他视图的距离。下面是内边距和外边距的效果图：
  
                     ^
-                    | topMargin
+                    | margin-top
                     |           width
                 +------------------------------+
                 |                              |------------>
-                |  l                       r   | rightMargin
-                |  e       topPadding      i   |
-                |  f                       g   |
-                |  t   +---------------+   h   |
-     <----------|  P   |               |   t   |
-      leftMargin|  a   |               |   P   |
-                |  d   |   subviews    |   a   |  height
-                |  d   |    content    |   d   |
-                |  i   |               |   d   |
-                |  n   |               |   i   |
-                |  g   +---------------+   n   |
-                |                          g   |
-                |        bottomPadding         |
+                |  p                       p   | margin-right
+                |  a      padding-top      a   |
+                |  d                       d   |
+                |  d   +---------------+   d   |
+     <----------|  i   |               |   i   |
+     margin-left|  n   |               |   n   |
+                |  g   |   subview's   |   g   |  height
+                |  |   |    content    |   |   |
+                |  l   |               |   r   |
+                |  e   |               |   i   |
+                |  f   +---------------+   g   |
+                |  t                       h   |
+                |       padding-bottom     t   |
                 +------------------------------+
-                    |bottomMargin
+                    |margin-bottom
                     |
                     V
  
@@ -627,33 +621,33 @@
 /**
  * 顶部内边距，用来设置子视图离自身顶部的边距值。
  */
-@property (nonatomic, assign) IBInspectable CGFloat topPadding;
+@property (nonatomic, assign) IBInspectable CGFloat paddingTop;
 /**
  *头部内边距，用来设置子视图离自身头部的边距值。对于LTR方向的布局来说就是指的左边内边距，而对于RTL方向的布局来说就是指的右边内边距
  */
-@property (nonatomic, assign) IBInspectable CGFloat leadingPadding;
+@property (nonatomic, assign) IBInspectable CGFloat paddingLeading;
 /**
  *底部内边距，用来设置子视图离自身底部的边距值。
  */
-@property (nonatomic, assign) IBInspectable CGFloat bottomPadding;
+@property (nonatomic, assign) IBInspectable CGFloat paddingBottom;
 /**
  *尾部内边距，用来设置子视图离自身尾部的边距值。对于LTR方向的布局来说就是指的右边内边距，而对于RTL方向的布局来说就是指的左边内边距
  */
-@property (nonatomic, assign) IBInspectable CGFloat trailingPadding;
+@property (nonatomic, assign) IBInspectable CGFloat paddingTrailing;
 
 /**
- *左边内边距，用来设置子视图离自身左边的边距值。如果您不需要考虑布局的方向，那么请用这个属性来设置左边的内部边距，如果您需要考虑国际化则请用leadingPadding
+ *左边内边距，用来设置子视图离自身左边的边距值。如果您不需要考虑布局的方向，那么请用这个属性来设置左边的内部边距，如果您需要考虑国际化则请用paddingLeading
  */
-@property (nonatomic, assign) IBInspectable CGFloat leftPadding;
+@property (nonatomic, assign) IBInspectable CGFloat paddingLeft;
 
 /**
- *右边内边距，用来设置子视图离自身右边的边距值。如果您不需要考虑布局的方向，那么请用这个属性来设置右边的内部边距，如果您需要考虑国际化则请用trailingPadding
+ *右边内边距，用来设置子视图离自身右边的边距值。如果您不需要考虑布局的方向，那么请用这个属性来设置右边的内部边距，如果您需要考虑国际化则请用paddingTrailing
  */
-@property (nonatomic, assign) IBInspectable CGFloat rightPadding;
+@property (nonatomic, assign) IBInspectable CGFloat paddingRight;
 
 /**
  * 设置当布局的尺寸由子视图决定并且在没有子视图加入的情况下padding的设置值是否会加入到布局的尺寸值里面。默认是YES，表示当布局视图没有子视图时padding值也会加入到尺寸里面。
- * 举例来说假设某个布局视图的高度是自适应,并且设置了topPadding为10，bottomPadding为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为NO时，那么在没有任何子视图时布局视图的高度就是0，也就是说topPadding和bottomPadding不会参与高度的计算了。
+ * 举例来说假设某个布局视图的高度是自适应,并且设置了paddingTop为10，paddingBottom为20。那么默认情况下当没有任何子视图时布局视图的高度是30；而当我们将这个属性设置为NO时，那么在没有任何子视图时布局视图的高度就是0，也就是说paddingTop和paddingBottom不会参与高度的计算了。
  */
 @property (nonatomic, assign) BOOL zeroPadding;
 
@@ -935,6 +929,8 @@
 
 #pragma mark-- MyLayoutDragger
 
+@class MyLayoutDragger;
+
 //布局视图拖动器类，用来实现布局内的视图的拖动封装。用于实现布局子视图的拖放处理。
 //布局视图的拖动器类，只支持那些按顺序添加的布局视图，不支持相对布局、框架布局、栅格布局、路径布局。
 //一般情况下我们要实现布局内子视图的：
@@ -964,6 +960,7 @@
 //当前是否正在悬停中。我们可以借助这个属性值判断来做一些操作处理。
 @property (nonatomic, assign, readonly) BOOL isHovering;
 
+
 //下列方法请在子视图的相应事件处理中调用。
 
 //开始拖动,请在子视图view的拖动开始事件处调用这个方法，其中view指定要开始拖动的视图。
@@ -985,6 +982,9 @@
 #pragma mark-- Deprecated
 
 @interface UIView (MyDeprecated)
+
+@property (nonatomic, assign) MyVisibility myVisibility MYDEPRECATED("use visibility instead");
+@property (nonatomic, assign) MyGravity myAlignment MYDEPRECATED("use alignment instead");
 
 /**
  *！！！不建议使用这个属性了，而是直接设置视图的宽度为MyLayoutSize.wrap。 比如:myWidth = MyLayoutSize.wrap 或者 widthSize.equalTo(@(MyLayoutSize.wrap))。
@@ -1008,5 +1008,16 @@
  *设置为YES。这样就可以在设置完毕text后系统会自动激发布局处理。
  */
 @property (nonatomic, assign) BOOL wrapContentSize;
+
+@end
+
+@interface MyBaseLayout(MyDeprecated)
+
+@property (nonatomic, assign) CGFloat topPadding MYDEPRECATED("use paddingTop instead");
+@property (nonatomic, assign) CGFloat leadingPadding MYDEPRECATED("use paddingLeading instead");
+@property (nonatomic, assign) CGFloat bottomPadding MYDEPRECATED("use paddingBottom instead");
+@property (nonatomic, assign) CGFloat trailingPadding MYDEPRECATED("use paddingTrailing instead");
+@property (nonatomic, assign) CGFloat leftPadding MYDEPRECATED("use paddingLeft instead");
+@property (nonatomic, assign) CGFloat rightPadding MYDEPRECATED("use paddingRight instead");
 
 @end

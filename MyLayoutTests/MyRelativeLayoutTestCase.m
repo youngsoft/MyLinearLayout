@@ -112,10 +112,10 @@
 {
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
     rootLayout.myHeight = MyLayoutSize.wrap;
-    rootLayout.bottomPadding = 20;
-    rootLayout.topPadding = 10;
+    rootLayout.paddingBottom = 20;
+    rootLayout.paddingTop = 10;
     rootLayout.leadingPadding = 10;
-    rootLayout.trailingPadding = 10;
+    rootLayout.paddingTrailing = 10;
     
     
     CGSize size0 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
@@ -389,10 +389,10 @@
 {
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
     rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
-    rootLayout.bottomPadding = 20;
-    rootLayout.topPadding = 10;
+    rootLayout.paddingBottom = 20;
+    rootLayout.paddingTop = 10;
     rootLayout.leadingPadding = 10;
-    rootLayout.trailingPadding = 10;
+    rootLayout.paddingTrailing = 10;
     
     
     XCTAssertTrue(CGSizeEqualToSize([rootLayout sizeThatFits:CGSizeMake(0, 0)], CGSizeMake(20, 30)), @"size is:%@", NSStringFromCGSize([rootLayout sizeThatFits:CGSizeMake(0, 0)]));
@@ -697,7 +697,7 @@
     linear.heightSize.equalTo(_layoutRoot.heightSize);
     linear.widthSize.equalTo(@(screenWidth)).multiply(0.24).min(90.0f);
     linear.myTrailing = 0.0f;
-    linear.trailingPadding = 15.0f;
+    linear.paddingTrailing = 15.0f;
     linear.subviewVSpace = 8.0f;
     linear.gravity = MyGravity_Horz_Right|MyGravity_Vert_Center;
     [_layoutRoot addSubview:linear];
@@ -730,14 +730,14 @@
     imgv.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     imgv.visibility = MyVisibility_Gone;
     [_layoutAccessoryBottom addSubview:imgv];
-    UIView *hideView1 = imgv;
+   // UIView *hideView1 = imgv;
     
     // 勿扰状态下，有新消息时的小红点提示
     UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6.0f, 6.0f)];
     [view setBackgroundColor:[UIColor greenColor]];
     view.visibility = MyVisibility_Gone;
     [_layoutAccessoryBottom addSubview:view];
-    UIView *hideView2 = view;
+  //  UIView *hideView2 = view;
     
     // 非勿扰状态下未读消息数
     lbl = [UILabel new];
@@ -862,8 +862,8 @@
     MyRelativeLayout *_rootLayout = [MyRelativeLayout new];
     
     _rootLayout.wrapContentHeight = YES;
-    _rootLayout.topPadding = 15;
-    _rootLayout.bottomPadding = 15;
+    _rootLayout.paddingTop = 15;
+    _rootLayout.paddingBottom = 15;
     _rootLayout.backgroundColor = [UIColor whiteColor];
     
     
@@ -980,21 +980,18 @@
     CGFloat screen_width = [UIScreen mainScreen].bounds.size.width;
     CGFloat ten_margin = 10;
     MyLinearLayout *bgLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-  //  bgLayout.widthSize.equalTo(@(screen_width - 2 * ten_margin));
     bgLayout.widthSize.equalTo(baseLayout.widthSize).add(-2 * ten_margin);
     bgLayout.myLeft = ten_margin;
     bgLayout.myTop = ten_margin;
     bgLayout.padding = UIEdgeInsetsMake(2 * ten_margin, 0, 2 * ten_margin, 0);
     [baseLayout addSubview:bgLayout];
-  //  self.bgLayout = bgLayout;
-   // bgLayout.backgroundColor = UIColorFromRGB(0x6095f0);
     bgLayout.backgroundColor = [UIColor lightGrayColor];
     
     ///资产布局
     MyRelativeLayout *assetsLayout = [[MyRelativeLayout alloc] init];
     [bgLayout addSubview:assetsLayout];
     assetsLayout.myHorzMargin = 0;
-    assetsLayout.leftPadding = 1.8 * ten_margin;
+    assetsLayout.paddingLeft = 1.8 * ten_margin;
     assetsLayout.wrapContentHeight = YES;
     
     ///总资产Lab
@@ -1017,8 +1014,8 @@
     ///本金布局
     MyFloatLayout *principalLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     principalLayout.myHorzMargin = 0;
-    principalLayout.topPadding = 1.5 * ten_margin;
-    principalLayout.leftPadding = 1.8 * ten_margin;
+    principalLayout.paddingTop = 1.5 * ten_margin;
+    principalLayout.paddingLeft = 1.8 * ten_margin;
     principalLayout.wrapContentHeight = YES;
     [bgLayout addSubview:principalLayout];
     
@@ -1069,7 +1066,6 @@
     
     UIView *topLine = [[UIView alloc] init];
     [animLayout addSubview:topLine];
-   // topLine.backgroundColor = color_bg_white;
     topLine.myTop = 2 * ten_margin;
     topLine.myHorzMargin = 0;
     topLine.heightSize.equalTo(@(1));
@@ -1077,8 +1073,8 @@
     ///收益布局
     MyFloatLayout *incomeLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     incomeLayout.myHorzMargin = 0;
-    incomeLayout.topPadding = 2 * ten_margin;
-    incomeLayout.leftPadding = 1.8 * ten_margin;
+    incomeLayout.paddingTop = 2 * ten_margin;
+    incomeLayout.paddingLeft = 1.8 * ten_margin;
     incomeLayout.wrapContentHeight = YES;
     [animLayout addSubview:incomeLayout];
     
@@ -1104,7 +1100,6 @@
     
     UIView *bttomLine = [[UIView alloc] init];
     [animLayout addSubview:bttomLine];
-  //  bttomLine.backgroundColor = color_bg_white;
     bttomLine.myTop = 2 * ten_margin;
     bttomLine.myHorzMargin = 0;
     bttomLine.heightSize.equalTo(@(1));
@@ -1112,8 +1107,8 @@
     //出借总额布局
     MyFloatLayout *totalLoanLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     totalLoanLayout.myHorzMargin = 0;
-    totalLoanLayout.topPadding = 2 * ten_margin;
-    totalLoanLayout.leftPadding = 1.8 * ten_margin;
+    totalLoanLayout.paddingTop = 2 * ten_margin;
+    totalLoanLayout.paddingLeft = 1.8 * ten_margin;
     totalLoanLayout.wrapContentHeight = YES;
     [animLayout addSubview:totalLoanLayout];
     
@@ -1135,19 +1130,12 @@
     stretchLayout.wrapContentHeight = YES;
     //    stretchLayout.heightSize.equalTo(@100);
     stretchLayout.widthSize.equalTo(rootLayout);
-    stretchLayout.topPadding = stretchLayout.bottomPadding = 1.2 * ten_margin;
+    stretchLayout.paddingTop = stretchLayout.paddingBottom = 1.2 * ten_margin;
     stretchLayout.gravity = MyGravity_Horz_Center;
     [baseLayout addSubview:stretchLayout];
     
     UILabel *arrowBtn = [UILabel new];
     arrowBtn.backgroundColor = [UIColor redColor];
-//    [arrowBtn setImage:[UIImage imageNamed:@"assets_my_assets_header_hide"]
-//              forState:UIControlStateNormal];
-//    [arrowBtn setImage:[UIImage imageNamed:@"assets_my_assets_header_show"]
-//              forState:UIControlStateSelected];
-//    [arrowBtn addTarget:self
-//                 action:@selector(arrowBtnClicked:)
-//       forControlEvents:UIControlEventTouchUpInside];
     arrowBtn.mySize = CGSizeMake(40, 40);
     [stretchLayout addSubview:arrowBtn];
    // self.arrowBtn = arrowBtn;
@@ -1499,7 +1487,7 @@
     _layoutRoot.myLeft =
     _layoutRoot.myRight = 0;
     _layoutRoot.wrapContentHeight = YES;
-    _layoutRoot.bottomPadding = 12;
+    _layoutRoot.paddingBottom = 12;
    // _layoutRoot.backgroundColor = [UIColor whiteColor];
     //_layoutRoot.clipsToBounds = YES;
     _layoutRoot.frame = CGRectMake(0, 0, 100, 0);
@@ -1523,6 +1511,144 @@
     
 }
 
+- (void)testWrapContentHeight7 {
+    
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
+    rootLayout.myHorzMargin = 10;
+    rootLayout.frame = CGRectMake(0, 0, 375-20, 0);
+    rootLayout.myWidth = 375-20;
+    rootLayout.myHeight = MyLayoutSize.wrap;
+    
+    
+    UIView *leftImageView = [UIView new];
+    leftImageView.myHeight = 60;
+    leftImageView.myWidth = 60;
+    leftImageView.myLeft = 5;
+    leftImageView.myRight = 5;
+    leftImageView.myCenterY = 0;
+    [rootLayout addSubview:leftImageView];
+        
+        MyLinearLayout *centerLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+        centerLayout.weight = 1;
+        centerLayout.myHeight = MyLayoutSize.wrap;
+        centerLayout.gravity = MyGravity_Horz_Fill;//里面的子视图宽度和布局视图相等。
+        centerLayout.backgroundColor = [UIColor whiteColor];
+        [rootLayout addSubview:centerLayout];
+        
+        UILabel *titleLabel = [UILabel new];
+        titleLabel.myHeight = MyLayoutSize.wrap;
+        titleLabel.myTop = 5;
+    titleLabel.text = @"刘艳辉提交的技术支撑技术职称";
+        [centerLayout addSubview:titleLabel];
+        
+        UILabel *projectLabel = [UILabel new];
+        projectLabel.myHeight = MyLayoutSize.wrap;
+        projectLabel.myTop = 10;
+    projectLabel.text = @"支撑项目:大寿阿斯蒂芬阿斯蒂芬爱上阿斯蒂芬";
+        [centerLayout addSubview:projectLabel];
+        
+        UILabel *contentLabel = [UILabel new];
+        contentLabel.myHeight = MyLayoutSize.wrap;
+        contentLabel.myTop = 4;
+    contentLabel.text = @"支撑方式：业务";
+        [centerLayout addSubview:contentLabel];
+        
+        UILabel *timeLabel = [UILabel new];
+        timeLabel.myHeight = MyLayoutSize.wrap;
+        timeLabel.myTop = 4;
+        timeLabel.myBottom = 5;
+    timeLabel.text = @"时间：2019-12-32";
+        [centerLayout addSubview:timeLabel];
+        
+        MyRelativeLayout *stateLayout = [MyRelativeLayout new];
+        stateLayout.myWidth = MyLayoutSize.wrap;
+        stateLayout.myVertMargin = 0;
+        stateLayout.backgroundColor = [UIColor whiteColor];
+        [rootLayout addSubview:stateLayout];
+        
+        UILabel *createTimeLabel = [UILabel new];
+        createTimeLabel.myTop = 5;
+        createTimeLabel.myRight = 5;
+    createTimeLabel.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    createTimeLabel.text = @"2019-12-31";
+
+        [stateLayout addSubview:createTimeLabel];
+        
+        UILabel *stateLabel = [UILabel new];
+        stateLabel.myRight = 5;
+        stateLabel.myCenterY = 0;
+        stateLabel.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    stateLabel.text = @"审批中";
+        [stateLayout addSubview:stateLabel];
+    
+  //  [rootLayout setNeedsLayout];
+  //  [rootLayout layoutIfNeeded];
+    
+   CGSize sz1 = [rootLayout sizeThatFits:CGSizeMake(355, 0)];
+    CGSize sz2 = centerLayout.estimatedRect.size;   //[centerLayout sizeThatFits:CGSizeMake(355, 0)];
+    CGSize sz3 =  stateLayout.estimatedRect.size; //[stateLayout sizeThatFits:CGSizeMake(355, 0)];
+
+    //355，130
+    
+    MySizeAssert(rootLayout, sz1, CGSizeMake(355, 151));
+    MySizeAssert(centerLayout, sz2, CGSizeMake(191, 151));
+    MySizeAssert(stateLayout, sz3, CGSizeMake(94, 151));
+}
+
+-(void)testCenterXY {
+    {
+        MyRelativeLayout *rootLayout = [[MyRelativeLayout alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        rootLayout.padding = UIEdgeInsetsMake(20, 10, 10, 10);
+        rootLayout.backgroundColor = [UIColor grayColor];
+        
+        
+        UIView *v1 = UIView.alloc.init;
+        v1.backgroundColor = UIColor.redColor;
+        v1.mySize = CGSizeMake(30, 20);
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = UIView.alloc.init;
+        v2.mySize = CGSizeMake(70, 20);
+        v2.backgroundColor = UIColor.orangeColor;
+        [rootLayout addSubview:v2];
+        
+        v2.leftPos.equalTo(v1.leftPos);
+        v1.centerYPos.equalTo(@[v2.centerYPos]);
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(v1, CGRectMake(10, 35, 30, 20));
+        MyRectAssert(v2, CGRectMake(10, 55, 70, 20));
+
+    }
+    
+    {
+        MyRelativeLayout *rootLayout = [[MyRelativeLayout alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        rootLayout.mySize = CGSizeMake(100, 100);
+        rootLayout.myTop = 100;
+        rootLayout.padding = UIEdgeInsetsMake(20, 10, 10, 10);
+        rootLayout.backgroundColor = [UIColor grayColor];
+        
+        
+        UIView *v1 = UIView.alloc.init;
+        v1.backgroundColor = UIColor.redColor;
+        v1.mySize = CGSizeMake(20, 30);
+        [rootLayout addSubview:v1];
+        
+        UIView *v2 = UIView.alloc.init;
+        v2.mySize = CGSizeMake(20, 70);
+        v2.backgroundColor = UIColor.orangeColor;
+        [rootLayout addSubview:v2];
+        
+        v2.topPos.equalTo(v1.topPos);
+        v1.centerXPos.equalTo(@[v2.centerXPos]);
+        [rootLayout layoutIfNeeded];
+        
+        MyRectAssert(v1, CGRectMake(30, 20, 20, 30));
+        MyRectAssert(v2, CGRectMake(50, 20, 20, 70));
+
+    }
+
+}
 
 - (void)testPerformanceExample {
     // This is an example of a performance test case.

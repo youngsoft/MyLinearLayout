@@ -216,7 +216,6 @@
     if ([MyBaseLayout isRTL]) {
         layerRect.origin.x = layoutSize.width - layerRect.origin.x - layerRect.size.width;
     }
-    //把动画效果取消。
     if (!_myCGRectEqual(layer.frame, layerRect)) {
         if (layer.lineDashPhase == 0) {
             layer.path = nil;

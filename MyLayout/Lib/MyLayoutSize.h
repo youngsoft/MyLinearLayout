@@ -25,33 +25,17 @@
  */
 @interface MyLayoutSize : NSObject <NSCopying>
 
-#if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸由子视图决定或者由内容决定，也就是说尺寸自适应*/
 @property (class, nonatomic, assign, readonly) NSInteger wrap;
-#else
-+ (NSInteger)wrap;
-#endif
 
-#if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸会填充满父视图的剩余空间。*/
 @property (class, nonatomic, assign, readonly) NSInteger fill;
-#else
-+ (NSInteger)fill;
-#endif
 
-#if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示清除尺寸的约束设置，等价于:equalTo(nil)*/
 @property (class, nonatomic, assign, readonly) NSInteger empty;
-#else
-+ (NSInteger)empty;
-#endif
 
-#if UIKIT_DEFINE_AS_PROPERTIES
 /**特殊的尺寸，表示尺寸会均分父视图的剩余空间。目前只用在表格布局MyTableLayout */
 @property (class, nonatomic, assign, readonly) NSInteger average;
-#else
-+ (NSInteger)average;
-#endif
 
 //because masonry defined macro MAS_SHORTHAND_GLOBALS. the equalTo, offset may conflict with below method. so
 //if you used MyLayout and Masonry concurrently and you defined MAS_SHORTHAND_GLOBALS in masonry, then you can define MY_USEPREFIXMETHOD to solve the conflict.
@@ -133,6 +117,7 @@
  */
 - (MyLayoutSize * (^)(id sizeVal, CGFloat addVal, CGFloat multiVal))lBound;
 
+
 /**
  *设置尺寸的最大边界数值。max方法是uBound方法的简化版本。比如：A.max(10) <==>  A.uBound(@10, 0, 1)
  */
@@ -212,6 +197,9 @@
 //上面方法设置的属性的获取。
 @property (nonatomic, assign, readonly) CGFloat addVal;
 @property (nonatomic, assign, readonly) CGFloat multiVal;
+@property (nonatomic, assign, readonly) CGFloat minVal;
+@property (nonatomic, assign, readonly) CGFloat maxVal;
+
 
 /**
  判断尺寸值是否是自适应值。
@@ -238,9 +226,9 @@
  */
 @interface NSArray (MyLayoutMostSize)
 
-//从数组中得到最小的尺寸值。要求数组的元素必须是MyLayoutSize类型
+//从数组中得到最小的尺寸值。
 @property (nonatomic, readonly) MyLayoutMostSize *myMinSize;
-//从数组中得到最大的尺寸值。要求数组的元素必须是MyLayoutSize类型
+//从数组中得到最大的尺寸值。
 @property (nonatomic, readonly) MyLayoutMostSize *myMaxSize;
 
 @end

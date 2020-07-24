@@ -109,8 +109,8 @@
 -(void)createLinearRootLayout
 {
     _rootLayout= [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    _rootLayout.topPadding = 5;
-    _rootLayout.bottomPadding = 5;
+    _rootLayout.paddingTop = 5;
+    _rootLayout.paddingBottom = 5;
     _rootLayout.cacheEstimatedRect = YES;  //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
  
     /*
@@ -165,8 +165,8 @@
 -(void)createRelativeRootLayout
 {
     _rootLayout = [MyRelativeLayout new];
-    _rootLayout.topPadding = 5;
-    _rootLayout.bottomPadding = 5;
+    _rootLayout.paddingTop = 5;
+    _rootLayout.paddingBottom = 5;
     _rootLayout.cacheEstimatedRect = YES; //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
  
     /*
@@ -215,8 +215,8 @@
 -(void)createFloatRootLayout
 {
     _rootLayout= [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
-    _rootLayout.topPadding = 5;
-    _rootLayout.bottomPadding = 5;
+    _rootLayout.paddingTop = 5;
+    _rootLayout.paddingBottom = 5;
     _rootLayout.cacheEstimatedRect = YES; //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
     
     /*

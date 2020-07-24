@@ -1,6 +1,15 @@
 # 版本变更日志
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
+## [V1.9.8](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.1)(2020/07/24)
+### Update
+1. 重写布局库的内部实现，代码更具可读性，计算性能得到进一步的提升，重写了相对布局的内部实现。
+2. 将布局的属性leftPadding,rightPadding,topPadding,bottomPadding,leadingPadding,trailingPadding改名为paddingLeft,paddingRight,paddingTop,paddingBottom,paddingLeading,paddingTrailing。原来的属性名保留但是会提示过期。
+3. 修复布局套布局时进行尺寸评估可能会不准确的BUG。[issue#116](https://github.com/youngsoft/MyLinearLayout/issues/116)
+4. 修复弹性布局MyFlexLayout在单行时子视图不被拉伸的BUG。
+5. 修复相对布局子视图整体水平居中时又设置了padding时的BUG。[issue#120](https://github.com/youngsoft/MyLinearLayout/issues/120)
+6. 优化横竖屏不同布局展示的支持能力，由原先的设备方向变为优先考虑接口方向。[issue#123](https://github.com/youngsoft/MyLinearLayout/issues/123)
+
 ## [V1.9.1](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.1)(2019/12/23)
 ### Added
 1. 流式布局和线性布局添加对停靠属性`gravity`的两个新枚举值： `MyGravity_Vert_Among、MyGravity_Horz_Among`的支持。这两个枚举值可以实现间距的等分拉伸功能。between、around、among这三个拉伸的区别在于和父视图之间的间距上。

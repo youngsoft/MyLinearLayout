@@ -100,7 +100,7 @@
     [hLinearLayout addSubview:_browLabel];
     
     MyLinearLayout *actionshLinearLayout = [[MyLinearLayout alloc] initWithOrientation:MyOrientation_Horz];
-    actionshLinearLayout.rightPadding = 5;
+    actionshLinearLayout.paddingRight = 5;
     actionshLinearLayout.myHeight = MyLayoutSize.wrap;
     actionshLinearLayout.gravity =  MyGravity_Vert_Center;
     actionshLinearLayout.myHorzMargin = 0;

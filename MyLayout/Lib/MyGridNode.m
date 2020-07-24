@@ -913,12 +913,12 @@ typedef struct _MyGridOptionalProperties2 {
         }
 
         NSMutableArray *gravitystrs = [NSMutableArray new];
-        MyGravity horzGravity = gravity & MyGravity_Vert_Mask;
+        MyGravity horzGravity = MYHORZGRAVITY(gravity);
         NSString *horzstr = data[@(horzGravity)];
         if (horzstr != nil) {
             [gravitystrs addObject:horzstr];
         }
-        MyGravity vertGravity = gravity & MyGravity_Horz_Mask;
+        MyGravity vertGravity = MYVERTGRAVITY(gravity);
         NSString *vertstr = data[@(vertGravity)];
         if (vertstr != nil) {
             [gravitystrs addObject:vertstr];
@@ -951,12 +951,12 @@ typedef struct _MyGridOptionalProperties2 {
         }
 
         NSMutableArray *gravitystrs = [NSMutableArray new];
-        MyGravity horzGravity = gravity & MyGravity_Vert_Mask;
+        MyGravity horzGravity = MYHORZGRAVITY(gravity);
         NSString *horzstr = data[@(horzGravity)];
         if (horzstr != nil) {
             [gravitystrs addObject:horzstr];
         }
-        MyGravity vertGravity = gravity & MyGravity_Horz_Mask;
+        MyGravity vertGravity = MYVERTGRAVITY(gravity);
         NSString *vertstr = data[@(vertGravity)];
         if (vertstr != nil) {
             [gravitystrs addObject:vertstr];

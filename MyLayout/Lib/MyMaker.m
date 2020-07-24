@@ -112,35 +112,35 @@
     return [self addMethod:@"clearFloat"];
 }
 
-- (MyMaker *)topPadding {
-    return [self addMethod:@"topPadding"];
+- (MyMaker *)paddingTop {
+    return [self addMethod:@"paddingTop"];
 }
 
-- (MyMaker *)leftPadding {
-    return [self addMethod:@"leftPadding"];
+- (MyMaker *)paddingLeft {
+    return [self addMethod:@"paddingLeft"];
 }
 
-- (MyMaker *)bottomPadding {
-    return [self addMethod:@"bottomPadding"];
+- (MyMaker *)paddingBottom {
+    return [self addMethod:@"paddingBottom"];
 }
 
-- (MyMaker *)rightPadding {
-    return [self addMethod:@"rightPadding"];
+- (MyMaker *)paddingRight {
+    return [self addMethod:@"paddingRight"];
 }
 
-- (MyMaker *)leadingPadding {
-    return [self addMethod:@"leadingPadding"];
+- (MyMaker *)paddingLeading {
+    return [self addMethod:@"paddingLeading"];
 }
 
-- (MyMaker *)trailingPadding {
-    return [self addMethod:@"trailingPadding"];
+- (MyMaker *)paddingTrailing {
+    return [self addMethod:@"paddingTrailing"];
 }
 
 - (MyMaker *)padding {
-    [self addMethod:@"topPadding"];
-    [self addMethod:@"leftPadding"];
-    [self addMethod:@"bottomPadding"];
-    return [self addMethod:@"rightPadding"];
+    [self addMethod:@"paddingTop"];
+    [self addMethod:@"paddingLeft"];
+    [self addMethod:@"paddingBottom"];
+    return [self addMethod:@"paddingRight"];
 }
 
 - (MyMaker *)zeroPadding {
@@ -261,7 +261,7 @@
     return ^id(CGFloat val) {
         for (NSString *key in self->_keys) {
             for (UIView *myView in self->_myViews) {
-                [((MyLayoutPos *)[myView valueForKey:key]) __offset:val];
+                [((MyLayoutPos *)[myView valueForKey:key]) _myOffset:val];
             }
         }
         return self;
@@ -273,7 +273,7 @@
     return ^id(CGFloat val) {
         for (NSString *key in self->_keys) {
             for (UIView *myView in self->_myViews) {
-                [((MyLayoutSize *)[myView valueForKey:key]) __multiply:val];
+                [((MyLayoutSize *)[myView valueForKey:key]) _myMultiply:val];
             }
         }
         return self;
@@ -285,7 +285,7 @@
     return ^id(CGFloat val) {
         for (NSString *key in self->_keys) {
             for (UIView *myView in self->_myViews) {
-                [((MyLayoutSize *)[myView valueForKey:key]) __add:val];
+                [((MyLayoutSize *)[myView valueForKey:key]) _myAdd:val];
             }
         }
         return self;
@@ -303,9 +303,9 @@
                 }
                 id oldVal = [myView valueForKey:key];
                 if ([oldVal isKindOfClass:[MyLayoutPos class]]) {
-                    [((MyLayoutPos *)oldVal) __lBound:val2 offsetVal:0];
+                    [((MyLayoutPos *)oldVal) _myLBound:val2 offsetVal:0];
                 } else if ([oldVal isKindOfClass:[MyLayoutSize class]]) {
-                    [((MyLayoutSize *)oldVal) __lBound:val2 addVal:0 multiVal:1];
+                    [((MyLayoutSize *)oldVal) _myLBound:val2 addVal:0 multiVal:1];
                 }
             }
         }
@@ -324,14 +324,35 @@
                 }
                 id oldVal = [myView valueForKey:key];
                 if ([oldVal isKindOfClass:[MyLayoutPos class]]) {
-                    [((MyLayoutPos *)oldVal) __uBound:val2 offsetVal:0];
+                    [((MyLayoutPos *)oldVal) _myUBound:val2 offsetVal:0];
                 } else if ([oldVal isKindOfClass:[MyLayoutSize class]]) {
-                    [((MyLayoutSize *)oldVal) __uBound:val2 addVal:0 multiVal:1];
+                    [((MyLayoutSize *)oldVal) _myUBound:val2 addVal:0 multiVal:1];
                 }
             }
         }
         return self;
     };
+}
+
+#pragma mark -- Dreprecated methods
+
+- (MyMaker *)topPadding {
+    return self.paddingTop;
+}
+- (MyMaker *)leftPadding {
+    return self.paddingLeft;
+}
+- (MyMaker *)bottomPadding {
+    return self.paddingBottom;
+}
+- (MyMaker *)rightPadding {
+    return self.paddingRight;
+}
+- (MyMaker *)leadingPadding {
+    return self.paddingLeading;
+}
+- (MyMaker *)trailingPadding {
+    return self.paddingTrailing;
 }
 
 @end

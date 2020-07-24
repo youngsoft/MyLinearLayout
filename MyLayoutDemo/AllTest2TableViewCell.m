@@ -80,7 +80,7 @@
     MyBorderline *bld = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
     bld.headIndent = bld.tailIndent = 10;
     rootLayout.bottomBorderline = bld;
-    rootLayout.leftPadding = rootLayout.rightPadding = 10;  //两边保留10的内边距。
+    rootLayout.paddingLeft = rootLayout.paddingRight = 10;  //两边保留10的内边距。
     rootLayout.gravity = MyGravity_Vert_Center;       //整个布局内容垂直居中。
     
     /*
@@ -164,7 +164,7 @@
     MyBorderline *bld = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
     bld.headIndent = bld.tailIndent = 10;
     rootLayout.bottomBorderline = bld;
-    rootLayout.leftPadding = rootLayout.rightPadding = 10;  //两边保留10的内边距。
+    rootLayout.paddingLeft = rootLayout.paddingRight = 10;  //两边保留10的内边距。
     
     
     _headImageView  = [UIImageView new];
@@ -236,7 +236,7 @@
     MyBorderline *bld = [[MyBorderline alloc] initWithColor:[UIColor lightGrayColor]];
     bld.headIndent = bld.tailIndent = 10;
     rootLayout.bottomBorderline = bld;
-    rootLayout.leftPadding = rootLayout.rightPadding = 10;  //两边保留10的内边距。
+    rootLayout.paddingLeft = rootLayout.paddingRight = 10;  //两边保留10的内边距。
     
     _headImageView = [UIImageView new];
     _headImageView.contentMode = UIViewContentModeScaleAspectFit;

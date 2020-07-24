@@ -23,7 +23,7 @@
 @property (nonatomic, strong) MyBorderline *bottomBorderline;   /**底部边界线*/
 @property (nonatomic, strong) MyBorderline *trailingBorderline; /**尾部边界线*/
 @property (nonatomic, strong) MyBorderline *leftBorderline;     /**左边边界线*/
-@property (nonatomic, strong) MyBorderline *rightBorderline;    /**左边边界线*/
+@property (nonatomic, strong) MyBorderline *rightBorderline;    /**右边边界线*/
 
 @property (nonatomic, strong) CAShapeLayer *topBorderlineLayer;
 @property (nonatomic, strong) CAShapeLayer *leadingBorderlineLayer;

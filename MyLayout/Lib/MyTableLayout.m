@@ -15,15 +15,12 @@ static CGFloat sColCountTag = -100000;
 
 + (MyTableRowLayout *)rowSize:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation;
 
-@property (nonatomic, assign, readonly) CGFloat rowSize;
-@property (nonatomic, assign, readonly) CGFloat colSize;
+@property (nonatomic, assign) CGFloat rowSize;
+@property (nonatomic, assign) CGFloat colSize;
 
 @end
 
-@implementation MyTableRowLayout {
-    CGFloat _rowSize;
-    CGFloat _colSize;
-}
+@implementation MyTableRowLayout
 
 - (instancetype)initWith:(CGFloat)rowSize colSize:(CGFloat)colSize orientation:(MyOrientation)orientation {
     self = [super initWithOrientation:orientation];
@@ -31,21 +28,21 @@ static CGFloat sColCountTag = -100000;
         _rowSize = rowSize;
         _colSize = colSize;
 
-        UIView *lsc = self.myCurrentSizeClass;
+        UIView *layoutTraits = self.myDefaultSizeClass;
 
         if (rowSize == MyLayoutSize.average) {
-            lsc.weight = 1;
+            layoutTraits.weight = 1;
         } else if (rowSize > 0) {
             if (orientation == MyOrientation_Horz) {
-                lsc.myHeight = rowSize;
+                [layoutTraits.heightSize _myEqualTo:@(rowSize)];
             } else {
-                lsc.myWidth = rowSize;
+                [layoutTraits.widthSize _myEqualTo:@(rowSize)];
             }
         } else if (rowSize == MyLayoutSize.wrap) {
             if (orientation == MyOrientation_Horz) {
-                [lsc.heightSize __equalTo:@(MyLayoutSize.wrap)];
+                [layoutTraits.heightSize _myEqualTo:@(MyLayoutSize.wrap)];
             } else {
-                [lsc.widthSize __equalTo:@(MyLayoutSize.wrap)];
+                [layoutTraits.widthSize _myEqualTo:@(MyLayoutSize.wrap)];
             }
         } else {
             NSCAssert(0, @"Constraint exception !! rowSize can not set to MyLayoutSize.fill");
@@ -53,11 +50,13 @@ static CGFloat sColCountTag = -100000;
 
         if (colSize == MyLayoutSize.average || colSize == MyLayoutSize.fill || colSize < sColCountTag) {
             if (orientation == MyOrientation_Horz) {
-                [lsc.widthSize __equalTo:nil];
-                lsc.myHorzMargin = 0;
+                [layoutTraits.widthSize _myEqualTo:nil];
+                [layoutTraits.leadingPos _myEqualTo:@(0)];
+                [layoutTraits.trailingPos _myEqualTo:@(0)];
             } else {
-                [lsc.heightSize __equalTo:nil];
-                lsc.myVertMargin = 0;
+                [layoutTraits.heightSize _myEqualTo:nil];
+                [layoutTraits.topPos _myEqualTo:@(0)];
+                [layoutTraits.bottomPos _myEqualTo:@(0)];
             }
         }
     }
@@ -70,17 +69,20 @@ static CGFloat sColCountTag = -100000;
      有时候我们希望列子视图的边界线能够布满整个行(比如垂直表格中，所有列子视图的的高度都和所在行的行高是一致的）因此我们需要将列子视图的边界线的可显示范围进行调整。
      因此我们重载这个方法来解决这个问题，这个方法可以将列子视图的边界线的区域进行扩充和调整，目的是为了让列子视图的边界线能够布满整个行布局上。
      */
+    
+    MyLinearLayoutTraits *layoutTraits = (MyLinearLayoutTraits*)self.myEngine.currentSizeClass;
+    
     if (self.rowSize == MyLayoutSize.wrap) {
-        if (self.orientation == MyOrientation_Horz) {
+        if (layoutTraits.orientation == MyOrientation_Horz) {
             //垂直表格下，行是水平的，所以这里需要将列子视图的y轴的位置和行对齐。
-            pRect->origin.y = 0 - sublayout.frame.origin.y;
+            pRect->origin.y = 0 - CGRectGetMinY(sublayout.frame);
             //垂直表格下，行是水平的，所以这里需要将子视图的边界线的高度和行的高度保持一致。
-            pRect->size.height = self.bounds.size.height;
+            pRect->size.height = CGRectGetHeight(self.bounds);
         } else {
             //水平表格下，行是垂直的，所以这里需要将列子视图的x轴的位置和行对齐。
-            pRect->origin.x = 0 - sublayout.frame.origin.x;
+            pRect->origin.x = 0 - CGRectGetMinX(sublayout.frame);
             //水平表格下，行是垂直的，所以这里需要将子视图的边界线的宽度和行的宽度保持一致。
-            pRect->size.width = self.bounds.size.width;
+            pRect->size.width = CGRectGetWidth(self.bounds);
         }
     }
 }
@@ -125,10 +127,10 @@ static CGFloat sColCountTag = -100000;
 }
 
 - (MyLinearLayout *)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex {
-    MyTableLayout *lsc = self.myCurrentSizeClass;
+    MyTableLayout *layoutTraits = self.myDefaultSizeClass;
 
     MyOrientation ori = MyOrientation_Vert;
-    if (lsc.orientation == MyOrientation_Vert) {
+    if (layoutTraits.orientation == MyOrientation_Vert) {
         ori = MyOrientation_Horz;
     } else {
         ori = MyOrientation_Vert;
@@ -136,9 +138,9 @@ static CGFloat sColCountTag = -100000;
 
     MyTableRowLayout *rowView = [MyTableRowLayout rowSize:rowSize colSize:colSize orientation:ori];
     if (ori == MyOrientation_Horz) {
-        rowView.subviewHSpace = lsc.subviewHSpace;
+        rowView.subviewHSpace = layoutTraits.subviewHSpace;
     } else {
-        rowView.subviewVSpace = lsc.subviewVSpace;
+        rowView.subviewVSpace = layoutTraits.subviewVSpace;
     }
     rowView.intelligentBorderline = self.intelligentBorderline;
     [super insertSubview:rowView atIndex:rowIndex];
@@ -169,33 +171,33 @@ static CGFloat sColCountTag = -100000;
 - (void)insertCol:(UIView *)colView atIndexPath:(NSIndexPath *)indexPath {
     MyTableRowLayout *rowView = (MyTableRowLayout *)[self viewAtRowIndex:indexPath.row];
 
-    MyLinearLayout *rowsc = rowView.myCurrentSizeClass;
-    UIView *colsc = colView.myCurrentSizeClass;
+    MyLinearLayout *rowViewTraits = rowView.myDefaultSizeClass;
+    UIView *colViewTraits = colView.myDefaultSizeClass;
 
     if (rowView.colSize == MyLayoutSize.average) {
-        colsc.weight = 1;
+        colViewTraits.weight = 1;
     } else if (rowView.colSize < sColCountTag) {
         NSUInteger colCount = sColCountTag - rowView.colSize;
-        if (rowsc.orientation == MyOrientation_Horz) {
-            [[[colsc.widthSize __equalTo:rowView.widthSize] __multiply:(1.0 / colCount)] __add:-1 * rowView.subviewHSpace * (colCount - 1.0) / colCount];
+        if (rowViewTraits.orientation == MyOrientation_Horz) {
+            [[[colViewTraits.widthSize _myEqualTo:rowView.widthSize] _myMultiply:(1.0 / colCount)] _myAdd:-1 * rowView.subviewHSpace * (colCount - 1.0) / colCount];
         } else {
-            [[[colsc.heightSize __equalTo:rowView.heightSize] __multiply:(1.0 / colCount)] __add:-1 * rowView.subviewVSpace * (colCount - 1.0) / colCount];
+            [[[colViewTraits.heightSize _myEqualTo:rowView.heightSize] _myMultiply:(1.0 / colCount)] _myAdd:-1 * rowView.subviewVSpace * (colCount - 1.0) / colCount];
         }
     } else if (rowView.colSize > 0) {
-        if (rowsc.orientation == MyOrientation_Horz) {
-            colsc.myWidth = rowView.colSize;
+        if (rowViewTraits.orientation == MyOrientation_Horz) {
+            [colViewTraits.widthSize _myEqualTo:@(rowView.colSize)];
         } else {
-            colsc.myHeight = rowView.colSize;
+            [colViewTraits.heightSize _myEqualTo:@(rowView.colSize)];
         }
     }
 
-    if (rowsc.orientation == MyOrientation_Horz) {
-        if (CGRectGetHeight(colView.bounds) == 0 && colsc.heightSizeInner.dimeVal == nil) {
-            [colsc.heightSize __equalTo:rowsc.heightSize priority:MyPriority_Low];
+    if (rowViewTraits.orientation == MyOrientation_Horz) {
+        if (CGRectGetHeight(colView.bounds) == 0 && colViewTraits.heightSizeInner.val == nil) {
+            [colViewTraits.heightSize _myEqualTo:rowViewTraits.heightSize priority:MyPriority_Low];
         }
     } else {
-        if (CGRectGetWidth(colView.bounds) == 0 && colsc.widthSizeInner.dimeVal == nil) {
-            [colsc.widthSize __equalTo:rowsc.widthSize priority:MyPriority_Low];
+        if (CGRectGetWidth(colView.bounds) == 0 && colViewTraits.widthSizeInner.val == nil) {
+            [colViewTraits.widthSize _myEqualTo:rowViewTraits.widthSize priority:MyPriority_Low];
         }
     }
 
@@ -269,7 +271,7 @@ static CGFloat sColCountTag = -100000;
 }
 
 - (id)createSizeClassInstance {
-    return [MyTableLayoutViewSizeClass new];
+    return [MyTableLayoutTraits new];
 }
 
 @end

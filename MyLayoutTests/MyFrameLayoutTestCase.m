@@ -184,8 +184,8 @@
     //上面在滚动视图下。
     
     MyLinearLayout * dataContentV = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    dataContentV.topPadding = 64;
-    dataContentV.bottomPadding = 64;      // + 10;
+    dataContentV.paddingTop = 64;
+    dataContentV.paddingBottom = 64;      // + 10;
     dataContentV.myCenterX = 0;
     dataContentV.myCenterY = 0;
     dataContentV.myHeight = MyLayoutSize.wrap;
@@ -347,7 +347,7 @@
     _layoutRoot.myLeft =
     _layoutRoot.myRight = 0;
     _layoutRoot.wrapContentHeight = YES;
-    _layoutRoot.bottomPadding = 12;
+    _layoutRoot.paddingBottom = 12;
     // _layoutRoot.backgroundColor = [UIColor whiteColor];
     //_layoutRoot.clipsToBounds = YES;
     _layoutRoot.frame = CGRectMake(0, 0, 100, 0);

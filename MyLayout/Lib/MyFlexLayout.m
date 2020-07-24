@@ -78,10 +78,10 @@ const int MyFlex_Auto = -1;
         return MyLayoutSize.wrap;
     } else if (self.view.widthSizeInner.isFill) {
         return self.view.widthSizeInner.multiVal == 1 ? MyLayoutSize.fill : self.view.widthSizeInner.multiVal;
-    } else if (self.view.widthSizeInner != nil && self.view.widthSizeInner.dimeValType == MyLayoutValueType_Nil) {
+    } else if (self.view.widthSizeInner != nil && self.view.widthSizeInner.valType == MyLayoutValType_Nil) {
         return MyLayoutSize.empty;
-    } else if (self.view.widthSizeInner.dimeNumVal != nil) {
-        return self.view.widthSizeInner.dimeNumVal.doubleValue;
+    } else if (self.view.widthSizeInner.numberVal != nil) {
+        return self.view.widthSizeInner.numberVal.doubleValue;
     } else {
         return MyLayoutSize.wrap;
     }
@@ -100,10 +100,10 @@ const int MyFlex_Auto = -1;
         return MyLayoutSize.wrap;
     } else if (self.view.heightSizeInner.isFill) {
         return self.view.heightSizeInner.multiVal == 1 ? MyLayoutSize.fill : self.view.heightSizeInner.multiVal;
-    } else if (self.view.heightSizeInner != nil && self.view.heightSizeInner.dimeValType == MyLayoutValueType_Nil) {
+    } else if (self.view.heightSizeInner != nil && self.view.heightSizeInner.valType == MyLayoutValType_Nil) {
         return MyLayoutSize.empty;
-    } else if (self.view.heightSizeInner.dimeNumVal != nil) {
-        return self.view.heightSizeInner.dimeNumVal.doubleValue;
+    } else if (self.view.heightSizeInner.numberVal != nil) {
+        return self.view.heightSizeInner.numberVal.doubleValue;
     } else {
         return MyLayoutSize.wrap;
     }
@@ -536,93 +536,93 @@ const int MyFlex_Auto = -1;
     return self;
 }
 
-- (CGSize)calcLayoutSize:(CGSize)size isEstimate:(BOOL)isEstimate pHasSubLayout:(BOOL *)pHasSubLayout sizeClass:(MySizeClass)sizeClass sbs:(NSMutableArray *)sbs {
+- (CGSize)calcLayoutSize:(CGSize)size subviewEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines context:(MyLayoutContext *)context {
     //将flexbox中的属性映射为MyFlowLayout中的属性。
-    MyFlexLayout *lsc = self.myCurrentSizeClass;
+    MyFlowLayoutTraits *layoutTraits = (MyFlowLayoutTraits*)context->layoutViewEngine.currentSizeClass;
+    if (context->subviewEngines == nil) {
+        context->subviewEngines = [layoutTraits filterEngines:subviewEngines];
+    }
+    
     id<MyFlexBox> myFlex = self.myFlex;
 
     //最先设置方向。
     switch (myFlex.attrs.flex_direction) {
         case MyFlexDirection_Column_Reverse: { //column_reverse
-            lsc.orientation = MyOrientation_Horz;
-            lsc.layoutTransform = CGAffineTransformMake(1, 0, 0, -1, 0, 0); //垂直翻转
+            layoutTraits.orientation = MyOrientation_Horz;
+            layoutTraits.layoutTransform = CGAffineTransformMake(1, 0, 0, -1, 0, 0); //垂直翻转
         } break;
         case MyFlexDirection_Column: { //column;
-            lsc.orientation = MyOrientation_Horz;
-            lsc.layoutTransform = CGAffineTransformIdentity;
+            layoutTraits.orientation = MyOrientation_Horz;
+            layoutTraits.layoutTransform = CGAffineTransformIdentity;
         } break;
         case MyFlexDirection_Row_Reverse: { //row_reverse
-            lsc.orientation = MyOrientation_Vert;
-            lsc.layoutTransform = CGAffineTransformMake(-1, 0, 0, 1, 0, 0); //水平翻转
+            layoutTraits.orientation = MyOrientation_Vert;
+            layoutTraits.layoutTransform = CGAffineTransformMake(-1, 0, 0, 1, 0, 0); //水平翻转
         } break;
         case MyFlexDirection_Row:
         default: {
-            lsc.orientation = MyOrientation_Vert;
-            lsc.layoutTransform = CGAffineTransformIdentity;
+            layoutTraits.orientation = MyOrientation_Vert;
+            layoutTraits.layoutTransform = CGAffineTransformIdentity;
         } break;
     }
 
     //设置换行
     switch (myFlex.attrs.flex_wrap) {
         case MyFlexWrap_Wrap: {
-            lsc.arrangedCount = myFlex.attrs.item_size;
+            layoutTraits.arrangedCount = myFlex.attrs.item_size;
         } break;
         case MyFlexWrap_Wrap_Reverse: {
-            lsc.arrangedCount = myFlex.attrs.item_size;
-            lsc.layoutTransform = CGAffineTransformConcat(lsc.layoutTransform, (lsc.orientation == MyOrientation_Vert) ? CGAffineTransformMake(1, 0, 0, -1, 0, 0) : CGAffineTransformMake(-1, 0, 0, 1, 0, 0));
+            layoutTraits.arrangedCount = myFlex.attrs.item_size;
+            layoutTraits.layoutTransform = CGAffineTransformConcat(layoutTraits.layoutTransform, (layoutTraits.orientation == MyOrientation_Vert) ? CGAffineTransformMake(1, 0, 0, -1, 0, 0) : CGAffineTransformMake(-1, 0, 0, 1, 0, 0));
         } break;
         case MyFlexWrap_NoWrap:
         default: {
-            lsc.arrangedCount = NSIntegerMax;
+            layoutTraits.arrangedCount = NSIntegerMax;
         } break;
     }
 
-    //处理子视图的flexitem设置。
-    if (sbs == nil) {
-        sbs = [self myGetLayoutSubviews];
-    }
-
+   
     //按order排序。
-    [sbs sortWithOptions:NSSortStable
-         usingComparator:^NSComparisonResult(UIView *_Nonnull obj1, UIView *_Nonnull obj2) {
-             return obj1.myFlex.attrs.order - obj2.myFlex.attrs.order;
+    [context->subviewEngines sortWithOptions:NSSortStable
+         usingComparator:^NSComparisonResult(MyLayoutEngine *_Nonnull obj1, MyLayoutEngine *_Nonnull obj2) {
+            return obj1.currentSizeClass.view.myFlex.attrs.order - obj2.currentSizeClass.view.myFlex.attrs.order;
          }];
 
-    for (UIView *sbv in sbs) {
-        id<MyFlexItem> flexItem = sbv.myFlex;
-        UIView *sbvsc = sbv.myCurrentSizeClass;
+    for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
+        MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+        id<MyFlexItem> flexItem = subviewTraits.view.myFlex;
 
         //flex_grow，如果子视图有设置grow则父视图的换行不起作用。
-        sbvsc.weight = flexItem.attrs.flex_grow;
+        subviewTraits.weight = flexItem.attrs.flex_grow;
 
         //flex_shrink
-        if (lsc.orientation == MyOrientation_Vert) {
-            sbvsc.widthSize.shrink = flexItem.attrs.flex_shrink != MyFlex_Auto ? flexItem.attrs.flex_shrink : 0;
+        if (layoutTraits.orientation == MyOrientation_Vert) {
+            subviewTraits.widthSize.shrink = flexItem.attrs.flex_shrink != MyFlex_Auto ? flexItem.attrs.flex_shrink : 0;
         } else {
-            sbvsc.heightSize.shrink = flexItem.attrs.flex_shrink != MyFlex_Auto ? flexItem.attrs.flex_shrink : 0;
+            subviewTraits.heightSize.shrink = flexItem.attrs.flex_shrink != MyFlex_Auto ? flexItem.attrs.flex_shrink : 0;
         }
 
         //如果没有设置尺寸约束则默认是自适应。
-        if (sbvsc.widthSizeInner.dimeVal == nil) {
-            [sbvsc.widthSize __equalTo:@(MyLayoutSize.wrap)];
+        if (subviewTraits.widthSizeInner.val == nil) {
+            [subviewTraits.widthSize _myEqualTo:@(MyLayoutSize.wrap)];
         }
-        if (sbvsc.heightSizeInner.dimeVal == nil) {
-            [sbvsc.heightSize __equalTo:@(MyLayoutSize.wrap)];
+        if (subviewTraits.heightSizeInner.val == nil) {
+            [subviewTraits.heightSize _myEqualTo:@(MyLayoutSize.wrap)];
         }
 
         //基准值设置。
         if (flexItem.attrs.flex_basis != MyFlex_Auto) {
-            if (lsc.orientation == MyOrientation_Vert) {
+            if (layoutTraits.orientation == MyOrientation_Vert) {
                 if (flexItem.attrs.flex_basis > 0 && flexItem.attrs.flex_basis < 1) {
-                    [[sbvsc.widthSize __equalTo:@(MyLayoutSize.fill)] __multiply:flexItem.attrs.flex_basis];
+                    [[subviewTraits.widthSize _myEqualTo:@(MyLayoutSize.fill)] _myMultiply:flexItem.attrs.flex_basis];
                 } else {
-                    [sbvsc.widthSize __equalTo:@(flexItem.attrs.flex_basis)];
+                    [subviewTraits.widthSize _myEqualTo:@(flexItem.attrs.flex_basis)];
                 }
             } else {
                 if (flexItem.attrs.flex_basis > 0 && flexItem.attrs.flex_basis < 1) {
-                    [[sbvsc.heightSize __equalTo:@(MyLayoutSize.fill)] __multiply:flexItem.attrs.flex_basis];
+                    [[subviewTraits.heightSize _myEqualTo:@(MyLayoutSize.fill)] _myMultiply:flexItem.attrs.flex_basis];
                 } else {
-                    [sbvsc.heightSize __equalTo:@(flexItem.attrs.flex_basis)];
+                    [subviewTraits.heightSize _myEqualTo:@(flexItem.attrs.flex_basis)];
                 }
             }
         }
@@ -631,22 +631,22 @@ const int MyFlex_Auto = -1;
         int align_self = flexItem.attrs.align_self;
         switch (align_self) {
             case -1:
-                sbvsc.alignment = MyGravity_None;
+                subviewTraits.alignment = MyGravity_None;
                 break;
             case MyFlexGravity_Flex_Start:
-                sbvsc.alignment = (lsc.orientation == MyOrientation_Vert) ? MyGravity_Vert_Top : MyGravity_Horz_Leading;
+                subviewTraits.alignment = (layoutTraits.orientation == MyOrientation_Vert) ? MyGravity_Vert_Top : MyGravity_Horz_Leading;
                 break;
             case MyFlexGravity_Flex_End:
-                sbvsc.alignment = (lsc.orientation == MyOrientation_Vert) ? MyGravity_Vert_Bottom : MyGravity_Horz_Trailing;
+                subviewTraits.alignment = (layoutTraits.orientation == MyOrientation_Vert) ? MyGravity_Vert_Bottom : MyGravity_Horz_Trailing;
                 break;
             case MyFlexGravity_Center:
-                sbvsc.alignment = (lsc.orientation == MyOrientation_Vert) ? MyGravity_Vert_Center : MyGravity_Horz_Center;
+                subviewTraits.alignment = (layoutTraits.orientation == MyOrientation_Vert) ? MyGravity_Vert_Center : MyGravity_Horz_Center;
                 break;
             case MyFlexGravity_Baseline:
-                sbvsc.alignment = (lsc.orientation == MyOrientation_Vert) ? MyGravity_Vert_Baseline : MyGravity_None;
+                subviewTraits.alignment = (layoutTraits.orientation == MyOrientation_Vert) ? MyGravity_Vert_Baseline : MyGravity_None;
                 break;
             case MyFlexGravity_Stretch:
-                sbvsc.alignment = (lsc.orientation == MyOrientation_Vert) ? MyGravity_Vert_Stretch : MyGravity_Horz_Stretch;
+                subviewTraits.alignment = (layoutTraits.orientation == MyOrientation_Vert) ? MyGravity_Vert_Stretch : MyGravity_Horz_Stretch;
                 break;
             default:
                 break;
@@ -654,139 +654,139 @@ const int MyFlex_Auto = -1;
     }
 
     //设置主轴的水平对齐和拉伸
-    MyGravity vertGravity = lsc.gravity & MyGravity_Horz_Mask;
-    MyGravity horzGravity = lsc.gravity & MyGravity_Vert_Mask;
+    MyGravity vertGravity = MYVERTGRAVITY(layoutTraits.gravity);
+    MyGravity horzGravity = MYHORZGRAVITY(layoutTraits.gravity);
     switch (myFlex.attrs.justify_content) {
         case MyFlexGravity_Flex_End:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.gravity = MyGravity_Horz_Trailing | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.gravity = MyGravity_Horz_Trailing | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Bottom | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Bottom | horzGravity;
             }
             break;
         case MyFlexGravity_Center:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.gravity = MyGravity_Horz_Center | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.gravity = MyGravity_Horz_Center | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Center | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Center | horzGravity;
             }
             break;
         case MyFlexGravity_Space_Between:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.gravity = MyGravity_Horz_Between | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.gravity = MyGravity_Horz_Between | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Between | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Between | horzGravity;
             }
             break;
         case MyFlexGravity_Space_Around:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.gravity = MyGravity_Horz_Around | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.gravity = MyGravity_Horz_Around | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Around | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Around | horzGravity;
             }
             break;
         case MyFlexGravity_Flex_Start:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.gravity = MyGravity_Horz_Leading | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.gravity = MyGravity_Horz_Leading | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Top | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Top | horzGravity;
             }
         default:
             break;
     }
 
     //次轴的对齐处理。
-    MyGravity vertArrangedGravity = lsc.arrangedGravity & MyGravity_Horz_Mask;
-    MyGravity horzArrangedGravity = lsc.arrangedGravity & MyGravity_Vert_Mask;
+    MyGravity vertArrangedGravity = MYVERTGRAVITY(layoutTraits.arrangedGravity);
+    MyGravity horzArrangedGravity = MYHORZGRAVITY(layoutTraits.arrangedGravity);
     switch (myFlex.attrs.align_items) {
         case MyFlexGravity_Flex_End:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.arrangedGravity = MyGravity_Vert_Bottom | horzArrangedGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.arrangedGravity = MyGravity_Vert_Bottom | horzArrangedGravity;
             } else {
-                lsc.arrangedGravity = MyGravity_Horz_Trailing | vertArrangedGravity;
+                layoutTraits.arrangedGravity = MyGravity_Horz_Trailing | vertArrangedGravity;
             }
             break;
         case MyFlexGravity_Center:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.arrangedGravity = MyGravity_Vert_Center | horzArrangedGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.arrangedGravity = MyGravity_Vert_Center | horzArrangedGravity;
             } else {
-                lsc.arrangedGravity = MyGravity_Horz_Center | vertArrangedGravity;
+                layoutTraits.arrangedGravity = MyGravity_Horz_Center | vertArrangedGravity;
             }
             break;
         case MyFlexGravity_Baseline:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.arrangedGravity = MyGravity_Vert_Baseline | horzArrangedGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.arrangedGravity = MyGravity_Vert_Baseline | horzArrangedGravity;
             } else {
-                lsc.arrangedGravity = MyGravity_Horz_Leading | vertArrangedGravity;
+                layoutTraits.arrangedGravity = MyGravity_Horz_Leading | vertArrangedGravity;
             }
             break;
         case MyFlexGravity_Flex_Start:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.arrangedGravity = MyGravity_Vert_Top | horzArrangedGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.arrangedGravity = MyGravity_Vert_Top | horzArrangedGravity;
             } else {
-                lsc.arrangedGravity = MyGravity_Horz_Leading | vertArrangedGravity;
+                layoutTraits.arrangedGravity = MyGravity_Horz_Leading | vertArrangedGravity;
             }
             break;
         case MyFlexGravity_Stretch:
         default:
-            if (lsc.orientation == MyOrientation_Vert) {
-                lsc.arrangedGravity = MyGravity_Vert_Stretch | horzArrangedGravity;
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.arrangedGravity = MyGravity_Vert_Stretch | horzArrangedGravity;
             } else {
-                lsc.arrangedGravity = MyGravity_Horz_Stretch | vertArrangedGravity;
+                layoutTraits.arrangedGravity = MyGravity_Horz_Stretch | vertArrangedGravity;
             }
             break;
     }
 
     //多行下的整体停靠处理。
-    vertGravity = lsc.gravity & MyGravity_Horz_Mask;
-    horzGravity = lsc.gravity & MyGravity_Vert_Mask;
+    vertGravity = MYVERTGRAVITY(layoutTraits.gravity);
+    horzGravity = MYHORZGRAVITY(layoutTraits.gravity);
     switch (myFlex.attrs.align_content) {
         case MyFlexGravity_Flex_End:
-            if (lsc.orientation == MyOrientation_Horz) {
-                lsc.gravity = MyGravity_Horz_Trailing | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Horz) {
+                layoutTraits.gravity = MyGravity_Horz_Trailing | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Bottom | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Bottom | horzGravity;
             }
             break;
         case MyFlexGravity_Center:
-            if (lsc.orientation == MyOrientation_Horz) {
-                lsc.gravity = MyGravity_Horz_Center | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Horz) {
+                layoutTraits.gravity = MyGravity_Horz_Center | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Center | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Center | horzGravity;
             }
             break;
         case MyFlexGravity_Space_Between:
-            if (lsc.orientation == MyOrientation_Horz) {
-                lsc.gravity = MyGravity_Horz_Between | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Horz) {
+                layoutTraits.gravity = MyGravity_Horz_Between | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Between | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Between | horzGravity;
             }
             break;
         case MyFlexGravity_Space_Around:
-            if (lsc.orientation == MyOrientation_Horz) {
-                lsc.gravity = MyGravity_Horz_Around | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Horz) {
+                layoutTraits.gravity = MyGravity_Horz_Around | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Around | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Around | horzGravity;
             }
             break;
         case MyFlexGravity_Flex_Start:
-            if (lsc.orientation == MyOrientation_Horz) {
-                lsc.gravity = MyGravity_Horz_Leading | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Horz) {
+                layoutTraits.gravity = MyGravity_Horz_Leading | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Top | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Top | horzGravity;
             }
             break;
         case MyFlexGravity_Stretch:
         default:
-            if (lsc.orientation == MyOrientation_Horz) {
-                lsc.gravity = MyGravity_Horz_Stretch | vertGravity;
+            if (layoutTraits.orientation == MyOrientation_Horz) {
+                layoutTraits.gravity = MyGravity_Horz_Stretch | vertGravity;
             } else {
-                lsc.gravity = MyGravity_Vert_Stretch | horzGravity;
+                layoutTraits.gravity = MyGravity_Vert_Stretch | horzGravity;
             }
             break;
     }
 
-    return [super calcLayoutSize:size isEstimate:isEstimate pHasSubLayout:pHasSubLayout sizeClass:sizeClass sbs:sbs];
+    return [super calcLayoutSize:size subviewEngines:subviewEngines context:context];
 }
 
 @end

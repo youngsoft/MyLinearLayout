@@ -7,16 +7,181 @@
 //
 
 #import "MyLayoutSizeClass.h"
-#import "MyBaseLayout.h"
 #import "MyGridNode.h"
 #import "MyLayoutPosInner.h"
 #import "MyLayoutSizeInner.h"
 
-@interface MyViewSizeClass ()
+
+@implementation MyLayoutEngine
+
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+        _leading = CGFLOAT_MAX;
+        _trailing = CGFLOAT_MAX;
+        _top = CGFLOAT_MAX;
+        _bottom = CGFLOAT_MAX;
+        _width = CGFLOAT_MAX;
+        _height = CGFLOAT_MAX;
+    }
+
+    return self;
+}
+
+- (void)reset {
+    _leading = CGFLOAT_MAX;
+    _trailing = CGFLOAT_MAX;
+    _top = CGFLOAT_MAX;
+    _bottom = CGFLOAT_MAX;
+    _width = CGFLOAT_MAX;
+    _height = CGFLOAT_MAX;
+}
+
+- (CGRect)frame {
+    return CGRectMake(_leading, _top, _width, _height);
+}
+
+- (void)setFrame:(CGRect)frame {
+    _leading = frame.origin.x;
+    _top = frame.origin.y;
+    _width = frame.size.width;
+    _height = frame.size.height;
+    _trailing = _leading + _width;
+    _bottom = _top + _height;
+}
+
+- (CGSize)size {
+    return CGSizeMake(_width, _height);
+}
+
+- (void)setSize:(CGSize)size {
+    _width = size.width;
+    _height = size.height;
+}
+
+- (CGPoint)origin {
+    return CGPointMake(_leading, _top);
+}
+
+- (void)setOrigin:(CGPoint)origin {
+    _leading = origin.x;
+    _top = origin.y;
+}
+
+- (BOOL)multiple {
+    return self.sizeClasses.count > 1;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"leading:%g, top:%g, width:%g, height:%g, trailing:%g, bottom:%g", _leading, _top, _width, _height, _trailing, _bottom];
+}
+
+- (MyViewTraits *)fetchView:(UIView *)view layoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass {
+    MyViewTraits *viewTraits = nil;
+    if (self.sizeClasses == nil) {
+        self.sizeClasses = [NSMutableDictionary new];
+    } else {
+      viewTraits = (MyViewTraits *)[self.sizeClasses objectForKey:@(sizeClass)];
+    }
+     
+    if (viewTraits == nil) {
+        MyViewTraits *srcTraits = (MyViewTraits *)[self.sizeClasses objectForKey:@(srcSizeClass)];
+        if (srcTraits == nil) {
+            viewTraits = [view createSizeClassInstance];
+        } else {
+            viewTraits = [srcTraits copy];
+        }
+        viewTraits.view = view;
+        [self.sizeClasses setObject:viewTraits forKey:@(sizeClass)];
+    }
+    return viewTraits;
+}
+
+- (MyViewTraits *)fetchView:(UIView *)view bestLayoutSizeClass:(MySizeClass)sizeClass {
+
+    MySizeClass wscType = sizeClass & 0x03;
+    MySizeClass hscType = sizeClass & 0x0C;
+    MySizeClass oriType = sizeClass & 0xC0;
+
+    if (self.sizeClasses == nil) {
+        self.sizeClasses = [NSMutableDictionary new];
+    }
+    MySizeClass searchType;
+    MyViewTraits *viewTraits = nil;
+    if (self.sizeClasses.count > 1) {
+        //first search the most exact SizeClass
+        searchType = wscType | hscType | oriType;
+        viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+        if (viewTraits != nil) {
+            return viewTraits;
+        }
+        searchType = wscType | hscType;
+        if (searchType != sizeClass) {
+            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            if (viewTraits != nil) {
+                return viewTraits;
+            }
+        }
+
+        searchType = MySizeClass_wAny | hscType | oriType;
+        if (oriType != 0 && searchType != sizeClass) {
+            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            if (viewTraits != nil) {
+                return viewTraits;
+            }
+        }
+
+        searchType = MySizeClass_wAny | hscType;
+        if (searchType != sizeClass) {
+            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            if (viewTraits != nil) {
+                return viewTraits;
+            }
+        }
+
+        searchType = wscType | MySizeClass_hAny | oriType;
+        if (oriType != 0 && searchType != sizeClass) {
+            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            if (viewTraits != nil) {
+                return viewTraits;
+            }
+        }
+
+        searchType = wscType | MySizeClass_hAny;
+        if (searchType != sizeClass) {
+            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            if (viewTraits != nil) {
+                return viewTraits;
+            }
+        }
+
+        searchType = MySizeClass_wAny | MySizeClass_hAny | oriType;
+        if (oriType != 0 && searchType != sizeClass) {
+            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            if (viewTraits != nil) {
+                return viewTraits;
+            }
+        }
+    }
+
+    searchType = MySizeClass_wAny | MySizeClass_hAny;
+    viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+    if (viewTraits == nil) {
+        viewTraits = [view createSizeClassInstance];
+        viewTraits.view = view;
+        [self.sizeClasses setObject:viewTraits forKey:@(searchType)];
+    }
+    return viewTraits;
+}
+
 
 @end
 
-@implementation MyViewSizeClass
+@interface MyViewTraits ()
+
+@end
+
+@implementation MyViewTraits
 
 BOOL _myisRTL = NO;
 
@@ -57,11 +222,11 @@ BOOL _myisRTL = NO;
 }
 
 - (MyLayoutPos *)leftPosInner {
-    return [MyViewSizeClass isRTL] ? self.trailingPosInner : self.leadingPosInner;
+    return [MyViewTraits isRTL] ? self.trailingPosInner : self.leadingPosInner;
 }
 
 - (MyLayoutPos *)rightPosInner {
-    return [MyViewSizeClass isRTL] ? self.leadingPosInner : self.trailingPosInner;
+    return [MyViewTraits isRTL] ? self.leadingPosInner : self.trailingPosInner;
 }
 
 - (MyLayoutPos *)baselinePosInner {
@@ -82,7 +247,7 @@ BOOL _myisRTL = NO;
     if (_topPos == nil) {
         _topPos = [MyLayoutPos new];
         _topPos.view = self.view;
-        _topPos.pos = MyGravity_Vert_Top;
+        _topPos.anchorType = MyLayoutAnchorType_Top;
     }
     return _topPos;
 }
@@ -91,7 +256,7 @@ BOOL _myisRTL = NO;
     if (_leadingPos == nil) {
         _leadingPos = [MyLayoutPos new];
         _leadingPos.view = self.view;
-        _leadingPos.pos = MyGravity_Horz_Leading;
+        _leadingPos.anchorType = MyLayoutAnchorType_Leading;
     }
 
     return _leadingPos;
@@ -101,7 +266,7 @@ BOOL _myisRTL = NO;
     if (_bottomPos == nil) {
         _bottomPos = [MyLayoutPos new];
         _bottomPos.view = self.view;
-        _bottomPos.pos = MyGravity_Vert_Bottom;
+        _bottomPos.anchorType = MyLayoutAnchorType_Bottom;
     }
     return _bottomPos;
 }
@@ -110,7 +275,7 @@ BOOL _myisRTL = NO;
     if (_trailingPos == nil) {
         _trailingPos = [MyLayoutPos new];
         _trailingPos.view = self.view;
-        _trailingPos.pos = MyGravity_Horz_Trailing;
+        _trailingPos.anchorType = MyLayoutAnchorType_Trailing;
     }
     return _trailingPos;
 }
@@ -119,7 +284,7 @@ BOOL _myisRTL = NO;
     if (_centerXPos == nil) {
         _centerXPos = [MyLayoutPos new];
         _centerXPos.view = self.view;
-        _centerXPos.pos = MyGravity_Horz_Center;
+        _centerXPos.anchorType = MyLayoutAnchorType_CenterX;
     }
     return _centerXPos;
 }
@@ -128,30 +293,30 @@ BOOL _myisRTL = NO;
     if (_centerYPos == nil) {
         _centerYPos = [MyLayoutPos new];
         _centerYPos.view = self.view;
-        _centerYPos.pos = MyGravity_Vert_Center;
+        _centerYPos.anchorType = MyLayoutAnchorType_CenterY;
     }
     return _centerYPos;
 }
 
 - (MyLayoutPos *)leftPos {
-    return [MyViewSizeClass isRTL] ? self.trailingPos : self.leadingPos;
+    return [MyViewTraits isRTL] ? self.trailingPos : self.leadingPos;
 }
 
 - (MyLayoutPos *)rightPos {
-    return [MyViewSizeClass isRTL] ? self.leadingPos : self.trailingPos;
+    return [MyViewTraits isRTL] ? self.leadingPos : self.trailingPos;
 }
 
 - (MyLayoutPos *)baselinePos {
     if (_baselinePos == nil) {
         _baselinePos = [MyLayoutPos new];
         _baselinePos.view = self.view;
-        _baselinePos.pos = MyGravity_Vert_Baseline;
+        _baselinePos.anchorType = MyLayoutAnchorType_Baseline;
     }
     return _baselinePos;
 }
 
 - (CGFloat)myTop {
-    return self.topPosInner.absVal;
+    return self.topPosInner.measure;
 }
 
 - (void)setMyTop:(CGFloat)myTop {
@@ -159,7 +324,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myLeading {
-    return self.leadingPosInner.absVal;
+    return self.leadingPosInner.measure;
 }
 
 - (void)setMyLeading:(CGFloat)myLeading {
@@ -167,7 +332,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myBottom {
-    return self.bottomPosInner.absVal;
+    return self.bottomPosInner.measure;
 }
 
 - (void)setMyBottom:(CGFloat)myBottom {
@@ -175,7 +340,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myTrailing {
-    return self.trailingPosInner.absVal;
+    return self.trailingPosInner.measure;
 }
 
 - (void)setMyTrailing:(CGFloat)myTrailing {
@@ -183,7 +348,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myCenterX {
-    return self.centerXPosInner.absVal;
+    return self.centerXPosInner.measure;
 }
 
 - (void)setMyCenterX:(CGFloat)myCenterX {
@@ -191,7 +356,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myCenterY {
-    return self.centerYPosInner.absVal;
+    return self.centerYPosInner.measure;
 }
 
 - (void)setMyCenterY:(CGFloat)myCenterY {
@@ -208,7 +373,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myLeft {
-    return self.leftPosInner.absVal;
+    return self.leftPosInner.measure;
 }
 
 - (void)setMyLeft:(CGFloat)myLeft {
@@ -216,7 +381,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myRight {
-    return self.rightPosInner.absVal;
+    return self.rightPosInner.measure;
 }
 
 - (void)setMyRight:(CGFloat)myRight {
@@ -224,7 +389,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myMargin {
-    return self.leftPosInner.absVal;
+    return self.leftPosInner.measure;
 }
 
 - (void)setMyMargin:(CGFloat)myMargin {
@@ -235,7 +400,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myHorzMargin {
-    return self.leftPosInner.absVal;
+    return self.leftPosInner.measure;
 }
 
 - (void)setMyHorzMargin:(CGFloat)myHorzMargin {
@@ -244,7 +409,7 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myVertMargin {
-    return self.topPosInner.absVal;
+    return self.topPosInner.measure;
 }
 
 - (void)setMyVertMargin:(CGFloat)myVertMargin {
@@ -256,7 +421,7 @@ BOOL _myisRTL = NO;
     if (_widthSize == nil) {
         _widthSize = [MyLayoutSize new];
         _widthSize.view = self.view;
-        _widthSize.dime = MyGravity_Horz_Fill;
+        _widthSize.anchorType = MyLayoutAnchorType_Width;
     }
     return _widthSize;
 }
@@ -265,16 +430,16 @@ BOOL _myisRTL = NO;
     if (_heightSize == nil) {
         _heightSize = [MyLayoutSize new];
         _heightSize.view = self.view;
-        _heightSize.dime = MyGravity_Vert_Fill;
+        _heightSize.anchorType = MyLayoutAnchorType_Height;
     }
     return _heightSize;
 }
 
 - (CGFloat)myWidth {
     //特殊处理设置为MyLayoutSize.wrap和MyLayoutSize.fill的返回。
-    if (self.widthSizeInner.dimeValType == MyLayoutValueType_Wrap) {
+    if (self.widthSizeInner.valType == MyLayoutValType_Wrap) {
         return MyLayoutSize.wrap;
-    } else if (self.widthSizeInner.dimeValType == MyLayoutValueType_Fill) {
+    } else if (self.widthSizeInner.valType == MyLayoutValType_Fill) {
         return MyLayoutSize.fill;
     } else {
         return self.widthSizeInner.measure;
@@ -286,9 +451,9 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myHeight {
-    if (self.heightSizeInner.dimeValType == MyLayoutValueType_Wrap) {
+    if (self.heightSizeInner.valType == MyLayoutValType_Wrap) {
         return MyLayoutSize.wrap;
-    } else if (self.heightSizeInner.dimeValType == MyLayoutValueType_Fill) {
+    } else if (self.heightSizeInner.valType == MyLayoutValType_Fill) {
         return MyLayoutSize.fill;
     } else {
         return self.heightSizeInner.measure;
@@ -318,11 +483,11 @@ BOOL _myisRTL = NO;
 }
 
 - (BOOL)wrapContentWidth {
-    return self.widthSizeInner.dimeWrapVal;
+    return self.widthSizeInner.wrapVal;
 }
 
 - (BOOL)wrapContentHeight {
-    return self.heightSizeInner.dimeWrapVal;
+    return self.heightSizeInner.wrapVal;
 }
 
 - (void)setWrapContentWidth:(BOOL)wrapContentWidth {
@@ -379,33 +544,122 @@ BOOL _myisRTL = NO;
 #pragma mark-- NSCopying
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyViewSizeClass *lsc = [[[self class] allocWithZone:zone] init];
+    MyViewTraits *layoutTraits = [[[self class] allocWithZone:zone] init];
 
     //这里不会复制hidden属性
-    lsc->_view = _view;
-    lsc->_topPos = [self.topPosInner copy];
-    lsc->_leadingPos = [self.leadingPosInner copy];
-    lsc->_bottomPos = [self.bottomPosInner copy];
-    lsc->_trailingPos = [self.trailingPosInner copy];
-    lsc->_centerXPos = [self.centerXPosInner copy];
-    lsc->_centerYPos = [self.centerYPosInner copy];
-    lsc->_baselinePos = [self.baselinePos copy];
-    lsc->_widthSize = [self.widthSizeInner copy];
-    lsc->_heightSize = [self.heightSizeInner copy];
-    lsc.useFrame = self.useFrame;
-    lsc.noLayout = self.noLayout;
-    lsc.visibility = self.visibility;
-    lsc.alignment = self.alignment;
-    lsc.weight = self.weight;
-    lsc.reverseFloat = self.isReverseFloat;
-    lsc.clearFloat = self.clearFloat;
+    layoutTraits->_view = _view;
+    layoutTraits->_topPos = [self.topPosInner copy];
+    layoutTraits->_leadingPos = [self.leadingPosInner copy];
+    layoutTraits->_bottomPos = [self.bottomPosInner copy];
+    layoutTraits->_trailingPos = [self.trailingPosInner copy];
+    layoutTraits->_centerXPos = [self.centerXPosInner copy];
+    layoutTraits->_centerYPos = [self.centerYPosInner copy];
+    layoutTraits->_baselinePos = [self.baselinePos copy];
+    layoutTraits->_widthSize = [self.widthSizeInner copy];
+    layoutTraits->_heightSize = [self.heightSizeInner copy];
+    layoutTraits.useFrame = self.useFrame;
+    layoutTraits.noLayout = self.noLayout;
+    layoutTraits.visibility = self.visibility;
+    layoutTraits.alignment = self.alignment;
+    layoutTraits.weight = self.weight;
+    layoutTraits.reverseFloat = self.isReverseFloat;
+    layoutTraits.clearFloat = self.clearFloat;
 
-    return lsc;
+    return layoutTraits;
 }
+
+#pragma mark -- Helper
+
++ (MyGravity)convertLeadingTrailingGravityFromLeftRightGravity:(MyGravity)leftRightGravity{
+    if (leftRightGravity == MyGravity_Horz_Left) {
+        if ([self isRTL]) {
+            return MyGravity_Horz_Trailing;
+        } else {
+            return MyGravity_Horz_Leading;
+        }
+    } else if (leftRightGravity == MyGravity_Horz_Right) {
+        if ([self isRTL]) {
+            return MyGravity_Horz_Leading;
+        } else {
+            return MyGravity_Horz_Trailing;
+        }
+    } else {
+        return leftRightGravity;
+    }
+}
+
+
+- (BOOL)invalid {
+    if (self.useFrame) {
+        return YES;
+    }
+    if (self.view.isHidden) {
+        return self.visibility != MyVisibility_Invisible;
+    } else {
+        return self.visibility == MyVisibility_Gone;
+    }
+}
+
+- (MyGravity)vertGravityWith:(MyGravity)layoutVertGravity {
+    MyGravity vertAlignment = MYVERTGRAVITY(self.alignment);
+    MyGravity vertGravity = MyGravity_Vert_Top;
+    if (layoutVertGravity != MyGravity_None) {
+        vertGravity = layoutVertGravity;
+        if (vertAlignment != MyGravity_None) {
+            vertGravity = vertAlignment;
+        }
+    } else {
+        if (vertAlignment != MyGravity_None) {
+            vertGravity = vertAlignment;
+        }
+        if (self.topPosInner.val != nil && self.bottomPosInner.val != nil) {
+            //只有在没有设置高度约束，或者高度约束优先级很低的情况下同时设置上下才转化为填充。
+            if (self.heightSizeInner.val == nil || self.heightSizeInner.priority == MyPriority_Low) {
+                vertGravity = MyGravity_Vert_Fill;
+            }
+        } else if (self.centerYPosInner.val != nil) {
+            vertGravity = MyGravity_Vert_Center;
+        } else if (self.topPosInner.val != nil) {
+            vertGravity = MyGravity_Vert_Top;
+        } else if (self.bottomPosInner.val != nil) {
+            vertGravity = MyGravity_Vert_Bottom;
+        }
+    }
+    return vertGravity;
+}
+
+- (MyGravity)horzGravityWith:(MyGravity)layoutHorzGravity {
+    MyGravity horzAlignment = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(self.alignment)];
+    MyGravity horzGravity = MyGravity_Horz_Leading;
+    if (layoutHorzGravity != MyGravity_None) {
+        horzGravity = layoutHorzGravity;
+        if (horzAlignment != MyGravity_None) {
+            horzGravity = horzAlignment;
+        }
+    } else {
+        if (horzAlignment != MyGravity_None) {
+            horzGravity = horzAlignment;
+        }
+        if (self.leadingPosInner.val != nil && self.trailingPosInner.val != nil) {
+            //只有在没有设置宽度约束，或者宽度约束优先级很低的情况下同时设置左右才转化为填充。
+            if (self.widthSizeInner.val == nil || self.widthSizeInner.priority == MyPriority_Low) {
+                horzGravity = MyGravity_Horz_Fill;
+            }
+        } else if (self.centerXPosInner.val != nil) {
+            horzGravity = MyGravity_Horz_Center;
+        } else if (self.leadingPosInner.val != nil) {
+            horzGravity = MyGravity_Horz_Leading;
+        } else if (self.trailingPosInner.val != nil) {
+            horzGravity = MyGravity_Horz_Trailing;
+        }
+    }
+    return horzGravity;
+}
+
 
 @end
 
-@implementation MyLayoutViewSizeClass
+@implementation MyLayoutTraits
 
 - (id)init {
     self = [super init];
@@ -419,101 +673,101 @@ BOOL _myisRTL = NO;
 }
 
 - (UIEdgeInsets)padding {
-    return UIEdgeInsetsMake(self.topPadding, self.leftPadding, self.bottomPadding, self.rightPadding);
+    return UIEdgeInsetsMake(self.paddingTop, self.paddingLeft, self.paddingBottom, self.paddingRight);
 }
 
 - (void)setPadding:(UIEdgeInsets)padding {
-    self.topPadding = padding.top;
-    self.leftPadding = padding.left;
-    self.bottomPadding = padding.bottom;
-    self.rightPadding = padding.right;
+    self.paddingTop = padding.top;
+    self.paddingLeft = padding.left;
+    self.paddingBottom = padding.bottom;
+    self.paddingRight = padding.right;
 }
 
-- (CGFloat)leftPadding {
-    return [MyViewSizeClass isRTL] ? self.trailingPadding : self.leadingPadding;
+- (CGFloat)paddingLeft {
+    return [MyViewTraits isRTL] ? self.paddingTrailing : self.paddingLeading;
 }
 
-- (void)setLeftPadding:(CGFloat)leftPadding {
-    if ([MyViewSizeClass isRTL]) {
-        self.trailingPadding = leftPadding;
+- (void)setPaddingLeft:(CGFloat)paddingLeft {
+    if ([MyViewTraits isRTL]) {
+        self.paddingTrailing = paddingLeft;
     } else {
-        self.leadingPadding = leftPadding;
+        self.paddingLeading = paddingLeft;
     }
 }
 
-- (CGFloat)rightPadding {
-    return [MyViewSizeClass isRTL] ? self.leadingPadding : self.trailingPadding;
+- (CGFloat)paddingRight {
+    return [MyViewTraits isRTL] ? self.paddingLeading : self.paddingTrailing;
 }
 
-- (void)setRightPadding:(CGFloat)rightPadding {
-    if ([MyViewSizeClass isRTL]) {
-        self.leadingPadding = rightPadding;
+- (void)setPaddingRight:(CGFloat)paddingRight {
+    if ([MyViewTraits isRTL]) {
+        self.paddingLeading = paddingRight;
     } else {
-        self.trailingPadding = rightPadding;
+        self.paddingTrailing = paddingRight;
     }
 }
 
-- (CGFloat)myLayoutTopPadding {
+- (CGFloat)myLayoutPaddingTop {
     //如果padding值是特殊的值。
-    if (self.topPadding >= MyLayoutPos.safeAreaMargin - 2000 && self.topPadding <= MyLayoutPos.safeAreaMargin + 2000) {
-        CGFloat topPaddingAdd = 20.0; //默认高度是状态栏的高度。
+    if (self.paddingTop >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingTop <= MyLayoutPos.safeAreaMargin + 2000) {
+        CGFloat paddingTopAdd = 20.0; //默认高度是状态栏的高度。
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
         if (@available(iOS 11.0, *)) {
-            topPaddingAdd = self.view.safeAreaInsets.top;
+            paddingTopAdd = self.view.safeAreaInsets.top;
         }
 #endif
-        return self.topPadding - MyLayoutPos.safeAreaMargin + topPaddingAdd;
+        return self.paddingTop - MyLayoutPos.safeAreaMargin + paddingTopAdd;
     }
 
     if ((self.insetsPaddingFromSafeArea & UIRectEdgeTop) == UIRectEdgeTop) {
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
         if (@available(iOS 11.0, *)) {
-            return self.topPadding + self.view.safeAreaInsets.top;
+            return self.paddingTop + self.view.safeAreaInsets.top;
         }
 #endif
     }
-    return self.topPadding;
+    return self.paddingTop;
 }
 
-- (CGFloat)myLayoutBottomPadding {
+- (CGFloat)myLayoutPaddingBottom {
     //如果padding值是特殊的值。
-    if (self.bottomPadding >= MyLayoutPos.safeAreaMargin - 2000 && self.bottomPadding <= MyLayoutPos.safeAreaMargin + 2000) {
-        CGFloat bottomPaddingAdd = 0;
+    if (self.paddingBottom >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingBottom <= MyLayoutPos.safeAreaMargin + 2000) {
+        CGFloat paddingBottomAdd = 0;
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
         if (@available(iOS 11.0, *)) {
-            bottomPaddingAdd = self.view.safeAreaInsets.bottom;
+            paddingBottomAdd = self.view.safeAreaInsets.bottom;
         }
 #endif
-        return self.bottomPadding - MyLayoutPos.safeAreaMargin + bottomPaddingAdd;
+        return self.paddingBottom - MyLayoutPos.safeAreaMargin + paddingBottomAdd;
     }
 
     if ((self.insetsPaddingFromSafeArea & UIRectEdgeBottom) == UIRectEdgeBottom) {
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
         if (@available(iOS 11.0, *)) {
-            return self.bottomPadding + self.view.safeAreaInsets.bottom;
+            return self.paddingBottom + self.view.safeAreaInsets.bottom;
         }
 #endif
     }
-    return self.bottomPadding;
+    return self.paddingBottom;
 }
 
 - (CGFloat)myLayoutLeadingPadding {
-    if (self.leadingPadding >= MyLayoutPos.safeAreaMargin - 2000 && self.leadingPadding <= MyLayoutPos.safeAreaMargin + 2000) {
-        CGFloat leadingPaddingAdd = 0;
+    if (self.paddingLeading >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingLeading <= MyLayoutPos.safeAreaMargin + 2000) {
+        CGFloat paddingLeadingAdd = 0;
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
         if (@available(iOS 11.0, *)) {
-            leadingPaddingAdd = self.view.safeAreaInsets.left; //因为这里左右的缩进都是一样的，因此不需要考虑RTL的情况。
+            paddingLeadingAdd = self.view.safeAreaInsets.left; //因为这里左右的缩进都是一样的，因此不需要考虑RTL的情况。
         }
 #endif
-        return self.leadingPadding - MyLayoutPos.safeAreaMargin + leadingPaddingAdd;
+        return self.paddingLeading - MyLayoutPos.safeAreaMargin + paddingLeadingAdd;
     }
 
     CGFloat inset = 0;
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
     if (@available(iOS 11.0, *)) {
-        UIRectEdge edge = [MyViewSizeClass isRTL] ? UIRectEdgeRight : UIRectEdgeLeft;
+        UIRectEdge edge = [MyViewTraits isRTL] ? UIRectEdgeRight : UIRectEdgeLeft;
 #if TARGET_OS_IOS
-        UIDeviceOrientation devori = [MyViewSizeClass isRTL] ? UIDeviceOrientationLandscapeLeft : UIDeviceOrientationLandscapeRight;
+        UIDeviceOrientation devori = [MyViewTraits isRTL] ? UIDeviceOrientationLandscapeLeft : UIDeviceOrientationLandscapeRight;
 #endif
         if ((self.insetsPaddingFromSafeArea & edge) == edge) {
 #if TARGET_OS_IOS
@@ -524,30 +778,30 @@ BOOL _myisRTL = NO;
                 inset = 0;
             } else
 #endif
-                inset = [MyViewSizeClass isRTL] ? self.view.safeAreaInsets.right : self.view.safeAreaInsets.left;
+                inset = [MyViewTraits isRTL] ? self.view.safeAreaInsets.right : self.view.safeAreaInsets.left;
         }
     }
 #endif
-    return self.leadingPadding + inset;
+    return self.paddingLeading + inset;
 }
 
 - (CGFloat)myLayoutTrailingPadding {
-    if (self.trailingPadding >= MyLayoutPos.safeAreaMargin - 2000 && self.trailingPadding <= MyLayoutPos.safeAreaMargin + 2000) {
-        CGFloat trailingPaddingAdd = 0;
+    if (self.paddingTrailing >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingTrailing <= MyLayoutPos.safeAreaMargin + 2000) {
+        CGFloat paddingTrailingAdd = 0;
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
         if (@available(iOS 11.0, *)) {
-            trailingPaddingAdd = self.view.safeAreaInsets.right;
+            paddingTrailingAdd = self.view.safeAreaInsets.right;
         }
 #endif
-        return self.trailingPadding - MyLayoutPos.safeAreaMargin + trailingPaddingAdd;
+        return self.paddingTrailing - MyLayoutPos.safeAreaMargin + paddingTrailingAdd;
     }
 
     CGFloat inset = 0;
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
     if (@available(iOS 11.0, *)) {
-        UIRectEdge edge = [MyViewSizeClass isRTL] ? UIRectEdgeLeft : UIRectEdgeRight;
+        UIRectEdge edge = [MyViewTraits isRTL] ? UIRectEdgeLeft : UIRectEdgeRight;
 #if TARGET_OS_IOS
-        UIDeviceOrientation devori = [MyViewSizeClass isRTL] ? UIDeviceOrientationLandscapeRight : UIDeviceOrientationLandscapeLeft;
+        UIDeviceOrientation devori = [MyViewTraits isRTL] ? UIDeviceOrientationLandscapeRight : UIDeviceOrientationLandscapeLeft;
 #endif
         if ((self.insetsPaddingFromSafeArea & edge) == edge) {
 #if TARGET_OS_IOS
@@ -558,18 +812,18 @@ BOOL _myisRTL = NO;
                 inset = 0;
             } else
 #endif
-                inset = [MyViewSizeClass isRTL] ? self.view.safeAreaInsets.left : self.view.safeAreaInsets.right;
+                inset = [MyViewTraits isRTL] ? self.view.safeAreaInsets.left : self.view.safeAreaInsets.right;
         }
     }
 #endif
-    return self.trailingPadding + inset;
+    return self.paddingTrailing + inset;
 }
 
-- (CGFloat)myLayoutLeftPadding {
-    return [MyViewSizeClass isRTL] ? [self myLayoutTrailingPadding] : [self myLayoutLeadingPadding];
+- (CGFloat)myLayoutPaddingLeft {
+    return [MyViewTraits isRTL] ? [self myLayoutTrailingPadding] : [self myLayoutLeadingPadding];
 }
-- (CGFloat)myLayoutRightPadding {
-    return [MyViewSizeClass isRTL] ? [self myLayoutLeadingPadding] : [self myLayoutTrailingPadding];
+- (CGFloat)myLayoutPaddingRight {
+    return [MyViewTraits isRTL] ? [self myLayoutLeadingPadding] : [self myLayoutTrailingPadding];
 }
 
 - (CGFloat)subviewSpace {
@@ -582,21 +836,21 @@ BOOL _myisRTL = NO;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyLayoutViewSizeClass *lsc = [super copyWithZone:zone];
-    lsc.topPadding = self.topPadding;
-    lsc.leadingPadding = self.leadingPadding;
-    lsc.bottomPadding = self.bottomPadding;
-    lsc.trailingPadding = self.trailingPadding;
-    lsc.zeroPadding = self.zeroPadding;
-    lsc.insetsPaddingFromSafeArea = self.insetsPaddingFromSafeArea;
-    lsc.insetLandscapeFringePadding = self.insetLandscapeFringePadding;
-    lsc.gravity = self.gravity;
-    lsc.reverseLayout = self.reverseLayout;
-    lsc.layoutTransform = self.layoutTransform;
-    lsc.subviewVSpace = self.subviewVSpace;
-    lsc.subviewHSpace = self.subviewHSpace;
+    MyLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    layoutTraits.paddingTop = self.paddingTop;
+    layoutTraits.paddingLeading = self.paddingLeading;
+    layoutTraits.paddingBottom = self.paddingBottom;
+    layoutTraits.paddingTrailing = self.paddingTrailing;
+    layoutTraits.zeroPadding = self.zeroPadding;
+    layoutTraits.insetsPaddingFromSafeArea = self.insetsPaddingFromSafeArea;
+    layoutTraits.insetLandscapeFringePadding = self.insetLandscapeFringePadding;
+    layoutTraits.gravity = self.gravity;
+    layoutTraits.reverseLayout = self.reverseLayout;
+    layoutTraits.layoutTransform = self.layoutTransform;
+    layoutTraits.subviewVSpace = self.subviewVSpace;
+    layoutTraits.subviewHSpace = self.subviewHSpace;
 
-    return lsc;
+    return layoutTraits;
 }
 
 - (NSString *)debugDescription {
@@ -613,11 +867,41 @@ BOOL _myisRTL = NO;
     return dbgDesc;
 }
 
+#pragma mark -- Helper
+
+- (NSMutableArray<MyLayoutEngine *> *)filterEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines {
+    
+    if (subviewEngines == nil) {
+        subviewEngines = [NSMutableArray arrayWithCapacity:self.view.subviews.count];
+        for (UIView *subview in self.view.subviews) {
+            [subviewEngines addObject:subview.myEngine];
+        }
+    }
+    
+    NSInteger count = subviewEngines.count;
+    if (self.reverseLayout) {
+        //翻转一个数组。
+        for (NSInteger i = 0; i < count / 2; i++) {
+            [subviewEngines exchangeObjectAtIndex:i withObjectAtIndex:count - 1 - i];
+        }
+    }
+    
+    for (NSInteger i = count - 1; i >= 0; i--) {
+        MyViewTraits *subviewTraits = subviewEngines[i].currentSizeClass;
+        if ([subviewTraits invalid]) {
+            [subviewEngines removeObjectAtIndex:i];
+        }
+    }
+    
+    return subviewEngines;
+}
+
+
 @end
 
 @implementation MySequentLayoutFlexSpace
 
-- (CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize startPadding:(CGFloat *)pStarPadding endPadding:(CGFloat *)pEndPadding space:(CGFloat *)pSpace {
+- (CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding space:(CGFloat *)pSpace {
     CGFloat subviewSize = self.subviewSize;
 
     CGFloat extralSpace = self.minSpace;
@@ -672,20 +956,20 @@ BOOL _myisRTL = NO;
 
 @end
 
-@implementation MySequentLayoutViewSizeClass
+@implementation MySequentLayoutTraits
 
 - (id)copyWithZone:(NSZone *)zone {
-    MySequentLayoutViewSizeClass *lsc = [super copyWithZone:zone];
-    lsc.orientation = self.orientation;
+    MySequentLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    layoutTraits.orientation = self.orientation;
     if (self.flexSpace != nil) {
-        lsc.flexSpace = [MySequentLayoutFlexSpace new];
-        lsc.flexSpace.subviewSize = self.flexSpace.subviewSize;
-        lsc.flexSpace.minSpace = self.flexSpace.minSpace;
-        lsc.flexSpace.maxSpace = self.flexSpace.maxSpace;
-        lsc.flexSpace.centered = self.flexSpace.centered;
+        layoutTraits.flexSpace = [MySequentLayoutFlexSpace new];
+        layoutTraits.flexSpace.subviewSize = self.flexSpace.subviewSize;
+        layoutTraits.flexSpace.minSpace = self.flexSpace.minSpace;
+        layoutTraits.flexSpace.maxSpace = self.flexSpace.maxSpace;
+        layoutTraits.flexSpace.centered = self.flexSpace.centered;
     }
 
-    return lsc;
+    return layoutTraits;
 }
 
 - (NSString *)debugDescription {
@@ -699,12 +983,12 @@ BOOL _myisRTL = NO;
 
 @end
 
-@implementation MyLinearLayoutViewSizeClass
+@implementation MyLinearLayoutTraits
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyLinearLayoutViewSizeClass *lsc = [super copyWithZone:zone];
-    lsc.shrinkType = self.shrinkType;
-    return lsc;
+    MyLinearLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    layoutTraits.shrinkType = self.shrinkType;
+    return layoutTraits;
 }
 
 - (NSString *)debugDescription {
@@ -717,30 +1001,30 @@ BOOL _myisRTL = NO;
 
 @end
 
-@implementation MyTableLayoutViewSizeClass
+@implementation MyTableLayoutTraits
 
 @end
 
-@implementation MyFloatLayoutViewSizeClass
+@implementation MyFloatLayoutTraits
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyFloatLayoutViewSizeClass *lsc = [super copyWithZone:zone];
-    return lsc;
+    MyFloatLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    return layoutTraits;
 }
 
 @end
 
-@implementation MyFlowLayoutViewSizeClass
+@implementation MyFlowLayoutTraits
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyFlowLayoutViewSizeClass *lsc = [super copyWithZone:zone];
-    lsc.arrangedCount = self.arrangedCount;
-    lsc.autoArrange = self.autoArrange;
-    lsc.isFlex = self.isFlex;
-    lsc.lastlineGravityPolicy = self.lastlineGravityPolicy;
-    lsc.arrangedGravity = self.arrangedGravity;
-    lsc.pagedCount = self.pagedCount;
-    return lsc;
+    MyFlowLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    layoutTraits.arrangedCount = self.arrangedCount;
+    layoutTraits.autoArrange = self.autoArrange;
+    layoutTraits.isFlex = self.isFlex;
+    layoutTraits.lastlineGravityPolicy = self.lastlineGravityPolicy;
+    layoutTraits.arrangedGravity = self.arrangedGravity;
+    layoutTraits.pagedCount = self.pagedCount;
+    return layoutTraits;
 }
 
 - (NSString *)debugDescription {
@@ -758,23 +1042,23 @@ BOOL _myisRTL = NO;
 
 @end
 
-@implementation MyRelativeLayoutViewSizeClass
+@implementation MyRelativeLayoutTraits
 
 @end
 
-@implementation MyFrameLayoutViewSizeClass
+@implementation MyFrameLayoutTraits
 @end
 
-@implementation MyPathLayoutViewSizeClass
+@implementation MyPathLayoutTraits
 @end
 
-@interface MyGridLayoutViewSizeClass () <MyGridNode>
+@interface MyGridLayoutTraits () <MyGridNode>
 
 @property (nonatomic, strong) MyGridNode *rootGrid;
 
 @end
 
-@implementation MyGridLayoutViewSizeClass
+@implementation MyGridLayoutTraits
 
 - (MyGridNode *)rootGrid {
     if (_rootGrid == nil) {
@@ -1021,7 +1305,7 @@ BOOL _myisRTL = NO;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyGridLayoutViewSizeClass *lsc = [super copyWithZone:zone];
+    MyGridLayoutTraits *lsc = [super copyWithZone:zone];
     lsc->_rootGrid = (MyGridNode *)[self.rootGrid cloneGrid];
     return lsc;
 }

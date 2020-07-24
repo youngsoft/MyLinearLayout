@@ -71,8 +71,8 @@
     self.testLayout.backgroundColor = [CFTool color:0];
     self.testLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平宽度充满布局，这样就不需要分别设置每个子视图的宽度了。
     self.testLayout.weight = 1.0;
-    self.testLayout.leftPadding = 10;
-    self.testLayout.rightPadding = 10;
+    self.testLayout.paddingLeft = 10;
+    self.testLayout.paddingRight = 10;
     [rootLayout addSubview:self.testLayout];
     
     //这里用到了sizeclass的支持。您可以切换横竖屏看看效果。默认是垂直布局，横屏时是水平布局,并且垂直填充。

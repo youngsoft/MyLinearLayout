@@ -48,7 +48,7 @@
     
     MyRelativeLayout *rootLayout = [MyRelativeLayout new];
     rootLayout.backgroundColor = [UIColor whiteColor];
-    rootLayout.trailingPadding = 10;
+    rootLayout.paddingTrailing = 10;
     self.view = rootLayout;
     
     UISwitch *visibilitySwitch = [UISwitch new];

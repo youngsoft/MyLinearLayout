@@ -27,7 +27,7 @@
     self.view = _pathLayout;
     
     _pathLayout.backgroundColor = [CFTool color:0];
-    _pathLayout.leftPadding = 20;
+    _pathLayout.paddingLeft = 20;
     _pathLayout.coordinateSetting.origin = CGPointMake(0, 0.5);  //原点坐标在(0,0.5)的位置。
     _pathLayout.coordinateSetting.start = -60.0 / 180.0 * M_PI;  //从-60度到60度
     _pathLayout.coordinateSetting.end = 60.0 / 180.0 * M_PI;

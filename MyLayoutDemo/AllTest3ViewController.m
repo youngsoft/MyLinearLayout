@@ -210,8 +210,8 @@
     
     MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     testLayout.backgroundColor = [UIColor whiteColor];
-    testLayout.leftPadding = 10;
-    testLayout.rightPadding = 10;
+    testLayout.paddingLeft = 10;
+    testLayout.paddingRight = 10;
     testLayout.myHeight = 50;
     testLayout.gravity = MyGravity_Vert_Fill;
     testLayout.subviewHSpace = 10;
@@ -261,8 +261,8 @@
     
     MyLinearLayout *testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     testLayout.backgroundColor = [UIColor whiteColor];
-    testLayout.leftPadding = 10;
-    testLayout.rightPadding = 10;
+    testLayout.paddingLeft = 10;
+    testLayout.paddingRight = 10;
     testLayout.myHeight = 50;
     testLayout.gravity = MyGravity_Vert_Fill;
     testLayout.shrinkType = MySubviewsShrink_Auto;  //左右2个子视图会根据自身的宽度自动调整。不会产生覆盖和重叠。
@@ -341,7 +341,7 @@
     testLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     testLayout.backgroundColor = [UIColor whiteColor];
     testLayout.myTop = 10;
-    testLayout.myBottom = 50;   //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。你也可以设置contentLayout的bottomPadding = 50来解决这个问题。
+    testLayout.myBottom = 50;   //这里设置底部间距的原因是登录按钮在最底部。为了使得滚动到底部时不被覆盖。你也可以设置contentLayout的paddingBottom = 50来解决这个问题。
     [contentLayout addSubview:testLayout];
     
     UIButton *testButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -367,8 +367,8 @@
     [actionLayout setTarget:self action:action];    //这里设置布局的触摸事件处理。
     
     //左右内边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
-    actionLayout.leftPadding = 10;
-    actionLayout.rightPadding = 10;
+    actionLayout.paddingLeft = 10;
+    actionLayout.paddingRight = 10;
     actionLayout.widthSize.equalTo(nil);
     actionLayout.heightSize.equalTo(@50);
     actionLayout.gravity = MyGravity_Vert_Center;
@@ -400,8 +400,8 @@
     switchLayout.backgroundColor = [UIColor whiteColor];
     
     //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
-    switchLayout.leftPadding = 10;
-    switchLayout.rightPadding = 10;
+    switchLayout.paddingLeft = 10;
+    switchLayout.paddingRight = 10;
     switchLayout.widthSize.equalTo(nil);
     switchLayout.heightSize.equalTo(@50);
     switchLayout.gravity = MyGravity_Vert_Center;
@@ -433,8 +433,8 @@
     segmentedLayout.backgroundColor = [UIColor whiteColor];
     
     //左右边距都是10，不包裹子视图，整体高度为50，里面的子布局垂直居中对齐。
-    segmentedLayout.leftPadding = 10;
-    segmentedLayout.rightPadding = 10;
+    segmentedLayout.paddingLeft = 10;
+    segmentedLayout.paddingRight = 10;
     segmentedLayout.heightSize.equalTo(@50);
     segmentedLayout.gravity = MyGravity_Vert_Center;
     

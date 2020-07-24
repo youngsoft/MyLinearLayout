@@ -266,7 +266,7 @@
     bottomHalfCircleView.layer.cornerRadius = 25;
     bottomHalfCircleView.widthSize.equalTo(@50);      //宽度固定为50
     bottomHalfCircleView.heightSize.equalTo(bottomHalfCircleView.widthSize);  //高度等于宽度
-    bottomHalfCircleView.centerYPos.equalTo(rootLayout.bottomPos).offset(10); //垂直中心点和父布局的底部对齐，并且往下偏移10个点。 因为rootLayout设置了bottomPadding为10，所以这里要偏移10，否则不需要设置偏移。
+    bottomHalfCircleView.centerYPos.equalTo(rootLayout.bottomPos).offset(10); //垂直中心点和父布局的底部对齐，并且往下偏移10个点。 因为rootLayout设置了paddingBottom为10，所以这里要偏移10，否则不需要设置偏移。
     bottomHalfCircleView.leadingPos.equalTo(rootLayout.leadingPos).offset(50); //左边父布局左对齐，并且向右偏移50个点。
     [rootLayout addSubview:bottomHalfCircleView];
     /*

@@ -1162,7 +1162,7 @@
         rootLayout.gravity = MyGravity_Vert_Stretch;
         [rootLayout layoutIfNeeded];
         MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
-        MyRectAssert(v2, CGRectMake(40, 0, 36.5, 50));
+        MyRectAssert(v2, CGRectMake(40, 0, 36.5, 95));
         MyRectAssert(v3, CGRectMake(76.5, 0, 30, 95));
         MyRectAssert(v4, CGRectMake(106.5, 0, 50, 50));
         MyRectAssert(v5, CGRectMake(0, 95, 60, 60));
@@ -1225,7 +1225,7 @@
         rootLayout.gravity = MyGravity_Horz_Stretch;
         [rootLayout layoutIfNeeded];
         MyRectAssert(v1, CGRectMake(0, 0, 40, 40));
-        MyRectAssert(v2, CGRectMake(0, 40, 50, 20.5));
+        MyRectAssert(v2, CGRectMake(0, 40, 95, 20.5));
         MyRectAssert(v3, CGRectMake(0,60.5, 50+45, 30));
         MyRectAssert(v4, CGRectMake(0,90.5, 50, 50));
         MyRectAssert(v5, CGRectMake(95, 0, 60, 60));

@@ -120,8 +120,8 @@
 -(MyBaseLayout*)itemFrom:(NSString*)itemString alignment:(NSTextAlignment)alignment isFitWidth:(BOOL)isFitWidth
 {
     MyFrameLayout *itemLayout = [MyFrameLayout new];
-    itemLayout.topPadding = itemLayout.bottomPadding = 10;
-    itemLayout.leftPadding = itemLayout.rightPadding = 5;
+    itemLayout.paddingTop = itemLayout.paddingBottom = 10;
+    itemLayout.paddingLeft = itemLayout.paddingRight = 5;
     UILabel *label = [UILabel new];
     label.text = itemString;
     label.textAlignment = alignment;

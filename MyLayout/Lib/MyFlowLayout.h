@@ -99,7 +99,6 @@
  @return 返回流式布局对象实例。
  */
 - (instancetype)initWithOrientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
-
 /**
  初始化一个流式布局并指定布局视图的frame值以及方向和每行条目视图的数量,如果数量为0则表示内容约束流式布局。
 
@@ -109,7 +108,6 @@
  @return 返回流式布局对象实例
  */
 - (instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation arrangedCount:(NSInteger)arrangedCount;
-
 /**
  初始化一个流式布局并指定布局的方向和行内条目视图的数量,如果数量为0则表示内容约束流式布局。
 
@@ -171,16 +169,26 @@
 @property (nonatomic, assign) IBInspectable NSInteger pagedCount;
 
 /**
- 布局内子视图自动排列或者让布局内的子视图的排列尽可能的紧凑，默认为NO
+ 布局内子视图自动排列或者让布局内的子视图的排列尽可能的紧凑，默认为NO。
  
  当流式布局是内容填充约束流式布局时，则当设置为YES时则根据子视图的尺寸自动填充，而不是根据加入的顺序来填充，以便保证不会出现多余空隙的情况。
  当流式布局是数量填充约束流式布局时，则当设置为YES时每个子视图会按顺序找一个最佳的存放地点进行填充。
  
-
  @note
  如果在内容填充约束流式布局中使用此属性时，请在将所有子视图添加完毕并且初始布局完成后再设置这个属性，否则如果预先设置这个属性则在后续添加子视图时可能会非常耗性能。
  */
 @property (nonatomic, assign) IBInspectable BOOL autoArrange;
+
+/**
+ 布局是否是兼容flexbox规则的布局，默认是NO。当设置为YES时有两个特性会产生差异：
+ 1.停靠属性gravity在所有行中都有效。在一些场景中，往往最后一行的子视图个数并没有填充满布局视图，如果这时候设置了gravity时产生的效果并不美观。
+ 所以默认情况下最后一行的子视图并不会受到gravity设置的影响，但是特殊情况除外：1.只有一行时，2.最后一行的数量和其他行的数量一样时 这两种情况gravity会影响所有子视图。 因此当isFlex为YES时则所有行和列都会受到gravity属性的影响。
+ 
+ 2.子视图的weight属性可以和子视图的尺寸约束共存。默认情况下在垂直流式布局中如果子视图设置了weight属性则子视图的宽度约束将不起作用，
+    而在水平流式布局中如果子视图设置了weight属性则子视图的高度约束将不起作用。另外在流式内容约束布局中weight表示的是剩余空间的比重。
+    因此当isFlex设置为YES时，表示子视图的weight可以和尺寸约束共存，并且weight就是表示行内的剩余空间的比重。
+ */
+@property (nonatomic, assign) BOOL isFlex;
 
 /**
  设置流式布局中每行内所有子视图的对齐停靠方式。具体的对齐停靠方式依赖于布局视图的方向：
@@ -206,13 +214,14 @@
      MyGravity_Horz_Between  数量约束水平流式布局有效，子视图会紧凑进行排列，当设置为这个属性值时，子视图的x轴的位置总是从对应行的上一列的结尾开始，而不是上一列的最宽位置开始。
      MyGravity_Horz_Around 如果列内子视图没有设置宽度约束，则子视图的宽度填充整行，否则按子视图的宽度是宽度约束决定。
    @endcode
- @note 如果您想单独设置某个子视图在行内的对齐方式则请使用子视图的扩展属性alignment。
+ @note
+ 如果您想单独设置某个子视图在行内的对齐方式则请使用子视图的扩展属性alignment。
  
  */
 @property (nonatomic, assign) MyGravity arrangedGravity;
 
 /**
-指定流式布局最后一行的尺寸或间距的拉伸策略。默认值是MyGravityPolicy_No表示最后一行的尺寸或间接拉伸策略不生效。。
+指定流式布局最后一行的尺寸或间距的拉伸策略。默认值是MyGravityPolicy_No表示最后一行的尺寸或间接拉伸策略不生效。
 在流式布局中我们可以通过gravity属性来对每一行的尺寸或间距进行拉伸处理。但是在实际情况中最后一行的子视图数量可能会小于等于前面行的数量。
 在这种情况下如果对最后一行进行相同的尺寸或间距的拉伸处理则有可能会影响整体的布局效果。因此我们可通过这个属性来指定最后一行的尺寸或间距的生效策略。
 这个策略在不同的流式布局中效果不一样：
@@ -223,17 +232,6 @@
 2.在内容约束布局中因为每行的子视图数量不固定,所以只有no和always两种策略有效，并且这两种策略不仅影响子视图的尺寸的拉伸(fill,stretch)还影响间距的拉伸效果(between,around,among)。
  */
 @property (nonatomic, assign) MyGravityPolicy lastlineGravityPolicy;
-
-/**
- 布局是否是兼容flexbox规则的布局，默认是NO。当设置为YES时有两个特性会产生差异：
- 1.停靠属性gravity在所有行中都有效。在一些场景中，往往最后一行的子视图个数并没有填充满布局视图，如果这时候设置了gravity时产生的效果并不美观。
- 所以默认情况下最后一行的子视图并不会受到gravity设置的影响，但是特殊情况除外：1.只有一行时，2.最后一行的数量和其他行的数量一样时 这两种情况gravity会影响所有子视图。 因此当isFlex为YES时则所有行和列都会受到gravity属性的影响。
- 
- 2.子视图的weight属性可以和子视图的尺寸约束共存。默认情况下在垂直流式布局中如果子视图设置了weight属性则子视图的宽度约束将不起作用，
-    而在水平流式布局中如果子视图设置了weight属性则子视图的高度约束将不起作用。另外在流式内容约束布局中weight表示的是剩余空间的比重。
-    因此当isFlex设置为YES时，表示子视图的weight可以和尺寸约束共存，并且weight就是表示行内的剩余空间的比重。
- */
-@property (nonatomic, assign) BOOL isFlex;
 
 /**
  单独为某一行定制的水平和垂直停靠对齐属性，默认情况下布局视图的gravity和arrangedGravity作用于所有行以及行内的停靠对齐。如果你想单独定制某一行的停靠对齐方式时

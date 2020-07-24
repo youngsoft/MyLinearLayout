@@ -13,6 +13,78 @@
 
 @class MyBaseLayout;
 
+@class MyViewTraits;
+
+//视图在布局中的评估测量值
+@interface MyLayoutEngine : NSObject
+
+@property (nonatomic, assign) CGFloat top;
+@property (nonatomic, assign) CGFloat leading;
+@property (nonatomic, assign) CGFloat bottom;
+@property (nonatomic, assign) CGFloat trailing;
+@property (nonatomic, assign) CGFloat width;
+@property (nonatomic, assign) CGFloat height;
+
+//默认的布局分类，所有视图的布局相关的属性，都是设置到这个分类上。
+@property (nonatomic, weak) MyViewTraits *defaultSizeClass;
+
+//当前的布局分类，当前正在执行布局时所用的布局分类。
+@property (nonatomic, weak) MyViewTraits *currentSizeClass;
+
+@property (nonatomic, assign, readonly) BOOL multiple; //是否设置了多个sizeclass
+
+@property (nonatomic, strong) NSMutableDictionary<NSNumber*, MyViewTraits*> *sizeClasses;
+
+@property (nonatomic, assign) BOOL hasObserver;
+
+- (void)reset;
+
+@property (nonatomic, assign) CGPoint origin;
+@property (nonatomic, assign) CGSize size;
+@property (nonatomic, assign) CGRect frame;
+
+
+- (MyViewTraits *)fetchView:(UIView *)view layoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
+
+- (MyViewTraits *)fetchView:(UIView *)view bestLayoutSizeClass:(MySizeClass)sizeClass;
+
+
+@end
+
+
+@interface UIView (MyLayoutExtInner)
+
+@property (nonatomic, strong, readonly) MyLayoutEngine *myEngine;
+
+- (id)createSizeClassInstance;
+
+- (instancetype)myDefaultSizeClass;
+- (instancetype)myDefaultSizeClassInner;
+
+- (instancetype)myCurrentSizeClass;
+- (instancetype)myCurrentSizeClassInner;
+
+@property (nonatomic, readonly) MyLayoutPos *topPosInner;
+@property (nonatomic, readonly) MyLayoutPos *leadingPosInner;
+@property (nonatomic, readonly) MyLayoutPos *bottomPosInner;
+@property (nonatomic, readonly) MyLayoutPos *trailingPosInner;
+@property (nonatomic, readonly) MyLayoutPos *centerXPosInner;
+@property (nonatomic, readonly) MyLayoutPos *centerYPosInner;
+@property (nonatomic, readonly) MyLayoutSize *widthSizeInner;
+@property (nonatomic, readonly) MyLayoutSize *heightSizeInner;
+
+@property (nonatomic, readonly) MyLayoutPos *leftPosInner;
+@property (nonatomic, readonly) MyLayoutPos *rightPosInner;
+
+@property (nonatomic, readonly) MyLayoutPos *baselinePosInner;
+
+@property (nonatomic, readonly) CGFloat myEstimatedWidth;
+@property (nonatomic, readonly) CGFloat myEstimatedHeight;
+
+@end
+
+
+
 /*
  布局的尺寸类型类，这个类的功能用来支持类似于iOS的Size Class机制用来实现各种屏幕下的视图的约束。
  MyLayoutSizeClass类中定义的各种属性跟视图和布局的各种扩展属性是一致的。
@@ -23,7 +95,7 @@
  SizeClass，以及MySizeClass_Portrait或者MySizeClass_Landscape 也就是设置布局默认的约束。而iOS8以上的系统则能支持所有的SizeClass.
   
  */
-@interface MyViewSizeClass : NSObject <NSCopying>
+@interface MyViewTraits : NSObject <NSCopying>
 
 @property (nonatomic, weak) UIView *view;
 
@@ -82,9 +154,18 @@
 @property (nonatomic, assign, getter=isReverseFloat) BOOL reverseFloat;
 @property (nonatomic, assign) BOOL clearFloat;
 
+//内部方法
+
++ (MyGravity)convertLeadingTrailingGravityFromLeftRightGravity:(MyGravity)horzGravity;
+
+- (BOOL)invalid;
+
+- (MyGravity)vertGravityWith:(MyGravity)layoutVertGravity;
+- (MyGravity)horzGravityWith:(MyGravity)layoutHorzGravity;
+
 @end
 
-@interface MyLayoutViewSizeClass : MyViewSizeClass
+@interface MyLayoutTraits : MyViewTraits
 
 @property (nonatomic, assign) BOOL zeroPadding;
 
@@ -95,20 +176,28 @@
 
 @property (nonatomic, assign) BOOL insetLandscapeFringePadding;
 
-@property (nonatomic, assign) CGFloat topPadding;
-@property (nonatomic, assign) CGFloat leadingPadding;
-@property (nonatomic, assign) CGFloat bottomPadding;
-@property (nonatomic, assign) CGFloat trailingPadding;
+@property (nonatomic, assign) CGFloat paddingTop;
+@property (nonatomic, assign) CGFloat paddingLeading;
+@property (nonatomic, assign) CGFloat paddingBottom;
+@property (nonatomic, assign) CGFloat paddingTrailing;
 @property (nonatomic, assign) UIEdgeInsets padding;
 
-@property (nonatomic, assign) CGFloat leftPadding;
-@property (nonatomic, assign) CGFloat rightPadding;
+@property (nonatomic, assign) CGFloat paddingLeft;
+@property (nonatomic, assign) CGFloat paddingRight;
+
+//兼容1.9.2以及以前的老版本，因为老版本的命名不符合规范，所以这里重新命名。
+@property (nonatomic, assign, getter=paddingTop, setter=setPaddingTop:) CGFloat topPadding;
+@property (nonatomic, assign, getter=paddingLeading, setter=setPaddingLeading:) CGFloat leadingPadding;
+@property (nonatomic, assign, getter=paddingBottom, setter=setPaddingBottom:) CGFloat bottomPadding;
+@property (nonatomic, assign, getter=paddingTrailing, setter=setPaddingTrailing:) CGFloat trailingPadding;
+@property (nonatomic, assign, getter=paddingLeft, setter=setPaddingLeft:) CGFloat leftPadding;
+@property (nonatomic, assign, getter=paddingRight, setter=setPaddingRight:) CGFloat rightPadding;
 
 //为支持iOS11的safeArea而进行的padding的转化
-- (CGFloat)myLayoutTopPadding;
-- (CGFloat)myLayoutBottomPadding;
-- (CGFloat)myLayoutLeftPadding;
-- (CGFloat)myLayoutRightPadding;
+- (CGFloat)myLayoutPaddingTop;
+- (CGFloat)myLayoutPaddingBottom;
+- (CGFloat)myLayoutPaddingLeft;
+- (CGFloat)myLayoutPaddingRight;
 - (CGFloat)myLayoutLeadingPadding;
 - (CGFloat)myLayoutTrailingPadding;
 
@@ -118,6 +207,9 @@
 @property (nonatomic, assign) CGFloat subviewHSpace;
 @property (nonatomic, assign) CGFloat subviewSpace;
 
+//从全部子视图引擎数组中过滤出需要进行布局的子视图布局引擎数组子集。
+- (NSMutableArray<MyLayoutEngine *> *)filterEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines;
+
 @end
 
 @interface MySequentLayoutFlexSpace : NSObject
@@ -126,29 +218,29 @@
 @property (nonatomic, assign) CGFloat maxSpace;
 @property (nonatomic, assign) BOOL centered;
 
-- (CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize startPadding:(CGFloat *)pStarPadding endPadding:(CGFloat *)pEndPadding space:(CGFloat *)pSpace;
+- (CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding space:(CGFloat *)pSpace;
 - (CGFloat)calcMaxMinSubviewSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount startPadding:(CGFloat *)pStarPadding endPadding:(CGFloat *)pEndPadding space:(CGFloat *)pSpace;
 
 @end
 
-@interface MySequentLayoutViewSizeClass : MyLayoutViewSizeClass
+@interface MySequentLayoutTraits : MyLayoutTraits
 
 @property (nonatomic, assign) MyOrientation orientation;
 @property (nonatomic, strong) MySequentLayoutFlexSpace *flexSpace;
 
 @end
 
-@interface MyLinearLayoutViewSizeClass : MySequentLayoutViewSizeClass
+@interface MyLinearLayoutTraits : MySequentLayoutTraits
 
 @property (nonatomic, assign) MySubviewsShrinkType shrinkType;
 
 @end
 
-@interface MyTableLayoutViewSizeClass : MyLinearLayoutViewSizeClass
+@interface MyTableLayoutTraits : MyLinearLayoutTraits
 
 @end
 
-@interface MyFlowLayoutViewSizeClass : MySequentLayoutViewSizeClass
+@interface MyFlowLayoutTraits : MySequentLayoutTraits
 
 @property (nonatomic, assign) MyGravity arrangedGravity;
 @property (nonatomic, assign) BOOL autoArrange;
@@ -160,22 +252,22 @@
 
 @end
 
-@interface MyFloatLayoutViewSizeClass : MySequentLayoutViewSizeClass
+@interface MyFloatLayoutTraits : MySequentLayoutTraits
 
 @end
 
-@interface MyRelativeLayoutViewSizeClass : MyLayoutViewSizeClass
+@interface MyRelativeLayoutTraits : MyLayoutTraits
 
 @end
 
-@interface MyFrameLayoutViewSizeClass : MyLayoutViewSizeClass
+@interface MyFrameLayoutTraits : MyLayoutTraits
 
 @end
 
-@interface MyPathLayoutViewSizeClass : MyLayoutViewSizeClass
+@interface MyPathLayoutTraits : MyLayoutTraits
 
 @end
 
-@interface MyGridLayoutViewSizeClass : MyLayoutViewSizeClass <MyGrid>
+@interface MyGridLayoutTraits : MyLayoutTraits <MyGrid>
 
 @end

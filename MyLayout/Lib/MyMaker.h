@@ -43,12 +43,12 @@
 - (MyMaker *)sizeToFit;
 
 //布局独有
-- (MyMaker *)topPadding;
-- (MyMaker *)leftPadding;
-- (MyMaker *)bottomPadding;
-- (MyMaker *)rightPadding;
-- (MyMaker *)leadingPadding;
-- (MyMaker *)trailingPadding;
+- (MyMaker *)paddingTop;
+- (MyMaker *)paddingLeft;
+- (MyMaker *)paddingBottom;
+- (MyMaker *)paddingRight;
+- (MyMaker *)paddingLeading;
+- (MyMaker *)paddingTrailing;
 - (MyMaker *)padding;
 - (MyMaker *)zeroPadding;
 - (MyMaker *)reverseLayout;
@@ -97,4 +97,12 @@
 
 @end
 
+@interface MyMaker(MyDeprecated)
+- (MyMaker *)topPadding MYDEPRECATED("use paddingTop instead");
+- (MyMaker *)leftPadding MYDEPRECATED("use paddingTop instead");
+- (MyMaker *)bottomPadding MYDEPRECATED("use paddingTop instead");
+- (MyMaker *)rightPadding MYDEPRECATED("use paddingTop instead");
+- (MyMaker *)leadingPadding MYDEPRECATED("use paddingTop instead");
+- (MyMaker *)trailingPadding MYDEPRECATED("use paddingTop instead");
+@end
 #endif
