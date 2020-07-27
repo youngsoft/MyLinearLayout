@@ -67,13 +67,7 @@
             //如果里面有需要重新计算的就重新计算布局
             if (reCalcWidth || reCalcHeight) {
                 for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
-                    
-                    if (reCalcWidth) {
-                        subviewEngine.leading = subviewEngine.trailing = subviewEngine.width = CGFLOAT_MAX;
-                    }
-                    if (reCalcHeight) {
-                        subviewEngine.top = subviewEngine.bottom = subviewEngine.height = CGFLOAT_MAX;
-                    }
+                    [subviewEngine reset];
                 }
                 [self myDoLayoutRecalcWidth:NULL recalcHeight:NULL withContext:context];
             }

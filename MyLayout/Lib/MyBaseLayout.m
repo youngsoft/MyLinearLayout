@@ -415,8 +415,7 @@ void *_myObserverContextC = (void *)20175283;
 }
 
 - (instancetype)myDefaultSizeClassInner {
-    MyLayoutEngine *viewEngine = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_ENGINE);
-    return (UIView *)viewEngine.defaultSizeClass;
+    return (UIView *)self.myEngineInner.defaultSizeClass;
 }
 
 - (instancetype)myCurrentSizeClass {
@@ -429,8 +428,7 @@ void *_myObserverContextC = (void *)20175283;
 
 - (instancetype)myCurrentSizeClassInner {
     //如果没有则不会建立，为了优化减少不必要的建立。
-    MyLayoutEngine *viewEngine = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_ENGINE);
-    return (UIView *)viewEngine.currentSizeClass;
+    return (UIView *)self.myEngineInner.currentSizeClass;
 }
 
 - (MyLayoutEngine *)myEngine {
@@ -440,6 +438,10 @@ void *_myObserverContextC = (void *)20175283;
         objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_ENGINE, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return obj;
+}
+
+- (MyLayoutEngine *)myEngineInner {
+    return (MyLayoutEngine*)objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_ENGINE);
 }
 
 - (id)createSizeClassInstance {
@@ -523,6 +525,7 @@ void *_myObserverContextC = (void *)20175283;
     MyLayoutTouchEventDelegate *_touchEventDelegate;
     MyBorderlineLayerDelegate *_borderlineLayerDelegate;
     MyBaseLayoutOptionalData *_optionalData;
+    MyLayoutEngine *_myEngine;
 }
 
 - (void)dealloc {
@@ -1741,11 +1744,23 @@ void *_myObserverContextC = (void *)20175283;
 
 #pragma mark-- Private Methods
 
+- (MyLayoutEngine *)myEngine {
+    if (_myEngine == nil) {
+        _myEngine = [MyLayoutEngine new];
+    }
+    return _myEngine;
+}
+
+- (MyLayoutEngine *)myEngineInner {
+    return _myEngine;
+}
+
 - (CGSize)myEstimateLayoutSize:(CGSize)size inSizeClass:(MySizeClass)sizeClass subviews:(NSMutableArray<UIView *> *)subviews {
-    
-    NSArray *tuple = [self myUpdateCurrentSizeClass:sizeClass subviews:subviews];
-    MyLayoutEngine *layoutViewEngine = tuple.firstObject;
-    NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
+
+NSArray *tuple = [self myUpdateCurrentSizeClass:sizeClass subviews:subviews];
+MyLayoutEngine *layoutViewEngine = tuple.firstObject;
+NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
+
     
    
     MyLayoutContext context;
@@ -2532,7 +2547,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 
 - (void)myRemoveSubviewObserver:(UIView *)subview {
-    MyLayoutEngine *subviewEngine = objc_getAssociatedObject(subview, ASSOCIATEDOBJECT_KEY_MYLAYOUT_ENGINE);
+    MyLayoutEngine *subviewEngine = subview.myEngineInner;
     if (subviewEngine != nil) {
         subviewEngine.currentSizeClass.viewLayoutCompleteBlock = nil;
         if (subviewEngine.hasObserver) {

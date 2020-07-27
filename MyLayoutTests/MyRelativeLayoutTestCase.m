@@ -1650,6 +1650,115 @@
 
 }
 
+- (void)testWidthEqualToHeight {
+       MyRelativeLayout *rootLayout= [[MyRelativeLayout alloc] init];
+            rootLayout.myHeight = MyLayoutSize.wrap;
+            rootLayout.widthSize.equalTo(@(414));
+            rootLayout.backgroundColor = UIColor.whiteColor;
+            
+            // 头像 3个排序lab 3个名称
+            UILabel *titleLab = [[UILabel alloc] init];
+            titleLab.numberOfLines = -1;
+            titleLab.textAlignment = NSTextAlignmentCenter;
+            titleLab.textColor = UIColor.whiteColor;
+            titleLab.font = [UIFont systemFontOfSize:13];
+            
+            UIImageView *avatarImv = [[UIImageView alloc] init];
+            avatarImv.image = [UIImage imageNamed:@"head1"];
+            
+            UILabel *oneLab = [[UILabel alloc] init];
+            oneLab.text = @"1、";
+            oneLab.font = [UIFont systemFontOfSize:10];
+            
+            UILabel *twoLab = [[UILabel alloc] init];
+            twoLab.text = @"2、";
+            twoLab.font = [UIFont systemFontOfSize:10];
+            
+            UILabel *threeLab = [[UILabel alloc] init];
+            threeLab.text = @"3、";
+            threeLab.font = [UIFont systemFontOfSize:10];
+            
+            UILabel *firstLab = [[UILabel alloc] init];
+            firstLab.text = @"第一";
+            firstLab.font = [UIFont systemFontOfSize:10];
+            
+            UILabel *secondLab = [[UILabel alloc] init];
+            secondLab.text = @"第二";
+            secondLab.font = [UIFont systemFontOfSize:10];
+            
+            UILabel *thirdLab = [[UILabel alloc] init];
+            thirdLab.text = @"第三";
+            thirdLab.font = [UIFont systemFontOfSize:10];
+            
+            // 布局
+            titleLab.leftPos.equalTo(avatarImv.leftPos).offset(3);
+            titleLab.rightPos.equalTo(avatarImv.rightPos).offset(3);
+            titleLab.topPos.equalTo(avatarImv.topPos);
+            titleLab.bottomPos.equalTo(avatarImv.bottomPos);
+            
+            avatarImv.myVertMargin = 0;
+            avatarImv.myLeft = 5;
+            avatarImv.widthSize.equalTo(avatarImv.heightSize); // TODO: 临时设置宽度为 48，正确的应为 avatarImv.heightSize
+            
+            oneLab.myHeight = MyLayoutSize.wrap;
+            oneLab.myTop = 5.0;
+            oneLab.leftPos.equalTo(avatarImv.rightPos).offset(5);
+            oneLab.widthSize.equalTo(threeLab.widthSize);
+            
+            twoLab.myHeight = MyLayoutSize.wrap;
+            twoLab.topPos.equalTo(oneLab.bottomPos).offset(6);
+            twoLab.leftPos.equalTo(oneLab.leftPos);
+            twoLab.widthSize.equalTo(threeLab.widthSize);
+            
+            threeLab.myWidth = MyLayoutSize.wrap;
+            threeLab.myHeight = MyLayoutSize.wrap;
+            threeLab.topPos.equalTo(twoLab.bottomPos).offset(6);
+            threeLab.leftPos.equalTo(oneLab.leftPos);
+            threeLab.myBottom = 5;
+            
+            firstLab.myHeight = MyLayoutSize.wrap;
+            firstLab.topPos.equalTo(oneLab.topPos);
+            firstLab.leftPos.equalTo(oneLab.rightPos);
+            firstLab.rightPos.equalTo(rootLayout.rightPos);
+            
+            secondLab.myHeight = MyLayoutSize.wrap;
+            secondLab.leftPos.equalTo(firstLab.leftPos);
+            secondLab.rightPos.equalTo(firstLab.rightPos);
+            secondLab.topPos.equalTo(twoLab.topPos);
+            
+            thirdLab.myHeight = MyLayoutSize.wrap;
+            thirdLab.leftPos.equalTo(firstLab.leftPos);
+            thirdLab.rightPos.equalTo(firstLab.rightPos);
+            thirdLab.topPos.equalTo(threeLab.topPos);
+            
+            // 添加视图
+            [rootLayout addSubview:avatarImv];
+            [rootLayout addSubview:titleLab];
+            [rootLayout addSubview:oneLab];
+            [rootLayout addSubview:twoLab];
+            [rootLayout addSubview:threeLab];
+            [rootLayout addSubview:firstLab];
+            [rootLayout addSubview:secondLab];
+            [rootLayout addSubview:thirdLab];
+            
+           
+            // 添加视图
+          //  [rootLayout addSubview:avatarImv];
+            
+          
+    CGSize sz = [rootLayout sizeThatFits:CGSizeMake(414, 0)];
+          
+    MySizeAssert(rootLayout, sz, CGSizeMake(414, 58));
+    MyRectAssert2(titleLab, titleLab.estimatedRect, CGRectMake(8, 0, 52, 58));
+    MyRectAssert2(titleLab, titleLab.estimatedRect, CGRectMake(8, 0, 52, 58));
+    MyRectAssert2(oneLab, oneLab.estimatedRect, CGRectMake(68, 5, 17, 12));
+    MyRectAssert2(twoLab, twoLab.estimatedRect, CGRectMake(68, 23, 17, 12));
+    MyRectAssert2(threeLab, threeLab.estimatedRect, CGRectMake(68, 41, 17, 12));
+    MyRectAssert2(avatarImv, avatarImv.estimatedRect, CGRectMake(5, 0, 58, 58));
+    // NSLog(@"aa");
+    
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

@@ -25,6 +25,10 @@
 @property (nonatomic, assign) CGFloat width;
 @property (nonatomic, assign) CGFloat height;
 
+@property (nonatomic, assign) CGPoint origin;
+@property (nonatomic, assign) CGSize size;
+@property (nonatomic, assign) CGRect frame;
+
 //默认的布局分类，所有视图的布局相关的属性，都是设置到这个分类上。
 @property (nonatomic, weak) MyViewTraits *defaultSizeClass;
 
@@ -39,11 +43,6 @@
 
 - (void)reset;
 
-@property (nonatomic, assign) CGPoint origin;
-@property (nonatomic, assign) CGSize size;
-@property (nonatomic, assign) CGRect frame;
-
-
 - (MyViewTraits *)fetchView:(UIView *)view layoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
 
 - (MyViewTraits *)fetchView:(UIView *)view bestLayoutSizeClass:(MySizeClass)sizeClass;
@@ -55,6 +54,8 @@
 @interface UIView (MyLayoutExtInner)
 
 @property (nonatomic, strong, readonly) MyLayoutEngine *myEngine;
+@property (nonatomic, strong, readonly) MyLayoutEngine *myEngineInner;
+
 
 - (id)createSizeClassInstance;
 
@@ -86,14 +87,7 @@
 
 
 /*
- 布局的尺寸类型类，这个类的功能用来支持类似于iOS的Size Class机制用来实现各种屏幕下的视图的约束。
- MyLayoutSizeClass类中定义的各种属性跟视图和布局的各种扩展属性是一致的。
- 
- 我们所有的视图的默认的约束设置都是基于MySizeClass_wAny|MySizeClass_hAny这种SizeClass的。
- 
- 需要注意的是因为MyLayoutSizeClass是基于苹果SizeClass实现的，因此如果是iOS7的系统则只能支持MySizeClass_wAny|MySizeClass_hAny这种
- SizeClass，以及MySizeClass_Portrait或者MySizeClass_Landscape 也就是设置布局默认的约束。而iOS8以上的系统则能支持所有的SizeClass.
-  
+ 布局的属性特征集合类，这个类的功能用来存储涉及到布局的各种属性。MyViewTraits类中定义的各种属性跟视图和布局的各种扩展属性是一致的。
  */
 @interface MyViewTraits : NSObject <NSCopying>
 
@@ -155,11 +149,9 @@
 @property (nonatomic, assign) BOOL clearFloat;
 
 //内部方法
-
-+ (MyGravity)convertLeadingTrailingGravityFromLeftRightGravity:(MyGravity)horzGravity;
-
 - (BOOL)invalid;
 
++ (MyGravity)convertLeadingTrailingGravityFromLeftRightGravity:(MyGravity)horzGravity;
 - (MyGravity)vertGravityWith:(MyGravity)layoutVertGravity;
 - (MyGravity)horzGravityWith:(MyGravity)layoutHorzGravity;
 
@@ -219,7 +211,7 @@
 @property (nonatomic, assign) BOOL centered;
 
 - (CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding space:(CGFloat *)pSpace;
-- (CGFloat)calcMaxMinSubviewSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount startPadding:(CGFloat *)pStarPadding endPadding:(CGFloat *)pEndPadding space:(CGFloat *)pSpace;
+- (CGFloat)calcMaxMinSubviewSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding space:(CGFloat *)pSpace;
 
 @end
 

@@ -1249,7 +1249,7 @@
 
      MyGravity vertAlignment = MYVERTGRAVITY(layoutTraits.arrangedGravity);
 
-     CGFloat subviewWidth = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.width arrangedCount:arrangedCount startPadding:&context->paddingLeading endPadding:&context->paddingTrailing space:&context->horzSpace];
+     CGFloat subviewWidth = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.width arrangedCount:arrangedCount paddingStart:&context->paddingLeading paddingEnd:&context->paddingTrailing space:&context->horzSpace];
 
     CGFloat paddingHorz = context->paddingLeading + context->paddingTrailing;
     CGFloat paddingVert = context->paddingTop + context->paddingBottom;
@@ -2088,7 +2088,7 @@
 
     MyGravity horzAlignment = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(layoutTraits.arrangedGravity)];
 
-     CGFloat subviewHeight = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.height arrangedCount:arrangedCount startPadding:&context->paddingTop endPadding:&context->paddingBottom space:&context->vertSpace];
+     CGFloat subviewHeight = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.height arrangedCount:arrangedCount paddingStart:&context->paddingTop paddingEnd:&context->paddingBottom space:&context->vertSpace];
 
     CGFloat paddingHorz = context->paddingLeading + context->paddingTrailing;
     CGFloat paddingVert = context->paddingTop + context->paddingBottom;

@@ -927,7 +927,7 @@ BOOL _myisRTL = NO;
     return subviewSize;
 }
 
-- (CGFloat)calcMaxMinSubviewSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount startPadding:(CGFloat *)pStarPadding endPadding:(CGFloat *)pEndPadding space:(CGFloat *)pSpace {
+- (CGFloat)calcMaxMinSubviewSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding space:(CGFloat *)pSpace {
     CGFloat subviewSize = self.subviewSize;
 
     NSInteger spaceCount = arrangedCount - 1;

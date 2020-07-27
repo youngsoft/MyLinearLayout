@@ -897,7 +897,7 @@
    //得到将A加入到L2后的评估的frame值，注意这时候A还没有加入到L2。
    CGRect rectNew = [L2 subview:A estimatedRectInLayoutSize:CGSizeZero];
    //将新位置的评估的frame值，这里需要进行坐标转换为S在中的frame。
-   rectNew = [L2 convertRect:rectNew toView:self.view];
+   rectNew = [L2 convertRect:rectNew toView:S];
  
    //动画的过程是先将A作为S的子视图进行位置的调整后再加入到L2中去
    [A removeFromSuperview];

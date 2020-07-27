@@ -275,7 +275,7 @@
    
     MyLinearLayoutTraits *layoutTraits = (MyLinearLayoutTraits *)context->layoutViewEngine.currentSizeClass;
     
-    CGFloat subviewHeight = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.height arrangedCount:context->subviewEngines.count startPadding:&context->paddingTop endPadding:&context->paddingBottom space:&context->vertSpace];
+    CGFloat subviewHeight = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.height arrangedCount:context->subviewEngines.count paddingStart:&context->paddingTop paddingEnd:&context->paddingBottom space:&context->vertSpace];
     CGFloat paddingVert = context->paddingTop + context->paddingBottom;
     
     CGFloat totalHeight = 0.0; //计算固定部分的总高度
@@ -652,7 +652,7 @@
     
     MyLinearLayoutTraits *layoutTraits = (MyLinearLayoutTraits*)context->layoutViewEngine.currentSizeClass;
     
-    CGFloat subviewWidth = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.width arrangedCount:context->subviewEngines.count startPadding:&context->paddingLeading endPadding:&context->paddingTrailing space:&context->horzSpace];
+    CGFloat subviewWidth = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.width arrangedCount:context->subviewEngines.count paddingStart:&context->paddingLeading paddingEnd:&context->paddingTrailing space:&context->horzSpace];
     CGFloat totalWidth = 0.0;  //计算固定部分的宽度
     CGFloat totalWeight = 0.0; //剩余部分的总比重
     CGFloat totalShrink = 0.0; //总的压缩比重
