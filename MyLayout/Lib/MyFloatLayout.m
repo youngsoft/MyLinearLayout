@@ -111,8 +111,8 @@
     context->subviewEngines = [layoutTraits filterEngines:subviewEngines];
     context->paddingTop = layoutTraits.myLayoutPaddingTop;
     context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
-    context->paddingLeading = layoutTraits.myLayoutLeadingPadding;
-    context->paddingTrailing = layoutTraits.myLayoutTrailingPadding;
+    context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
+    context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
     context->vertGravity = MYVERTGRAVITY(layoutTraits.gravity);
     context->horzGravity = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(layoutTraits.gravity)];
     context->vertSpace = layoutTraits.subviewVSpace;
@@ -667,7 +667,7 @@
             if (lineHasAlignment) {
                 CGFloat baselinePos = CGFLOAT_MAX;
                 for (NSInteger i = lineFirstIndex; i <= idx; i++) {
-                   MyLayoutEngine *subviewEngine = context->subviewEngines[i];
+                    MyLayoutEngine *subviewEngine = context->subviewEngines[i];
                     MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
                     MyGravity subviewVertAlignment = MYVERTGRAVITY(subviewTraits.alignment);
                     UIFont *subviewFont = nil;

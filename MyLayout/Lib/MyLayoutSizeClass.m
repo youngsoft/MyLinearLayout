@@ -751,7 +751,7 @@ BOOL _myisRTL = NO;
     return self.paddingBottom;
 }
 
-- (CGFloat)myLayoutLeadingPadding {
+- (CGFloat)myLayoutPaddingLeading {
     if (self.paddingLeading >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingLeading <= MyLayoutPos.safeAreaMargin + 2000) {
         CGFloat paddingLeadingAdd = 0;
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
@@ -785,7 +785,7 @@ BOOL _myisRTL = NO;
     return self.paddingLeading + inset;
 }
 
-- (CGFloat)myLayoutTrailingPadding {
+- (CGFloat)myLayoutPaddingTrailing {
     if (self.paddingTrailing >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingTrailing <= MyLayoutPos.safeAreaMargin + 2000) {
         CGFloat paddingTrailingAdd = 0;
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
@@ -820,10 +820,10 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)myLayoutPaddingLeft {
-    return [MyViewTraits isRTL] ? [self myLayoutTrailingPadding] : [self myLayoutLeadingPadding];
+    return [MyViewTraits isRTL] ? [self myLayoutPaddingTrailing] : [self myLayoutPaddingLeading];
 }
 - (CGFloat)myLayoutPaddingRight {
-    return [MyViewTraits isRTL] ? [self myLayoutLeadingPadding] : [self myLayoutTrailingPadding];
+    return [MyViewTraits isRTL] ? [self myLayoutPaddingLeading] : [self myLayoutPaddingTrailing];
 }
 
 - (CGFloat)subviewSpace {

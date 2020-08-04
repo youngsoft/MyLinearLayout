@@ -264,8 +264,8 @@
     context.selfSize = self.bounds.size;
     context.paddingTop = layoutTraits.myLayoutPaddingTop;
     context.paddingBottom = layoutTraits.myLayoutPaddingBottom;
-    context.paddingLeading = layoutTraits.myLayoutLeadingPadding;
-    context.paddingTrailing = layoutTraits.myLayoutTrailingPadding;
+    context.paddingLeading = layoutTraits.myLayoutPaddingLeading;
+    context.paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
     
     if (full) {
         NSMutableArray *pointIndexs = [NSMutableArray new];
@@ -351,8 +351,8 @@
     context.selfSize = self.bounds.size;
     context.paddingTop = layoutTraits.myLayoutPaddingTop;
     context.paddingBottom = layoutTraits.myLayoutPaddingBottom;
-    context.paddingLeading = layoutTraits.myLayoutLeadingPadding;
-    context.paddingTrailing = layoutTraits.myLayoutTrailingPadding;
+    context.paddingLeading = layoutTraits.myLayoutPaddingLeading;
+    context.paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
     
     CGMutablePathRef retPath = CGPathCreateMutable();
 
@@ -476,8 +476,8 @@
     MyPathLayoutTraits *layoutTraits = (MyPathLayoutTraits *)context->layoutViewEngine.currentSizeClass;
     context->paddingTop = layoutTraits.myLayoutPaddingTop;
     context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
-    context->paddingLeading = layoutTraits.myLayoutLeadingPadding;
-    context->paddingTrailing = layoutTraits.myLayoutTrailingPadding;
+    context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
+    context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
     if (context->subviewEngines == nil) {
         context->subviewEngines = [layoutTraits filterEngines:subviewEngines];
     }

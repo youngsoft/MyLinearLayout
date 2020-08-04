@@ -190,8 +190,8 @@
 - (CGFloat)myLayoutPaddingBottom;
 - (CGFloat)myLayoutPaddingLeft;
 - (CGFloat)myLayoutPaddingRight;
-- (CGFloat)myLayoutLeadingPadding;
-- (CGFloat)myLayoutTrailingPadding;
+- (CGFloat)myLayoutPaddingLeading;
+- (CGFloat)myLayoutPaddingTrailing;
 
 @property (nonatomic, assign) UIRectEdge insetsPaddingFromSafeArea;
 

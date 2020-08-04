@@ -19,8 +19,8 @@
     MyRelativeLayoutTraits *layoutTraits = (MyRelativeLayoutTraits *)context->layoutViewEngine.currentSizeClass;
     context->paddingTop = layoutTraits.myLayoutPaddingTop;
     context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
-    context->paddingLeading = layoutTraits.myLayoutLeadingPadding;
-    context->paddingTrailing = layoutTraits.myLayoutTrailingPadding;
+    context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
+    context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
     context->subviewEngines = subviewEngines;
 
     if (layoutTraits.widthSizeInner.wrapVal) {

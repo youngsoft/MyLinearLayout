@@ -2219,7 +2219,7 @@ NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
     } else if (valType == MyLayoutValType_LayoutSize) {
         if (anchor.anchorVal.view == self) {
             if (anchor.anchorVal.anchorType == MyLayoutAnchorType_Width) {
-                value = selfLayoutSize.width - (self.myLayoutLeadingPadding + self.myLayoutTrailingPadding);
+                value = selfLayoutSize.width - (self.myLayoutPaddingLeading + self.myLayoutPaddingTrailing);
             } else {
                 value = selfLayoutSize.height - (self.myLayoutPaddingTop + self.myLayoutPaddingBottom);
             }
@@ -2433,11 +2433,11 @@ NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
 - (CGFloat)myLayoutPaddingRight {
     return self.myCurrentSizeClass.myLayoutPaddingRight;
 }
-- (CGFloat)myLayoutLeadingPadding {
-    return self.myCurrentSizeClass.myLayoutLeadingPadding;
+- (CGFloat)myLayoutPaddingLeading {
+    return self.myCurrentSizeClass.myLayoutPaddingLeading;
 }
-- (CGFloat)myLayoutTrailingPadding {
-    return self.myCurrentSizeClass.myLayoutTrailingPadding;
+- (CGFloat)myLayoutPaddingTrailing {
+    return self.myCurrentSizeClass.myLayoutPaddingTrailing;
 }
 
 - (void)myLayout:(MyLayoutTraits *)layoutTraits adjustScrollViewContentWithSize:(CGSize)newSize {

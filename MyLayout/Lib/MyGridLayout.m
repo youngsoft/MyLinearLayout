@@ -629,8 +629,8 @@ NSString *const vMyGridGravityHeightFill = @"height";
     
        context->paddingTop = layoutTraits.myLayoutPaddingTop;
        context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
-       context->paddingLeading = layoutTraits.myLayoutLeadingPadding;
-       context->paddingTrailing = layoutTraits.myLayoutTrailingPadding;
+       context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
+       context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
        context->vertGravity = MYVERTGRAVITY(layoutTraits.gravity);
        context->horzGravity = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(layoutTraits.gravity)];
        context->vertSpace = layoutTraits.subviewVSpace;
@@ -750,9 +750,9 @@ NSString *const vMyGridGravityHeightFill = @"height";
     CGFloat paddingTrailing;
     if (grid == (id<MyGridNode>)layoutTraits) {
         paddingTop = layoutTraits.myLayoutPaddingTop;
-        paddingLeading = layoutTraits.myLayoutLeadingPadding;
+        paddingLeading = layoutTraits.myLayoutPaddingLeading;
         paddingBottom = layoutTraits.myLayoutPaddingBottom;
-        paddingTrailing = layoutTraits.myLayoutTrailingPadding;
+        paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
     } else {
         UIEdgeInsets gridPadding = grid.padding;
         paddingTop = gridPadding.top;
@@ -928,9 +928,9 @@ NSString *const vMyGridGravityHeightFill = @"height";
     CGFloat paddingTrailing;
     if (grid == (id<MyGridNode>)lsc) {
         paddingTop = lsc.myLayoutPaddingTop;
-        paddingLeading = lsc.myLayoutLeadingPadding;
+        paddingLeading = lsc.myLayoutPaddingLeading;
         paddingBottom = lsc.myLayoutPaddingBottom;
-        paddingTrailing = lsc.myLayoutTrailingPadding;
+        paddingTrailing = lsc.myLayoutPaddingTrailing;
     } else {
         UIEdgeInsets gridPadding = grid.padding;
         paddingTop = gridPadding.top;

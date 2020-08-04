@@ -158,8 +158,8 @@
        MyFlowLayoutTraits *layoutTraits = (MyFlowLayoutTraits *)context->layoutViewEngine.currentSizeClass;
        context->paddingTop = layoutTraits.myLayoutPaddingTop;
        context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
-       context->paddingLeading = layoutTraits.myLayoutLeadingPadding;
-       context->paddingTrailing = layoutTraits.myLayoutTrailingPadding;
+       context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
+       context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
        context->vertGravity = MYVERTGRAVITY(layoutTraits.gravity);
        context->horzGravity = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(layoutTraits.gravity)];
        context->vertSpace = layoutTraits.subviewVSpace;

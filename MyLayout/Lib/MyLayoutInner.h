@@ -71,8 +71,8 @@ typedef struct _MyLayoutContext {
 - (CGFloat)myLayoutPaddingBottom;
 - (CGFloat)myLayoutPaddingLeft;
 - (CGFloat)myLayoutPaddingRight;
-- (CGFloat)myLayoutLeadingPadding;
-- (CGFloat)myLayoutTrailingPadding;
+- (CGFloat)myLayoutPaddingLeading;
+- (CGFloat)myLayoutPaddingTrailing;
 
 - (void)myAdjustSizeSettingOfSubviewEngine:(MyLayoutEngine *)subviewEngine withContext:(MyLayoutContext *)context;
 
