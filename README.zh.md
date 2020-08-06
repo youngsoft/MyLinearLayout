@@ -2,7 +2,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
 [![Platform](https://img.shields.io/cocoapods/p/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
-[![Support](https://img.shields.io/badge/support-iOS%205%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
+[![Support](https://img.shields.io/badge/support-iOS%208%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
 [![Weibo](https://img.shields.io/badge/Sina微博-@欧阳大哥2013-yellow.svg?style=flat)](http://weibo.com/1411091507)
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/MyLinearLayout.svg)](https://github.com/youngsoft/MyLinearLayout/stargazers)
@@ -158,8 +158,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 示例代码:
 
 ```objective-c
--(void)loadView
-{
+-(void)loadView {
     [super loadView];
     
     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
@@ -167,23 +166,22 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     S.subviewSpace = 10;
     
     UIView *A = [UIView new];
-    A.myLeft = A.myRight = 5;
+    A.myHorzMargin = 5;
     A.myHeight = 40;
     [S addSubview:A];
     
     UIView *B = [UIView new];
     B.myLeft = 20;
-    B.myWidth = B.myHeight = 40;
+    B.mySize = CGSizeMake(40,40);
     [S addSubview:B];
     
     UIView *C = [UIView new];
     C.myRight = 40;
-    C.myWidth = 50;
-    C.myHeight = 40;
+    C.mySize = CGSizeMake(50,40);
     [S addSubview:C];
     
     UIView *D = [UIView new];
-    D.myLeft = D.myRight = 10;
+    D.myHorzMargin = 10;
     D.myHeight = 40;
     [S addSubview:D];
     
@@ -194,7 +192,6 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     C.backgroundColor = [UIColor orangeColor];
     D.backgroundColor = [UIColor cyanColor];
  }
-
 ```
 
 
@@ -208,8 +205,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 示例代码:
 
 ```objective-c
--(void)loadView
-{
+-(void)loadView {
     [super loadView];
     
     MyRelativeLayout *S = [MyRelativeLayout new];
@@ -275,8 +271,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 示例代码:
 
 ```objective-c
- -(void)loadView
-{
+ -(void)loadView {
     [super loadView];
     
     MyFrameLayout *S = [MyFrameLayout new];
@@ -325,16 +320,15 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 示例代码:
 
 ```objective-c
-  -(void)loadView
-{
+-(void)loadView {
     [super loadView];
     
     MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
-    S.wrapContentWidth = YES;
+    S.myWidth = MyLayoutSize.wrap;
     S.subviewHSpace = 10;
     S.subviewVSpace = 10;
     
-    [S addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_WRAPCONTENT];
+    [S addRow:MyLayoutSize.wrap colSize:MyLayoutSize.wrap];
     
     UIView *A = [UIView new];
     A.mySize = CGSizeMake(50,40);
@@ -348,7 +342,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     C.mySize = CGSizeMake(30,40);
     [S addSubview:C];
     
-    [S addRow:MTLSIZE_WRAPCONTENT colSize:MTLSIZE_WRAPCONTENT];
+    [S addRow:MyLayoutSize.wrap colSize:MyLayoutSize.wrap];
     
     UIView *D = [UIView new];
     D.mySize = CGSizeMake(200,40);
@@ -381,12 +375,11 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 
 ```objective-c
    
-  -(void)loadView
-{
+  -(void)loadView {
     [super loadView];
     
     MyFlowLayout *S = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
-    S.wrapContentHeight = YES;
+    S.myHeight = MyLayoutSize.wrap;
     S.myWidth = 300;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     S.gravity = MyGravity_Horz_Fill;
@@ -406,10 +399,6 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     [self.view addSubview:S];
     S.backgroundColor = [UIColor redColor];
 }
-
-   
-   
-
 ```
 
 
@@ -424,15 +413,14 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 示例代码:
 
 ```objective-c
-      -(void)loadView
-{
+  -(void)loadView {
     [super loadView];
     
     MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
-    S.wrapContentHeight = YES;
+    S.myHeight = MyLayoutSize.wrap;
+    S.myWidth = 300;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     S.subviewSpace = 10;
-    S.myWidth = 300;
     
     UIView *A = [UIView new];
     A.mySize = CGSizeMake(80,70);
@@ -469,8 +457,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     E.backgroundColor = [UIColor blackColor];
     F.backgroundColor = [UIColor whiteColor];
 }     
-     
-
+    
 ```
 
 
@@ -486,8 +473,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
 示例代码:
  
  ```objective-c
-   -(void)loadView
-{
+   -(void)loadView {
     [super loadView];
     
     MyPathLayout *S = [MyPathLayout new];
@@ -495,13 +481,11 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
     S.coordinateSetting.isReverse = YES;
     S.coordinateSetting.origin = CGPointMake(0.5, 0.2);
     
-    S.polarEquation = ^(CGFloat angle)
-    {
+    S.polarEquation = ^(CGFloat angle) {
         return 80 * (1 + cos(angle));
     };
     
-    for (int i = 0; i < 4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         UIView *A = [UIView new];
         A.mySize = CGSizeMake(40,40);
         [S addSubview:A];
@@ -526,8 +510,7 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
    示例代码:
  
  ```objective-c
-   -(void)loadView
-{
+ -(void)loadView {
     [super loadView];
     
     MyGridLayout *S = [MyGridLayout new];
@@ -588,14 +571,14 @@ MyLayout布局体系为了实现对不同屏幕尺寸的设备进行适配，提
 //默认所有设备的设置。
  MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    rootLayout.wrapContentHeight = NO;
+    rootLayout.myHeight = MyLayoutSize.empty;
     rootLayout.gravity = MyGravity_Horz_Fill;
 
 //MySizeClass_wAny | MySizeClass_hCompact 表明的是iPhone设备的横屏.
  MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
  
     lsc.orientation = MyOrientation_Horz;
-    lsc.wrapContentWidth = NO;
+    lsc.myWidth = MyLayoutSize.empty;
     lsc.gravity = MyGravity_Vert_Fill;
 
 

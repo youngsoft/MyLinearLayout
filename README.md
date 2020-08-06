@@ -2,7 +2,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
 [![Platform](https://img.shields.io/cocoapods/p/MyLayout.svg?style=flat)](http://cocoapods.org/pods/MyLayout)
-[![Support](https://img.shields.io/badge/support-iOS%205%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
+[![Support](https://img.shields.io/badge/support-iOS%208%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)
 [![Weibo](https://img.shields.io/badge/Sina微博-@欧阳大哥2013-yellow.svg?style=flat)](http://weibo.com/1411091507)
 [![QQ](https://img.shields.io/badge/QQ-156355113-yellow.svg?style=flat)]()
 [![GitHub stars](https://img.shields.io/github/stars/youngsoft/MyLinearLayout.svg)](https://github.com/youngsoft/MyLinearLayout/stargazers)
@@ -109,8 +109,7 @@ Sample code:
 
 ```objective-c
 
--(void)loadView
-{
+-(void)loadView {
     [super loadView];
     
     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
@@ -118,23 +117,22 @@ Sample code:
     S.subviewSpace = 10;
     
     UIView *A = [UIView new];
-    A.myLeft = A.myRight = 5;
+    A.myHorzMargin = 5;
     A.myHeight = 40;
     [S addSubview:A];
     
     UIView *B = [UIView new];
     B.myLeft = 20;
-    B.myWidth = B.myHeight = 40;
+    B.mySize = CGSizeMake(40,40);
     [S addSubview:B];
     
     UIView *C = [UIView new];
     C.myRight = 40;
-    C.myWidth = 50;
-    C.myHeight = 40;
+    C.mySize = CGSizeMake(50,40);
     [S addSubview:C];
     
     UIView *D = [UIView new];
-    D.myLeft = D.myRight = 10;
+    D.myHorzMargin = 10;
     D.myHeight = 40;
     [S addSubview:D];
     
@@ -160,8 +158,7 @@ Sample code:
 
 ```objective-c
 
--(void)loadView
-{
+-(void)loadView {
     [super loadView];
     
     MyRelativeLayout *S = [MyRelativeLayout new];
@@ -212,7 +209,6 @@ Sample code:
     D.backgroundColor = [UIColor cyanColor];
     E.backgroundColor = [UIColor magentaColor];
 }
-
 ```
 
 
@@ -227,8 +223,7 @@ Sample code:
 
 ```objective-c
 
- -(void)loadView
-{
+ -(void)loadView {
     [super loadView];
     
     MyFrameLayout *S = [MyFrameLayout new];
@@ -262,7 +257,6 @@ Sample code:
     C.backgroundColor = [UIColor orangeColor];
     D.backgroundColor = [UIColor cyanColor];  
   }
-  
 ```
 
 
@@ -277,12 +271,11 @@ Sample code:
 
 ```objective-c
 
- -(void)loadView
-{
+ -(void)loadView {
     [super loadView];
     
     MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
-    S.wrapContentWidth = YES;
+    S.myWidth = MyLayoutSize.wrap;
     S.subviewHSpace = 10;
     S.subviewVSpace = 10;
     
@@ -308,7 +301,6 @@ Sample code:
     
     //...E,F  
     
-    
     [self.view addSubview:S];
     S.backgroundColor = [UIColor redColor];
     A.backgroundColor = [UIColor greenColor];
@@ -316,7 +308,6 @@ Sample code:
     C.backgroundColor = [UIColor orangeColor];
     D.backgroundColor = [UIColor cyanColor];
 }  
-  
 ```
 
 
@@ -331,36 +322,28 @@ Sample code:
 
 ```objective-c
 
-
-  -(void)loadView
-{
+  -(void)loadView {
     [super loadView];
     
     MyFlowLayout *S = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
-    S.wrapContentHeight = YES;
+    S.myHeight = MyLayoutSize.wrap;
     S.myWidth = 300;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     S.gravity = MyGravity_Horz_Fill;
     S.subviewSpace = 10;
     
-    for (int i = 0; i < 10; i++)
-    {
+    for (int i = 0; i < 10; i++) {
         UIView *A = [UIView new];
         A.heightSize.equalTo(A.widthSize);
         [S addSubview:A];
         
         A.backgroundColor = [UIColor greenColor];
-
     }
     
     
     [self.view addSubview:S];
     S.backgroundColor = [UIColor redColor];
 }
-
-   
-   
-
 ```
 
 
@@ -376,15 +359,14 @@ Sample code:
 
 ```objective-c
 
-     -(void)loadView
-{
+ -(void)loadView {
     [super loadView];
     
     MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
-    S.wrapContentHeight = YES;
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     S.subviewSpace = 10;
     S.myWidth = 300;
+    S.myHeight = MyLayoutSize.wrap;
     
     UIView *A = [UIView new];
     A.mySize = CGSizeMake(80,70);
@@ -421,7 +403,6 @@ Sample code:
     E.backgroundColor = [UIColor blackColor];
     F.backgroundColor = [UIColor whiteColor];
 }     
-
 ```
 
 
@@ -436,8 +417,7 @@ Sample code:
  
  ```objective-c
  
-    -(void)loadView
-{
+-(void)loadView {
     [super loadView];
     
     MyPathLayout *S = [MyPathLayout new];
@@ -445,13 +425,11 @@ Sample code:
     S.coordinateSetting.isReverse = YES;
     S.coordinateSetting.origin = CGPointMake(0.5, 0.2);
     
-    S.polarEquation = ^(CGFloat angle)
-    {
+    S.polarEquation = ^(CGFloat angle) {
         return 80 * (1 + cos(angle));
     };
     
-    for (int i = 0; i < 4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         UIView *A = [UIView new];
         A.mySize = CGSizeMake(40,40);
         [S addSubview:A];
@@ -462,7 +440,6 @@ Sample code:
     [self.view  addSubview:S];
     S.backgroundColor = [UIColor redColor];
  }
-
  
  ```
   
@@ -478,8 +455,7 @@ Grid layout is a view to a rectangular area according to the row or column divid
    Sample code:
  
  ```objective-c
-   -(void)loadView
-{
+-(void)loadView {
     [super loadView];
     
     MyGridLayout *S = [MyGridLayout new];
@@ -541,17 +517,15 @@ to set Size Classes Characteristics like below:
 //default is all Size Classes
  MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    rootLayout.wrapContentHeight = NO;
+    rootLayout.myHeight = MyLayoutSize.empty;
     rootLayout.gravity = MyGravity_Horz_Fill;
 
 //MySizeClass_wAny | MySizeClass_hCompact is iPhone landscape orientation.
  MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
  
     lsc.orientation = MyOrientation_Horz;
-    lsc.wrapContentWidth = NO;
+    lsc.myWidth = MyLayoutSize.empty;
     lsc.gravity = MyGravity_Vert_Fill;
-
-
 
 ```
 
