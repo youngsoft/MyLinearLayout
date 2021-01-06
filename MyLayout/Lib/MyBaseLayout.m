@@ -2210,7 +2210,7 @@ NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
 
 - (CGFloat)myGetBoundLimitMeasure:(MyLayoutSize *)anchor subview:(UIView *)subview anchorType:(MyLayoutAnchorType)anchorType subviewSize:(CGSize)subviewSize selfLayoutSize:(CGSize)selfLayoutSize isUBound:(BOOL)isUBound {
     CGFloat value = isUBound ? CGFLOAT_MAX : -CGFLOAT_MAX;
-    if (anchor == nil || !anchor.isActive) {
+    if (anchor == nil || !anchor.isActive || anchor.valType == MyLayoutValType_Nil) {
         return value;
     }
     MyLayoutValType valType = anchor.valType;
