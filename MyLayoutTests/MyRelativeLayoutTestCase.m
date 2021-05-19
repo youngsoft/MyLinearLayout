@@ -1759,6 +1759,71 @@
     
 }
 
+-(void)testSizeThatFit {
+    {
+    MyRelativeLayout *v = MyRelativeLayout.alloc.init;
+    v.myWidth = v.myHeight = 200;
+    CGSize vsize = [v sizeThatFits:(CGSizeZero)];
+    MySizeAssert(v, vsize, CGSizeMake(200, 200));
+    }
+    {
+    MyLinearLayout *v = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    v.myWidth = v.myHeight = 200;
+    CGSize vsize = [v sizeThatFits:(CGSizeZero)];
+    MySizeAssert(v, vsize, CGSizeMake(200, 200));
+    }
+    {
+    MyFlowLayout *v = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
+      v.myWidth = v.myHeight = 200;
+      CGSize vsize = [v sizeThatFits:(CGSizeZero)];
+      MySizeAssert(v, vsize, CGSizeMake(200, 200));
+    }
+    
+    {
+    MyFloatLayout *v = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
+      v.myWidth = v.myHeight = 200;
+      CGSize vsize = [v sizeThatFits:(CGSizeZero)];
+      MySizeAssert(v, vsize, CGSizeMake(200, 200));
+    }
+    
+    {
+    MyPathLayout *v = [MyPathLayout new];
+      v.myWidth = v.myHeight = 200;
+      CGSize vsize = [v sizeThatFits:(CGSizeZero)];
+      MySizeAssert(v, vsize, CGSizeMake(200, 200));
+    }
+    
+    {
+       MyFrameLayout *v = [MyFrameLayout new];
+         v.myWidth = v.myHeight = 200;
+         CGSize vsize = [v sizeThatFits:(CGSizeZero)];
+         MySizeAssert(v, vsize, CGSizeMake(200, 200));
+       }
+    
+    
+    {
+    MyGridLayout *v = [MyGridLayout new];
+      v.myWidth = v.myHeight = 200;
+      CGSize vsize = [v sizeThatFits:(CGSizeZero)];
+      MySizeAssert(v, vsize, CGSizeMake(200, 200));
+    }
+    
+    {
+      MyTableLayout *v = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
+        v.myWidth = v.myHeight = 200;
+        CGSize vsize = [v sizeThatFits:(CGSizeZero)];
+        MySizeAssert(v, vsize, CGSizeMake(200, 200));
+      }
+    
+    {
+        MyFlexLayout *v = MyFlexLayout.new;
+       v.myWidth = v.myHeight = 200;
+      CGSize vsize = [v sizeThatFits:(CGSizeZero)];
+      MySizeAssert(v, vsize, CGSizeMake(200, 200));
+    }
+    
+}
+
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{

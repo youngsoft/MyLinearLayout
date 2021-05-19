@@ -25,10 +25,10 @@
 
     if (layoutTraits.widthSizeInner.wrapVal) {
         context->selfSize.width = [self myValidMeasure:layoutTraits.widthSizeInner subview:self calcSize:0 subviewSize:context->selfSize selfLayoutSize:self.superview.bounds.size];
-    }
+    } 
     if (layoutTraits.heightSizeInner.wrapVal) {
         context->selfSize.height = [self myValidMeasure:layoutTraits.heightSizeInner subview:self calcSize:0 subviewSize:context->selfSize selfLayoutSize:self.superview.bounds.size];
-    }
+    } 
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
         MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
 

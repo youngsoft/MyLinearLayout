@@ -32,16 +32,15 @@
         _rootLayout.paddingBottom = 5;
         _rootLayout.subviewVSpace = 10;
         _rootLayout.myHorzMargin = 0;
-        _rootLayout.cacheEstimatedRect = YES;  //这个属性只局限于在UITableViewCell中使用，用来优化tableviewcell的高度自适应的性能，其他地方请不要使用！！！
+        _rootLayout.gravity = MyGravity_Horz_Fill;
         [self.contentView addSubview:_rootLayout];
         
         _titleLabel = [UILabel new];
-        _titleLabel.widthSize.equalTo(@(MyLayoutSize.wrap)).max(100);
-        _titleLabel.heightSize.equalTo(@30);
+        _titleLabel.myHeight = MyLayoutSize.wrap;
         [_rootLayout addSubview:_titleLabel];
         
         _subtitleLabel = [UILabel new];
-        _subtitleLabel.myWidth = 70;
+        _subtitleLabel.myTop = 10;
         _subtitleLabel.myHeight = MyLayoutSize.wrap;
         [_rootLayout addSubview:_subtitleLabel];
         
@@ -50,15 +49,18 @@
     return self;
 }
 
-- (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority
-{
-    /*
-     通过布局视图的sizeThatFits方法能够评估出UITableViewCell的动态高度。sizeThatFits并不会进行布局而只是评估布局的尺寸。
-     因为cell的高度是自适应的，因此这里通过调用高度为wrap的布局视图的sizeThatFits来获取真实的高度。
-     */
-    return  [self.rootLayout sizeThatFits:targetSize];//如果使用系统自带的分割线，请记得将返回的高度height+1
+///自适应高度处理，需要重载这个方法来指定尺寸和位置。
+- (UICollectionViewLayoutAttributes *)preferredLayoutAttributesFittingAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes {
+    
+    UICollectionViewLayoutAttributes *retLayoutAttributes = [super preferredLayoutAttributesFittingAttributes:layoutAttributes];
+    CGSize size =  [self.rootLayout sizeThatFits:CGSizeMake(200, 0)];
+    
+    retLayoutAttributes.size = size;
+    //如果您需要对位置进行控制，则需要借助一些累加的处理来进行位置处理。
+    return retLayoutAttributes;
     
 }
+
 
 -(void)setModel:(AllTest9DataModel *)model
 {

@@ -15,7 +15,7 @@
 
 @class MyViewTraits;
 
-//视图在布局中的评估测量值
+//视图的布局引擎。
 @interface MyLayoutEngine : NSObject
 
 @property (nonatomic, assign) CGFloat top;

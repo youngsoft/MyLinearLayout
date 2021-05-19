@@ -95,10 +95,7 @@ extern NSString *const vMyGridGravityHeightFill; //对应MyGravity_Vert_Fill
  */
 @property (nonatomic, strong, readonly) NSArray<id<MyGrid>> *subGrids;
 
-/**
- 克隆出一个新栅格以及其下的所有子栅格。
- */
-- (id<MyGrid>)cloneGrid;
+
 
 /**
  栅格内子栅格之间的间距。
@@ -130,7 +127,7 @@ extern NSString *const vMyGridGravityHeightFill; //对应MyGravity_Vert_Fill
 
 /**
  重叠视图的对齐停靠方式
- 对于叶子栅格来说,如果设置了gravity 则填充的子视图必须要设置明确的尺寸
+ 根据栅格视图的规则默认是不存在重叠能力的，所谓重叠能力就是指视图显示时出现重叠和覆盖的现象。
  */
 @property (nonatomic, assign) MyGravity overlap;
 
@@ -172,8 +169,14 @@ extern NSString *const vMyGridGravityHeightFill; //对应MyGravity_Vert_Fill
 - (id<MyGrid>)addRowGrid:(id<MyGrid>)grid;
 - (id<MyGrid>)addColGrid:(id<MyGrid>)grid;
 
+//添加栅格，返回被添加的栅格。这个方法会重新设定grid中的measure属性值。
 - (id<MyGrid>)addRowGrid:(id<MyGrid>)grid measure:(CGFloat)measure;
 - (id<MyGrid>)addColGrid:(id<MyGrid>)grid measure:(CGFloat)measure;
+
+/**
+ 克隆出一个新栅格以及其下的所有子栅格。
+ */
+- (id<MyGrid>)cloneGrid;
 
 //从父栅格中删除。
 - (void)removeFromSuperGrid;

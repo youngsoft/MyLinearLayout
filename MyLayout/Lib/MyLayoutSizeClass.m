@@ -593,11 +593,14 @@ BOOL _myisRTL = NO;
     if (self.useFrame) {
         return YES;
     }
-    if (self.view.isHidden) {
-        return self.visibility != MyVisibility_Invisible;
-    } else {
-        return self.visibility == MyVisibility_Gone;
+    
+    BOOL isHidden = self.view.isHidden;
+    BOOL result = (self.visibility != MyVisibility_Visible);
+    if (isHidden != result) {
+        self.view.hidden = result;
     }
+    
+    return result;
 }
 
 - (MyGravity)vertGravityWith:(MyGravity)layoutVertGravity {

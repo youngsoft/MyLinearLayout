@@ -27,6 +27,8 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self != nil)
     {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
         /**
          * 您可以尝试用不同的布局来实现相同的功能。
          */

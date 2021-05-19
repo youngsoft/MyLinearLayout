@@ -22,16 +22,11 @@ static NSString * const reuseIdentifier = @"Cell";
 -(instancetype)init
 {
     UICollectionViewFlowLayout  *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = UICollectionViewScrollDirectionVertical | UICollectionViewScrollDirectionHorizontal;
-    
-    //如果您的cell是需要动态尺寸则需要设置estimatedItemSize的值为非0
-    layout.estimatedItemSize = CGSizeMake(100, 100);
+    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    //如果您的cell是需要动态尺寸则需要设置estimatedItemSize的值为UICollectionViewFlowLayoutAutomaticSize
+    layout.estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize;
     
     self = [self initWithCollectionViewLayout:layout];
-    if (self != nil)
-    {
-    }
-    
     return self;
 }
 
@@ -156,12 +151,13 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 */
 
-/*
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(100, 100);
-}
 
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return CGSizeMake(100, 100);
+//}
+
+/*
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(10, 10, 10, 10);

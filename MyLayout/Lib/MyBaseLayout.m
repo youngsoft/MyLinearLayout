@@ -1767,8 +1767,17 @@ NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
     context.isEstimate = YES;
     context.sizeClass = sizeClass;
     context.layoutViewEngine = layoutViewEngine;
+    
+    if (layoutViewEngine.currentSizeClass.widthSizeInner.numberVal != nil) {
+        size.width = MAX(layoutViewEngine.currentSizeClass.widthSizeInner.measure, size.width);
+    }
+    
+    if (layoutViewEngine.currentSizeClass.heightSizeInner.numberVal != nil) {
+        size.height = MAX(layoutViewEngine.currentSizeClass.heightSizeInner.measure, size.height);
+    }
+    
     CGSize selfSize = [self calcLayoutSize:size subviewEngines:subviewEngines context:&context];
-
+    
     layoutViewEngine.width = selfSize.width;
     layoutViewEngine.height = selfSize.height;
 
