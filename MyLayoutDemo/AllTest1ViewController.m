@@ -143,7 +143,10 @@
     //这个例子用来构建一个动态高度的头部布局视图。
     MyLinearLayout *tableHeaderViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     tableHeaderViewLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    tableHeaderViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 0); //高度不确定可以设置为0。但是宽度一定要写明确的值。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用MyLayout的特性，减少常数的使用。
+    /*在iOS14以前的viewDidLoad中self.view或者self.tableView的frame属性是有值的，但是到了iOS14以后其中的frame值就变为了CGRectZero了
+    所以这里要想取到正确的宽度，从iOS14以后起改为了获取self.navigationController.view.bounds。以前的历史版本是self.tableView.bounds
+     */
+    tableHeaderViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.navigationController.view.bounds), 0); //高度不确定可以设置为0。但是宽度一定要写明确的值。尽量不要在代码中使用kScreenWidth,kScreenHeight，SCREEN_WIDTH。之类这样的宏来设定视图的宽度和高度。要充分利用MyLayout的特性，减少常数的使用。
     tableHeaderViewLayout.myHorzMargin = 0; //这里注意设置宽度和父布局保持一致。
     tableHeaderViewLayout.backgroundImage = [UIImage imageNamed:@"bk1"];
     [tableHeaderViewLayout setTarget:self action:@selector(handleTableHeaderViewLayoutClick:)];
@@ -195,7 +198,10 @@
     //这个例子用来构建一个固定高度的尾部布局视图。
     MyLinearLayout *tableFooterViewLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     tableFooterViewLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    tableFooterViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), 80); //这里明确设定高度。
+    /*在iOS14以前的viewDidLoad中self.view或者self.tableView的frame属性是有值的，但是到了iOS14以后其中的frame值就变为了CGRectZero了
+    所以这里要想取到正确的宽度，从iOS14以后起改为了获取self.navigationController.view.bounds。以前的历史版本是self.tableView.bounds
+     */
+    tableFooterViewLayout.frame = CGRectMake(0, 0, CGRectGetWidth(self.navigationController.view.bounds), 80); //这里明确设定高度。
     tableFooterViewLayout.myHorzMargin = 0; //这里注意设置宽度和父布局保持一致。
     tableFooterViewLayout.backgroundColor = [CFTool color:6];
     tableFooterViewLayout.gravity = MyGravity_Vert_Center | MyGravity_Horz_Fill;
