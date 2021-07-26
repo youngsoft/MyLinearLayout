@@ -931,13 +931,24 @@
 
 @class MyLayoutDragger;
 
-//布局视图拖动器类，用来实现布局内的视图的拖动封装。用于实现布局子视图的拖放处理。
-//布局视图的拖动器类，只支持那些按顺序添加的布局视图，不支持相对布局、框架布局、栅格布局、路径布局。
-//一般情况下我们要实现布局内子视图的：
-//  1.UIControlEventTouchDown 事件来处理拖动开始
-//  2.UIControlEventTouchDragInside UIControlEventTouchDragOutside 事件来处理拖动进行中
-//  3. UIControlEventTouchUpInside UIControlEventTouchCancel 事件来处理拖动结束。
+/**
+ 布局视图拖动器类，用来实现布局内的视图的拖动封装。用于实现布局子视图的拖放处理。
+布局视图的拖动器类，只支持那些按顺序添加的布局视图，不支持相对布局、框架布局、栅格布局、路径布局。
+ 一般情况下我们要实现布局内子视图的：
+  1.UIControlEventTouchDown 事件来处理拖动开始
+  2.UIControlEventTouchDragInside UIControlEventTouchDragOutside 事件来处理拖动进行中
+  3. UIControlEventTouchUpInside UIControlEventTouchCancel 事件来处理拖动结束。
+ 
+ 如果您的布局下的子视图不是UIControl类的派生类的话，请分别重载如下事件：
+ 
+ - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event    在这个方法中调用dragView:withEvent:
+ - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;   在这个方法中调用dragginView:withEvent
+ - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+ - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event  在上述两个方法中调用dropView:withEvent
 
+ 无论何种方式，最终都是在调用完dropView:withEvent方法后，通过读取currentIndex和oldIndex的值来获取位置信息的改变。
+ 
+ */
 @interface MyLayoutDragger : NSObject
 
 //子视图拖动时，拖动区域当前所归属的子视图位置索引。
@@ -951,7 +962,7 @@
 //设置拖动时不会调整的子视图列表。也就是说数组中指定的子视图在拖动时不会被移动而是总是固定在原有的位置。
 @property (nonatomic, strong) NSArray<UIView *> *exclusiveViews;
 
-//设置拖动时位置调整的动画时长，默认是0.2秒，设置为0时拖动不产生动画效果。
+//设置拖动时位置调整的动画时长，默认是0秒，设置为0时拖动不产生动画效果。设置为0.2效果较好。
 @property (nonatomic, assign) NSTimeInterval animateDuration;
 
 //当拖动的视图和现有视图重叠时是否支持悬停功能，默认为NO。当开启开关后，并且oldIndex和currentIndex相等时则处于悬停状态。开启悬停功能的目的是为了支持一些替换或者更新的能力。
@@ -982,9 +993,6 @@
 #pragma mark-- Deprecated
 
 @interface UIView (MyDeprecated)
-
-@property (nonatomic, assign) MyVisibility myVisibility MYDEPRECATED("use visibility instead");
-@property (nonatomic, assign) MyGravity myAlignment MYDEPRECATED("use alignment instead");
 
 /**
  *！！！不建议使用这个属性了，而是直接设置视图的宽度为MyLayoutSize.wrap。 比如:myWidth = MyLayoutSize.wrap 或者 widthSize.equalTo(@(MyLayoutSize.wrap))。

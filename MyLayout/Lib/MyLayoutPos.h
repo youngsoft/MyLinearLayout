@@ -255,9 +255,9 @@
  */
 @interface NSArray (MyLayoutMostPos)
 
-//从数组中得到最大的位置值。
-@property (nonatomic, readonly) MyLayoutMostPos *myMinPos;
 //从数组中得到最小的位置值。
+@property (nonatomic, readonly) MyLayoutMostPos *myMinPos;
+//从数组中得到最大的位置值。
 @property (nonatomic, readonly) MyLayoutMostPos *myMaxPos;
 
 @end

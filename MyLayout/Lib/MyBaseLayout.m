@@ -340,14 +340,6 @@ void *_myObserverContextC = (void *)20175283;
     }
 }
 
-- (MyVisibility)myVisibility {
-    return self.visibility;
-}
-
-- (void)setMyVisibility:(MyVisibility)myVisibility {
-    self.visibility = myVisibility;
-}
-
 - (MyGravity)alignment {
     return self.myDefaultSizeClassInner.alignment;
 }
@@ -360,14 +352,6 @@ void *_myObserverContextC = (void *)20175283;
             [self.superview setNeedsLayout];
         }
     }
-}
-
-- (void)setMyAlignment:(MyGravity)myAlignment {
-    self.alignment = myAlignment;
-}
-
-- (MyGravity)myAlignment {
-    return self.alignment;
 }
 
 - (void (^)(MyBaseLayout *, UIView *))viewLayoutCompleteBlock {
@@ -2886,6 +2870,12 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 
 #pragma mark-- MyLayoutDragger
 
+@interface MyLayoutDragger()
+
+@property(nonatomic, assign) CGPoint centerPointOffset;
+
+@end
+
 @implementation MyLayoutDragger
 
 //开始拖动
@@ -2896,6 +2886,10 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     self.oldIndex = [self.layout.subviews indexOfObject:view];
     self.currentIndex = self.oldIndex;
     self.hasDragging = NO;
+    
+    CGPoint point = [[event touchesForView:view].anyObject locationInView:self.layout];
+    CGPoint center = view.center;
+    self.centerPointOffset = CGPointMake(center.x - point.x, center.y - point.y);
 }
 
 //拖动中,在拖动时要排除移动的子视图序列，动画的时长。返回是否拖动成功。
@@ -2952,7 +2946,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     [self.layout bringSubviewToFront:view]; //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
     self.layout.autoresizesSubviews = NO;   //在拖动时不要让布局视图激发布局
     view.useFrame = YES;                    //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
-    view.center = point;                       //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
+    view.center = CGPointMake(point.x + self.centerPointOffset.x, point.y + self.centerPointOffset.y);                       //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
     view.noLayout = NO;                     //恢复noLayout为NO。
 }
 

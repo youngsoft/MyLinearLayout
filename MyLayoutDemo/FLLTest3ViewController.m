@@ -75,8 +75,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    for (NSInteger i = 0; i < 14; i++)
-    {
+    //创建一个布局拖动器。
+    self.dragger = [self.flowLayout createLayoutDragger];
+    self.dragger.animateDuration = 0.2;
+
+    
+    for (NSInteger i = 0; i < 14; i++){
         NSString *label = [NSString stringWithFormat:NSLocalizedString(@"drag me %ld", @""),i];
         [self.flowLayout addSubview:[self createTagButton:label]];
     }
@@ -84,11 +88,7 @@
     //最后添加添加按钮。
     self.addButton = [self createAddButton];
     [self.flowLayout addSubview:self.addButton];
-    
-    //创建一个布局拖动器。
-    self.dragger = [self.flowLayout createLayoutDragger];
     self.dragger.exclusiveViews = @[self.addButton];
-    self.dragger.animateDuration = 0.2;
     
 }
 
@@ -110,11 +110,11 @@
     tagButton.backgroundColor = [CFTool color:(random()%14 + 1)];
     tagButton.heightSize.equalTo(@44);
     
-    [tagButton addTarget:self action:@selector(handleTouchDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside]; //注册拖动事件。
-    [tagButton addTarget:self action:@selector(handleTouchDrag:withEvent:) forControlEvents:UIControlEventTouchDragOutside]; //注册外面拖动事件。
-    [tagButton addTarget:self action:@selector(handleTouchDown:withEvent:) forControlEvents:UIControlEventTouchDown]; //注册按下事件
-    [tagButton addTarget:self action:@selector(handleTouchUp:withEvent:) forControlEvents:UIControlEventTouchUpInside]; //注册抬起事件
-    [tagButton addTarget:self action:@selector(handleTouchUp:withEvent:) forControlEvents:UIControlEventTouchCancel]; //注册终止事件
+    [tagButton addTarget:self.dragger action:@selector(dragginView:withEvent:) forControlEvents:UIControlEventTouchDragInside]; //注册拖动事件。
+    [tagButton addTarget:self.dragger action:@selector(dragginView:withEvent:) forControlEvents:UIControlEventTouchDragOutside]; //注册外面拖动事件。
+    [tagButton addTarget:self.dragger action:@selector(dragView:withEvent:) forControlEvents:UIControlEventTouchDown]; //注册按下事件
+    [tagButton addTarget:self.dragger action:@selector(dropView:withEvent:) forControlEvents:UIControlEventTouchUpInside]; //注册抬起事件
+    [tagButton addTarget:self.dragger action:@selector(dropView:withEvent:) forControlEvents:UIControlEventTouchCancel]; //注册终止事件
     [tagButton addTarget:self action:@selector(handleTouchDownRepeat:withEvent:) forControlEvents:UIControlEventTouchDownRepeat]; //注册多次点击事件
 
     return tagButton;
@@ -149,24 +149,6 @@
 
 }
 
-- (IBAction)handleTouchDown:(UIButton*)sender withEvent:(UIEvent*)event {
-    
-    //拖动子视图开始处理。
-    [self.dragger dragView:sender withEvent:event];
-}
-
-- (IBAction)handleTouchUp:(UIButton*)sender withEvent:(UIEvent*)event {
-    
-    //停止子视图拖动处理。
-    [self.dragger dropView:sender withEvent:event];
-}
-
-
-- (IBAction)handleTouchDrag:(UIButton*)sender withEvent:(UIEvent*)event {
-    
-    //子视图拖动中处理。
-    [self.dragger dragginView:sender withEvent:event];
-}
 
 - (IBAction)handleTouchDownRepeat:(UIButton*)sender withEvent:(UIEvent*)event {
     

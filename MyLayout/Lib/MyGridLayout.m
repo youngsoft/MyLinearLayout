@@ -51,7 +51,8 @@ NSString *const vMyGridGravityHeightFill = @"height";
 //视图组和动作数据
 @interface MyViewGroupAndActionData : NSObject
 
-@property (nonatomic, strong) NSMutableArray *viewGroup;
+//视图组，这里除了可以添加UIView外还可以添加占位类型NSNull
+@property (nonatomic, strong) NSMutableArray<UIView *> *viewGroup;
 @property (nonatomic, strong) id actionData;
 
 + (instancetype)viewGroup:(NSArray *)viewGroup actionData:(id)actionData;
@@ -78,8 +79,10 @@ NSString *const vMyGridGravityHeightFill = @"height";
 @interface MyGridLayout () <MyGridNode>
 
 @property (nonatomic, weak) MyGridLayoutTraits *lastSizeClass;
-
-@property (nonatomic, strong) NSMutableDictionary *tagsDict;
+//保存某个标签下对应的 视图组和数据 数组。字典。一个标签下可以有N个视图组。
+@property (nonatomic, strong) NSMutableDictionary<NSNumber*, NSMutableArray<MyViewGroupAndActionData *> *> *tagsDict;
+//这个锁并不是用于同步处理，而是用来区分是外部主动调用删除子视图还是类内部删除子视图。因为二者都会触发willRemoveSubview方法的调用，这个标志
+//用来表明是否是内部触发的删除子视图的标志。
 @property (nonatomic, assign) BOOL tagsDictLock;
 
 @end
@@ -138,29 +141,22 @@ NSString *const vMyGridGravityHeightFill = @"height";
 }
 
 - (void)insertViewGroup:(NSArray<UIView *> *)viewGroup withActionData:(id)actionData atIndex:(NSUInteger)index to:(NSInteger)gridTag {
-    if (gridTag == 0) {
-        for (UIView *sbv in viewGroup) {
-            if (sbv != (UIView *)[NSNull null]) {
-                [self addSubview:sbv];
-            }
+    if (gridTag != 0) {
+        NSNumber *key = @(gridTag);
+        NSMutableArray<MyViewGroupAndActionData *> *viewGroupArray = [self.tagsDict objectForKey:key];
+        if (viewGroupArray == nil) {
+            viewGroupArray = [NSMutableArray new];
+            [self.tagsDict setObject:viewGroupArray forKey:key];
         }
-        return;
+        
+        MyViewGroupAndActionData *va = [MyViewGroupAndActionData viewGroup:viewGroup actionData:actionData];
+        if (index == (NSUInteger)-1) {
+            [viewGroupArray addObject:va];
+        } else {
+            [viewGroupArray insertObject:va atIndex:index];
+        }
     }
-
-    //...
-    NSNumber *key = @(gridTag);
-    NSMutableArray *viewGroupArray = [self.tagsDict objectForKey:key];
-    if (viewGroupArray == nil) {
-        viewGroupArray = [NSMutableArray new];
-        [self.tagsDict setObject:viewGroupArray forKey:key];
-    }
-
-    MyViewGroupAndActionData *va = [MyViewGroupAndActionData viewGroup:viewGroup actionData:actionData];
-    if (index == (NSUInteger)-1) {
-        [viewGroupArray addObject:va];
-    } else {
-        [viewGroupArray insertObject:va atIndex:index];
-    }
+    
     for (UIView *sbv in viewGroup) {
         if (sbv != (UIView *)[NSNull null]) {
             [self addSubview:sbv];
@@ -915,8 +911,14 @@ NSString *const vMyGridGravityHeightFill = @"height";
     }
 }
 
-//遍历尺寸。
-- (CGFloat)myTraversalGrid:(id<MyGridNode>)grid gridSize:(CGSize)gridSize lsc:(MyGridLayoutTraits *)lsc sbs:(NSArray<UIView *> *)sbs pIndex:(NSInteger *)pIndex tagViewGroupIndexDict:(NSMutableDictionary *)tagViewGroupIndexDict tagViewGroup:(NSArray<UIView *> *)tagViewGroup pTagIndex:(NSInteger *)pTagIndex withContext:(MyLayoutContext *)context {
+/*
+遍历尺寸。
+ pIndex 指定格子所对应的子视图的索引指针。
+ pTagIndex 指格子所对应的视图组内的索引指针？
+ tagViewGroupIndexDict： 记录标签中的视图组索引字典。
+ 
+ */
+- (CGFloat)myTraversalGrid:(id<MyGridNode>)grid gridSize:(CGSize)gridSize lsc:(MyGridLayoutTraits *)lsc sbs:(NSArray<UIView *> *)sbs pIndex:(NSInteger *)pIndex tagViewGroupIndexDict:(NSMutableDictionary<NSNumber*, NSNumber*> *)tagViewGroupIndexDict tagViewGroup:(NSArray<UIView *> *)tagViewGroup pTagIndex:(NSInteger *)pTagIndex withContext:(MyLayoutContext *)context {
     NSArray<id<MyGridNode>> *subGrids = nil;
     if (grid.subGridsType != MySubGridsType_Unknown) {
         subGrids = grid.subGrids;
@@ -952,6 +954,10 @@ NSString *const vMyGridGravityHeightFill = @"height";
         validMeasure = grid.gridRect.size.height - fixedMeasure;
     }
 
+    //要从格子找到对应的视图，因为格子是树形结构而视图是数组结构，因此每遍历完一个可以放视图的格子，视图的索引就要加1
+    //还有一种特殊的就是开启了视图组的功能，因此某些标签下的格子要单独遍历对应视图组中的视图。
+    //但是这里是否存在视图组和非视图组并存的情况呢？
+    
     //得到匹配的form
     if (grid.tag != 0) {
         NSNumber *key = @(grid.tag);
@@ -974,7 +980,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
         }
     }
 
-    //叶子节点
+    //叶子节点，或者用来放置视图的格子。
     if ((grid.anchor || subGrids.count == 0) && !grid.placeholder) {
         BOOL isNotNullSbv = YES;
         NSArray<UIView *> *tempSbs = sbs;
