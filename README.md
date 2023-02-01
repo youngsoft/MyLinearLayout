@@ -497,7 +497,40 @@ Grid layout is a view to a rectangular area according to the row or column divid
  
  ```
 
- 
+### MyFlexLayout
+Flex is a layout defined in the W3C specification. This layout allows simple, fast, responsive implementation of various layout pages, and is intended to replace "position+display+float". MyFlexLayout implements a subset of the flex specification while extending some of the capabilities in the flex specification. Since MyFlowLayout also provides similar elastic layout capabilities, but the syntax is not compatible with the flex specification, MyFlexLayout provides a new layout writing syntax derived from MyFlowLayout. Syntax candy allows you to use the syntax defined by the flex specification to implement the layout of the code. 
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fll.png)
+
+Sample code:
+
+```objective-c
+   
+  -(void)loadView {
+    [super loadView];
+    
+   MyFlexLayout *S = MyFlexLayout.new.myFlex
+    .flex_direction(MyFlexDirection_Row)
+    .flex_wrap(MyFlexWrap_Wrap)
+    .vert_space(10)
+    .horz_space(10)
+    .padding(UIEdgeInsetsMake(10, 10, 10, 10))
+    .width(300)
+    .height(MyLayoutSize.wrap)
+    .addTo(self.view);
+    
+    for (int i = 0; i < 10; i++) {
+        UIView *A = UIView.new.myFlex
+        .width(60)
+        .height(50)
+        .addTo(S);
+        
+        A.backgroundColor = [UIColor greenColor];
+    }
+   }
+```
+
+
  
 ###  MySizeClass
 > Is equivalent to: Size Classes of iOS.
@@ -586,7 +619,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 
 ```
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '7.0'
+platform :ios, '9.0'
 
 pod 'MyLayout'
 ```

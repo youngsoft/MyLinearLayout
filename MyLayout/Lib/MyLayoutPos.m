@@ -11,12 +11,8 @@
 #import "MyLayoutInner.h"
 #import "MyLayoutPosInner.h"
 
-@implementation MyLayoutPos {
-    id _val;
-    CGFloat _offsetVal;
-    MyLayoutPos *_lBoundVal;
-    MyLayoutPos *_uBoundVal;
-}
+
+@implementation MyLayoutPos 
 
 + (CGFloat)safeAreaMargin {
     //在2017年10月3号定义的一个数字，没有其他特殊意义。
@@ -183,13 +179,13 @@
     } else if (_valType == MyLayoutValType_UILayoutSupport) {
         //只有在11以后并且是设置了safearea缩进才忽略UILayoutSupport。
         UIView *superview = self.view.superview;
-        if (superview != nil &&
-            [UIDevice currentDevice].systemVersion.doubleValue >= 11 &&
-            [superview isKindOfClass:[MyBaseLayout class]]) {
-            UIRectEdge edge = ((MyBaseLayout *)superview).insetsPaddingFromSafeArea;
-            if ((_anchorType == MyLayoutAnchorType_Top && (edge & UIRectEdgeTop) == UIRectEdgeTop) ||
-                (_anchorType == MyLayoutAnchorType_Bottom && (edge & UIRectEdgeBottom) == UIRectEdgeBottom)) {
-                return @(0);
+        if (@available(iOS 11.0, *)) {
+            if (superview != nil && [superview isKindOfClass:[MyBaseLayout class]]) {
+                UIRectEdge edge = ((MyBaseLayout *)superview).insetsPaddingFromSafeArea;
+                if ((_anchorType == MyLayoutAnchorType_Top && (edge & UIRectEdgeTop) == UIRectEdgeTop) ||
+                    (_anchorType == MyLayoutAnchorType_Bottom && (edge & UIRectEdgeBottom) == UIRectEdgeBottom)) {
+                    return @(0);
+                }
             }
         }
 

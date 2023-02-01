@@ -37,6 +37,8 @@ typedef enum : unsigned char {
 
 //更新栅格尺寸。返回对应方向的尺寸
 - (CGFloat)updateGridSize:(CGSize)superSize superGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure;
+//只更新栅格一边的尺寸，返回另外一边方向的尺寸
+- (CGFloat)updateWrapGridSizeInSuperGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure;
 
 //更新栅格位置。返回对应方向的尺寸
 - (CGFloat)updateGridOrigin:(CGPoint)superOrigin superGrid:(id<MyGridNode>)superGrid withOffset:(CGFloat)offset;

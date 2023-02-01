@@ -15,17 +15,19 @@
 @property (nonatomic, weak) UIView *view;
 @property (nonatomic, assign) MyLayoutAnchorType anchorType;
 @property (nonatomic, assign) MyLayoutValType valType;
-@property (nonatomic, readonly, strong) id val;
+@property (nonatomic, strong) id val;
 @property (nonatomic, readonly, strong) NSNumber *numberVal;
 @property (nonatomic, readonly, strong) MyLayoutPos *anchorVal;
 @property (nonatomic, readonly, strong) NSArray *arrayVal;
 @property (nonatomic, readonly, strong) NSNumber *mostVal;
 
-@property (nonatomic, readonly, strong) MyLayoutPos *lBoundVal;
-@property (nonatomic, readonly, strong) MyLayoutPos *uBoundVal;
+@property (nonatomic, strong) MyLayoutPos *lBoundVal;
+@property (nonatomic, strong) MyLayoutPos *uBoundVal;
 
 @property (nonatomic, readonly, strong) MyLayoutPos *lBoundValInner;
 @property (nonatomic, readonly, strong) MyLayoutPos *uBoundValInner;
+
+@property (nonatomic, assign) CGFloat offsetVal;
 
 - (MyLayoutPos * (^)(id val))myEqualTo;
 - (MyLayoutPos * (^)(CGFloat val))myOffset;

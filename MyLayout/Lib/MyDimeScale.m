@@ -22,7 +22,7 @@ CGFloat _wrate = 1;
 CGFloat _hrate = 1;
 
 + (void)setUITemplateSize:(CGSize)size {
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    CGSize screenSize = [UIScreen mainScreen].fixedCoordinateSpace.bounds.size;
     _wrate = screenSize.width / size.width;
     _hrate = screenSize.height / size.height;
     _rate = sqrt((screenSize.width * screenSize.width + screenSize.height * screenSize.height) / (size.width * size.width + size.height * size.height));

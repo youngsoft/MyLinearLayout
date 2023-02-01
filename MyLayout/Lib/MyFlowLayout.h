@@ -124,12 +124,12 @@
  
  2. MyOrientation_Horz 表示行内子视图从上到下垂直排列，行与行之间依次从左到右(RTL从右到左)水平排列。
  */
-@property (nonatomic, assign) IBInspectable MyOrientation orientation;
+@property (nonatomic, assign) MyOrientation orientation;
 
 /**
  每行内的子条目视图数量。默认是0表示每行内的子条目视图的数量不固定，而是根据子视图的尺寸自动换行或者换列处理。如果非0则每行内的子视图数量等于这个值后会自动换行。
  */
-@property (nonatomic, assign) IBInspectable NSInteger arrangedCount;
+@property (nonatomic, assign) NSInteger arrangedCount;
 
 /**
  为流式布局提供分页展示的能力,默认是0表不支持分页展示。当设置为非0时则要求必须是arrangedCount的整数倍数，表示每页的子视图的数量。而arrangedCount则表示每行内的子视图的数量。当启用pagedCount时如果流式布局的父视图是UIScrollView或者其派生类就会有分页滚动的效果。只有数量约束流式布局才支持分页展示的功能，通过pagedCount和设置尺寸的高度或者宽度自适应配合使用能实现不同的分页展示能力:
@@ -166,7 +166,7 @@
      8  10 12
  @endcode
  */
-@property (nonatomic, assign) IBInspectable NSInteger pagedCount;
+@property (nonatomic, assign) NSInteger pagedCount;
 
 /**
  布局内子视图自动排列或者让布局内的子视图的排列尽可能的紧凑，默认为NO。
@@ -177,7 +177,7 @@
  @note
  如果在内容填充约束流式布局中使用此属性时，请在将所有子视图添加完毕并且初始布局完成后再设置这个属性，否则如果预先设置这个属性则在后续添加子视图时可能会非常耗性能。
  */
-@property (nonatomic, assign) IBInspectable BOOL autoArrange;
+@property (nonatomic, assign) BOOL autoArrange;
 
 /**
  布局是否是兼容flexbox规则的布局，默认是NO。当设置为YES时有两个特性会产生差异：

@@ -47,6 +47,7 @@
 
 - (MyViewTraits *)fetchView:(UIView *)view bestLayoutSizeClass:(MySizeClass)sizeClass;
 
+- (void)setView:(UIView *)view layoutSizeClass:(MySizeClass)sizeClass withTraits:(MyViewTraits *)traits;
 
 @end
 
@@ -148,12 +149,29 @@
 @property (nonatomic, assign, getter=isReverseFloat) BOOL reverseFloat;
 @property (nonatomic, assign) BOOL clearFloat;
 
+//内部属性
+@property (nonatomic, strong, readonly) MyLayoutPos *topPosInner;
+@property (nonatomic, strong, readonly) MyLayoutPos *leadingPosInner;
+@property (nonatomic, strong, readonly) MyLayoutPos *bottomPosInner;
+@property (nonatomic, strong, readonly) MyLayoutPos *trailingPosInner;
+@property (nonatomic, strong, readonly) MyLayoutPos *centerXPosInner;
+@property (nonatomic, strong, readonly) MyLayoutPos *centerYPosInner;
+@property (nonatomic, strong, readonly) MyLayoutSize *widthSizeInner;
+@property (nonatomic, strong, readonly) MyLayoutSize *heightSizeInner;
+
+@property (nonatomic, strong, readonly) MyLayoutPos *leftPosInner;
+@property (nonatomic, strong, readonly) MyLayoutPos *rightPosInner;
+
+@property (nonatomic, strong, readonly) MyLayoutPos *baselinePosInner;
+
+@property (class, nonatomic, assign) BOOL isRTL;
+
 //内部方法
 - (BOOL)invalid;
 
 + (MyGravity)convertLeadingTrailingGravityFromLeftRightGravity:(MyGravity)horzGravity;
-- (MyGravity)vertGravityWith:(MyGravity)layoutVertGravity;
-- (MyGravity)horzGravityWith:(MyGravity)layoutHorzGravity;
+- (MyGravity)finalVertGravityFrom:(MyGravity)layoutVertGravity;
+- (MyGravity)finalHorzGravityFrom:(MyGravity)layoutHorzGravity;
 
 @end
 
@@ -204,7 +222,7 @@
 
 @end
 
-@interface MySequentLayoutFlexSpace : NSObject
+@interface MySequentLayoutFlexSpacing : NSObject
 @property (nonatomic, assign) CGFloat subviewSize;
 @property (nonatomic, assign) CGFloat minSpace;
 @property (nonatomic, assign) CGFloat maxSpace;
@@ -218,7 +236,7 @@
 @interface MySequentLayoutTraits : MyLayoutTraits
 
 @property (nonatomic, assign) MyOrientation orientation;
-@property (nonatomic, strong) MySequentLayoutFlexSpace *flexSpace;
+@property (nonatomic, strong) MySequentLayoutFlexSpacing *flexSpace;
 
 @end
 

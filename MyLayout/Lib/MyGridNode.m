@@ -380,6 +380,23 @@ typedef struct _MyGridOptionalProperties2 {
     return measure;
 }
 
+- (CGFloat)updateWrapGridSizeInSuperGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure {
+    if (superGrid.subGridsType == MySubGridsType_Col) {
+        _gridRect.size.width = measure;
+        if (self.subGrids.count > 0) {
+            _gridRect.size.height = self.subGrids.firstObject.gridRect.size.height;
+        }
+        return _gridRect.size.height;
+    } else {
+        _gridRect.size.height = measure;
+        if (self.subGrids.count > 0) {
+            _gridRect.size.width = self.subGrids.firstObject.gridRect.size.width;
+        }
+        return _gridRect.size.width;
+    }
+    return 0.0f;
+}
+
 - (CGFloat)updateGridOrigin:(CGPoint)superOrigin superGrid:(id<MyGridNode>)superGrid withOffset:(CGFloat)offset {
     if (superGrid.subGridsType == MySubGridsType_Col) {
         _gridRect.origin.x = offset;

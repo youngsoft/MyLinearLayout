@@ -118,6 +118,7 @@
 @property (nonatomic, strong) NSMutableArray *argumentArray;
 
 @property (nonatomic, assign) BOOL hasOriginView;
+
 @property (nonatomic, strong) MyCoordinateSetting *coordinateSetting;
 
 @end
@@ -257,7 +258,6 @@
 //开始和结束子视图之间的路径创建
 - (void)beginSubviewPathPoint:(BOOL)full {
     //这里先把所有点都创建出来。
-    
     MyPathLayoutTraits *layoutTraits = (MyPathLayoutTraits*)self.myDefaultSizeClass;
     
     MyLayoutContext context;
@@ -344,7 +344,6 @@
 }
 
 - (CGPathRef)createPath:(NSInteger)subviewCount {
-
     MyPathLayoutTraits *layoutTraits = (MyPathLayoutTraits*)self.myDefaultSizeClass;
     
     MyLayoutContext context;
@@ -688,12 +687,12 @@
                         endArg:(CGFloat)endArg   //定义域最大值
                           func:(CGPoint (^)(CGFloat))func {
 
-    if (self.distanceError <= 0) {
+    if (self.distanceError <= 0.0) {
         self.distanceError = 0.5;
     }
     [self.argumentArray removeAllObjects];
 
-    CGFloat distance = 0;
+    CGFloat distance = 0.0;
     CGPoint lastXY = CGPointZero;
 
     CGFloat arg = startArg;
@@ -770,7 +769,7 @@
                         } else {
                             [pointIndexArray addObject:@(pathPointArray.count)];
                         }
-                        distance = 0;
+                        distance = 0.0;
                         subviewCount -= 1;
                         lastValidArg = arg;
                         [self.argumentArray addObject:@(arg)];
@@ -921,11 +920,11 @@
                                     }
                                 }];
     } else if (self.polarEquation != nil) {
-        startArg = 0;
+        startArg = 0.0;
         if (self.coordinateSetting.start != -CGFLOAT_MAX) {
             startArg = self.coordinateSetting.start * 180.0 / M_PI;
         }
-        endArg = 360;
+        endArg = 360.0;
         if (self.coordinateSetting.end != CGFLOAT_MAX) {
             endArg = self.coordinateSetting.end * 180.0 / M_PI;
         }
@@ -947,8 +946,8 @@
                                             return CGPointMake(r * sin(arg / 180.0 * M_PI) + originX,
                                                                (self.coordinateSetting.isMath ? -y : y) + originY);
                                         } else {
-                                            CGFloat y = r * sin(arg / 180 * M_PI);
-                                            return CGPointMake(r * cos(arg / 180 * M_PI) + originX,
+                                            CGFloat y = r * sin(arg / 180.0 * M_PI);
+                                            return CGPointMake(r * cos(arg / 180.0 * M_PI) + originX,
                                                                (self.coordinateSetting.isMath ? -y : y) + originY);
                                         }
                                     } else {

@@ -335,6 +335,11 @@ void *_myObserverContextC = (void *)20175283;
         viewTraits.visibility = visibility;
         self.hidden = (visibility != MyVisibility_Visible);
         if (self.superview != nil) {
+            //修复布局视图在从隐藏转到不隐藏并且有尺寸自适应时，位置和尺寸不会重新计算的BUG。
+            if (!self.isHidden &&
+                [self isKindOfClass:MyBaseLayout.class] && (viewTraits.widthSizeInner.isWrap || viewTraits.heightSizeInner.isWrap)) {
+                [self setNeedsLayout];
+            }
             [self.superview setNeedsLayout];
         }
     }
@@ -384,6 +389,10 @@ void *_myObserverContextC = (void *)20175283;
 
 - (instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass {
     return (UIView *)[self.myEngine fetchView:self layoutSizeClass:sizeClass copyFrom:srcSizeClass];
+}
+
+- (void)setLayoutSizeClass:(MySizeClass)sizeClass withValue:(id)value {
+    [self.myEngine setView:self layoutSizeClass:sizeClass withTraits:value];
 }
 
 @end
@@ -981,10 +990,12 @@ void *_myObserverContextC = (void *)20175283;
     //监控子视图的frame的变化以便重新进行布局
     if (!_isMyLayouting) {
         if (context == _myObserverContextA) {
-            [self setNeedsLayout];
-            //这里添加的原因是有可能子视图取消隐藏后不会绘制自身，所以这里要求子视图重新绘制自身
-            if ([keyPath isEqualToString:@"hidden"] && ![change[NSKeyValueChangeNewKey] boolValue]) {
-                [(UIView *)object setNeedsDisplay];
+            if (!object.myCurrentSizeClassInner.useFrame) {
+                [self setNeedsLayout];
+                //这里添加的原因是有可能子视图取消隐藏后不会绘制自身，所以这里要求子视图重新绘制自身
+                if ([keyPath isEqualToString:@"hidden"] && ![change[NSKeyValueChangeNewKey] boolValue]) {
+                    [(UIView *)object setNeedsDisplay];
+                }
             }
         } else if (context == _myObserverContextB) { //针对UILabel特殊处理。。
             MyViewTraits *subviewTraits = (MyViewTraits*)object.myDefaultSizeClass;
@@ -1390,6 +1401,10 @@ void *_myObserverContextC = (void *)20175283;
     return size;
 }
 
+- (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
+    return [self sizeThatFits:targetSize];
+}
+
 - (void)doLayoutSubviews {
     int currentScreenOrientation = 0;
 
@@ -1717,12 +1732,17 @@ void *_myObserverContextC = (void *)20175283;
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
-    if (@available(iOS 12.0, *)) {
-        if (self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle) {
-            [_borderlineLayerDelegate updateAllBorderlineColor];
-        }
+    BOOL canUpdateBorderlineColor = NO;
+    if (@available(iOS 13.0, *)) {
+        canUpdateBorderlineColor = [self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection];
+    } else if (@available(iOS 12.0, *)) {
+        canUpdateBorderlineColor = (self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle);
     } else {
         // Fallback on earlier versions
+    }
+    
+    if (canUpdateBorderlineColor) {
+        [_borderlineLayerDelegate updateAllBorderlineColor];
     }
 }
 
@@ -1740,13 +1760,13 @@ void *_myObserverContextC = (void *)20175283;
 }
 
 - (CGSize)myEstimateLayoutSize:(CGSize)size inSizeClass:(MySizeClass)sizeClass subviews:(NSMutableArray<UIView *> *)subviews {
-
-NSArray *tuple = [self myUpdateCurrentSizeClass:sizeClass subviews:subviews];
-MyLayoutEngine *layoutViewEngine = tuple.firstObject;
-NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
-
     
-   
+    NSArray *tuple = [self myUpdateCurrentSizeClass:sizeClass subviews:subviews];
+    MyLayoutEngine *layoutViewEngine = tuple.firstObject;
+    NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
+    
+    
+    
     MyLayoutContext context;
     context.isEstimate = YES;
     context.sizeClass = sizeClass;
@@ -1764,7 +1784,7 @@ NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
     
     layoutViewEngine.width = selfSize.width;
     layoutViewEngine.height = selfSize.height;
-
+    
     if (self.cacheEstimatedRect) {
         _useCacheRects = YES;
     }
@@ -2517,12 +2537,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 - (MySizeClass)myGetGlobalSizeClass {
     //找到最根部的父视图。
     if (_myGlobalSizeClass == 0xFF || ![self.superview isKindOfClass:[MyBaseLayout class]]) {
-        MySizeClass sizeClass;
-        if ([UIDevice currentDevice].systemVersion.floatValue < 8) {
-            sizeClass = MySizeClass_hAny | MySizeClass_wAny;
-        } else {
-            sizeClass = (MySizeClass)((self.traitCollection.verticalSizeClass << 2) | self.traitCollection.horizontalSizeClass);
-        }
+        MySizeClass sizeClass = (MySizeClass)((self.traitCollection.verticalSizeClass << 2) | self.traitCollection.horizontalSizeClass);
 #if TARGET_OS_IOS
         UIDeviceOrientation ori = [self myGetDeviceOrientation];
         if (UIDeviceOrientationIsPortrait(ori)) {
@@ -2687,19 +2702,19 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     
     subviewEngine.width = [self myWidthSizeValueOfSubviewEngine:subviewEngine withContext:context];
     subviewEngine.width = [self myValidMeasure:subviewTraits.widthSizeInner subview:subviewTraits.view calcSize:subviewEngine.width subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
-    [self myCalcSubview:subviewEngine horzGravity:[subviewTraits horzGravityWith:context->horzGravity] withContext:context];
+    [self myCalcSubview:subviewEngine horzGravity:[subviewTraits finalHorzGravityFrom:context->horzGravity] withContext:context];
 
     subviewEngine.height = [self myHeightSizeValueOfSubviewEngine:subviewEngine withContext:context];
 
     subviewEngine.height = [self myValidMeasure:subviewTraits.heightSizeInner subview:subviewTraits.view calcSize:subviewEngine.height subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
-    [self myCalcSubview:subviewEngine vertGravity:[subviewTraits vertGravityWith:context->vertGravity] baselinePos:CGFLOAT_MAX withContext:context];
+    [self myCalcSubview:subviewEngine vertGravity:[subviewTraits finalVertGravityFrom:context->vertGravity] baselinePos:CGFLOAT_MAX withContext:context];
 
     //特殊处理宽度等于高度
     if (subviewTraits.widthSizeInner.anchorVal.view == subviewTraits.view && subviewTraits.widthSizeInner.anchorVal.anchorType == MyLayoutAnchorType_Height) {
         subviewEngine.width = [subviewTraits.widthSizeInner measureWith:subviewEngine.height];
         subviewEngine.width = [self myValidMeasure:subviewTraits.widthSizeInner subview:subviewTraits.view calcSize:subviewEngine.width subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
 
-        [self myCalcSubview:subviewEngine horzGravity:[subviewTraits horzGravityWith:context->horzGravity] withContext:context];
+        [self myCalcSubview:subviewEngine horzGravity:[subviewTraits finalHorzGravityFrom:context->horzGravity] withContext:context];
     }
 
     //特殊处理高度等于宽度。
@@ -2710,7 +2725,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             subviewEngine.height = [self mySubview:subviewTraits wrapHeightSizeFits:subviewEngine.size withContext:context];
         }
         subviewEngine.height = [self myValidMeasure:subviewTraits.heightSizeInner subview:subviewTraits.view calcSize:subviewEngine.height subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
-        [self myCalcSubview:subviewEngine vertGravity:[subviewTraits vertGravityWith:context->vertGravity] baselinePos:CGFLOAT_MAX withContext:context];
+        [self myCalcSubview:subviewEngine vertGravity:[subviewTraits finalVertGravityFrom:context->vertGravity] baselinePos:CGFLOAT_MAX withContext:context];
     }
     
     subviewEngine.bottom = subviewEngine.top + subviewEngine.height;
@@ -2902,8 +2917,8 @@ MySizeClass _myGlobalSizeClass = 0xFF;
     //取出拖动时当前的位置点。
     CGPoint point = [[event touchesForView:view].anyObject locationInView:self.layout];
 
-    UIView *hoverView = nil; //sbv2保存拖动时手指所在的视图。
-    //判断当前手指在具体视图的位置。这里要排除self.addButton的位置(因为这个按钮将固定不调整)。
+    UIView *hoverView = nil; //保存拖动时手指所在的视图。
+    //判断当前手指在具体视图的位置。这里要排除exclusiveViews中指定的所有视图的位置，因为这些视图固定不会调整。
     for (UIView *subview in self.layout.subviews) {
         if (subview != view && view.useFrame && ![self.exclusiveViews containsObject:subview]) {
             if (CGRectContainsPoint(subview.frame, point)) {
@@ -2913,7 +2928,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         }
     }
 
-    //如果拖动的控件sender和手指下当前其他的兄弟控件有重合时则意味着需要将当前控件插入到手指下的sbv2所在的位置，并且调整sbv2的位置。
+    //如果拖动的view和手指下当前其他的兄弟视图有重合时则意味着需要将当前视图view插入到手指下其他视图所在的位置，并且调整其他视图的位置。
     if (hoverView != nil) {
         if (self.animateDuration > 0) {
             [self.layout layoutAnimationWithDuration:self.animateDuration];
@@ -2934,15 +2949,15 @@ MySizeClass _myGlobalSizeClass = 0xFF;
             [self.layout exchangeSubviewAtIndex:i withSubviewAtIndex:i - 1];
         }
 
-        //因为sender在bringSubviewToFront后变为了最后一个子视图，因此要调整正确的位置。
-        //经过上面的sbv2的位置调整完成后，需要重新激发布局视图的布局，因此这里要设置autoresizesSubviews为YES。
+        //因为view在bringSubviewToFront后变为了最后一个子视图，因此要调整正确的位置。
+        //经过上面的view的位置调整完成后，需要重新激发布局视图的布局，因此这里要设置autoresizesSubviews为YES。
         self.layout.autoresizesSubviews = YES;
         view.useFrame = NO;
         view.noLayout = YES;
-        //这里设置为YES表示布局时不会改变sender的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
+        //这里设置为YES表示布局时不会改变view的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
         [self.layout layoutIfNeeded];
     }
-    //在进行sender的位置调整时，要把sender移动到最顶端，也就子视图数组的的最后。同时布局视图不能激发子视图布局，因此要把autoresizesSubviews设置为NO，同时因为要自定义sender的位置，因此要把useFrame设置为YES，并且恢复noLayout为NO。
+    //在进行view的位置调整时，要把view移动到最顶端，也就子视图数组的的最后。同时布局视图不能激发子视图布局，因此要把autoresizesSubviews设置为NO，同时因为要自定义view的位置，因此要把useFrame设置为YES，并且恢复noLayout为NO。
     [self.layout bringSubviewToFront:view]; //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
     self.layout.autoresizesSubviews = NO;   //在拖动时不要让布局视图激发布局
     view.useFrame = YES;                    //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。

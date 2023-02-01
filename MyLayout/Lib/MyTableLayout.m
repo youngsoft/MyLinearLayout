@@ -175,7 +175,7 @@ static CGFloat sColCountTag = -100000;
     UIView *colViewTraits = colView.myDefaultSizeClass;
 
     if (rowView.colSize == MyLayoutSize.average) {
-        colViewTraits.weight = 1;
+        colViewTraits.weight = 1.0;
     } else if (rowView.colSize < sColCountTag) {
         NSUInteger colCount = sColCountTag - rowView.colSize;
         if (rowViewTraits.orientation == MyOrientation_Horz) {

@@ -11,13 +11,7 @@
 #import "MyLayoutInner.h"
 #import "MyLayoutSizeInner.h"
 
-@implementation MyLayoutSize {
-    id _val;
-    CGFloat _addVal;
-    CGFloat _multiVal;
-    MyLayoutSize *_lBoundVal;
-    MyLayoutSize *_uBoundVal;
-}
+@implementation MyLayoutSize 
 
 + (NSInteger)empty {
     return -100000; //这么定义存粹是一个数字没有其他意义

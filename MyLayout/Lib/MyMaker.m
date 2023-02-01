@@ -257,7 +257,6 @@
 
 - (MyMaker * (^)(CGFloat val))offset {
     _clear = YES;
-
     return ^id(CGFloat val) {
         for (NSString *key in self->_keys) {
             for (UIView *myView in self->_myViews) {

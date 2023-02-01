@@ -72,7 +72,6 @@
 }
 
 - (void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space inSizeClass:(MySizeClass)sizeClass {
-    
     NSArray *tuple = [self myUpdateCurrentSizeClass:sizeClass subviews:nil];
     MyLayoutEngine *layoutViewEngine = tuple.firstObject;
     NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
@@ -88,7 +87,6 @@
 }
 
 - (void)equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass {
-    
     NSArray *tuple = [self myUpdateCurrentSizeClass:sizeClass subviews:nil];
     MyLayoutEngine *layoutViewEngine = tuple.firstObject;
     NSMutableArray<MyLayoutEngine *> *subviewEngines = tuple.lastObject;
@@ -105,13 +103,12 @@
 
 - (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass {
     MySequentLayoutTraits *layoutTraits = (MySequentLayoutTraits *)[self fetchLayoutSizeClass:sizeClass];
-    if (subviewSize == 0) {
+    if (subviewSize == 0.0) {
         layoutTraits.flexSpace = nil;
     } else {
         if (layoutTraits.flexSpace == nil) {
-            layoutTraits.flexSpace = [MySequentLayoutFlexSpace new];
+            layoutTraits.flexSpace = [MySequentLayoutFlexSpacing new];
         }
-
         layoutTraits.flexSpace.subviewSize = subviewSize;
         layoutTraits.flexSpace.minSpace = minSpace;
         layoutTraits.flexSpace.maxSpace = maxSpace;
@@ -130,7 +127,6 @@
 }
 
 - (CGSize)calcLayoutSize:(CGSize)size subviewEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines context:(MyLayoutContext *)context {
-    
     [super calcLayoutSize:size subviewEngines:subviewEngines context:context];
     
     MyLinearLayoutTraits *layoutTraits = (MyLinearLayoutTraits *)context->layoutViewEngine.currentSizeClass;
@@ -158,10 +154,8 @@
     } else {
         [self myDoHorzOrientationLayoutWithContext:context];
     }
-
     //绘制智能线。
     [self mySetIntelligentBorderlineWithContext:context];
-
     return [self myAdjustLayoutViewSizeWithContext:context];
 }
 
@@ -204,14 +198,12 @@
 
 //设置智能边界线
 - (void)mySetIntelligentBorderlineWithContext:(MyLayoutContext *)context {
-    
     if (context->isEstimate) {
         return;
     }
     
     MyLinearLayoutTraits *layoutTraits = (MyLinearLayoutTraits*)context->layoutViewEngine.currentSizeClass;
     NSArray<MyLayoutEngine *> *subviewEngines = context->subviewEngines;
-    
     if (self.intelligentBorderline == nil) {
         return;
     }
@@ -272,12 +264,10 @@
 }
 
 - (void)myDoVertOrientationLayoutWithContext:(MyLayoutContext *)context {
-   
     MyLinearLayoutTraits *layoutTraits = (MyLinearLayoutTraits *)context->layoutViewEngine.currentSizeClass;
     
     CGFloat subviewHeight = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.height arrangedCount:context->subviewEngines.count paddingStart:&context->paddingTop paddingEnd:&context->paddingBottom space:&context->vertSpace];
     CGFloat paddingVert = context->paddingTop + context->paddingBottom;
-    
     CGFloat totalHeight = 0.0; //计算固定部分的总高度
     CGFloat totalWeight = 0.0; //剩余部分的总比重
     CGFloat totalShrink = 0.0; //总的压缩比重
@@ -293,17 +283,13 @@
     CGFloat totalFixedSpacing = 0.0;  //固定间距的子视图的高度。
     CGFloat pos = context->paddingTop;
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
-        
         MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
-
         if (context->vertGravity == MyGravity_Vert_Fill || context->vertGravity == MyGravity_Vert_Stretch) {
             BOOL isFlexEngine = YES;
-
             //比重高度的子视图不能被伸缩。
             if (subviewTraits.weight != 0.0) {
                 isFlexEngine = NO;
             }
-
             //高度依赖于父视图的不能被伸缩
             if ((subviewTraits.heightSizeInner.anchorVal != nil && subviewTraits.heightSizeInner.anchorVal == layoutTraits.heightSizeInner) || subviewTraits.heightSizeInner.fillVal) {
                 isFlexEngine = NO;
@@ -546,11 +532,11 @@
             if (subviewTraits.topPosInner.isRelativePos) {
                 CGFloat topSpacingWeight = topSpacing;
                 topSpacing = _myCGFloatRound((topSpacingWeight / totalWeight) * spareHeight);
-                if (_myCGFloatLessOrEqual(topSpacing, 0)) {
-                    topSpacing = 0;
+                if (_myCGFloatLessOrEqual(topSpacing, 0.0)) {
+                    topSpacing = 0.0;
                 }
             } else {
-                if (topSpacing + subviewTraits.topPosInner.offsetVal != 0) {
+                if (topSpacing + subviewTraits.topPosInner.offsetVal != 0.0) {
                     pos += addSpace;
                     if (isWeightShrinkSpacing) {
                         pos += weightShrinkSpacingTotalHeight * (topSpacing + subviewTraits.topPosInner.offsetVal) / totalFixedSpacing;
@@ -568,8 +554,8 @@
             //分别处理相对高度和绝对高度
             if (weight != 0) {
                 CGFloat h = _myCGFloatRound((weight / totalWeight) * spareHeight);
-                if (_myCGFloatLessOrEqual(h, 0)) {
-                    h = 0;
+                if (_myCGFloatLessOrEqual(h, 0.0)) {
+                    h = 0.0;
                 }
                 subviewEngine.height = [self myValidMeasure:subviewTraits.heightSizeInner subview :subviewTraits.view calcSize:h subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
             }
@@ -608,11 +594,11 @@
             if (subviewTraits.bottomPosInner.isRelativePos) {
                 CGFloat bottomSpaceWeight = bottomSpacing;
                 bottomSpacing = _myCGFloatRound((bottomSpaceWeight / totalWeight) * spareHeight);
-                if (_myCGFloatLessOrEqual(bottomSpacing, 0)) {
-                    bottomSpacing = 0;
+                if (_myCGFloatLessOrEqual(bottomSpacing, 0.0)) {
+                    bottomSpacing = 0.0;
                 }
             } else {
-                if (bottomSpacing + subviewTraits.bottomPosInner.offsetVal != 0) {
+                if (bottomSpacing + subviewTraits.bottomPosInner.offsetVal != 0.0) {
                     pos += addSpace;
                     if (isWeightShrinkSpacing) {
                         pos += weightShrinkSpacingTotalHeight * (bottomSpacing + subviewTraits.bottomPosInner.offsetVal) / totalFixedSpacing;
@@ -629,7 +615,7 @@
             //添加共有的子视图间距
             if (subviewEngine != context->subviewEngines.lastObject) {
                 pos += context->vertSpace;
-                if (context->vertSpace != 0) {
+                if (context->vertSpace != 0.0) {
                     pos += addSpace;
                     if (isWeightShrinkSpacing) {
                         pos += weightShrinkSpacingTotalHeight * context->vertSpace / totalFixedSpacing;
@@ -649,9 +635,7 @@
 }
 
 - (void)myDoHorzOrientationLayoutWithContext:(MyLayoutContext *)context {
-    
     MyLinearLayoutTraits *layoutTraits = (MyLinearLayoutTraits*)context->layoutViewEngine.currentSizeClass;
-    
     CGFloat subviewWidth = [layoutTraits.flexSpace calcMaxMinSubviewSize:context->selfSize.width arrangedCount:context->subviewEngines.count paddingStart:&context->paddingLeading paddingEnd:&context->paddingTrailing space:&context->horzSpace];
     CGFloat totalWidth = 0.0;  //计算固定部分的宽度
     CGFloat totalWeight = 0.0; //剩余部分的总比重
@@ -673,12 +657,9 @@
     CGFloat maxLayoutHeight = 0.0;
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
         //计算出固定宽度部分以及weight部分。这里的宽度可能依赖高度。如果不是高度包裹则计算出所有高度。
-
         MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
-
         if (context->horzGravity == MyGravity_Horz_Fill || context->horzGravity == MyGravity_Horz_Stretch) {
             BOOL isFlexEngine = YES;
-
             //设置了比重宽度的子视图不伸缩
             if (subviewTraits.weight != 0.0) {
                 isFlexEngine = NO;
@@ -734,10 +715,10 @@
 
         //如果垂直方向的对齐方式是基线对齐，那么就以第一个具有基线的视图作为标准位置。
         if (context->vertGravity == MyGravity_Vert_Baseline && baselinePos == CGFLOAT_MAX && self.baselineBaseView == subviewTraits.view) {
-            UIFont *sbvFont = [subviewTraits.view valueForKey:@"font"];
+            UIFont *subviewFont = [subviewTraits.view valueForKey:@"font"];
             //这里要求baselineBaseView必须要具有font属性。
             //得到基线位置。
-            baselinePos = subviewEngine.top + (subviewEngine.height - sbvFont.lineHeight) / 2.0 + sbvFont.ascender;
+            baselinePos = subviewEngine.top + (subviewEngine.height - subviewFont.lineHeight) / 2.0 + subviewFont.ascender;
         }
 
         if (subviewTraits.widthSizeInner.anchorVal != nil && subviewTraits.widthSizeInner.anchorVal == subviewTraits.heightSizeInner && subviewWidth == 0.0) { //特殊处理宽度等于高度的情况
@@ -880,7 +861,7 @@
                                 trailingViewEngine.width = layoutWidth - leadingWidth;
                             }
                         }
-                    } else if (_myCGFloatNotEqual(totalFixedWidth, 0)) { //按比例分配。
+                    } else if (_myCGFloatNotEqual(totalFixedWidth, 0.0)) { //按比例分配。
                         for (MyLayoutEngine *fixedWidthSubviewEngine in fixedWidthSubviewEngines) {
                             fixedWidthSubviewEngine.width += spareWidth * (fixedWidthSubviewEngine.width / totalFixedWidth);
                         }
@@ -899,7 +880,7 @@
         }
 
         if (totalShrink == 0.0) {
-            spareWidth = 0;
+            spareWidth = 0.0;
         }
     } else {
         //如果不需要压缩则压缩比设置为0
@@ -962,11 +943,11 @@
             if (subviewTraits.leadingPosInner.isRelativePos) {
                 CGFloat topSpaceWeight = leadingSpacing;
                 leadingSpacing = _myCGFloatRound((topSpaceWeight / totalWeight) * spareWidth);
-                if (_myCGFloatLessOrEqual(leadingSpacing, 0)) {
-                    leadingSpacing = 0;
+                if (_myCGFloatLessOrEqual(leadingSpacing, 0.0)) {
+                    leadingSpacing = 0.0;
                 }
             } else {
-                if (leadingSpacing + subviewTraits.leadingPosInner.offsetVal != 0) {
+                if (leadingSpacing + subviewTraits.leadingPosInner.offsetVal != 0.0) {
                     pos += addSpace;
 
                     if (isWeightShrinkSpacing) {
@@ -985,8 +966,8 @@
             //分别处理相对宽度和绝对宽度
             if (weight != 0.0) {
                 CGFloat w = _myCGFloatRound((weight / totalWeight) * spareWidth);
-                if (_myCGFloatLessOrEqual(w, 0)) {
-                    w = 0;
+                if (_myCGFloatLessOrEqual(w, 0.0)) {
+                    w = 0.0;
                 }
                 subviewEngine.width = [self myValidMeasure:subviewTraits.widthSizeInner subview:subviewTraits.view calcSize:w subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
             }
@@ -1025,11 +1006,11 @@
             if (subviewTraits.trailingPosInner.isRelativePos) {
                 CGFloat trailingSpaceWeight = trailingSpacing;
                 trailingSpacing = _myCGFloatRound((trailingSpaceWeight / totalWeight) * spareWidth);
-                if (_myCGFloatLessOrEqual(trailingSpacing, 0)) {
-                    trailingSpacing = 0;
+                if (_myCGFloatLessOrEqual(trailingSpacing, 0.0)) {
+                    trailingSpacing = 0.0;
                 }
             } else {
-                if (trailingSpacing + subviewTraits.trailingPosInner.offsetVal != 0) {
+                if (trailingSpacing + subviewTraits.trailingPosInner.offsetVal != 0.0) {
                     pos += addSpace;
 
                     if (isWeightShrinkSpacing) {
@@ -1045,7 +1026,7 @@
             //添加共有的子视图间距
             if (subviewEngine != context->subviewEngines.lastObject) {
                 pos += context->horzSpace;
-                if (context->horzSpace != 0) {
+                if (context->horzSpace != 0.0) {
                     pos += addSpace;
                     if (isWeightShrinkSpacing) {
                         pos += weightShrinkSpacingTotalWidth * context->horzSpace / totalFixedSpacing;
@@ -1065,7 +1046,6 @@
 }
 
 - (CGFloat)mySubviewEngine:(MyLayoutEngine *)subviewEngine calcLeadingTrailingWithContext:(MyLayoutContext *)context {
-    
     MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
     UIView *subview = subviewTraits.view;
     subviewEngine.width = [self myWidthSizeValueOfSubviewEngine:subviewEngine withContext:context];
@@ -1076,7 +1056,7 @@
     }
     subviewEngine.width = [self myValidMeasure:subviewTraits.widthSizeInner subview:subview calcSize:subviewEngine.width subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
 
-    return [self myCalcSubview:subviewEngine horzGravity:[subviewTraits horzGravityWith:context->horzGravity] withContext:context];
+    return [self myCalcSubview:subviewEngine horzGravity:[subviewTraits finalHorzGravityFrom:context->horzGravity] withContext:context];
 }
 
 - (CGFloat)mySubviewEngine:(MyLayoutEngine *)subviewEngine baselinePos:(CGFloat)baselinePos calcTopBottomWithContext:(MyLayoutContext *)context  {
@@ -1089,7 +1069,7 @@
     }
     subviewEngine.height = [self myValidMeasure:subviewTraits.heightSizeInner subview:subview calcSize:subviewEngine.height subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
 
-    return [self myCalcSubview:subviewEngine vertGravity:[subviewTraits vertGravityWith:context->vertGravity] baselinePos:baselinePos withContext:context];
+    return [self myCalcSubview:subviewEngine vertGravity:[subviewTraits finalVertGravityFrom:context->vertGravity] baselinePos:baselinePos withContext:context];
 }
 
 - (void)myEqualizeSubviewEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines  orientation:(MyOrientation)orientation centered:(BOOL)centered space:(CGFloat)space {

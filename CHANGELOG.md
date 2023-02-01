@@ -1,7 +1,25 @@
 # 版本变更日志
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
-## [V1.9.8](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.1)(2020/08/04)
+## [V1.9.9](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.9)(2022/12/22)
+### Add
+1. 扩充了栅格布局MyGridLayout中行列的自适应尺寸计算的能力。在老版本中如果某个格子的行高为自适应，那么这个格子的子格子只能是行。新版本中自适应行高的格子可以拆分为列子格子，同样自适应列宽的格子可以拆分为行子格子。
+2. 视图添加了新的方法：`setLayoutSizeClass:(MySizeClass)sizeClass withValue:(id)value`. 此方法可以用来设置视图整体的布局特性。
+3. 弹性布局MyFlexLayout添加了`AddItem`方法以及添加了宏`MyFlexNew`。通过这两个方法可以使用类似于描述布局的语法糖来构建UI界面。
+4. 添加了对滚动时停靠能力的Demo支持，详细见[LLTest8ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/LLTest8ViewController.m)
+5. 添加了一个MyLayout和UICollectionView相结合实现双排瀑布流的Demo：[AllTest9ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/AllTest9ViewController.m)
+
+
+### Update
+1. 将布局视图以及视图的一些属性中的 IBInspectable 宏去掉，减少对XIB以及Storyboard的入侵性。
+2. 格式化一些代码布局，以及重命名一些内部的方法。
+
+### Fixed
+1. 修复布局视图的点击事件有可能不生效的BUG。
+2. 修复了visibility属性可能在不同sizeClass下不生效的BUG。
+
+
+## [V1.9.8](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.8)(2020/08/04)
 ### Update
 1. 重写布局库的内部实现，代码更具可读性，计算性能得到进一步的提升，重写了相对布局的内部实现。
 2. 将布局的属性leftPadding,rightPadding,topPadding,bottomPadding,leadingPadding,trailingPadding改名为paddingLeft,paddingRight,paddingTop,paddingBottom,paddingLeading,paddingTrailing。原来的属性名保留但是会提示过期。

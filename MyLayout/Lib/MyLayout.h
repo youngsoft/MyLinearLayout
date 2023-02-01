@@ -36,7 +36,7 @@
  SOFTWARE.
  */
 
-// Current version is 1.9.8, please open:https://github.com/youngsoft/MyLinearLayout/blob/master/CHANGELOG.md to show the changes.
+// Current version is 1.9.9, please open:https://github.com/youngsoft/MyLinearLayout/blob/master/CHANGELOG.md to show the changes.
 
 #ifndef MyLayout_MyLayout_h
 #define MyLayout_MyLayout_h
@@ -57,21 +57,4 @@
 #import "MyTableLayout.h"
 
 #endif
-
-/**
- Summary(第一段)
- 
- @param a detail
- @param b detail
- @return  detail
- 
- Discussion(第二段)
-
- @code
- 中间的实例代码
- @endcode
- 
-@note 注解。
- */
-//void fn(int a, int b);
 

@@ -16,7 +16,7 @@
 @property (nonatomic, assign) MyLayoutAnchorType anchorType;
 
 @property (nonatomic, assign) MyLayoutValType valType;
-@property (nonatomic, readonly, strong) id val;
+@property (nonatomic, strong) id val;
 @property (nonatomic, readonly, strong) NSNumber *numberVal;
 @property (nonatomic, readonly, strong) MyLayoutSize *anchorVal;
 @property (nonatomic, readonly, strong) NSArray *arrayVal;
@@ -24,11 +24,14 @@
 @property (nonatomic, readonly, assign) BOOL wrapVal;
 @property (nonatomic, readonly, assign) BOOL fillVal;
 
-@property (nonatomic, readonly, strong) MyLayoutSize *lBoundVal;
-@property (nonatomic, readonly, strong) MyLayoutSize *uBoundVal;
+@property (nonatomic, strong) MyLayoutSize *lBoundVal;
+@property (nonatomic, strong) MyLayoutSize *uBoundVal;
 
 @property (nonatomic, readonly, strong) MyLayoutSize *lBoundValInner;
 @property (nonatomic, readonly, strong) MyLayoutSize *uBoundValInner;
+
+@property (nonatomic, assign) CGFloat addVal;
+@property (nonatomic, assign) CGFloat multiVal;
 
 //优先级，内部使用，值是0，500， 1000 分别代表低、中、高，默认是500，这个属性先内部生效。
 @property (nonatomic, assign) MyPriority priority;

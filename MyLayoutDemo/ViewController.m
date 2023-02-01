@@ -18,6 +18,7 @@
 #import "LLTest5ViewController.h"
 #import "LLTest6ViewController.h"
 #import "LLTest7ViewController.h"
+#import "LLTest8ViewController.h"
 
 #import "FLTest1ViewController.h"
 #import "FLTest2ViewController.h"
@@ -27,7 +28,6 @@
 #import "RLTest3ViewController.h"
 #import "RLTest4ViewController.h"
 #import "RLTest5ViewController.h"
-#import "RLTest6ViewController.h"
 
 #import "TLTest1ViewController.h"
 #import "TLTest2ViewController.h"
@@ -120,6 +120,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"7.LinearLayout - Average size&space", @""),
                                                @"class":[LLTest7ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"8.LinearLayout - Scroll&Dock", @""),
+                                               @"class":[LLTest8ViewController class]
                                                }
                                              ]
                             },
@@ -146,14 +149,11 @@
                                              @{@"title":NSLocalizedString(@"3.RelativeLayout - Centered", @""),
                                                @"class":[RLTest3ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"4.RelativeLayout - Scroll&Dock", @""),
+                                             @{@"title":NSLocalizedString(@"4.RelativeLayout - Boundary limit", @""),
                                                @"class":[RLTest4ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"5.RelativeLayout - Boundary limit", @""),
+                                             @{@"title":NSLocalizedString(@"5.RelativeLayout - MostSize&MostPos", @""),
                                                @"class":[RLTest5ViewController class]
-                                               },
-                                             @{@"title":NSLocalizedString(@"6.RelativeLayout - MostSize&MostPos", @""),
-                                               @"class":[RLTest6ViewController class]
                                                }
                                              ]
                             },

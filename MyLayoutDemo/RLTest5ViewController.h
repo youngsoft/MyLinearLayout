@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- * 5.RelativeLayout - Boundary limit
+ * 5.RelativeLayout - MostSize&MostPos
  */
 @interface RLTest5ViewController : UIViewController
 

@@ -87,20 +87,22 @@
     // Configure the view for the selected state
 }
 
- //如果您的最低支持是iOS8，那么你可以重载这个方法来动态的评估cell的高度，Autolayout内部是通过这个方法来评估高度的，因此如果用MyLayout实现的话就不需要调用基类的方法，而是调用根布局视图的sizeThatFits来评估获取动态的高度。
+ /**为了支持cell的高度自适应，您需要重载这个方法来动态的评估cell的高度，Autolayout内部是通过这个方法来评估高度的。因此如果用MyLayout实现的话就不需要调用基类的方法，而是调用根布局视图的sizeThatFits来评估获取动态的高度。
+  当然您也可以不通过重载这个方法来实现高度自适应，而是用AllTest1TableViewCellForAutoLayout类中介绍的方法：通过autolayout+mylayout的组合方式来实现高度自适应的能力，强烈建议采用后者，代码更加简单方便！！！
+  */
 - (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority
 {
     /*
-     通过布局视图的sizeThatFits方法能够评估出UITableViewCell的动态高度。sizeThatFits并不会进行布局而只是评估布局的尺寸。
-     因为cell的高度是自适应的，因此这里通过调用高度为wrap的布局视图的sizeThatFits来获取真实的高度。
+     通过布局视图的systemLayoutSizeFittingSize方法能够评估出UITableViewCell的动态高度。systemLayoutSizeFittingSize并不会进行布局而只是评估布局的尺寸。
+     因为cell的高度是自适应的，因此这里通过调用高度为wrap的布局视图的systemLayoutSizeFittingSize来获取真实的高度。
      */
     
     if (@available(iOS 11.0, *)) {
         //如果你的界面要支持横屏的话，因为iPhoneX的横屏左右有44的安全区域，所以这里要减去左右的安全区域的值，来作为布局宽度尺寸的评估值。
         //如果您的界面不需要支持横屏，或者延伸到安全区域外则不需要做这个特殊处理，而直接使用else部分的代码即可。
-       return [self.rootLayout sizeThatFits:CGSizeMake(targetSize.width - self.safeAreaInsets.left - self.safeAreaInsets.right, targetSize.height)];
+       return [self.rootLayout systemLayoutSizeFittingSize:CGSizeMake(targetSize.width - self.safeAreaInsets.left - self.safeAreaInsets.right, targetSize.height) withHorizontalFittingPriority:horizontalFittingPriority verticalFittingPriority:verticalFittingPriority];
     } else {
-        return [self.rootLayout sizeThatFits:targetSize];  //如果使用系统自带的分割线，请记得将返回的高度height+1
+        return [self.rootLayout systemLayoutSizeFittingSize:targetSize withHorizontalFittingPriority:horizontalFittingPriority verticalFittingPriority:verticalFittingPriority];  //如果使用系统自带的分割线，请记得将返回的高度height+1
     }
 }
 
