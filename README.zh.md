@@ -552,6 +552,39 @@ MyLayoutSize类是用来描述一个视图的尺寸的类。UIView中扩展出�
  
  ```
 
+###  弹性布局MyFlexLayout
+弹性布局是W3C规范中定义的一种布局，又称为flex布局。这种布局可以简单、快速、响应的实现各种布局页面，其目的是为了取代“position+display+float”。MyFlexLayout实现了flex规范中的子集，同时又扩展了flex规范中的一些能力。由于MyFlowLayout也提供了类似弹性布局的能力，但是语法和flex规范不兼容，因此MyFlexLayout在从MyFlowLayout派生的基础上提供了一套新的布局编写语法糖，语法糖使得我们可以用和flex规范定义的语法来实现代码的布局。
+
+![演示效果图](https://raw.githubusercontent.com/youngsoft/MyLinearLayout/master/MyLayout/fll.png)
+
+示例代码:
+
+```objective-c
+   
+  -(void)loadView {
+    [super loadView];
+    
+   MyFlexLayout *S = MyFlexLayout.new.myFlex
+    .flex_direction(MyFlexDirection_Row)
+    .flex_wrap(MyFlexWrap_Wrap)
+    .vert_space(10)
+    .horz_space(10)
+    .padding(UIEdgeInsetsMake(10, 10, 10, 10))
+    .width(300)
+    .height(MyLayoutSize.wrap)
+    .addTo(self.view);
+    
+    for (int i = 0; i < 10; i++) {
+        UIView *A = UIView.new.myFlex
+        .width(60)
+        .height(50)
+        .addTo(S);
+        
+        A.backgroundColor = [UIColor greenColor];
+    }
+   }
+```
+
 
 ###  SizeClass的支持
 > 等价于iOS的Size Classes
@@ -603,7 +636,7 @@ $ gem install cocoapods
 
 ```
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '7.0'
+platform :ios, '9.0'
 
 pod 'MyLayout'
 ```

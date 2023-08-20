@@ -128,6 +128,7 @@ extern NSString *const vMyGridGravityHeightFill; //对应MyGravity_Vert_Fill
 /**
  重叠视图的对齐停靠方式
  根据栅格视图的规则默认是不存在重叠能力的，所谓重叠能力就是指视图显示时出现重叠和覆盖的现象。
+ 这个属性是：anchor=YES,measure=0,gravity=overlap 三个属性的简化设置。也就是设置这个属性后这个格子对应的尺寸将是0, 因为是0同时又设置了子栅格的停靠方式，因此就相当于起到了重叠的效果。
  */
 @property (nonatomic, assign) MyGravity overlap;
 

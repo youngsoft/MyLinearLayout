@@ -24,10 +24,10 @@
     context->subviewEngines = subviewEngines;
 
     if (layoutTraits.widthSizeInner.wrapVal) {
-        context->selfSize.width = [self myValidMeasure:layoutTraits.widthSizeInner subview:self calcSize:0 subviewSize:context->selfSize selfLayoutSize:self.superview.bounds.size];
+        context->selfSize.width = [self myValidMeasure:layoutTraits.widthSizeInner subview:self calcSize:0.0 subviewSize:context->selfSize selfLayoutSize:self.superview.bounds.size];
     } 
     if (layoutTraits.heightSizeInner.wrapVal) {
-        context->selfSize.height = [self myValidMeasure:layoutTraits.heightSizeInner subview:self calcSize:0 subviewSize:context->selfSize selfLayoutSize:self.superview.bounds.size];
+        context->selfSize.height = [self myValidMeasure:layoutTraits.heightSizeInner subview:self calcSize:0.0 subviewSize:context->selfSize selfLayoutSize:self.superview.bounds.size];
     } 
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
         MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
@@ -121,8 +121,8 @@
         //先算出所有关联视图的宽度。再计算出关联视图的左边和右边的绝对值。
         NSArray *anchorArray = subviewTraits.centerXPosInner.arrayVal;
 
-        CGFloat totalWidth = 0;
-        CGFloat totalOffset = 0;
+        CGFloat totalWidth = 0.0;
+        CGFloat totalOffset = 0.0;
 
         MyLayoutPos *nextAnchor = nil;
         for (NSInteger i = anchorArray.count - 1; i >= 0; i--) {
@@ -142,7 +142,7 @@
         }
 
         if (![subviewTraits invalid]) {
-            if (totalWidth != 0) {
+            if (totalWidth != 0.0) {
                 if (nextAnchor != nil) {
                     totalOffset += nextAnchor.measure;
                 }
@@ -174,8 +174,8 @@
         if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
             subviewEngine.leading -= subviewTraits.centerXPosInner.measure;
         }
-        if (subviewEngine.leading < 0 && relativeView == self && layoutTraits.widthSizeInner.wrapVal) {
-            subviewEngine.leading = 0;
+        if (subviewEngine.leading < 0.0 && relativeView == self && layoutTraits.widthSizeInner.wrapVal) {
+            subviewEngine.leading = 0.0;
         }
         subviewEngine.trailing = subviewEngine.leading + subviewEngine.width;
     } else if (subviewTraits.centerXPosInner.mostVal != nil) {
@@ -184,8 +184,8 @@
     } else if (subviewTraits.centerXPosInner.numberVal != nil) {
         subviewEngine.leading = (context->selfSize.width - context->paddingLeading - context->paddingTrailing - subviewEngine.width) / 2 + context->paddingLeading + subviewTraits.centerXPosInner.measure;
 
-        if (subviewEngine.leading < 0 && layoutTraits.widthSizeInner.wrapVal) {
-            subviewEngine.leading = 0;
+        if (subviewEngine.leading < 0.0 && layoutTraits.widthSizeInner.wrapVal) {
+            subviewEngine.leading = 0.0;
         }
         subviewEngine.trailing = subviewEngine.leading + subviewEngine.width;
     } else {
@@ -295,15 +295,15 @@
     if (subviewTraits.centerYPosInner.arrayVal != nil) {
         NSArray *anchorArray = subviewTraits.centerYPosInner.arrayVal;
 
-        CGFloat totalHeight = 0;
-        CGFloat totalOffset = 0;
+        CGFloat totalHeight = 0.0;
+        CGFloat totalOffset = 0.0;
 
         MyLayoutPos *nextAnchor = nil;
         for (NSInteger i = anchorArray.count - 1; i >= 0; i--) {
             MyLayoutPos *anchor = anchorArray[i];
             MyViewTraits *relativeViewTraits = anchor.view.myEngine.currentSizeClass;
             if (![relativeViewTraits invalid]) {
-                if (totalHeight != 0) {
+                if (totalHeight != 0.0) {
                     if (nextAnchor != nil) {
                         totalOffset += nextAnchor.measure;
                     }
@@ -316,7 +316,7 @@
         }
 
         if (![subviewTraits invalid]) {
-            if (totalHeight != 0) {
+            if (totalHeight != 0.0) {
                 if (nextAnchor != nil) {
                     totalOffset += nextAnchor.measure;
                 }
@@ -384,22 +384,22 @@
         if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
             subviewEngine.top -= subviewTraits.centerYPosInner.measure;
         }
-        if (subviewEngine.top < 0 && relativeView == self && layoutTraits.heightSizeInner.wrapVal) {
-            subviewEngine.top = 0;
+        if (subviewEngine.top < 0.0 && relativeView == self && layoutTraits.heightSizeInner.wrapVal) {
+            subviewEngine.top = 0.0;
         }
         subviewEngine.bottom = subviewEngine.top + subviewEngine.height;
     } else if (subviewTraits.centerYPosInner.mostVal != nil) {
         subviewEngine.top = subviewTraits.centerYPosInner.mostVal.doubleValue + subviewTraits.centerYPosInner.measure - subviewEngine.height / 2;
 
-        if (subviewEngine.top < 0 && layoutTraits.heightSizeInner.wrapVal) {
-            subviewEngine.top = 0;
+        if (subviewEngine.top < 0.0 && layoutTraits.heightSizeInner.wrapVal) {
+            subviewEngine.top = 0.0;
         }
         subviewEngine.bottom = subviewEngine.top + subviewEngine.height;
     } else if (subviewTraits.centerYPosInner.numberVal != nil) {
         subviewEngine.top = (context->selfSize.height - context->paddingTop - context->paddingBottom - subviewEngine.height) / 2 + context->paddingTop + subviewTraits.centerYPosInner.measure;
 
-        if (subviewEngine.top < 0 && layoutTraits.heightSizeInner.wrapVal) {
-            subviewEngine.top = 0;
+        if (subviewEngine.top < 0.0 && layoutTraits.heightSizeInner.wrapVal) {
+            subviewEngine.top = 0.0;
         }
         subviewEngine.bottom = subviewEngine.top + subviewEngine.height;
     } else {
@@ -618,8 +618,8 @@
             NSArray *anchorArray = subviewTraits.widthSizeInner.arrayVal;
 
             BOOL invalid = [subviewTraits invalid];
-            CGFloat totalMultiple = invalid ? 0 : subviewTraits.widthSizeInner.multiVal;
-            CGFloat totalIncrement = invalid ? 0 : subviewTraits.widthSizeInner.addVal;
+            CGFloat totalMultiple = invalid ? 0.0 : subviewTraits.widthSizeInner.multiVal;
+            CGFloat totalIncrement = invalid ? 0.0 : subviewTraits.widthSizeInner.addVal;
             for (MyLayoutSize *anchor in anchorArray) {
                 if (anchor.isActive) {
                     MyLayoutEngine *relativeViewEngine = anchor.view.myEngine;
@@ -638,15 +638,15 @@
             }
 
             CGFloat spareWidth = context->selfSize.width - context->paddingLeading - context->paddingTrailing + totalIncrement;
-            if (_myCGFloatLessOrEqual(spareWidth, 0)) {
-                spareWidth = 0;
+            if (_myCGFloatLessOrEqual(spareWidth, 0.0)) {
+                spareWidth = 0.0;
             }
-            if (totalMultiple != 0) {
+            if (totalMultiple != 0.0) {
                 CGFloat tempWidth = _myCGFloatRound(spareWidth * (subviewTraits.widthSizeInner.multiVal / totalMultiple));
                 subviewEngine.width = tempWidth;
 
                 if ([subviewTraits invalid]) {
-                    subviewEngine.width = 0;
+                    subviewEngine.width = 0.0;
                 } else {
                     spareWidth -= tempWidth;
                     totalMultiple -= subviewTraits.widthSizeInner.multiVal;
@@ -663,7 +663,7 @@
                         }
                         relativeViewEngine.width = [self myValidMeasure:anchor subview:anchor.view calcSize:relativeViewEngine.width subviewSize:relativeViewEngine.size selfLayoutSize:context->selfSize];
                     } else {
-                        relativeViewEngine.width = 0;
+                        relativeViewEngine.width = 0.0;
                     }
                 }
             }
@@ -736,7 +736,7 @@
         subviewEngine.width = [self myValidMeasure:subviewTraits.widthSizeInner subview:subviewTraits.view calcSize:subviewEngine.width subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
 
         if ([subviewTraits invalid]) {
-            subviewEngine.width = 0;
+            subviewEngine.width = 0.0;
             subviewEngine.trailing = subviewEngine.leading + subviewEngine.width;
         }
     }
@@ -755,8 +755,8 @@
 
             BOOL invalid = [subviewTraits invalid];
 
-            CGFloat totalMultiple = invalid ? 0 : subviewTraits.heightSizeInner.multiVal;
-            CGFloat totalIncrement = invalid ? 0 : subviewTraits.heightSizeInner.addVal;
+            CGFloat totalMultiple = invalid ? 0.0 : subviewTraits.heightSizeInner.multiVal;
+            CGFloat totalIncrement = invalid ? 0.0 : subviewTraits.heightSizeInner.addVal;
             for (MyLayoutSize *anchor in anchorArray) {
                 if (anchor.isActive) {
                     MyLayoutEngine *relativeViewEngine = anchor.view.myEngine;
@@ -775,14 +775,14 @@
             }
 
             CGFloat spareHeight = context->selfSize.height - context->paddingTop - context->paddingBottom + totalIncrement;
-            if (_myCGFloatLessOrEqual(spareHeight, 0)) {
-                spareHeight = 0;
+            if (_myCGFloatLessOrEqual(spareHeight, 0.0)) {
+                spareHeight = 0.0;
             }
-            if (totalMultiple != 0) {
+            if (totalMultiple != 0.0) {
                 CGFloat tempHeight = _myCGFloatRound(spareHeight * (subviewTraits.heightSizeInner.multiVal / totalMultiple));
                 subviewEngine.height = tempHeight;
                 if ([subviewTraits invalid]) {
-                    subviewEngine.height = 0;
+                    subviewEngine.height = 0.0;
                 } else {
                     spareHeight -= tempHeight;
                     totalMultiple -= subviewTraits.heightSizeInner.multiVal;
@@ -799,7 +799,7 @@
                         }
                         relativeViewEngine.height = [self myValidMeasure:anchor subview :anchor.view calcSize:relativeViewEngine.height subviewSize:relativeViewEngine.size selfLayoutSize:context->selfSize];
                     } else {
-                        relativeViewEngine.height = 0;
+                        relativeViewEngine.height = 0.0;
                     }
                 }
             }
@@ -864,7 +864,7 @@
         }
         subviewEngine.height = [self myValidMeasure:subviewTraits.heightSizeInner subview:subviewTraits.view calcSize:subviewEngine.height subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
         if ([subviewTraits invalid]) {
-            subviewEngine.height = 0;
+            subviewEngine.height = 0.0;
             subviewEngine.bottom = subviewEngine.top + subviewEngine.height;
         }
     }
@@ -872,7 +872,6 @@
 }
 
 - (CGSize)myDoLayoutRecalcWidth:(BOOL *)pRecalcWidth recalcHeight:(BOOL *)pRecalcHeight withContext:(MyLayoutContext *)context {
-    
     MyRelativeLayoutTraits *layoutTraits = (MyRelativeLayoutTraits *)context->layoutViewEngine.currentSizeClass;
     
     if (pRecalcWidth != NULL) {

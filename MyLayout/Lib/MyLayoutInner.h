@@ -14,21 +14,24 @@
 
 
 typedef struct _MyLayoutContext {
+
+    BOOL isEstimate;
     
+    MySizeClass sizeClass;
+    
+    MyGravity vertGravity;
+    MyGravity horzGravity;
+
     MyLayoutEngine *layoutViewEngine;
     NSMutableArray<MyLayoutEngine *> *subviewEngines;
     
     //布局视图相关属性。
-    MySizeClass sizeClass;
     CGSize selfSize;
     CGFloat paddingLeading;
     CGFloat paddingTrailing;
     CGFloat paddingTop;
     CGFloat paddingBottom;
-    BOOL isEstimate;
-    
-    MyGravity vertGravity;
-    MyGravity horzGravity;
+
     
     CGFloat horzSpace;
     CGFloat vertSpace;
@@ -96,26 +99,6 @@ typedef struct _MyLayoutContext {
 - (void)myHookSublayout:(MyBaseLayout *)sublayout borderlineRect:(CGRect *)pRect;
 
 - (void)myCalcSubviewsWrapContentSize:(MyLayoutContext *)context withCustomSetting:(void (^)(MyViewTraits *subviewTraits))customSetting;
-
-@end
-
-@interface MyViewTraits ()
-
-@property (nonatomic, strong, readonly) MyLayoutPos *topPosInner;
-@property (nonatomic, strong, readonly) MyLayoutPos *leadingPosInner;
-@property (nonatomic, strong, readonly) MyLayoutPos *bottomPosInner;
-@property (nonatomic, strong, readonly) MyLayoutPos *trailingPosInner;
-@property (nonatomic, strong, readonly) MyLayoutPos *centerXPosInner;
-@property (nonatomic, strong, readonly) MyLayoutPos *centerYPosInner;
-@property (nonatomic, strong, readonly) MyLayoutSize *widthSizeInner;
-@property (nonatomic, strong, readonly) MyLayoutSize *heightSizeInner;
-
-@property (nonatomic, strong, readonly) MyLayoutPos *leftPosInner;
-@property (nonatomic, strong, readonly) MyLayoutPos *rightPosInner;
-
-@property (nonatomic, strong, readonly) MyLayoutPos *baselinePosInner;
-
-@property (class, nonatomic, assign) BOOL isRTL;
 
 @end
 

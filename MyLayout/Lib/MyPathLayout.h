@@ -63,7 +63,7 @@ typedef enum : NSUInteger {
 /**结束位置。如果不设置则根据坐标原点设置以及视图的尺寸自动确定.默认是CGFLOAT_MAX*/
 @property (nonatomic, assign) CGFloat end;
 
-/**恢复默认设置。*/
+/**将上面的属性恢复默认设置。*/
 - (void)reset;
 
 @end

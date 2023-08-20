@@ -234,13 +234,13 @@
     [button3 setTitle:@"Del Click" forState:UIControlStateNormal];
     button3.tintColor = [UIColor redColor];
     button3.titleLabel.font = [CFTool font:14];
-    [button3 sizeToFit];
+    button3.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [contentLayout addSubview:button3];
     [button3 addTarget:self action:@selector(handleDel:) forControlEvents:UIControlEventTouchUpInside];
 
     
-    //因为button2,和button3的宽度是固定的，因此这里面label1的最大宽是父视图的宽度减去2个按钮的宽度之和，外加上所有子视图的间距的和。
-    label1.widthSize.uBound(contentLayout.widthSize, -1 *(CGRectGetWidth(button2.bounds) + CGRectGetWidth(button3.bounds) + 2 * contentLayout.subviewHSpace), 1);
+    //因为button2,和button3的宽度是固定的,而label1的宽度是自适应的，但是不能超过容器视图的宽度，所以这里将宽度尺寸的shrink设置为1表明当宽度超过阈值时会自动压缩宽度值。
+    label1.widthSize.shrink = 1;
 }
 
 

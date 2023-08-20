@@ -49,21 +49,25 @@
     return self;
 }
 
-///自适应高度处理，需要重载这个方法来指定尺寸和位置。
-- (UICollectionViewLayoutAttributes *)preferredLayoutAttributesFittingAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes {
-    
-    UICollectionViewLayoutAttributes *retLayoutAttributes = [super preferredLayoutAttributesFittingAttributes:layoutAttributes];
-    CGSize size =  [self.rootLayout sizeThatFits:CGSizeMake(200, 0)];
-    
-    retLayoutAttributes.size = size;
-    //如果您需要对位置进行控制，则需要借助一些累加的处理来进行位置处理。
-    return retLayoutAttributes;
-    
+-  (void)prepareForReuse {
+    [super prepareForReuse];
 }
 
+- (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes {
+    [super applyLayoutAttributes:layoutAttributes];
+}
 
--(void)setModel:(AllTest9DataModel *)model
-{
+- (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
+    ///自适应高度处理，需要重载这个方法来指定尺寸和位置。
+    CGSize sz =  [self.rootLayout systemLayoutSizeFittingSize:targetSize withHorizontalFittingPriority:horizontalFittingPriority verticalFittingPriority:verticalFittingPriority];
+    return sz;
+}
+
+- (UICollectionViewLayoutAttributes *)preferredLayoutAttributesFittingAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes {
+    return [super preferredLayoutAttributesFittingAttributes:layoutAttributes];
+}
+
+-(void)setModel:(AllTest9DataModel *)model {
     _titleLabel.text = model.title;
     _subtitleLabel.text = model.subtitle;
 }

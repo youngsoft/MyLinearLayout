@@ -1,15 +1,15 @@
 //
-//  RLTest4ViewController.h
+//  RLTest5ViewController.h
 //  MyLayout
 //
-//  Created by oybq on 15/7/9.
-//  Copyright (c) 2015年 YoungSoft. All rights reserved.
+//  Created by oybq on 16/12/19.
+//  Copyright (c) 2016年 YoungSoft. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 /**
- * 4.RelativeLayout - Scroll&Dock
+ * 4.RelativeLayout - Boundary limit
  */
 @interface RLTest4ViewController : UIViewController
 

@@ -298,18 +298,24 @@
 @end
 
 //布局的事件处理委托对象
-@implementation MyTouchEventDelegate {
-    __weak id _touchDownTarget;
-    SEL _touchDownAction;
 
-    __weak id _touchCancelTarget;
-    SEL _touchCancelAction;
-    BOOL _hasDoCancel;
+@interface MyTouchEventDelegate()
 
-    BOOL _forbidTouch;
-    BOOL _canCallAction;
-    CGPoint _beginPoint;
-}
+@property (nonatomic, assign) BOOL hasDoCancel;
+@property (nonatomic, assign) BOOL forbidTouch;
+@property (nonatomic, assign) BOOL canCallAction;
+
+@property (nonatomic, weak) id touchDownTarget;
+@property (nonatomic, assign) SEL touchDownAction;
+
+@property (nonatomic, weak) id touchCancelTarget;
+@property (nonatomic, assign) SEL touchCancelAction;
+
+@property (nonatomic, assign) CGPoint beginPoint;
+
+@end
+
+@implementation MyTouchEventDelegate 
 
 BOOL _hasBegin;
 __weak MyBaseLayout *_currentLayout;
@@ -326,7 +332,7 @@ __weak MyBaseLayout *_currentLayout;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
 
-    if (_layout != nil && _target != nil && !_forbidTouch && touch.tapCount == 1 && !_hasBegin) {
+    if (_layout != nil && _target != nil && !_forbidTouch && !_hasBegin) {
         _hasBegin = YES;
         _currentLayout = _layout;
         _canCallAction = YES;
@@ -440,11 +446,13 @@ __weak MyBaseLayout *_currentLayout;
 
 @end
 
-@implementation MyLayoutTouchEventDelegate {
-    UIColor *_oldBackgroundColor;
-    UIImage *_oldBackgroundImage;
-    CGFloat _oldAlpha;
-}
+@interface MyLayoutTouchEventDelegate()
+@property (nonatomic, strong) UIColor *oldBackgroundColor;
+@property (nonatomic, strong) UIImage *oldBackgroundImage;
+@property (nonatomic, assign) CGFloat oldAlpha;
+@end
+
+@implementation MyLayoutTouchEventDelegate
 
 - (instancetype)initWithLayout:(MyBaseLayout *)layout {
     self = [super initWithLayout:layout];

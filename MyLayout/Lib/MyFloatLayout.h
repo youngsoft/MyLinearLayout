@@ -45,7 +45,7 @@
  
  @note 这个属性的定义是完全参考CSS样式表中float属性的定义
  */
-@property (nonatomic, assign, getter=isReverseFloat) IBInspectable BOOL reverseFloat;
+@property (nonatomic, assign, getter=isReverseFloat) BOOL reverseFloat;
 
 /**
  清除浮动，默认是NO。这个属性的意义也跟父浮动布局视图的方向相关。如果设置为了清除浮动属性则表示本子视图不会在浮动方向上紧跟在前一个浮动子视图的后面，而是会另外新起一行或者一列来重新排列。
@@ -66,7 +66,7 @@
  @note 这个属性的定义是完全参考CSS样式表中clear属性的定义。
  
  */
-@property (nonatomic, assign) IBInspectable BOOL clearFloat;
+@property (nonatomic, assign) BOOL clearFloat;
 
 @end
 
@@ -95,7 +95,7 @@
 
  2.MyOrientation_Horz 表示里面的子视图可以进行上下的浮动，但整体从左到右进行排列的布局方式，这个方式是默认方式。
  */
-@property (nonatomic, assign) IBInspectable MyOrientation orientation;
+@property (nonatomic, assign) MyOrientation orientation;
 
 /**
  在一些应用场景中我们希望子视图的宽度是固定的但间距是浮动的，这样就尽可能在一排中容纳更多的子视图。比如设置每个子视图的宽度固定为80，那么在小屏幕下每排只能放3个，而大屏幕则每排能放4个或者5个子视图。 因此您可以通过如下方法来设置子视图的固定尺寸和最小最大浮动间距。这个方法会根据您当前布局的方向不同而具有不同的意义：

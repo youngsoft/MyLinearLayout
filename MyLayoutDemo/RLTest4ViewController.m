@@ -2,8 +2,8 @@
 //  RLTest4ViewController.m
 //  MyLayout
 //
-//  Created by oybq on 15/7/9.
-//  Copyright (c) 2015年 YoungSoft. All rights reserved.
+//  Created by oybq on 16/12/19.
+//  Copyright (c) 2016年 YoungSoft. All rights reserved.
 //
 
 #import "RLTest4ViewController.h"
@@ -13,8 +13,6 @@
 @interface RLTest4ViewController ()<UIScrollViewDelegate>
 
 
-@property(nonatomic, weak) UIView *testTopDockView;
-@property(nonatomic, weak) UIView *testView1;
 
 
 @end
@@ -22,97 +20,35 @@
 @implementation RLTest4ViewController
 
 
--(UILabel*)createLabel:(NSString*)title backgroundColor:(UIColor*)color
-{
-    UILabel *v = [UILabel new];
-    v.text = title;
-    v.backgroundColor = color;
-    v.textColor = [CFTool color:0];
-    v.font = [CFTool font:17];
-    v.numberOfLines = 0;
-    return v;
-}
-
 -(void)loadView
 {
     /*
-       这个例子用来介绍相对布局和滚动视图的结合，来实现滚动以及子视图的停靠的实现，其中主要的方式是通过子视图的属性noLayout来简单的实现这个功能。
-     
-       这里之所以用相对布局来实现滚动和停靠的原因是，线性布局、流式布局、浮动布局这几种布局都是根据添加的顺序来排列的。一般情况下，前面添加的子视图会显示在底部，而后面添加的子视图则会显示在顶部，所以一旦我们出现这种滚动，且某个子视图固定停靠时，我们一般要求这个停靠的子视图要放在最上面，也就是最后一个。
+        本例子是要用来介绍在相对布局中的子视图可以使用MyLayoutPos对象的uBound,lBound设置来实现最大和最小边界约束。
      */
     
-    self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
-
     UIScrollView *scrollView = [UIScrollView new];
-    scrollView.delegate = self;
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
     
-    if (@available(iOS 11.0, *)) {
-        scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    } else {
-        // Fallback on earlier versions
-    }
-    
-    
-    MyRelativeLayout *rootLayout = [MyRelativeLayout new];
-    rootLayout.insetsPaddingFromSafeArea = ~UIRectEdgeBottom;  //为了防止拉到底部时iPhoneX设备的抖动发生，不能将底部安全区叠加到padding中去。
-    rootLayout.widthSize.equalTo(scrollView.widthSize);
+    MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
+    rootLayout.leadingPos.equalTo(@0);
+    rootLayout.trailingPos.equalTo(@0);
     rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
-    rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+    rootLayout.subviewVSpace = 10;
+    rootLayout.gravity = MyGravity_Horz_Fill;
     [scrollView addSubview:rootLayout];
     
+    //最小最大间距限制例子。segment的简易实现。
+    [self createDemo1:rootLayout];
     
-    //添加色块。
-    UILabel *v1 = [self createLabel:NSLocalizedString(@"Scroll the view please", @"") backgroundColor:[CFTool color:1]];
-    v1.widthSize.equalTo(rootLayout.widthSize);
-    v1.heightSize.equalTo(@80);
-    [rootLayout addSubview:v1];
-    self.testView1 = v1;
-    
-    
-    UIView *v2 = [self createLabel:@"" backgroundColor:[CFTool color:2]];
-    v2.widthSize.equalTo(rootLayout.widthSize);
-    v2.heightSize.equalTo(@200);
-    [rootLayout addSubview:v2];
-    
-    
-    UIView *v3 = [self createLabel:@"" backgroundColor:[CFTool color:3]];
-    v3.widthSize.equalTo(rootLayout.widthSize);
-    v3.heightSize.equalTo(@800);
-    v3.topPos.equalTo(v2.bottomPos);
-    [rootLayout addSubview:v3];
-    
-    
-    //这里最后一个加入的子视图作为滚动时的停靠视图。。
-    UILabel *v4 = [self createLabel:NSLocalizedString(@"This view will Dock to top when scroll", @"") backgroundColor:[CFTool color:4]];
-    v4.widthSize.equalTo(rootLayout.widthSize);
-    v4.heightSize.equalTo(@80);
-    v4.topPos.equalTo(v1.bottomPos);
-    [rootLayout addSubview:v4];
-    self.testTopDockView = v4;
-    
-    v2.topPos.equalTo(v4.bottomPos);
-    
-    
-    //当v4设置为noLayout时，出现了屏幕的旋转这时候是无法更新v4的frame值的，所以这里需要实现布局视图的这个block来再屏幕旋转是更新v4的frame值。
-    __weak UIView *weakV4 = v4;
-    __weak UIScrollView *weakScrollView = scrollView;
-    rootLayout.rotationToDeviceOrientationBlock = ^(MyBaseLayout *layout, BOOL isFirst, BOOL isPortrait){
-    
-        if (weakV4.noLayout && !isFirst)
-        {
-          //如果V4不实际布局且不是第一次布局完成则这里要调整V4的frame。
-          CGRect rect = weakV4.frame;
-          weakV4.frame = CGRectMake(rect.origin.x, weakScrollView.contentOffset.y, layout.frame.size.width - 20, rect.size.height);
-        }
-        
-    };
-    
-    
+    //右边边距限制的例子。
+    [self createDemo2:rootLayout];
+
+    //左边边距限制和上下边距限制的例子。
+    [self createDemo3:rootLayout];
+
     
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -124,45 +60,213 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark -- UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+-(void)handleButtonSelect:(UIButton*)button
 {
+    if (button.isSelected)
+        return;
     
-    //testTopDockView的上面视图是testView1。所以这里如果偏移超过testView1的最大则开始固定testTopDockView了
-    if (scrollView.contentOffset.y > CGRectGetMaxY(self.testView1.frame))
-    {
-        
-        /*
-         当滚动条偏移的位置大于某个值后，我们将特定的子视图的noLayout设置为YES，表示特定的子视图虽然会参与布局，但是在布局完成后不会更新frame值。
-         因为参与了布局，所以不会影响到依赖这个视图的其他视图，所以整体布局结构是保持不变，这时候虽然设置为了noLayout的视图留出了一个空挡，但是却可以通过frame值来进行任意的定位而不受到布局的控制。
-        
-         上面的代码中我们可以看到v4视图的位置和尺寸设置如下：
-         v4.widthSize.equalTo(rootLayout.widthSize);  //宽度和父视图相等。
-         v4.heightSize.equalTo(@80);              //高度等于80。
-         v4.topPos.equalTo(v1.bottomPos);         //总是位于v1的下面。
-         。。。。
-         v2.topPos.equalTo(v4.bottomPos);         //v2则总是位于v4的下面。
-         
-         而当我们将v4的noLayout设置为了YES后，这时候v4仍然会参与布局，也就是说v4的那块区域和位置是保持不变的，v2还是会在v4的下面。但是v4却可以通过frame值进行任意位置和尺寸的改变。 这样就实现了当滚动时我们调整v4的真实frame值来达到悬停的功能，但是v2却保持了不变，还是向往常一样保持在那个v4假位置的下面，而随着滚动条滚动而滚动。
-         
-         ***需要注意的是这个特定的子视图一定要最后加入到布局视图中去。***
-         */
-        
-        self.testTopDockView.noLayout = YES;
-        CGRect rect = self.testTopDockView.frame;
-        self.testTopDockView.frame = CGRectMake(rect.origin.x, scrollView.contentOffset.y, rect.size.width, rect.size.height); //这里可以自由设置位置和尺寸了。
-        
-        
-        
-    }
-    else
-    {
-        
-        //当滚动的偏移小于90后，我们将testTopDocView的noLayout设置回NO,这样这个视图就又会根据所设置的约束而受到布局视图的约束和控制了，这时候frame的设置将不再起作用了。
-        self.testTopDockView.noLayout = NO;
-    }
+    MyRelativeLayout *containerLayout = (MyRelativeLayout*)button.superview;
+    
+    UIButton *leadingButton = [containerLayout viewWithTag:1];
+    UIButton *trailingButton = [containerLayout viewWithTag:2];
+    UIView  *underLineView = [containerLayout viewWithTag:3];
+    
+    NSInteger tag = button.tag;
+    leadingButton.selected = (tag == 1);
+    trailingButton.selected = (tag == 2);
+    
+    //调整underLineView的位置。
+    underLineView.leadingPos.equalTo(button.leadingPos);
+    underLineView.widthSize.equalTo(button.widthSize);
+    
+    
+    [containerLayout layoutAnimationWithDuration:0.3];
+    
 }
 
+-(void)createDemo1:(UIView*)rootLayout
+{
+    /*
+       本例子实现一个带动画效果的segment的简单实现。只有在相对布局中的子视图的MyLayoutPos位置对象才支持lBound和uBound方法。
+       通过这个方法能设置子视图的最小和最大的边界值。
+     */
+    
+    MyRelativeLayout *containerLayout = [MyRelativeLayout new];
+    containerLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
+    containerLayout.paddingTop = 6;
+    containerLayout.paddingBottom = 6;
+    containerLayout.backgroundColor = [CFTool color:0];
+    [rootLayout addSubview:containerLayout];
+    
+    UIButton *leadingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leadingButton setTitle:@"Leading Button" forState:UIControlStateNormal];
+    [leadingButton setTitleColor:[CFTool color:4] forState:UIControlStateNormal];
+    [leadingButton setTitleColor:[CFTool color:7] forState:UIControlStateSelected];
+    leadingButton.tag = 1;
+    [leadingButton addTarget:self action:@selector(handleButtonSelect:) forControlEvents:UIControlEventTouchUpInside];
+    [leadingButton sizeToFit]; //根据内容得到高度和宽度
+    leadingButton.leadingPos.lBound(containerLayout.leadingPos, 0);  //左边最小边界是父视图左边偏移0
+    leadingButton.trailingPos.uBound(containerLayout.centerXPos, 0); //右边最大的边界是父视图中心点偏移0
+    //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中leadingButton始终在父视图的左边和父视图的水平中心这个边界内居中显示。
+    [containerLayout addSubview:leadingButton];
+    leadingButton.selected = YES;
+    
+    UIButton *trailingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [trailingButton setTitle:@"Trailing Button" forState:UIControlStateNormal];
+    [trailingButton setTitleColor:[CFTool color:4] forState:UIControlStateNormal];
+    [trailingButton setTitleColor:[CFTool color:7] forState:UIControlStateSelected];
+    trailingButton.tag = 2;
+    [trailingButton addTarget:self action:@selector(handleButtonSelect:) forControlEvents:UIControlEventTouchUpInside];
+    [trailingButton sizeToFit]; //根据内容得到高度和宽度
+    trailingButton.leadingPos.lBound(containerLayout.centerXPos, 0); //左边最小边界是父视图中心点偏移0
+    trailingButton.trailingPos.uBound(containerLayout.trailingPos, 0);   //右边最大边界是父视图右边偏移0
+    //在相对布局中子视图可以不设置左右边距而是设置最小和最大的边界值，就可以让子视图在指定的边界范围内居中，并且如果宽度超过最小和最大的边界设定时会自动压缩子视图的宽度。在这个例子中trailingButton始终在父视图的水平中心和父视图的右边这个边界内居中显示。
+    [containerLayout addSubview:trailingButton];
+    
+    
+    //添加下划线视图。
+    UIView *underLineView = [UIView new];
+    underLineView.backgroundColor = [CFTool color:7];
+    underLineView.tag = 3;
+    underLineView.heightSize.equalTo(@1);
+    underLineView.widthSize.equalTo(leadingButton.widthSize);
+    underLineView.leadingPos.equalTo(leadingButton.leadingPos);
+    underLineView.topPos.equalTo(leadingButton.bottomPos).offset(6);
+    [containerLayout addSubview:underLineView];
+    
+
+}
+
+
+-(void)createDemo2:(UIView*)rootLayout
+{
+    /*
+       这个例子通常用于UITableViewCell中的某些元素的最大尺寸的限制，您可以横竖屏切换，看看效果。
+       对于某些布局场景中：子视图尺寸是自适应的，但又不能无限制的延生而会受到某些边界的约束控制，因此可以用如下的方法来进行视图的尺寸设置。
+     */
+    
+    MyRelativeLayout *containerLayout = [MyRelativeLayout new];
+    containerLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
+    containerLayout.padding = UIEdgeInsetsMake(6, 6, 6, 6);
+    containerLayout.backgroundColor = [CFTool color:0];
+    [rootLayout addSubview:containerLayout];
+    
+    /*
+      这个例子中，水平方向一共有leadingImageView,flexedLabel,editImageView,trailingLabel四个子视图水平排列。其中leadingImageView在最左边且宽度固定，flexedLabel则跟在leadingImageView的右边但是宽度是不确定的，editImageView则是跟在flexedLabel的后面宽度是固定的，trailingLabel则总是在屏幕的右边且宽度是固定的，但是其中的flexedLabel的宽度最宽不能无限制的扩展，且不能和trailingLabel进行重叠。
+     */
+    
+    NSArray *images = @[@"minions1",@"minions2",@"minions3",@"minions4"];
+    NSArray *texts = @[@"这是一段很长的文本，目的是为了实现最大限度的利用整个空间而不出现多余的缝隙",
+                       @"您好",
+                       @"北京市朝阳区三里屯SOHO城",
+                       @"我是醉里挑灯看键",
+                       @"欧阳大哥",
+                       @"MyLayout是一套功能强大的综合界面布局库"];
+    
+    NSArray *trailingTexts =  @[@"100.00",@"1000.00",@"10000.00",@"100000.00"];
+    
+    for (int i = 0; i < images.count; i++)
+    {
+        UIImageView *leadingImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:images[arc4random()%4]]];
+        leadingImageView.topPos.equalTo(@(90*i));
+        [containerLayout addSubview:leadingImageView];
+        
+        UILabel *flexedLabel = [UILabel new];
+        flexedLabel.text = texts[arc4random()%6];
+        flexedLabel.font = [CFTool font:17];
+        flexedLabel.textColor = [CFTool color:4];
+        flexedLabel.lineBreakMode = NSLineBreakByCharWrapping;
+        flexedLabel.heightSize.equalTo(@(MyLayoutSize.wrap)); //高度自动计算。
+        flexedLabel.leadingPos.equalTo(leadingImageView.trailingPos).offset(5);  //左边等于leadingImageView的右边
+        flexedLabel.topPos.equalTo(leadingImageView.topPos);  //顶部和leadingImageView相等。
+        [containerLayout addSubview:flexedLabel];
+        
+        UIImageView *editImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit"]];
+        editImageView.leadingPos.equalTo(flexedLabel.trailingPos);  //这个图片总是跟随在flexedLabel的后面。
+        editImageView.topPos.equalTo(leadingImageView.topPos).offset(4);
+        [containerLayout addSubview:editImageView];
+        
+        UILabel *trailingLabel = [UILabel new];
+        trailingLabel.text = trailingTexts[arc4random()%4];
+        trailingLabel.font = [CFTool font:15];
+        trailingLabel.textColor = [CFTool color:7];
+        [trailingLabel sizeToFit]; //尺寸自适应
+        trailingLabel.trailingPos.equalTo(containerLayout.trailingPos);  //右边等于父视图的右边，也就是现实在最右边。
+        trailingLabel.topPos.equalTo(leadingImageView.topPos).offset(4);
+        [containerLayout addSubview:trailingLabel];
+        
+        flexedLabel.widthSize.equalTo(@(MyLayoutSize.wrap)); //宽度自适应
+        flexedLabel.trailingPos.uBound(trailingLabel.leadingPos, editImageView.frame.size.width + 10); //右边的最大的边界就等于trailingLabel的最左边再减去editImageView的尺寸外加上10,这里的10是视图之间的间距，为了让视图之间保持有足够的间距。这样当flexedLabel的宽度超过这个最大的右边界时，系统自动会缩小flexedLabel的宽度，以便来满足右边界的限制。 这个场景非常适合某个UITableViewCell里面的两个子视图之间有尺寸长度约束的情况。
+        
+        
+    }
+    
+    
+}
+
+
+-(void)handleClick:(UITapGestureRecognizer*)sender
+{
+    UILabel *label = (UILabel*)sender.view;
+    NSString *text = label.text;
+    label.text = [text stringByAppendingString:@"+++"];
+    
+}
+
+-(void)createDemo3:(UIView*)rootLayout
+{
+    /*
+      这个例子用来了解上下边距的约束和左边边距的约束的场景。这些约束的设置特别适合那些有尺寸依赖以及位置依赖的UITableViewCell的场景。
+     */
+     
+    
+    MyRelativeLayout *containerLayout = [MyRelativeLayout new];
+    containerLayout.heightSize.equalTo(@150);
+    containerLayout.padding = UIEdgeInsetsMake(6, 6, 6, 6);
+    containerLayout.backgroundColor = [CFTool color:0];
+    [rootLayout addSubview:containerLayout];
+    
+    
+    //左边文字居中并且根据内容变化。
+    UILabel *leadingLabel = [UILabel new];
+    leadingLabel.backgroundColor = [CFTool color:5];
+    leadingLabel.text = @"Click me:";
+    leadingLabel.textColor = [CFTool color:4];
+    leadingLabel.widthSize.equalTo(@100);  //宽度固定为100
+    leadingLabel.heightSize.equalTo(@(MyLayoutSize.wrap)); //高度由子视图的内容确定，自动计算高度。
+    leadingLabel.topPos.lBound(containerLayout.topPos,0);   //最小的上边界是父布局的顶部。
+    leadingLabel.bottomPos.uBound(containerLayout.bottomPos, 0);  //最大的下边界是父布局的底部
+    //通过这两个位置的最小最大边界设置，视图leadingLabel将会在这个范围内垂直居中显示，并且当高度超过这个边界时，会自动的压缩子视图的高度。
+    [containerLayout addSubview:leadingLabel];
+    
+    //添加手势处理。
+    UITapGestureRecognizer *leadingLabelTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleClick:)];
+    leadingLabel.userInteractionEnabled = YES;
+    [leadingLabel addGestureRecognizer:leadingLabelTapGesture];
+    
+    
+    
+    //右边按钮
+    UILabel *trailingLabel = [UILabel new];
+    trailingLabel.backgroundColor = [CFTool color:6];
+    trailingLabel.text = @"Click me:";
+    trailingLabel.textColor = [CFTool color:4];
+    trailingLabel.trailingPos.equalTo(containerLayout.trailingPos);  //和父布局视图右对齐。
+    trailingLabel.centerYPos.equalTo(leadingLabel.centerYPos);   //和左边视图垂直居中对齐。
+    trailingLabel.leadingPos.lBound(leadingLabel.trailingPos, 10);     //右边视图的最小边界是等于左边视图的右边再偏移10，这样当右边视图的宽度超过这个最小边界时则会自动压缩视图的宽度。
+    trailingLabel.widthSize.equalTo(@(MyLayoutSize.wrap));    //宽度等于自身的宽度。这个设置和上面的leadingPos.lBound方法配合使用实现子视图宽度的压缩。
+    trailingLabel.heightSize.equalTo(@(MyLayoutSize.wrap)).uBound(containerLayout.heightSize, 0, 1); //但是最大的高度等于父布局视图的高度(注意这里内部自动减去了padding的值)
+    [containerLayout addSubview:trailingLabel];
+    
+    //添加手势处理。
+    UITapGestureRecognizer *trailingLabelTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleClick:)];
+    trailingLabel.userInteractionEnabled = YES;
+    [trailingLabel addGestureRecognizer:trailingLabelTapGesture];
+
+    
+    
+    
+}
 
 /*
 #pragma mark - Navigation

@@ -53,7 +53,7 @@
  
  2. MyOrientation_Horz 表示布局内子视图依次从左到右(RTL从右到左)水平排列。
  */
-@property (nonatomic, assign) IBInspectable MyOrientation orientation;
+@property (nonatomic, assign) MyOrientation orientation;
 
 /**
  用来设置当线性布局中的所有子视图的尺寸和间距的和大于线性布局的尺寸时子视图压缩策略。默认值是MySubviewsShrink_None，表示什么不压缩子视图的尺寸和间距。

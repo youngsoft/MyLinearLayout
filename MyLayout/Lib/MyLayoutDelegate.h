@@ -41,7 +41,7 @@
 
 @property (nonatomic, weak) MyBaseLayout *layout;
 @property (nonatomic, weak) id target;
-@property (nonatomic) SEL action;
+@property (nonatomic, assign) SEL action;
 
 - (instancetype)initWithLayout:(MyBaseLayout *)layout;
 

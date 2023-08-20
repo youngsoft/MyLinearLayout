@@ -517,6 +517,11 @@ NSString *const vMyGridGravityHeightFill = @"height";
     return [self.myDefaultSizeClass updateGridSize:superSize superGrid:superGrid withMeasure:measure];
 }
 
+- (CGFloat)updateWrapGridSizeInSuperGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure {
+    return [self.myDefaultSizeClass updateWrapGridSizeInSuperGrid:superGrid withMeasure:measure];
+}
+
+
 - (CGFloat)updateGridOrigin:(CGPoint)superOrigin superGrid:(id<MyGridNode>)superGrid withOffset:(CGFloat)offset {
     return [self.myDefaultSizeClass updateGridOrigin:superOrigin superGrid:superGrid withOffset:offset];
 }
@@ -916,7 +921,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
  pIndex 指定格子所对应的子视图的索引指针。
  pTagIndex 指格子所对应的视图组内的索引指针？
  tagViewGroupIndexDict： 记录标签中的视图组索引字典。
- 
+ 函数返回格子的尺寸值。
  */
 - (CGFloat)myTraversalGrid:(id<MyGridNode>)grid gridSize:(CGSize)gridSize lsc:(MyGridLayoutTraits *)lsc sbs:(NSArray<UIView *> *)sbs pIndex:(NSInteger *)pIndex tagViewGroupIndexDict:(NSMutableDictionary<NSNumber*, NSNumber*> *)tagViewGroupIndexDict tagViewGroup:(NSArray<UIView *> *)tagViewGroup pTagIndex:(NSInteger *)pTagIndex withContext:(MyLayoutContext *)context {
     NSArray<id<MyGridNode>> *subGrids = nil;
@@ -1015,6 +1020,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
                                 size = [sbv sizeThatFits:size];
                                 subviewEngine.width = size.width;
                                 subviewEngine.height = size.height;
+                                
                             } else {
                                 context->vertGravity = MyGravity_None;
                                 context->horzGravity = MyGravity_None;
@@ -1028,8 +1034,15 @@ NSString *const vMyGridGravityHeightFill = @"height";
 
                             if (grid.superGrid.subGridsType == MySubGridsType_Row) {
                                 fixedMeasure = paddingTop + paddingBottom + subviewEngine.height;
+                                if (grid.superGrid.measure == MyLayoutSize.wrap && grid.superGrid.superGrid != nil && grid.superGrid.superGrid.subGridsType == MySubGridsType_Col) {
+                                    [grid updateWrapGridSizeInSuperGrid:grid.superGrid.superGrid withMeasure:paddingLeading + paddingTrailing + subviewEngine.width];
+                                }
+                                
                             } else {
                                 fixedMeasure = paddingLeading + paddingTrailing + subviewEngine.width;
+                                if (grid.superGrid.measure == MyLayoutSize.wrap && grid.superGrid.superGrid != nil && grid.superGrid.superGrid.subGridsType == MySubGridsType_Row) {
+                                    [grid updateWrapGridSizeInSuperGrid:grid.superGrid.superGrid withMeasure:paddingTop + paddingBottom + subviewEngine.height];
+                                }
                             }
                         }
                     } else {
@@ -1048,6 +1061,10 @@ NSString *const vMyGridGravityHeightFill = @"height";
         }
     }
 
+    //如果自己的尺寸是wrap的并且子节点的行列类型和自身的行列类型不一致，则尺寸为最大的值。
+    BOOL wrapMeasure = NO;
+    CGFloat maxMeasure = 0.0;
+
     if (subGrids.count > 0) {
         NSMutableArray<id<MyGridNode>> *weightSubGrids = [NSMutableArray new];      //比重尺寸子格子数组
         NSMutableArray<NSNumber *> *weightSubGridsIndexs = [NSMutableArray new];    //比重尺寸格子的开头子视图位置索引
@@ -1064,24 +1081,78 @@ NSString *const vMyGridGravityHeightFill = @"height";
         } else {
             gridSize2.height -= (paddingTop + paddingBottom);
         }
-
+        
+        if (grid == (id<MyGridNode>)lsc) {
+            
+            if (lsc.heightSizeInner.isWrap && grid.subGridsType == MySubGridsType_Col) {
+                wrapMeasure =  YES;
+            }
+            
+            if (lsc.widthSizeInner.isWrap && grid.subGridsType == MySubGridsType_Row) {
+                wrapMeasure = YES;
+            }
+            
+        } else {
+            wrapMeasure = (grid.measure == MyLayoutSize.wrap) && (grid.superGrid.subGridsType != grid.subGridsType);
+        }
+        
         for (id<MyGridNode> sbvGrid in subGrids) {
             if (sbvGrid.measure == MyLayoutSize.wrap) {
 
+                //先将父节点的尺寸更新到非wrap维度的自身尺寸上，便于计算另外维度的子格子尺寸。
+                [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:0];
                 CGFloat measure = [self myTraversalGrid:sbvGrid gridSize:gridSize2 lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex withContext:context];
-                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:measure];
+                if (wrapMeasure) {
+                    fixedMeasure += measure;
+                    measure = [sbvGrid updateWrapGridSizeInSuperGrid:grid withMeasure:measure];
+                    //取子节点中的最高值。
+                    if (measure > maxMeasure) {
+                        maxMeasure = measure;
+                    }
+                } else {
+                    
+                    fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:measure];
+                }
 
             } else if (sbvGrid.measure >= 1 || sbvGrid.measure == 0) {
-                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:sbvGrid.measure];
+                
+                CGFloat measure = sbvGrid.measure;
+                if (wrapMeasure) {
+                    fixedMeasure += measure;
+                    [sbvGrid updateWrapGridSizeInSuperGrid:grid withMeasure:measure];
+                } else {
+                    fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:measure];
+                }
 
                 //遍历儿子节点。。
                 [self myTraversalGrid:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex withContext:context];
+                
+                if (wrapMeasure) {
+                    measure = [sbvGrid updateWrapGridSizeInSuperGrid:grid withMeasure:measure];
+                    if (measure > maxMeasure) {
+                        maxMeasure = measure;
+                    }
+                }
 
             } else if (sbvGrid.measure > 0 && sbvGrid.measure < 1) {
-                fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:validMeasure * sbvGrid.measure];
+                
+                CGFloat measure = validMeasure * sbvGrid.measure;
+                if (wrapMeasure) {
+                    fixedMeasure += measure;
+                    [sbvGrid updateWrapGridSizeInSuperGrid:grid withMeasure:measure];
+                } else {
+                    fixedMeasure += [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:measure];
+                }
 
                 //遍历儿子节点。。
                 [self myTraversalGrid:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:pIndex tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex withContext:context];
+                
+                if (wrapMeasure) {
+                    measure = [sbvGrid updateWrapGridSizeInSuperGrid:grid withMeasure:measure];
+                    if (measure > maxMeasure) {
+                        maxMeasure = measure;
+                    }
+                }
 
             } else if (sbvGrid.measure < 0 && sbvGrid.measure > -1) {
                 [weightSubGrids addObject:sbvGrid];
@@ -1121,7 +1192,14 @@ NSString *const vMyGridGravityHeightFill = @"height";
         if (weightSubGridCount > 0) {
             for (NSInteger i = 0; i < weightSubGridCount; i++) {
                 id<MyGridNode> sbvGrid = weightSubGrids[i];
-                remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:-1 * remainedMeasure * sbvGrid.measure];
+                
+                CGFloat measure = -1 * remainedMeasure * sbvGrid.measure;
+                if (wrapMeasure) {
+                    remainedMeasure -= measure;
+                    [sbvGrid updateWrapGridSizeInSuperGrid:grid withMeasure:measure];
+                } else {
+                    remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:measure];
+                }
 
                 NSInteger index = weightSubGridsIndexs[i].integerValue;
                 if (hasTagIndex) {
@@ -1132,6 +1210,13 @@ NSString *const vMyGridGravityHeightFill = @"height";
                 }
 
                 [self myTraversalGrid:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex withContext:context];
+                
+                if (wrapMeasure) {
+                    measure = [sbvGrid updateWrapGridSizeInSuperGrid:grid withMeasure:measure];
+                    if (measure > maxMeasure) {
+                        maxMeasure = measure;
+                    }
+                }
             }
         }
 
@@ -1140,7 +1225,13 @@ NSString *const vMyGridGravityHeightFill = @"height";
             NSInteger totalCount = fillSubGridsCount;
             for (NSInteger i = 0; i < fillSubGridsCount; i++) {
                 id<MyGridNode> sbvGrid = fillSubGrids[i];
-                remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:_myCGFloatRound(remainedMeasure * (1.0 / totalCount))];
+                CGFloat measure = _myCGFloatRound(remainedMeasure * (1.0 / totalCount));
+                if (wrapMeasure) {
+                    remainedMeasure -= measure;
+                    [sbvGrid updateWrapGridSizeInSuperGrid:grid withMeasure:measure];
+                } else {
+                    remainedMeasure -= [sbvGrid updateGridSize:gridSize2 superGrid:grid withMeasure:measure];
+                }
                 totalCount -= 1;
                 NSInteger index = fillSubGridsIndexs[i].integerValue;
                 if (hasTagIndex) {
@@ -1150,10 +1241,29 @@ NSString *const vMyGridGravityHeightFill = @"height";
                     pTagIndex = nil;
                 }
                 [self myTraversalGrid:sbvGrid gridSize:sbvGrid.gridRect.size lsc:lsc sbs:sbs pIndex:&index tagViewGroupIndexDict:tagViewGroupIndexDict tagViewGroup:tagViewGroup pTagIndex:pTagIndex withContext:context];
+                
+                if (wrapMeasure) {
+                    measure = [sbvGrid updateWrapGridSizeInSuperGrid:grid withMeasure:measure];
+                    if (measure > maxMeasure) {
+                        maxMeasure = measure;
+                    }
+                }
             }
         }
     }
-    return fixedMeasure;
+    
+    if (wrapMeasure) {
+        
+        if (self.subGridsType == MySubGridsType_Col) {
+            maxMeasure += paddingTop + paddingBottom;
+        }else {
+            maxMeasure += paddingLeading + paddingTrailing;
+        }
+        
+        return maxMeasure;
+    } else {
+        return fixedMeasure;
+    }
 }
 
 @end

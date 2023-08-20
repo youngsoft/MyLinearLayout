@@ -90,10 +90,26 @@
     UIViewController *demoVC = [[self.demoVCList[indexPath.row][@"class"] alloc] init];
     demoVC.title = self.demoVCList[indexPath.row][@"title"];
     
-    if (self.isPresentVC)
-        [self.navigationController presentViewController:demoVC animated:YES completion:nil];
-    else
+    if (self.isPresentVC) {
+        demoVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        [self.navigationController presentViewController:demoVC animated:YES completion:^{
+            if (@available(iOS 13.0, *)) {
+                UIButton *button = [UIButton buttonWithType:UIButtonTypeClose];
+                [button addTarget:self action:@selector(handleClose:) forControlEvents:UIControlEventTouchUpInside];
+                button.frame = CGRectMake(0, 20, 44, 44);
+                [self.view.window addSubview:button];
+                
+
+            } else {
+                // Fallback on earlier versions
+            }
+        }];
+        
+      
+    }
+    else {
         [self.navigationController pushViewController:demoVC animated:YES];
+    }
 }
 
 
@@ -106,8 +122,13 @@
     
     if (self.isPresentVC)
     {
-        [[[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString(@"If you select \"Present\", then you can touch topleft corner of Status bar to dissmis the view controller",@"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        [[[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString(@"If you select \"Present\", then you can touch Close button of topleft corner to dissmis the view controller",@"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
     }
+}
+
+-(void)handleClose:(UIButton *)sender {
+    [sender removeFromSuperview];
+    [self.view.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 

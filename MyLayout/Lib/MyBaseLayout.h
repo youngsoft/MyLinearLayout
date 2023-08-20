@@ -13,7 +13,7 @@
 
 /*
  几种视图类型的定义：
-1.布局视图：    就是从MyBaseLayout派生而出的视图，目前MyLayout中一共有：线性布局、框架布局、相对布局、表格布局、流式布局、浮动布局、路径布局、栅格布局8种布局。 布局视图也是一个视图。
+1.布局视图：    就是从MyBaseLayout派生而出的视图，目前MyLayout中一共有：线性布局、框架布局、相对布局、表格布局、流式布局、浮动布局、路径布局、栅格布局、弹性布局9种布局。 布局视图也是一个视图。
 2.非布局视图：  除上面说的7种布局视图外的所有视图和控件。
 3.布局父视图：  如果某个视图的父视图是一个布局视图，那么这个父视图就是布局父视图。
 4.非布局父视图：如果某个视图的父视图不是一个布局视图，那么这个父视图就是非布局父视图。
@@ -163,7 +163,7 @@
 /**
  *Top layout position of the view. Equivalent to topPos.equalTo(NSNumber). Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myTop;
+@property (nonatomic, assign) CGFloat myTop;
 
 /**
  *视图头部的布局位置, 是leadingPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
@@ -171,7 +171,7 @@
 /**
  *Leading layout position of the view. Equivalent to leadingPos.equalTo(NSNumber).Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myLeading;
+@property (nonatomic, assign) CGFloat myLeading;
 
 /**
  *视图下边的布局位置, 是bottomPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
@@ -179,7 +179,7 @@
 /**
  *Bottom layout position of the view. Equivalent to bottomPos.equalTo(NSNumber).Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myBottom;
+@property (nonatomic, assign) CGFloat myBottom;
 
 /**
  *视图尾部的布局位置, 是trailingPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
@@ -187,7 +187,7 @@
 /**
  *Trailing layout position of the view. Equivalent to trailingPos.equalTo(NSNumber).Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myTrailing;
+@property (nonatomic, assign) CGFloat myTrailing;
 
 /**
  *视图水平中心布局位置, 是centerXPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
@@ -195,7 +195,7 @@
 /**
  *Horizontal center layout position of the view. Equivalent to centerXPos.equalTo(NSNumber).Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myCenterX;
+@property (nonatomic, assign) CGFloat myCenterX;
 
 /**
  *视图垂直中心布局位置, 是centerYPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
@@ -203,7 +203,7 @@
 /**
  *Vertical center layout position of the view. Equivalent to centerYPos.equalTo(NSNumber).Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myCenterY;
+@property (nonatomic, assign) CGFloat myCenterY;
 
 /**
  *视图中心布局位置, 是myCenterX,myCenterY方法的简化版本。此属性只用于赋值不用于读取！
@@ -211,7 +211,7 @@
 /**
  *Center layout position of the view. Equivalent to set myCenterX and myCenterY .Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGPoint myCenter;
+@property (nonatomic, assign) CGPoint myCenter;
 
 /**
  *视图左边的布局位置, 是leftPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
@@ -219,7 +219,7 @@
 /**
  *Left layout position of the view. Equivalent to leftPos.equalTo(NSNumber).Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myLeft;
+@property (nonatomic, assign) CGFloat myLeft;
 
 /**
  *视图右边的布局位置, 是rightPos.equalTo方法的简化版本。此属性只用于赋值不用于读取！
@@ -227,7 +227,7 @@
 /**
  *Right layout position of the view. Equivalent to rightPos.equalTo(NSNumber).Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myRight;
+@property (nonatomic, assign) CGFloat myRight;
 
 /**
  *视图四边的布局位置, 是myLeading,myTop,myTrailing,myBottom的简化版本。此属性只用于赋值不用于读取！
@@ -235,17 +235,17 @@
 /**
  *Boundary layout position of the view. Equivalent to myLeading,myTop,myTrailing,myBottom set to the same number.Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myMargin;
+@property (nonatomic, assign) CGFloat myMargin;
 
 /**
  *leading and trailing margin of the view to the superview. Equivalent to myLeading,myTrailing set to the same number.Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myHorzMargin;
+@property (nonatomic, assign) CGFloat myHorzMargin;
 
 /**
  *top and bottom margin of the view to the superview. Equivalent to myTop,myBottom set to the same number.Only for setting, not for getting.
  */
-@property (nonatomic, assign) IBInspectable CGFloat myVertMargin;
+@property (nonatomic, assign) CGFloat myVertMargin;
 
 /*
  视图的布局尺寸对象MyLayoutSize,用于设置视图的宽度和高度尺寸。视图可以通过设置frame值来设置自身的尺寸，也可以通过设置widthSize和heightSize来
@@ -314,7 +314,7 @@
  MyLayoutSize.fill  表明宽度填充父视图剩余宽度
  MyLayoutSize.empty 表明清除宽度约束。
  */
-@property (nonatomic, assign) IBInspectable CGFloat myWidth;
+@property (nonatomic, assign) CGFloat myWidth;
 
 /**
  *视图的高度布局尺寸,是heightSize.equalTo方法的简化版本。此属性只用于赋值不用于读取！除了设置常规的数字外您还可以设置一些特殊的值：
@@ -322,12 +322,12 @@
  MyLayoutSize.fill  表明高度填充父视图剩余高度
  MyLayoutSize.empty 表明清除高度约束。
  */
-@property (nonatomic, assign) IBInspectable CGFloat myHeight;
+@property (nonatomic, assign) CGFloat myHeight;
 
 /**
  *视图的宽度高度布局尺寸,是myWidth,myHeight方法的简化版本。此属性只用于赋值不用于读取！
  */
-@property (nonatomic, assign) IBInspectable CGSize mySize;
+@property (nonatomic, assign) CGSize mySize;
 
 /**
  设置子视图的相对比重尺寸。也就是子视图的尺寸并不是一个绝对值而是一个相对值，在最终布局时系统会根据布局视图的剩余尺寸来将这个相对的值转化为绝对的值。通过对子视图设置相对的尺寸可以很方便的适配各种屏幕尺寸的设备，以便达到完美的布局效果。这个属性默认值是0表示不使用相对尺寸。weight属性的引入是参考android中的weight的概念而来的。
@@ -407,7 +407,7 @@
  @endcode
  
  */
-@property (nonatomic, assign) IBInspectable CGFloat weight;
+@property (nonatomic, assign) CGFloat weight;
 
 /**
  设置视图不受布局父视图的布局约束控制和不再参与视图的布局，所有设置的其他扩展属性都将失效而必须用frame来设置视图的位置和尺寸，默认值是NO。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
@@ -441,7 +441,7 @@
  useFrame的应用场景是某个视图虽然是布局视图的子视图但不想受到父布局视图的约束，而是可以通过frame进行自由位置和尺寸调整的场景。
 
  */
-@property (nonatomic, assign) IBInspectable BOOL useFrame;
+@property (nonatomic, assign) BOOL useFrame;
 
 /**
  设置视图在进行布局时只会参与布局但不会真实的调整位置和尺寸，默认值是NO。当设置为YES时会在布局时保留出视图的布局位置和布局尺寸的空间，但不会更新视图的位置和尺寸，也就是说只会占位但不会更新。因此你可以通过frame值来进行位置和尺寸的任意设置，而不会受到你的布局视图的影响。这个属性主要用于某些视图希望在布局视图中进行特殊处理和进行自定义的设置的场景。比如一个垂直线性布局下有A,B,C三个子视图设置如下：
@@ -482,7 +482,7 @@
  noLayout的应用场景是那些想在运行时动态调整某个视图的位置和尺寸，但是又不想破坏布局视图中其他子视图的布局结构的场景，也就是调整了视图的位置和尺寸，但是不会调整其他的兄弟子视图的位置和尺寸。
  
 */
-@property (nonatomic, assign) IBInspectable BOOL noLayout;
+@property (nonatomic, assign) BOOL noLayout;
 
 /**
  指定视图的可见性，默认是visible。这个属性是对视图hidden属性的扩展，布局系统对视图的hidden属性设置后，视图将不再参与布局。但在实际中有些场景我们希望视图隐藏后
@@ -557,6 +557,12 @@
  */
 - (instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
 
+
+/// 为某个sizeClass设置新的布局特性值，新的布局特性值一般来源于其他视图或者其他sizeClass，从而实现布局特征属性的拷贝功能。
+/// @param sizeClass 具体的sizeClass类型
+/// @param value 新的值，这个值必须是上述两个fetchLayoutSizeClass方法返回值的copy结果。
+- (void)setLayoutSizeClass:(MySizeClass)sizeClass withValue:(id)value;
+
 @end
 
 /**
@@ -621,29 +627,29 @@
 /**
  * 顶部内边距，用来设置子视图离自身顶部的边距值。
  */
-@property (nonatomic, assign) IBInspectable CGFloat paddingTop;
+@property (nonatomic, assign) CGFloat paddingTop;
 /**
  *头部内边距，用来设置子视图离自身头部的边距值。对于LTR方向的布局来说就是指的左边内边距，而对于RTL方向的布局来说就是指的右边内边距
  */
-@property (nonatomic, assign) IBInspectable CGFloat paddingLeading;
+@property (nonatomic, assign) CGFloat paddingLeading;
 /**
  *底部内边距，用来设置子视图离自身底部的边距值。
  */
-@property (nonatomic, assign) IBInspectable CGFloat paddingBottom;
+@property (nonatomic, assign) CGFloat paddingBottom;
 /**
  *尾部内边距，用来设置子视图离自身尾部的边距值。对于LTR方向的布局来说就是指的右边内边距，而对于RTL方向的布局来说就是指的左边内边距
  */
-@property (nonatomic, assign) IBInspectable CGFloat paddingTrailing;
+@property (nonatomic, assign) CGFloat paddingTrailing;
 
 /**
  *左边内边距，用来设置子视图离自身左边的边距值。如果您不需要考虑布局的方向，那么请用这个属性来设置左边的内部边距，如果您需要考虑国际化则请用paddingLeading
  */
-@property (nonatomic, assign) IBInspectable CGFloat paddingLeft;
+@property (nonatomic, assign) CGFloat paddingLeft;
 
 /**
  *右边内边距，用来设置子视图离自身右边的边距值。如果您不需要考虑布局的方向，那么请用这个属性来设置右边的内部边距，如果您需要考虑国际化则请用paddingTrailing
  */
-@property (nonatomic, assign) IBInspectable CGFloat paddingRight;
+@property (nonatomic, assign) CGFloat paddingRight;
 
 /**
  * 设置当布局的尺寸由子视图决定并且在没有子视图加入的情况下padding的设置值是否会加入到布局的尺寸值里面。默认是YES，表示当布局视图没有子视图时padding值也会加入到尺寸里面。
@@ -664,15 +670,15 @@
 /**
  *设置布局视图里面子视图之间的垂直间距。如果布局内每个子视图的垂直间距都相等则可以用这个属性来设置。这个属性不支持框架布局、相对布局、路径布局。
  */
-@property (nonatomic, assign) IBInspectable CGFloat subviewVSpace;
+@property (nonatomic, assign) CGFloat subviewVSpace;
 /**
  *设置布局视图里面子视图之间的水平间距。如果布局内每个子视图的水平间距都相等则可以用这个属性来设置。这个属性不支持框架布局、相对布局、路径布局。
  */
-@property (nonatomic, assign) IBInspectable CGFloat subviewHSpace;
+@property (nonatomic, assign) CGFloat subviewHSpace;
 /**
  *设置布局视图里面子视图之间的间距。如果布局内每个子视图的间距都相等则可以用这个属性来设置。这个属性不支持框架布局、相对布局、路径布局。
  */
-@property (nonatomic, assign) IBInspectable CGFloat subviewSpace;
+@property (nonatomic, assign) CGFloat subviewSpace;
 
 /**
  布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
@@ -703,7 +709,7 @@
  12.MyGravity_Vert_Stretch 表示当布局中的子视图没有设置高度约束时或者非布局子视图高度自适应时，会拉伸子视图的高度。(支持：线性布局、流式布局)
  13.MyGravity_Horz_Stretch 表示当布局中的子视图没有设置宽度约束或者非布局子视图宽度自适应时，会拉伸子视图的宽度。(支持：线性布局、流式布局)
  */
-@property (nonatomic, assign) IBInspectable MyGravity gravity;
+@property (nonatomic, assign) MyGravity gravity;
 
 /**
  *设置是否布局里面的所有子视图按添加的顺序逆序进行布局。默认是NO，表示按子视图添加的顺序排列。比如一个垂直线性布局依次添加A,B,C三个子视图，那么在正常布局时A,B,C从上到下依次排列，而当这个属性设置为YES时，则布局时就会变成按C,B,A依次从上到下排列。这个属性的设置对框架布局和相对布局无效。
@@ -882,7 +888,7 @@
  @endcode
  
  @note
-   这个属性有可能会造成动态高度计算不正确，请只在UITableviewCell的高度为自适应时使用，其他地方不建议设置这个属性！！
+   这个属性有可能会造成动态高度计算不正确，请只在UITableviewCell的高度为自适应时使用，其他地方不建议设置这个属性！！。如果出现高度计算异常也请勿设置这个属性为YES。
  */
 @property (nonatomic, assign) BOOL cacheEstimatedRect;
 
@@ -928,7 +934,6 @@
 @end
 
 #pragma mark-- MyLayoutDragger
-
 @class MyLayoutDragger;
 
 /**
@@ -953,6 +958,7 @@
 
 //子视图拖动时，拖动区域当前所归属的子视图位置索引。
 @property (nonatomic, assign, readonly) NSUInteger currentIndex;
+
 //子视图拖动时，拖动视图的老的位置索引。
 @property (nonatomic, assign, readonly) NSUInteger oldIndex;
 

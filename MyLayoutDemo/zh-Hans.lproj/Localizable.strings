@@ -8,7 +8,7 @@
 
 //Category
 "Category"="目录";
-"If you select \"Present\", than you can touch topleft corner of Status bar to dissmis the view controller" ="如果你选择了弹出则可以点击状态栏的左上角区域退出视图控制器";
+"If you select \"Present\", then you can touch Close button of topleft corner to dissmis the view controller" ="如果你选择了弹出则可以点击屏幕左上角区域关闭按钮退出视图控制器";
 "1.LinearLayout - Vert&Horz" = "1.线性布局-垂直布局和水平布局";
 "2.LinearLayout - Combine with UIScrollView" = "2.线性布局-和UIScrollView的结合";
 "3.LinearLayout - Gravity&Fill" = "3.线性布局-子视图的停靠和填充";
@@ -16,14 +16,14 @@
 "5.LinearLayout - Weight & Relative margin" = "5.线性布局-子视图尺寸由布局决定";
 "6.LinearLayout - Size limit & Flexed margin" = "6.线性布局-子视图之间的浮动间距";
 "7.LinearLayout - Average size&space" = "7.线性布局-均分子视图尺寸和间距";
+"8.LinearLayout - Scroll&Dock" = "8.线性布局-滚动和悬浮停靠";
 "1.FrameLayout - Gravity&Fill" = "1.框架布局-子视图在布局各方位停靠";
 "2.FrameLayout - Complex UI" = "2.框架布局-复杂的界面布局";
 "1.RelativeLayout - Constraint&Dependence" = "1.相对布局-子视图之间的约束依赖";
 "2.RelativeLayout - Prorate size" = "2.相对布局-子视图的尺寸按比例分配";
 "3.RelativeLayout - Centered" = "3.相对布局-子视图整体居中";
-"4.RelativeLayout - Scroll&Dock" = "4.相对布局-滚动和停靠";
-"5.RelativeLayout - Boundary limit" = "5.相对布局-边界约束";
-"6.RelativeLayout - MostSize&MostPos" = "6.相对布局-最值约束";
+"4.RelativeLayout - Boundary limit" = "4.相对布局-边界约束";
+"5.RelativeLayout - MostSize&MostPos" = "5.相对布局-最值约束";
 "1.TableLayout - Vert" = "1.表格布局-垂直表格";
 "2.TableLayout - Waterfall(Horz)" = "2.表格布局-水平表格实现瀑布流";
 "3.TableLayout - Intelligent Borderline" = "3.表格布局-表格和智能边界线";

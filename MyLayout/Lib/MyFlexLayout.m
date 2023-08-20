@@ -145,7 +145,6 @@ const int MyFlex_Auto = -1;
         _align_content = MyFlexGravity_Stretch;
         _item_size = 0;
     }
-
     return self;
 }
 
@@ -360,6 +359,13 @@ const int MyFlex_Auto = -1;
 - (id<MyFlexItem> (^)(UIView *))add {
     return ^(UIView *val) {
         [self.view addSubview:val];
+        return self;
+    };
+}
+
+- (id<MyFlexItem> (^)(id<MyFlexItem>))addItem {
+    return ^(id<MyFlexItem> item) {
+        [self.view addSubview:item.view];
         return self;
     };
 }
@@ -581,7 +587,6 @@ const int MyFlex_Auto = -1;
         } break;
     }
 
-   
     //按order排序。
     [context->subviewEngines sortWithOptions:NSSortStable
          usingComparator:^NSComparisonResult(MyLayoutEngine *_Nonnull obj1, MyLayoutEngine *_Nonnull obj2) {

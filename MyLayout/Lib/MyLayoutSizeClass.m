@@ -174,12 +174,27 @@
     return viewTraits;
 }
 
+- (void)setView:(UIView *)view layoutSizeClass:(MySizeClass)sizeClass withTraits:(MyViewTraits *)traits {
+    if (self.sizeClasses == nil) {
+        self.sizeClasses = [NSMutableDictionary new];
+    }
+    traits.view = view;
+    traits.topPosInner.view = view;
+    traits.bottomPosInner.view = view;
+    traits.leadingPosInner.view = view;
+    traits.trailingPosInner.view = view;
+    traits.centerXPosInner.view = view;
+    traits.centerYPosInner.view = view;
+    traits.baselinePosInner.view = view;
+    traits.widthSizeInner.view = view;
+    traits.heightSizeInner.view = view;
+    
+    [self.sizeClasses setObject:traits forKey:@(sizeClass)];
+}
+
 
 @end
 
-@interface MyViewTraits ()
-
-@end
 
 @implementation MyViewTraits
 
@@ -600,63 +615,63 @@ BOOL _myisRTL = NO;
         self.view.hidden = result;
     }
     
-    return result;
+    return self.visibility == MyVisibility_Gone;
 }
 
-- (MyGravity)vertGravityWith:(MyGravity)layoutVertGravity {
+- (MyGravity)finalVertGravityFrom:(MyGravity)layoutVertGravity {
+    MyGravity finalVertGravity = MyGravity_Vert_Top; //
     MyGravity vertAlignment = MYVERTGRAVITY(self.alignment);
-    MyGravity vertGravity = MyGravity_Vert_Top;
     if (layoutVertGravity != MyGravity_None) {
-        vertGravity = layoutVertGravity;
+        finalVertGravity = layoutVertGravity;
         if (vertAlignment != MyGravity_None) {
-            vertGravity = vertAlignment;
+            finalVertGravity = vertAlignment;
         }
     } else {
         if (vertAlignment != MyGravity_None) {
-            vertGravity = vertAlignment;
+            finalVertGravity = vertAlignment;
         }
         if (self.topPosInner.val != nil && self.bottomPosInner.val != nil) {
             //只有在没有设置高度约束，或者高度约束优先级很低的情况下同时设置上下才转化为填充。
             if (self.heightSizeInner.val == nil || self.heightSizeInner.priority == MyPriority_Low) {
-                vertGravity = MyGravity_Vert_Fill;
+                finalVertGravity = MyGravity_Vert_Fill;
             }
         } else if (self.centerYPosInner.val != nil) {
-            vertGravity = MyGravity_Vert_Center;
+            finalVertGravity = MyGravity_Vert_Center;
         } else if (self.topPosInner.val != nil) {
-            vertGravity = MyGravity_Vert_Top;
+            finalVertGravity = MyGravity_Vert_Top;
         } else if (self.bottomPosInner.val != nil) {
-            vertGravity = MyGravity_Vert_Bottom;
+            finalVertGravity = MyGravity_Vert_Bottom;
         }
     }
-    return vertGravity;
+    return finalVertGravity;
 }
 
-- (MyGravity)horzGravityWith:(MyGravity)layoutHorzGravity {
+- (MyGravity)finalHorzGravityFrom:(MyGravity)layoutHorzGravity {
+    MyGravity finalHorzGravity = MyGravity_Horz_Leading;
     MyGravity horzAlignment = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(self.alignment)];
-    MyGravity horzGravity = MyGravity_Horz_Leading;
     if (layoutHorzGravity != MyGravity_None) {
-        horzGravity = layoutHorzGravity;
+        finalHorzGravity = layoutHorzGravity;
         if (horzAlignment != MyGravity_None) {
-            horzGravity = horzAlignment;
+            finalHorzGravity = horzAlignment;
         }
     } else {
         if (horzAlignment != MyGravity_None) {
-            horzGravity = horzAlignment;
+            finalHorzGravity = horzAlignment;
         }
         if (self.leadingPosInner.val != nil && self.trailingPosInner.val != nil) {
             //只有在没有设置宽度约束，或者宽度约束优先级很低的情况下同时设置左右才转化为填充。
             if (self.widthSizeInner.val == nil || self.widthSizeInner.priority == MyPriority_Low) {
-                horzGravity = MyGravity_Horz_Fill;
+                finalHorzGravity = MyGravity_Horz_Fill;
             }
         } else if (self.centerXPosInner.val != nil) {
-            horzGravity = MyGravity_Horz_Center;
+            finalHorzGravity = MyGravity_Horz_Center;
         } else if (self.leadingPosInner.val != nil) {
-            horzGravity = MyGravity_Horz_Leading;
+            finalHorzGravity = MyGravity_Horz_Leading;
         } else if (self.trailingPosInner.val != nil) {
-            horzGravity = MyGravity_Horz_Trailing;
+            finalHorzGravity = MyGravity_Horz_Trailing;
         }
     }
-    return horzGravity;
+    return finalHorzGravity;
 }
 
 
@@ -902,7 +917,7 @@ BOOL _myisRTL = NO;
 
 @end
 
-@implementation MySequentLayoutFlexSpace
+@implementation MySequentLayoutFlexSpacing
 
 - (CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding space:(CGFloat *)pSpace {
     CGFloat subviewSize = self.subviewSize;
@@ -965,7 +980,7 @@ BOOL _myisRTL = NO;
     MySequentLayoutTraits *layoutTraits = [super copyWithZone:zone];
     layoutTraits.orientation = self.orientation;
     if (self.flexSpace != nil) {
-        layoutTraits.flexSpace = [MySequentLayoutFlexSpace new];
+        layoutTraits.flexSpace = [MySequentLayoutFlexSpacing new];
         layoutTraits.flexSpace.subviewSize = self.flexSpace.subviewSize;
         layoutTraits.flexSpace.minSpace = self.flexSpace.minSpace;
         layoutTraits.flexSpace.maxSpace = self.flexSpace.maxSpace;
@@ -1266,6 +1281,10 @@ BOOL _myisRTL = NO;
 - (CGFloat)updateGridSize:(CGSize)superSize superGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure {
     return [self.rootGrid updateGridSize:superSize superGrid:superGrid withMeasure:measure];
 }
+- (CGFloat)updateWrapGridSizeInSuperGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure {
+    return [self.rootGrid updateWrapGridSizeInSuperGrid:superGrid withMeasure:measure];
+}
+
 
 - (CGFloat)updateGridOrigin:(CGPoint)superOrigin superGrid:(id<MyGridNode>)superGrid withOffset:(CGFloat)offset {
     return [self.rootGrid updateGridOrigin:superOrigin superGrid:superGrid withOffset:offset];

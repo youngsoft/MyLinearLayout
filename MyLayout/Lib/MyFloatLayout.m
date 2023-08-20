@@ -92,7 +92,7 @@
         layoutTraits.flexSpace = nil;
     } else {
         if (layoutTraits.flexSpace == nil) {
-            layoutTraits.flexSpace = [MySequentLayoutFlexSpace new];
+            layoutTraits.flexSpace = [MySequentLayoutFlexSpacing new];
         }
         layoutTraits.flexSpace.subviewSize = subviewSize;
         layoutTraits.flexSpace.minSpace = minSpace;
@@ -314,7 +314,6 @@
 }
 
 - (void)myDoVertOrientationLayoutWithContext:(MyLayoutContext *)context {
-    
     MyFloatLayoutTraits *layoutTraits = (MyFloatLayoutTraits*)context->layoutViewEngine.currentSizeClass;
 
     BOOL isBeyondFlag = NO; //子视图是否超出剩余空间需要换行。
@@ -399,7 +398,7 @@
             }
 
             //重新设置宽度
-            if (subviewTraits.weight != 0) {
+            if (subviewTraits.weight != 0.0) {
                 subviewEngine.width = [self myValidMeasure:subviewTraits.widthSizeInner subview:subviewTraits.view calcSize:(nextPoint.x - leadingCandidateXBoundary + subviewTraits.widthSizeInner.addVal) * subviewTraits.weight - leadingSpacing - trailingSpacing subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
 
                 //特殊处理高度等于宽度，并且高度依赖宽度的情况。
@@ -422,23 +421,23 @@
             if (!context->isEstimate && self.intelligentBorderline != nil) {
                 //优先绘制左边和上边的。绘制左边的和上边的。
                 if ([subviewTraits.view isKindOfClass:[MyBaseLayout class]]) {
-                    MyBaseLayout *sbvl = (MyBaseLayout *)subviewTraits.view;
-                    if (!sbvl.notUseIntelligentBorderline) {
-                        sbvl.bottomBorderline = nil;
-                        sbvl.topBorderline = nil;
-                        sbvl.trailingBorderline = nil;
-                        sbvl.leadingBorderline = nil;
+                    MyBaseLayout *sublayout = (MyBaseLayout *)subviewTraits.view;
+                    if (!sublayout.notUseIntelligentBorderline) {
+                        sublayout.bottomBorderline = nil;
+                        sublayout.topBorderline = nil;
+                        sublayout.trailingBorderline = nil;
+                        sublayout.leadingBorderline = nil;
 
                         if (_myCGFloatLess(subviewEngine.leading + subviewEngine.width + trailingSpacing, context->selfSize.width - context->paddingTrailing)) {
-                            sbvl.trailingBorderline = self.intelligentBorderline;
+                            sublayout.trailingBorderline = self.intelligentBorderline;
                         }
 
                         if (_myCGFloatLess(subviewEngine.top + subviewEngine.height + bottomSpacing, context->selfSize.height - context->paddingBottom)) {
-                            sbvl.bottomBorderline = self.intelligentBorderline;
+                            sublayout.bottomBorderline = self.intelligentBorderline;
                         }
 
                         if (_myCGFloatGreat(subviewEngine.leading, leadingCandidateXBoundary) && subviewEngine == context->subviewEngines.lastObject) {
-                            sbvl.leadingBorderline = self.intelligentBorderline;
+                            sublayout.leadingBorderline = self.intelligentBorderline;
                         }
                     }
                 }
@@ -625,14 +624,14 @@
 
     if (context->selfSize.height != maxLayoutHeight) {
         if (context->vertGravity != MyGravity_None) {
-            CGFloat addYPos = 0;
+            CGFloat addYPos = 0.0;
             if (context->vertGravity == MyGravity_Vert_Center) {
                 addYPos = (context->selfSize.height - maxLayoutHeight) / 2;
             } else if (context->vertGravity == MyGravity_Vert_Bottom) {
                 addYPos = context->selfSize.height - maxLayoutHeight;
             }
 
-            if (addYPos != 0) {
+            if (addYPos != 0.0) {
                 for (int i = 0; i < context->subviewEngines.count; i++) {
                     context->subviewEngines[i].top += addYPos;
                 }
@@ -712,7 +711,6 @@
 }
 
 - (void)myDoHorzOrientationLayoutWithContext:(MyLayoutContext *)context {
-    
     MyFloatLayoutTraits *layoutTraits = (MyFloatLayoutTraits*)context->layoutViewEngine.currentSizeClass;
     NSArray<MyLayoutEngine *> *subviewEngines = context->subviewEngines;
     //如果没有边界限制我们将高度设置为最大。。
@@ -796,7 +794,7 @@
                 }
             }
 
-            if (subviewTraits.weight != 0) {
+            if (subviewTraits.weight != 0.0) {
                 subviewEngine.height = [self myValidMeasure:subviewTraits.heightSizeInner subview:subviewTraits.view calcSize:(nextPoint.y - topCandidateYBoundary + subviewTraits.heightSizeInner.addVal) * subviewTraits.weight - topSpacing - bottomSpacing subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
 
                 //特殊处理宽度等于高度的问题。
@@ -905,7 +903,7 @@
                 }
             }
 
-            if (subviewTraits.weight != 0) {
+            if (subviewTraits.weight != 0.0) {
 
 #ifdef DEBUG
                 //异常崩溃：当布局视图设置了高度为wrap时子视图不能设置weight大于0
@@ -1012,14 +1010,14 @@
 
     if (context->selfSize.width != maxLayoutWidth) {
         if (context->horzGravity != MyGravity_None) {
-            CGFloat addXPos = 0;
+            CGFloat addXPos = 0.0;
             if (context->horzGravity == MyGravity_Horz_Center) {
                 addXPos = (context->selfSize.width - maxLayoutWidth) / 2;
             } else if (context->horzGravity == MyGravity_Horz_Trailing) {
                 addXPos = context->selfSize.width - maxLayoutWidth;
             }
 
-            if (addXPos != 0) {
+            if (addXPos != 0.0) {
                 for (int i = 0; i < subviewEngines.count; i++) {
                     subviewEngines[i].leading += addXPos;
                 }

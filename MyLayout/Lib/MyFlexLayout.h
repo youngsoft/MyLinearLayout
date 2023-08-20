@@ -83,6 +83,8 @@ extern const int MyFlex_Auto;
 
 @end
 
+#define MyFlexNew(cls, var) (var = cls.new).myFlex
+
 @protocol MyFlexItem
 
 @property (nonatomic, strong, readonly) id<MyFlexItemAttrs> attrs;
@@ -158,6 +160,9 @@ extern const int MyFlex_Auto;
 
 //添加子视图
 - (id<MyFlexItem> (^)(UIView *))add;
+
+//添加条目
+- (id<MyFlexItem> (^)(id<MyFlexItem>))addItem;
 
 /**
  条目在弹盒中的排列顺序，值越大越往后排。

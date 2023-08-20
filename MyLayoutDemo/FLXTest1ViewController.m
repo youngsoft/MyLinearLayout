@@ -29,15 +29,48 @@
 
 -(void)loadView
 {
+    /*
+     我们为MyFlexLayout建立了一套专有的语法糖，用来构建布局。具体可以参考MyFlexLayout.h中的MyFlexBox和MyFlexItem两个接口的定义和说明，前者用于弹性盒布局对象的布局属性设置，后者用于条目对象的布局属性设置。
+     
+     我们可以借助UIView的myFlex扩展属性来获取语法糖布局对象。对于MyFlexBox和MyFlexItem的语法糖使用，又可以分为用attrs属性的方式进行单独赋值，
+     也可以采用链式调用的语法来进行布局属性设置。 下面的方法就是使用语法糖的方式来构建弹性盒布局的代码：
+     
+     */
     
+    //弹性盒布局构建布局的语法糖方式1：
+    MyFlexLayout *rootLayout = nil;
+    MyFlexLayout *flexAttrLayout = nil;
+    UILabel *flexAttrTitleLabel = nil;
+    UISegmentedControl *flexAttrSeg = nil;
+    
+    self.view = MyFlexNew(MyFlexLayout, rootLayout)
+    .flex_direction(MyFlexDirection_Column)
+    .vert_space(10)
+    .addItem(MyFlexNew(MyFlexLayout, flexAttrLayout)
+             .flex_direction(MyFlexDirection_Row)
+             .align_items(MyFlexGravity_Center)
+             .width(MyLayoutSize.fill)
+             .height(MyLayoutSize.wrap)
+             .addItem(MyFlexNew(UILabel, flexAttrTitleLabel)
+                      .width(MyLayoutSize.wrap)
+                      .height(MyLayoutSize.wrap)
+                      )
+             .addItem(MyFlexNew(UISegmentedControl, flexAttrSeg)
+                      .flex_grow(1)
+                      .height(MyLayoutSize.wrap)
+                      )
+             ).view;
+    
+    
+    
+    /*
+     //弹性盒布局构建布局的语法糖方式2： 你可以将上面部分注释，打开这部分注释，二者的作用是一致的。
     //根视图为flexbox布局视图。
     MyFlexLayout *rootLayout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Column)
     .vert_space(10)
     .view;
     self.view = rootLayout;
-    
-    
     
     //布局属性设置。
     MyFlexLayout *flexAttrLayout = MyFlexLayout.new.myFlex
@@ -46,19 +79,23 @@
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(rootLayout);
-    
+
     UILabel *flexAttrTitleLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
     .addTo(flexAttrLayout);
     
-    flexAttrTitleLabel.text = @"flex:";
     
     UISegmentedControl *flexAttrSeg = UISegmentedControl.new.myFlex
     .flex_grow(1)
     .height(MyLayoutSize.wrap)
     .addTo(flexAttrLayout);
+     
+     */
     
+    
+    flexAttrTitleLabel.text = @"flex:";
+
     [flexAttrSeg insertSegmentWithTitle:@"flex-direction" atIndex:0 animated:NO];
     [flexAttrSeg insertSegmentWithTitle:@"flex-wrap" atIndex:1 animated:NO];
     [flexAttrSeg insertSegmentWithTitle:@"justify-content" atIndex:2 animated:NO];
