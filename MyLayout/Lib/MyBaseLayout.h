@@ -934,7 +934,6 @@
 @end
 
 #pragma mark-- MyLayoutDragger
-
 @class MyLayoutDragger;
 
 /**
@@ -959,6 +958,7 @@
 
 //子视图拖动时，拖动区域当前所归属的子视图位置索引。
 @property (nonatomic, assign, readonly) NSUInteger currentIndex;
+
 //子视图拖动时，拖动视图的老的位置索引。
 @property (nonatomic, assign, readonly) NSUInteger oldIndex;
 
