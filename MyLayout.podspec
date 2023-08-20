@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MyLayout"
-  s.version      = "1.9.8"
+  s.version      = "1.9.9"
   s.summary      = "MyLayout is an iOS UI framework integrates the functions with Android,AutoLayout,SizeClass,HTML CSS float and flexbox,UIView UITableView."
 
   s.description  = <<-DESC
@@ -61,10 +61,10 @@ Pod::Spec.new do |s|
   #
 
   # s.platform     = :ios
-  s.platform     = :ios, "8.0"
+  s.platform     = :ios, "9.0"
 
   #  When using multiple platforms
-  s.ios.deployment_target = "8.0"
+  s.ios.deployment_target = "9.0"
   # s.osx.deployment_target = "10.7"
   # s.watchos.deployment_target = "2.0"
 
