@@ -334,25 +334,25 @@
 }
 
 #pragma mark -- Dreprecated methods
-
-- (MyMaker *)topPadding {
-    return self.paddingTop;
-}
-- (MyMaker *)leftPadding {
-    return self.paddingLeft;
-}
-- (MyMaker *)bottomPadding {
-    return self.paddingBottom;
-}
-- (MyMaker *)rightPadding {
-    return self.paddingRight;
-}
-- (MyMaker *)leadingPadding {
-    return self.paddingLeading;
-}
-- (MyMaker *)trailingPadding {
-    return self.paddingTrailing;
-}
+//
+//- (MyMaker *)topPadding {
+//    return self.paddingTop;
+//}
+//- (MyMaker *)leftPadding {
+//    return self.paddingLeft;
+//}
+//- (MyMaker *)bottomPadding {
+//    return self.paddingBottom;
+//}
+//- (MyMaker *)rightPadding {
+//    return self.paddingRight;
+//}
+//- (MyMaker *)leadingPadding {
+//    return self.paddingLeading;
+//}
+//- (MyMaker *)trailingPadding {
+//    return self.paddingTrailing;
+//}
 
 @end
 

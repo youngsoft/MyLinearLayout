@@ -114,7 +114,7 @@
     rootLayout.myHeight = MyLayoutSize.wrap;
     rootLayout.paddingBottom = 20;
     rootLayout.paddingTop = 10;
-    rootLayout.leadingPadding = 10;
+    rootLayout.paddingLeading = 10;
     rootLayout.paddingTrailing = 10;
     
     
@@ -391,7 +391,7 @@
     rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     rootLayout.paddingBottom = 20;
     rootLayout.paddingTop = 10;
-    rootLayout.leadingPadding = 10;
+    rootLayout.paddingLeading = 10;
     rootLayout.paddingTrailing = 10;
     
     

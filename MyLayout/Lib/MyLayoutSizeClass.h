@@ -196,12 +196,12 @@
 @property (nonatomic, assign) CGFloat paddingRight;
 
 //兼容1.9.2以及以前的老版本，因为老版本的命名不符合规范，所以这里重新命名。
-@property (nonatomic, assign, getter=paddingTop, setter=setPaddingTop:) CGFloat topPadding;
-@property (nonatomic, assign, getter=paddingLeading, setter=setPaddingLeading:) CGFloat leadingPadding;
-@property (nonatomic, assign, getter=paddingBottom, setter=setPaddingBottom:) CGFloat bottomPadding;
-@property (nonatomic, assign, getter=paddingTrailing, setter=setPaddingTrailing:) CGFloat trailingPadding;
-@property (nonatomic, assign, getter=paddingLeft, setter=setPaddingLeft:) CGFloat leftPadding;
-@property (nonatomic, assign, getter=paddingRight, setter=setPaddingRight:) CGFloat rightPadding;
+//@property (nonatomic, assign, getter=paddingTop, setter=setPaddingTop:) CGFloat topPadding;
+//@property (nonatomic, assign, getter=paddingLeading, setter=setPaddingLeading:) CGFloat leadingPadding;
+//@property (nonatomic, assign, getter=paddingBottom, setter=setPaddingBottom:) CGFloat bottomPadding;
+//@property (nonatomic, assign, getter=paddingTrailing, setter=setPaddingTrailing:) CGFloat trailingPadding;
+//@property (nonatomic, assign, getter=paddingLeft, setter=setPaddingLeft:) CGFloat leftPadding;
+//@property (nonatomic, assign, getter=paddingRight, setter=setPaddingRight:) CGFloat rightPadding;
 
 //为支持iOS11的safeArea而进行的padding的转化
 - (CGFloat)myLayoutPaddingTop;

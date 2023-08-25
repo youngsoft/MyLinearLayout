@@ -585,7 +585,7 @@
  直接更新window下所有布局视图的RTL特性。
  */
 + (void)updateRTL:(BOOL)isRTL inWindow:(UIWindow *)window;
-+ (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window MYDEPRECATED("use updateRTL:inWindow: instead");
+//+ (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window MYDEPRECATED("use updateRTL:inWindow: instead");
 
 /*
  布局视图里面的padding属性用来设置布局视图的内边距。内边距是指布局视图里面的子视图离自己距离。外边距则是视图与父视图之间的距离。
@@ -1010,7 +1010,7 @@
 /**
  *！！！不建议使用这个属性了，而是直接设置视图的高度为MyLayoutSize.wrap。 比如:myHeight = MyLayoutSize.wrap 或者 heightSize.equalTo(@(MyLayoutSize.wrap))。
  *获取和判断的时候可以通过 myHeight == MyLayoutSize.wrap 或者 heightSize.isWrap 来比较判断
- 
+
  *视图的高度包裹属性，表示视图的高度由所有子视图的整体高度来确定或者根据视图内容来高度自适应。默认值是NO(垂直线性布局默认这个属性是YES)，表示必须要明确指定布局的高度，而当设置为YES时则不需要明确的指定视图的高度了。这个属性不能和heightSize(或者设置了上下边距)同时设置否则可能会产生约束冲突，因为前者表明高度由子视图或者内容来决定而后者则表示高度是一个明确的值。如果同时设置了高度包裹属性又同时设置了明确的高度则系统会出现约束冲突告警，虽然如此，系统在布局时做了一些优化，如果同时设置了明确的高度和高度包裹则会在布局前将高度包裹属性置为NO。如果某个非布局视图指定了明确的宽度，而又将这个属性设置为了YES的话就能实现在固定宽度的情况下视图的高度根据内容自适应的效果，这个特性主要用于UILabel,UITextView以及实现了sizeThatFits方法的视图来实现高度根据内容自适应的场景。UILabel在使用这个属性时会自动设置numberOfLines为0，因此如果您要修改numberOfLines则需要在设置这个属性后进行；UITextView可以用这个属性以及heightSize中的max方法来实现到达指定的高度后若继续输入则产生滚动的效果；UIImageView可以用这个属性来在实现在确定宽度的情况下高度根据宽度的缩放情况进行等比例的缩放。
  */
 @property (nonatomic, assign) BOOL wrapContentHeight;
@@ -1025,13 +1025,13 @@
 
 @end
 
-@interface MyBaseLayout(MyDeprecated)
-
-@property (nonatomic, assign) CGFloat topPadding MYDEPRECATED("use paddingTop instead");
-@property (nonatomic, assign) CGFloat leadingPadding MYDEPRECATED("use paddingLeading instead");
-@property (nonatomic, assign) CGFloat bottomPadding MYDEPRECATED("use paddingBottom instead");
-@property (nonatomic, assign) CGFloat trailingPadding MYDEPRECATED("use paddingTrailing instead");
-@property (nonatomic, assign) CGFloat leftPadding MYDEPRECATED("use paddingLeft instead");
-@property (nonatomic, assign) CGFloat rightPadding MYDEPRECATED("use paddingRight instead");
-
-@end
+//@interface MyBaseLayout(MyDeprecated)
+//
+//@property (nonatomic, assign) CGFloat topPadding MYDEPRECATED("use paddingTop instead");
+//@property (nonatomic, assign) CGFloat leadingPadding MYDEPRECATED("use paddingLeading instead");
+//@property (nonatomic, assign) CGFloat bottomPadding MYDEPRECATED("use paddingBottom instead");
+//@property (nonatomic, assign) CGFloat trailingPadding MYDEPRECATED("use paddingTrailing instead");
+//@property (nonatomic, assign) CGFloat leftPadding MYDEPRECATED("use paddingLeft instead");
+//@property (nonatomic, assign) CGFloat rightPadding MYDEPRECATED("use paddingRight instead");
+//
+//@end

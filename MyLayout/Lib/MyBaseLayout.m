@@ -539,9 +539,9 @@ void *_myObserverContextC = (void *)20175283;
 + (void)updateRTL:(BOOL)isRTL inWindow:(UIWindow *)window {
     [window myUpdateRTL:isRTL];
 }
-+ (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window {
-    [self updateRTL:isArabicUI inWindow:window];
-}
+//+ (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window {
+//    [self updateRTL:isArabicUI inWindow:window];
+//}
 
 - (CGFloat)paddingTop {
     return self.myDefaultSizeClassInner.paddingTop;
@@ -988,7 +988,7 @@ void *_myObserverContextC = (void *)20175283;
     }
 
     //监控子视图的frame的变化以便重新进行布局
-    if (!_isMyLayouting) {
+    if (!self.isMyLayouting) {
         if (context == _myObserverContextA) {
             if (!object.myCurrentSizeClassInner.useFrame) {
                 [self setNeedsLayout];
@@ -1292,10 +1292,10 @@ void *_myObserverContextC = (void *)20175283;
          self.trailingPosInner.isSafeAreaPos ||
          self.topPosInner.isSafeAreaPos ||
          self.bottomPosInner.isSafeAreaPos)) {
-        if (!_isMyLayouting) {
-            _isMyLayouting = YES;
+        if (!self.isMyLayouting) {
+            self.isMyLayouting = YES;
             [self myUpdateLayoutRectInNoLayoutSuperview:self.superview];
-            _isMyLayouting = NO;
+            self.isMyLayouting = NO;
         }
     }
 }
@@ -2806,55 +2806,55 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 
 #pragma mark -- Deprecated methods
-
-
-- (CGFloat)topPadding {
-    return self.paddingTop;
-}
-
-- (void)setTopPadding:(CGFloat)topPadding {
-    self.paddingTop = topPadding;
-}
-
-- (CGFloat)leadingPadding {
-    return self.paddingLeading;
-}
-
-- (void)setLeadingPadding:(CGFloat)leadingPadding {
-    self.paddingLeading = leadingPadding;
-}
-
-- (CGFloat)bottomPadding {
-    return self.paddingBottom;
-}
-
-- (void)setBottomPadding:(CGFloat)bottomPadding {
-    self.paddingBottom = bottomPadding;
-}
-
-- (CGFloat)trailingPadding {
-    return self.paddingTrailing;
-}
-
-- (void)setTrailingPadding:(CGFloat)trailingPadding {
-    self.paddingTrailing = trailingPadding;
-}
-
-- (CGFloat)leftPadding {
-    return self.paddingLeft;
-}
-
-- (void)setLeftPadding:(CGFloat)leftPadding {
-    self.paddingLeft = leftPadding;
-}
-
-- (CGFloat)rightPadding {
-    return self.paddingRight;
-}
-
-- (void)setRightPadding:(CGFloat)rightPadding {
-    self.paddingRight = rightPadding;
-}
+//
+//
+//- (CGFloat)topPadding {
+//    return self.paddingTop;
+//}
+//
+//- (void)setTopPadding:(CGFloat)topPadding {
+//    self.paddingTop = topPadding;
+//}
+//
+//- (CGFloat)leadingPadding {
+//    return self.paddingLeading;
+//}
+//
+//- (void)setLeadingPadding:(CGFloat)leadingPadding {
+//    self.paddingLeading = leadingPadding;
+//}
+//
+//- (CGFloat)bottomPadding {
+//    return self.paddingBottom;
+//}
+//
+//- (void)setBottomPadding:(CGFloat)bottomPadding {
+//    self.paddingBottom = bottomPadding;
+//}
+//
+//- (CGFloat)trailingPadding {
+//    return self.paddingTrailing;
+//}
+//
+//- (void)setTrailingPadding:(CGFloat)trailingPadding {
+//    self.paddingTrailing = trailingPadding;
+//}
+//
+//- (CGFloat)leftPadding {
+//    return self.paddingLeft;
+//}
+//
+//- (void)setLeftPadding:(CGFloat)leftPadding {
+//    self.paddingLeft = leftPadding;
+//}
+//
+//- (CGFloat)rightPadding {
+//    return self.paddingRight;
+//}
+//
+//- (void)setRightPadding:(CGFloat)rightPadding {
+//    self.paddingRight = rightPadding;
+//}
 
 @end
 

@@ -97,12 +97,12 @@
 
 @end
 
-@interface MyMaker(MyDeprecated)
-- (MyMaker *)topPadding MYDEPRECATED("use paddingTop instead");
-- (MyMaker *)leftPadding MYDEPRECATED("use paddingTop instead");
-- (MyMaker *)bottomPadding MYDEPRECATED("use paddingTop instead");
-- (MyMaker *)rightPadding MYDEPRECATED("use paddingTop instead");
-- (MyMaker *)leadingPadding MYDEPRECATED("use paddingTop instead");
-- (MyMaker *)trailingPadding MYDEPRECATED("use paddingTop instead");
-@end
+//@interface MyMaker(MyDeprecated)
+//- (MyMaker *)topPadding MYDEPRECATED("use paddingTop instead");
+//- (MyMaker *)leftPadding MYDEPRECATED("use paddingTop instead");
+//- (MyMaker *)bottomPadding MYDEPRECATED("use paddingTop instead");
+//- (MyMaker *)rightPadding MYDEPRECATED("use paddingTop instead");
+//- (MyMaker *)leadingPadding MYDEPRECATED("use paddingTop instead");
+//- (MyMaker *)trailingPadding MYDEPRECATED("use paddingTop instead");
+//@end
 #endif

@@ -609,13 +609,11 @@ BOOL _myisRTL = NO;
         return YES;
     }
     
-    BOOL isHidden = self.view.isHidden;
-    BOOL result = (self.visibility != MyVisibility_Visible);
-    if (isHidden != result) {
-        self.view.hidden = result;
+    if (self.view.isHidden) {
+        return self.visibility != MyVisibility_Invisible;
+    } else {
+        return self.visibility == MyVisibility_Gone;
     }
-    
-    return self.visibility == MyVisibility_Gone;
 }
 
 - (MyGravity)finalVertGravityFrom:(MyGravity)layoutVertGravity {
