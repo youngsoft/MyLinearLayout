@@ -510,6 +510,26 @@ void *_myObserverContextC = (void *)20175283;
     }
 }
 
+- (CGFloat)myLayoutPaddingTop {
+    return 0.0;
+}
+- (CGFloat)myLayoutPaddingBottom {
+    return 0.0;
+}
+- (CGFloat)myLayoutPaddingLeft {
+    return 0.0;
+}
+- (CGFloat)myLayoutPaddingRight {
+    return 0.0;
+}
+- (CGFloat)myLayoutPaddingLeading {
+    return 0.0;
+}
+- (CGFloat)myLayoutPaddingTrailing {
+    return 0.0;
+}
+
+
 @end
 
 @implementation MyBaseLayout {
@@ -726,8 +746,11 @@ void *_myObserverContextC = (void *)20175283;
 }
 
 - (CGAffineTransform)layoutTransform {
-    //这里不用myDefaultSizeClassInner的原因是这个属性默认是CGAffineTransformIdentity
-    return self.myDefaultSizeClass.layoutTransform;
+    if (self.myDefaultSizeClassInner == nil) {
+        return CGAffineTransformIdentity;
+    } else {
+        return self.myDefaultSizeClass.layoutTransform;
+    }
 }
 
 - (void)setLayoutTransform:(CGAffineTransform)layoutTransform {
@@ -2041,40 +2064,28 @@ void *_myObserverContextC = (void *)20175283;
             rectSelf.size.width = [self myValidMeasure:layoutTraits.widthSizeInner subview:self calcSize:rectSelf.size.width subviewSize:rectSelf.size selfLayoutSize:rectSuper.size];
         }
 
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-
-        if (@available(iOS 11.0, *)) {
-
-            //在ios11后如果是滚动视图的contentInsetAdjustmentBehavior设置为UIScrollViewContentInsetAdjustmentAlways
-            //那么系统不管contentSize如何总是会将安全区域叠加到contentInsets所以这里的边距不应该是偏移的边距而是0
-            UIScrollView *scrollSuperView = nil;
-            if ([newSuperview isKindOfClass:[UIScrollView class]])
-                scrollSuperView = (UIScrollView *)newSuperview;
-            if (scrollSuperView != nil && layoutTraits.leadingPosInner.isSafeAreaPos) {
-                marginLeading = layoutTraits.leadingPosInner.offsetVal + ([MyBaseLayout isRTL] ? scrollSuperView.safeAreaInsets.right : scrollSuperView.safeAreaInsets.left) - ([MyBaseLayout isRTL] ? scrollSuperView.adjustedContentInset.right : scrollSuperView.adjustedContentInset.left);
-            }
+        //在ios11后如果是滚动视图的contentInsetAdjustmentBehavior设置为UIScrollViewContentInsetAdjustmentAlways
+        //那么系统不管contentSize如何总是会将安全区域叠加到contentInsets所以这里的边距不应该是偏移的边距而是0
+        UIScrollView *scrollSuperView = nil;
+        if ([newSuperview isKindOfClass:[UIScrollView class]])
+            scrollSuperView = (UIScrollView *)newSuperview;
+        if (scrollSuperView != nil && layoutTraits.leadingPosInner.isSafeAreaPos) {
+            marginLeading = layoutTraits.leadingPosInner.offsetVal + ([MyBaseLayout isRTL] ? scrollSuperView.safeAreaInsets.right : scrollSuperView.safeAreaInsets.left) - ([MyBaseLayout isRTL] ? scrollSuperView.adjustedContentInset.right : scrollSuperView.adjustedContentInset.left);
         }
-#endif
-
         rectSelf.origin.x = marginLeading;
     } else if (layoutTraits.centerXPosInner.val != nil) {
         isAdjust = YES;
         rectSelf.origin.x = (rectSuper.size.width - rectSelf.size.width) / 2;
         rectSelf.origin.x += [layoutTraits.centerXPosInner measureWith:rectSuper.size.width];
     } else if (layoutTraits.leadingPosInner.val != nil) {
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-
-        if (@available(iOS 11.0, *)) {
-            //iOS11中的滚动条的安全区会叠加到contentInset里面。因此这里要特殊处理，让x轴的开始位置不应该算偏移。
-            UIScrollView *scrollSuperView = nil;
-            if ([newSuperview isKindOfClass:[UIScrollView class]]) {
-                scrollSuperView = (UIScrollView *)newSuperview;
-            }
-            if (scrollSuperView != nil && layoutTraits.leadingPosInner.isSafeAreaPos) {
-                marginLeading = layoutTraits.leadingPosInner.offsetVal + ([MyBaseLayout isRTL] ? scrollSuperView.safeAreaInsets.right : scrollSuperView.safeAreaInsets.left) - ([MyBaseLayout isRTL] ? scrollSuperView.adjustedContentInset.right : scrollSuperView.adjustedContentInset.left);
-            }
+        //iOS11中的滚动条的安全区会叠加到contentInset里面。因此这里要特殊处理，让x轴的开始位置不应该算偏移。
+        UIScrollView *scrollSuperView = nil;
+        if ([newSuperview isKindOfClass:[UIScrollView class]]) {
+            scrollSuperView = (UIScrollView *)newSuperview;
         }
-#endif
+        if (scrollSuperView != nil && layoutTraits.leadingPosInner.isSafeAreaPos) {
+            marginLeading = layoutTraits.leadingPosInner.offsetVal + ([MyBaseLayout isRTL] ? scrollSuperView.safeAreaInsets.right : scrollSuperView.safeAreaInsets.left) - ([MyBaseLayout isRTL] ? scrollSuperView.adjustedContentInset.right : scrollSuperView.adjustedContentInset.left);
+        }
         rectSelf.origin.x = marginLeading;
     } else if (layoutTraits.trailingPosInner.val != nil) {
         isAdjust = YES;
@@ -2120,40 +2131,29 @@ void *_myObserverContextC = (void *)20175283;
             rectSelf.size.height = [self myValidMeasure:layoutTraits.heightSizeInner subview:self calcSize:rectSelf.size.height subviewSize:rectSelf.size selfLayoutSize:rectSuper.size];
         }
 
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-
-        if (@available(iOS 11.0, *)) {
-
-            //在ios11后如果是滚动视图的contentInsetAdjustmentBehavior设置为UIScrollViewContentInsetAdjustmentAlways
-            //那么系统不管contentSize如何总是会将安全区域叠加到contentInsets所以这里的边距不应该是偏移的边距而是0
-            UIScrollView *scrollSuperView = nil;
-            if ([newSuperview isKindOfClass:[UIScrollView class]])
-                scrollSuperView = (UIScrollView *)newSuperview;
-            if (scrollSuperView != nil && layoutTraits.topPosInner.isSafeAreaPos) {
-                marginTop = layoutTraits.topPosInner.offsetVal + scrollSuperView.safeAreaInsets.top - scrollSuperView.adjustedContentInset.top;
-            }
+        //在ios11后如果是滚动视图的contentInsetAdjustmentBehavior设置为UIScrollViewContentInsetAdjustmentAlways
+        //那么系统不管contentSize如何总是会将安全区域叠加到contentInsets所以这里的边距不应该是偏移的边距而是0
+        UIScrollView *scrollSuperView = nil;
+        if ([newSuperview isKindOfClass:[UIScrollView class]])
+            scrollSuperView = (UIScrollView *)newSuperview;
+        if (scrollSuperView != nil && layoutTraits.topPosInner.isSafeAreaPos) {
+            marginTop = layoutTraits.topPosInner.offsetVal + scrollSuperView.safeAreaInsets.top - scrollSuperView.adjustedContentInset.top;
         }
-#endif
-
+        
         rectSelf.origin.y = marginTop;
     } else if (layoutTraits.centerYPosInner.val != nil) {
         isAdjust = YES;
         rectSelf.origin.y = (rectSuper.size.height - rectSelf.size.height) / 2 + [layoutTraits.centerYPosInner measureWith:rectSuper.size.height];
     } else if (layoutTraits.topPosInner.val != nil) {
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-
-        if (@available(iOS 11.0, *)) {
-            //在ios11后如果是滚动视图的contentInsetAdjustmentBehavior设置为UIScrollViewContentInsetAdjustmentAlways
-            //那么系统不管contentSize如何总是会将安全区域叠加到contentInsets所以这里的边距不应该是偏移的边距而是0
-            UIScrollView *scrollSuperView = nil;
-            if ([newSuperview isKindOfClass:[UIScrollView class]]) {
-                scrollSuperView = (UIScrollView *)newSuperview;
-            }
-            if (scrollSuperView != nil && layoutTraits.topPosInner.isSafeAreaPos) {
-                marginTop = layoutTraits.topPosInner.offsetVal + scrollSuperView.safeAreaInsets.top - scrollSuperView.adjustedContentInset.top;
-            }
+        //在ios11后如果是滚动视图的contentInsetAdjustmentBehavior设置为UIScrollViewContentInsetAdjustmentAlways
+        //那么系统不管contentSize如何总是会将安全区域叠加到contentInsets所以这里的边距不应该是偏移的边距而是0
+        UIScrollView *scrollSuperView = nil;
+        if ([newSuperview isKindOfClass:[UIScrollView class]]) {
+            scrollSuperView = (UIScrollView *)newSuperview;
         }
-#endif
+        if (scrollSuperView != nil && layoutTraits.topPosInner.isSafeAreaPos) {
+            marginTop = layoutTraits.topPosInner.offsetVal + scrollSuperView.safeAreaInsets.top - scrollSuperView.adjustedContentInset.top;
+        }
         rectSelf.origin.y = marginTop;
     } else if (layoutTraits.bottomPosInner.val != nil) {
         isAdjust = YES;
@@ -2250,8 +2250,14 @@ void *_myObserverContextC = (void *)20175283;
         } else {
             if (anchor.anchorVal.anchorType == MyLayoutAnchorType_Width) {
                 value = anchor.anchorVal.view.myEstimatedWidth;
+                if (anchor.anchorVal.view == self.superview) {
+                    value -= (self.superview.myLayoutPaddingLeading + self.superview.myLayoutPaddingTrailing);
+                }
             } else {
                 value = anchor.anchorVal.view.myEstimatedHeight;
+                if (anchor.anchorVal.view == self.superview) {
+                    value -= (self.superview.myLayoutPaddingTop + self.superview.myLayoutPaddingBottom);
+                }
             }
         }
 
@@ -2464,26 +2470,19 @@ void *_myObserverContextC = (void *)20175283;
         CGFloat marginTrailing = [layoutTraits.trailingPosInner measureWith:rectSuper.size.width];
         CGFloat marginTop = [layoutTraits.topPosInner measureWith:rectSuper.size.height];
         CGFloat marginBottom = [layoutTraits.bottomPosInner measureWith:rectSuper.size.height];
-
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-        if (@available(iOS 11.0, *)) {
-            if (1) {
-                if (layoutTraits.leadingPosInner.isSafeAreaPos) {
-                    marginLeading = layoutTraits.leadingPosInner.offsetVal;
-                }
-                if (layoutTraits.trailingPosInner.isSafeAreaPos) {
-                    marginTrailing = layoutTraits.trailingPosInner.offsetVal; 
-                }
-                if (layoutTraits.topPosInner.isSafeAreaPos) {
-                    marginTop = layoutTraits.topPosInner.offsetVal;
-                }
-                if (layoutTraits.bottomPosInner.isSafeAreaPos) {
-                    marginBottom = layoutTraits.bottomPosInner.offsetVal;
-                }
-            }
+        if (layoutTraits.leadingPosInner.isSafeAreaPos) {
+            marginLeading = layoutTraits.leadingPosInner.offsetVal;
         }
-#endif
-
+        if (layoutTraits.trailingPosInner.isSafeAreaPos) {
+            marginTrailing = layoutTraits.trailingPosInner.offsetVal;
+        }
+        if (layoutTraits.topPosInner.isSafeAreaPos) {
+            marginTop = layoutTraits.topPosInner.offsetVal;
+        }
+        if (layoutTraits.bottomPosInner.isSafeAreaPos) {
+            marginBottom = layoutTraits.bottomPosInner.offsetVal;
+        }
+        
         if (contsize.height != newSize.height + marginTop + marginBottom) {
             contsize.height = newSize.height + marginTop + marginBottom;
         }

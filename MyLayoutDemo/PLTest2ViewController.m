@@ -43,7 +43,7 @@
 @end
 
 
-@interface PLTest2ViewController ()<UIActionSheetDelegate>
+@interface PLTest2ViewController ()
 
 @property(nonatomic, strong) MyPathLayout *pathLayout;
 
@@ -109,7 +109,50 @@
 
 -(void)handleAction:(id)sender
 {
-    [[[UIActionSheet alloc] initWithTitle:@"Curve Type" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Straight-line",@"Sin",@"Cycloid",@"Spiral-like",@"Cardioid",@"Astroid",nil] showFromBarButtonItem:sender animated:YES];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Curve Type" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    {
+    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alertVC addAction:alertAction];
+    }
+    {
+        UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"Straight-line" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self actionSheet:nil clickedButtonAtIndex:0];
+        }];
+        [alertVC addAction:alertAction];
+    }
+    {
+        UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"Sin" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self actionSheet:nil clickedButtonAtIndex:1];
+        }];
+        [alertVC addAction:alertAction];
+    }
+    {
+        UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"Cycloid" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self actionSheet:nil clickedButtonAtIndex:2];
+        }];
+        [alertVC addAction:alertAction];
+    }
+    {
+        UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"Spiral-like" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self actionSheet:nil clickedButtonAtIndex:3];
+        }];
+        [alertVC addAction:alertAction];
+    }
+    {
+        UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"Cardioid" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self actionSheet:nil clickedButtonAtIndex:4];
+        }];
+        [alertVC addAction:alertAction];
+    }
+    {
+        UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"Astroid" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self actionSheet:nil clickedButtonAtIndex:5];
+        }];
+        [alertVC addAction:alertAction];
+    }
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
     
 }
 
@@ -146,7 +189,7 @@
 
 #pragma mark -- UIActionSheetDelegate
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)actionSheet:(UIAlertAction *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     [self changeFunc:buttonIndex];
     [self.pathLayout setNeedsLayout];
@@ -154,13 +197,6 @@
     
 }
 
-
-// Called when we cancel a view (eg. the user clicks the Home button). This is not called when the user clicks the cancel button.
-// If not defined in the delegate, we simulate a click in the cancel button
-- (void)actionSheetCancel:(UIActionSheet *)actionSheet
-{
-    
-}
 
 #pragma mark -- Private Method
 -(void)changeFunc:(NSInteger)index

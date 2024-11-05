@@ -21,18 +21,7 @@
     /**
      *本例子是介绍MyPathLayout布局视图的。用来建立曲线布局。
      */
-    
 
-    //为了支持iPhoneX而设置附加的安全区缩进。否则根视图将延伸到工具栏下面去了。
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-    if (@available(iOS 11.0, *)) {
-    } else {
-        // Fallback on earlier versions
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-#endif
-    
-    
     MyPathLayout *pathLayout = [MyPathLayout new];
     
      self.view  = pathLayout;

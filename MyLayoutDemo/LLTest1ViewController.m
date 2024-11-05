@@ -95,8 +95,9 @@
      * 系统会自动检测如果您的导航条是半透明的那么这个视图的位置总是会在导航条下面出现，而如果不是半透明导航条也会在导航条下面出现，而如果没有导航条时则
      * 就出现在屏幕的顶部。
      */
-    vertTitleLabel.topPos.equalTo(self.topLayoutGuide).offset(10);  //顶部边距设置为10。
-   // vertTitleLabel.topPos.equalTo(@10); //您可以注释上面，解开这句看看运行效果。
+   // vertTitleLabel.topPos.equalTo(self.topLayoutGuide).offset(10);  //顶部边距设置为10。
+    // topLayoutGuide is not support
+    vertTitleLabel.topPos.equalTo(@10); //您可以注释上面，解开这句看看运行效果。
     [rootLayout addSubview:vertTitleLabel];
     
     

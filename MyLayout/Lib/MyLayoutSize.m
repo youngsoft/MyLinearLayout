@@ -506,8 +506,8 @@
 #pragma mark-- MyLayoutMostSize
 
 @implementation MyLayoutMostSize {
-    NSArray *_dimens;
     BOOL _isMax;
+    NSArray *_dimens;
 }
 
 - (instancetype)initWith:(NSArray *)dimens isMax:(BOOL)isMax {

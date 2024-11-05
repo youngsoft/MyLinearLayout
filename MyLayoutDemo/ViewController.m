@@ -44,6 +44,7 @@
 #import "FLLTest7ViewController.h"
 #import "FLLTest8ViewController.h"
 #import "FLLTest9ViewController.h"
+#import "FLLTest10ViewController.h"
 
 #import "FLXTest1ViewController.h"
 
@@ -203,6 +204,9 @@
                                                },
                                              @{@"title":NSLocalizedString(@"9.FlowLayout - Line gravity", @""),
                                                @"class":[FLLTest9ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"10.FlowLayout - Max Lines", @""),
+                                               @"class":[FLLTest10ViewController class]
                                                }
                                              ]
                             },

@@ -420,8 +420,10 @@ static CGFloat sTagWidth = 70;
     NSInteger tagIndex = sender.tag % 1000;
     
     NSString *message = [NSString stringWithFormat:@"you have select:\npartIndex:%ld\nsectionIndex:%ld\ntagIndex:%ld", (long)partIndex, (long)sectionIndex, (long)tagIndex];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 
 }
 
@@ -431,8 +433,10 @@ static CGFloat sTagWidth = 70;
     NSInteger sectionIndex = sender.tag % 1000;
     
     NSString *message = [NSString stringWithFormat:@"You have select:\npartIndex:%ld\nsectionIndex:%ld", (long)partIndex, (long)sectionIndex];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 
 }
 

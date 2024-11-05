@@ -80,7 +80,7 @@
  Scene7:当同时设置了topPos和bottomPos上下边距后就能确定出视图的布局高度了，这样就不需要为子视图指定布局高度值了。需要注意的是只有同时设置了上下边距才能确定视图的高度，而设置上下间距是则不能。
     比如：某个布局布局视图高度是100，而某个子视图的topPos.equalTo(@10),bottomPos.equalTo(@20).则这个子视图的高度=70(100-10-20)
 
- 另外如果某个布局视图是视图控制器的根视图，那么你可以将布局视图里面的第一个子视图的topPos设置为： topPos.equalTo(vc.topLayoutGuide) 或者最后一个子视图的bottomPos设置为bottomPos.equalTo(vc.bottomLayoutGuide） 这样不管视图控制器所在的导航条是否半透明，总是会显示在导航条下面的位置。。
+ 另外如果某个布局视图是视图控制器的根视图，那么你可以将布局视图里面的第一个子视图的topPos设置为： topPos.equalTo(@(MyLayoutPos.safeAreaMargin)) 或者最后一个子视图的bottomPos设置为bottomPos.equalTo(@(MyLayoutPos.safeAreaMargin)） 这样不管视图控制器所在的导航条是否半透明，总是会显示在导航条下面的位置。。
  
 */
 

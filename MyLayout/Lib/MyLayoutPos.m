@@ -177,68 +177,28 @@
     if (_valType == MyLayoutValType_Number) {
         return _val;
     } else if (_valType == MyLayoutValType_UILayoutSupport) {
-        //只有在11以后并且是设置了safearea缩进才忽略UILayoutSupport。
-        UIView *superview = self.view.superview;
-        if (@available(iOS 11.0, *)) {
-            if (superview != nil && [superview isKindOfClass:[MyBaseLayout class]]) {
-                UIRectEdge edge = ((MyBaseLayout *)superview).insetsPaddingFromSafeArea;
-                if ((_anchorType == MyLayoutAnchorType_Top && (edge & UIRectEdgeTop) == UIRectEdgeTop) ||
-                    (_anchorType == MyLayoutAnchorType_Bottom && (edge & UIRectEdgeBottom) == UIRectEdgeBottom)) {
-                    return @(0);
-                }
-            }
-        }
-
-        return @([((id<UILayoutSupport>)_val) length]);
-    } else if (_valType == MyLayoutValType_SafeArea) {
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-
-        if (@available(iOS 11.0, *)) {
-            UIView *superView = self.view.superview;
-            switch (_anchorType) {
-                case MyLayoutAnchorType_Leading:
-                    return [MyBaseLayout isRTL] ? @(superView.safeAreaInsets.right) : @(superView.safeAreaInsets.left);
-                    break;
-                case MyLayoutAnchorType_Trailing:
-                    return [MyBaseLayout isRTL] ? @(superView.safeAreaInsets.left) : @(superView.safeAreaInsets.right);
-                    break;
-                case MyLayoutAnchorType_Top:
-                    return @(superView.safeAreaInsets.top);
-                    break;
-                case MyLayoutAnchorType_Bottom:
-                    return @(superView.safeAreaInsets.bottom);
-                    break;
-                default:
-                    return @(0);
-                    break;
-            }
-        }
-#endif
-        if (_anchorType == MyLayoutAnchorType_Top) {
-            return @([self findContainerVC].topLayoutGuide.length);
-        } else if (_anchorType == MyLayoutAnchorType_Bottom) {
-            return @([self findContainerVC].bottomLayoutGuide.length);
-        }
         return @(0);
+    } else if (_valType == MyLayoutValType_SafeArea) {
+        UIView *superView = self.view.superview;
+        switch (_anchorType) {
+            case MyLayoutAnchorType_Leading:
+                return [MyBaseLayout isRTL] ? @(superView.safeAreaInsets.right) : @(superView.safeAreaInsets.left);
+                break;
+            case MyLayoutAnchorType_Trailing:
+                return [MyBaseLayout isRTL] ? @(superView.safeAreaInsets.left) : @(superView.safeAreaInsets.right);
+                break;
+            case MyLayoutAnchorType_Top:
+                return @(superView.safeAreaInsets.top);
+                break;
+            case MyLayoutAnchorType_Bottom:
+                return @(superView.safeAreaInsets.bottom);
+                break;
+            default:
+                return @(0);
+                break;
+        }
     }
     return nil;
-}
-
-- (UIViewController *)findContainerVC {
-    UIViewController *vc = nil;
-    @try {
-        UIView *v = self.view;
-        while (v != nil) {
-            vc = [v valueForKey:@"viewDelegate"];
-            if (vc != nil) {
-                break;
-            }
-            v = [v superview];
-        }
-    } @catch (NSException *exception) {
-    }
-
-    return vc;
 }
 
 - (MyLayoutPos *)anchorVal {
@@ -310,12 +270,6 @@
             _valType = MyLayoutValType_LayoutPos;
         } else if ([val isKindOfClass:[NSArray class]]) {
             _valType = MyLayoutValType_Array;
-        } else if ([val conformsToProtocol:@protocol(UILayoutSupport)]) {
-            //这里只有上边和下边支持，其他不支持。。
-            if (_anchorType != MyLayoutAnchorType_Top && _anchorType != MyLayoutAnchorType_Bottom) {
-                NSAssert(0, @"oops! only topPos or bottomPos can set to id<UILayoutSupport>");
-            }
-            _valType = MyLayoutValType_UILayoutSupport;
         } else if ([val isKindOfClass:[MyLayoutMostPos class]]) {
             _valType = MyLayoutValType_Most;
         } else if ([val isKindOfClass:[UIView class]]) {
@@ -348,8 +302,10 @@
                     NSAssert(0, @"oops!");
                     break;
             }
-        } else {
+        } else if (_val == nil) {
             _valType = MyLayoutValType_Nil;
+        } else {
+            NSAssert(0, @"oops!, not support type !!");
         }
         _val = val;
     }
@@ -432,7 +388,7 @@
 }
 
 - (BOOL)isSafeAreaPos {
-    return self.isActive && (_valType == MyLayoutValType_SafeArea || _valType == MyLayoutValType_UILayoutSupport);
+    return self.isActive && (_valType == MyLayoutValType_SafeArea);
 }
 
 - (CGFloat)measureWith:(CGFloat)refVal {

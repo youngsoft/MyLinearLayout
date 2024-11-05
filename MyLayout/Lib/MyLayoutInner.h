@@ -69,13 +69,6 @@ typedef struct _MyLayoutContext {
 
 - (CGSize)myAdjustLayoutViewSizeWithContext:(MyLayoutContext *)context;
 
-//为支持iOS11的safeArea而进行的padding的转化
-- (CGFloat)myLayoutPaddingTop;
-- (CGFloat)myLayoutPaddingBottom;
-- (CGFloat)myLayoutPaddingLeft;
-- (CGFloat)myLayoutPaddingRight;
-- (CGFloat)myLayoutPaddingLeading;
-- (CGFloat)myLayoutPaddingTrailing;
 
 - (void)myAdjustSizeSettingOfSubviewEngine:(MyLayoutEngine *)subviewEngine withContext:(MyLayoutContext *)context;
 

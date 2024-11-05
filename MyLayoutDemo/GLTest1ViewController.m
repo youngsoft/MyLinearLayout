@@ -32,15 +32,7 @@
         栅格既然是一个区域，那么栅格布局本身除了是一个视图外，也是一个栅格，我们称栅格布局视图对应的栅格为根栅格。因此栅格布局除了负责管理子视图的添加外，还负责子栅格的建立删除等管理工作。  在栅格布局中，栅格的建立和子视图建立的分开的。子视图所填充的栅格是叶子栅格和设置为anchor属性的非叶子栅格，而填充的顺序是按栅格树的深度优先顺序填充的。 当然你可以用视图组的方式来将某些视图绑定在特定的栅格之中。
      
      */
-    
-    
-    //在iOS11以后因为有安全区的概念，因此不需要设置edgesForExtendedLayout属性了。否则可能出现push一个视图时，出现从下往上移动的动画效果。
-    if (@available(iOS 11.0, *)) {
-    } else {
-        // Fallback on earlier versions
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-    
+        
     UIScrollView *scrollView = [UIScrollView new];
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;

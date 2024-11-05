@@ -140,9 +140,10 @@
 
 -(void)handleColLayoutTap:(UIView*)sender
 {
-   UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:NSLocalizedString(@"cell:%03ld be selected", @""), (long)sender.tag] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:NSLocalizedString(@"cell:%03ld be selected", @""), (long)sender.tag] preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertView show];
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 /*

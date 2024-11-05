@@ -48,7 +48,8 @@
     //创建动作布局
     MyLinearLayout *action1Layout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     action1Layout.heightSize.equalTo(@(MyLayoutSize.wrap));
-    action1Layout.topPos.equalTo(self.topLayoutGuide);
+   // action1Layout.topPos.equalTo(self.topLayoutGuide); topLyoutGuide is not support!! please use MyLayoutPos.safeAreaMargin
+    action1Layout.topPos.equalTo(@(MyLayoutPos.safeAreaMargin));
     [rootLayout addSubview:action1Layout];
     
     [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&space no centered", @"") tag:100]];

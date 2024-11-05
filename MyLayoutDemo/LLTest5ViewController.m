@@ -77,7 +77,8 @@
     
     UILabel *v1 = [self createLabel:NSLocalizedString(@"width equal to superview, height equal to 20% of free height of superview", @"") backgroundColor:[CFTool color:5]];
     v1.numberOfLines = 3;
-    v1.topPos.equalTo(self.topLayoutGuide).offset(10);
+ //   v1.topPos.equalTo(self.topLayoutGuide).offset(10);
+    v1.topPos.equalTo(@(MyLayoutPos.safeAreaMargin)).offset(10);
     v1.myLeading = v1.myTrailing = 0; //宽度和父视图相等,等价于v1.widthSize.equalTo(rootLayout.widthSize);
     v1.weight = 0.2;     //高度的比重是剩余空间的20%
     [rootLayout addSubview:v1];

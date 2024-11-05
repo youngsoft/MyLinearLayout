@@ -316,7 +316,7 @@
     }
     else
     {
-        self.title = @"paging";
+        sender.title = @"paging";
     }
     
     self.scrollView1.pagingEnabled = !self.scrollView1.pagingEnabled;

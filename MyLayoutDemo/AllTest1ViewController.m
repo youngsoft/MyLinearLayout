@@ -280,9 +280,10 @@
     [headerFooterView setItemChangedAction:^(NSInteger index){
     
         NSString *message = [NSString stringWithFormat:@"You have select index:%ld",(long)index];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
         
-        [alertView show];
+        [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alertVC animated:YES completion:nil];
     
     }];
 

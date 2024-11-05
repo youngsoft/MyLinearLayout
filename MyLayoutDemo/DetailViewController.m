@@ -122,7 +122,10 @@
     
     if (self.isPresentVC)
     {
-        [[[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString(@"If you select \"Present\", then you can touch Close button of topleft corner to dissmis the view controller",@"") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:NSLocalizedString(@"If you select \"Present\", then you can touch Close button of topleft corner to dissmis the view controller",@"") preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alertVC animated:YES completion:nil];
     }
 }
 

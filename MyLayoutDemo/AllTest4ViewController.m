@@ -186,9 +186,10 @@ static NSInteger sBaseTag = 100000;
     
     NSString *message = [NSString stringWithFormat:@"You have select:\nSupplementaryIndex:%ld CellIndex:%ld",(long)supplementaryIndex, (long)cellIndex];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertView show];
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 

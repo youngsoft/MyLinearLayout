@@ -61,13 +61,8 @@
     scrollView.delegate = self;
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
-    
-    if (@available(iOS 11.0, *)) {
-        scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    } else {
-        // Fallback on earlier versions
-    }
-    
+    scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+   
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.insetsPaddingFromSafeArea = ~UIRectEdgeBottom;  //为了防止拉到底部时iPhoneX设备的抖动发生，不能将底部安全区叠加到padding中去。

@@ -83,6 +83,14 @@
 @property (nonatomic, readonly) CGFloat myEstimatedWidth;
 @property (nonatomic, readonly) CGFloat myEstimatedHeight;
 
+//为支持iOS11的safeArea而进行的padding的转化
+- (CGFloat)myLayoutPaddingTop;
+- (CGFloat)myLayoutPaddingBottom;
+- (CGFloat)myLayoutPaddingLeft;
+- (CGFloat)myLayoutPaddingRight;
+- (CGFloat)myLayoutPaddingLeading;
+- (CGFloat)myLayoutPaddingTrailing;
+
 @end
 
 
@@ -256,6 +264,7 @@
 @property (nonatomic, assign) BOOL autoArrange;
 @property (nonatomic, assign) BOOL isFlex;
 @property (nonatomic, assign) MyGravityPolicy lastlineGravityPolicy;
+@property (nonatomic, assign) NSInteger maxLines;
 
 @property (nonatomic, assign) NSInteger arrangedCount;
 @property (nonatomic, assign) NSInteger pagedCount;

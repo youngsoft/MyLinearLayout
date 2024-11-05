@@ -48,13 +48,9 @@
     /*
       当上面设置了根视图的边不延伸到导航条下或者导航条的navigationBar.translucent = NO，也就是不透明时。在push时发现除了从右往左的动画外，还出现了从下往上的动画效果。这个从下往上的动画效果不是我们需要的，这是因为iOS11后的UIScrollView的contentInset默认是叠加安全区的，而这里又因为滚动视图不延伸到导航条下面，所以这里出现了contentInset不断缩小的效果而产生了动画效果。这个锅是iOS11的锅，也是一个BUG。为了解决这个问题可以有如下方案：
      */
-    if (@available(iOS 11.0, *)) {
-        //滚动视图不把安全区叠加到滚动的缩进里面去。这个属性不是必须要这么设置的，只有当你出现了上面的情况时才这么设置。
-        //如果导航条是半透明的或者根视图可以延伸到导航条下面去，就不需要这么设置。
-        scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    } else {
-        // Fallback on earlier versions
-    }
+    //滚动视图不把安全区叠加到滚动的缩进里面去。这个属性不是必须要这么设置的，只有当你出现了上面的情况时才这么设置。
+    //如果导航条是半透明的或者根视图可以延伸到导航条下面去，就不需要这么设置。
+    scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.backgroundColor = [UIColor whiteColor];

@@ -726,21 +726,11 @@ BOOL _myisRTL = NO;
 - (CGFloat)myLayoutPaddingTop {
     //如果padding值是特殊的值。
     if (self.paddingTop >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingTop <= MyLayoutPos.safeAreaMargin + 2000) {
-        CGFloat paddingTopAdd = 20.0; //默认高度是状态栏的高度。
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-        if (@available(iOS 11.0, *)) {
-            paddingTopAdd = self.view.safeAreaInsets.top;
-        }
-#endif
-        return self.paddingTop - MyLayoutPos.safeAreaMargin + paddingTopAdd;
+        return self.paddingTop - MyLayoutPos.safeAreaMargin + self.view.safeAreaInsets.top;
     }
 
     if ((self.insetsPaddingFromSafeArea & UIRectEdgeTop) == UIRectEdgeTop) {
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-        if (@available(iOS 11.0, *)) {
-            return self.paddingTop + self.view.safeAreaInsets.top;
-        }
-#endif
+        return self.paddingTop + self.view.safeAreaInsets.top;
     }
     return self.paddingTop;
 }
@@ -748,90 +738,60 @@ BOOL _myisRTL = NO;
 - (CGFloat)myLayoutPaddingBottom {
     //如果padding值是特殊的值。
     if (self.paddingBottom >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingBottom <= MyLayoutPos.safeAreaMargin + 2000) {
-        CGFloat paddingBottomAdd = 0;
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-        if (@available(iOS 11.0, *)) {
-            paddingBottomAdd = self.view.safeAreaInsets.bottom;
-        }
-#endif
-        return self.paddingBottom - MyLayoutPos.safeAreaMargin + paddingBottomAdd;
+        return self.paddingBottom - MyLayoutPos.safeAreaMargin + self.view.safeAreaInsets.bottom;
     }
 
     if ((self.insetsPaddingFromSafeArea & UIRectEdgeBottom) == UIRectEdgeBottom) {
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-        if (@available(iOS 11.0, *)) {
-            return self.paddingBottom + self.view.safeAreaInsets.bottom;
-        }
-#endif
+        return self.paddingBottom + self.view.safeAreaInsets.bottom;
     }
     return self.paddingBottom;
 }
 
 - (CGFloat)myLayoutPaddingLeading {
     if (self.paddingLeading >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingLeading <= MyLayoutPos.safeAreaMargin + 2000) {
-        CGFloat paddingLeadingAdd = 0;
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-        if (@available(iOS 11.0, *)) {
-            paddingLeadingAdd = self.view.safeAreaInsets.left; //因为这里左右的缩进都是一样的，因此不需要考虑RTL的情况。
-        }
-#endif
-        return self.paddingLeading - MyLayoutPos.safeAreaMargin + paddingLeadingAdd;
+        return self.paddingLeading - MyLayoutPos.safeAreaMargin + self.view.safeAreaInsets.left;
     }
 
     CGFloat inset = 0;
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-    if (@available(iOS 11.0, *)) {
-        UIRectEdge edge = [MyViewTraits isRTL] ? UIRectEdgeRight : UIRectEdgeLeft;
+    UIRectEdge edge = [MyViewTraits isRTL] ? UIRectEdgeRight : UIRectEdgeLeft;
 #if TARGET_OS_IOS
-        UIDeviceOrientation devori = [MyViewTraits isRTL] ? UIDeviceOrientationLandscapeLeft : UIDeviceOrientationLandscapeRight;
+    UIDeviceOrientation devori = [MyViewTraits isRTL] ? UIDeviceOrientationLandscapeLeft : UIDeviceOrientationLandscapeRight;
 #endif
-        if ((self.insetsPaddingFromSafeArea & edge) == edge) {
+    if ((self.insetsPaddingFromSafeArea & edge) == edge) {
 #if TARGET_OS_IOS
-            //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是尾部那么就不缩进了。
-            if (self.insetLandscapeFringePadding &&
-                (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
-                [UIDevice currentDevice].orientation == devori) {
-                inset = 0;
-            } else
+        //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是尾部那么就不缩进了。
+        if (self.insetLandscapeFringePadding &&
+            (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
+            [UIDevice currentDevice].orientation == devori) {
+            inset = 0;
+        } else
 #endif
-                inset = [MyViewTraits isRTL] ? self.view.safeAreaInsets.right : self.view.safeAreaInsets.left;
-        }
+            inset = [MyViewTraits isRTL] ? self.view.safeAreaInsets.right : self.view.safeAreaInsets.left;
     }
-#endif
     return self.paddingLeading + inset;
 }
 
 - (CGFloat)myLayoutPaddingTrailing {
     if (self.paddingTrailing >= MyLayoutPos.safeAreaMargin - 2000 && self.paddingTrailing <= MyLayoutPos.safeAreaMargin + 2000) {
-        CGFloat paddingTrailingAdd = 0;
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-        if (@available(iOS 11.0, *)) {
-            paddingTrailingAdd = self.view.safeAreaInsets.right;
-        }
-#endif
-        return self.paddingTrailing - MyLayoutPos.safeAreaMargin + paddingTrailingAdd;
+        return self.paddingTrailing - MyLayoutPos.safeAreaMargin + self.view.safeAreaInsets.right;
     }
 
     CGFloat inset = 0;
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-    if (@available(iOS 11.0, *)) {
-        UIRectEdge edge = [MyViewTraits isRTL] ? UIRectEdgeLeft : UIRectEdgeRight;
+    UIRectEdge edge = [MyViewTraits isRTL] ? UIRectEdgeLeft : UIRectEdgeRight;
 #if TARGET_OS_IOS
-        UIDeviceOrientation devori = [MyViewTraits isRTL] ? UIDeviceOrientationLandscapeRight : UIDeviceOrientationLandscapeLeft;
+    UIDeviceOrientation devori = [MyViewTraits isRTL] ? UIDeviceOrientationLandscapeRight : UIDeviceOrientationLandscapeLeft;
 #endif
-        if ((self.insetsPaddingFromSafeArea & edge) == edge) {
+    if ((self.insetsPaddingFromSafeArea & edge) == edge) {
 #if TARGET_OS_IOS
-            //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是头部那么就不缩进了。
-            if (self.insetLandscapeFringePadding &&
-                (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
-                [UIDevice currentDevice].orientation == devori) {
-                inset = 0;
-            } else
+        //如果只缩进刘海那一边。并且同时设置了左右缩进，并且当前刘海方向是头部那么就不缩进了。
+        if (self.insetLandscapeFringePadding &&
+            (self.insetsPaddingFromSafeArea & (UIRectEdgeLeft | UIRectEdgeRight)) == (UIRectEdgeLeft | UIRectEdgeRight) &&
+            [UIDevice currentDevice].orientation == devori) {
+            inset = 0;
+        } else
 #endif
-                inset = [MyViewTraits isRTL] ? self.view.safeAreaInsets.left : self.view.safeAreaInsets.right;
-        }
+            inset = [MyViewTraits isRTL] ? self.view.safeAreaInsets.left : self.view.safeAreaInsets.right;
     }
-#endif
     return self.paddingTrailing + inset;
 }
 
@@ -1032,12 +992,21 @@ BOOL _myisRTL = NO;
 
 @implementation MyFlowLayoutTraits
 
+- (instancetype)init {
+    self = [super init];
+    if (self != nil) {
+        _maxLines = NSIntegerMax;
+    }
+    return self;
+}
+
 - (id)copyWithZone:(NSZone *)zone {
     MyFlowLayoutTraits *layoutTraits = [super copyWithZone:zone];
     layoutTraits.arrangedCount = self.arrangedCount;
     layoutTraits.autoArrange = self.autoArrange;
     layoutTraits.isFlex = self.isFlex;
     layoutTraits.lastlineGravityPolicy = self.lastlineGravityPolicy;
+    layoutTraits.maxLines = self.maxLines;
     layoutTraits.arrangedGravity = self.arrangedGravity;
     layoutTraits.pagedCount = self.pagedCount;
     return layoutTraits;
@@ -1045,13 +1014,14 @@ BOOL _myisRTL = NO;
 
 - (NSString *)debugDescription {
     NSString *dbgDesc = [super debugDescription];
-    dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\nautoArrange=%@\nisFlex=%@\narrangedGravity=%hu\npagedCount=%ld",
+    dbgDesc = [NSString stringWithFormat:@"%@\nFlowLayout: \narrangedCount=%ld\nautoArrange=%@\nisFlex=%@\narrangedGravity=%hu\npagedCount=%ld\nmaxLines=%ld",
                                          dbgDesc,
                                          (long)self.arrangedCount,
                                          self.autoArrange ? @"YES" : @"NO",
                                          self.isFlex ? @"YES" : @"NO",
                                          self.arrangedGravity,
-                                         (long)self.pagedCount];
+                                         (long)self.pagedCount,
+                                         (long)self.maxLines];
 
     return dbgDesc;
 }

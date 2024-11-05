@@ -92,8 +92,11 @@ static NSInteger sTextStyleTag = 1;    //文本风格的标签
 {
    //这里面栅格的actionData保存的是对应的栅格的数据模型对象。因此您可以在栅格中用actionData来保存某个栅格所对应要处理的任何数据。
     NSString *message = [NSString stringWithFormat:@"您单击了:%@", ((GLTest2DataModel*)[sender actionData]).title];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 
 }
 

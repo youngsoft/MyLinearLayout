@@ -363,8 +363,10 @@ static NSInteger sBottomStyleTag = 1003;
 -(void)handleTap:(id<MyGrid>)sender
 {
     NSString *message = [NSString stringWithFormat:@"您单击了:%@", sender.actionData];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 
 }
 

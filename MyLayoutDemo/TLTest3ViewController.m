@@ -30,14 +30,7 @@
     UIScrollView *scrollView = [UIScrollView new];
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
-    
-    if (@available(iOS 11.0, *)) {
-    } else {
-        // Fallback on earlier versions
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-   
-    
+
     //建立一个垂直表格
     MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     //这里设置表格的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置MyLayoutPos.safeAreaMargin。
@@ -172,9 +165,11 @@
 -(void)handleCellTap:(MyBaseLayout*)sender
 {
     NSString *message = [NSString stringWithFormat:@"您单击了:%@", ((UILabel*)sender.subviews.firstObject).text];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
-
+    
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 -(void)handleSpace:(id)sender
