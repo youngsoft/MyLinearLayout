@@ -125,7 +125,7 @@
     MyLinearLayout *messageLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     messageLayout.weight = 1;
     messageLayout.myLeading = 5;  //前面2行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。
-    messageLayout.subviewVSpace = 5; //垂直布局里面所有子视图都保持5个点的间距。
+    messageLayout.subviewVSpacing = 5; //垂直布局里面所有子视图都保持5个点的间距。
     [_rootLayout addSubview:messageLayout];
     
     

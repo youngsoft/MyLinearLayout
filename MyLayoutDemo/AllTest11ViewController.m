@@ -44,8 +44,8 @@
     actionLayout.myHeight = MyLayoutSize.wrap;
     actionLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平填充，也就是所有子视图的宽度相等。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    actionLayout.subviewHSpace = 5;
-    actionLayout.subviewVSpace = 5;
+    actionLayout.subviewHSpacing = 5;
+    actionLayout.subviewVSpacing = 5;
     [rootLayout addSubview:actionLayout];
     
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"Identity", @"")
@@ -66,7 +66,7 @@
     MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
     contentLayout.backgroundColor = [CFTool color:5];
     contentLayout.weight = 1.0;  //占用线性布局中的剩余高度。
-    contentLayout.subviewSpace = 10;
+    contentLayout.subviewSpacing = 10;
     [rootLayout addSubview:contentLayout];
     self.contentLayout = contentLayout;
     

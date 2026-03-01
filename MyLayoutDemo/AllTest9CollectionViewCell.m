@@ -30,7 +30,7 @@
         _rootLayout= [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
         _rootLayout.paddingTop = 5;
         _rootLayout.paddingBottom = 5;
-        _rootLayout.subviewVSpace = 10;
+        _rootLayout.subviewVSpacing = 10;
         _rootLayout.myHorzMargin = 0;
         _rootLayout.gravity = MyGravity_Horz_Fill;
         [self.contentView addSubview:_rootLayout];

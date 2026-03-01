@@ -7,9 +7,7 @@
 //
 
 #import "MyBorderline.h"
-#import "MyLayoutDef.h"
-#import "MyLayoutPos.h"
-#import "MyLayoutSize.h"
+#import "MyLayoutTraits.h"
 
 /*
  几种视图类型的定义：
@@ -21,9 +19,7 @@
 6.非布局子视图：如果某个视图的子视图不是一个布局视图，那么这个子视图就是非布局子视图。
 */
 
-@class MyBaseLayout;
-
-@interface UIView (MyLayoutExt)
+@interface UIView (MyLayoutExt)<MyViewTraits>
 
 /*
    视图的布局位置对象属性，用来指定视图水平布局位置和垂直布局位置。对于一个视图来说我们可以使用frame属性中的origin部分来确定一个视图的左上方位在父视图的位置。这种方法的缺点是需要明确的指定一个常数值，以及需要进行位置的计算，缺乏可扩展性以及可维护性。因此对于布局视图里面的子视图来说我们将不再通过设置frame属性中的origin部分来确定位置，而是通过视图扩展的布局位置对象属性来设置视图的布局位置。子视图的布局位置对象在不同类型的布局视图里和不同的场景下所表达的意义以及能设置的值类型将会有一定的差异性。下面的表格将列出这些差异性：
@@ -520,6 +516,69 @@
 @property (nonatomic, assign) MyGravity alignment;
 
 /**
+ 下面两个属性：reverseFloat和clearFloat 仅用在浮动布局MyFloatLayout下面的子视图中使用。
+ */
+
+/**
+ 是否反方向浮动，默认是NO表示正向浮动。正向浮动和反向浮动的意义根据所在的父浮动布局视图的方向的不同而不同：
+ 
+    1. 如果父视图是垂直浮动布局则默认正向浮动是向左浮动的，而反向浮动则是向右浮动。
+ 
+ @code
+ 下面是垂直浮动布局中的正向浮动和反向浮动的效果图(正向浮动:A,B,D; 反向浮动:C,E,F)：
+ 
+ |<--A-- <---B---    -C->|
+ |<-----D---- -F-> --E-->|
+ @endcode
+ 
+    2. 如果父视图是水平浮动布局则默认正向浮动是向上浮动的，而反向浮动则是向下浮动。
+ 
+ @code
+ 下面是水平浮动布局中的正向浮动和反向浮动的效果图(正向浮动:A,B,D; 反向浮动:C,E,F):
+ 
+  -----------
+   ↑   ↑
+   |   |
+   A   |
+   |   D
+       |
+   ↑   |
+   B
+   |   F
+       ↓
+   |   |
+   C   E
+   ↓   ↓
+  ------------
+ @endcode
+ 
+ @note 这个属性的定义是完全参考CSS样式表中float属性的定义
+ */
+@property (nonatomic, assign, getter=isReverseFloat) BOOL reverseFloat;
+
+/**
+ 清除浮动，默认是NO。这个属性的意义也跟父浮动布局视图的方向相关。如果设置为了清除浮动属性则表示本子视图不会在浮动方向上紧跟在前一个浮动子视图的后面，而是会另外新起一行或者一列来重新排列。
+ 
+ @code
+ 垂直浮动布局下的浮动和清除浮动
+ 
+ |<--A-- <---B--- <-C--|
+ |<----D---            |
+ |<--E-- <---F--       |
+ |<-----G----          |
+ |      ---I---> --H-->|
+ |                -J-> |
+ 
+ A(正向浮动);B(正向浮动);C(正向浮动);D(正向浮动);E(正向浮动);F(正向浮动);G(正向浮动，清除浮动);H(反向浮动);I(反向浮动);J(反向浮动，清除浮动)
+ @endcode
+ 
+ @note 这个属性的定义是完全参考CSS样式表中clear属性的定义。
+ 
+ */
+@property (nonatomic, assign) BOOL clearFloat;
+
+
+/**
  视图在父布局视图中布局完成后也就是视图的frame更新完成后执行的block，执行完block后会被重置为nil。通过在viewLayoutCompleteBlock中我们可以得到这个视图真实的frame值,当然您也可以在里面进行其他业务逻辑的操作和属性的获取和更新。block方法中layout参数就是父布局视图，而v就是视图本身，block中这两个参数目的是为了防止循环引用的问题。
  
  不再建议使用这个block进行获取子视图最终frame值，因为这个block只会执行一次，所以得到的frame值可能不准确。
@@ -536,32 +595,33 @@
 - (CGRect)estimatedRect;
 
 /**
- *清除视图所有为布局而设置的扩展属性值。如果是布局视图调用这个方法则同时会清除布局视图中所有关于布局设置的属性值。
+ *清除视图所有为布局而设置的布局特性值。如果是布局视图调用这个方法则同时会清除布局视图中所有关于布局设置的属性值。
  */
-- (void)resetMyLayoutSetting;
-- (void)resetMyLayoutSettingInSizeClass:(MySizeClass)sizeClass;
+- (void)clearLayoutTraits;
+- (void)clearLayoutTraitsInSizeClass:(MySizeClass)sizeClass;
 
 /**
-  获取视图在某个Size Classes下的MyLayoutSizeClass对象。视图可以通过得到的MyLayoutSizeClass对象来设置视图在对应Size Classes下的各种布局约束属性。
+  获取视图在某个SizeClass下的布局特性对象。视图可以通过得到的布局特性对象来设置视图在对应SizeClass下的各种布局约束属性。如果指定的sizeClass之前不存在则会从默认sizeClass下拷贝一份。
  
  @param sizeClass 指定获取某种SizeClass
- @return 返回指定的SizeClass
+ @return 返回指定的布局特性对象
  */
-- (instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass;
+- (__kindof id<MyViewTraits>)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass;
 
 /**
-  获取视图在某个Size Classes下的MyLayoutSizeClass对象，如果对象不存在则会新建立一个MyLayoutSizeClass对象，并且其布局约束属性都拷贝自srcSizeClass中的属性，如果对象已经存在则srcSizeClass不起作用，如果srcSizeClass本来就不存在则也不会起作用。
+  获取视图在某个SizeClass下的布局特性对象，如果对象不存在则会新建立一个新的特性对象，并且其布局约束属性都拷贝自srcSizeClass中的属性，如果对象已经存在则srcSizeClass不起作用，如果srcSizeClass本来就不存在则也不会起作用。
  @param sizeClass 指定获取某个SizeClass
  @param srcSizeClass 指定从哪种SizeClass中拷贝
- @return 返回指定的SizeClass
+ @return 返回指定的布局特性对象
  */
-- (instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
+- (__kindof id<MyViewTraits>)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
 
 
-/// 为某个sizeClass设置新的布局特性值，新的布局特性值一般来源于其他视图或者其他sizeClass，从而实现布局特征属性的拷贝功能。
+/// 为某个sizeClass设置新的布局特性对象，新的布局特性对象一般来源于其他视图或者其他sizeClass，从而实现布局特性属性的拷贝功能。
+/// @param value 新的值，这个值必须是上述两个fetchLayoutTraits方法返回值的copy结果。
 /// @param sizeClass 具体的sizeClass类型
-/// @param value 新的值，这个值必须是上述两个fetchLayoutSizeClass方法返回值的copy结果。
-- (void)setLayoutSizeClass:(MySizeClass)sizeClass withValue:(id)value;
+- (void)setLayoutTraits:(__kindof id<MyViewTraits>)value inSizeClass:(MySizeClass)sizeClass;
+
 
 @end
 
@@ -573,7 +633,7 @@
  
  MyLayout布局库根据实际中常见的场景实现了8种不同的布局视图派生类他们分别是：线性布局、表格布局、相对布局、框架布局、流式布局、浮动布局、路径布局、栅格布局。
  */
-@interface MyBaseLayout : UIView
+@interface MyBaseLayout < __covariant MyLayoutTraitsT> : UIView< MyLayoutTraits >
 
 /**
   用于实现对阿拉伯国家的布局适配。对于非阿拉伯国家来说，界面布局都是默认从左到右排列。而对于阿拉伯国家来说界面布局则默认是从右往左排列。默认这个属性是NO，您可以将这个属性设置为YES，这样布局里面的所有视图都将从右到左进行排列布局。如果您需要考虑国际化布局的问题，那么您应该用leadingPos来表示头部的位置，而用trailingPos来表示尾部的位置，这样当布局方向是LTR时那么leadingPos就表示的是左边而trailingPos则表示的是右边；而当布局方向是RTL时那么leadingPos表示的是右边而trailingPos则表示的是左边。如果您的界面布局不会考虑到国际化以及不需要考虑RTL时那么您可以用leftPos和rightPos来表示左右而不需要用leadingPos和trailingPos。
@@ -670,15 +730,15 @@
 /**
  *设置布局视图里面子视图之间的垂直间距。如果布局内每个子视图的垂直间距都相等则可以用这个属性来设置。这个属性不支持框架布局、相对布局、路径布局。
  */
-@property (nonatomic, assign) CGFloat subviewVSpace;
+@property (nonatomic, assign) CGFloat subviewVSpacing;
 /**
  *设置布局视图里面子视图之间的水平间距。如果布局内每个子视图的水平间距都相等则可以用这个属性来设置。这个属性不支持框架布局、相对布局、路径布局。
  */
-@property (nonatomic, assign) CGFloat subviewHSpace;
+@property (nonatomic, assign) CGFloat subviewHSpacing;
 /**
  *设置布局视图里面子视图之间的间距。如果布局内每个子视图的间距都相等则可以用这个属性来设置。这个属性不支持框架布局、相对布局、路径布局。
  */
-@property (nonatomic, assign) CGFloat subviewSpace;
+@property (nonatomic, assign) CGFloat subviewSpacing;
 
 /**
  布局里面的所有子视图的整体停靠方向以及填充，所谓停靠是指布局视图里面的所有子视图整体在布局视图中的位置，系统默认的停靠是在布局视图的左上角。
@@ -931,6 +991,13 @@
  */
 - (CGRect)subview:(UIView *)subview estimatedRectInLayoutSize:(CGSize)size;
 
+
+- (MyLayoutTraitsT)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass;
+- (MyLayoutTraitsT)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
+
+- (void)setLayoutTraits:(MyLayoutTraitsT)value inSizeClass:(MySizeClass)sizeClass;
+
+
 @end
 
 #pragma mark-- MyLayoutDragger
@@ -1023,15 +1090,21 @@
  */
 @property (nonatomic, assign) BOOL wrapContentSize;
 
+
+- (void)resetMyLayoutSetting MYDEPRECATED("use clearLayoutTraits instead");
+- (void)resetMyLayoutSettingInSizeClass:(MySizeClass)sizeClass MYDEPRECATED("use clearLayoutTraitsInSizeClass: instead");
+
+- (instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass MYDEPRECATED("use fetchLayoutTraitsInSizeClass: instead");
+
+- (instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass MYDEPRECATED("use fetchLayoutTraitsInSizeClass:copyFrom: instead");
+
+
+- (void)setLayoutSizeClass:(MySizeClass)sizeClass withValue:(id)value MYDEPRECATED("use setLayoutTraits:inSizeClass: instead");
+
+
+@property (nonatomic, assign) CGFloat subviewVSpace MYDEPRECATED("use subviewVSpacing instead");
+@property (nonatomic, assign) CGFloat subviewHSpace MYDEPRECATED("use subviewHSpacing instead");
+@property (nonatomic, assign) CGFloat subviewSpace MYDEPRECATED("use subviewSpacing instead");
+
 @end
 
-//@interface MyBaseLayout(MyDeprecated)
-//
-//@property (nonatomic, assign) CGFloat topPadding MYDEPRECATED("use paddingTop instead");
-//@property (nonatomic, assign) CGFloat leadingPadding MYDEPRECATED("use paddingLeading instead");
-//@property (nonatomic, assign) CGFloat bottomPadding MYDEPRECATED("use paddingBottom instead");
-//@property (nonatomic, assign) CGFloat trailingPadding MYDEPRECATED("use paddingTrailing instead");
-//@property (nonatomic, assign) CGFloat leftPadding MYDEPRECATED("use paddingLeft instead");
-//@property (nonatomic, assign) CGFloat rightPadding MYDEPRECATED("use paddingRight instead");
-//
-//@end

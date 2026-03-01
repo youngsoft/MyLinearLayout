@@ -50,7 +50,7 @@
     self.rootLayout.myTop = 10;
     self.rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     self.rootLayout.zeroPadding = NO;  //这个属性设置为NO时表示当布局视图的尺寸是wrap也就是由子视图决定时并且在没有任何子视图是不会参与布局视图高度的计算的。您可以在这个DEMO的测试中将所有子视图都删除掉，看看效果，然后注释掉这句代码看看效果。
-    self.rootLayout.subviewVSpace = 5;
+    self.rootLayout.subviewVSpacing = 5;
     [contentView addSubview:self.rootLayout];
     
     [self.rootLayout addSubview:[self addWrapContentLayout]];
@@ -77,7 +77,7 @@
     MyLinearLayout *wrapContentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     wrapContentLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);  //布局的高度和宽度由子视图决定
     wrapContentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    wrapContentLayout.subviewHSpace = 5;
+    wrapContentLayout.subviewHSpacing = 5;
     
     
     /*
@@ -107,7 +107,7 @@
     actionLayout.layer.borderWidth = 1;
     actionLayout.layer.borderColor = [CFTool color:9].CGColor;
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    actionLayout.subviewVSpace = 5;
+    actionLayout.subviewVSpacing = 5;
     actionLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap); //布局的高度和宽度由子视图决定
     [wrapContentLayout addSubview:actionLayout];
     

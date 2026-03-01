@@ -63,7 +63,7 @@
     self.flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
     self.flowLayout.backgroundColor = [CFTool color:0];
     self.flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    self.flowLayout.subviewSpace = 10;   //流式布局里面的子视图的水平和垂直间距都设置为10
+    self.flowLayout.subviewSpacing = 10;   //流式布局里面的子视图的水平和垂直间距都设置为10
     self.flowLayout.gravity = MyGravity_Horz_Fill;  //流式布局里面的子视图的宽度将平均分配。
     self.flowLayout.weight = 1;   //流式布局占用线性布局里面的剩余高度。
     self.flowLayout.myTop = 10;

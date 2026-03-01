@@ -1,6 +1,34 @@
 # 版本变更日志
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
+## [V2.0.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/2.0.0)(2025/11/10)
+### Add
+1. 为流式布局MyFlowLayout添加新的`maxLines`属性和`arrangedLines`属性。前者用来设置最大可显示的行列数，后者用来获取当前的行列数，具体例子详见[FLLTest10ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/FLLTest10ViewController.m)中的demo.
+2. 添加弹性布局MyFlexLayout对`space-evenly`属性值的支持。
+
+### Update
+ 1. 系统大重构，对布局特性做进一步的抽象。将原先的fetchLayoutSizeClass方法改名为fetchLayoutTraitsInSizeClass，并且返回为一个id<MyViewTraits> 或者派生接口。布局中的所有属性都可以用id<MyViewTraits>中的属性来描述和设置。
+ 2. 删除对系统过期对象id<UILayoutSupport> 的支持，在MyLayoutPos中的此种位置类型值不再被支持！！ 请用 @(MyLayoutPos.safeAreaMargin)
+ 3. 对布局中的关于间距的命名由space统一改名为spacing。这里可能会造成一些错误编译提示，请正确命名：
+ 
+ 旧命名|新命名
+ -------|---------------
+ subviewSpace | subviewSpacing
+ subviewHSpace|subviewHSpacing
+ subviewVSpace|subviewVSpacing
+ MyPathSpaceType|MyPathSpacingType
+ MyPathSpace|MyPathSpacing
+ MyPathLayout.spaceType|MyPathLayout.spacingType
+ kMyGridSpace|kMyGridSpacing
+ MySubviewsShrinkType.MySubviewsShrink_Space | MySubviewsShrinkType.MySubviewsShrink_spacing
+ MySubviewsShrinkType.MySubviewsShrink_SizeAndSpace | MySubviewsShrinkType.MySubviewsShrink_SizeAndSpacing
+ 
+ 
+ ### Fixed
+ 1. 修复相对布局MyRelativeLayout中子视图设置visibility为Gone时的尺寸评估错误的缺陷。
+
+ 
+
 ## [V1.9.9](https://github.com/youngsoft/MyLinearLayout/releases/tag/1.9.9)(2022/12/22)
 ### Add
 1. 扩充了栅格布局MyGridLayout中行列的自适应尺寸计算的能力。在老版本中如果某个格子的行高为自适应，那么这个格子的子格子只能是行。新版本中自适应行高的格子可以拆分为列子格子，同样自适应列宽的格子可以拆分为行子格子。

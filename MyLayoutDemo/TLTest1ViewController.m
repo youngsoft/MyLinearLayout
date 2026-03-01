@@ -40,8 +40,8 @@
      */
     MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     tableLayout.backgroundColor = [CFTool color:0];
-    tableLayout.subviewHSpace = 2;  //表格的列间距
-    tableLayout.subviewVSpace = 2;  //表格的行间距
+    tableLayout.subviewHSpacing = 2;  //表格的列间距
+    tableLayout.subviewVSpacing = 2;  //表格的行间距
     tableLayout.myMargin = MyLayoutPos.safeAreaMargin;   //和父视图的安全区域保持一致的尺寸，因为这里和父视图四周的边距都是安全区边距。你可以设置为0看看效果。
     [self.view addSubview:tableLayout];
 

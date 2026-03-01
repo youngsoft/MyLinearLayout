@@ -52,9 +52,9 @@
 - (MyMaker *)padding;
 - (MyMaker *)zeroPadding;
 - (MyMaker *)reverseLayout;
-- (MyMaker *)vertSpace;
-- (MyMaker *)horzSpace;
-- (MyMaker *)space;
+- (MyMaker *)vertSpacing;
+- (MyMaker *)horzSpacing;
+- (MyMaker *)spacing;
 
 //线性布局和流式布局独有
 - (MyMaker *)orientation;
@@ -68,6 +68,9 @@
 - (MyMaker *)autoArrange;
 - (MyMaker *)arrangedGravity;
 - (MyMaker *)pagedCount;
+- (MyMaker *)maxLines;
+- (MyMaker *)lastlineGravityPolicy;
+- (MyMaker *)isFlex;
 
 //线性布局和浮动布局和流式布局子视图独有
 - (MyMaker *)weight;
@@ -97,12 +100,4 @@
 
 @end
 
-//@interface MyMaker(MyDeprecated)
-//- (MyMaker *)topPadding MYDEPRECATED("use paddingTop instead");
-//- (MyMaker *)leftPadding MYDEPRECATED("use paddingTop instead");
-//- (MyMaker *)bottomPadding MYDEPRECATED("use paddingTop instead");
-//- (MyMaker *)rightPadding MYDEPRECATED("use paddingTop instead");
-//- (MyMaker *)leadingPadding MYDEPRECATED("use paddingTop instead");
-//- (MyMaker *)trailingPadding MYDEPRECATED("use paddingTop instead");
-//@end
 #endif

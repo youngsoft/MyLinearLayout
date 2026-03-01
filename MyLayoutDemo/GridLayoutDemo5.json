@@ -3,7 +3,7 @@
              {
              "size":240,
              "padding":"{10,10,5,10}",
-             "space":5,
+             "spacing":5,
              "cols":[
                      {
                      "size":"40%",
@@ -21,7 +21,7 @@
                      },
                      {
                      "size":"30%",
-                     "space":5,
+                     "spacing":5,
                      "rows":[
                              {
                              "size":"fill",
@@ -47,7 +47,7 @@
                      },
                      {
                      "size":"30%",
-                     "space":5,
+                     "spacing":5,
                      "rows":[
                              {
                              "size":"fill",
@@ -80,7 +80,7 @@
              "offset":5,
              "color": "#D1D1D1"
              },
-             "space":5,
+             "spacing":5,
              "padding":"{10,10,10,10}",
              "rows":[
                      {
@@ -89,7 +89,7 @@
                      },
                      {
                      "size":"fill",
-                     "space":10,
+                     "spacing":10,
                      "cols":[
                              {
                              "size":"fill",

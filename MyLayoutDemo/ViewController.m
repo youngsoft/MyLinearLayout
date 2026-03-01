@@ -119,7 +119,7 @@
                                              @{@"title":NSLocalizedString(@"6.LinearLayout - Size limit & Flexed margin", @""),
                                                @"class":[LLTest6ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"7.LinearLayout - Average size&space", @""),
+                                             @{@"title":NSLocalizedString(@"7.LinearLayout - Average size&spacing", @""),
                                                @"class":[LLTest7ViewController class]
                                                },
                                              @{@"title":NSLocalizedString(@"8.LinearLayout - Scroll&Dock", @""),
@@ -199,7 +199,7 @@
                                              @{@"title":NSLocalizedString(@"7.FlowLayout - Auto Arrange", @""),
                                                @"class":[FLLTest7ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"8.FlowLayout - Flex space", @""),
+                                             @{@"title":NSLocalizedString(@"8.FlowLayout - Flex spacing", @""),
                                                @"class":[FLLTest8ViewController class]
                                                },
                                              @{@"title":NSLocalizedString(@"9.FlowLayout - Line gravity", @""),

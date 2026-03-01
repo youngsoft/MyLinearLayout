@@ -83,7 +83,7 @@ typedef struct _MyGridOptionalProperties1 {
  */
 typedef struct _MyGridOptionalProperties2 {
     //格子内子栅格的间距
-    CGFloat subviewSpace;
+    CGFloat subviewSpacing;
     //格子内视图的内边距。
     UIEdgeInsets padding;
     //格子内子视图的对齐停靠方式。
@@ -293,7 +293,7 @@ typedef struct _MyGridOptionalProperties2 {
     grid.tag = self.tag;
     grid.actionData = self.actionData;
     if (self->_optionalProperties2 != NULL) {
-        grid.subviewSpace = self.subviewSpace;
+        grid.subviewSpacing = self.subviewSpacing;
         grid.padding = self.padding;
     }
 
@@ -344,16 +344,16 @@ typedef struct _MyGridOptionalProperties2 {
 }
 
 //格子内子栅格的间距
-- (CGFloat)subviewSpace {
+- (CGFloat)subviewSpacing {
     if (_optionalProperties2 == NULL) {
         return 0;
     } else {
-        return _optionalProperties2->subviewSpace;
+        return _optionalProperties2->subviewSpacing;
     }
 }
 
-- (void)setSubviewSpace:(CGFloat)subviewSpace {
-    self.optionalProperties2->subviewSpace = subviewSpace;
+- (void)setSubviewSpacing:(CGFloat)subviewSpacing {
+    self.optionalProperties2->subviewSpacing = subviewSpacing;
 }
 
 //格子内视图的内边距。
@@ -570,8 +570,8 @@ typedef struct _MyGridOptionalProperties2 {
     NSString *padding = [gridDictionary objectForKey:kMyGridPadding];
     [self createPadding:padding gridNode:gridNode];
 
-    NSNumber *space = [gridDictionary objectForKey:kMyGridSpace];
-    [self createSpace:space.doubleValue gridNode:gridNode];
+    NSNumber *spacing = [gridDictionary objectForKey:kMyGridSpacing];
+    [self createSpacing:spacing.doubleValue gridNode:gridNode];
 
     NSNumber *placeholder = [gridDictionary objectForKey:kMyGridPlaceholder];
     [self createPlaceholder:placeholder.boolValue gridNode:gridNode];
@@ -663,10 +663,10 @@ typedef struct _MyGridOptionalProperties2 {
     }
 }
 
-//space:10.0
-+ (void)createSpace:(CGFloat)space gridNode:(id<MyGridNode>)gridNode {
-    if (space != 0.0) {
-        gridNode.subviewSpace = space;
+//spacing:10.0
++ (void)createSpacing:(CGFloat)spacing gridNode:(id<MyGridNode>)gridNode {
+    if (spacing != 0.0) {
+        gridNode.subviewSpacing = spacing;
     }
 }
 
@@ -809,7 +809,7 @@ typedef struct _MyGridOptionalProperties2 {
 
     [self returnPaddingWithGridNode:gridNode result:gridDictionary];
 
-    [self returnSpaceWithGridNode:gridNode result:gridDictionary];
+    [self returnSpacingWithGridNode:gridNode result:gridDictionary];
 
     [self returnPlaceholderWithGridNode:gridNode result:gridDictionary];
 
@@ -888,10 +888,10 @@ typedef struct _MyGridOptionalProperties2 {
     }
 }
 
-//space:10.0
-+ (void)returnSpaceWithGridNode:(id<MyGridNode>)gridNode result:(NSMutableDictionary *)result {
-    if (gridNode.subviewSpace != 0.0) {
-        [result setObject:[NSNumber numberWithDouble:gridNode.subviewSpace] forKey:kMyGridSpace];
+//spacing:10.0
++ (void)returnSpacingWithGridNode:(id<MyGridNode>)gridNode result:(NSMutableDictionary *)result {
+    if (gridNode.subviewSpacing != 0.0) {
+        [result setObject:[NSNumber numberWithDouble:gridNode.subviewSpacing] forKey:kMyGridSpacing];
     }
 }
 
@@ -1065,7 +1065,7 @@ typedef struct _MyGridOptionalProperties2 {
 
 @implementation UIColor (MyGrid)
 
-static NSDictionary *myDefaultColors() {
+static NSDictionary *myDefaultColors(void) {
     static NSDictionary *colors = nil;
     if (colors == nil) {
         colors = @{

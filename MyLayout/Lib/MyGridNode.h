@@ -77,7 +77,7 @@ typedef enum : unsigned char {
 @property (nonatomic, assign) MySubGridsType subGridsType;
 
 //格子内子栅格的间距
-@property (nonatomic, assign) CGFloat subviewSpace;
+@property (nonatomic, assign) CGFloat subviewSpacing;
 
 //格子内视图的内边距。
 @property (nonatomic, assign) UIEdgeInsets padding;

@@ -9,9 +9,9 @@
 #import "MyPathLayout.h"
 #import "MyLayoutInner.h"
 
-@implementation MyPathSpace
+@implementation MyPathSpacing
 
-- (MyPathSpace *)initWithSpaceType:(MyPathSpaceType)type value:(CGFloat)value {
+- (MyPathSpacing *)initWithSpacingType:(MyPathSpacingType)type value:(CGFloat)value {
     self = [super init];
     if (self != nil) {
         _type = type;
@@ -21,18 +21,18 @@
 }
 
 //浮动距离，根据布局视图的尺寸和子视图的数量动态决定
-+ (MyPathSpace *)flexed {
-    return [[self alloc] initWithSpaceType:MyPathSpace_Flexed value:0];
++ (MyPathSpacing *)flexed {
+    return [[self alloc] initWithSpacingType:MyPathSpacing_Flexed value:0];
 }
 
 //固定距离，len为长度，每个子视图之间的距离都是len
-+ (MyPathSpace *)fixed:(CGFloat)len {
-    return [[self alloc] initWithSpaceType:MyPathSpace_Fixed value:len];
++ (MyPathSpacing *)fixed:(CGFloat)len {
+    return [[self alloc] initWithSpacingType:MyPathSpacing_Fixed value:len];
 }
 
 //数量距离，根据布局视图的尺寸和指定的数量动态决定。
-+ (MyPathSpace *)count:(NSInteger)count {
-    return [[self alloc] initWithSpaceType:MyPathSpace_Count value:count];
++ (MyPathSpacing *)count:(NSInteger)count {
+    return [[self alloc] initWithSpacingType:MyPathSpacing_Count value:count];
 }
 
 @end
@@ -124,7 +124,7 @@
 @end
 
 @implementation MyPathLayout
-@synthesize spaceType = _spaceType;
+@synthesize spacingType = _spacingType;
 
 #pragma mark-- Public Methods
 
@@ -142,16 +142,16 @@
     return _coordinateSetting;
 }
 
-- (MyPathSpace *)spaceType {
-    if (_spaceType == nil) {
-        _spaceType = [MyPathSpace flexed];
+- (MyPathSpacing *)spacingType {
+    if (_spacingType == nil) {
+        _spacingType = [MyPathSpacing flexed];
     }
-    return _spaceType;
+    return _spacingType;
 }
 
-- (void)setSpaceType:(MyPathSpace *)spaceType {
-    if (_spaceType != spaceType) {
-        _spaceType = spaceType;
+- (void)setSpacingType:(MyPathSpacing *)spacingType {
+    if (_spacingType != spacingType) {
+        _spacingType = spacingType;
         [self setNeedsLayout];
     }
 }
@@ -258,7 +258,7 @@
 //开始和结束子视图之间的路径创建
 - (void)beginSubviewPathPoint:(BOOL)full {
     //这里先把所有点都创建出来。
-    MyPathLayoutTraits *layoutTraits = (MyPathLayoutTraits*)self.myDefaultSizeClass;
+    MyPathLayoutTraitsImpl *layoutTraits = self.myCurrentTraits;
     
     MyLayoutContext context;
     context.selfSize = self.bounds.size;
@@ -344,7 +344,7 @@
 }
 
 - (CGPathRef)createPath:(NSInteger)subviewCount {
-    MyPathLayoutTraits *layoutTraits = (MyPathLayoutTraits*)self.myDefaultSizeClass;
+    MyPathLayoutTraitsImpl *layoutTraits = self.myCurrentTraits;
     
     MyLayoutContext context;
     context.selfSize = self.bounds.size;
@@ -355,13 +355,13 @@
     
     CGMutablePathRef retPath = CGPathCreateMutable();
 
-    if (self.spaceType.type != MyPathSpace_Fixed) {
-        [self myCalcPathPoints:retPath pPathLen:NULL subviewCount:-1 pointIndexArray:nil viewSpace:0 withContext:&context];
+    if (self.spacingType.type != MyPathSpacing_Fixed) {
+        [self myCalcPathPoints:retPath pPathLen:NULL subviewCount:-1 pointIndexArray:nil viewSpacing:0 withContext:&context];
     } else {
         if (subviewCount == -1) {
             subviewCount = self.pathSubviews.count;
         }
-        [self myCalcPathPoints:retPath pPathLen:NULL subviewCount:subviewCount pointIndexArray:nil viewSpace:self.spaceType.value withContext:&context];
+        [self myCalcPathPoints:retPath pPathLen:NULL subviewCount:subviewCount pointIndexArray:nil viewSpacing:self.spacingType.value withContext:&context];
     }
     return retPath;
 }
@@ -418,15 +418,15 @@
     
     CGMutablePathRef path = CGPathCreateMutable();
     
-    MyPathLayout *lsc = self.myCurrentSizeClass;
+    MyPathLayout *lsc = self.myCurrentTraits;
     
     NSArray *pts = nil;
     if (sbs.count > 0)
     {
-        if (self.spaceType.type != MyPathSpace_Fixed)
+        if (self.spacingType.type != MyPathSpacing_Fixed)
         {
             CGFloat totalLen = 0;
-            NSArray *tempArray = [self myCalcPathPoints:path pPathLen:&totalLen subviewCount:-1 pointIndexArray:nil viewSpace:0 lsc:lsc];
+            NSArray *tempArray = [self myCalcPathPoints:path pPathLen:&totalLen subviewCount:-1 pointIndexArray:nil viewSpacing:0 lsc:lsc];
             BOOL bClose = NO;
             if (tempArray.count > 1)
             {
@@ -437,20 +437,20 @@
             
             CGFloat viewSpacing = 0;
             NSInteger sbvcount = sbs.count;
-            if (self.spaceType.type == MyPathSpace_Count)
-                sbvcount = (NSInteger)self.spaceType.value;
+            if (self.spacingType.type == MyPathSpacing_Count)
+                sbvcount = (NSInteger)self.spacingType.value;
             
             if (sbvcount > 1)
             {
                 viewSpacing = totalLen / (sbvcount - (bClose ? 0 : 1));
             }
             
-            pts = [self myCalcPathPoints:nil pPathLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpace:viewSpacing lsc:lsc];
+            pts = [self myCalcPathPoints:nil pPathLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpacing:viewSpacing lsc:lsc];
             
         }
         else
         {
-            pts = [self myCalcPathPoints:path pPathLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpace:self.spaceType.value lsc:lsc];
+            pts = [self myCalcPathPoints:path pPathLen:NULL subviewCount:sbs.count pointIndexArray:nil viewSpacing:self.spacingType.value lsc:lsc];
         }
     }
  
@@ -472,14 +472,7 @@
 - (CGSize)calcLayoutSize:(CGSize)size subviewEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines context:(MyLayoutContext *)context {
     [super calcLayoutSize:size subviewEngines:subviewEngines context:context];
 
-    MyPathLayoutTraits *layoutTraits = (MyPathLayoutTraits *)context->layoutViewEngine.currentSizeClass;
-    context->paddingTop = layoutTraits.myLayoutPaddingTop;
-    context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
-    context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
-    context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
-    if (context->subviewEngines == nil) {
-        context->subviewEngines = [layoutTraits filterEngines:subviewEngines];
-    }
+    MyPathLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
 
     [self myCalcSubviewsWrapContentSize:context withCustomSetting:nil];
 
@@ -517,7 +510,7 @@
     for (int i = 0; i < context->subviewEngines.count; i++) {
 
         MyLayoutEngine *subviewEngine = context->subviewEngines[i];
-        MyViewTraits *subviewTraits = (MyViewTraits *)subviewEngine.currentSizeClass;
+        MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
 
         CGPoint point = CGPointZero;
         if (points.count > i) {
@@ -561,7 +554,7 @@
 
     //特殊填充中心视图。
     if (originViewEngine != nil) {
-        MyViewTraits *originViewTraits = (MyViewTraits *)originViewEngine.currentSizeClass;
+        MyViewTraitsImpl *originViewTraits = originViewEngine.currentTraits;
 
         originViewEngine.width = [self myWidthSizeValueOfSubviewEngine:originViewEngine withContext:context];
         originViewEngine.width = [self myValidMeasure:originViewTraits.widthSizeInner subview:originViewTraits.view calcSize:originViewEngine.width subviewSize:originViewEngine.size selfLayoutSize:context->selfSize];
@@ -624,8 +617,8 @@
     return [self myAdjustLayoutViewSizeWithContext:context];
 }
 
-- (id)createSizeClassInstance {
-    return [MyPathLayoutTraits new];
+- (Class) myTratisClass {
+    return [MyPathLayoutTraitsImpl class];
 }
 
 #pragma mark-- Private Methods
@@ -634,7 +627,7 @@
     return hypot(pt1.x - pt2.x, pt1.y - pt2.y);
 }
 
-- (CGPoint)myGetNearestDistancePoint:(CGFloat)startArg lastXY:(CGPoint)lastXY distance:(CGFloat)distance viewSpace:(CGFloat)viewSpace pLastValidArg:(CGFloat *)pLastValidArg func:(CGPoint (^)(CGFloat))func {
+- (CGPoint)myGetNearestDistancePoint:(CGFloat)startArg lastXY:(CGPoint)lastXY distance:(CGFloat)distance viewSpacing:(CGFloat)viewSpacing pLastValidArg:(CGFloat *)pLastValidArg func:(CGPoint (^)(CGFloat))func {
 
     //判断pLastValidArg和Arg的差距如果超过1则按pLastValidArg + 1作为开始计算的变量。
     if (startArg - *pLastValidArg > 1) {
@@ -648,8 +641,8 @@
             if (!isnan(realXY.x) && !isnan(realXY.y)) {
                 CGFloat oldDistance = distance;
                 distance += [self myCalcDistance:realXY with:lastXY];
-                if (_myCGFloatGreatOrEqual(distance, viewSpace)) {
-                    if (_myCGFloatLessOrEqual(distance - viewSpace, self.distanceError)) {
+                if (_myCGFloatGreatOrEqual(distance, viewSpacing)) {
+                    if (_myCGFloatLessOrEqual(distance - viewSpacing, self.distanceError)) {
                         *pLastValidArg = arg;
                         return realXY;
                     } else {
@@ -682,7 +675,7 @@
                       pPathLen:(CGFloat *)pPathLen
                   subviewCount:(NSInteger)subviewCount
                pointIndexArray:(NSMutableArray *)pointIndexArray
-                     viewSpace:(CGFloat)viewSpace
+                     viewSpacing:(CGFloat)viewSpacing
                       startArg:(CGFloat)startArg //定义域最小值
                         endArg:(CGFloat)endArg   //定义域最大值
                           func:(CGPoint (^)(CGFloat))func {
@@ -749,9 +742,9 @@
                     //点的距离累加
                     CGFloat oldDistance = distance;
                     distance += [self myCalcDistance:realXY with:lastXY];
-                    if (_myCGFloatGreatOrEqual(distance, viewSpace)) { //如果距离超过间距。则需要缩小自变量步长。以便达到最小的间距误差
-                        if (_myCGFloatGreatOrEqual(distance - viewSpace, self.distanceError)) {
-                            realXY = [self myGetNearestDistancePoint:arg lastXY:lastXY distance:oldDistance viewSpace:viewSpace pLastValidArg:&lastValidArg func:func];
+                    if (_myCGFloatGreatOrEqual(distance, viewSpacing)) { //如果距离超过间距。则需要缩小自变量步长。以便达到最小的间距误差
+                        if (_myCGFloatGreatOrEqual(distance - viewSpacing, self.distanceError)) {
+                            realXY = [self myGetNearestDistancePoint:arg lastXY:lastXY distance:oldDistance viewSpacing:viewSpacing pLastValidArg:&lastValidArg func:func];
                         } else {
                             lastValidArg = arg;
                         }
@@ -763,7 +756,7 @@
                         distance = 0;
                         subviewCount -= 1;
                         [self.argumentArray addObject:@(lastValidArg)];
-                    } else if (distance - viewSpace > -1 * self.distanceError) { //如果距离和间距小于误差则认为是一个视图可以存放的点。
+                    } else if (distance - viewSpacing > -1 * self.distanceError) { //如果距离和间距小于误差则认为是一个视图可以存放的点。
                         if (pointIndexArray == nil) {
                             [pathPointArray addObject:[NSValue valueWithCGPoint:realXY]];
                         } else {
@@ -807,7 +800,7 @@
  @param pPathLen 返回路径的总长度
  @param subviewCount 子视图的数量，如果为-1则表示只计算路径的长度不会把每个子视图所在的路径点索引保存
  @param pointIndexArray 返回所有子视图在路径点的索引
- @param viewSpace 子视图之间的间距
+ @param viewSpacing 子视图之间的间距
  @param context 布局上下文对象。
  @return 返回所有路径点
  */
@@ -815,7 +808,7 @@
                      pPathLen:(CGFloat *)pPathLen
                  subviewCount:(NSInteger)subviewCount
               pointIndexArray:(NSMutableArray *)pointIndexArray
-                    viewSpace:(CGFloat)viewSpace
+                    viewSpacing:(CGFloat)viewSpacing
                   withContext:(MyLayoutContext *)context {
     NSMutableArray *pathPointArray = [NSMutableArray new];
 
@@ -857,7 +850,7 @@
                             pPathLen:pPathLen
                         subviewCount:subviewCount
                      pointIndexArray:pointIndexArray
-                           viewSpace:viewSpace
+                           viewSpacing:viewSpacing
                             startArg:startArg
                               endArg:endArg
                                 func:^(CGFloat arg) {
@@ -902,7 +895,7 @@
                             pPathLen:pPathLen
                         subviewCount:subviewCount
                      pointIndexArray:pointIndexArray
-                           viewSpace:viewSpace
+                           viewSpacing:viewSpacing
                             startArg:startArg
                               endArg:endArg
                                 func:^(CGFloat arg) {
@@ -933,7 +926,7 @@
                             pPathLen:pPathLen
                         subviewCount:subviewCount
                      pointIndexArray:pointIndexArray
-                           viewSpace:viewSpace
+                           viewSpacing:viewSpacing
                             startArg:startArg
                               endArg:endArg
                                 func:^(CGFloat arg) {
@@ -960,11 +953,11 @@
 
 - (NSArray *)myCalcPointsOfSubviewCount:(NSInteger)count path:(CGMutablePathRef)path pointIndexArray:(NSMutableArray *)pointIndexArray withContext:(MyLayoutContext*)context {
     if (count > 0) {
-        if (self.spaceType.type != MyPathSpace_Fixed) {
+        if (self.spacingType.type != MyPathSpacing_Fixed) {
             //如果间距不是固定的，那么要先算出路径的长度pathLen,以及是否是封闭曲线标志来算出每个子视图在曲线上的间距viewSpacing
 
             CGFloat pathLen = 0; //曲线的总长度
-            NSArray *tempArray = [self myCalcPathPoints:path pPathLen:&pathLen subviewCount:-1 pointIndexArray:nil viewSpace:0 withContext:context];
+            NSArray *tempArray = [self myCalcPathPoints:path pPathLen:&pathLen subviewCount:-1 pointIndexArray:nil viewSpacing:0 withContext:context];
 
             //判断是否是封闭路径，方法为第一个路径点和最后一个之间的距离差小于1
             BOOL bClose = NO;
@@ -974,19 +967,19 @@
                 bClose = [self myCalcDistance:p1 with:p2] <= 1;
             }
 
-            CGFloat viewSpace = 0; //每个视图之间的间距。
+            CGFloat viewSpacing = 0; //每个视图之间的间距。
             NSInteger sbvcount = count;
-            if (self.spaceType.type == MyPathSpace_Count) { //如果是固定数量则按固定数量来分配间距
-                sbvcount = (NSInteger)self.spaceType.value;
+            if (self.spacingType.type == MyPathSpacing_Count) { //如果是固定数量则按固定数量来分配间距
+                sbvcount = (NSInteger)self.spacingType.value;
             }
             //总长度除视图数量得出子视图的间距。
             if (sbvcount > 1) {
-                viewSpace = pathLen / (sbvcount - (bClose ? 0 : 1));
+                viewSpacing = pathLen / (sbvcount - (bClose ? 0 : 1));
             }
             //有间距后再重新计算一遍
-            return [self myCalcPathPoints:nil pPathLen:NULL subviewCount:count pointIndexArray:pointIndexArray viewSpace:viewSpace withContext:context];
+            return [self myCalcPathPoints:nil pPathLen:NULL subviewCount:count pointIndexArray:pointIndexArray viewSpacing:viewSpacing withContext:context];
         } else {
-            return [self myCalcPathPoints:path pPathLen:NULL subviewCount:count pointIndexArray:pointIndexArray viewSpace:self.spaceType.value withContext:context];
+            return [self myCalcPathPoints:path pPathLen:NULL subviewCount:count pointIndexArray:pointIndexArray viewSpacing:self.spacingType.value withContext:context];
         }
     }
     return nil;

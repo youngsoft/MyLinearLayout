@@ -172,7 +172,7 @@ static NSInteger sTextStyleTag = 1;    //文本风格的标签
     id<MyGrid> gridTemplate = [MyGridLayout createTemplateGrid:sTextStyleTag];
     gridTemplate.gravity = MyGravity_Vert_Center;
     gridTemplate.padding = UIEdgeInsetsMake(0, 10, 0, 10);
-    gridTemplate.subviewSpace = 10;
+    gridTemplate.subviewSpacing = 10;
     [gridTemplate addRow:MyLayoutSize.wrap];
     [gridTemplate addRow:MyLayoutSize.wrap];
     [gridTemplate setTarget:self action:@selector(handleTest1:)];

@@ -9,7 +9,7 @@
 #import "MyLayoutDef.h"
 #import "MyLayoutMath.h"
 #import "MyLayoutPosInner.h"
-#import "MyLayoutSizeClass.h"
+#import "MyLayoutTraitsImpl.h"
 #import "MyLayoutSizeInner.h"
 
 
@@ -33,10 +33,36 @@ typedef struct _MyLayoutContext {
     CGFloat paddingBottom;
 
     
-    CGFloat horzSpace;
-    CGFloat vertSpace;
+    CGFloat horzSpacing;
+    CGFloat vertSpacing;
     
 } MyLayoutContext;
+
+@interface UIView (MyLayoutExtInner)
+
+@property (nonatomic, strong, readonly) MyLayoutEngine *myEngine;
+@property (nonatomic, strong, readonly) MyLayoutEngine *myEngineInner;
+
+
+- (__kindof MyViewTraitsImpl *)myDefaultTraits;
+- (__kindof MyViewTraitsImpl *)myDefaultTraitsInner;
+
+- (__kindof MyViewTraitsImpl *)myCurrentTraits;
+- (__kindof MyViewTraitsImpl *)myCurrentTraitsInner;
+
+@property (nonatomic, readonly) CGFloat myEstimatedWidth;
+@property (nonatomic, readonly) CGFloat myEstimatedHeight;
+
+//为支持iOS11的safeArea而进行的padding的转化
+- (CGFloat)myLayoutPaddingTop;
+- (CGFloat)myLayoutPaddingBottom;
+- (CGFloat)myLayoutPaddingLeft;
+- (CGFloat)myLayoutPaddingRight;
+- (CGFloat)myLayoutPaddingLeading;
+- (CGFloat)myLayoutPaddingTrailing;
+
+@end
+
 
 @interface MyBaseLayout ()
 
@@ -45,7 +71,6 @@ typedef struct _MyLayoutContext {
 //派生类重载这个函数进行布局
 - (CGSize)calcLayoutSize:(CGSize)size subviewEngines:(NSMutableArray *)subviewEngines context:(MyLayoutContext *)context;
 
-- (id)createSizeClassInstance;
 
 - (CGFloat)myCalcSubview:(MyLayoutEngine *)subviewEngine
              vertGravity:(MyGravity)vertGravity
@@ -56,7 +81,7 @@ typedef struct _MyLayoutContext {
              horzGravity:(MyGravity)horz
                  withContext:(MyLayoutContext *)context;
 
-- (CGFloat)mySubview:(MyViewTraits *)subviewTraits wrapHeightSizeFits:(CGSize)size withContext:(MyLayoutContext *)context;
+- (CGFloat)mySubview:(id<MyViewTraits>)subviewTraits wrapHeightSizeFits:(CGSize)size withContext:(MyLayoutContext *)context;
 
 - (CGFloat)myGetBoundLimitMeasure:(MyLayoutSize *)anchor subview:(UIView *)subview anchorType:(MyLayoutAnchorType)anchorType subviewSize:(CGSize)subviewSize selfLayoutSize:(CGSize)selfLayoutSize isUBound:(BOOL)isUBound;
 
@@ -91,7 +116,7 @@ typedef struct _MyLayoutContext {
 //给父布局视图机会来更改子布局视图的边界线的显示的rect
 - (void)myHookSublayout:(MyBaseLayout *)sublayout borderlineRect:(CGRect *)pRect;
 
-- (void)myCalcSubviewsWrapContentSize:(MyLayoutContext *)context withCustomSetting:(void (^)(MyViewTraits *subviewTraits))customSetting;
+- (void)myCalcSubviewsWrapContentSize:(MyLayoutContext *)context withCustomSetting:(void (^)(MyViewTraitsImpl *subviewTraits))customSetting;
 
 @end
 
@@ -112,4 +137,95 @@ typedef struct _MyLayoutContext {
 @end
 
 
+
+#define _MYLAYOUT_PROPERTY_GET1(type, name)\
+-(type)name {\
+return [super name];\
+}\
+
+#define _MYLAYOUT_PROPERTY_SET1(type, setName, name)\
+-(void)set##setName:(type)name{\
+[super set##setName:name];\
+}\
+
+#define _MYLAYOUT_PROPERTY_OVERRIDE1(type, setName, name)\
+_MYLAYOUT_PROPERTY_GET1(type, name)\
+_MYLAYOUT_PROPERTY_SET1(type, setName, name)\
+
+
+#define _MYLAYOUT_PROPERTY_VIEW_GET1(type, name)\
+-(type)name {\
+return self.myDefaultTraitsInner.name;\
+}\
+
+#define _MYLAYOUT_PROPERTY_VIEW_SET1(type, setName, name)\
+- (void)set##setName:(type)name {\
+self.myDefaultTraits.name = name;\
+}\
+
+#define _MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(type, setName, name)\
+_MYLAYOUT_PROPERTY_VIEW_GET1(type, name)\
+_MYLAYOUT_PROPERTY_VIEW_SET1(type, setName, name)\
+
+
+#define _MYLAYOUT_PROPERTY_VIEW_GET2 _MYLAYOUT_PROPERTY_VIEW_GET1
+
+#define _MYLAYOUT_PROPERTY_VIEW_SET2(type, setName, name)\
+- (void)set##setName:(type)name {\
+    MyViewTraitsImpl *viewTraits = (MyViewTraitsImpl*)self.myDefaultTraits;\
+    if (viewTraits.name != name) {\
+        viewTraits.name = name;\
+        if (self.superview != nil) {\
+            [self.superview setNeedsLayout];\
+        }\
+    }\
+}\
+
+#define _MYLAYOUT_PROPERTY_VIEW_OVERRIDE2(type, setName, name)\
+_MYLAYOUT_PROPERTY_VIEW_GET2(type,name)\
+_MYLAYOUT_PROPERTY_VIEW_SET2(type,setName,name)\
+
+
+#define _MYLAYOUT_PROPERTY_VIEW_GET3(type, name)\
+-(type)name {\
+return ((MyViewTraitsImpl *)self.myDefaultTraits).name;\
+}\
+
+
+#define _MYLAYOUT_PROPERTY_LAYOUTVIEW_GET1(traits,type, name)\
+-(type)name {\
+return ((traits *)self.myDefaultTraitsInner).name;\
+}\
+
+#define _MYLAYOUT_PROPERTY_LAYOUTVIEW_SET1(traits, type, setName, name)\
+- (void)set##setName:(type)name {\
+    traits *layoutTraits = (traits *)self.myDefaultTraits;\
+    if (layoutTraits.name != name) {\
+        layoutTraits.name = name;\
+        [self setNeedsLayout];\
+    }\
+}\
+
+
+#define _MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(traits, type, setName, name)\
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_GET1(traits,type,name)\
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_SET1(traits,type,setName,name)\
+
+
+
+
+#define _MYLAYOUT_PROPERTY_GRIDLAYOUT_GET(type, name)\
+-(type)name {\
+return ((MyGridLayoutTraitsImpl*)self.myDefaultTraits).name;\
+}\
+
+#define _MYLAYOUT_PROPERTY_GRIDLAYOUT_SET(type, setName, name)\
+- (void)set##setName:(type)name {\
+MyGridLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;\
+layoutTraits.name = name;\
+}\
+
+#define _MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(type, setName, name)\
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_GET(type,name)\
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_SET(type,setName,name)\
 

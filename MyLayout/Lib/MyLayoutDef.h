@@ -172,14 +172,14 @@ typedef enum : unsigned char {
 
   //上面部分是压缩的策略，下面部分指定压缩的内容，因此一个shrinkType的指定时上面部分和下面部分的
   //| 操作。比如让间距平均压缩：MySubviewsShrink_Average |
-  // MySubviewsShrink_Space
+  // MySubviewsShrink_Spacing
 
   /**只压缩尺寸，因为这里是0所以这部分可以不设置，为默认。*/
   MySubviewsShrink_Size = 0 << 4,
   /**只压缩间距。*/
-  MySubviewsShrink_Space = 1 << 4,
+  MySubviewsShrink_Spacing = 1 << 4,
   /**压缩尺寸和间距。暂时不支持！！！*/
-  MySubviewsShrink_SizeAndSpace = 2 << 4
+  MySubviewsShrink_SizeAndSpacing = 2 << 4
 
 } MySubviewsShrinkType;
 
@@ -220,8 +220,8 @@ typedef enum : unsigned char {
  在默认情况下现有的布局以及子视图的约束设置都是基于w:Any
  h:Any的,如果我们要为某种SizeClass设置约束则可以调用视图的扩展方法：
 
- -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass;
- -(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass
+ -(__kindof id<MyViewTraits>)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass;
+ -(__kindof id<MyViewTraits>)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass
  copyFrom:(MySizeClass)srcSizeClass;
 
 
@@ -229,33 +229,30 @@ typedef enum : unsigned char {
  运算符来组合。 比如：
 
  1.想设置所有iPhone设备的横屏的约束
- UIView *lsc = [某视图
- fetchLayoutSizeClass:MySizeClass_wAny|MySizeClass_hCompact];
+ id<MyViewTraits> traits = [某视图
+ fetchLayoutTraitsInSizeClass:MySizeClass_wAny|MySizeClass_hCompact];
 
  2.想设置所有iPad设备的横屏的约束
- UIView *lsc = [某视图 fetchLayoutSizeClass: MySizeClass_wRegular |
+ id<MyViewTraits> traits = [某视图 fetchLayoutTraitsInSizeClass: MySizeClass_wRegular |
  MySizeClass_hRegular | MySizeClass_Landscape];
 
  3.想设置iphone6plus下的横屏的约束
- UIView *lsc = [某视图
- fetchLayoutSizeClass:MySizeClass_wRegular|MySizeClass_hCompact];
+ id<MyViewTraits> traits = [某视图
+ fetchLayoutTraitsInSizeClass:MySizeClass_wRegular|MySizeClass_hCompact];
 
  4.想设置ipad下的约束
- UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wRegular |
+ id<MyViewTraits> traits = [某视图 fetchLayoutTraitsInSizeClass:MySizeClass_wRegular |
  MySizeClass_hRegular];
 
  5.想设置所有设备下的约束，也是默认的视图的约束
- UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_wAny |
+ id<MyViewTraits> traits = [某视图 fetchLayoutTraitsInSizeClass:MySizeClass_wAny |
  MySizeClass_hAny];
 
  6.所有设备的竖屏约束：
- UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_Portrait];
+ id<MyViewTraits> traits = [某视图 fetchLayoutTraitsInSizeClass:MySizeClass_Portrait];
 
  7.所有设备的横屏约束：
- UIView *lsc = [某视图 fetchLayoutSizeClass:MySizeClass_Landscape];
-
- fetchLayoutSizeClass虽然返回的是一个instancetype,但实际得到了一个MyLayoutSizeClass对象或者其派生类，而MyLayoutSizeClass类中又定义了跟UIView一样相同的布局方法，因此虽然是返回视图对象，并设置各种约束，但实际上是设置MyLayoutSizeClass对象的各种约束。
-
+ id<MyViewTraits> traits = [某视图 fetchLayoutTraitsInSizeClass:MySizeClass_Landscape];
  */
 typedef enum : unsigned char {
   MySizeClass_wAny = 0,      //宽度任意尺寸
@@ -270,4 +267,5 @@ typedef enum : unsigned char {
   MySizeClass_Portrait = 0x40,  //竖屏
   MySizeClass_Landscape =
       0x80,  //横屏,注意横屏和竖屏不支持 | 运算操作，只能指定一个。
+  MySizeClass_All = 0xFF,  //全部
 } MySizeClass;

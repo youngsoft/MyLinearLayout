@@ -136,8 +136,8 @@ static NSInteger sBaseTag = 100000;
     MyFlowLayout *containerLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:arrangedCount];
     containerLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     containerLayout.gravity = MyGravity_Horz_Fill; //平均分配里面每个子视图的宽度或者拉伸子视图的宽度以便填充满整个布局。
-    containerLayout.subviewHSpace = 5;
-    containerLayout.subviewVSpace = 5;
+    containerLayout.subviewHSpacing = 5;
+    containerLayout.subviewVSpacing = 5;
     containerLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     
     return containerLayout;
@@ -149,7 +149,7 @@ static NSInteger sBaseTag = 100000;
     MyLinearLayout *cellLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     cellLayout.gravity = MyGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
     cellLayout.myHeight = 100;
-    cellLayout.subviewVSpace = 5;  //设置布局视图里面子视图之间的间距为5个点。
+    cellLayout.subviewVSpacing = 5;  //设置布局视图里面子视图之间的间距为5个点。
     cellLayout.backgroundColor = [UIColor whiteColor];
     [cellLayout setTarget:self action:@selector(handleCellLayoutTap:)];
     cellLayout.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。

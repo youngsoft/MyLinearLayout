@@ -231,7 +231,7 @@
     self.toolbarItems[7].style = UIBarButtonItemStylePlain;
     self.toolbarItems[8].style = UIBarButtonItemStylePlain;
 
-    self.pathLayout.spaceType = [MyPathSpace flexed];   //表示路径布局视图里面的子视图的间距会根据路径曲线自动的调整。
+    self.pathLayout.spacingType = [MyPathSpacing flexed];   //表示路径布局视图里面的子视图的间距会根据路径曲线自动的调整。
     [self.pathLayout layoutAnimationWithDuration:0.5];
 
 }
@@ -242,7 +242,7 @@
     self.toolbarItems[7].style = UIBarButtonItemStyleDone;
     self.toolbarItems[8].style = UIBarButtonItemStylePlain;
 
-    self.pathLayout.spaceType = [MyPathSpace fixed:100]; //表示路径布局视图里面的子视图的间距是固定为80的。
+    self.pathLayout.spacingType = [MyPathSpacing fixed:100]; //表示路径布局视图里面的子视图的间距是固定为80的。
     [self.pathLayout layoutAnimationWithDuration:0.5];
     
 }
@@ -254,7 +254,7 @@
     self.toolbarItems[8].style = UIBarButtonItemStyleDone;
 
     
-    self.pathLayout.spaceType = [MyPathSpace count:6]; //表示路径布局视图里面的子视图的间距会根据尺寸和数量为10来调整。
+    self.pathLayout.spacingType = [MyPathSpacing count:6]; //表示路径布局视图里面的子视图的间距会根据尺寸和数量为10来调整。
     [self.pathLayout layoutAnimationWithDuration:0.5];
 
 }

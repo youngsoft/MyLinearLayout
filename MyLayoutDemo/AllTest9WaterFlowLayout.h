@@ -13,8 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AllTest9WaterFlowLayout : UICollectionViewLayout
 
 @property (nonatomic, assign) NSUInteger numberOfColumn;
-@property (nonatomic, assign) CGFloat horzSpace;
-@property (nonatomic, assign) CGFloat vertSpace;
+@property (nonatomic, assign) CGFloat horzSpacing;
+@property (nonatomic, assign) CGFloat vertSpacing;
  
 @end
 

@@ -19,11 +19,12 @@
     return -20171003.0;
 }
 
-- (id)init {
-    self = [super init];
+- (instancetype)initWithView:(UIView *)view anchorType:(MyLayoutAnchorType)anchorType {
+    self = [self init];
     if (self != nil) {
         _active = YES;
-        _view = nil;
+        _view = view;
+        _anchorType = anchorType;
         _val = nil;
         _valType = MyLayoutValType_Nil;
         _offsetVal = 0;
@@ -31,7 +32,6 @@
         _uBoundVal = nil;
         _shrink = 0.0;
     }
-
     return self;
 }
 
@@ -146,21 +146,19 @@
 #pragma mark-- NSCopying
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyLayoutPos *layoutPos = [[[self class] allocWithZone:zone] init];
-    layoutPos.view = self.view;
+    MyLayoutPos *layoutPos = [[[self class] allocWithZone:zone] initWithView:_view anchorType:_anchorType];
     layoutPos->_active = _active;
     layoutPos->_shrink = _shrink;
-    layoutPos->_anchorType = _anchorType;
     layoutPos->_valType = _valType;
     layoutPos->_val = _val;
     layoutPos->_offsetVal = _offsetVal;
     if (_lBoundVal != nil) {
-        layoutPos->_lBoundVal = [[[self class] allocWithZone:zone] init];
+        layoutPos->_lBoundVal = [[[self class] allocWithZone:zone] initWithView:_view anchorType:_anchorType];
         layoutPos->_lBoundVal->_active = _active;
         [[layoutPos->_lBoundVal _myEqualTo:_lBoundVal.val] _myOffset:_lBoundVal.offsetVal];
     }
     if (_uBoundVal != nil) {
-        layoutPos->_uBoundVal = [[[self class] allocWithZone:zone] init];
+        layoutPos->_uBoundVal = [[[self class] allocWithZone:zone] initWithView:_view anchorType:_anchorType];
         layoutPos->_uBoundVal->_active = _active;
         [[layoutPos->_uBoundVal _myEqualTo:_uBoundVal.val] _myOffset:_uBoundVal.offsetVal];
     }
@@ -233,7 +231,7 @@
 
 - (MyLayoutPos *)lBoundVal {
     if (_lBoundVal == nil) {
-        _lBoundVal = [[MyLayoutPos alloc] init];
+        _lBoundVal = [[MyLayoutPos alloc] initWithView:_view anchorType:_anchorType];
         _lBoundVal->_active = _active;
         [_lBoundVal _myEqualTo:@(-CGFLOAT_MAX)];
     }
@@ -242,7 +240,7 @@
 
 - (MyLayoutPos *)uBoundVal {
     if (_uBoundVal == nil) {
-        _uBoundVal = [[MyLayoutPos alloc] init];
+        _uBoundVal = [[MyLayoutPos alloc] initWithView:_view anchorType:_anchorType];
         _uBoundVal->_active = _active;
         [_uBoundVal _myEqualTo:@(CGFLOAT_MAX)];
     }
@@ -498,7 +496,7 @@
 
 - (MyLayoutPos * (^)(CGFloat offsetVal))clone {
     return ^id(CGFloat offsetVal) {
-        MyLayoutPos *clonedAnchor = [[[self class] allocWithZone:nil] init];
+        MyLayoutPos *clonedAnchor = [[[self class] allocWithZone:nil] initWithView:nil anchorType:self.anchorType];
         clonedAnchor->_offsetVal = offsetVal;
         clonedAnchor->_val = self;
         clonedAnchor->_valType = MyLayoutValType_LayoutAnchorClone;

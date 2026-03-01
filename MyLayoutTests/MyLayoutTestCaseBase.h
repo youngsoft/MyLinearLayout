@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "MyLayout.h"
+#import "MyLayoutMath.h"
 
 
 #define MyRectAssert(v, rc)  XCTAssert(CGRectEqualToRect(v.frame, rc),  @"the real frame = %@",NSStringFromCGRect(v.frame));

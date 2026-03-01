@@ -38,8 +38,8 @@
     actionLayout.myHeight = MyLayoutSize.wrap;
     actionLayout.gravity = MyGravity_Horz_Fill;  //所有子视图水平填充，也就是所有子视图的宽度相等。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    actionLayout.subviewHSpace = 5;
-    actionLayout.subviewVSpace = 5;
+    actionLayout.subviewHSpacing = 5;
+    actionLayout.subviewVSpacing = 5;
     [rootLayout addSubview:actionLayout];
     
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust orientation", @"")
@@ -53,7 +53,7 @@
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust align", @"")
                                                action:@selector(handleAdjustArrangeGravity:)]];
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust spacing", @"")
-                                               action:@selector(handleAdjustSpace:)]];
+                                               action:@selector(handleAdjustSpacing:)]];
     [actionLayout addSubview:[self createActionButton:NSLocalizedString(@"adjust gravity policy", @"")
                                                action:@selector(handleAdjustGravityPolicy:)]];
     
@@ -78,8 +78,8 @@
     flowLayout.backgroundColor = [CFTool color:0];
     flowLayout.frame = CGRectMake(0, 0, 800, 800);
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    flowLayout.subviewVSpace = 5;
-    flowLayout.subviewHSpace = 5;
+    flowLayout.subviewVSpacing = 5;
+    flowLayout.subviewHSpacing = 5;
     [scrollView addSubview:flowLayout];
     self.flowLayout = flowLayout;
     
@@ -313,18 +313,18 @@
     
 }
 
--(void)handleAdjustSpace:(id)sender
+-(void)handleAdjustSpacing:(id)sender
 {
     //调整所有子视图的水平和垂直间距。
-    if (self.flowLayout.subviewHSpace == 0)
-        self.flowLayout.subviewHSpace = 5;
+    if (self.flowLayout.subviewHSpacing == 0)
+        self.flowLayout.subviewHSpacing = 5;
     else
-        self.flowLayout.subviewHSpace = 0;
+        self.flowLayout.subviewHSpacing = 0;
     
-    if (self.flowLayout.subviewVSpace == 0)
-        self.flowLayout.subviewVSpace = 5;
+    if (self.flowLayout.subviewVSpacing == 0)
+        self.flowLayout.subviewVSpacing = 5;
     else
-        self.flowLayout.subviewVSpace = 0;
+        self.flowLayout.subviewVSpacing = 0;
     
     [self.flowLayout layoutAnimationWithDuration:0.4];
     [self flowlayoutInfo];
@@ -366,11 +366,11 @@
     
     NSString *arrangedGravityStr = [self gravityInfo:self.flowLayout.arrangedGravity];
     
-    NSString *subviewSpaceStr = [NSString stringWithFormat:@"vert:%.0f,horz:%.0f",self.flowLayout.subviewVSpace, self.flowLayout.subviewHSpace];
+    NSString *subviewSpacingStr = [NSString stringWithFormat:@"vert:%.0f,horz:%.0f",self.flowLayout.subviewVSpacing, self.flowLayout.subviewHSpacing];
     
     NSString *gravityPolicyStr = [self gravityPolicyInfo:self.flowLayout.lastlineGravityPolicy];
     
-    self.flowLayoutSetLabel.text = [NSString stringWithFormat:@"flowLayout:\norientation=%@, arrangedCount=%@\ngravity=%@\narrangedGravity=%@\nsubviewSpace=(%@)\n%@",orientationStr,arrangeCountStr,gravityStr,arrangedGravityStr,subviewSpaceStr,gravityPolicyStr];
+    self.flowLayoutSetLabel.text = [NSString stringWithFormat:@"flowLayout:\norientation=%@, arrangedCount=%@\ngravity=%@\narrangedGravity=%@\nsubviewSpacing=(%@)\n%@",orientationStr,arrangeCountStr,gravityStr,arrangedGravityStr,subviewSpacingStr,gravityPolicyStr];
 }
 
 -(NSString*)gravityInfo:(MyGravity)gravity

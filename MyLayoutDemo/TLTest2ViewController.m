@@ -31,8 +31,8 @@
      */
     
     MyTableLayout *rootLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Horz];
-    rootLayout.subviewHSpace = 5;
-    rootLayout.subviewVSpace = 10;
+    rootLayout.subviewHSpacing = 5;
+    rootLayout.subviewVSpacing = 10;
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //分别设置表格布局里面的行间距、列间距、内部padding边距。
     
     rootLayout.widthSize.equalTo(scrollView.widthSize);
@@ -72,7 +72,7 @@
 {
     MyLinearLayout *colLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     colLayout.gravity = MyGravity_Horz_Fill;  //里面所有子视图的宽度都跟父视图保持一致，这样子视图就不需要设置宽度了。
-    colLayout.subviewVSpace = 5;  //设置布局视图里面子视图之间的间距为5个点。
+    colLayout.subviewVSpacing = 5;  //设置布局视图里面子视图之间的间距为5个点。
     colLayout.backgroundColor = [CFTool color:0];
     colLayout.highlightedOpacity = 0.3; //设置触摸事件按下时的不透明度，来响应按下状态。
     [colLayout setTarget:self action:@selector(handleColLayoutTap:)];

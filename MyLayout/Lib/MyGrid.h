@@ -19,7 +19,7 @@ extern NSString *const kMyGridRows;             //NSArray<NSDictionary>类型，
 extern NSString *const kMyGridCols;             //NSArray<NSDictionary>类型，表示里面的值是列子栅格数组.数组的元素是一个个子栅格字典对象
 extern NSString *const kMyGridSize;             //NSString类型或者NSNumber类型。设置栅格的尺寸，可以为特定的值vMyGridSizeWrap或者vMyGridSizeFill，也可以为某个具体的数字比如20.0, 还可以为百分比数字比如：@"20%" 或者@"-20%"。
 extern NSString *const kMyGridPadding;          //NSString类型，设置栅格的内边距，对应MyGrid的padding属性，具体的值的格式为：@"{上,左,下,右}"
-extern NSString *const kMyGridSpace;            //NSNumber类型，栅格的内子栅格的间距，对应MyGrid的subviewSpace属性。
+extern NSString *const kMyGridSpacing;            //NSNumber类型，栅格的内子栅格的间距，对应MyGrid的subviewSpacing属性。
 extern NSString *const kMyGridGravity;          //NSString类型，栅格的停靠属性，对应MyGrid的gravity属性，具体的值请参考下面的定义，比如：@"top|left"
 extern NSString *const kMyGridPlaceholder;      //NSNumber类型，栅格的占位属性，对应MyGrid的placeholder 属性，具体的值设置为YES or NO
 extern NSString *const kMyGridAnchor;           //NSNumber类型，栅格的锚点属性，对应MyGrid的anchor属性，具体的值设置为YES or NO
@@ -100,7 +100,7 @@ extern NSString *const vMyGridGravityHeightFill; //对应MyGravity_Vert_Fill
 /**
  栅格内子栅格之间的间距。
  */
-@property (nonatomic, assign) CGFloat subviewSpace;
+@property (nonatomic, assign) CGFloat subviewSpacing;
 
 /**
  栅格内子栅格或者叶子栅格内视图的四周内边距。

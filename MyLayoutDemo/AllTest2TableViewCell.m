@@ -97,14 +97,14 @@
     userInfoLayout.myHeight = MyLayoutSize.wrap;  //高度由子视图决定
     userInfoLayout.weight = 1;               //中间部分的宽度占用整个水平线性布局剩余的空间。
     userInfoLayout.gravity = MyGravity_Horz_Fill;   //里面的子视图宽度和布局视图相等。
-    userInfoLayout.subviewVSpace = 5;       //子视图间距为5。
+    userInfoLayout.subviewVSpacing = 5;       //子视图间距为5。
     [rootLayout addSubview:userInfoLayout];
     
     
     //姓名信息部分，一个水平线性布局：左边名称，后面两个操作按钮，整体底部对齐。
     MyLinearLayout *userNameLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     userNameLayout.myHeight = MyLayoutSize.wrap;   //高度由子视图决定
-    userNameLayout.subviewHSpace = 5;    //子视图之间宽度间隔是5
+    userNameLayout.subviewHSpacing = 5;    //子视图之间宽度间隔是5
     userNameLayout.gravity = MyGravity_Vert_Bottom;  //整体垂直底部对齐。
     [userInfoLayout addSubview:userNameLayout];
     
@@ -261,8 +261,8 @@
     userInfoLayout.heightSize.equalTo(rootLayout.heightSize);
     userInfoLayout.weight = 1;
     userInfoLayout.gravity = MyGravity_Vert_Center;
-    userInfoLayout.subviewVSpace = 5;
-    userInfoLayout.subviewHSpace = 5;
+    userInfoLayout.subviewVSpacing = 5;
+    userInfoLayout.subviewHSpacing = 5;
     [rootLayout addSubview:userInfoLayout];
     
     _nameLabel = [UILabel new];

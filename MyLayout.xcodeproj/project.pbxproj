@@ -20,7 +20,7 @@
 		182225CE1E77E5930081AA4B /* MyFrameLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225B71E77E5930081AA4B /* MyFrameLayout.m */; };
 		182225CF1E77E5930081AA4B /* MyFloatLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225B91E77E5930081AA4B /* MyFloatLayout.m */; };
 		182225D01E77E5930081AA4B /* MyLayoutPos.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225BB1E77E5930081AA4B /* MyLayoutPos.m */; };
-		182225D11E77E5930081AA4B /* MyLayoutSizeClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225BF1E77E5930081AA4B /* MyLayoutSizeClass.m */; };
+		182225D11E77E5930081AA4B /* MyLayoutTraitsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225BF1E77E5930081AA4B /* MyLayoutTraitsImpl.m */; };
 		182225D21E77E5930081AA4B /* MyMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225C11E77E5930081AA4B /* MyMaker.m */; };
 		182225D31E77E5930081AA4B /* MyTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225C31E77E5930081AA4B /* MyTableLayout.m */; };
 		182225D41E77E5930081AA4B /* MyDimeScale.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225C41E77E5930081AA4B /* MyDimeScale.m */; };
@@ -44,7 +44,7 @@
 		18C15AF41EDF140400AADEAC /* MyBaseLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225AF1E77E5930081AA4B /* MyBaseLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AF51EDF140D00AADEAC /* MyLayoutPos.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225B01E77E5930081AA4B /* MyLayoutPos.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AF61EDF141000AADEAC /* MyLayoutSize.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225BC1E77E5930081AA4B /* MyLayoutSize.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		18C15AF71EDF141600AADEAC /* MyLayoutSizeClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C01E77E5930081AA4B /* MyLayoutSizeClass.h */; };
+		18C15AF71EDF141600AADEAC /* MyLayoutTraitsImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C01E77E5930081AA4B /* MyLayoutTraitsImpl.h */; };
 		18C15AF81EDF141A00AADEAC /* MyMaker.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C21E77E5930081AA4B /* MyMaker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AF91EDF142000AADEAC /* MyDimeScale.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225C71E77E5930081AA4B /* MyDimeScale.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18C15AFA1EDF142300AADEAC /* MyLayoutDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 182225B31E77E5930081AA4B /* MyLayoutDef.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -58,7 +58,7 @@
 		18C15B021EDF144B00AADEAC /* MyBaseLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225B11E77E5930081AA4B /* MyBaseLayout.m */; };
 		18C15B031EDF144B00AADEAC /* MyLayoutPos.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225BB1E77E5930081AA4B /* MyLayoutPos.m */; };
 		18C15B041EDF144B00AADEAC /* MyLayoutSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225C51E77E5930081AA4B /* MyLayoutSize.m */; };
-		18C15B051EDF144B00AADEAC /* MyLayoutSizeClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225BF1E77E5930081AA4B /* MyLayoutSizeClass.m */; };
+		18C15B051EDF144B00AADEAC /* MyLayoutTraitsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225BF1E77E5930081AA4B /* MyLayoutTraitsImpl.m */; };
 		18C15B061EDF144B00AADEAC /* MyMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225C11E77E5930081AA4B /* MyMaker.m */; };
 		18C15B071EDF144B00AADEAC /* MyDimeScale.m in Sources */ = {isa = PBXBuildFile; fileRef = 182225C41E77E5930081AA4B /* MyDimeScale.m */; };
 		18D3C9111EDF074900D3DE43 /* LLTest1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D3C9041EDF074900D3DE43 /* LLTest1ViewController.m */; };
@@ -164,6 +164,7 @@
 		208157BD1F586AA700E945B6 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157BC1F586AA700E945B6 /* DetailViewController.m */; };
 		208157C31F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
 		208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 208157C11F5A886300E945B6 /* MyLayoutDelegate.m */; };
+		2089F6352CDA68C5000C4A9A /* MyLayoutTraits.h in Headers */ = {isa = PBXBuildFile; fileRef = 2089F6342CDA68C5000C4A9A /* MyLayoutTraits.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2094619E2341FD6F005F5C8E /* AllTestExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2094619D2341FD6F005F5C8E /* AllTestExampleViewController.m */; };
 		20A45EC52318FCA50026A18C /* MyFlexLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DF42402318F4EA0078CAA0 /* MyFlexLayout.m */; };
 		20B46A8D1F8A79C300826372 /* layoutdemo8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 20B46A8C1F8A79C300826372 /* layoutdemo8.gif */; };
@@ -236,8 +237,8 @@
 		182225BC1E77E5930081AA4B /* MyLayoutSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutSize.h; sourceTree = "<group>"; };
 		182225BD1E77E5930081AA4B /* MyPathLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPathLayout.h; sourceTree = "<group>"; };
 		182225BE1E77E5930081AA4B /* MyRelativeLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRelativeLayout.h; sourceTree = "<group>"; };
-		182225BF1E77E5930081AA4B /* MyLayoutSizeClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLayoutSizeClass.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		182225C01E77E5930081AA4B /* MyLayoutSizeClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutSizeClass.h; sourceTree = "<group>"; };
+		182225BF1E77E5930081AA4B /* MyLayoutTraitsImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLayoutTraitsImpl.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		182225C01E77E5930081AA4B /* MyLayoutTraitsImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutTraitsImpl.h; sourceTree = "<group>"; };
 		182225C11E77E5930081AA4B /* MyMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMaker.m; sourceTree = "<group>"; };
 		182225C21E77E5930081AA4B /* MyMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMaker.h; sourceTree = "<group>"; };
 		182225C31E77E5930081AA4B /* MyTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTableLayout.m; sourceTree = "<group>"; };
@@ -419,6 +420,7 @@
 		208157BC1F586AA700E945B6 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		208157C01F5A886300E945B6 /* MyLayoutDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLayoutDelegate.h; sourceTree = "<group>"; };
 		208157C11F5A886300E945B6 /* MyLayoutDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLayoutDelegate.m; sourceTree = "<group>"; };
+		2089F6342CDA68C5000C4A9A /* MyLayoutTraits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLayoutTraits.h; sourceTree = "<group>"; };
 		2094619C2341FD5E005F5C8E /* AllTestExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllTestExampleViewController.h; sourceTree = "<group>"; };
 		2094619D2341FD6F005F5C8E /* AllTestExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllTestExampleViewController.m; sourceTree = "<group>"; };
 		20B46A8C1F8A79C300826372 /* layoutdemo8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = layoutdemo8.gif; sourceTree = "<group>"; };
@@ -839,14 +841,16 @@
 				182225B71E77E5930081AA4B /* MyFrameLayout.m */,
 				182225AF1E77E5930081AA4B /* MyBaseLayout.h */,
 				182225B11E77E5930081AA4B /* MyBaseLayout.m */,
+				182DB6401EF7876200E2D65D /* MyGridLayout.h */,
+				182DB6411EF7876200E2D65D /* MyGridLayout.m */,
 				182225B01E77E5930081AA4B /* MyLayoutPos.h */,
 				182225C61E77E5930081AA4B /* MyLayoutPosInner.h */,
 				182225BB1E77E5930081AA4B /* MyLayoutPos.m */,
 				182225BC1E77E5930081AA4B /* MyLayoutSize.h */,
 				182225C81E77E5930081AA4B /* MyLayoutSizeInner.h */,
 				182225C51E77E5930081AA4B /* MyLayoutSize.m */,
-				182225C01E77E5930081AA4B /* MyLayoutSizeClass.h */,
-				182225BF1E77E5930081AA4B /* MyLayoutSizeClass.m */,
+				182225C01E77E5930081AA4B /* MyLayoutTraitsImpl.h */,
+				182225BF1E77E5930081AA4B /* MyLayoutTraitsImpl.m */,
 				182225C21E77E5930081AA4B /* MyMaker.h */,
 				182225C11E77E5930081AA4B /* MyMaker.m */,
 				182225C71E77E5930081AA4B /* MyDimeScale.h */,
@@ -854,8 +858,6 @@
 				182225B81E77E5930081AA4B /* MyLayoutInner.h */,
 				182225B31E77E5930081AA4B /* MyLayoutDef.h */,
 				205642891F4D013D00E8BDDE /* MyGrid.h */,
-				182DB6401EF7876200E2D65D /* MyGridLayout.h */,
-				182DB6411EF7876200E2D65D /* MyGridLayout.m */,
 				205642841F4CFF9B00E8BDDE /* MyBorderline.h */,
 				205642851F4CFF9B00E8BDDE /* MyBorderline.m */,
 				205643081F4E53CD00E8BDDE /* MyGridNode.h */,
@@ -864,6 +866,7 @@
 				205643151F55A03000E8BDDE /* MyLayoutMath.m */,
 				208157C01F5A886300E945B6 /* MyLayoutDelegate.h */,
 				208157C11F5A886300E945B6 /* MyLayoutDelegate.m */,
+				2089F6342CDA68C5000C4A9A /* MyLayoutTraits.h */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -945,9 +948,10 @@
 				205E0C5F20B90347001A8B99 /* MyGrid.h in Headers */,
 				182DB6421EF7876200E2D65D /* MyGridLayout.h in Headers */,
 				205642861F4CFF9B00E8BDDE /* MyBorderline.h in Headers */,
+				2089F6352CDA68C5000C4A9A /* MyLayoutTraits.h in Headers */,
 				20DF42412318F4EA0078CAA0 /* MyFlexLayout.h in Headers */,
 				18C15AF81EDF141A00AADEAC /* MyMaker.h in Headers */,
-				18C15AF71EDF141600AADEAC /* MyLayoutSizeClass.h in Headers */,
+				18C15AF71EDF141600AADEAC /* MyLayoutTraitsImpl.h in Headers */,
 				18C15AF91EDF142000AADEAC /* MyDimeScale.h in Headers */,
 				18C15AFA1EDF142300AADEAC /* MyLayoutDef.h in Headers */,
 				205E0C6020B907CC001A8B99 /* MyLayoutPosInner.h in Headers */,
@@ -1047,7 +1051,7 @@
 					};
 					1840828C1B2C46E8003F378B = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = BGQ8WB468K;
+						DevelopmentTeam = Y87SGSP84T;
 						ProvisioningStyle = Automatic;
 					};
 					184082A51B2C46E8003F378B = {
@@ -1166,7 +1170,7 @@
 				18C15B031EDF144B00AADEAC /* MyLayoutPos.m in Sources */,
 				18C15B041EDF144B00AADEAC /* MyLayoutSize.m in Sources */,
 				208157C41F5A886400E945B6 /* MyLayoutDelegate.m in Sources */,
-				18C15B051EDF144B00AADEAC /* MyLayoutSizeClass.m in Sources */,
+				18C15B051EDF144B00AADEAC /* MyLayoutTraitsImpl.m in Sources */,
 				18C15B061EDF144B00AADEAC /* MyMaker.m in Sources */,
 				18C15B071EDF144B00AADEAC /* MyDimeScale.m in Sources */,
 			);
@@ -1238,7 +1242,7 @@
 				202A5A0D2950A1E60076DD27 /* AllTest9WaterFlowLayout.m in Sources */,
 				20A45EC52318FCA50026A18C /* MyFlexLayout.m in Sources */,
 				2056430C1F4E8B1E00E8BDDE /* MyGridNode.m in Sources */,
-				182225D11E77E5930081AA4B /* MyLayoutSizeClass.m in Sources */,
+				182225D11E77E5930081AA4B /* MyLayoutTraitsImpl.m in Sources */,
 				444B71911F6A3E3F00331872 /* GLTest5ViewController.m in Sources */,
 				18D3C9741EDF082800D3DE43 /* AllTestDataModel.m in Sources */,
 				205CFA8E1F49BD1C00355489 /* GLTest1ViewController.m in Sources */,
@@ -1543,7 +1547,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BGQ8WB468K;
+				DEVELOPMENT_TEAM = Y87SGSP84T;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayoutDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1565,7 +1569,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BGQ8WB468K;
+				DEVELOPMENT_TEAM = Y87SGSP84T;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/MyLayoutDemo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

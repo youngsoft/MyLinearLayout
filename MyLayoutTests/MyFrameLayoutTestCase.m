@@ -346,7 +346,7 @@
     _layoutRoot.myTop =
     _layoutRoot.myLeft =
     _layoutRoot.myRight = 0;
-    _layoutRoot.wrapContentHeight = YES;
+    _layoutRoot.myHeight = MyLayoutSize.wrap;
     _layoutRoot.paddingBottom = 12;
     // _layoutRoot.backgroundColor = [UIColor whiteColor];
     //_layoutRoot.clipsToBounds = YES;

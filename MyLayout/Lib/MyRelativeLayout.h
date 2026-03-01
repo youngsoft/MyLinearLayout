@@ -13,6 +13,6 @@
  相对布局里面的子视图的布局位置和添加的顺序无关，而是通过设置子视图的相对依赖关系来进行定位和布局的。
  相对布局提供了和AutoLayout相似的能力。
  */
-@interface MyRelativeLayout : MyBaseLayout
+@interface MyRelativeLayout : MyBaseLayout<id<MyRelativeLayoutTraits>><MyRelativeLayoutTraits>
 
 @end

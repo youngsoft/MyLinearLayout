@@ -207,7 +207,7 @@
         self.pathLayout.coordinateSetting.isMath = NO;
         self.pathLayout.coordinateSetting.start = -CGFLOAT_MAX;
         self.pathLayout.coordinateSetting.end = CGFLOAT_MAX;
-        self.pathLayout.spaceType = [MyPathSpace fixed:60];
+        self.pathLayout.spacingType = [MyPathSpacing fixed:60];
         
         self.pathLayout.rectangularEquation = ^(CGFloat x)
         {
@@ -221,7 +221,7 @@
         self.pathLayout.coordinateSetting.isMath = YES;
         self.pathLayout.coordinateSetting.start = -CGFLOAT_MAX;
         self.pathLayout.coordinateSetting.end = CGFLOAT_MAX;
-        self.pathLayout.spaceType = [MyPathSpace fixed:60];
+        self.pathLayout.spacingType = [MyPathSpacing fixed:60];
         
         self.pathLayout.rectangularEquation = ^(CGFloat x)
         {
@@ -235,7 +235,7 @@
         self.pathLayout.coordinateSetting.isMath = YES;
         self.pathLayout.coordinateSetting.start = -CGFLOAT_MAX;
         self.pathLayout.coordinateSetting.end = CGFLOAT_MAX;
-        self.pathLayout.spaceType = [MyPathSpace fixed:100];
+        self.pathLayout.spacingType = [MyPathSpacing fixed:100];
         
         self.pathLayout.parametricEquation = ^(CGFloat t)
         {
@@ -254,7 +254,7 @@
         self.pathLayout.coordinateSetting.isMath = NO;
         self.pathLayout.coordinateSetting.start = -CGFLOAT_MAX;
         self.pathLayout.coordinateSetting.end = CGFLOAT_MAX;
-        self.pathLayout.spaceType = [MyPathSpace fixed:60];
+        self.pathLayout.spacingType = [MyPathSpacing fixed:60];
         
         self.pathLayout.polarEquation = ^(CGFloat angle)
         {
@@ -269,7 +269,7 @@
         self.pathLayout.coordinateSetting.isMath = YES;
         self.pathLayout.coordinateSetting.start = -CGFLOAT_MAX;
         self.pathLayout.coordinateSetting.end = CGFLOAT_MAX;
-        self.pathLayout.spaceType = [MyPathSpace flexed];
+        self.pathLayout.spacingType = [MyPathSpacing flexed];
         
         self.pathLayout.polarEquation = ^(CGFloat angle)
         {
@@ -285,7 +285,7 @@
         self.pathLayout.coordinateSetting.isMath = YES;
         self.pathLayout.coordinateSetting.start = 0;
         self.pathLayout.coordinateSetting.end = 360;
-        self.pathLayout.spaceType = [MyPathSpace flexed];
+        self.pathLayout.spacingType = [MyPathSpacing flexed];
         
         self.pathLayout.parametricEquation = ^(CGFloat t)
         {

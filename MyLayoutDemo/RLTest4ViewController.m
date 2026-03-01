@@ -34,7 +34,7 @@
     rootLayout.leadingPos.equalTo(@0);
     rootLayout.trailingPos.equalTo(@0);
     rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
-    rootLayout.subviewVSpace = 10;
+    rootLayout.subviewVSpacing = 10;
     rootLayout.gravity = MyGravity_Horz_Fill;
     [scrollView addSubview:rootLayout];
     

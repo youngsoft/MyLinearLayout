@@ -84,7 +84,7 @@
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewHSpace = 5;
+    contentLayout.subviewHSpacing = 5;
  
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
@@ -141,7 +141,7 @@
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewHSpace = 5;
+    contentLayout.subviewHSpacing = 5;
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
     
@@ -205,7 +205,7 @@
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewHSpace = 5;
+    contentLayout.subviewHSpacing = 5;
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
     
@@ -283,7 +283,7 @@
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewHSpace = 20;
+    contentLayout.subviewHSpacing = 20;
     contentLayout.shrinkType = MySubviewsShrink_Auto;  //为了实现左右两边文本的自动缩放调整，必须要将线性布局的属性设置MySubviewsShrink_Auto。当设置为Auto属性时，必要要满足当前子视图中只有2个子视图的宽度设置为等于自身内容，否则无效。这个属性用来实现左右2个子视图根据内容来占用最佳的空间的例子。
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
@@ -367,8 +367,8 @@
     contentLayout.backgroundColor = [CFTool color:0];
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     contentLayout.myHeight = MyLayoutSize.wrap;
-    contentLayout.subviewVSpace = 5; //设置流式布局里面子视图之间的垂直间距。
-    [contentLayout setSubviewsSize:subviewWidth minSpace:5 maxSpace:10];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为60，最小的间距为5,最大间距为10。注意这里要求所有子视图的宽度都是60。
+    contentLayout.subviewVSpacing = 5; //设置流式布局里面子视图之间的垂直间距。
+    [contentLayout setSubviewsSize:subviewWidth minSpacing:5 maxSpacing:10 centered:NO];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为60，最小的间距为5,最大间距为10。注意这里要求所有子视图的宽度都是60。
     [rootLayout addSubview:contentLayout];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -460,8 +460,8 @@
 
     MyTableLayout *contentLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewVSpace = 5;
-    contentLayout.subviewHSpace = 5;  //设置行间距和列间距都为5.
+    contentLayout.subviewVSpacing = 5;
+    contentLayout.subviewHSpacing = 5;  //设置行间距和列间距都为5.
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
     
@@ -486,7 +486,7 @@
     MyFlowLayout *contentLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
     contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewSpace = 5;
+    contentLayout.subviewSpacing = 5;
     contentLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:contentLayout];
     
@@ -533,7 +533,7 @@
     contentLayout.myBottom = 0;
     contentLayout.gravity = MyGravity_Vert_Fill;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewHSpace = 5;
+    contentLayout.subviewHSpacing = 5;
     contentLayout.widthSize.lBound(scrollView.widthSize,0,1); //默认水平线性布局的宽度是自适应但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
     [scrollView addSubview:contentLayout];
     
@@ -590,7 +590,7 @@
     contentLayout.myBottom = 0;
     contentLayout.gravity = MyGravity_Vert_Fill;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewHSpace = 5;
+    contentLayout.subviewHSpacing = 5;
     contentLayout.widthSize.lBound(scrollView.widthSize,0,1); //默认水平线性布局的宽度是自适应的但是最小的宽度和父视图相等，这样对于一些大尺寸屏幕因为能够容纳内容而不会产生滚动。
     [scrollView addSubview:contentLayout];
     
@@ -723,8 +723,8 @@
     [rootLayout addSubview:contentLayout];
     
     
-    contentLayout.subviewHSpace = 50;  //默认设定固定间距为50
-    contentLayout.shrinkType = MySubviewsShrink_Space | MySubviewsShrink_Average;  //当整体内容的总宽度不超过布局视图的宽度时则正常布局，当布局视图的宽度不能容纳总体宽度时，则会平均缩小子视图之间的间距以保证一行内能容纳下所有的内容。shrinkType支持压缩尺寸和压缩间距两种压缩方法，默认是压缩尺寸。你可以选择MySubviewsShrink_Size或者MySubviewsShrink_Space来指定当布局尺寸不能容纳内容时是压缩所有子视图之间的间距还是尺寸来实现完美适配。
+    contentLayout.subviewHSpacing = 50;  //默认设定固定间距为50
+    contentLayout.shrinkType = MySubviewsShrink_Spacing | MySubviewsShrink_Average;  //当整体内容的总宽度不超过布局视图的宽度时则正常布局，当布局视图的宽度不能容纳总体宽度时，则会平均缩小子视图之间的间距以保证一行内能容纳下所有的内容。shrinkType支持压缩尺寸和压缩间距两种压缩方法，默认是压缩尺寸。你可以选择MySubviewsShrink_Size或者MySubviewsShrink_Spacing来指定当布局尺寸不能容纳内容时是压缩所有子视图之间的间距还是尺寸来实现完美适配。
     
     
     UILabel *A = [self createLabel:@"Objective-C" color:5];

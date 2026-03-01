@@ -89,17 +89,17 @@
     
     UILabel *descLabel = [UILabel new];
     descLabel.bottomPos.equalTo(rootLayout.bottomPos).offset(15);
-    descLabel.rightPos.equalTo(numberLabel.leftPos).offset(15);
+    descLabel.rightPos.equalTo(numberLabel.leftPos).offset(10);
     descLabel.mySize = CGSizeMake(100, 20);
     [rootLayout addSubview:descLabel];
     
-    
+
    CGSize size1 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
     XCTAssertTrue(CGSizeEqualToSize(size1, CGSizeMake(320, 180)), @"size1 is:%@", NSStringFromCGSize(size1));
-    XCTAssertTrue(CGRectEqualToRect(descLabel.estimatedRect, CGRectMake(120,135,100, 20)), @"descLabel rect is:%@", NSStringFromCGRect(descLabel.estimatedRect));
+    XCTAssertTrue(CGRectEqualToRect(descLabel.estimatedRect, CGRectMake(125,135,100, 20)), @"descLabel rect is:%@", NSStringFromCGRect(descLabel.estimatedRect));
+
     
-    
-    numberLabel.hidden = YES;
+    numberLabel.visibility = MyVisibility_Gone;
     
     CGSize size2 = [rootLayout sizeThatFits:CGSizeMake(320, 0)];
     
@@ -698,7 +698,7 @@
     linear.widthSize.equalTo(@(screenWidth)).multiply(0.24).min(90.0f);
     linear.myTrailing = 0.0f;
     linear.paddingTrailing = 15.0f;
-    linear.subviewVSpace = 8.0f;
+    linear.subviewVSpacing = 8.0f;
     linear.gravity = MyGravity_Horz_Right|MyGravity_Vert_Center;
     [_layoutRoot addSubview:linear];
     MyLinearLayout * _layoutAccessory = linear;
@@ -720,7 +720,7 @@
     linear.gravity = MyGravity_Vert_Center|MyGravity_Horz_Right;
     linear.widthSize.equalTo(_layoutAccessory.widthSize);
     linear.myHeight = 20.0f;
-    linear.subviewHSpace = 4.0f;
+    linear.subviewHSpacing = 4.0f;
     [_layoutAccessory addSubview:linear];
     MyLinearLayout *_layoutAccessoryBottom = linear;
     
@@ -758,7 +758,7 @@
     linear.leadingPos.equalTo(_layoutPortrait.trailingPos);
     linear.trailingPos.equalTo(_layoutAccessory.leadingPos);
     linear.gravity = MyGravity_Vert_Center;
-    linear.subviewVSpace = 8.0f;
+    linear.subviewVSpacing = 8.0f;
     [_layoutRoot addSubview:linear];
     MyLinearLayout * _layoutContent = linear;
     
@@ -801,7 +801,7 @@
     linear = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     linear.widthSize.equalTo(_layoutContent.widthSize);
     linear.myHeight = MyLayoutSize.wrap;
-    linear.subviewHSpace = 2.0f;
+    linear.subviewHSpacing = 2.0f;
     [_layoutContent addSubview:linear];
     MyLinearLayout *_layoutSummary = linear;
     
@@ -861,7 +861,7 @@
 {
     MyRelativeLayout *_rootLayout = [MyRelativeLayout new];
     
-    _rootLayout.wrapContentHeight = YES;
+    _rootLayout.myHeight = MyLayoutSize.wrap;
     _rootLayout.paddingTop = 15;
     _rootLayout.paddingBottom = 15;
     _rootLayout.backgroundColor = [UIColor whiteColor];
@@ -870,10 +870,9 @@
     
     MyLinearLayout *topLayout = [MyLinearLayout linearLayoutWithOrientation:(MyOrientation_Vert)];
     
-    topLayout.wrapContentWidth = YES;
     topLayout.myHorzMargin = 0;
-    topLayout.wrapContentHeight = YES;
-    topLayout.subviewVSpace = 5;
+    topLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    topLayout.subviewVSpacing = 5;
     [_rootLayout addSubview:topLayout];
     
     
@@ -881,7 +880,7 @@
     topLable.text = @"宿州学院-皁阳火车站";
     topLable.myTop = 0;
     topLable.myLeft = 11;
-    topLable.wrapContentSize = YES;
+    topLable.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [topLayout addSubview:topLable];
     
     
@@ -898,7 +897,7 @@
     contentLabel.text = @"途径：蒙城、嘎县、阜阳师范学院、嘎县、阜阳师范学院、嘎县、阜阳师范学院";
     contentLabel.myLeft = 11;
     
-    contentLabel.wrapContentHeight= YES;
+    contentLabel.myHeight = MyLayoutSize.wrap;
     contentLabel.myRight = 27;
     contentLabel.hidden = NO;
     [topLayout addSubview:contentLabel];
@@ -992,7 +991,7 @@
     [bgLayout addSubview:assetsLayout];
     assetsLayout.myHorzMargin = 0;
     assetsLayout.paddingLeft = 1.8 * ten_margin;
-    assetsLayout.wrapContentHeight = YES;
+    assetsLayout.myHeight = MyLayoutSize.wrap;
     
     ///总资产Lab
     UILabel *assetsLab = [UILabel new];
@@ -1016,7 +1015,7 @@
     principalLayout.myHorzMargin = 0;
     principalLayout.paddingTop = 1.5 * ten_margin;
     principalLayout.paddingLeft = 1.8 * ten_margin;
-    principalLayout.wrapContentHeight = YES;
+    principalLayout.myHeight = MyLayoutSize.wrap;
     [bgLayout addSubview:principalLayout];
     
     ///待收本金
@@ -1075,7 +1074,7 @@
     incomeLayout.myHorzMargin = 0;
     incomeLayout.paddingTop = 2 * ten_margin;
     incomeLayout.paddingLeft = 1.8 * ten_margin;
-    incomeLayout.wrapContentHeight = YES;
+    incomeLayout.myHeight = MyLayoutSize.wrap;
     [animLayout addSubview:incomeLayout];
     
     ///待收收益
@@ -1109,7 +1108,7 @@
     totalLoanLayout.myHorzMargin = 0;
     totalLoanLayout.paddingTop = 2 * ten_margin;
     totalLoanLayout.paddingLeft = 1.8 * ten_margin;
-    totalLoanLayout.wrapContentHeight = YES;
+    totalLoanLayout.myHeight = MyLayoutSize.wrap;
     [animLayout addSubview:totalLoanLayout];
     
     ///累积出借总额
@@ -1127,7 +1126,7 @@
     
     ///点击布局
     MyLinearLayout *stretchLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
-    stretchLayout.wrapContentHeight = YES;
+    stretchLayout.myHeight = MyLayoutSize.wrap;
     //    stretchLayout.heightSize.equalTo(@100);
     stretchLayout.widthSize.equalTo(rootLayout);
     stretchLayout.paddingTop = stretchLayout.paddingBottom = 1.2 * ten_margin;
@@ -1386,7 +1385,7 @@
     MyLinearLayout *headerLayout = [MyLinearLayout linearLayoutWithOrientation:(MyOrientation_Horz)];
     headerLayout.topPos.equalTo(rootLayout.topPos);
     headerLayout.leftPos.equalTo(rootLayout.leftPos);
-    headerLayout.wrapContentHeight = YES;
+    headerLayout.myHeight = MyLayoutSize.wrap;
     [rootLayout addSubview:headerLayout];
     
     UIImageView *headerView = UIImageView.alloc.init;
@@ -1486,7 +1485,7 @@
     _layoutRoot.myTop =
     _layoutRoot.myLeft =
     _layoutRoot.myRight = 0;
-    _layoutRoot.wrapContentHeight = YES;
+    _layoutRoot.myHeight = MyLayoutSize.wrap;
     _layoutRoot.paddingBottom = 12;
    // _layoutRoot.backgroundColor = [UIColor whiteColor];
     //_layoutRoot.clipsToBounds = YES;

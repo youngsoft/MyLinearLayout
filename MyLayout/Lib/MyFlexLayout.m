@@ -74,14 +74,15 @@ const int MyFlex_Auto = -1;
 }
 
 - (CGFloat)width {
-    if (self.view.widthSizeInner.isWrap) {
+    MyViewTraitsImpl *viewTraits = self.view.myDefaultTraitsInner;
+    if (viewTraits.widthSizeInner.isWrap) {
         return MyLayoutSize.wrap;
-    } else if (self.view.widthSizeInner.isFill) {
-        return self.view.widthSizeInner.multiVal == 1 ? MyLayoutSize.fill : self.view.widthSizeInner.multiVal;
-    } else if (self.view.widthSizeInner != nil && self.view.widthSizeInner.valType == MyLayoutValType_Nil) {
+    } else if (viewTraits.widthSizeInner.isFill) {
+        return viewTraits.widthSizeInner.multiVal == 1 ? MyLayoutSize.fill : viewTraits.widthSizeInner.multiVal;
+    } else if (viewTraits.widthSizeInner != nil && viewTraits.widthSizeInner.valType == MyLayoutValType_Nil) {
         return MyLayoutSize.empty;
-    } else if (self.view.widthSizeInner.numberVal != nil) {
-        return self.view.widthSizeInner.numberVal.doubleValue;
+    } else if (viewTraits.widthSizeInner.numberVal != nil) {
+        return viewTraits.widthSizeInner.numberVal.doubleValue;
     } else {
         return MyLayoutSize.wrap;
     }
@@ -96,14 +97,15 @@ const int MyFlex_Auto = -1;
 }
 
 - (CGFloat)height {
-    if (self.view.heightSizeInner.isWrap) {
+    MyViewTraitsImpl *viewTraits = self.view.myDefaultTraitsInner;
+    if (viewTraits.heightSizeInner.isWrap) {
         return MyLayoutSize.wrap;
-    } else if (self.view.heightSizeInner.isFill) {
-        return self.view.heightSizeInner.multiVal == 1 ? MyLayoutSize.fill : self.view.heightSizeInner.multiVal;
-    } else if (self.view.heightSizeInner != nil && self.view.heightSizeInner.valType == MyLayoutValType_Nil) {
+    } else if (viewTraits.heightSizeInner.isFill) {
+        return viewTraits.heightSizeInner.multiVal == 1 ? MyLayoutSize.fill : viewTraits.heightSizeInner.multiVal;
+    } else if (viewTraits.heightSizeInner != nil && viewTraits.heightSizeInner.valType == MyLayoutValType_Nil) {
         return MyLayoutSize.empty;
-    } else if (self.view.heightSizeInner.numberVal != nil) {
-        return self.view.heightSizeInner.numberVal.doubleValue;
+    } else if (viewTraits.heightSizeInner.numberVal != nil) {
+        return viewTraits.heightSizeInner.numberVal.doubleValue;
     } else {
         return MyLayoutSize.wrap;
     }
@@ -129,8 +131,8 @@ const int MyFlex_Auto = -1;
 @property (nonatomic, assign) MyFlexGravity align_content;
 @property (nonatomic, assign) NSInteger item_size;
 @property (nonatomic, assign) UIEdgeInsets padding;
-@property (nonatomic, assign) CGFloat vert_space;
-@property (nonatomic, assign) CGFloat horz_space;
+@property (nonatomic, assign) CGFloat vert_spacing;
+@property (nonatomic, assign) CGFloat horz_spacing;
 @end
 
 @implementation MyFlexBoxAttrs
@@ -198,20 +200,20 @@ const int MyFlex_Auto = -1;
     ((MyFlexLayout *)self.view).padding = padding;
 }
 
-- (CGFloat)vert_space {
-    return ((MyFlexLayout *)self.view).subviewVSpace;
+- (CGFloat)vert_spacing {
+    return ((MyFlexLayout *)self.view).subviewVSpacing;
 }
 
-- (void)setVert_space:(CGFloat)vert_space {
-    ((MyFlexLayout *)self.view).subviewVSpace = vert_space;
+- (void)setVert_spacing:(CGFloat)vert_spacing {
+    ((MyFlexLayout *)self.view).subviewVSpacing = vert_spacing;
 }
 
-- (CGFloat)horz_space {
-    return ((MyFlexLayout *)self.view).subviewHSpace;
+- (CGFloat)horz_spacing {
+    return ((MyFlexLayout *)self.view).subviewHSpacing;
 }
 
-- (void)setHorz_space:(CGFloat)horz_space {
-    ((MyFlexLayout *)self.view).subviewHSpace = horz_space;
+- (void)setHorz_spacing:(CGFloat)horz_spacing {
+    ((MyFlexLayout *)self.view).subviewHSpacing = horz_spacing;
 }
 
 @end
@@ -488,16 +490,16 @@ const int MyFlex_Auto = -1;
     };
 }
 
-- (id<MyFlexBox> (^)(CGFloat))vert_space {
+- (id<MyFlexBox> (^)(CGFloat))vert_spacing {
     return ^id(CGFloat val) {
-        ((MyFlexLayout *)self.view).subviewVSpace = val;
+        ((MyFlexLayout *)self.view).subviewVSpacing = val;
         return self;
     };
 }
 
-- (id<MyFlexBox> (^)(CGFloat))horz_space {
+- (id<MyFlexBox> (^)(CGFloat))horz_spacing {
     return ^id(CGFloat val) {
-        ((MyFlexLayout *)self.view).subviewHSpace = val;
+        ((MyFlexLayout *)self.view).subviewHSpacing = val;
         return self;
     };
 }
@@ -530,10 +532,11 @@ const int MyFlex_Auto = -1;
 - (instancetype)init {
     self = [super init];
     if (self != nil) {
-        self.orientation = MyOrientation_Vert; //默认row
-        self.arrangedCount = NSIntegerMax;     //默认单行
-        self.isFlex = YES;                     //满足flexbox的需求。
-        self.lastlineGravityPolicy = MyGravityPolicy_Always;
+        MyFlowLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
+        layoutTraits.orientation = MyOrientation_Vert; //默认row
+        layoutTraits.arrangedCount = NSIntegerMax;     //默认单行
+        layoutTraits.isFlex = YES;                     //满足flexbox的需求。
+        layoutTraits.lastlineGravityPolicy = MyGravityPolicy_Always;
 
         MyFlexBoxAttrs *attrs = [MyFlexBoxAttrs new];
         attrs.view = self;
@@ -544,7 +547,7 @@ const int MyFlex_Auto = -1;
 
 - (CGSize)calcLayoutSize:(CGSize)size subviewEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines context:(MyLayoutContext *)context {
     //将flexbox中的属性映射为MyFlowLayout中的属性。
-    MyFlowLayoutTraits *layoutTraits = (MyFlowLayoutTraits*)context->layoutViewEngine.currentSizeClass;
+    MyFlowLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
     if (context->subviewEngines == nil) {
         context->subviewEngines = [layoutTraits filterEngines:subviewEngines];
     }
@@ -590,11 +593,11 @@ const int MyFlex_Auto = -1;
     //按order排序。
     [context->subviewEngines sortWithOptions:NSSortStable
          usingComparator:^NSComparisonResult(MyLayoutEngine *_Nonnull obj1, MyLayoutEngine *_Nonnull obj2) {
-            return obj1.currentSizeClass.view.myFlex.attrs.order - obj2.currentSizeClass.view.myFlex.attrs.order;
+            return obj1.currentTraits.view.myFlex.attrs.order - obj2.currentTraits.view.myFlex.attrs.order;
          }];
 
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
-        MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+        MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
         id<MyFlexItem> flexItem = subviewTraits.view.myFlex;
 
         //flex_grow，如果子视图有设置grow则父视图的换行不起作用。
@@ -690,6 +693,13 @@ const int MyFlex_Auto = -1;
                 layoutTraits.gravity = MyGravity_Vert_Around | horzGravity;
             }
             break;
+        case MyFlexGravity_Space_Evenly:
+            if (layoutTraits.orientation == MyOrientation_Vert) {
+                layoutTraits.gravity = MyGravity_Horz_Among | vertGravity;
+            } else {
+                layoutTraits.gravity = MyGravity_Vert_Among | horzGravity;
+            }
+            break;
         case MyFlexGravity_Flex_Start:
             if (layoutTraits.orientation == MyOrientation_Vert) {
                 layoutTraits.gravity = MyGravity_Horz_Leading | vertGravity;
@@ -772,6 +782,13 @@ const int MyFlex_Auto = -1;
                 layoutTraits.gravity = MyGravity_Horz_Around | vertGravity;
             } else {
                 layoutTraits.gravity = MyGravity_Vert_Around | horzGravity;
+            }
+            break;
+        case MyFlexGravity_Space_Evenly:
+            if (layoutTraits.orientation == MyOrientation_Horz) {
+                layoutTraits.gravity = MyGravity_Horz_Among | vertGravity;
+            } else {
+                layoutTraits.gravity = MyGravity_Vert_Among | horzGravity;
             }
             break;
         case MyFlexGravity_Flex_Start:

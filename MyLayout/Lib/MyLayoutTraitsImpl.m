@@ -6,17 +6,24 @@
 //  Copyright © 2016年 YoungSoft. All rights reserved.
 //
 
-#import "MyLayoutSizeClass.h"
-#import "MyGridNode.h"
+#import "MyLayoutTraitsImpl.h"
 #import "MyLayoutPosInner.h"
 #import "MyLayoutSizeInner.h"
 
 
+@interface MyLayoutEngine()
+
+@property (nonatomic, readonly, strong) Class traitsClass;
+
+@end
+
 @implementation MyLayoutEngine
 
-- (id)init {
-    self = [super init];
+
+-(instancetype)initWithTraitsClass:(Class)traitsClass {
+    self = [self init];
     if (self != nil) {
+        _traitsClass = traitsClass;
         _leading = CGFLOAT_MAX;
         _trailing = CGFLOAT_MAX;
         _top = CGFLOAT_MAX;
@@ -24,7 +31,6 @@
         _width = CGFLOAT_MAX;
         _height = CGFLOAT_MAX;
     }
-
     return self;
 }
 
@@ -69,55 +75,57 @@
 }
 
 - (BOOL)multiple {
-    return self.sizeClasses.count > 1;
+    return self.traitsDict.count > 1;
 }
+
+
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"leading:%g, top:%g, width:%g, height:%g, trailing:%g, bottom:%g", _leading, _top, _width, _height, _trailing, _bottom];
 }
 
-- (MyViewTraits *)fetchView:(UIView *)view layoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass {
-    MyViewTraits *viewTraits = nil;
-    if (self.sizeClasses == nil) {
-        self.sizeClasses = [NSMutableDictionary new];
+- (MyViewTraitsImpl *)fetchView:(UIView *)view traitsInSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass {
+    MyViewTraitsImpl *viewTraits = nil;
+    if (self.traitsDict == nil) {
+        self.traitsDict = [NSMutableDictionary new];
     } else {
-      viewTraits = (MyViewTraits *)[self.sizeClasses objectForKey:@(sizeClass)];
+      viewTraits = (MyViewTraitsImpl *)[self.traitsDict objectForKey:@(sizeClass)];
     }
      
     if (viewTraits == nil) {
-        MyViewTraits *srcTraits = (MyViewTraits *)[self.sizeClasses objectForKey:@(srcSizeClass)];
+        MyViewTraitsImpl *srcTraits = (MyViewTraitsImpl *)[self.traitsDict objectForKey:@(srcSizeClass)];
         if (srcTraits == nil) {
-            viewTraits = [view createSizeClassInstance];
+            viewTraits =   [self.traitsClass new];
         } else {
             viewTraits = [srcTraits copy];
         }
         viewTraits.view = view;
-        [self.sizeClasses setObject:viewTraits forKey:@(sizeClass)];
+        [self.traitsDict setObject:viewTraits forKey:@(sizeClass)];
     }
     return viewTraits;
 }
 
-- (MyViewTraits *)fetchView:(UIView *)view bestLayoutSizeClass:(MySizeClass)sizeClass {
+- (MyViewTraitsImpl *)fetchView:(UIView *)view bestTraitsAt:(MySizeClass)sizeClass {
 
     MySizeClass wscType = sizeClass & 0x03;
     MySizeClass hscType = sizeClass & 0x0C;
     MySizeClass oriType = sizeClass & 0xC0;
 
-    if (self.sizeClasses == nil) {
-        self.sizeClasses = [NSMutableDictionary new];
+    if (self.traitsDict == nil) {
+        self.traitsDict = [NSMutableDictionary new];
     }
     MySizeClass searchType;
-    MyViewTraits *viewTraits = nil;
-    if (self.sizeClasses.count > 1) {
+    MyViewTraitsImpl *viewTraits = nil;
+    if (self.traitsDict.count > 1) {
         //first search the most exact SizeClass
         searchType = wscType | hscType | oriType;
-        viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+        viewTraits = [self.traitsDict objectForKey:@(searchType)];
         if (viewTraits != nil) {
             return viewTraits;
         }
         searchType = wscType | hscType;
         if (searchType != sizeClass) {
-            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            viewTraits = [self.traitsDict objectForKey:@(searchType)];
             if (viewTraits != nil) {
                 return viewTraits;
             }
@@ -125,7 +133,7 @@
 
         searchType = MySizeClass_wAny | hscType | oriType;
         if (oriType != 0 && searchType != sizeClass) {
-            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            viewTraits = [self.traitsDict objectForKey:@(searchType)];
             if (viewTraits != nil) {
                 return viewTraits;
             }
@@ -133,7 +141,7 @@
 
         searchType = MySizeClass_wAny | hscType;
         if (searchType != sizeClass) {
-            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            viewTraits = [self.traitsDict objectForKey:@(searchType)];
             if (viewTraits != nil) {
                 return viewTraits;
             }
@@ -141,7 +149,7 @@
 
         searchType = wscType | MySizeClass_hAny | oriType;
         if (oriType != 0 && searchType != sizeClass) {
-            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            viewTraits = [self.traitsDict objectForKey:@(searchType)];
             if (viewTraits != nil) {
                 return viewTraits;
             }
@@ -149,7 +157,7 @@
 
         searchType = wscType | MySizeClass_hAny;
         if (searchType != sizeClass) {
-            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            viewTraits = [self.traitsDict objectForKey:@(searchType)];
             if (viewTraits != nil) {
                 return viewTraits;
             }
@@ -157,7 +165,7 @@
 
         searchType = MySizeClass_wAny | MySizeClass_hAny | oriType;
         if (oriType != 0 && searchType != sizeClass) {
-            viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+            viewTraits = [self.traitsDict objectForKey:@(searchType)];
             if (viewTraits != nil) {
                 return viewTraits;
             }
@@ -165,18 +173,18 @@
     }
 
     searchType = MySizeClass_wAny | MySizeClass_hAny;
-    viewTraits = [self.sizeClasses objectForKey:@(searchType)];
+    viewTraits = [self.traitsDict objectForKey:@(searchType)];
     if (viewTraits == nil) {
-        viewTraits = [view createSizeClassInstance];
+        viewTraits = [self.traitsClass new];
         viewTraits.view = view;
-        [self.sizeClasses setObject:viewTraits forKey:@(searchType)];
+        [self.traitsDict setObject:viewTraits forKey:@(searchType)];
     }
     return viewTraits;
 }
 
-- (void)setView:(UIView *)view layoutSizeClass:(MySizeClass)sizeClass withTraits:(MyViewTraits *)traits {
-    if (self.sizeClasses == nil) {
-        self.sizeClasses = [NSMutableDictionary new];
+- (void)setView:(UIView *)view newTraits:(__kindof MyViewTraitsImpl* )traits at:(MySizeClass)sizeClass {
+    if (self.traitsDict == nil) {
+        self.traitsDict = [NSMutableDictionary new];
     }
     traits.view = view;
     traits.topPosInner.view = view;
@@ -189,16 +197,34 @@
     traits.widthSizeInner.view = view;
     traits.heightSizeInner.view = view;
     
-    [self.sizeClasses setObject:traits forKey:@(sizeClass)];
+    [self.traitsDict setObject:traits forKey:@(sizeClass)];
 }
 
 
 @end
 
 
-@implementation MyViewTraits
+@implementation MyViewTraitsImpl
+
+@synthesize topPos = _topPos;
+@synthesize leadingPos = _leadingPos;
+@synthesize bottomPos = _bottomPos;
+@synthesize trailingPos = _trailingPos;
+@synthesize centerXPos = _centerXPos;
+@synthesize centerYPos = _centerYPos;
+@synthesize baselinePos = _baselinePos;
+@synthesize widthSize = _widthSize;
+@synthesize heightSize = _heightSize;
+@synthesize useFrame;
+@synthesize noLayout;
+@synthesize visibility;
+@synthesize alignment;
+@synthesize weight = _weight;
+@synthesize reverseFloat;
+@synthesize clearFloat;
 
 BOOL _myisRTL = NO;
+
 
 + (BOOL)isRTL {
     return _myisRTL;
@@ -208,124 +234,62 @@ BOOL _myisRTL = NO;
     _myisRTL = isRTL;
 }
 
-- (id)init {
-    return [super init];
-}
 
-- (MyLayoutPos *)topPosInner {
-    return _topPos;
-}
-
-- (MyLayoutPos *)leadingPosInner {
-    return _leadingPos;
-}
-
-- (MyLayoutPos *)bottomPosInner {
-    return _bottomPos;
-}
-
-- (MyLayoutPos *)trailingPosInner {
-    return _trailingPos;
-}
-
-- (MyLayoutPos *)centerXPosInner {
-    return _centerXPos;
-}
-
-- (MyLayoutPos *)centerYPosInner {
-    return _centerYPos;
-}
-
-- (MyLayoutPos *)leftPosInner {
-    return [MyViewTraits isRTL] ? self.trailingPosInner : self.leadingPosInner;
-}
-
-- (MyLayoutPos *)rightPosInner {
-    return [MyViewTraits isRTL] ? self.leadingPosInner : self.trailingPosInner;
-}
-
-- (MyLayoutPos *)baselinePosInner {
-    return _baselinePos;
-}
-
-- (MyLayoutSize *)widthSizeInner {
-    return _widthSize;
-}
-
-- (MyLayoutSize *)heightSizeInner {
-    return _heightSize;
-}
-
-//..
+//接口实现
 
 - (MyLayoutPos *)topPos {
     if (_topPos == nil) {
-        _topPos = [MyLayoutPos new];
-        _topPos.view = self.view;
-        _topPos.anchorType = MyLayoutAnchorType_Top;
+        _topPos = [[MyLayoutPos alloc] initWithView:self.view anchorType:MyLayoutAnchorType_Top];
     }
     return _topPos;
 }
 
 - (MyLayoutPos *)leadingPos {
     if (_leadingPos == nil) {
-        _leadingPos = [MyLayoutPos new];
-        _leadingPos.view = self.view;
-        _leadingPos.anchorType = MyLayoutAnchorType_Leading;
+        _leadingPos = [[MyLayoutPos alloc] initWithView:self.view anchorType:MyLayoutAnchorType_Leading];
     }
-
     return _leadingPos;
 }
 
 - (MyLayoutPos *)bottomPos {
     if (_bottomPos == nil) {
-        _bottomPos = [MyLayoutPos new];
-        _bottomPos.view = self.view;
-        _bottomPos.anchorType = MyLayoutAnchorType_Bottom;
+        _bottomPos = [[MyLayoutPos alloc] initWithView:self.view anchorType:MyLayoutAnchorType_Bottom];
     }
     return _bottomPos;
 }
 
 - (MyLayoutPos *)trailingPos {
     if (_trailingPos == nil) {
-        _trailingPos = [MyLayoutPos new];
-        _trailingPos.view = self.view;
-        _trailingPos.anchorType = MyLayoutAnchorType_Trailing;
+        _trailingPos = [[MyLayoutPos alloc] initWithView:self.view anchorType:MyLayoutAnchorType_Trailing];
     }
     return _trailingPos;
 }
 
 - (MyLayoutPos *)centerXPos {
     if (_centerXPos == nil) {
-        _centerXPos = [MyLayoutPos new];
-        _centerXPos.view = self.view;
-        _centerXPos.anchorType = MyLayoutAnchorType_CenterX;
+        _centerXPos = [[MyLayoutPos alloc] initWithView:self.view anchorType:MyLayoutAnchorType_CenterX];
     }
     return _centerXPos;
 }
 
 - (MyLayoutPos *)centerYPos {
     if (_centerYPos == nil) {
-        _centerYPos = [MyLayoutPos new];
-        _centerYPos.view = self.view;
-        _centerYPos.anchorType = MyLayoutAnchorType_CenterY;
+        _centerYPos = [[MyLayoutPos alloc] initWithView:self.view anchorType:MyLayoutAnchorType_CenterY];
     }
     return _centerYPos;
 }
 
 - (MyLayoutPos *)leftPos {
-    return [MyViewTraits isRTL] ? self.trailingPos : self.leadingPos;
+    return [MyViewTraitsImpl isRTL] ? self.trailingPos : self.leadingPos;
 }
 
 - (MyLayoutPos *)rightPos {
-    return [MyViewTraits isRTL] ? self.leadingPos : self.trailingPos;
+    return [MyViewTraitsImpl isRTL] ? self.leadingPos : self.trailingPos;
 }
 
 - (MyLayoutPos *)baselinePos {
     if (_baselinePos == nil) {
-        _baselinePos = [MyLayoutPos new];
-        _baselinePos.view = self.view;
-        _baselinePos.anchorType = MyLayoutAnchorType_Baseline;
+        _baselinePos = [[MyLayoutPos alloc] initWithView:self.view anchorType:MyLayoutAnchorType_Baseline];
     }
     return _baselinePos;
 }
@@ -434,18 +398,14 @@ BOOL _myisRTL = NO;
 
 - (MyLayoutSize *)widthSize {
     if (_widthSize == nil) {
-        _widthSize = [MyLayoutSize new];
-        _widthSize.view = self.view;
-        _widthSize.anchorType = MyLayoutAnchorType_Width;
+        _widthSize = [[MyLayoutSize alloc] initWithView:self.view anchorType:MyLayoutAnchorType_Width];
     }
     return _widthSize;
 }
 
 - (MyLayoutSize *)heightSize {
     if (_heightSize == nil) {
-        _heightSize = [MyLayoutSize new];
-        _heightSize.view = self.view;
-        _heightSize.anchorType = MyLayoutAnchorType_Height;
+        _heightSize = [[MyLayoutSize alloc] initWithView:self.view anchorType:MyLayoutAnchorType_Height];
     }
     return _heightSize;
 }
@@ -535,6 +495,51 @@ BOOL _myisRTL = NO;
     self.wrapContentWidth = self.wrapContentHeight = wrapContentSize;
 }
 
+- (MyLayoutPos *)topPosInner {
+    return _topPos;
+}
+
+- (MyLayoutPos *)leadingPosInner {
+    return _leadingPos;
+}
+
+- (MyLayoutPos *)bottomPosInner {
+    return _bottomPos;
+}
+
+- (MyLayoutPos *)trailingPosInner {
+    return _trailingPos;
+}
+
+- (MyLayoutPos *)centerXPosInner {
+    return _centerXPos;
+}
+
+- (MyLayoutPos *)centerYPosInner {
+    return _centerYPos;
+}
+
+- (MyLayoutPos *)leftPosInner {
+    return [MyViewTraitsImpl isRTL] ? self.trailingPosInner : self.leadingPosInner;
+}
+
+- (MyLayoutPos *)rightPosInner {
+    return [MyViewTraitsImpl isRTL] ? self.leadingPosInner : self.trailingPosInner;
+}
+
+- (MyLayoutPos *)baselinePosInner {
+    return _baselinePos;
+}
+
+- (MyLayoutSize *)widthSizeInner {
+    return _widthSize;
+}
+
+- (MyLayoutSize *)heightSizeInner {
+    return _heightSize;
+}
+
+
 - (NSString *)debugDescription {
     NSString *dbgDesc = [NSString stringWithFormat:@"\nView:\n%@\n%@\n%@\n%@\n%@\n%@\n%@\n%@\nweight=%f\nuseFrame=%@\nnoLayout=%@\nvisibility=%c\nalignment=%hu\nreverseFloat=%@\nclearFloat=%@",
                                                    self.topPosInner,
@@ -559,7 +564,7 @@ BOOL _myisRTL = NO;
 #pragma mark-- NSCopying
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyViewTraits *layoutTraits = [[[self class] allocWithZone:zone] init];
+    MyViewTraitsImpl *layoutTraits = [[[self class] allocWithZone:zone] init];
 
     //这里不会复制hidden属性
     layoutTraits->_view = _view;
@@ -646,7 +651,7 @@ BOOL _myisRTL = NO;
 
 - (MyGravity)finalHorzGravityFrom:(MyGravity)layoutHorzGravity {
     MyGravity finalHorzGravity = MyGravity_Horz_Leading;
-    MyGravity horzAlignment = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(self.alignment)];
+    MyGravity horzAlignment = [MyViewTraitsImpl convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(self.alignment)];
     if (layoutHorzGravity != MyGravity_None) {
         finalHorzGravity = layoutHorzGravity;
         if (horzAlignment != MyGravity_None) {
@@ -675,14 +680,27 @@ BOOL _myisRTL = NO;
 
 @end
 
-@implementation MyLayoutTraits
+@implementation MyLayoutTraitsImpl
+
+@synthesize zeroPadding = _zeroPadding;
+@synthesize reverseLayout;
+@synthesize layoutTransform = _layoutTransform;
+@synthesize gravity;
+@synthesize insetLandscapeFringePadding;
+@synthesize paddingTop;
+@synthesize paddingLeading;
+@synthesize paddingBottom;
+@synthesize paddingTrailing;
+@synthesize insetsPaddingFromSafeArea = _insetsPaddingFromSafeArea;
+@synthesize subviewVSpacing;
+@synthesize subviewHSpacing;
+
 
 - (id)init {
     self = [super init];
     if (self != nil) {
         _zeroPadding = YES;
         _insetsPaddingFromSafeArea = UIRectEdgeLeft | UIRectEdgeRight;
-        _insetLandscapeFringePadding = NO;
         _layoutTransform = CGAffineTransformIdentity;
     }
     return self;
@@ -700,11 +718,11 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)paddingLeft {
-    return [MyViewTraits isRTL] ? self.paddingTrailing : self.paddingLeading;
+    return [MyViewTraitsImpl isRTL] ? self.paddingTrailing : self.paddingLeading;
 }
 
 - (void)setPaddingLeft:(CGFloat)paddingLeft {
-    if ([MyViewTraits isRTL]) {
+    if ([MyViewTraitsImpl isRTL]) {
         self.paddingTrailing = paddingLeft;
     } else {
         self.paddingLeading = paddingLeft;
@@ -712,11 +730,11 @@ BOOL _myisRTL = NO;
 }
 
 - (CGFloat)paddingRight {
-    return [MyViewTraits isRTL] ? self.paddingLeading : self.paddingTrailing;
+    return [MyViewTraitsImpl isRTL] ? self.paddingLeading : self.paddingTrailing;
 }
 
 - (void)setPaddingRight:(CGFloat)paddingRight {
-    if ([MyViewTraits isRTL]) {
+    if ([MyViewTraitsImpl isRTL]) {
         self.paddingLeading = paddingRight;
     } else {
         self.paddingTrailing = paddingRight;
@@ -753,9 +771,9 @@ BOOL _myisRTL = NO;
     }
 
     CGFloat inset = 0;
-    UIRectEdge edge = [MyViewTraits isRTL] ? UIRectEdgeRight : UIRectEdgeLeft;
+    UIRectEdge edge = [MyViewTraitsImpl isRTL] ? UIRectEdgeRight : UIRectEdgeLeft;
 #if TARGET_OS_IOS
-    UIDeviceOrientation devori = [MyViewTraits isRTL] ? UIDeviceOrientationLandscapeLeft : UIDeviceOrientationLandscapeRight;
+    UIDeviceOrientation devori = [MyViewTraitsImpl isRTL] ? UIDeviceOrientationLandscapeLeft : UIDeviceOrientationLandscapeRight;
 #endif
     if ((self.insetsPaddingFromSafeArea & edge) == edge) {
 #if TARGET_OS_IOS
@@ -766,7 +784,7 @@ BOOL _myisRTL = NO;
             inset = 0;
         } else
 #endif
-            inset = [MyViewTraits isRTL] ? self.view.safeAreaInsets.right : self.view.safeAreaInsets.left;
+            inset = [MyViewTraitsImpl isRTL] ? self.view.safeAreaInsets.right : self.view.safeAreaInsets.left;
     }
     return self.paddingLeading + inset;
 }
@@ -777,9 +795,9 @@ BOOL _myisRTL = NO;
     }
 
     CGFloat inset = 0;
-    UIRectEdge edge = [MyViewTraits isRTL] ? UIRectEdgeLeft : UIRectEdgeRight;
+    UIRectEdge edge = [MyViewTraitsImpl isRTL] ? UIRectEdgeLeft : UIRectEdgeRight;
 #if TARGET_OS_IOS
-    UIDeviceOrientation devori = [MyViewTraits isRTL] ? UIDeviceOrientationLandscapeRight : UIDeviceOrientationLandscapeLeft;
+    UIDeviceOrientation devori = [MyViewTraitsImpl isRTL] ? UIDeviceOrientationLandscapeRight : UIDeviceOrientationLandscapeLeft;
 #endif
     if ((self.insetsPaddingFromSafeArea & edge) == edge) {
 #if TARGET_OS_IOS
@@ -790,29 +808,29 @@ BOOL _myisRTL = NO;
             inset = 0;
         } else
 #endif
-            inset = [MyViewTraits isRTL] ? self.view.safeAreaInsets.left : self.view.safeAreaInsets.right;
+            inset = [MyViewTraitsImpl isRTL] ? self.view.safeAreaInsets.left : self.view.safeAreaInsets.right;
     }
     return self.paddingTrailing + inset;
 }
 
 - (CGFloat)myLayoutPaddingLeft {
-    return [MyViewTraits isRTL] ? [self myLayoutPaddingTrailing] : [self myLayoutPaddingLeading];
+    return [MyViewTraitsImpl isRTL] ? [self myLayoutPaddingTrailing] : [self myLayoutPaddingLeading];
 }
 - (CGFloat)myLayoutPaddingRight {
-    return [MyViewTraits isRTL] ? [self myLayoutPaddingLeading] : [self myLayoutPaddingTrailing];
+    return [MyViewTraitsImpl isRTL] ? [self myLayoutPaddingLeading] : [self myLayoutPaddingTrailing];
 }
 
-- (CGFloat)subviewSpace {
-    return self.subviewVSpace;
+- (CGFloat)subviewSpacing {
+    return self.subviewVSpacing;
 }
 
-- (void)setSubviewSpace:(CGFloat)subviewSpace {
-    self.subviewVSpace = subviewSpace;
-    self.subviewHSpace = subviewSpace;
+- (void)setSubviewSpacing:(CGFloat)subviewSpacing {
+    self.subviewVSpacing = subviewSpacing;
+    self.subviewHSpacing = subviewSpacing;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    MyLayoutTraitsImpl *layoutTraits = [super copyWithZone:zone];
     layoutTraits.paddingTop = self.paddingTop;
     layoutTraits.paddingLeading = self.paddingLeading;
     layoutTraits.paddingBottom = self.paddingBottom;
@@ -823,22 +841,22 @@ BOOL _myisRTL = NO;
     layoutTraits.gravity = self.gravity;
     layoutTraits.reverseLayout = self.reverseLayout;
     layoutTraits.layoutTransform = self.layoutTransform;
-    layoutTraits.subviewVSpace = self.subviewVSpace;
-    layoutTraits.subviewHSpace = self.subviewHSpace;
+    layoutTraits.subviewVSpacing = self.subviewVSpacing;
+    layoutTraits.subviewHSpacing = self.subviewHSpacing;
 
     return layoutTraits;
 }
 
 - (NSString *)debugDescription {
     NSString *dbgDesc = [super debugDescription];
-    dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nzeroPadding=%@\ngravity=%hu\nreverseLayout=%@\nsubviewVertSpace=%f\nsubviewHorzSpace=%f",
+    dbgDesc = [NSString stringWithFormat:@"%@\nLayout:\npadding=%@\nzeroPadding=%@\ngravity=%hu\nreverseLayout=%@\nsubviewVertSpacing=%f\nsubviewHorzSpacing=%f",
                                          dbgDesc,
                                          NSStringFromUIEdgeInsets(self.padding),
                                          self.zeroPadding ? @"YES" : @"NO",
                                          self.gravity,
                                          self.reverseLayout ? @"YES" : @"NO",
-                                         self.subviewVSpace,
-                                         self.subviewHSpace];
+                                         self.subviewVSpacing,
+                                         self.subviewHSpacing];
 
     return dbgDesc;
 }
@@ -848,10 +866,11 @@ BOOL _myisRTL = NO;
 - (NSMutableArray<MyLayoutEngine *> *)filterEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines {
     
     if (subviewEngines == nil) {
-        subviewEngines = [NSMutableArray arrayWithCapacity:self.view.subviews.count];
-        for (UIView *subview in self.view.subviews) {
-            [subviewEngines addObject:subview.myEngine];
-        }
+        NSAssert(NO, @"oops!");
+//        subviewEngines = [NSMutableArray arrayWithCapacity:self.view.subviews.count];
+//        for (UIView *subview in self.view.subviews) {
+//            [subviewEngines addObject:subview.myEngine];
+//        }
     }
     
     NSInteger count = subviewEngines.count;
@@ -863,7 +882,7 @@ BOOL _myisRTL = NO;
     }
     
     for (NSInteger i = count - 1; i >= 0; i--) {
-        MyViewTraits *subviewTraits = subviewEngines[i].currentSizeClass;
+        MyViewTraitsImpl *subviewTraits = subviewEngines[i].currentTraits;
         if ([subviewTraits invalid]) {
             [subviewEngines removeObjectAtIndex:i];
         }
@@ -877,72 +896,74 @@ BOOL _myisRTL = NO;
 
 @implementation MySequentLayoutFlexSpacing
 
-- (CGFloat)calcMaxMinSubviewSizeForContent:(CGFloat)selfSize paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding space:(CGFloat *)pSpace {
-    CGFloat subviewSize = self.subviewSize;
+- (CGFloat)calcMaxMinSubviewsSizeForContent:(CGFloat)selfSize paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding spacing:(CGFloat *)pSpacing {
+    CGFloat subviewsSize = self.subviewsSize;
 
-    CGFloat extralSpace = self.minSpace;
+    CGFloat extralSpacing = self.minSpacing;
     if (self.centered) {
-        extralSpace *= -1;
+        extralSpacing *= -1;
     }
-    NSInteger rowCount = MAX(floor((selfSize - (*pStarPadding) - (*pEndPadding) + extralSpace) / (subviewSize + self.minSpace)), 1);
-    NSInteger spaceCount = rowCount - 1;
+    NSInteger rowCount = MAX(floor((selfSize - (*pStarPadding) - (*pEndPadding) + extralSpacing) / (subviewsSize + self.minSpacing)), 1);
+    NSInteger spacingCount = rowCount - 1;
     if (self.centered) {
-        spaceCount += 2;
+        spacingCount += 2;
     }
-    if (spaceCount > 0) {
-        *pSpace = (selfSize - (*pStarPadding) - (*pEndPadding) - subviewSize * rowCount) / spaceCount;
-        if (_myCGFloatGreat(*pSpace, self.maxSpace)) {
-            *pSpace = self.maxSpace;
-            subviewSize = (selfSize - (*pStarPadding) - (*pEndPadding) - (*pSpace) * spaceCount) / rowCount;
+    if (spacingCount > 0) {
+        *pSpacing = (selfSize - (*pStarPadding) - (*pEndPadding) - subviewsSize * rowCount) / spacingCount;
+        if (_myCGFloatGreat(*pSpacing, self.maxSpacing)) {
+            *pSpacing = self.maxSpacing;
+            subviewsSize = (selfSize - (*pStarPadding) - (*pEndPadding) - (*pSpacing) * spacingCount) / rowCount;
         }
         if (self.centered) {
-            *pStarPadding = (*pStarPadding + *pSpace);
-            *pEndPadding = (*pEndPadding + *pSpace);
+            *pStarPadding = (*pStarPadding + *pSpacing);
+            *pEndPadding = (*pEndPadding + *pSpacing);
         }
     }
-    return subviewSize;
+    return subviewsSize;
 }
 
-- (CGFloat)calcMaxMinSubviewSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding space:(CGFloat *)pSpace {
-    CGFloat subviewSize = self.subviewSize;
+- (CGFloat)calcMaxMinSubviewsSize:(CGFloat)selfSize arrangedCount:(NSInteger)arrangedCount paddingStart:(CGFloat *)pStarPadding paddingEnd:(CGFloat *)pEndPadding spacing:(CGFloat *)pSpacing {
+    CGFloat subviewsSize = self.subviewsSize;
 
-    NSInteger spaceCount = arrangedCount - 1;
+    NSInteger spacingCount = arrangedCount - 1;
     if (self.centered) {
-        spaceCount += 2;
+        spacingCount += 2;
     }
-    if (spaceCount > 0) {
-        *pSpace = (selfSize - *pStarPadding - *pEndPadding - subviewSize * arrangedCount) / spaceCount;
+    if (spacingCount > 0) {
+        *pSpacing = (selfSize - *pStarPadding - *pEndPadding - subviewsSize * arrangedCount) / spacingCount;
 
-        if (_myCGFloatGreat(*pSpace, self.maxSpace) || _myCGFloatLess(*pSpace, self.minSpace)) {
-            if (_myCGFloatGreat(*pSpace, self.maxSpace)) {
-                *pSpace = self.maxSpace;
+        if (_myCGFloatGreat(*pSpacing, self.maxSpacing) || _myCGFloatLess(*pSpacing, self.minSpacing)) {
+            if (_myCGFloatGreat(*pSpacing, self.maxSpacing)) {
+                *pSpacing = self.maxSpacing;
             }
-            if (_myCGFloatLess(*pSpace, self.minSpace)) {
-                *pSpace = self.minSpace;
+            if (_myCGFloatLess(*pSpacing, self.minSpacing)) {
+                *pSpacing = self.minSpacing;
             }
-            subviewSize = (selfSize - *pStarPadding - *pEndPadding - (*pSpace) * spaceCount) / arrangedCount;
+            subviewsSize = (selfSize - *pStarPadding - *pEndPadding - (*pSpacing) * spacingCount) / arrangedCount;
         }
         if (self.centered) {
-            *pStarPadding = (*pStarPadding + *pSpace);
-            *pEndPadding = (*pEndPadding + *pSpace);
+            *pStarPadding = (*pStarPadding + *pSpacing);
+            *pEndPadding = (*pEndPadding + *pSpacing);
         }
     }
-    return subviewSize;
+    return subviewsSize;
 }
 
 @end
 
-@implementation MySequentLayoutTraits
+@implementation MySequentLayoutTraitsImpl
+
+@synthesize orientation;
 
 - (id)copyWithZone:(NSZone *)zone {
-    MySequentLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    MySequentLayoutTraitsImpl *layoutTraits = [super copyWithZone:zone];
     layoutTraits.orientation = self.orientation;
-    if (self.flexSpace != nil) {
-        layoutTraits.flexSpace = [MySequentLayoutFlexSpacing new];
-        layoutTraits.flexSpace.subviewSize = self.flexSpace.subviewSize;
-        layoutTraits.flexSpace.minSpace = self.flexSpace.minSpace;
-        layoutTraits.flexSpace.maxSpace = self.flexSpace.maxSpace;
-        layoutTraits.flexSpace.centered = self.flexSpace.centered;
+    if (self.flexSpacing != nil) {
+        layoutTraits.flexSpacing = [MySequentLayoutFlexSpacing new];
+        layoutTraits.flexSpacing.subviewsSize = self.flexSpacing.subviewsSize;
+        layoutTraits.flexSpacing.minSpacing = self.flexSpacing.minSpacing;
+        layoutTraits.flexSpacing.maxSpacing = self.flexSpacing.maxSpacing;
+        layoutTraits.flexSpacing.centered = self.flexSpacing.centered;
     }
 
     return layoutTraits;
@@ -959,10 +980,13 @@ BOOL _myisRTL = NO;
 
 @end
 
-@implementation MyLinearLayoutTraits
+@implementation MyLinearLayoutTraitsImpl
+
+@synthesize shrinkType;
+
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyLinearLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    MyLinearLayoutTraitsImpl *layoutTraits = [super copyWithZone:zone];
     layoutTraits.shrinkType = self.shrinkType;
     return layoutTraits;
 }
@@ -977,20 +1001,29 @@ BOOL _myisRTL = NO;
 
 @end
 
-@implementation MyTableLayoutTraits
+@implementation MyTableLayoutTraitsImpl
 
 @end
 
-@implementation MyFloatLayoutTraits
+@implementation MyFloatLayoutTraitsImpl
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyFloatLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    MyFloatLayoutTraitsImpl *layoutTraits = [super copyWithZone:zone];
     return layoutTraits;
 }
 
 @end
 
-@implementation MyFlowLayoutTraits
+@implementation MyFlowLayoutTraitsImpl
+
+@synthesize arrangedGravity;
+@synthesize autoArrange;
+@synthesize isFlex;
+@synthesize lastlineGravityPolicy;
+@synthesize maxLines = _maxLines;
+@synthesize arrangedCount;
+@synthesize pagedCount;
+
 
 - (instancetype)init {
     self = [super init];
@@ -1001,7 +1034,7 @@ BOOL _myisRTL = NO;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyFlowLayoutTraits *layoutTraits = [super copyWithZone:zone];
+    MyFlowLayoutTraitsImpl *layoutTraits = [super copyWithZone:zone];
     layoutTraits.arrangedCount = self.arrangedCount;
     layoutTraits.autoArrange = self.autoArrange;
     layoutTraits.isFlex = self.isFlex;
@@ -1028,23 +1061,23 @@ BOOL _myisRTL = NO;
 
 @end
 
-@implementation MyRelativeLayoutTraits
+@implementation MyRelativeLayoutTraitsImpl
 
 @end
 
-@implementation MyFrameLayoutTraits
+@implementation MyFrameLayoutTraitsImpl
 @end
 
-@implementation MyPathLayoutTraits
+@implementation MyPathLayoutTraitsImpl
 @end
 
-@interface MyGridLayoutTraits () <MyGridNode>
+@interface MyGridLayoutTraitsImpl () <MyGridNode>
 
 @property (nonatomic, strong) MyGridNode *rootGrid;
 
 @end
 
-@implementation MyGridLayoutTraits
+@implementation MyGridLayoutTraitsImpl
 
 - (MyGridNode *)rootGrid {
     if (_rootGrid == nil) {
@@ -1295,7 +1328,7 @@ BOOL _myisRTL = NO;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyGridLayoutTraits *lsc = [super copyWithZone:zone];
+    MyGridLayoutTraitsImpl *lsc = [super copyWithZone:zone];
     lsc->_rootGrid = (MyGridNode *)[self.rootGrid cloneGrid];
     return lsc;
 }

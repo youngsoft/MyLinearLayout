@@ -38,299 +38,53 @@ void *_myObserverContextC = (void *)20175283;
 
 @implementation UIView (MyLayoutExt)
 
-- (MyLayoutPos *)topPos {
-    return self.myDefaultSizeClass.topPos;
-}
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutPos *, topPos)
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutPos *, leadingPos)
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutPos *, bottomPos)
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutPos *, trailingPos)
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutPos *, centerXPos)
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutPos *, centerYPos)
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutPos *, leftPos)
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutPos *, rightPos)
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutPos *, baselinePos)
 
-- (MyLayoutPos *)leadingPos {
-    return self.myDefaultSizeClass.leadingPos;
-}
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyTop, myTop)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyLeading, myLeading)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyBottom, myBottom)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyTrailing, myTrailing)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyCenterX, myCenterX)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyCenterY, myCenterY)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGPoint, MyCenter, myCenter)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyLeft, myLeft)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyRight, myRight)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyMargin, myMargin)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyHorzMargin, myHorzMargin)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyVertMargin, myVertMargin)
 
-- (MyLayoutPos *)bottomPos {
-    return self.myDefaultSizeClass.bottomPos;
-}
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutSize *, widthSize)
+_MYLAYOUT_PROPERTY_VIEW_GET3(MyLayoutSize *, heightSize)
 
-- (MyLayoutPos *)trailingPos {
-    return self.myDefaultSizeClass.trailingPos;
-}
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyWidth, myWidth)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGFloat, MyHeight, myHeight)
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE1(CGSize, MySize, mySize)
 
-- (MyLayoutPos *)centerXPos {
-    return self.myDefaultSizeClass.centerXPos;
-}
 
-- (MyLayoutPos *)centerYPos {
-    return self.myDefaultSizeClass.centerYPos;
-}
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE2(BOOL, WrapContentHeight, wrapContentHeight)
 
-- (MyLayoutPos *)leftPos {
-    return self.myDefaultSizeClass.leftPos;
-}
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE2(BOOL, WrapContentWidth, wrapContentWidth)
 
-- (MyLayoutPos *)rightPos {
-    return self.myDefaultSizeClass.rightPos;
-}
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE2(BOOL, WrapContentSize, wrapContentSize)
 
-- (MyLayoutPos *)baselinePos {
-    return self.myDefaultSizeClass.baselinePos;
-}
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE2(CGFloat, Weight, weight)
 
-- (CGFloat)myTop {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myTop;
-}
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE2(BOOL, UseFrame, useFrame)
 
-- (void)setMyTop:(CGFloat)myTop {
-    self.myDefaultSizeClass.myTop = myTop;
-}
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE2(BOOL, NoLayout, noLayout)
 
-- (CGFloat)myLeading {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myLeading;
-}
-
-- (void)setMyLeading:(CGFloat)myLeading {
-    self.myDefaultSizeClass.myLeading = myLeading;
-}
-
-- (CGFloat)myBottom {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myBottom;
-}
-
-- (void)setMyBottom:(CGFloat)myBottom {
-    self.myDefaultSizeClass.myBottom = myBottom;
-}
-
-- (CGFloat)myTrailing {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myTrailing;
-}
-
-- (void)setMyTrailing:(CGFloat)myTrailing {
-    self.myDefaultSizeClass.myTrailing = myTrailing;
-}
-
-- (CGFloat)myCenterX {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myCenterX;
-}
-
-- (void)setMyCenterX:(CGFloat)myCenterX {
-    self.myDefaultSizeClass.myCenterX = myCenterX;
-}
-
-- (CGFloat)myCenterY {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myCenterY;
-}
-
-- (void)setMyCenterY:(CGFloat)myCenterY {
-    self.myDefaultSizeClass.myCenterY = myCenterY;
-}
-
-- (CGPoint)myCenter {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myCenter;
-}
-
-- (void)setMyCenter:(CGPoint)myCenter {
-    self.myDefaultSizeClass.myCenter = myCenter;
-}
-
-- (CGFloat)myLeft {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myLeft;
-}
-
-- (void)setMyLeft:(CGFloat)myLeft {
-    self.myDefaultSizeClass.myLeft = myLeft;
-}
-
-- (CGFloat)myRight {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myRight;
-}
-
-- (void)setMyRight:(CGFloat)myRight {
-    self.myDefaultSizeClass.myRight = myRight;
-}
-
-- (CGFloat)myMargin {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myMargin;
-}
-
-- (void)setMyMargin:(CGFloat)myMargin {
-    self.myDefaultSizeClass.myMargin = myMargin;
-}
-
-- (CGFloat)myHorzMargin {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myHorzMargin;
-}
-
-- (void)setMyHorzMargin:(CGFloat)myHorzMargin {
-    self.myDefaultSizeClass.myHorzMargin = myHorzMargin;
-}
-
-- (CGFloat)myVertMargin {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.myVertMargin;
-}
-
-- (void)setMyVertMargin:(CGFloat)myVertMargin {
-    self.myDefaultSizeClass.myVertMargin = myVertMargin;
-}
-
-- (MyLayoutSize *)widthSize {
-    return self.myDefaultSizeClass.widthSize;
-}
-
-- (MyLayoutSize *)heightSize {
-    return self.myDefaultSizeClass.heightSize;
-}
-
-- (CGFloat)myWidth {
-    return self.myDefaultSizeClassInner.myWidth;
-}
-
-- (void)setMyWidth:(CGFloat)myWidth {
-    self.myDefaultSizeClass.myWidth = myWidth;
-}
-
-- (CGFloat)myHeight {
-    return self.myDefaultSizeClassInner.myHeight;
-}
-
-- (void)setMyHeight:(CGFloat)myHeight {
-    self.myDefaultSizeClass.myHeight = myHeight;
-}
-
-- (CGSize)mySize {
-#if DEBUG
-    NSLog(@"%s 一般只用于设置，而不能用于获取！！", sel_getName(_cmd));
-#endif
-    return self.myDefaultSizeClassInner.mySize;
-}
-
-- (void)setMySize:(CGSize)mySize {
-    self.myDefaultSizeClass.mySize = mySize;
-}
-
-- (void)setWrapContentHeight:(BOOL)wrapContentHeight {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
-    if (viewTraits.wrapContentHeight != wrapContentHeight) {
-        viewTraits.wrapContentHeight = wrapContentHeight;
-        if (self.superview != nil) {
-            [self.superview setNeedsLayout];
-        }
-    }
-}
-
-- (BOOL)wrapContentHeight {
-    //特殊处理，减少不必要的对象创建
-    return self.myDefaultSizeClassInner.wrapContentHeight;
-}
-
-- (void)setWrapContentWidth:(BOOL)wrapContentWidth {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
-    if (viewTraits.wrapContentWidth != wrapContentWidth) {
-        viewTraits.wrapContentWidth = wrapContentWidth;
-        if (self.superview != nil) {
-            [self.superview setNeedsLayout];
-        }
-    }
-}
-
-- (BOOL)wrapContentWidth {
-    //特殊处理，减少不必要的对象创建
-    return self.myDefaultSizeClassInner.wrapContentWidth;
-}
-
-- (BOOL)wrapContentSize {
-    return self.myDefaultSizeClassInner.wrapContentSize;
-}
-
-- (void)setWrapContentSize:(BOOL)wrapContentSize {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
-    viewTraits.wrapContentSize = wrapContentSize;
-    if (self.superview != nil) {
-        [self.superview setNeedsLayout];
-    }
-}
-
-- (CGFloat)weight {
-    return self.myDefaultSizeClassInner.weight;
-}
-
-- (void)setWeight:(CGFloat)weight {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
-    if (viewTraits.weight != weight) {
-        viewTraits.weight = weight;
-        if (self.superview != nil) {
-            [self.superview setNeedsLayout];
-        }
-    }
-}
-
-- (BOOL)useFrame {
-    return self.myDefaultSizeClassInner.useFrame;
-}
-
-- (void)setUseFrame:(BOOL)useFrame {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
-    if (viewTraits.useFrame != useFrame) {
-        viewTraits.useFrame = useFrame;
-        if (self.superview != nil) {
-            [self.superview setNeedsLayout];
-        }
-    }
-}
-
-- (BOOL)noLayout {
-    return self.myDefaultSizeClassInner.noLayout;
-}
-
-- (void)setNoLayout:(BOOL)noLayout {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
-    if (viewTraits.noLayout != noLayout) {
-        viewTraits.noLayout = noLayout;
-        if (self.superview != nil) {
-            [self.superview setNeedsLayout];
-        }
-    }
-}
-
-- (MyVisibility)visibility {
-    return self.myDefaultSizeClassInner.visibility;
-}
+_MYLAYOUT_PROPERTY_VIEW_GET2(MyVisibility, visibility)
 
 - (void)setVisibility:(MyVisibility)visibility {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
+    MyViewTraitsImpl *viewTraits = (MyViewTraitsImpl*)self.myDefaultTraits;
     if (viewTraits.visibility != visibility) {
         viewTraits.visibility = visibility;
         self.hidden = (visibility != MyVisibility_Visible);
@@ -345,26 +99,33 @@ void *_myObserverContextC = (void *)20175283;
     }
 }
 
-- (MyGravity)alignment {
-    return self.myDefaultSizeClassInner.alignment;
-}
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE2(MyGravity, Alignment, alignment)
 
-- (void)setAlignment:(MyGravity)alignment {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
-    if (viewTraits.alignment != alignment) {
-        viewTraits.alignment = alignment;
+
+- (void)setReverseFloat:(BOOL)reverseFloat {
+    MyViewTraitsImpl *viewTraits = (MyViewTraitsImpl*)self.myDefaultTraits;
+    if (viewTraits.isReverseFloat != reverseFloat) {
+        viewTraits.reverseFloat = reverseFloat;
         if (self.superview != nil) {
             [self.superview setNeedsLayout];
         }
     }
 }
 
+- (BOOL)isReverseFloat {
+    return self.myDefaultTraitsInner.isReverseFloat;
+}
+
+
+_MYLAYOUT_PROPERTY_VIEW_OVERRIDE2(BOOL, ClearFloat, clearFloat)
+
+
 - (void (^)(MyBaseLayout *, UIView *))viewLayoutCompleteBlock {
-    return self.myDefaultSizeClassInner.viewLayoutCompleteBlock;
+    return self.myEngineInner.viewLayoutCompleteBlock;
 }
 
 - (void)setViewLayoutCompleteBlock:(void (^)(MyBaseLayout *, UIView *))viewLayoutCompleteBlock {
-    self.myDefaultSizeClass.viewLayoutCompleteBlock = viewLayoutCompleteBlock;
+    self.myEngine.viewLayoutCompleteBlock = viewLayoutCompleteBlock;
 }
 
 - (CGRect)estimatedRect {
@@ -375,59 +136,82 @@ void *_myObserverContextC = (void *)20175283;
     return rect;
 }
 
+- (void)clearLayoutTraits {
+    [self clearLayoutTraitsInSizeClass:MySizeClass_wAny | MySizeClass_hAny];
+}
+
+- (void)clearLayoutTraitsInSizeClass:(MySizeClass)sizeClass {
+    [self.myEngine.traitsDict removeObjectForKey:@(sizeClass)];
+}
+
+- (id<MyViewTraits>)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass {
+    return [self fetchLayoutTraitsInSizeClass:sizeClass copyFrom:MySizeClass_All];
+}
+
+- (id<MyViewTraits>)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass {
+    return [self.myEngine fetchView:self traitsInSizeClass:sizeClass copyFrom:srcSizeClass];
+}
+
+- (void)setLayoutTraits:(id<MyViewTraits>)value inSizeClass:(MySizeClass)sizeClass {
+    [self.myEngine setView:self newTraits:(MyViewTraitsImpl*)value at:sizeClass];
+}
+
 - (void)resetMyLayoutSetting {
-    [self resetMyLayoutSettingInSizeClass:MySizeClass_wAny | MySizeClass_hAny];
+    [self clearLayoutTraits];
 }
 
 - (void)resetMyLayoutSettingInSizeClass:(MySizeClass)sizeClass {
-    [self.myEngine.sizeClasses removeObjectForKey:@(sizeClass)];
+    [self clearLayoutTraitsInSizeClass:sizeClass];
 }
 
 - (instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass {
-    return [self fetchLayoutSizeClass:sizeClass copyFrom:0xFF];
+    return [self fetchLayoutSizeClass:sizeClass copyFrom:MySizeClass_All];
 }
 
 - (instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass {
-    return (UIView *)[self.myEngine fetchView:self layoutSizeClass:sizeClass copyFrom:srcSizeClass];
+    return (UIView *)[self fetchLayoutTraitsInSizeClass:sizeClass copyFrom:srcSizeClass];
 }
 
 - (void)setLayoutSizeClass:(MySizeClass)sizeClass withValue:(id)value {
-    [self.myEngine setView:self layoutSizeClass:sizeClass withTraits:value];
+    [self setLayoutTraits:value inSizeClass:sizeClass];
 }
 
 @end
 
 @implementation UIView (MyLayoutExtInner)
 
-- (instancetype)myDefaultSizeClass {
+- (__kindof MyViewTraitsImpl *)myDefaultTraits {
     MyLayoutEngine *viewEngine = self.myEngine;
-    if (viewEngine.defaultSizeClass == nil) {
-        viewEngine.defaultSizeClass = [viewEngine fetchView:self layoutSizeClass:MySizeClass_wAny | MySizeClass_hAny copyFrom:0xFF];
+    if (viewEngine.defaultTraits == nil) {
+        viewEngine.defaultTraits = [viewEngine fetchView:self traitsInSizeClass:MySizeClass_wAny | MySizeClass_hAny copyFrom:MySizeClass_All];
     }
-    return (UIView *)viewEngine.defaultSizeClass;
+    if (viewEngine.currentTraits == nil) {
+        viewEngine.currentTraits = viewEngine.defaultTraits;
+    }
+    return viewEngine.defaultTraits;
 }
 
-- (instancetype)myDefaultSizeClassInner {
-    return (UIView *)self.myEngineInner.defaultSizeClass;
+- (__kindof MyViewTraitsImpl *)myDefaultTraitsInner {
+    return self.myEngineInner.defaultTraits;
 }
 
-- (instancetype)myCurrentSizeClass {
+- (__kindof MyViewTraitsImpl *)myCurrentTraits {
     MyLayoutEngine *viewEngine = self.myEngine;
-    if (viewEngine.currentSizeClass == nil) {
-        viewEngine.currentSizeClass = (MyViewTraits *)[self myDefaultSizeClass];
+    if (viewEngine.currentTraits == nil) {
+        viewEngine.currentTraits = [self myDefaultTraits];
     }
-    return (UIView *)viewEngine.currentSizeClass;
+    return viewEngine.currentTraits;
 }
 
-- (instancetype)myCurrentSizeClassInner {
+- (__kindof MyViewTraitsImpl *)myCurrentTraitsInner {
     //如果没有则不会建立，为了优化减少不必要的建立。
-    return (UIView *)self.myEngineInner.currentSizeClass;
+    return self.myEngineInner.currentTraits;
 }
 
 - (MyLayoutEngine *)myEngine {
     MyLayoutEngine *obj = objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_ENGINE);
-    if (obj == nil) {
-        obj = [MyLayoutEngine new];
+    if (obj == nil){
+        obj = [[MyLayoutEngine alloc] initWithTraitsClass:[MyViewTraitsImpl class]];
         objc_setAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_ENGINE, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return obj;
@@ -437,53 +221,6 @@ void *_myObserverContextC = (void *)20175283;
     return (MyLayoutEngine*)objc_getAssociatedObject(self, ASSOCIATEDOBJECT_KEY_MYLAYOUT_ENGINE);
 }
 
-- (id)createSizeClassInstance {
-    return [MyViewTraits new];
-}
-
-- (MyLayoutPos *)topPosInner {
-    return self.myDefaultSizeClassInner.topPosInner;
-}
-
-- (MyLayoutPos *)leadingPosInner {
-    return self.myDefaultSizeClassInner.leadingPosInner;
-}
-
-- (MyLayoutPos *)bottomPosInner {
-    return self.myDefaultSizeClassInner.bottomPosInner;
-}
-
-- (MyLayoutPos *)trailingPosInner {
-    return self.myDefaultSizeClassInner.trailingPosInner;
-}
-
-- (MyLayoutPos *)centerXPosInner {
-    return self.myDefaultSizeClassInner.centerXPosInner;
-}
-
-- (MyLayoutPos *)centerYPosInner {
-    return self.myDefaultSizeClassInner.centerYPosInner;
-}
-
-- (MyLayoutPos *)leftPosInner {
-    return self.myDefaultSizeClassInner.leftPosInner;
-}
-
-- (MyLayoutPos *)rightPosInner {
-    return self.myDefaultSizeClassInner.rightPosInner;
-}
-
-- (MyLayoutPos *)baselinePosInner {
-    return self.myDefaultSizeClassInner.baselinePosInner;
-}
-
-- (MyLayoutSize *)widthSizeInner {
-    return self.myDefaultSizeClassInner.widthSizeInner;
-}
-
-- (MyLayoutSize *)heightSizeInner {
-    return self.myDefaultSizeClassInner.heightSizeInner;
-}
 
 - (CGFloat)myEstimatedWidth {
     //如果视图的父视图不是布局视图则直接返回宽度值。
@@ -549,212 +286,149 @@ void *_myObserverContextC = (void *)20175283;
 #pragma mark-- Public Methods
 
 + (BOOL)isRTL {
-    return [MyViewTraits isRTL];
+    return [MyViewTraitsImpl isRTL];
 }
 
 + (void)setIsRTL:(BOOL)isRTL {
-    [MyViewTraits setIsRTL:isRTL];
+    [MyViewTraitsImpl setIsRTL:isRTL];
 }
 
 + (void)updateRTL:(BOOL)isRTL inWindow:(UIWindow *)window {
     [window myUpdateRTL:isRTL];
 }
-//+ (void)myUpArabicUI:(BOOL)isArabicUI inWindow:(UIWindow *)window {
-//    [self updateRTL:isArabicUI inWindow:window];
-//}
 
-- (CGFloat)paddingTop {
-    return self.myDefaultSizeClassInner.paddingTop;
-}
+_MYLAYOUT_PROPERTY_GET1(MyLayoutPos *,topPos)
+_MYLAYOUT_PROPERTY_GET1(MyLayoutPos *,leadingPos)
+_MYLAYOUT_PROPERTY_GET1(MyLayoutPos *,bottomPos)
+_MYLAYOUT_PROPERTY_GET1(MyLayoutPos *,trailingPos)
+_MYLAYOUT_PROPERTY_GET1(MyLayoutPos *,centerXPos)
+_MYLAYOUT_PROPERTY_GET1(MyLayoutPos *,centerYPos)
+_MYLAYOUT_PROPERTY_GET1(MyLayoutPos *,leftPos)
+_MYLAYOUT_PROPERTY_GET1(MyLayoutPos *,rightPos)
+_MYLAYOUT_PROPERTY_GET1(MyLayoutPos *,baselinePos)
 
-- (void)setPaddingTop:(CGFloat)paddingTop {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.paddingTop != paddingTop) {
-        layoutTraits.paddingTop = paddingTop;
-        [self setNeedsLayout];
-    }
-}
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyTop,myTop)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyLeading,myLeading)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyBottom,myBottom)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyTrailing,myTrailing)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyCenterX,myCenterX)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyCenterY,myCenterY)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGPoint,MyCenter,myCenter)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyLeft,myLeft)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyRight,myRight)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyMargin,myMargin)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyHorzMargin,myHorzMargin)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyVertMargin,myVertMargin)
 
-- (CGFloat)paddingLeading {
-    return self.myDefaultSizeClassInner.paddingLeading;
-}
+_MYLAYOUT_PROPERTY_GET1(MyLayoutSize *,widthSize)
+_MYLAYOUT_PROPERTY_GET1(MyLayoutSize *,heightSize)
 
-- (void)setPaddingLeading:(CGFloat)paddingLeading {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.paddingLeading != paddingLeading) {
-        layoutTraits.paddingLeading = paddingLeading;
-        [self setNeedsLayout];
-    }
-}
 
-- (CGFloat)paddingBottom {
-    return self.myDefaultSizeClassInner.paddingBottom;
-}
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyWidth,myWidth)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,MyHeight,myHeight)
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGSize,MySize,mySize)
 
-- (void)setPaddingBottom:(CGFloat)paddingBottom {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.paddingBottom != paddingBottom) {
-        layoutTraits.paddingBottom = paddingBottom;
-        [self setNeedsLayout];
-    }
-}
+_MYLAYOUT_PROPERTY_GET1(BOOL,wrapContentWidth)
+_MYLAYOUT_PROPERTY_GET1(BOOL,wrapContentHeight)
+_MYLAYOUT_PROPERTY_GET1(BOOL,wrapContentSize)
 
-- (CGFloat)paddingTrailing {
-    return self.myDefaultSizeClassInner.paddingTrailing;
-}
 
-- (void)setPaddingTrailing:(CGFloat)paddingTrailing {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.paddingTrailing != paddingTrailing) {
-        layoutTraits.paddingTrailing = paddingTrailing;
-        [self setNeedsLayout];
-    }
-}
 
-- (UIEdgeInsets)padding {
-    return self.myDefaultSizeClassInner.padding;
-}
+_MYLAYOUT_PROPERTY_OVERRIDE1(CGFloat,Weight,weight)
+_MYLAYOUT_PROPERTY_OVERRIDE1(BOOL,UseFrame,useFrame)
+_MYLAYOUT_PROPERTY_OVERRIDE1(BOOL,NoLayout,noLayout)
+_MYLAYOUT_PROPERTY_OVERRIDE1(MyVisibility,Visibility,visibility)
+_MYLAYOUT_PROPERTY_OVERRIDE1(MyGravity,Alignment,alignment)
+_MYLAYOUT_PROPERTY_OVERRIDE1(BOOL,ReverseFloat,isReverseFloat)
+_MYLAYOUT_PROPERTY_OVERRIDE1(BOOL,ClearFloat,clearFloat)
+
+
+
+
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, CGFloat, PaddingTop, paddingTop)
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, CGFloat, PaddingLeading, paddingLeading)
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, CGFloat, PaddingBottom, paddingBottom)
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, CGFloat, PaddingTrailing, paddingTrailing)
+
+
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_GET1(MyLayoutTraitsImpl, UIEdgeInsets, padding)
+
 
 - (void)setPadding:(UIEdgeInsets)padding {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = (MyLayoutTraitsImpl*)self.myDefaultTraits;
     if (!UIEdgeInsetsEqualToEdgeInsets(layoutTraits.padding, padding)) {
         layoutTraits.padding = padding;
         [self setNeedsLayout];
     }
 }
 
-- (CGFloat)paddingLeft {
-    return self.myDefaultSizeClassInner.paddingLeft;
-}
 
-- (void)setPaddingLeft:(CGFloat)paddingLeft {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.paddingLeft != paddingLeft) {
-        layoutTraits.paddingLeft = paddingLeft;
-        [self setNeedsLayout];
-    }
-}
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, CGFloat, PaddingLeft, paddingLeft)
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, CGFloat, PaddingRight, paddingRight)
 
-- (CGFloat)paddingRight {
-    return self.myDefaultSizeClassInner.paddingRight;
-}
-
-- (void)setPaddingRight:(CGFloat)paddingRight {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.paddingRight != paddingRight) {
-        layoutTraits.paddingRight = paddingRight;
-        [self setNeedsLayout];
-    }
-}
 
 - (BOOL)zeroPadding {
     //这里不用myDefaultSizeClassInner的原因是这个属性默认是YES!
-    return self.myDefaultSizeClass.zeroPadding;
+    return ((MyLayoutTraitsImpl*)self.myDefaultTraits).zeroPadding;
 }
 
-- (void)setZeroPadding:(BOOL)zeroPadding {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.zeroPadding != zeroPadding) {
-        layoutTraits.zeroPadding = zeroPadding;
-        [self setNeedsLayout];
-    }
-}
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_SET1(MyLayoutTraitsImpl, BOOL,ZeroPadding,zeroPadding)
+
 
 - (UIRectEdge)insetsPaddingFromSafeArea {
     //这里不用myDefaultSizeClassInner的原因是这个属性默认是UIRectEdgeLeft | UIRectEdgeRight ！
-    return self.myDefaultSizeClass.insetsPaddingFromSafeArea;
+    return ((MyLayoutTraitsImpl*)self.myDefaultTraits).insetsPaddingFromSafeArea;
 }
 
-- (void)setInsetsPaddingFromSafeArea:(UIRectEdge)insetsPaddingFromSafeArea {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.insetsPaddingFromSafeArea != insetsPaddingFromSafeArea) {
-        layoutTraits.insetsPaddingFromSafeArea = insetsPaddingFromSafeArea;
-        [self setNeedsLayout];
-    }
-}
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_SET1(MyLayoutTraitsImpl, UIRectEdge,InsetsPaddingFromSafeArea,insetsPaddingFromSafeArea)
 
-- (BOOL)insetLandscapeFringePadding {
-    return self.myDefaultSizeClassInner.insetLandscapeFringePadding;
-}
 
-- (void)setInsetLandscapeFringePadding:(BOOL)insetLandscapeFringePadding {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.insetLandscapeFringePadding != insetLandscapeFringePadding) {
-        layoutTraits.insetLandscapeFringePadding = insetLandscapeFringePadding;
-        [self setNeedsLayout];
-    }
-}
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, BOOL, InsetLandscapeFringePadding, insetLandscapeFringePadding)
+
+
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, CGFloat, SubviewHSpacing, subviewHSpacing)
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, CGFloat, SubviewVSpacing, subviewVSpacing)
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, CGFloat, SubviewSpacing, subviewSpacing)
+
 
 - (void)setSubviewHSpace:(CGFloat)subviewHSpace {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.subviewHSpace != subviewHSpace) {
-        layoutTraits.subviewHSpace = subviewHSpace;
-        [self setNeedsLayout];
-    }
+    self.subviewHSpacing = subviewHSpace;
 }
 
 - (CGFloat)subviewHSpace {
-    return self.myDefaultSizeClassInner.subviewHSpace;
+    return self.subviewHSpacing;
 }
 
 - (void)setSubviewVSpace:(CGFloat)subviewVSpace {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.subviewVSpace != subviewVSpace) {
-        layoutTraits.subviewVSpace = subviewVSpace;
-        [self setNeedsLayout];
-    }
+    self.subviewVSpacing = subviewVSpace;
 }
 
 - (CGFloat)subviewVSpace {
-    return self.myDefaultSizeClassInner.subviewVSpace;
+    return self.subviewVSpacing;
 }
 
 - (void)setSubviewSpace:(CGFloat)subviewSpace {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.subviewSpace != subviewSpace) {
-        layoutTraits.subviewSpace = subviewSpace;
-        [self setNeedsLayout];
-    }
+    self.subviewSpacing = subviewSpace;
 }
 
 - (CGFloat)subviewSpace {
-    return self.myDefaultSizeClassInner.subviewSpace;
+    return self.subviewSpacing;
 }
 
-- (void)setGravity:(MyGravity)gravity {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.gravity != gravity) {
-        layoutTraits.gravity = gravity;
-        [self setNeedsLayout];
-    }
-}
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, MyGravity, Gravity, gravity)
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, BOOL, ReverseLayout, reverseLayout)
 
-- (MyGravity)gravity {
-    return self.myDefaultSizeClassInner.gravity;
-}
-
-- (void)setReverseLayout:(BOOL)reverseLayout {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.reverseLayout != reverseLayout) {
-        layoutTraits.reverseLayout = reverseLayout;
-        [self setNeedsLayout];
-    }
-}
-
-- (BOOL)reverseLayout {
-    return self.myDefaultSizeClassInner.reverseLayout;
-}
 
 - (CGAffineTransform)layoutTransform {
-    if (self.myDefaultSizeClassInner == nil) {
+    if (self.myDefaultTraitsInner == nil) {
         return CGAffineTransformIdentity;
     } else {
-        return self.myDefaultSizeClass.layoutTransform;
+        return ((MyLayoutTraitsImpl*)self.myDefaultTraits).layoutTransform;
     }
 }
 
 - (void)setLayoutTransform:(CGAffineTransform)layoutTransform {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
     if (!CGAffineTransformEqualToTransform(layoutTraits.layoutTransform, layoutTransform)) {
         layoutTraits.layoutTransform = layoutTransform;
         [self setNeedsLayout];
@@ -974,6 +648,19 @@ void *_myObserverContextC = (void *)20175283;
     _optionalData.aniCompletion = completion;
 }
 
+- (id<MyViewTraits>)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass {
+    return [super fetchLayoutTraitsInSizeClass:sizeClass];
+}
+
+- (id<MyViewTraits>)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass {
+    return [super fetchLayoutTraitsInSizeClass:sizeClass copyFrom:srcSizeClass];
+}
+
+- (void)setLayoutTraits:(id<MyViewTraits>)value inSizeClass:(MySizeClass)sizeClass {
+    return [super setLayoutTraits:value inSizeClass:sizeClass];
+    
+}
+
 #pragma mark-- Touches Event
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -1002,9 +689,9 @@ void *_myObserverContextC = (void *)20175283;
     //监控非布局父视图的frame的变化，而改变自身的位置和尺寸
     if (context == _myObserverContextC) {
         //只监控父视图的尺寸变换
-        CGRect rcOld = [change[NSKeyValueChangeOldKey] CGRectValue];
-        CGRect rcNew = [change[NSKeyValueChangeNewKey] CGRectValue];
-        if (!_myCGSizeEqual(rcOld.size, rcNew.size)) {
+        CGRect oldRect = [change[NSKeyValueChangeOldKey] CGRectValue];
+        CGRect newRect = [change[NSKeyValueChangeNewKey] CGRectValue];
+        if (!_myCGSizeEqual(oldRect.size, newRect.size)) {
             [self myUpdateLayoutRectInNoLayoutSuperview:object];
         }
         return;
@@ -1013,7 +700,7 @@ void *_myObserverContextC = (void *)20175283;
     //监控子视图的frame的变化以便重新进行布局
     if (!self.isMyLayouting) {
         if (context == _myObserverContextA) {
-            if (!object.myCurrentSizeClassInner.useFrame) {
+            if (!object.myCurrentTraitsInner.useFrame) {
                 [self setNeedsLayout];
                 //这里添加的原因是有可能子视图取消隐藏后不会绘制自身，所以这里要求子视图重新绘制自身
                 if ([keyPath isEqualToString:@"hidden"] && ![change[NSKeyValueChangeNewKey] boolValue]) {
@@ -1021,7 +708,7 @@ void *_myObserverContextC = (void *)20175283;
                 }
             }
         } else if (context == _myObserverContextB) { //针对UILabel特殊处理。。
-            MyViewTraits *subviewTraits = (MyViewTraits*)object.myDefaultSizeClass;
+            MyViewTraitsImpl *subviewTraits = (MyViewTraitsImpl*)object.myCurrentTraits;
             if (subviewTraits.widthSizeInner.wrapVal || subviewTraits.heightSizeInner.wrapVal) {
                 [self setNeedsLayout];
             }
@@ -1031,24 +718,11 @@ void *_myObserverContextC = (void *)20175283;
 
 #pragma mark-- Override Methods
 
-- (void)setWrapContentHeight:(BOOL)wrapContentHeight {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.wrapContentHeight != wrapContentHeight) {
-        layoutTraits.wrapContentHeight = wrapContentHeight;
-        [self setNeedsLayout];
-    }
-}
-
-- (void)setWrapContentWidth:(BOOL)wrapContentWidth {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.wrapContentWidth != wrapContentWidth) {
-        layoutTraits.wrapContentWidth = wrapContentWidth;
-        [self setNeedsLayout];
-    }
-}
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_SET1(MyLayoutTraitsImpl, BOOL, WrapContentHeight, wrapContentHeight)
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_SET1(MyLayoutTraitsImpl, BOOL, WrapContentWidth, wrapContentWidth)
 
 - (void)setWrapContentSize:(BOOL)wrapContentSize {
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myDefaultSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
     layoutTraits.wrapContentSize = wrapContentSize;
     [self setNeedsLayout];
 }
@@ -1065,12 +739,21 @@ void *_myObserverContextC = (void *)20175283;
             context->selfSize.height = size.height;
         }
     }
+    
+    MyLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
+    context->paddingTop = layoutTraits.myLayoutPaddingTop;
+    context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
+    context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
+    context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
+    context->vertGravity = MYVERTGRAVITY(layoutTraits.gravity);
+    context->horzGravity = [MyViewTraitsImpl convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(layoutTraits.gravity)];
+    context->vertSpacing = layoutTraits.subviewVSpacing;
+    context->horzSpacing = layoutTraits.subviewHSpacing;
+    if (context->subviewEngines == nil) {
+        context->subviewEngines = [layoutTraits filterEngines:subviewEngines];
+    }
 
     return context->selfSize;
-}
-
-- (id)createSizeClassInstance {
-    return [MyLayoutTraits new];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -1148,7 +831,7 @@ void *_myObserverContextC = (void *)20175283;
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     [super willMoveToSuperview:newSuperview];
 
-    MyBaseLayout *layoutTraits = self.myDefaultSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = self.myCurrentTraits;
 
     //特殊处理如果视图是控制器根视图则取消高度或者宽度包裹,安全区padding的缩进, 以及adjustScrollViewContentSizeMode的设置。
     //但是有一种特殊情况是控制器是子视图控制器。因此还需要添加判断父视图是否是非布局父视图，只有是非布局父视图下才将自适应设置清除
@@ -1308,13 +991,15 @@ void *_myObserverContextC = (void *)20175283;
 
     [super safeAreaInsetsDidChange];
 #endif
+    
+    MyViewTraitsImpl *viewTraits = self.myCurrentTraitsInner;
 
     if (self.superview != nil &&
         ![self.superview isKindOfClass:[MyBaseLayout class]] &&
-        (self.leadingPosInner.isSafeAreaPos ||
-         self.trailingPosInner.isSafeAreaPos ||
-         self.topPosInner.isSafeAreaPos ||
-         self.bottomPosInner.isSafeAreaPos)) {
+        (viewTraits.leadingPosInner.isSafeAreaPos ||
+         viewTraits.trailingPosInner.isSafeAreaPos ||
+         viewTraits.topPosInner.isSafeAreaPos ||
+         viewTraits.bottomPosInner.isSafeAreaPos)) {
         if (!self.isMyLayouting) {
             self.isMyLayouting = YES;
             [self myUpdateLayoutRectInNoLayoutSuperview:self.superview];
@@ -1330,10 +1015,11 @@ void *_myObserverContextC = (void *)20175283;
 
 - (CGSize)intrinsicContentSize {
     CGSize size = [super intrinsicContentSize];
-    if (self.translatesAutoresizingMaskIntoConstraints == NO && (self.widthSizeInner.wrapVal || self.heightSizeInner.wrapVal)) {
-        if (self.widthSizeInner.wrapVal && self.heightSizeInner.wrapVal) {
+    MyViewTraitsImpl *viewTraits = self.myCurrentTraitsInner;
+    if (self.translatesAutoresizingMaskIntoConstraints == NO && (viewTraits.widthSizeInner.wrapVal || viewTraits.heightSizeInner.wrapVal)) {
+        if (viewTraits.widthSizeInner.wrapVal && viewTraits.heightSizeInner.wrapVal) {
             size = [self sizeThatFits:CGSizeZero];
-        } else if (self.widthSizeInner.wrapVal) {
+        } else if (viewTraits.widthSizeInner.wrapVal) {
             //动态宽度
             NSLayoutConstraint *heightConstraint = nil;
             for (NSLayoutConstraint *constraint in self.constraints) {
@@ -1446,14 +1132,14 @@ void *_myObserverContextC = (void *)20175283;
         }
         //得到当前布局视图和子视图的最佳的sizeClass
         MyLayoutEngine *layoutViewEngine = self.myEngine;
-        layoutViewEngine.currentSizeClass = [layoutViewEngine fetchView:self bestLayoutSizeClass:sizeClass];
+        layoutViewEngine.currentTraits = [layoutViewEngine fetchView:self bestTraitsAt:sizeClass];
         
         NSMutableArray<MyLayoutEngine *> *subviewEngines = [NSMutableArray arrayWithCapacity:self.subviews.count];
         for (UIView *subview in self.subviews) {
             MyLayoutEngine *subviewEngine = subview.myEngine;
-            subviewEngine.currentSizeClass = [subviewEngine fetchView:subview bestLayoutSizeClass:sizeClass];
+            subviewEngine.currentTraits = [subviewEngine fetchView:subview bestTraitsAt:sizeClass];
             
-            if (!subviewEngine.hasObserver && subviewEngine.currentSizeClass != nil && !subviewEngine.currentSizeClass.useFrame) {
+            if (!subviewEngine.hasObserver && subviewEngine.currentTraits != nil && !subviewEngine.currentTraits.useFrame) {
                 subviewEngine.hasObserver = YES;
                 [self myAddSubviewObserver:subview];
             }
@@ -1461,7 +1147,7 @@ void *_myObserverContextC = (void *)20175283;
             [subviewEngines addObject:subviewEngine];
         }
 
-        MyLayoutTraits *layoutTraits = (MyLayoutTraits*)layoutViewEngine.currentSizeClass;
+        MyLayoutTraitsImpl *layoutTraits = layoutViewEngine.currentTraits;
 
         //计算布局
         CGSize oldSelfSize = self.bounds.size;
@@ -1492,7 +1178,7 @@ void *_myObserverContextC = (void *)20175283;
             CGPoint sbvOldCenter = subview.center;
 
             MyLayoutEngine *subviewEngine = subview.myEngine;
-            MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+            MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
 
             if (subviewEngine.leading != CGFLOAT_MAX && subviewEngine.top != CGFLOAT_MAX && !subviewTraits.noLayout && !subviewTraits.useFrame) {
                 if (subviewEngine.width < 0) {
@@ -1544,9 +1230,9 @@ void *_myObserverContextC = (void *)20175283;
             if (subviewTraits.visibility == MyVisibility_Gone && !subview.isHidden) {
                 subview.bounds = CGRectMake(sbvOldBounds.origin.x, sbvOldBounds.origin.y, 0, 0);
             }
-            if (subviewEngine.currentSizeClass.viewLayoutCompleteBlock != nil) {
-                subviewEngine.currentSizeClass.viewLayoutCompleteBlock(self, subview);
-                subviewEngine.currentSizeClass.viewLayoutCompleteBlock = nil;
+            if (subviewEngine.viewLayoutCompleteBlock != nil) {
+                subviewEngine.viewLayoutCompleteBlock(self, subview);
+                subviewEngine.viewLayoutCompleteBlock = nil;
             }
 
             [subviewEngine reset];
@@ -1561,7 +1247,7 @@ void *_myObserverContextC = (void *)20175283;
             //如果父视图也是布局视图，并且自己隐藏则不调整自身的尺寸和位置。
             BOOL isAdjustSelf = YES;
             if (self.superview != nil && [self.superview isKindOfClass:[MyBaseLayout class]]) {
-                if ([(MyViewTraits*)self.myCurrentSizeClass invalid]) {
+                if ([self.myCurrentTraits invalid]) {
                     isAdjustSelf = NO;
                 }
             }
@@ -1673,18 +1359,19 @@ void *_myObserverContextC = (void *)20175283;
 
             //这里处理当布局视图的父视图是非布局父视图，且父视图具有wrap属性时需要调整父视图的尺寸。
             if (superview != nil && ![superview isKindOfClass:[MyBaseLayout class]]) {
-                if (superview.heightSizeInner.wrapVal || superview.widthSizeInner.wrapVal) {
+                MyViewTraitsImpl *superviewTraits = superview.myCurrentTraitsInner;
+                if (superviewTraits.heightSizeInner.wrapVal || superviewTraits.widthSizeInner.wrapVal) {
                     //调整父视图的高度和宽度。frame值。
                     CGRect superBounds = superview.bounds;
                     CGPoint superCenter = superview.center;
 
-                    if (superview.heightSizeInner.wrapVal) {
-                        superBounds.size.height = [self myValidMeasure:superview.heightSizeInner subview:superview calcSize:layoutTraits.myTop + newSelfSize.height + layoutTraits.myBottom subviewSize:superBounds.size selfLayoutSize:newSelfSize];
+                    if (superviewTraits.heightSizeInner.wrapVal) {
+                        superBounds.size.height = [self myValidMeasure:superviewTraits.heightSizeInner subview:superview calcSize:layoutTraits.myTop + newSelfSize.height + layoutTraits.myBottom subviewSize:superBounds.size selfLayoutSize:newSelfSize];
                         superCenter.y += (superBounds.size.height - superview.bounds.size.height) * superview.layer.anchorPoint.y;
                     }
 
-                    if (superview.widthSizeInner.wrapVal) {
-                        superBounds.size.width = [self myValidMeasure:superview.widthSizeInner subview:superview calcSize:layoutTraits.myLeading + newSelfSize.width + layoutTraits.myTrailing subviewSize:superBounds.size selfLayoutSize:newSelfSize];
+                    if (superviewTraits.widthSizeInner.wrapVal) {
+                        superBounds.size.width = [self myValidMeasure:superviewTraits.widthSizeInner subview:superview calcSize:layoutTraits.myLeading + newSelfSize.width + layoutTraits.myTrailing subviewSize:superBounds.size selfLayoutSize:newSelfSize];
                         superCenter.x += (superBounds.size.width - superview.bounds.size.width) * superview.layer.anchorPoint.x;
                     }
 
@@ -1771,9 +1458,13 @@ void *_myObserverContextC = (void *)20175283;
 
 #pragma mark-- Private Methods
 
+- (Class) myTratisClass {
+    return [MyLayoutTraitsImpl class];
+}
+
 - (MyLayoutEngine *)myEngine {
     if (_myEngine == nil) {
-        _myEngine = [MyLayoutEngine new];
+        _myEngine = [[MyLayoutEngine alloc] initWithTraitsClass:[self myTratisClass]];
     }
     return _myEngine;
 }
@@ -1795,12 +1486,12 @@ void *_myObserverContextC = (void *)20175283;
     context.sizeClass = sizeClass;
     context.layoutViewEngine = layoutViewEngine;
     
-    if (layoutViewEngine.currentSizeClass.widthSizeInner.numberVal != nil) {
-        size.width = MAX(layoutViewEngine.currentSizeClass.widthSizeInner.measure, size.width);
+    if (layoutViewEngine.currentTraits.widthSizeInner.numberVal != nil) {
+        size.width = MAX(layoutViewEngine.currentTraits.widthSizeInner.measure, size.width);
     }
     
-    if (layoutViewEngine.currentSizeClass.heightSizeInner.numberVal != nil) {
-        size.height = MAX(layoutViewEngine.currentSizeClass.heightSizeInner.measure, size.height);
+    if (layoutViewEngine.currentTraits.heightSizeInner.numberVal != nil) {
+        size.height = MAX(layoutViewEngine.currentTraits.heightSizeInner.measure, size.height);
     }
     
     CGSize selfSize = [self calcLayoutSize:size subviewEngines:subviewEngines context:&context];
@@ -1819,7 +1510,7 @@ void *_myObserverContextC = (void *)20175283;
              baselinePos:(CGFloat)baselinePos
                  withContext:(MyLayoutContext *)context {
     
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
     UIView *subview = subviewTraits.view;
     CGFloat layoutViewContentHeight = context->selfSize.height - context->paddingTop - context->paddingBottom;
 
@@ -1886,7 +1577,7 @@ void *_myObserverContextC = (void *)20175283;
              horzGravity:(MyGravity)horzGravity
                  withContext:(MyLayoutContext *)context {
     
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
     UIView *subview = subviewTraits.view;
     CGFloat layoutViewContentWidth = context->selfSize.width - context->paddingLeading - context->paddingTrailing;
     CGFloat marginLeading = [self myValidMargin:subviewTraits.leadingPosInner subview:subview calcPos:[subviewTraits.leadingPosInner measureWith:layoutViewContentWidth] selfLayoutSize:context->selfSize];
@@ -1944,8 +1635,8 @@ void *_myObserverContextC = (void *)20175283;
         return size;
     }
     CGRect rectSuper = newSuperview.bounds;
-    MyViewTraits *superviewTraits = (MyViewTraits*)newSuperview.myDefaultSizeClassInner; //非布局父视图只有默认布局样式
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)self.myCurrentSizeClass;
+    MyViewTraitsImpl *superviewTraits = newSuperview.myCurrentTraitsInner;
+    MyLayoutTraitsImpl *layoutTraits = self.myCurrentTraits;
 
     if (!superviewTraits.widthSizeInner.wrapVal) {
         if (layoutTraits.widthSizeInner.anchorVal.view == newSuperview) {
@@ -2003,7 +1694,7 @@ void *_myObserverContextC = (void *)20175283;
     BOOL isAdjust = NO; //这个变量表明是否后续父视图尺寸变化后需要调整更新布局视图的尺寸。
 
     CGRect rectSuper = newSuperview.bounds;
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits *)self.myCurrentSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = self.myCurrentTraits;
 
     CGFloat marginLeading = [layoutTraits.leadingPosInner measureWith:rectSuper.size.width];
     CGFloat marginTrailing = [layoutTraits.trailingPosInner measureWith:rectSuper.size.width];
@@ -2183,7 +1874,7 @@ void *_myObserverContextC = (void *)20175283;
     return isAdjust;
 }
 
-- (CGFloat)mySubview:(MyViewTraits *)subviewTraits wrapHeightSizeFits:(CGSize)size withContext:(MyLayoutContext *)context {
+- (CGFloat)mySubview:(MyViewTraitsImpl *)subviewTraits wrapHeightSizeFits:(CGSize)size withContext:(MyLayoutContext *)context {
     UIView *subview = subviewTraits.view;
     
     CGFloat height = 0.0;
@@ -2361,7 +2052,7 @@ void *_myObserverContextC = (void *)20175283;
 - (NSArray *)myUpdateCurrentSizeClass:(MySizeClass)sizeClass subviews:(NSArray<UIView *> *)subviews {
     
     MyLayoutEngine *layoutViewEngine = self.myEngine;
-    layoutViewEngine.currentSizeClass = (MyViewTraits*)[self fetchLayoutSizeClass:sizeClass];
+    layoutViewEngine.currentTraits = (MyViewTraitsImpl*)[self fetchLayoutTraitsInSizeClass:sizeClass];
     
     if (subviews == nil) {
         subviews = self.subviews;
@@ -2369,7 +2060,10 @@ void *_myObserverContextC = (void *)20175283;
     NSMutableArray<MyLayoutEngine *> *subviewEngines = [NSMutableArray arrayWithCapacity:subviews.count];
     for (UIView *subview in subviews) {
         MyLayoutEngine *subviewEngine = subview.myEngine;
-        subviewEngine.currentSizeClass = (MyViewTraits*)[subview fetchLayoutSizeClass:sizeClass];
+        subviewEngine.currentTraits = (MyViewTraitsImpl*)[subview fetchLayoutTraitsInSizeClass:sizeClass];
+        if ([subviewEngine.currentTraits invalid]) {
+            [subviewEngine reset];
+        }
         [subviewEngines addObject:subviewEngine];
     }
     
@@ -2378,7 +2072,7 @@ void *_myObserverContextC = (void *)20175283;
 
 - (CGSize)myAdjustLayoutViewSizeWithContext:(MyLayoutContext *)context {
     
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)context->layoutViewEngine.currentSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
     
     //调整布局视图自己的尺寸。
     context->selfSize.height = [self myValidMeasure:layoutTraits.heightSizeInner subview:self calcSize:context->selfSize.height subviewSize:context->selfSize selfLayoutSize:self.superview.bounds.size];
@@ -2441,25 +2135,25 @@ void *_myObserverContextC = (void *)20175283;
 }
 
 - (CGFloat)myLayoutPaddingTop {
-    return self.myCurrentSizeClass.myLayoutPaddingTop;
+    return ((MyLayoutTraitsImpl*)self.myCurrentTraits).myLayoutPaddingTop;
 }
 - (CGFloat)myLayoutPaddingBottom {
-    return self.myCurrentSizeClass.myLayoutPaddingBottom;
+    return ((MyLayoutTraitsImpl*)self.myCurrentTraits).myLayoutPaddingBottom;
 }
 - (CGFloat)myLayoutPaddingLeft {
-    return self.myCurrentSizeClass.myLayoutPaddingLeft;
+    return ((MyLayoutTraitsImpl*)self.myCurrentTraits).myLayoutPaddingLeft;
 }
 - (CGFloat)myLayoutPaddingRight {
-    return self.myCurrentSizeClass.myLayoutPaddingRight;
+    return ((MyLayoutTraitsImpl*)self.myCurrentTraits).myLayoutPaddingRight;
 }
 - (CGFloat)myLayoutPaddingLeading {
-    return self.myCurrentSizeClass.myLayoutPaddingLeading;
+    return ((MyLayoutTraitsImpl*)self.myCurrentTraits).myLayoutPaddingLeading;
 }
 - (CGFloat)myLayoutPaddingTrailing {
-    return self.myCurrentSizeClass.myLayoutPaddingTrailing;
+    return ((MyLayoutTraitsImpl*)self.myCurrentTraits).myLayoutPaddingTrailing;
 }
 
-- (void)myLayout:(MyLayoutTraits *)layoutTraits adjustScrollViewContentWithSize:(CGSize)newSize {
+- (void)myLayout:(MyLayoutTraitsImpl *)layoutTraits adjustScrollViewContentWithSize:(CGSize)newSize {
     if (self.adjustScrollViewContentSizeMode == MyAdjustScrollViewContentSizeModeYes && self.superview != nil && [self.superview isKindOfClass:[UIScrollView class]]) {
         UIScrollView *scrollView = (UIScrollView *)self.superview;
         CGSize contsize = scrollView.contentSize;
@@ -2556,7 +2250,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 - (void)myRemoveSubviewObserver:(UIView *)subview {
     MyLayoutEngine *subviewEngine = subview.myEngineInner;
     if (subviewEngine != nil) {
-        subviewEngine.currentSizeClass.viewLayoutCompleteBlock = nil;
+        subviewEngine.viewLayoutCompleteBlock = nil;
         if (subviewEngine.hasObserver) {
             subviewEngine.hasObserver = NO;
             if (![subview isKindOfClass:[MyBaseLayout class]]) {
@@ -2592,8 +2286,8 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 
 - (void)myAdjustSizeSettingOfSubviewEngine:(MyLayoutEngine *)subviewEngine withContext:(MyLayoutContext *)context {
     
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)context->layoutViewEngine.currentSizeClass;
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
     UIView *subview = subviewTraits.view;
 
     if (!context->isEstimate) {
@@ -2627,8 +2321,8 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 - (CGFloat)myWidthSizeValueOfSubviewEngine:(MyLayoutEngine *)subviewEngine
                                withContext:(MyLayoutContext *)context {
     
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)context->layoutViewEngine.currentSizeClass;
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
     CGFloat retVal = subviewEngine.width;
     MyLayoutSize *sbvWidthSizeInner = subviewTraits.widthSizeInner;
     if (sbvWidthSizeInner.numberVal != nil) { //宽度等于固定的值。
@@ -2662,8 +2356,8 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 - (CGFloat)myHeightSizeValueOfSubviewEngine:(MyLayoutEngine *)subviewEngine
                                 withContext:(MyLayoutContext *)context {
     
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)context->layoutViewEngine.currentSizeClass;
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
     MyLayoutSize *subviewHeightSizeInner = subviewTraits.heightSizeInner;
 
     CGFloat contentWidth = context->selfSize.width - context->paddingLeading - context->paddingTrailing;
@@ -2696,8 +2390,8 @@ MySizeClass _myGlobalSizeClass = 0xFF;
                      pMaxWrapSize:(CGSize *)pMaxWrapSize
                       withContext:(MyLayoutContext *)context {
     
-    MyLayoutTraits *layoutTraits = (MyLayoutTraits*)context->layoutViewEngine.currentSizeClass;
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
     
     subviewEngine.width = [self myWidthSizeValueOfSubviewEngine:subviewEngine withContext:context];
     subviewEngine.width = [self myValidMeasure:subviewTraits.widthSizeInner subview:subviewTraits.view calcSize:subviewEngine.width subviewSize:subviewEngine.size selfLayoutSize:context->selfSize];
@@ -2784,15 +2478,16 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 
 - (void)myInvalidateIntrinsicContentSize {
     if (!self.translatesAutoresizingMaskIntoConstraints) {
-        if (self.widthSizeInner.wrapVal || self.heightSizeInner.wrapVal) {
+        MyViewTraitsImpl *viewTraits = (MyViewTraitsImpl*)self.myCurrentTraitsInner;
+        if (viewTraits.widthSizeInner.wrapVal || viewTraits.heightSizeInner.wrapVal) {
             [self invalidateIntrinsicContentSize];
         }
     }
 }
 
-- (void)myCalcSubviewsWrapContentSize:(MyLayoutContext *)context withCustomSetting:(void (^)(MyViewTraits *subviewTraits))customSetting {
+- (void)myCalcSubviewsWrapContentSize:(MyLayoutContext *)context withCustomSetting:(void (^)(MyViewTraitsImpl *subviewTraits))customSetting {
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
-        MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+        MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
         UIView *subview = subviewTraits.view;
 
         if (customSetting != nil) {
@@ -2805,55 +2500,7 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 }
 
 #pragma mark -- Deprecated methods
-//
-//
-//- (CGFloat)topPadding {
-//    return self.paddingTop;
-//}
-//
-//- (void)setTopPadding:(CGFloat)topPadding {
-//    self.paddingTop = topPadding;
-//}
-//
-//- (CGFloat)leadingPadding {
-//    return self.paddingLeading;
-//}
-//
-//- (void)setLeadingPadding:(CGFloat)leadingPadding {
-//    self.paddingLeading = leadingPadding;
-//}
-//
-//- (CGFloat)bottomPadding {
-//    return self.paddingBottom;
-//}
-//
-//- (void)setBottomPadding:(CGFloat)bottomPadding {
-//    self.paddingBottom = bottomPadding;
-//}
-//
-//- (CGFloat)trailingPadding {
-//    return self.paddingTrailing;
-//}
-//
-//- (void)setTrailingPadding:(CGFloat)trailingPadding {
-//    self.paddingTrailing = trailingPadding;
-//}
-//
-//- (CGFloat)leftPadding {
-//    return self.paddingLeft;
-//}
-//
-//- (void)setLeftPadding:(CGFloat)leftPadding {
-//    self.paddingLeft = leftPadding;
-//}
-//
-//- (CGFloat)rightPadding {
-//    return self.paddingRight;
-//}
-//
-//- (void)setRightPadding:(CGFloat)rightPadding {
-//    self.paddingRight = rightPadding;
-//}
+
 
 @end
 

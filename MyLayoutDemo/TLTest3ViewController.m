@@ -131,7 +131,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Space" style:UIBarButtonItemStylePlain target:self action:@selector(handleSpace:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Spacing" style:UIBarButtonItemStylePlain target:self action:@selector(handleSpacing:)];
     
 }
 
@@ -172,14 +172,14 @@
     [self presentViewController:alertVC animated:YES completion:nil];
 }
 
--(void)handleSpace:(id)sender
+-(void)handleSpacing:(id)sender
 {
-    if (self.tableLayout.subviewVSpace == 0)
-        self.tableLayout.subviewVSpace = 5;
-    else if (self.tableLayout.subviewHSpace == 0)
-        self.tableLayout.subviewHSpace = 5;
+    if (self.tableLayout.subviewVSpacing == 0)
+        self.tableLayout.subviewVSpacing = 5;
+    else if (self.tableLayout.subviewHSpacing == 0)
+        self.tableLayout.subviewHSpacing = 5;
     else
-        self.tableLayout.subviewVSpace = self.tableLayout.subviewHSpace = 0;
+        self.tableLayout.subviewVSpacing = self.tableLayout.subviewHSpacing = 0;
     
     [self.tableLayout layoutAnimationWithDuration:0.3];
     

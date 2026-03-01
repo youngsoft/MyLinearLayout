@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-/*8.FlowLayout - Flex space*/
+/*8.FlowLayout - Flex spacing*/
 @interface FLLTest8ViewController : UIViewController
 
 @end

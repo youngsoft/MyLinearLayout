@@ -34,7 +34,7 @@
  
  2. 对于水平表格布局来说，行子视图是从左到右依次排列的，而列子视图则是在行子视图里面从上到下依次排列。
  */
-@interface MyTableLayout : MyLinearLayout
+@interface MyTableLayout : MyLinearLayout<MyTableLayoutTraits>
 
 /**
  构建一个表格布局视图

@@ -36,8 +36,9 @@
     self.edgesForExtendedLayout = UIRectEdgeNone;  //设置视图控制器中的视图尺寸不延伸到导航条或者工具条下面。您可以注释这句代码看看效果。
     MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    rootLayout.subviewSpace = 5;
+    rootLayout.subviewSpacing = 5;
     self.view = rootLayout;
+    self.view.backgroundColor = [UIColor whiteColor];
     self.rootLayout = rootLayout;
     
     [self createVertLayout:rootLayout];
@@ -87,7 +88,7 @@
     [rootLayout addSubview:vertContentLayout];
     vertContentLayout.weight = 1.0;
     vertContentLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
-    vertContentLayout.subviewSpace = 20;
+    vertContentLayout.subviewSpacing = 20;
     vertContentLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     vertContentLayout.maxLines = 4;
     vertContentLayout.clipsToBounds = YES;
@@ -137,7 +138,7 @@
     [rootLayout addSubview:horzLayout];
     horzLayout.widthSize.equalTo(@(MyLayoutSize.wrap)).uBound(rootLayout.widthSize,-10,1);
     horzLayout.heightSize.equalTo(@(300));
-    horzLayout.subviewSpace = 20;
+    horzLayout.subviewSpacing = 20;
     horzLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     horzLayout.maxLines = 3;
     horzLayout.clipsToBounds = YES;

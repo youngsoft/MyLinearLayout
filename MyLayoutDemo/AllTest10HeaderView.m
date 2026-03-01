@@ -57,7 +57,7 @@
     MyLinearLayout *messageLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     messageLayout.weight = 1;
     messageLayout.myLeading = 5;
-    messageLayout.subviewVSpace = 5;
+    messageLayout.subviewVSpacing = 5;
     [_rootLayout addSubview:messageLayout];
     
     _nickNameLabel = [UILabel new];
@@ -77,8 +77,8 @@
     _nineFlowLayout = [[MyFlowLayout alloc] initWithOrientation:MyOrientation_Vert arrangedCount:3];
     _nineFlowLayout.gravity = MyGravity_Horz_Fill;
     _nineFlowLayout.myHorzMargin = 0;
-    _nineFlowLayout.subviewHSpace = 5;
-    _nineFlowLayout.subviewVSpace = 5;
+    _nineFlowLayout.subviewHSpacing = 5;
+    _nineFlowLayout.subviewVSpacing = 5;
     _nineFlowLayout.myHeight = MyLayoutSize.wrap;
     [messageLayout addSubview:_nineFlowLayout];
     

@@ -90,7 +90,7 @@
                                         "anchor": true,
                                         "size": 80,
                                         "padding":"{5,5,5,5}",
-                                        "space": 5,
+                                        "spacing": 5,
                                         "rows":[
                                                 {
                                                 
@@ -104,7 +104,7 @@
                                         {
                                         "size": "fill",
                                         "padding":"{5,5,5,5}",
-                                        "space": 5,
+                                        "spacing": 5,
                                         "rows":[
                                                 {
                                                 
@@ -118,7 +118,7 @@
                                         ]
                                },
                                {
-                               "space": 5,
+                               "spacing": 5,
                                "size": "fill",
                                "cols": [
                                         {

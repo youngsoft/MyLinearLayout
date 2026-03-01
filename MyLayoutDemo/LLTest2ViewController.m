@@ -190,7 +190,7 @@
      userInfoLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
      userInfoLayout.myTop = 20;
      userInfoLayout.myLeading = userInfoLayout.myTrailing = 0;
-     userInfoLayout.subviewHSpace = 10;  //子视图的水平间距为10
+     userInfoLayout.subviewHSpacing = 10;  //子视图的水平间距为10
      userInfoLayout.myHeight = MyLayoutSize.wrap;
      userInfoLayout.gravity = MyGravity_Vert_Center; //里面的子视图整体垂直居中。
      [contentLayout addSubview:userInfoLayout];
@@ -247,7 +247,7 @@
     MyLinearLayout *ageSelectLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     ageSelectLayout.myTop = 5;
     ageSelectLayout.myHeight = MyLayoutSize.wrap;
-    ageSelectLayout.subviewHSpace = 10;   //里面所有子视图之间的水平间距。
+    ageSelectLayout.subviewHSpacing = 10;   //里面所有子视图之间的水平间距。
     [ageLayout addSubview:ageSelectLayout];
     
     for (int i = 0; i < 3; i++)
@@ -276,8 +276,8 @@
      ageLayout.myTop = 20;
      ageLayout.myLeading = ageLayout.myTrailing = 0;  // 宽度和父布局相等
      ageLayout.myHeight = MyLayoutSize.wrap;  //高度由子视图包裹。
-     ageLayout.subviewVSpace = 5; //所有子视图垂直间距为5
-     ageLayout.subviewHSpace = 10; //所有子视图水平间距为10
+     ageLayout.subviewVSpacing = 5; //所有子视图垂直间距为5
+     ageLayout.subviewHSpacing = 10; //所有子视图水平间距为10
      [contentLayout addSubview:ageLayout];
      
      UILabel *ageTitleLabel = [UILabel new];
@@ -301,7 +301,7 @@
      //宽度这样设置的原因是：3个子视图要平分布局视图的宽度，这里每个子视图的间距是10。
      //因此每个子视图的宽度 = (布局视图宽度 - 2 * 子视图间距)/3 = 布局视图宽度 * 1/3 - 2*子视图间距/3
      //MyLayoutSize中的equalTo方法设置布局宽度，multiply方法用来设置1/3，add方法用来设置2*子视图间距/3. 因此可以进行如下设置：
-     ageLabel.widthSize.equalTo(ageLayout.widthSize).multiply(1.0/3).add(-1 * 2 * ageLayout.subviewHSpace / 3);
+     ageLabel.widthSize.equalTo(ageLayout.widthSize).multiply(1.0/3).add(-1 * 2 * ageLayout.subviewHSpacing / 3);
      [ageLayout addSubview:ageLabel];
      }
      */

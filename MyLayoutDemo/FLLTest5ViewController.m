@@ -119,8 +119,8 @@
      上面是实现一个水平流式布局分页且从左往右滚动的标准属性设置方法。
      */
     
-    flowLayout.subviewHSpace = 10;
-    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.subviewHSpacing = 10;
+    flowLayout.subviewVSpacing = 10;  //设置子视图的水平和垂直间距。
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
     [scrollView addSubview:flowLayout];
     flowLayout.backgroundColor = [CFTool color:0];
@@ -128,7 +128,7 @@
     [self addAllItemSubviews:flowLayout];
     
     //获取流式布局的横屏size classes，并且设置当设备处于横屏时每页的数量由9个变为了18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
-    MyFlowLayout *flowLayoutSC = [flowLayout fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    id<MyFlowLayoutTraits> flowLayoutSC = [flowLayout fetchLayoutTraitsInSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     flowLayoutSC.pagedCount = 18;
 }
 
@@ -159,8 +159,8 @@
      上面是实现一个水平流式布局分页且从上往下滚动的标准属性设置方法。
      */
     
-    flowLayout.subviewHSpace = 10;
-    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.subviewHSpacing = 10;
+    flowLayout.subviewVSpacing = 10;  //设置子视图的水平和垂直间距。
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
     [scrollView addSubview:flowLayout];
     flowLayout.backgroundColor = [CFTool color:0];
@@ -168,7 +168,7 @@
     [self addAllItemSubviews:flowLayout];
     
     //获取流式布局的横屏size classes，并且设置设备处于横屏时每页的数量由9个变为18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
-    MyFlowLayout *flowLayoutSC = [flowLayout fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    id<MyFlowLayoutTraits> flowLayoutSC = [flowLayout fetchLayoutTraitsInSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     flowLayoutSC.pagedCount = 18;
     
 }
@@ -202,8 +202,8 @@
      */
     
     
-    flowLayout.subviewHSpace = 10;
-    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.subviewHSpacing = 10;
+    flowLayout.subviewVSpacing = 10;  //设置子视图的水平和垂直间距。
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
     [scrollView addSubview:flowLayout];
     flowLayout.backgroundColor = [CFTool color:0];
@@ -211,7 +211,7 @@
     [self addAllItemSubviews:flowLayout];
     
     //获取流式布局的横屏size classes，并且设置设备处于横屏时,每排数量由3个变为6个，每页的数量由9个变为18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
-    MyFlowLayout *flowLayoutSC = [flowLayout fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    id<MyFlowLayoutTraits> flowLayoutSC = [flowLayout fetchLayoutTraitsInSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     flowLayoutSC.arrangedCount = 6;
     flowLayoutSC.pagedCount = 18;
     
@@ -247,8 +247,8 @@
      */
     
     
-    flowLayout.subviewHSpace = 10;
-    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.subviewHSpacing = 10;
+    flowLayout.subviewVSpacing = 10;  //设置子视图的水平和垂直间距。
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
     [scrollView addSubview:flowLayout];
     flowLayout.backgroundColor = [CFTool color:0];
@@ -256,7 +256,7 @@
     [self addAllItemSubviews:flowLayout];
     
     //获取流式布局的横屏size classes，并且设置设备处于横屏时,每排数量由3个变为6个，每页的数量由9个变为18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
-    MyFlowLayout *flowLayoutSC = [flowLayout fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    id<MyFlowLayoutTraits> flowLayoutSC = [flowLayout fetchLayoutTraitsInSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     flowLayoutSC.arrangedCount = 6;
     flowLayoutSC.pagedCount = 18;
     
@@ -291,8 +291,8 @@
      */
     
     
-    flowLayout.subviewHSpace = 10;
-    flowLayout.subviewVSpace = 10;  //设置子视图的水平和垂直间距。
+    flowLayout.subviewHSpacing = 10;
+    flowLayout.subviewVSpacing = 10;  //设置子视图的水平和垂直间距。
     flowLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5); //布局视图的内边距设置！您可以注释掉这句话看看效果！如果设置内边距且也有分页时请将这个值设置和子视图间距相等。
     [scrollView addSubview:flowLayout];
     flowLayout.backgroundColor = [CFTool color:0];
@@ -300,7 +300,7 @@
     [self addAllItemSubviews:flowLayout];
     
     //获取流式布局的横屏size classes，并且设置设备处于横屏时,每排数量由3个变为6个，每页的数量由9个变为18个。您可以注释掉这段代码，然后横竖屏切换看看效果。
-    MyFlowLayout *flowLayoutSC = [flowLayout fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    id<MyFlowLayoutTraits> flowLayoutSC = [flowLayout fetchLayoutTraitsInSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     flowLayoutSC.arrangedCount = 6;
     flowLayoutSC.pagedCount = 18;
 }
