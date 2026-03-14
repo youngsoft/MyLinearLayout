@@ -78,6 +78,8 @@
     //创建一个布局拖动器。
     self.dragger = [self.flowLayout createLayoutDragger];
     self.dragger.animateDuration = 0.2;
+    self.dragger.delegate = self;
+    self.dragger.canHover = YES;
 
     
     for (NSInteger i = 0; i < 14; i++){
@@ -149,12 +151,53 @@
 
 }
 
-
 - (IBAction)handleTouchDownRepeat:(UIButton*)sender withEvent:(UIEvent*)event {
     
     [sender removeFromSuperview];
     [self.flowLayout layoutAnimationWithDuration:0.2];
 }
+
+#pragma mark -- MyLayoutDraggerDelegate
+
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger draggingView:(UIView *)draggingView enterInHoveringView:(UIView *)hoveringView {
+    
+    UIButton *draggingButton = (UIButton *)draggingView;
+    UIButton *hoveringButton = (UIButton *)hoveringView;
+    
+    NSLog(@"按钮：%@ 出现在：%@ 之上",draggingButton.titleLabel.text, hoveringButton.titleLabel.text);
+    
+    hoveringView.transform = CGAffineTransformMakeScale(1.2, 1.2);
+
+
+}
+
+
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger draggingView:(UIView *)draggingView leaveFromHoveringView:(UIView *)hoveringView {
+    
+    UIButton *draggingButton = (UIButton *)draggingView;
+    UIButton *hoveringButton = (UIButton *)hoveringView;
+    
+    NSLog(@"按钮：%@ 从：%@ 离开",draggingButton.titleLabel.text, hoveringButton.titleLabel.text);
+    
+    hoveringView.transform = CGAffineTransformIdentity;
+
+}
+
+
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger startDragView:(UIView *)dragView {
+    
+    UIButton *btn = (UIButton *)dragView;
+    NSLog(@"按钮：%@ 开始拖动",btn.titleLabel.text);
+    
+}
+
+
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger endDropView:(UIView *)dropView {
+    UIButton *btn = (UIButton *)dropView;
+    NSLog(@"按钮：%@ 结束拖动",btn.titleLabel.text);
+ 
+}
+
 
 /*
 #pragma mark - Navigation

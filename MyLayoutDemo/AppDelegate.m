@@ -32,6 +32,11 @@
     ViewController *vc = [[ViewController alloc] init];
    
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    if (@available(iOS 26.0, *)) {
+        nav.interactiveContentPopGestureRecognizer.enabled = NO;
+    } else {
+        // Fallback on earlier versions
+    }
     self.window.rootViewController = nav;
         
     [self.window makeKeyAndVisible];

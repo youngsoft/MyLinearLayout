@@ -1003,46 +1003,82 @@
 #pragma mark-- MyLayoutDragger
 @class MyLayoutDragger;
 
+
+@protocol MyLayoutDraggerDelegate <NSObject>
+
+@optional
+
+/// <#Description#>
+/// - Parameters:
+///   - dragger: <#dragger description#>
+///   - draggingView: <#draggingView description#>
+///   - hoveringView: <#hoveringView description#>
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger draggingView:(UIView *)draggingView enterInHoveringView:(UIView *)hoveringView;
+
+/// <#Description#>
+/// - Parameters:
+///   - dragger: <#dragger description#>
+///   - draggingView: <#draggingView description#>
+///   - hoveringView: <#hoveringView description#>
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger draggingView:(UIView *)draggingView leaveFromHoveringView:(UIView *)hoveringView;
+
+/// <#Description#>
+/// - Parameters:
+///   - dragger: <#dragger description#>
+///   - dragView: <#dragView description#>
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger startDragView:(UIView *)dragView;
+
+/// <#Description#>
+/// - Parameters:
+///   - dragger: <#dragger description#>
+///   - dropView: <#dropView description#>
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger endDropView:(UIView *)dropView;
+
+@end
+
+
 /**
- 布局视图拖动器类，用来实现布局内的视图的拖动封装。用于实现布局子视图的拖放处理。
-布局视图的拖动器类，只支持那些按顺序添加的布局视图，不支持相对布局、框架布局、栅格布局、路径布局。
+ 布局视图拖动管理器类，用来实现布局内的视图的拖动封装。用于实现布局子视图的拖放处理。
+布局视图的拖动管理器类，只支持那些按顺序添加的布局视图，不支持相对布局、框架布局、栅格布局、路径布局。
  一般情况下我们要实现布局内子视图的：
   1.UIControlEventTouchDown 事件来处理拖动开始
   2.UIControlEventTouchDragInside UIControlEventTouchDragOutside 事件来处理拖动进行中
   3. UIControlEventTouchUpInside UIControlEventTouchCancel 事件来处理拖动结束。
  
- 如果您的布局下的子视图不是UIControl类的派生类的话，请分别重载如下事件：
+ 如果您添加到布局下的子视图不是UIControl类的派生类的话，请分别重载如下事件：
  
- - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event    在这个方法中调用dragView:withEvent:
- - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;   在这个方法中调用dragginView:withEvent
+ - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event    在这个方法内部调用dragView:withEvent:方法
+ - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;   在这个方法内部调用dragginView:withEvent方法
  - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
- - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event  在上述两个方法中调用dropView:withEvent
-
- 无论何种方式，最终都是在调用完dropView:withEvent方法后，通过读取currentIndex和oldIndex的值来获取位置信息的改变。
+ - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event  在上述两个方法内部调用dropView:withEvent方法
  
  */
 @interface MyLayoutDragger : NSObject
 
-//子视图拖动时，拖动区域当前所归属的子视图位置索引。
-@property (nonatomic, assign, readonly) NSUInteger currentIndex;
+//当拖动的视图和其他视图区域重叠时拖动视图否可以悬停在其他视图上。默认为NO，表明当拖动的视图与其他视图重叠后其他视图会移动，如果为YES则重叠时其他视图会保持不动。
+@property (nonatomic, assign) BOOL canHover;
 
-//子视图拖动时，拖动视图的老的位置索引。
-@property (nonatomic, assign, readonly) NSUInteger oldIndex;
-
-//当前是否正在拖动中。
-@property (nonatomic, assign, readonly) BOOL hasDragging;
-
-//设置拖动时不会调整的子视图列表。也就是说数组中指定的子视图在拖动时不会被移动而是总是固定在原有的位置。
+//设置拖动时不会移动位置的子视图列表。也就是说数组中指定的子视图在和拖动的视图重叠时总是固定在原有的位置不会变动。
 @property (nonatomic, strong) NSArray<UIView *> *exclusiveViews;
+
+//设定在拖动时拖动视图进入目标视图中心开始往外扩展尺寸的比例就会触发目标视图移开或者触发悬停回调通知，取值为(0,1] 默认值为0.25.
+@property (nonatomic, assign) CGFloat overlapRatio;
 
 //设置拖动时位置调整的动画时长，默认是0秒，设置为0时拖动不产生动画效果。设置为0.2效果较好。
 @property (nonatomic, assign) NSTimeInterval animateDuration;
 
-//当拖动的视图和现有视图重叠时是否支持悬停功能，默认为NO。当开启开关后，并且oldIndex和currentIndex相等时则处于悬停状态。开启悬停功能的目的是为了支持一些替换或者更新的能力。
-@property (nonatomic, assign) BOOL canHover;
+@property (nonatomic, weak) id<MyLayoutDraggerDelegate> delegate;
 
-//当前是否正在悬停中。我们可以借助这个属性值判断来做一些操作处理。
-@property (nonatomic, assign, readonly) BOOL isHovering;
+
+//拖动管理器所属的布局视图
+@property (nonatomic, weak, readonly) MyBaseLayout *layoutView;
+//正在执行拖动的视图，可能为空
+@property (nonatomic, weak, readonly) UIView *draggingView;
+//拖动时,拖动视图所悬停的视图，可能为空。注意悬停的视图也有可能是exclusiveViews中指定的视图。
+@property (nonatomic, weak, readonly) UIView *hoveringView;
+
+
+
 
 
 //下列方法请在子视图的相应事件处理中调用。
@@ -1051,7 +1087,7 @@
 - (void)dragView:(UIView *)view withEvent:(UIEvent *)event;
 //拖动中,请在子视图view的拖动过程事件中调用这个方法，其中的view指定拖动中的视图。
 - (void)dragginView:(UIView *)view withEvent:(UIEvent *)event;
-//结束拖动，请在子视图view的结束拖动事件中调用这个方法，其中的view指定要结束拖动的视图。
+//结束拖动，请在子视图view的结束或者终止拖动事件中调用这个方法，其中的view指定要结束拖动的视图。
 - (void)dropView:(UIView *)view withEvent:(UIEvent *)event;
 
 @end

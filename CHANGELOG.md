@@ -1,7 +1,7 @@
 # 版本变更日志
 **MyLayout**的所有版本的变更日志都将会在这里记录.
 
-## [V2.0.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/2.0.0)(2025/11/10)
+## [V2.0.0](https://github.com/youngsoft/MyLinearLayout/releases/tag/2.0.0)(2026/03/07)
 ### Add
 1. 为流式布局MyFlowLayout添加新的`maxLines`属性和`arrangedLines`属性。前者用来设置最大可显示的行列数，后者用来获取当前的行列数，具体例子详见[FLLTest10ViewController](https://github.com/youngsoft/MyLinearLayout/blob/master/MyLayoutDemo/FLLTest10ViewController.m)中的demo.
 2. 添加弹性布局MyFlexLayout对`space-evenly`属性值的支持。

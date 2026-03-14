@@ -32,7 +32,7 @@ MyLayout is a simple and easy objective-c framework for iOS view layout. MyLayou
 ```objective-c
 
     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
-    S.subviewSpace = 10;
+    S.subviewSpacing = 10;
     S.widthSize.equalTo(@100);
     
     UIView *A = UIView.new;
@@ -114,7 +114,7 @@ Sample code:
     
     MyLinearLayout *S = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     S.myWidth = 120;
-    S.subviewSpace = 10;
+    S.subviewSpacing = 10;
     
     UIView *A = [UIView new];
     A.myHorzMargin = 5;
@@ -276,8 +276,8 @@ Sample code:
     
     MyTableLayout *S = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     S.myWidth = MyLayoutSize.wrap;
-    S.subviewHSpace = 10;
-    S.subviewVSpace = 10;
+    S.subviewHSpacing = 10;
+    S.subviewVSpacing = 10;
     
     [S addRow:MyLayoutSize.wrap colSize:MyLayoutSize.wrap];
     
@@ -364,7 +364,7 @@ Sample code:
     
     MyFloatLayout *S  = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     S.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    S.subviewSpace = 10;
+    S.subviewSpacing = 10;
     S.myWidth = 300;
     S.myHeight = MyLayoutSize.wrap;
     
@@ -512,8 +512,8 @@ Sample code:
    MyFlexLayout *S = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Row)
     .flex_wrap(MyFlexWrap_Wrap)
-    .vert_space(10)
-    .horz_space(10)
+    .vert_spacing(10)
+    .horz_spacing(10)
     .padding(UIEdgeInsetsMake(10, 10, 10, 10))
     .width(300)
     .height(MyLayoutSize.wrap)
@@ -539,8 +539,8 @@ MyLayout provided support to SizeClass in order to fit the different screen size
 
 ```objective-c
 
--(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass;
--(instancetype)fetchLayoutSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
+- (MyLayoutTraitsT)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass;
+- (MyLayoutTraitsT)fetchLayoutTraitsInSizeClass:(MySizeClass)sizeClass copyFrom:(MySizeClass)srcSizeClass;
 
 ```
 to set Size Classes Characteristics like below:
@@ -554,7 +554,7 @@ to set Size Classes Characteristics like below:
     rootLayout.gravity = MyGravity_Horz_Fill;
 
 //MySizeClass_wAny | MySizeClass_hCompact is iPhone landscape orientation.
- MyLinearLayout *lsc = [rootLayout fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+ id<MyLinearLayoutTraits> lsc = [rootLayout fetchLayoutTraitsInSizeClass:MySizeClass_wAny | MySizeClass_hCompact copyFrom:MySizeClass_wAny | MySizeClass_hAny];
  
     lsc.orientation = MyOrientation_Horz;
     lsc.myWidth = MyLayoutSize.empty;
@@ -619,7 +619,7 @@ To integrate MyLayout into your Xcode project using CocoaPods, specify it in you
 
 ```
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '9.0'
+platform :ios, '11.0'
 
 pod 'MyLayout'
 ```

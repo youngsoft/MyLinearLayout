@@ -21,8 +21,14 @@ void *_myObserverContextC = (void *)20175283;
 
 @property (nonatomic, assign) NSUInteger currentIndex;
 @property (nonatomic, assign) NSUInteger oldIndex;
-@property (nonatomic, assign) BOOL hasDragging;
-@property (nonatomic, weak) MyBaseLayout *layout;
+
+//布局视图
+@property (nonatomic, weak, readwrite) MyBaseLayout *layoutView;
+//正在执行拖动的视图，可能为空
+@property (nonatomic, weak, readwrite) UIView *draggingView;
+//拖动时悬停的视图，可能为空
+@property (nonatomic, weak, readwrite) UIView *hoveringView;
+
 
 @end
 
@@ -598,8 +604,8 @@ _MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyLayoutTraitsImpl, BOOL, ReverseLayout,
     MyLayoutDragger *dragger = [MyLayoutDragger new];
     dragger.currentIndex = -1;
     dragger.oldIndex = -1;
-    dragger.hasDragging = NO;
-    dragger.layout = self;
+    dragger.layoutView = self;
+    dragger.overlapRatio = 0.25;
     return dragger;
 }
 
@@ -2541,97 +2547,137 @@ MySizeClass _myGlobalSizeClass = 0xFF;
 
 //开始拖动
 - (void)dragView:(UIView *)view withEvent:(UIEvent *)event {
-    if (self.layout == nil) {
+    if (self.layoutView == nil) {
+        self.draggingView = nil;
+        self.hoveringView = nil;
         return;
     }
-    self.oldIndex = [self.layout.subviews indexOfObject:view];
+    self.oldIndex = [self.layoutView.subviews indexOfObject:view];
     self.currentIndex = self.oldIndex;
-    self.hasDragging = NO;
     
-    CGPoint point = [[event touchesForView:view].anyObject locationInView:self.layout];
+    CGPoint point = [[event touchesForView:view].anyObject locationInView:self.layoutView];
     CGPoint center = view.center;
     self.centerPointOffset = CGPointMake(center.x - point.x, center.y - point.y);
+    self.draggingView = nil;
+    self.hoveringView = nil;
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(myLayoutDragger:startDragView:)]) {
+        [self.delegate myLayoutDragger:self startDragView:view];
+    }
 }
 
 //拖动中,在拖动时要排除移动的子视图序列，动画的时长。返回是否拖动成功。
 - (void)dragginView:(UIView *)view withEvent:(UIEvent *)event {
-    if (self.layout == nil) {
+    if (self.layoutView == nil) {
+        self.draggingView = nil;
+        self.hoveringView = nil;
         return;
     }
-    self.hasDragging = YES;
+    
+    self.draggingView = view;
 
     //取出拖动时当前的位置点。
-    CGPoint point = [[event touchesForView:view].anyObject locationInView:self.layout];
+    CGPoint point = [[event touchesForView:view].anyObject locationInView:self.layoutView];
 
-    UIView *hoverView = nil; //保存拖动时手指所在的视图。
+    BOOL hoverViewIsExclusiveView = NO;
+    UIView *hoveringView = nil; //保存拖动时手指所在的视图。
     //判断当前手指在具体视图的位置。这里要排除exclusiveViews中指定的所有视图的位置，因为这些视图固定不会调整。
-    for (UIView *subview in self.layout.subviews) {
-        if (subview != view && view.useFrame && ![self.exclusiveViews containsObject:subview]) {
-            if (CGRectContainsPoint(subview.frame, point)) {
-                hoverView = subview;
+    for (UIView *subview in self.layoutView.subviews) {
+        if (subview != view && view.useFrame) {
+            
+            CGRect subviewFrame = subview.frame;
+            CGRect validSubviewFrame = CGRectInset(subviewFrame, CGRectGetWidth(subviewFrame)*self.overlapRatio, CGRectGetHeight(subviewFrame)*self.overlapRatio);
+            if (CGRectContainsPoint(validSubviewFrame, point)) {
+                hoverViewIsExclusiveView = [self.exclusiveViews containsObject:subview];
+                hoveringView = subview;
                 break;
             }
         }
     }
 
     //如果拖动的view和手指下当前其他的兄弟视图有重合时则意味着需要将当前视图view插入到手指下其他视图所在的位置，并且调整其他视图的位置。
-    if (hoverView != nil) {
-        if (self.animateDuration > 0) {
-            [self.layout layoutAnimationWithDuration:self.animateDuration];
-        }
-        //得到要移动的视图的位置索引。
-        self.currentIndex = [self.layout.subviews indexOfObjectIdenticalTo:hoverView];
-        if (self.oldIndex != self.currentIndex) {
-            self.oldIndex = self.currentIndex;
-        } else {
-            if (!self.canHover) {
-                if (hoverView.center.x > view.center.x) {
-                    self.currentIndex = self.oldIndex + 1;
+    if (hoveringView != nil) {
+        if (!hoverViewIsExclusiveView) {
+            if (self.animateDuration > 0) {
+                [self.layoutView layoutAnimationWithDuration:self.animateDuration];
+            }
+            //得到要移动的视图的位置索引。
+            self.currentIndex = [self.layoutView.subviews indexOfObjectIdenticalTo:hoveringView];
+            if (self.oldIndex != self.currentIndex) {
+                self.oldIndex = self.currentIndex;
+            } else {
+                if (!self.canHover) {
+                    if (hoveringView.center.x > view.center.x) {
+                        self.currentIndex = self.oldIndex + 1;
+                    }
                 }
             }
+            
+            for (NSInteger i = self.layoutView.subviews.count - 1; i > self.currentIndex; i--) {
+                [self.layoutView exchangeSubviewAtIndex:i withSubviewAtIndex:i - 1];
+            }
+            
+            //因为view在bringSubviewToFront后变为了最后一个子视图，因此要调整正确的位置。
+            //经过上面的view的位置调整完成后，需要重新激发布局视图的布局，因此这里要设置autoresizesSubviews为YES。
+            self.layoutView.autoresizesSubviews = YES;
+            view.useFrame = NO;
+            view.noLayout = YES;
+            //这里设置为YES表示布局时不会改变view的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
+            [self.layoutView layoutIfNeeded];
         }
-
-        for (NSInteger i = self.layout.subviews.count - 1; i > self.currentIndex; i--) {
-            [self.layout exchangeSubviewAtIndex:i withSubviewAtIndex:i - 1];
-        }
-
-        //因为view在bringSubviewToFront后变为了最后一个子视图，因此要调整正确的位置。
-        //经过上面的view的位置调整完成后，需要重新激发布局视图的布局，因此这里要设置autoresizesSubviews为YES。
-        self.layout.autoresizesSubviews = YES;
-        view.useFrame = NO;
-        view.noLayout = YES;
-        //这里设置为YES表示布局时不会改变view的真实位置而只是在布局视图中占用一个位置和尺寸，正是因为只是占用位置，因此会调整其他视图的位置。
-        [self.layout layoutIfNeeded];
     }
     //在进行view的位置调整时，要把view移动到最顶端，也就子视图数组的的最后。同时布局视图不能激发子视图布局，因此要把autoresizesSubviews设置为NO，同时因为要自定义view的位置，因此要把useFrame设置为YES，并且恢复noLayout为NO。
-    [self.layout bringSubviewToFront:view]; //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
-    self.layout.autoresizesSubviews = NO;   //在拖动时不要让布局视图激发布局
+    [self.layoutView bringSubviewToFront:view]; //把拖动的子视图放在最后，这样这个子视图在移动时就会在所有兄弟视图的上面。
+    self.layoutView.autoresizesSubviews = NO;   //在拖动时不要让布局视图激发布局
     view.useFrame = YES;                    //因为拖动时，拖动的控件需要自己确定位置，不能被布局约束，因此必须要将useFrame设置为YES下面的center设置才会有效。
     view.center = CGPointMake(point.x + self.centerPointOffset.x, point.y + self.centerPointOffset.y);                       //因为useFrame设置为了YES所有这里可以直接调整center，从而实现了位置的自定义设置。
     view.noLayout = NO;                     //恢复noLayout为NO。
+    
+    if (self.hoveringView != nil && hoveringView == nil) {
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(myLayoutDragger:draggingView:leaveFromHoveringView:)]) {
+            [self.delegate myLayoutDragger:self draggingView:self.draggingView leaveFromHoveringView:self.hoveringView];
+        }
+    }
+    
+    if (hoveringView != nil && self.hoveringView != hoveringView) {
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(myLayoutDragger:draggingView:enterInHoveringView:)]) {
+            [self.delegate myLayoutDragger:self draggingView:self.draggingView enterInHoveringView:hoveringView];
+        }
+    }
+    
+    self.hoveringView = hoveringView;
 }
 
 //结束拖动
 - (void)dropView:(UIView *)view withEvent:(UIEvent *)event {
-    if (self.layout == nil) {
+    if (self.layoutView == nil) {
+        self.draggingView = nil;
+        self.hoveringView = nil;
         return;
     }
-    if (!self.hasDragging) {
+    if (self.draggingView != view) {
         return;
     }
-    self.hasDragging = NO;
+    self.draggingView = nil;
 
     //当抬起时，需要让拖动的子视图调整到正确的顺序，并重新参与布局，因此这里要把拖动的子视图的useFrame设置为NO，同时把布局视图的autoresizesSubviews还原为YES。
-    for (NSInteger i = self.layout.subviews.count - 1; i > self.currentIndex; i--) {
-        [self.layout exchangeSubviewAtIndex:i withSubviewAtIndex:i - 1];
+    for (NSInteger i = self.layoutView.subviews.count - 1; i > self.currentIndex; i--) {
+        [self.layoutView exchangeSubviewAtIndex:i withSubviewAtIndex:i - 1];
     }
 
     view.useFrame = NO;                    //让拖动的子视图重新参与布局，将useFrame设置为NO
-    self.layout.autoresizesSubviews = YES; //让布局视图可以重新激发布局，这里还原为YES。
+    self.layoutView.autoresizesSubviews = YES; //让布局视图可以重新激发布局，这里还原为YES。
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(myLayoutDragger:endDropView:)]) {
+        [self.delegate myLayoutDragger:self endDropView:view];
+    }
+    
+    if (self.hoveringView != nil) {
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(myLayoutDragger:draggingView:leaveFromHoveringView:)]) {
+            [self.delegate myLayoutDragger:self draggingView:view leaveFromHoveringView:self.hoveringView];
+        }
+    }
+    
+    self.hoveringView = nil;
 }
 
-- (BOOL)isHovering {
-    return self.hasDragging && self.canHover && self.oldIndex == self.currentIndex;
-}
 
 @end
