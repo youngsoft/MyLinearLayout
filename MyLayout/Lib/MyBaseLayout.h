@@ -1008,30 +1008,30 @@
 
 @optional
 
-/// <#Description#>
+/// 拖动的视图开始悬停在某个视图之上通知
 /// - Parameters:
-///   - dragger: <#dragger description#>
-///   - draggingView: <#draggingView description#>
-///   - hoveringView: <#hoveringView description#>
+///   - dragger: 拖动管理器
+///   - draggingView: 拖动的视图
+///   - hoveringView: 悬停的视图
 - (void)myLayoutDragger:(MyLayoutDragger *)dragger draggingView:(UIView *)draggingView enterInHoveringView:(UIView *)hoveringView;
 
-/// <#Description#>
+/// 拖动的视图从悬停的视图上离开通知
 /// - Parameters:
-///   - dragger: <#dragger description#>
-///   - draggingView: <#draggingView description#>
-///   - hoveringView: <#hoveringView description#>
+///   - dragger: 拖动管理器
+///   - draggingView: 拖动的视图
+///   - hoveringView: 悬停的视图
 - (void)myLayoutDragger:(MyLayoutDragger *)dragger draggingView:(UIView *)draggingView leaveFromHoveringView:(UIView *)hoveringView;
 
-/// <#Description#>
+/// 开始拖动通知
 /// - Parameters:
-///   - dragger: <#dragger description#>
-///   - dragView: <#dragView description#>
+///   - dragger: 推动管理器
+///   - dragView: 开始拖动的视图
 - (void)myLayoutDragger:(MyLayoutDragger *)dragger startDragView:(UIView *)dragView;
 
-/// <#Description#>
+/// 结束拖动通知
 /// - Parameters:
-///   - dragger: <#dragger description#>
-///   - dropView: <#dropView description#>
+///   - dragger: 拖动管理器
+///   - dropView: 结束拖动的视图
 - (void)myLayoutDragger:(MyLayoutDragger *)dragger endDropView:(UIView *)dropView;
 
 @end
@@ -1061,7 +1061,7 @@
 //设置拖动时不会移动位置的子视图列表。也就是说数组中指定的子视图在和拖动的视图重叠时总是固定在原有的位置不会变动。
 @property (nonatomic, strong) NSArray<UIView *> *exclusiveViews;
 
-//设定在拖动时拖动视图进入目标视图中心开始往外扩展尺寸的比例就会触发目标视图移开或者触发悬停回调通知，取值为(0,1] 默认值为0.25.
+//设定在拖动时拖动视图进入目标视图尺寸的比例就会触发目标视图移开或者触发悬停回调通知，取值为[0,1] 默认值为0.25.
 @property (nonatomic, assign) CGFloat overlapRatio;
 
 //设置拖动时位置调整的动画时长，默认是0秒，设置为0时拖动不产生动画效果。设置为0.2效果较好。

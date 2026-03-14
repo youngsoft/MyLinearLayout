@@ -2638,13 +2638,14 @@ MySizeClass _myGlobalSizeClass = 0xFF;
         }
     }
     
-    if (hoveringView != nil && self.hoveringView != hoveringView) {
+    UIView *oldHoveringView = self.hoveringView;
+    self.hoveringView = hoveringView;
+    
+    if (hoveringView != nil && oldHoveringView != hoveringView) {
         if (self.delegate != nil && [self.delegate respondsToSelector:@selector(myLayoutDragger:draggingView:enterInHoveringView:)]) {
             [self.delegate myLayoutDragger:self draggingView:self.draggingView enterInHoveringView:hoveringView];
         }
     }
-    
-    self.hoveringView = hoveringView;
 }
 
 //结束拖动

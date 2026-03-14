@@ -11,7 +11,7 @@
 #import "CFTool.h"
 
 
-@interface FLLTest3ViewController ()
+@interface FLLTest3ViewController ()<MyLayoutDraggerDelegate>
 
 @property(nonatomic, strong) MyFlowLayout *flowLayout;
 
