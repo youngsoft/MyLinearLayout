@@ -16,11 +16,7 @@
 - (CGSize)calcLayoutSize:(CGSize)size subviewEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines context:(MyLayoutContext *)context {
     [super calcLayoutSize:size subviewEngines:subviewEngines context:context];
     
-    MyRelativeLayoutTraits *layoutTraits = (MyRelativeLayoutTraits *)context->layoutViewEngine.currentSizeClass;
-    context->paddingTop = layoutTraits.myLayoutPaddingTop;
-    context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
-    context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
-    context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
+    MyRelativeLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
     context->subviewEngines = subviewEngines;
 
     if (layoutTraits.widthSizeInner.wrapVal) {
@@ -30,7 +26,7 @@
         context->selfSize.height = [self myValidMeasure:layoutTraits.heightSizeInner subview:self calcSize:0.0 subviewSize:context->selfSize selfLayoutSize:self.superview.bounds.size];
     } 
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
-        MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+        MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
 
         if (subviewTraits.useFrame) {
             continue;
@@ -78,15 +74,15 @@
     return [self myAdjustLayoutViewSizeWithContext:context];
 }
 
-- (id)createSizeClassInstance {
-    return [MyRelativeLayoutTraits new];
+- (Class) myTratisClass {
+    return [MyRelativeLayoutTraitsImpl class];
 }
 
 #pragma mark-- Private Method
 - (void)mySubviewEngine:(MyLayoutEngine *)subviewEngine calcLeadingTrailingWithContext:(MyLayoutContext *)context {
     
-    MyRelativeLayoutTraits *layoutTraits = (MyRelativeLayoutTraits *)context->layoutViewEngine.currentSizeClass;
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyRelativeLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
 
     //确定宽度，如果跟父一样宽则设置宽度和设置左右值，这时候三个参数设置完毕
     //如果和其他视图的宽度一样，则先计算其他视图的宽度并返回其他视图的宽度
@@ -127,7 +123,7 @@
         MyLayoutPos *nextAnchor = nil;
         for (NSInteger i = anchorArray.count - 1; i >= 0; i--) {
             MyLayoutPos *anchor = anchorArray[i];
-            MyViewTraits *relativeViewTraits = anchor.view.myEngine.currentSizeClass;
+            MyViewTraitsImpl *relativeViewTraits = anchor.view.myEngine.currentTraits;
             if (![relativeViewTraits invalid]) {
                 if (totalWidth != 0) {
                     if (nextAnchor != nil) {
@@ -159,7 +155,7 @@
         [subviewTraits.leadingPos _myEqualTo:prevAxis];
         prevAxis = subviewTraits.trailingPos;
         for (MyLayoutPos *anchor in anchorArray) {
-            MyViewTraits *relativeViewTraits = anchor.view.myEngine.currentSizeClass;
+            MyViewTraitsImpl *relativeViewTraits = anchor.view.myEngine.currentTraits;
             [[relativeViewTraits.leadingPos _myEqualTo:prevAxis] _myOffset:anchor.measure];
             prevAxis = relativeViewTraits.trailingPos;
         }
@@ -171,7 +167,7 @@
 
         subviewEngine.leading = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.centerXPosInner.anchorVal.anchorType withContext:context] - subviewEngine.width / 2 + subviewTraits.centerXPosInner.measure;
 
-        if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+        if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
             subviewEngine.leading -= subviewTraits.centerXPosInner.measure;
         }
         if (subviewEngine.leading < 0.0 && relativeView == self && layoutTraits.widthSizeInner.wrapVal) {
@@ -196,7 +192,7 @@
 
             subviewEngine.leading = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.leadingPosInner.anchorVal.anchorType withContext:context] + subviewTraits.leadingPosInner.measure;
 
-            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
                 subviewEngine.leading -= subviewTraits.leadingPosInner.measure;
             }
             subviewEngine.trailing = subviewEngine.leading + subviewEngine.width + subviewTraits.trailingPosInner.measure;
@@ -211,7 +207,7 @@
             MyLayoutEngine *relativeViewEngine = relativeView.myEngine;
             subviewEngine.trailing = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.trailingPosInner.anchorVal.anchorType withContext:context] - subviewTraits.trailingPosInner.measure + subviewTraits.leadingPosInner.measure;
 
-            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
                 subviewEngine.trailing += subviewTraits.trailingPosInner.measure;
             }
             subviewEngine.leading = subviewEngine.trailing - subviewEngine.width;
@@ -238,11 +234,11 @@
     if (lBoundAnchor.anchorVal != nil && uBoundAnchor.anchorVal != nil) {
         //让宽度缩小并在最小和最大的中间排列。
         CGFloat minLeading = [self mySubviewEngine:lBoundRelativeViewEngine getMeasureFromAnchorType:lBoundAnchor.anchorVal.anchorType withContext:context] + lBoundAnchor.offsetVal;
-        if (lBoundRelativeView != nil && lBoundRelativeView != self && [lBoundRelativeViewEngine.currentSizeClass invalid]) {
+        if (lBoundRelativeView != nil && lBoundRelativeView != self && [lBoundRelativeViewEngine.currentTraits invalid]) {
             minLeading -= lBoundAnchor.offsetVal;
         }
         CGFloat maxTrailing = [self mySubviewEngine:uBoundRelativeViewEngine getMeasureFromAnchorType:uBoundAnchor.anchorVal.anchorType withContext:context] - uBoundAnchor.offsetVal;
-        if (uBoundRelativeView != nil && uBoundRelativeView != self && [uBoundRelativeViewEngine.currentSizeClass invalid]) {
+        if (uBoundRelativeView != nil && uBoundRelativeView != self && [uBoundRelativeViewEngine.currentTraits invalid]) {
             maxTrailing += uBoundAnchor.offsetVal;
         }
         //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
@@ -257,7 +253,7 @@
     } else if (lBoundAnchor.anchorVal != nil) {
         //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
         CGFloat minLeading = [self mySubviewEngine:lBoundRelativeViewEngine getMeasureFromAnchorType:lBoundAnchor.anchorVal.anchorType withContext:context] + lBoundAnchor.offsetVal;
-        if (lBoundRelativeView != nil && lBoundRelativeView != self && [lBoundRelativeViewEngine.currentSizeClass invalid]) {
+        if (lBoundRelativeView != nil && lBoundRelativeView != self && [lBoundRelativeViewEngine.currentTraits invalid]) {
             minLeading -= lBoundAnchor.offsetVal;
         }
         if (_myCGFloatLess(subviewEngine.leading, minLeading)) {
@@ -267,7 +263,7 @@
     } else if (uBoundAnchor.anchorVal != nil) {
         //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
         CGFloat maxTrailing = [self mySubviewEngine:uBoundRelativeViewEngine getMeasureFromAnchorType:uBoundAnchor.anchorVal.anchorType withContext:context] - uBoundAnchor.offsetVal;
-        if (uBoundRelativeView != nil && uBoundRelativeView != self && [uBoundRelativeViewEngine.currentSizeClass invalid]) {
+        if (uBoundRelativeView != nil && uBoundRelativeView != self && [uBoundRelativeViewEngine.currentTraits invalid]) {
             maxTrailing += uBoundAnchor.offsetVal;
         }
         if (_myCGFloatGreat(subviewEngine.trailing, maxTrailing)) {
@@ -279,8 +275,8 @@
 
 - (void)mySubviewEngine:(MyLayoutEngine *)subviewEngine calcTopBottomWithContext:(MyLayoutContext *)context {
 
-    MyRelativeLayoutTraits *layoutTraits = (MyRelativeLayoutTraits *)context->layoutViewEngine.currentSizeClass;
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyRelativeLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
 
     
     if (subviewEngine.top != CGFLOAT_MAX && subviewEngine.bottom != CGFLOAT_MAX && subviewEngine.height != CGFLOAT_MAX) {
@@ -301,7 +297,7 @@
         MyLayoutPos *nextAnchor = nil;
         for (NSInteger i = anchorArray.count - 1; i >= 0; i--) {
             MyLayoutPos *anchor = anchorArray[i];
-            MyViewTraits *relativeViewTraits = anchor.view.myEngine.currentSizeClass;
+            MyViewTraitsImpl *relativeViewTraits = anchor.view.myEngine.currentTraits;
             if (![relativeViewTraits invalid]) {
                 if (totalHeight != 0.0) {
                     if (nextAnchor != nil) {
@@ -332,7 +328,7 @@
         [subviewTraits.topPos _myEqualTo:prevAxis];
         prevAxis = subviewTraits.bottomPos;
         for (MyLayoutPos *anchor in anchorArray) {
-            MyViewTraits *relativeViewTraits = anchor.view.myEngine.currentSizeClass;
+            MyViewTraitsImpl *relativeViewTraits = anchor.view.myEngine.currentTraits;
             [[relativeViewTraits.topPos _myEqualTo:prevAxis] _myOffset:anchor.measure];
             prevAxis = relativeViewTraits.bottomPos;
         }
@@ -348,7 +344,7 @@
             MyLayoutEngine *relativeViewEngine = relativeView.myEngine;
             subviewEngine.top = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.baselinePosInner.anchorVal.anchorType withContext:context] - subviewFont.ascender - (subviewEngine.height - subviewFont.lineHeight) / 2 + subviewTraits.baselinePosInner.measure;
 
-            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
                 subviewEngine.top -= subviewTraits.baselinePosInner.measure;
             }
         } else {
@@ -381,7 +377,7 @@
 
         subviewEngine.top = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType :subviewTraits.centerYPosInner.anchorVal.anchorType withContext:context] - subviewEngine.height / 2 + subviewTraits.centerYPosInner.measure;
 
-        if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+        if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
             subviewEngine.top -= subviewTraits.centerYPosInner.measure;
         }
         if (subviewEngine.top < 0.0 && relativeView == self && layoutTraits.heightSizeInner.wrapVal) {
@@ -407,7 +403,7 @@
             UIView *relativeView = subviewTraits.topPosInner.anchorVal.view;
             MyLayoutEngine *relativeViewEngine = relativeView.myEngine;
             subviewEngine.top = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.topPosInner.anchorVal.anchorType withContext:context] + subviewTraits.topPosInner.measure;
-            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
                 subviewEngine.top -= subviewTraits.topPosInner.measure;
             }
             subviewEngine.bottom = subviewEngine.top + subviewEngine.height + subviewTraits.bottomPosInner.measure;
@@ -421,7 +417,7 @@
             UIView *relativeView = subviewTraits.bottomPosInner.anchorVal.view;
             MyLayoutEngine *relativeViewEngine = relativeView.myEngine;
             subviewEngine.bottom = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.bottomPosInner.anchorVal.anchorType withContext:context] - subviewTraits.bottomPosInner.measure + subviewTraits.topPosInner.measure;
-            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+            if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
                 subviewEngine.bottom += subviewTraits.bottomPosInner.measure;
             }
             subviewEngine.top = subviewEngine.bottom - subviewEngine.height;
@@ -449,11 +445,11 @@
     if (lBoundAnchor.anchorVal != nil && uBoundAnchor.anchorVal != nil) {
         //让宽度缩小并在最小和最大的中间排列。
         CGFloat minTop = [self mySubviewEngine:lBoundRelativeViewEngine getMeasureFromAnchorType:lBoundAnchor.anchorVal.anchorType withContext:context] + lBoundAnchor.offsetVal;
-        if (lBoundRelativeView != nil && lBoundRelativeView != self && [lBoundRelativeViewEngine.currentSizeClass invalid]) {
+        if (lBoundRelativeView != nil && lBoundRelativeView != self && [lBoundRelativeViewEngine.currentTraits invalid]) {
             minTop -= lBoundAnchor.offsetVal;
         }
         CGFloat maxBottom = [self mySubviewEngine:uBoundRelativeViewEngine getMeasureFromAnchorType:uBoundAnchor.anchorVal.anchorType withContext:context] - uBoundAnchor.offsetVal;
-        if (uBoundRelativeView != nil && uBoundRelativeView != self && [uBoundRelativeViewEngine.currentSizeClass invalid]) {
+        if (uBoundRelativeView != nil && uBoundRelativeView != self && [uBoundRelativeViewEngine.currentTraits invalid]) {
             maxBottom += uBoundAnchor.offsetVal;
         }
         //用maxRight减去minLeft得到的宽度再减去视图的宽度，然后让其居中。。如果宽度超过则缩小视图的宽度。
@@ -467,7 +463,7 @@
     } else if (lBoundAnchor.anchorVal != nil) {
         //得到左边的最小位置。如果当前的左边距小于这个位置则缩小视图的宽度。
         CGFloat minTop = [self mySubviewEngine:lBoundRelativeViewEngine getMeasureFromAnchorType:lBoundAnchor.anchorVal.anchorType withContext:context] + lBoundAnchor.offsetVal;
-        if (lBoundRelativeView != nil && lBoundRelativeView != self && [lBoundRelativeViewEngine.currentSizeClass invalid]) {
+        if (lBoundRelativeView != nil && lBoundRelativeView != self && [lBoundRelativeViewEngine.currentTraits invalid]) {
             minTop -= lBoundAnchor.offsetVal;
         }
         if (_myCGFloatLess(subviewEngine.top, minTop)) {
@@ -478,7 +474,7 @@
     } else if (uBoundAnchor.anchorVal != nil) {
         //得到右边的最大位置。如果当前的右边距大于了这个位置则缩小视图的宽度。
         CGFloat maxBottom = [self mySubviewEngine:uBoundRelativeViewEngine getMeasureFromAnchorType:uBoundAnchor.anchorVal.anchorType withContext:context] - uBoundAnchor.offsetVal;
-        if (uBoundRelativeView != nil && uBoundRelativeView != self && [uBoundRelativeViewEngine.currentSizeClass invalid]) {
+        if (uBoundRelativeView != nil && uBoundRelativeView != self && [uBoundRelativeViewEngine.currentTraits invalid]) {
             maxBottom += uBoundAnchor.offsetVal;
         }
         if (_myCGFloatGreat(subviewEngine.bottom, maxBottom)) {
@@ -490,7 +486,7 @@
 
 - (CGFloat)mySubviewEngine:(MyLayoutEngine *)subviewEngine getMeasureFromAnchorType:(MyLayoutAnchorType)anchorType withContext:(MyLayoutContext *)context{
     
-    UIView *relativeView = subviewEngine.currentSizeClass.view;
+    UIView *relativeView = subviewEngine.currentTraits.view;
 
     switch (anchorType) {
         case MyLayoutAnchorType_Leading: {
@@ -610,7 +606,7 @@
 
 - (BOOL)mySubviewEngine:(MyLayoutEngine *)subviewEngine calcWidthWithContext:(MyLayoutContext *)context {
     
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
     BOOL hasMargin = NO;
 
     if (subviewEngine.width == CGFLOAT_MAX) {
@@ -623,7 +619,7 @@
             for (MyLayoutSize *anchor in anchorArray) {
                 if (anchor.isActive) {
                     MyLayoutEngine *relativeViewEngine = anchor.view.myEngine;
-                    invalid = [relativeViewEngine.currentSizeClass invalid];
+                    invalid = [relativeViewEngine.currentTraits invalid];
                     if (!invalid) {
                         if (anchor.val != nil) {
                             [self mySubviewEngine:relativeViewEngine calcWidthWithContext:context];
@@ -654,7 +650,7 @@
 
                 for (MyLayoutSize *anchor in anchorArray) {
                     MyLayoutEngine *relativeViewEngine = anchor.view.myEngine;
-                    if (anchor.isActive && ![relativeViewEngine.currentSizeClass invalid]) {
+                    if (anchor.isActive && ![relativeViewEngine.currentTraits invalid]) {
                         if (anchor.val == nil) {
                             tempWidth = _myCGFloatRound(spareWidth * (anchor.multiVal / totalMultiple));
                             spareWidth -= tempWidth;
@@ -693,7 +689,7 @@
                 UIView *relaView = subviewTraits.leadingPosInner.anchorVal.view;
                 MyLayoutEngine *relativeViewEngine = relaView.myEngine;
                 subviewEngine.leading = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.leadingPosInner.anchorVal.anchorType withContext:context] + subviewTraits.leadingPosInner.measure;
-                if (relaView != nil && relaView != self && [relativeViewEngine.currentSizeClass invalid]) {
+                if (relaView != nil && relaView != self && [relativeViewEngine.currentTraits invalid]) {
                     subviewEngine.leading -= subviewTraits.leadingPosInner.measure;
                 }
             } else if (subviewTraits.leadingPosInner.mostVal != nil) {
@@ -706,7 +702,7 @@
                 UIView *relativeView = subviewTraits.trailingPosInner.anchorVal.view;
                 MyLayoutEngine *relativeViewEngine = relativeView.myEngine;
                 subviewEngine.trailing = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.trailingPosInner.anchorVal.anchorType withContext:context] - subviewTraits.trailingPosInner.measure;
-                if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+                if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
                     subviewEngine.trailing += subviewTraits.trailingPosInner.measure;
                 }
             } else if (subviewTraits.trailingPosInner.mostVal != nil) {
@@ -746,7 +742,7 @@
 
 - (BOOL)mySubviewEngine:(MyLayoutEngine *)subviewEngine calcHeightWithContext:(MyLayoutContext *)context{
     
-    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
     BOOL hasMargin = NO;
 
     if (subviewEngine.height == CGFLOAT_MAX) {
@@ -760,7 +756,7 @@
             for (MyLayoutSize *anchor in anchorArray) {
                 if (anchor.isActive) {
                     MyLayoutEngine *relativeViewEngine = anchor.view.myEngine;
-                    invalid = [relativeViewEngine.currentSizeClass invalid];
+                    invalid = [relativeViewEngine.currentTraits invalid];
                     if (!invalid) {
                         if (anchor.val != nil) {
                             [self mySubviewEngine:relativeViewEngine calcHeightWithContext:context];
@@ -790,7 +786,7 @@
 
                 for (MyLayoutSize *anchor in anchorArray) {
                     MyLayoutEngine *relativeViewEngine = anchor.view.myEngine;
-                    if (anchor.isActive && ![relativeViewEngine.currentSizeClass invalid]) {
+                    if (anchor.isActive && ![relativeViewEngine.currentTraits invalid]) {
                         if (anchor.val == nil) {
                             tempHeight = _myCGFloatRound(spareHeight * (anchor.multiVal / totalMultiple));
                             spareHeight -= tempHeight;
@@ -824,7 +820,7 @@
                 UIView *relativeView = subviewTraits.topPosInner.anchorVal.view;
                 MyLayoutEngine *relativeViewEngine = relativeView.myEngine;
                 subviewEngine.top = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.topPosInner.anchorVal.anchorType withContext:context] + subviewTraits.topPosInner.measure;
-                if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+                if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
                     subviewEngine.top -= subviewTraits.topPosInner.measure;
                 }
             } else if (subviewTraits.topPosInner.mostVal != nil) {
@@ -837,7 +833,7 @@
                 UIView *relativeView = subviewTraits.bottomPosInner.anchorVal.view;
                 MyLayoutEngine *relativeViewEngine = relativeView.myEngine;
                 subviewEngine.bottom = [self mySubviewEngine:relativeViewEngine getMeasureFromAnchorType:subviewTraits.bottomPosInner.anchorVal.anchorType withContext:context] - subviewTraits.bottomPosInner.measure;
-                if (relativeView != nil && relativeView != self && [relativeViewEngine.currentSizeClass invalid]) {
+                if (relativeView != nil && relativeView != self && [relativeViewEngine.currentTraits invalid]) {
                     subviewEngine.bottom += subviewTraits.bottomPosInner.measure;
                 }
             } else if (subviewTraits.bottomPosInner.mostVal != nil) {
@@ -872,7 +868,7 @@
 }
 
 - (CGSize)myDoLayoutRecalcWidth:(BOOL *)pRecalcWidth recalcHeight:(BOOL *)pRecalcHeight withContext:(MyLayoutContext *)context {
-    MyRelativeLayoutTraits *layoutTraits = (MyRelativeLayoutTraits *)context->layoutViewEngine.currentSizeClass;
+    MyRelativeLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
     
     if (pRecalcWidth != NULL) {
         *pRecalcWidth = NO;
@@ -884,7 +880,7 @@
     CGFloat maxLayoutWidth = context->paddingLeading + context->paddingTrailing;
     CGFloat maxLayoutHeight = context->paddingTop + context->paddingBottom;
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
-        MyViewTraits *subviewTraits = (MyViewTraits *)subviewEngine.currentSizeClass;
+        MyViewTraitsImpl *subviewTraits = (MyViewTraitsImpl *)subviewEngine.currentTraits;
 
         [self mySubviewEngine:subviewEngine calcLeadingTrailingWithContext:context];
         [self mySubviewEngine:subviewEngine calcTopBottomWithContext:context];

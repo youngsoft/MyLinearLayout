@@ -1,5 +1,5 @@
 //
-//  FLLTest8ViewController.h
+//  FLLTest10ViewController.h
 //  MyLayoutDemo
 //
 //  Created by oubaiquan on 2018/8/1.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-/*8.FlowLayout - Flex spacing*/
-@interface FLLTest8ViewController : UIViewController
+/*10.FlowLayout - maxLines*/
+@interface FLLTest10ViewController : UIViewController
 
 @end

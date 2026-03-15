@@ -9,38 +9,6 @@
 #import "MyFloatLayout.h"
 #import "MyLayoutInner.h"
 
-@implementation UIView (MyFloatLayoutExt)
-
-- (void)setReverseFloat:(BOOL)reverseFloat {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
-    if (viewTraits.isReverseFloat != reverseFloat) {
-        viewTraits.reverseFloat = reverseFloat;
-        if (self.superview != nil) {
-            [self.superview setNeedsLayout];
-        }
-    }
-}
-
-- (BOOL)isReverseFloat {
-    return self.myDefaultSizeClassInner.isReverseFloat;
-}
-
-- (void)setClearFloat:(BOOL)clearFloat {
-    MyViewTraits *viewTraits = (MyViewTraits*)self.myDefaultSizeClass;
-    if (viewTraits.clearFloat != clearFloat) {
-        viewTraits.clearFloat = clearFloat;
-        if (self.superview != nil) {
-            [self.superview setNeedsLayout];
-        }
-    }
-}
-
-- (BOOL)clearFloat {
-    return self.myDefaultSizeClassInner.clearFloat;
-}
-
-@end
-
 @implementation MyFloatLayout
 
 #pragma mark-- Public Methods
@@ -48,7 +16,7 @@
 - (instancetype)initWithFrame:(CGRect)frame orientation:(MyOrientation)orientation {
     self = [super initWithFrame:frame];
     if (self != nil) {
-        self.myDefaultSizeClass.orientation = orientation;
+        ((MyFloatLayoutTraitsImpl*)self.myDefaultTraits).orientation = orientation;
     }
     return self;
 }
@@ -58,73 +26,67 @@
 }
 
 + (instancetype)floatLayoutWithOrientation:(MyOrientation)orientation {
-    MyFloatLayout *layout = [[[self class] alloc] initWithOrientation:orientation];
-    return layout;
+    return [[[self class] alloc] initWithOrientation:orientation];
 }
 
-- (void)setOrientation:(MyOrientation)orientation {
-    MyFloatLayoutTraits *layoutTraits = (MyFloatLayoutTraits*)self.myDefaultSizeClass;
-    if (layoutTraits.orientation != orientation) {
-        layoutTraits.orientation = orientation;
-        [self setNeedsLayout];
-    }
+_MYLAYOUT_PROPERTY_LAYOUTVIEW_OVERRIDE1(MyFloatLayoutTraitsImpl, MyOrientation, Orientation, orientation)
+
+- (void)setSubviewsSize:(CGFloat)subviewsSize minSpacing:(CGFloat)minSpacing maxSpacing:(CGFloat)maxSpacing {
+    [self setSubviewsSize:subviewsSize minSpacing:minSpacing maxSpacing:maxSpacing inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
 }
 
-- (MyOrientation)orientation {
-    return self.myDefaultSizeClassInner.orientation;
+- (void)setSubviewsSize:(CGFloat)subviewsSize minSpacing:(CGFloat)minSpacing maxSpacing:(CGFloat)maxSpacing inSizeClass:(MySizeClass)sizeClass {
+    [self setSubviewsSize:subviewsSize minSpacing:minSpacing maxSpacing:maxSpacing centered:NO inSizeClass:sizeClass];
 }
 
-- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace {
-    [self setSubviewsSize:subviewSize minSpace:minSpace maxSpace:maxSpace inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+- (void)setSubviewsSize:(CGFloat)subviewsSize minSpacing:(CGFloat)minSpacing maxSpacing:(CGFloat)maxSpacing centered:(BOOL)centered {
+    [self setSubviewsSize:subviewsSize minSpacing:minSpacing maxSpacing:maxSpacing centered:centered inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
 }
 
-- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass {
-    [self setSubviewsSize:subviewSize minSpace:minSpace maxSpace:maxSpace centered:NO inSizeClass:sizeClass];
-}
-
-- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered {
-    [self setSubviewsSize:subviewSize minSpace:minSpace maxSpace:maxSpace centered:centered inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
-}
-
-- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass {
-    MySequentLayoutTraits *layoutTraits = (MySequentLayoutTraits *)[self fetchLayoutSizeClass:sizeClass];
-    if (subviewSize == 0) {
-        layoutTraits.flexSpace = nil;
+- (void)setSubviewsSize:(CGFloat)subviewsSize minSpacing:(CGFloat)minSpacing maxSpacing:(CGFloat)maxSpacing centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass {
+    MyFloatLayoutTraitsImpl *layoutTraits = (MyFloatLayoutTraitsImpl *)[self fetchLayoutTraitsInSizeClass:sizeClass];
+    if (subviewsSize == 0) {
+        layoutTraits.flexSpacing = nil;
     } else {
-        if (layoutTraits.flexSpace == nil) {
-            layoutTraits.flexSpace = [MySequentLayoutFlexSpacing new];
+        if (layoutTraits.flexSpacing == nil) {
+            layoutTraits.flexSpacing = [MySequentLayoutFlexSpacing new];
         }
-        layoutTraits.flexSpace.subviewSize = subviewSize;
-        layoutTraits.flexSpace.minSpace = minSpace;
-        layoutTraits.flexSpace.maxSpace = maxSpace;
-        layoutTraits.flexSpace.centered = centered;
+        layoutTraits.flexSpacing.subviewsSize = subviewsSize;
+        layoutTraits.flexSpacing.minSpacing = minSpacing;
+        layoutTraits.flexSpacing.maxSpacing = maxSpacing;
+        layoutTraits.flexSpacing.centered = centered;
     }
     [self setNeedsLayout];
 }
+
+////
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace {
+    [self setSubviewsSize:subviewSize minSpacing:minSpace maxSpacing:maxSpace inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+}
+
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace inSizeClass:(MySizeClass)sizeClass {
+    [self setSubviewsSize:subviewSize minSpacing:minSpace maxSpacing:maxSpace centered:NO inSizeClass:sizeClass];
+}
+
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered {
+    [self setSubviewsSize:subviewSize minSpacing:minSpace maxSpacing:maxSpace centered:centered inSizeClass:MySizeClass_hAny | MySizeClass_wAny];
+}
+
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass {
+    [self setSubviewsSize:subviewSize minSpacing:minSpace maxSpacing:maxSpace centered:centered inSizeClass:sizeClass];
+}
+
 
 #pragma mark-- Override Methods
 
 - (CGSize)calcLayoutSize:(CGSize)size subviewEngines:(NSMutableArray<MyLayoutEngine *> *)subviewEngines context:(MyLayoutContext *)context {
     [super calcLayoutSize:size subviewEngines:subviewEngines context:context];
 
-    MyFloatLayoutTraits *layoutTraits = (MyFloatLayoutTraits *)context->layoutViewEngine.currentSizeClass;
-    context->subviewEngines = [layoutTraits filterEngines:subviewEngines];
-    context->paddingTop = layoutTraits.myLayoutPaddingTop;
-    context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
-    context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
-    context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
-    context->vertGravity = MYVERTGRAVITY(layoutTraits.gravity);
-    context->horzGravity = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(layoutTraits.gravity)];
-    context->vertSpace = layoutTraits.subviewVSpace;
-    context->horzSpace = layoutTraits.subviewHSpace;
-    if (context->subviewEngines == nil) {
-        context->subviewEngines = [layoutTraits filterEngines:subviewEngines];
-    }
-    
+    MyFloatLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;    
     MyOrientation orientation = layoutTraits.orientation;
 
     [self myCalcSubviewsWrapContentSize:context
-                      withCustomSetting:^(MyViewTraits *subviewTraits) {
+                      withCustomSetting:^(MyViewTraitsImpl *subviewTraits) {
                           if (subviewTraits.widthSizeInner.wrapVal &&
                               orientation == MyOrientation_Vert &&
                               subviewTraits.weight != 0 &&
@@ -146,8 +108,8 @@
     return [self myAdjustLayoutViewSizeWithContext:context];
 }
 
-- (id)createSizeClassInstance {
-    return [MyFloatLayoutTraits new];
+- (Class) myTratisClass {
+    return [MyFloatLayoutTraitsImpl class];
 }
 
 #pragma mark-- Private Methods
@@ -286,7 +248,7 @@
 - (void)myCalcSubviewsSize:(CGFloat)specialMeasure isWidth:(BOOL)isWidth withContext:(MyLayoutContext *)context {
     //设置子视图的宽度和高度。
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
-        MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+        MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
         if (specialMeasure != 0.0) {
             if (isWidth) {
                 subviewEngine.width = specialMeasure;
@@ -314,7 +276,7 @@
 }
 
 - (void)myDoVertOrientationLayoutWithContext:(MyLayoutContext *)context {
-    MyFloatLayoutTraits *layoutTraits = (MyFloatLayoutTraits*)context->layoutViewEngine.currentSizeClass;
+    MyFloatLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
 
     BOOL isBeyondFlag = NO; //子视图是否超出剩余空间需要换行。
     
@@ -324,7 +286,7 @@
     }
 
     //支持浮动水平间距。
-    CGFloat subviewWidth = [layoutTraits.flexSpace calcMaxMinSubviewSizeForContent:context->selfSize.width paddingStart:&context->paddingLeading paddingEnd:&context->paddingTrailing space:&context->horzSpace];
+    CGFloat subviewWidth = [layoutTraits.flexSpacing calcMaxMinSubviewsSizeForContent:context->selfSize.width paddingStart:&context->paddingLeading paddingEnd:&context->paddingTrailing spacing:&context->horzSpacing];
 
     //计算所有子视图的宽度和高度。
     [self myCalcSubviewsSize:subviewWidth isWidth:YES withContext:context];
@@ -355,7 +317,7 @@
 
     for (NSInteger idx = 0; idx < context->subviewEngines.count; idx++) {
         MyLayoutEngine *subviewEngine = context->subviewEngines[idx];
-        MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+        MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
 
         CGFloat topSpacing = subviewTraits.topPosInner.measure;
         CGFloat leadingSpacing = subviewTraits.leadingPosInner.measure;
@@ -444,7 +406,7 @@
             }
 
             //这里有可能子视图本身的宽度会超过布局视图本身，但是我们的候选区域则不存储超过的宽度部分。
-            CGRect cRect = CGRectMake(_myCGFloatMax((subviewEngine.leading - leadingSpacing - context->horzSpace), context->paddingLeading), subviewEngine.top - topSpacing, _myCGFloatMin((subviewEngine.width + leadingSpacing + trailingSpacing), (context->selfSize.width - context->paddingLeading - context->paddingTrailing)), subviewEngine.height + topSpacing + bottomSpacing + context->vertSpace);
+            CGRect cRect = CGRectMake(_myCGFloatMax((subviewEngine.leading - leadingSpacing - context->horzSpacing), context->paddingLeading), subviewEngine.top - topSpacing, _myCGFloatMin((subviewEngine.width + leadingSpacing + trailingSpacing), (context->selfSize.width - context->paddingLeading - context->paddingTrailing)), subviewEngine.height + topSpacing + bottomSpacing + context->vertSpacing);
 
             //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
             for (NSInteger i = trailingCandidateRects.count - 1; i >= 0; i--) {
@@ -478,8 +440,8 @@
             [trailingCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             trailingLastYOffset = subviewEngine.top - topSpacing;
 
-            if (_myCGFloatGreat(subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpace, trailingMaxHeight)) {
-                trailingMaxHeight = subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpace;
+            if (_myCGFloatGreat(subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpacing, trailingMaxHeight)) {
+                trailingMaxHeight = subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpacing;
             }
         } else {
             CGPoint nextPoint = {context->paddingLeading, trailingLastYOffset};
@@ -558,7 +520,7 @@
                 }
             }
 
-            CGRect cRect = CGRectMake(subviewEngine.leading - leadingSpacing, subviewEngine.top - topSpacing, _myCGFloatMin((subviewEngine.width + leadingSpacing + trailingSpacing + context->horzSpace), (context->selfSize.width - context->paddingLeading - context->paddingTrailing)), subviewEngine.height + topSpacing + bottomSpacing + context->vertSpace);
+            CGRect cRect = CGRectMake(subviewEngine.leading - leadingSpacing, subviewEngine.top - topSpacing, _myCGFloatMin((subviewEngine.width + leadingSpacing + trailingSpacing + context->horzSpacing), (context->selfSize.width - context->paddingLeading - context->paddingTrailing)), subviewEngine.height + topSpacing + bottomSpacing + context->vertSpacing);
 
             //把新添加到候选中去。并删除高度小于的候选键。和高度
             for (NSInteger i = leadingCandidateRects.count - 1; i >= 0; i--) {
@@ -591,22 +553,22 @@
             [leadingCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             leadingLastYOffset = subviewEngine.top - topSpacing;
 
-            if (_myCGFloatGreat(subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpace, leadingMaxHeight)) {
-                leadingMaxHeight = subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpace;
+            if (_myCGFloatGreat(subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpacing, leadingMaxHeight)) {
+                leadingMaxHeight = subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpacing;
             }
         }
 
-        if (_myCGFloatGreat(subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpace, maxLayoutHeight)) {
-            maxLayoutHeight = subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpace;
+        if (_myCGFloatGreat(subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpacing, maxLayoutHeight)) {
+            maxLayoutHeight = subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpacing;
         }
-        if (_myCGFloatGreat(subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpace, maxLayoutWidth)) {
-            maxLayoutWidth = subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpace;
+        if (_myCGFloatGreat(subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpacing, maxLayoutWidth)) {
+            maxLayoutWidth = subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpacing;
         }
     }
 
     if (context->subviewEngines.count > 0) {
-        maxLayoutHeight -= context->vertSpace;
-        maxLayoutWidth -= context->horzSpace;
+        maxLayoutHeight -= context->vertSpacing;
+        maxLayoutWidth -= context->horzSpacing;
     }
 
     maxLayoutWidth += context->paddingTrailing;
@@ -655,7 +617,7 @@
             CGFloat lineMaxHeight = 0;
             for (NSInteger i = lineFirstIndex; i <= idx; i++) {
                 MyLayoutEngine *subviewEngine = context->subviewEngines[i];
-                MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+                MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
                 if (subviewEngine.height > lineMaxHeight) {
                     lineMaxHeight = subviewEngine.height;
                 }
@@ -667,7 +629,7 @@
                 CGFloat baselinePos = CGFLOAT_MAX;
                 for (NSInteger i = lineFirstIndex; i <= idx; i++) {
                     MyLayoutEngine *subviewEngine = context->subviewEngines[i];
-                    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+                    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
                     MyGravity subviewVertAlignment = MYVERTGRAVITY(subviewTraits.alignment);
                     UIFont *subviewFont = nil;
                     if (subviewVertAlignment == MyGravity_Vert_Baseline) {
@@ -711,7 +673,7 @@
 }
 
 - (void)myDoHorzOrientationLayoutWithContext:(MyLayoutContext *)context {
-    MyFloatLayoutTraits *layoutTraits = (MyFloatLayoutTraits*)context->layoutViewEngine.currentSizeClass;
+    MyFloatLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
     NSArray<MyLayoutEngine *> *subviewEngines = context->subviewEngines;
     //如果没有边界限制我们将高度设置为最大。。
     BOOL isBeyondFlag = NO; //子视图是否超出剩余空间需要换行。
@@ -721,7 +683,7 @@
     }
 
     //支持浮动垂直间距。
-     CGFloat subviewHeight = [layoutTraits.flexSpace calcMaxMinSubviewSizeForContent:context->selfSize.height paddingStart:&context->paddingTop paddingEnd:&context->paddingBottom space:&context->vertSpace];
+     CGFloat subviewHeight = [layoutTraits.flexSpacing calcMaxMinSubviewsSizeForContent:context->selfSize.height paddingStart:&context->paddingTop paddingEnd:&context->paddingBottom spacing:&context->vertSpacing];
 
     //设置子视图的宽度和高度。
     [self myCalcSubviewsSize:subviewHeight isWidth:NO withContext:context];
@@ -752,7 +714,7 @@
 
     for (NSInteger idx = 0; idx < subviewEngines.count; idx++) {
         MyLayoutEngine *subviewEngine = subviewEngines[idx];
-        MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+        MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
 
         CGFloat topSpacing = subviewTraits.topPosInner.measure;
         CGFloat leadingSpacing = subviewTraits.leadingPosInner.measure;
@@ -835,7 +797,7 @@
             }
 
             //这里有可能子视图本身的高度会超过布局视图本身，但是我们的候选区域则不存储超过的高度部分。
-            CGRect cRect = CGRectMake(subviewEngine.leading - leadingSpacing, _myCGFloatMax((subviewEngine.top - topSpacing - context->vertSpace), context->paddingTop), subviewEngine.width + leadingSpacing + trailingSpacing + context->horzSpace, _myCGFloatMin((subviewEngine.height + topSpacing + bottomSpacing), (context->selfSize.height - context->paddingTop - context->paddingBottom)));
+            CGRect cRect = CGRectMake(subviewEngine.leading - leadingSpacing, _myCGFloatMax((subviewEngine.top - topSpacing - context->vertSpacing), context->paddingTop), subviewEngine.width + leadingSpacing + trailingSpacing + context->horzSpacing, _myCGFloatMin((subviewEngine.height + topSpacing + bottomSpacing), (context->selfSize.height - context->paddingTop - context->paddingBottom)));
 
             //把新的候选区域添加到数组中去。并删除高度小于新候选区域的其他区域
             for (NSInteger i = bottomCandidateRects.count - 1; i >= 0; i--) {
@@ -870,8 +832,8 @@
             [bottomCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             bottomLastXOffset = subviewEngine.leading - leadingSpacing;
 
-            if (_myCGFloatGreat(subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpace, bottomMaxWidth)) {
-                bottomMaxWidth = subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpace;
+            if (_myCGFloatGreat(subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpacing, bottomMaxWidth)) {
+                bottomMaxWidth = subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpacing;
             }
         } else {
             CGPoint nextPoint = {bottomLastXOffset, context->paddingTop};
@@ -943,7 +905,7 @@
                 }
             }
 
-            CGRect cRect = CGRectMake(subviewEngine.leading - leadingSpacing, subviewEngine.top - topSpacing, subviewEngine.width + leadingSpacing + trailingSpacing + context->horzSpace, _myCGFloatMin((subviewEngine.height + topSpacing + bottomSpacing + context->vertSpace), (context->selfSize.height - context->paddingTop - context->paddingBottom)));
+            CGRect cRect = CGRectMake(subviewEngine.leading - leadingSpacing, subviewEngine.top - topSpacing, subviewEngine.width + leadingSpacing + trailingSpacing + context->horzSpacing, _myCGFloatMin((subviewEngine.height + topSpacing + bottomSpacing + context->vertSpacing), (context->selfSize.height - context->paddingTop - context->paddingBottom)));
 
             //把新添加到候选中去。并删除宽度小于的最新候选区域的候选区域
             for (NSInteger i = topCandidateRects.count - 1; i >= 0; i--) {
@@ -977,23 +939,23 @@
             [topCandidateRects addObject:[NSValue valueWithCGRect:cRect]];
             topLastXOffset = subviewEngine.leading - leadingSpacing;
 
-            if (_myCGFloatGreat(subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpace, topMaxWidth)) {
-                topMaxWidth = subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpace;
+            if (_myCGFloatGreat(subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpacing, topMaxWidth)) {
+                topMaxWidth = subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpacing;
             }
         }
 
-        if (_myCGFloatGreat(subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpace, maxLayoutWidth)) {
-            maxLayoutWidth = subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpace;
+        if (_myCGFloatGreat(subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpacing, maxLayoutWidth)) {
+            maxLayoutWidth = subviewEngine.leading + subviewEngine.width + trailingSpacing + context->horzSpacing;
         }
 
-        if (_myCGFloatGreat(subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpace, maxLayoutHeight)) {
-            maxLayoutHeight = subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpace;
+        if (_myCGFloatGreat(subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpacing, maxLayoutHeight)) {
+            maxLayoutHeight = subviewEngine.top + subviewEngine.height + bottomSpacing + context->vertSpacing;
         }
     }
 
     if (subviewEngines.count > 0) {
-        maxLayoutWidth -= context->horzSpace;
-        maxLayoutHeight -= context->vertSpace;
+        maxLayoutWidth -= context->horzSpacing;
+        maxLayoutHeight -= context->vertSpacing;
     }
 
     maxLayoutHeight += context->paddingBottom;
@@ -1041,7 +1003,7 @@
             CGFloat lineMaxWidth = 0;
             for (NSInteger i = lineFirstIndex; i <= idx; i++) {
                 MyLayoutEngine *subviewEngine = subviewEngines[i];
-                MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
+                MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
                 if (subviewEngine.width > lineMaxWidth) {
                     lineMaxWidth = subviewEngine.width;
                 }
@@ -1052,8 +1014,8 @@
             if (lineHasAlignment) {
                 for (NSInteger i = lineFirstIndex; i <= idx; i++) {
                     MyLayoutEngine *subviewEngine = subviewEngines[i];
-                    MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
-                    switch ([MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(subviewTraits.alignment)]) {
+                    MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
+                    switch ([MyViewTraitsImpl convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(subviewTraits.alignment)]) {
                         case MyGravity_Horz_Center:
                             subviewEngine.leading += (lineMaxWidth - subviewEngine.width) / 2.0;
                             break;

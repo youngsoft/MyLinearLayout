@@ -34,7 +34,7 @@
     rootLayout.backgroundColor = [CFTool color:11];
     rootLayout.myHorzMargin = 0;
     rootLayout.myHeight = MyLayoutSize.wrap;
-    rootLayout.subviewVSpace = 10; //子视图之间的间距设置为10
+    rootLayout.subviewVSpacing = 10; //子视图之间的间距设置为10
     rootLayout.gravity = MyGravity_Horz_Fill; //所有子视图的宽度都和自己相等，这样子视图就不再需要设置宽度了。
     [scrollView addSubview:rootLayout];
     
@@ -248,7 +248,7 @@
     flowLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:flowLayout];
     flowLayout.myHeight = MyLayoutSize.wrap;
-    flowLayout.subviewSpace = 10;
+    flowLayout.subviewSpacing = 10;
     flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     
     //第一行占据全部
@@ -287,7 +287,7 @@
     v4.adjustsFontSizeToFitWidth = YES;
     v4.backgroundColor = [CFTool color:5];
     v4.weight = 1/3.0;
-    v4.widthSize.add(-20);  //因为要均分为3部分，而我们设置了水平间距subviewHSpace为10.所以我们这里要减去20。也就是减去2个间隔。
+    v4.widthSize.add(-20);  //因为要均分为3部分，而我们设置了水平间距subviewHSpacing为10.所以我们这里要减去20。也就是减去2个间隔。
     v4.myHeight = 50;
     [flowLayout addSubview:v4];
     
@@ -297,7 +297,7 @@
     v5.adjustsFontSizeToFitWidth = YES;
     v5.backgroundColor = [CFTool color:6];
     v5.weight = 1/2.0;
-    v5.widthSize.add(-10); //因为剩下的要均分为2部分，而我们设置了水平间距subviewHSpace为10.所以我们这里要减去10。也就是减去1个间隔。
+    v5.widthSize.add(-10); //因为剩下的要均分为2部分，而我们设置了水平间距subviewHSpacing为10.所以我们这里要减去10。也就是减去1个间隔。
     v5.myHeight = 50;
     [flowLayout addSubview:v5];
     
@@ -325,7 +325,7 @@
     flowLayout.backgroundColor = [CFTool color:0];
     [rootLayout addSubview:flowLayout];
     flowLayout.myHeight = MyLayoutSize.wrap;
-    flowLayout.subviewSpace = 10;
+    flowLayout.subviewSpacing = 10;
     flowLayout.arrangedGravity = MyGravity_Vert_Center;
     flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     

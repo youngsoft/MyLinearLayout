@@ -90,7 +90,7 @@
     //建立一个浮动布局,这个浮动布局不会控制父视图UIScrollView的contentSize。
     MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     floatLayout.backgroundColor = [CFTool color:0];
-    floatLayout.subviewSpace = 10;
+    floatLayout.subviewSpacing = 10;
     floatLayout.myLeading = floatLayout.myTrailing = 10;  //同时设定了左边和右边边距，布局视图的宽度就决定了。
     floatLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);  //设置内边距。
     floatLayout.myTop = 60;
@@ -156,7 +156,7 @@
     layout.backgroundColor = [CFTool color:14];
     layout.layer.cornerRadius = 5;
     layout.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //设置布局视图的内边距。
-    layout.subviewVSpace = 5;  //设置视图之间的间距，这样子视图就不再需要单独设置间距了。
+    layout.subviewVSpacing = 5;  //设置视图之间的间距，这样子视图就不再需要单独设置间距了。
     layout.gravity = MyGravity_Horz_Fill;   //里面的子视图宽度和自己一样，这样就不再需要设置子视图的宽度了。
     layout.myLeading = 0.2;
     layout.myTrailing = 0.2;  //左右边距0.2表示相对边距，也就是左右边距都是父视图总宽度的20%，这样布局视图的宽度就默认为父视图的60%了。
@@ -182,8 +182,8 @@
     
     //按钮容器。如果您想让两个按钮水平排列则只需在btnContainer初始化中把方向改为：MyOrientation_Horz 。您可以尝试看看效果。
     MyLinearLayout *btnContainer = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert /*MyOrientation_Horz*/];
-    btnContainer.subviewVSpace = 5;   //视图之间的间距设置为5
-    btnContainer.subviewHSpace = 5;   //视图之间的间距设置为5
+    btnContainer.subviewVSpacing = 5;   //视图之间的间距设置为5
+    btnContainer.subviewHSpacing = 5;   //视图之间的间距设置为5
     btnContainer.gravity = MyGravity_Horz_Fill; //里面的子视图的宽度水平填充，如果是垂直线性布局则里面的所有子视图的宽度都和父视图相等。如果是水平线性布局则会均分所有子视图的宽度。
     [layout addSubview:btnContainer];
     
@@ -196,7 +196,7 @@
        您可以将下面两句代码注释掉看看横竖屏切换的结果。
      */
     
-    MyLinearLayout *btnContainerSC = [btnContainer fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    id<MyLinearLayoutTraits> btnContainerSC = [btnContainer fetchLayoutTraitsInSizeClass: MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     btnContainerSC.orientation = MyOrientation_Horz;
     
     

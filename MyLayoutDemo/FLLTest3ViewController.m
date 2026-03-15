@@ -11,7 +11,7 @@
 #import "CFTool.h"
 
 
-@interface FLLTest3ViewController ()
+@interface FLLTest3ViewController ()<MyLayoutDraggerDelegate>
 
 @property(nonatomic, strong) MyFlowLayout *flowLayout;
 
@@ -47,7 +47,7 @@
     tipLabel.text = NSLocalizedString(@"  You can drag the following tag to adjust location in layout, MyLayout can use subview's useFrame,noLayout property and layout view's autoresizesSubviews propery to complete some position adjustment and the overall animation features: \n useFrame set to YES indicates subview is not controlled by the layout view but use its own frame to set the location and size instead.\n \n autoresizesSubviews set to NO indicate layout view will not do any layout operation, and will remain in the position and size of all subviews.\n \n noLayout set to YES indicate subview in the layout view just only take up the position and size but not real adjust the position and size when layouting.", @"");
     tipLabel.textColor = [CFTool color:4];
     tipLabel.heightSize.equalTo(@(MyLayoutSize.wrap)); //这两个属性结合着使用实现自动换行和文本的动态高度。
-    tipLabel.topPos.equalTo(self.topLayoutGuide);   //子视图不会延伸到导航条屏幕下面。
+    tipLabel.topPos.equalTo(@(MyLayoutPos.safeAreaMargin));   //子视图不会延伸到导航条屏幕下面。
     [rootLayout addSubview:tipLabel];
     
     
@@ -63,7 +63,7 @@
     self.flowLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
     self.flowLayout.backgroundColor = [CFTool color:0];
     self.flowLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    self.flowLayout.subviewSpace = 10;   //流式布局里面的子视图的水平和垂直间距都设置为10
+    self.flowLayout.subviewSpacing = 10;   //流式布局里面的子视图的水平和垂直间距都设置为10
     self.flowLayout.gravity = MyGravity_Horz_Fill;  //流式布局里面的子视图的宽度将平均分配。
     self.flowLayout.weight = 1;   //流式布局占用线性布局里面的剩余高度。
     self.flowLayout.myTop = 10;
@@ -78,6 +78,8 @@
     //创建一个布局拖动器。
     self.dragger = [self.flowLayout createLayoutDragger];
     self.dragger.animateDuration = 0.2;
+    self.dragger.delegate = self;
+    self.dragger.canHover = YES;
 
     
     for (NSInteger i = 0; i < 14; i++){
@@ -149,12 +151,53 @@
 
 }
 
-
 - (IBAction)handleTouchDownRepeat:(UIButton*)sender withEvent:(UIEvent*)event {
     
     [sender removeFromSuperview];
     [self.flowLayout layoutAnimationWithDuration:0.2];
 }
+
+#pragma mark -- MyLayoutDraggerDelegate
+
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger draggingView:(UIView *)draggingView enterInHoveringView:(UIView *)hoveringView {
+    
+    UIButton *draggingButton = (UIButton *)draggingView;
+    UIButton *hoveringButton = (UIButton *)hoveringView;
+    
+    NSLog(@"按钮：%@ 出现在：%@ 之上",draggingButton.titleLabel.text, hoveringButton.titleLabel.text);
+    
+    hoveringView.transform = CGAffineTransformMakeScale(1.2, 1.2);
+
+
+}
+
+
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger draggingView:(UIView *)draggingView leaveFromHoveringView:(UIView *)hoveringView {
+    
+    UIButton *draggingButton = (UIButton *)draggingView;
+    UIButton *hoveringButton = (UIButton *)hoveringView;
+    
+    NSLog(@"按钮：%@ 从：%@ 离开",draggingButton.titleLabel.text, hoveringButton.titleLabel.text);
+    
+    hoveringView.transform = CGAffineTransformIdentity;
+
+}
+
+
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger startDragView:(UIView *)dragView {
+    
+    UIButton *btn = (UIButton *)dragView;
+    NSLog(@"按钮：%@ 开始拖动",btn.titleLabel.text);
+    
+}
+
+
+- (void)myLayoutDragger:(MyLayoutDragger *)dragger endDropView:(UIView *)dropView {
+    UIButton *btn = (UIButton *)dropView;
+    NSLog(@"按钮：%@ 结束拖动",btn.titleLabel.text);
+ 
+}
+
 
 /*
 #pragma mark - Navigation

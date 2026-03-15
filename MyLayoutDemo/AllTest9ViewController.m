@@ -25,8 +25,8 @@ static NSString * const reuseIdentifier = @"Cell";
     
     AllTest9WaterFlowLayout  *layout = [[AllTest9WaterFlowLayout alloc] init];
     layout.numberOfColumn = 2;
-    layout.vertSpace = 10;
-    layout.horzSpace = 10;
+    layout.vertSpacing = 10;
+    layout.horzSpacing = 10;
      //您可以试试内置的UICollectionViewFlowLayout效果。
     /*
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];

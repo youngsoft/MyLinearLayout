@@ -126,7 +126,7 @@
         XCTAssertTrue(label3.frame.size.width == label1.frame.size.width &&
                       label3.frame.size.height == label1.frame.size.height, @"label3.frame = %@",NSStringFromCGRect(label3.frame));
         XCTAssertTrue(label4.frame.size.width == (label2.frame.size.height + 20) &&
-                      label4.frame.size.height == (label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
+                      label4.frame.size.height == _myCGFloatRound(label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
         
         XCTAssertTrue(label5.frame.size.width == (rootLayout1.frame.size.width - 20) &&
                       label5.frame.size.height == label5.frame.size.width, @"label5.frame = %@",NSStringFromCGRect(label5.frame));
@@ -186,7 +186,7 @@
         XCTAssertTrue(label3.frame.size.width == label1.frame.size.width &&
                       label3.frame.size.height == label1.frame.size.height, @"label3.frame = %@",NSStringFromCGRect(label3.frame));
         XCTAssertTrue(label4.frame.size.width == (label2.frame.size.height + 20) &&
-                      label4.frame.size.height == (label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
+                      label4.frame.size.height == _myCGFloatRound(label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
         
         XCTAssertTrue(label5.frame.size.width == (rootLayout1.frame.size.width - 20) &&
                       label5.frame.size.height == label5.frame.size.width, @"label5.frame = %@",NSStringFromCGRect(label5.frame));
@@ -287,7 +287,7 @@
     layout.backgroundColor = [UIColor redColor];
     layout.gravity = MyGravity_Horz_Center;
     layout.padding = UIEdgeInsetsMake(15, 0, 0, 0);
-    layout.subviewVSpace = 12;
+    layout.subviewVSpacing = 12;
     
     
     UILabel *timeLabel = UILabel.new;
@@ -302,9 +302,11 @@
     convertLayout.backgroundColor = [UIColor greenColor];
     convertLayout.myHeight = MyLayoutSize.wrap;
     convertLayout.gravity = MyGravity_Vert_Center;
-    convertLayout.subviewHSpace = 7;
+    convertLayout.subviewHSpacing = 7;
     [layout addSubview:convertLayout];
     
+    int secondLabelWidth = 0;
+    int labelWidth = 0;
     NSArray *items = @[@"$454", @"^sdsf"];
     for (int i=0; i<items.count; i++) {
         UILabel *label = UILabel.new;
@@ -312,23 +314,29 @@
         label.text = items[i];
         label.font = [UIFont systemFontOfSize:28];
         [convertLayout addSubview:label];
-        
+        labelWidth += [label sizeThatFits:CGSizeZero].width;
+        if (i == 1) {
+        }
         if (i==0) {
             
             UILabel *btn = [UILabel new];
             btn.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
             btn.text = @"->";
             [convertLayout addSubview:btn];
+            secondLabelWidth = [btn sizeThatFits:CGSizeZero].width;
+            labelWidth += secondLabelWidth;
         }
     }
     
     [layout layoutIfNeeded];
     
+    labelWidth += 14;
+    
     XCTAssertTrue(CGRectEqualToRect(layout.frame, CGRectMake(0,0,375,81)), @"the layout.frame = %@",NSStringFromCGRect(layout.frame));
-    XCTAssertTrue(CGRectEqualToRect(convertLayout.frame, CGRectMake(105,47.5,165,33.5)), @"the convertLayout.frame = %@",NSStringFromCGRect(convertLayout.frame));
+    XCTAssertTrue(CGRectEqualToRect(convertLayout.frame, CGRectMake((375 - labelWidth)/2.0,47.5,labelWidth,33.5)), @"the convertLayout.frame = %@",NSStringFromCGRect(convertLayout.frame));
     
     XCTAssertTrue(CGRectEqualToRect(timeLabel.frame, CGRectMake(0,15,375,20.5)), @"the timeLabel.frame = %@",NSStringFromCGRect(timeLabel.frame));
-    XCTAssertTrue(CGRectEqualToRect(convertLayout.subviews[1].frame, CGRectMake(76,6.5,18.5,20.5)), @"the convertLayout.subviews[1].frame = %@",NSStringFromCGRect(convertLayout.subviews[1].frame));
+    XCTAssertTrue(CGRectEqualToRect(convertLayout.subviews[1].frame, CGRectMake(76,6.5,secondLabelWidth,20.5)), @"the convertLayout.subviews[1].frame = %@",NSStringFromCGRect(convertLayout.subviews[1].frame));
 
 }
 
@@ -339,7 +347,7 @@
     testLayout.widthSize.min(200).max(300);
     testLayout.heightSize.equalTo(@(MyLayoutSize.wrap)).min(40).max(100);
     testLayout.shrinkType = MySubviewsShrink_Average;
-    testLayout.subviewHSpace = 10;
+    testLayout.subviewHSpacing = 10;
     testLayout.gravity = MyGravity_Center;
     
     
@@ -703,7 +711,7 @@
         v1.weight = 0;
         v2.weight = 0;
         v3.weight = 0;
-        [rootLayout equalizeSubviewsSpace:YES];
+        [rootLayout equalizeSubviewsSpacing:YES];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,67.5,100,10)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,67.5+10+67.5,100,10)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
@@ -715,7 +723,7 @@
         v2.myBottom = 0;
         v3.myTop = 0;
         v3.myBottom = 0;
-        [rootLayout equalizeSubviewsSpace:NO];
+        [rootLayout equalizeSubviewsSpacing:NO];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,100,10)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,135+10,100,10)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
@@ -730,7 +738,7 @@
         v2.myBottom = 0;
         v3.myTop = 0;
         v3.myBottom = 0;
-        [rootLayout equalizeSubviews:YES withSpace:10];
+        [rootLayout equalizeSubviews:YES withSpacing:10];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,10,100,86.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,106.5,100,86.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
@@ -739,7 +747,7 @@
         v1.weight = 0;
         v2.weight = 0;
         v3.weight = 0;
-        [rootLayout equalizeSubviews:NO withSpace:10];
+        [rootLayout equalizeSubviews:NO withSpacing:10];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,100,93.5)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(0,103.5,100,93.5)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
@@ -781,7 +789,7 @@
         v1.weight = 0;
         v2.weight = 0;
         v3.weight = 0;
-        [rootLayout equalizeSubviewsSpace:YES];
+        [rootLayout equalizeSubviewsSpacing:YES];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(67.5,0,10,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(67.5+10+67.5,0,10,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
@@ -793,7 +801,7 @@
         v2.myTrailing = 0;
         v3.myLeading = 0;
         v3.myTrailing = 0;
-        [rootLayout equalizeSubviewsSpace:NO];
+        [rootLayout equalizeSubviewsSpacing:NO];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,10,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(135+10,0,10,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
@@ -808,7 +816,7 @@
         v2.myTrailing = 0;
         v3.myLeading = 0;
         v3.myTrailing = 0;
-        [rootLayout equalizeSubviews:YES withSpace:10];
+        [rootLayout equalizeSubviews:YES withSpacing:10];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(10,0,86.5,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(106.5,0,86.5,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));
@@ -817,7 +825,7 @@
         v1.weight = 0;
         v2.weight = 0;
         v3.weight = 0;
-        [rootLayout equalizeSubviews:NO withSpace:10];
+        [rootLayout equalizeSubviews:NO withSpacing:10];
         [rootLayout layoutIfNeeded];
         XCTAssertTrue(CGRectEqualToRect(v1.frame, CGRectMake(0,0,93.5,100)), @"the v1.frame = %@",NSStringFromCGRect(v1.frame));
         XCTAssertTrue(CGRectEqualToRect(v2.frame, CGRectMake(103.5,0,93.5,100)), @"the v2.frame = %@",NSStringFromCGRect(v2.frame));

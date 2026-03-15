@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- * 7.LinearLayout - Average size&space
+ * 7.LinearLayout - Average size&spacing
  */
 @interface LLTest7ViewController : UIViewController
 

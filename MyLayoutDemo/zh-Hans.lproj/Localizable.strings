@@ -15,7 +15,7 @@
 "4.LinearLayout - Wrap content" = "4.线性布局-布局尺寸由子视图决定";
 "5.LinearLayout - Weight & Relative margin" = "5.线性布局-子视图尺寸由布局决定";
 "6.LinearLayout - Size limit & Flexed margin" = "6.线性布局-子视图之间的浮动间距";
-"7.LinearLayout - Average size&space" = "7.线性布局-均分子视图尺寸和间距";
+"7.LinearLayout - Average size&spacing" = "7.线性布局-均分子视图尺寸和间距";
 "8.LinearLayout - Scroll&Dock" = "8.线性布局-滚动和悬浮停靠";
 "1.FrameLayout - Gravity&Fill" = "1.框架布局-子视图在布局各方位停靠";
 "2.FrameLayout - Complex UI" = "2.框架布局-复杂的界面布局";
@@ -35,8 +35,9 @@
 "5.FlowLayout - Paging" = "5.流式布局-对分页滚动的支持";
 "6.FlowLayout - Scroll" = "6.流式布局-不同方向的滚动";
 "7.FlowLayout - Auto Arrange" = "7.流式布局-自动布局和对瀑布流的支持";
-"8.FlowLayout - Flex space" = "8.流式布局-浮动间距";
+"8.FlowLayout - Flex spacing" = "8.流式布局-浮动间距";
 "9.FlowLayout - Line gravity" = "9.流式布局-自定义行停靠对齐";
+"10.FlowLayout - Max Lines" = "10.流式布局-设置最大显示的行数";
 "1.FloatLayout - Float" = "1.浮动布局-浮动效果的演示";
 "2.FloatLayout - Jagged" = "2.浮动布局-仿天猫淘宝首页实现" ;
 "3.FloatLayout - Card news" = "3.浮动布局-仿ZAKER今日头条实现";
@@ -109,7 +110,7 @@
 "vert stretch"="垂直拉伸";
 "screen vert center" = "屏幕垂直居中";
 "screen horz center" ="屏幕水平居中";
-"space" = "间距调整";
+"spacing" = "间距调整";
 "between" = "间距拉伸";
 "around" = "间距环绕";
 "among" = "间距等分";
@@ -144,12 +145,12 @@
 "copy rights reserved by Youngsoft"="版权所有 Youngsoft";
 
 //LLTest7ViewController
-"average size&space no centered" = "均分视图和间距不居中";
-"average size&space centered" = "均分视图和间距居中";
+"average size&spacing no centered" = "均分视图和间距不居中";
+"average size&spacing centered" = "均分视图和间距居中";
 "average size no centered"="均分视图不居中";
 "average size centered"="均分视图居中";
-"average space no centered"="均分间距不居中";
-"average space centered"="均分间距居中";
+"average spacing no centered"="均分间距不居中";
+"average spacing centered"="均分间距居中";
 
 //RLTest2ViewController
 "flex size when subview hidden switch:"="隐藏时伸缩其他子视图:";
@@ -201,8 +202,8 @@
 "change style"="布局变换";
 
 //FOLTest4ViewController
-"flexed width, fixed space"="浮动宽度,固定间距";
-"fixed width, flexed space"="固定宽度,浮动间距";
+"flexed width, fixed spacing"="浮动宽度,固定间距";
+"fixed width, flexed spacing"="固定宽度,浮动间距";
 
 //FOLTest5ViewController
 "Layout view:"="布局名称:";

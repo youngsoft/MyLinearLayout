@@ -16,7 +16,7 @@
  所谓栅格其实就是一个矩形区域，我们知道一个视图其实就是一个矩形区域，而子视图的frame属性其实就是父视图中的某个特定的子区域部分。既然子视图最终占据的是父视图的某个子矩形区域。那么我们也可以先将一个矩形区域按照某种规则分解为多个子矩形区域，然后再将子视图填充到对应的子矩形区域中去，这就是栅格布局的实现思想。
  
  */
-@interface MyGridLayout : MyBaseLayout <MyGrid>
+@interface MyGridLayout : MyBaseLayout <id<MyGridLayoutTraits, NSCopying>> <MyGridLayoutTraits>
 
 /**
  建立一个栅格模板，注意栅格模板不能添加到栅格布局中去，而应该采用clone的方法来将克隆的栅格添加到栅格布局中去
@@ -158,7 +158,7 @@
  {"rows | cols":[
      {"size":100 | "100%" | "-20%" | "wrap" | size:"fill",
       "padding":"{10,10,10,10}",
-      "space":10.0,
+      "spacing":10.0,
       "gravity":@"top|bottom|left|right|centerX|centerY|width|height",
       "top-borderline":{"color":"#AAAAAA","thick":1.0, "head":1.0, "tail":1.0, "offset":1},
       "bottom-borderline":{},

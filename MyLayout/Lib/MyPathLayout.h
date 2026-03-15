@@ -12,27 +12,27 @@
  *定义子视图在路径布局中的距离的类型。
  */
 typedef enum : NSUInteger {
-    MyPathSpace_Flexed, //浮动距离，子视图之间的距离根据路径布局的尺寸和子视图的数量而确定。
-    MyPathSpace_Fixed,  //固定距离，就是子视图之间的距离是固定的某个数值。
-    MyPathSpace_Count,  //固定数量距离，就是子视图之间的距离根据路径布局的尺寸和某个具体的数量而确定。
-} MyPathSpaceType;
+    MyPathSpacing_Flexed, //浮动距离，子视图之间的距离根据路径布局的尺寸和子视图的数量而确定。
+    MyPathSpacing_Fixed,  //固定距离，就是子视图之间的距离是固定的某个数值。
+    MyPathSpacing_Count,  //固定数量距离，就是子视图之间的距离根据路径布局的尺寸和某个具体的数量而确定。
+} MyPathSpacingType;
 
 /**
  *子视图之间的路径距离类，描述子视图在路径上的间隔距离的类型。
  */
-@interface MyPathSpace : NSObject
+@interface MyPathSpacing : NSObject
 
 /**浮动距离，根据布局视图的尺寸和子视图的数量动态决定*/
-+ (MyPathSpace *)flexed;
++ (MyPathSpacing *)flexed;
 
 /**固定距离，len为长度，每个子视图之间的距离都是len*/
-+ (MyPathSpace *)fixed:(CGFloat)len;
++ (MyPathSpacing *)fixed:(CGFloat)len;
 
 /**数量距离，根据布局视图的尺寸和指定的数量count动态决定。*/
-+ (MyPathSpace *)count:(NSInteger)count;
++ (MyPathSpacing *)count:(NSInteger)count;
 
 /**距离类型。*/
-@property (nonatomic, assign, readonly) MyPathSpaceType type;
+@property (nonatomic, assign, readonly) MyPathSpacingType type;
 /**距离的值。*/
 @property (nonatomic, assign, readonly) CGFloat value;
 
@@ -83,7 +83,7 @@ typedef enum : NSUInteger {
  @note 也就是说MyPathLayout的派生类返回一个CAShapeLayer，那么系统将自动会在每次布局时将layer的path属性进行赋值操作。
 
  */
-@interface MyPathLayout : MyBaseLayout
+@interface MyPathLayout : MyBaseLayout<id<MyPathLayoutTraits>> <MyPathLayoutTraits>
 
 /**
  **下面部分是路径布局的三要素：坐标、函数、距离的定义
@@ -112,7 +112,7 @@ typedef enum : NSUInteger {
 /**
  *设置子视图在路径曲线上的距离的类型,一共有Flexed, Fixed, MaxCount,默认是Flexed,
  */
-@property (nonatomic, strong) MyPathSpace *spaceType;
+@property (nonatomic, strong) MyPathSpacing *spacingType;
 
 /**
  *设置和获取布局视图中的原点视图，默认是nil。如果设置了原点视图则总会将原点视图作为布局视图中的最后一个子视图。原点视图将会显示在路径的坐标原点中心上，因此原点布局是不会参与在路径中的布局的。因为中心原点视图是布局视图中的最后一个子视图，而MyPathLayout重写了AddSubview方法，因此可以正常的使用这个方法来添加子视图。
@@ -155,7 +155,7 @@ typedef enum : NSUInteger {
 
 /**
  创建布局的曲线的路径。用户需要负责销毁返回的值。调用者可以用这个方法来获得曲线的路径，进行一些绘制的工作。
- @param subviewCount 指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的spaceType为Flexed,Count的话则这个参数设置无效。
+ @param subviewCount 指定这个路径上子视图的数量的个数，如果设置为-1则是按照布局视图的子视图的数量来创建。需要注意的是如果布局视图的spacingType为Flexed,Count的话则这个参数设置无效。
  @return 返回指定数量的子视图的曲线路径，用户需要负责销毁返回的对象。
  */
 - (CGPathRef)createPath:(NSInteger)subviewCount;

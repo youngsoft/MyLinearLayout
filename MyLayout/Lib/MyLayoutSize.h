@@ -25,6 +25,10 @@
  */
 @interface MyLayoutSize : NSObject <NSCopying>
 
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
+
+
 /**特殊的尺寸，表示尺寸由子视图决定或者由内容决定，也就是说尺寸自适应*/
 @property (class, nonatomic, assign, readonly) NSInteger wrap;
 

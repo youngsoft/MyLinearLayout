@@ -117,8 +117,8 @@
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     actionLayout.myHeight = MyLayoutSize.wrap;
     actionLayout.gravity = MyGravity_Horz_Fill; //平均分配里面所有子视图的宽度
-    actionLayout.subviewHSpace = 5;
-    actionLayout.subviewVSpace = 5;  //设置里面子视图的水平和垂直间距。
+    actionLayout.subviewHSpacing = 5;
+    actionLayout.subviewVSpacing = 5;  //设置里面子视图的水平和垂直间距。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [contentLayout addSubview:actionLayout];
     
@@ -164,7 +164,7 @@
     vertGravityLayout.myHeight = 160;
     vertGravityLayout.myTop = 10;
     vertGravityLayout.myLeading = 20;
-    vertGravityLayout.subviewVSpace = 10; //设置每个子视图之间的间距为10
+    vertGravityLayout.subviewVSpacing = 10; //设置每个子视图之间的间距为10
     [contentLayout addSubview:vertGravityLayout];
     self.vertGravityLayout = vertGravityLayout;
 
@@ -209,8 +209,8 @@
     MyFlowLayout *actionLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     actionLayout.myHeight = MyLayoutSize.wrap;
     actionLayout.gravity = MyGravity_Horz_Fill;  //平均分配里面所有子视图的宽度
-    actionLayout.subviewHSpace = 5;
-    actionLayout.subviewVSpace = 5;  //设置里面子视图的水平和垂直间距。
+    actionLayout.subviewHSpacing = 5;
+    actionLayout.subviewVSpacing = 5;  //设置里面子视图的水平和垂直间距。
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [contentLayout addSubview:actionLayout];
     
@@ -254,7 +254,7 @@
     horzGravityLayout.myHeight = 200;
     horzGravityLayout.myTop = 10;
     horzGravityLayout.myLeading = 20;
-    horzGravityLayout.subviewHSpace = 5;  //设置子视图之间的水平间距为5
+    horzGravityLayout.subviewHSpacing = 5;  //设置子视图之间的水平间距为5
     [contentLayout addSubview:horzGravityLayout];
     self.horzGravityLayout = horzGravityLayout;
     

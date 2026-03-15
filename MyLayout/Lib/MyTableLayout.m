@@ -28,7 +28,7 @@ static CGFloat sColCountTag = -100000;
         _rowSize = rowSize;
         _colSize = colSize;
 
-        UIView *layoutTraits = self.myDefaultSizeClass;
+        MyTableLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
 
         if (rowSize == MyLayoutSize.average) {
             layoutTraits.weight = 1;
@@ -70,7 +70,7 @@ static CGFloat sColCountTag = -100000;
      因此我们重载这个方法来解决这个问题，这个方法可以将列子视图的边界线的区域进行扩充和调整，目的是为了让列子视图的边界线能够布满整个行布局上。
      */
     
-    MyLinearLayoutTraits *layoutTraits = (MyLinearLayoutTraits*)self.myEngine.currentSizeClass;
+    MyTableLayoutTraitsImpl *layoutTraits = self.myEngine.currentTraits;
     
     if (self.rowSize == MyLayoutSize.wrap) {
         if (layoutTraits.orientation == MyOrientation_Horz) {
@@ -127,7 +127,7 @@ static CGFloat sColCountTag = -100000;
 }
 
 - (MyLinearLayout *)insertRow:(CGFloat)rowSize colSize:(CGFloat)colSize atIndex:(NSInteger)rowIndex {
-    MyTableLayout *layoutTraits = self.myDefaultSizeClass;
+    MyTableLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
 
     MyOrientation ori = MyOrientation_Vert;
     if (layoutTraits.orientation == MyOrientation_Vert) {
@@ -138,9 +138,9 @@ static CGFloat sColCountTag = -100000;
 
     MyTableRowLayout *rowView = [MyTableRowLayout rowSize:rowSize colSize:colSize orientation:ori];
     if (ori == MyOrientation_Horz) {
-        rowView.subviewHSpace = layoutTraits.subviewHSpace;
+        rowView.subviewHSpacing = layoutTraits.subviewHSpacing;
     } else {
-        rowView.subviewVSpace = layoutTraits.subviewVSpace;
+        rowView.subviewVSpacing = layoutTraits.subviewVSpacing;
     }
     rowView.intelligentBorderline = self.intelligentBorderline;
     [super insertSubview:rowView atIndex:rowIndex];
@@ -171,17 +171,17 @@ static CGFloat sColCountTag = -100000;
 - (void)insertCol:(UIView *)colView atIndexPath:(NSIndexPath *)indexPath {
     MyTableRowLayout *rowView = (MyTableRowLayout *)[self viewAtRowIndex:indexPath.row];
 
-    MyLinearLayout *rowViewTraits = rowView.myDefaultSizeClass;
-    UIView *colViewTraits = colView.myDefaultSizeClass;
+    MyLinearLayoutTraitsImpl *rowViewTraits = rowView.myDefaultTraits;
+    MyViewTraitsImpl *colViewTraits = colView.myDefaultTraits;
 
     if (rowView.colSize == MyLayoutSize.average) {
         colViewTraits.weight = 1.0;
     } else if (rowView.colSize < sColCountTag) {
         NSUInteger colCount = sColCountTag - rowView.colSize;
         if (rowViewTraits.orientation == MyOrientation_Horz) {
-            [[[colViewTraits.widthSize _myEqualTo:rowView.widthSize] _myMultiply:(1.0 / colCount)] _myAdd:-1 * rowView.subviewHSpace * (colCount - 1.0) / colCount];
+            [[[colViewTraits.widthSize _myEqualTo:rowView.widthSize] _myMultiply:(1.0 / colCount)] _myAdd:-1 * rowView.subviewHSpacing * (colCount - 1.0) / colCount];
         } else {
-            [[[colViewTraits.heightSize _myEqualTo:rowView.heightSize] _myMultiply:(1.0 / colCount)] _myAdd:-1 * rowView.subviewVSpace * (colCount - 1.0) / colCount];
+            [[[colViewTraits.heightSize _myEqualTo:rowView.heightSize] _myMultiply:(1.0 / colCount)] _myAdd:-1 * rowView.subviewVSpacing * (colCount - 1.0) / colCount];
         }
     } else if (rowView.colSize > 0) {
         if (rowViewTraits.orientation == MyOrientation_Horz) {
@@ -232,20 +232,20 @@ static CGFloat sColCountTag = -100000;
 
 #pragma mark-- Override Methods
 
-- (void)setSubviewVSpace:(CGFloat)subviewVSpace {
-    [super setSubviewVSpace:subviewVSpace];
+- (void)setSubviewVSpacing:(CGFloat)subviewVSpacing {
+    [super setSubviewVSpacing:subviewVSpacing];
     if (self.orientation == MyOrientation_Horz) {
         for (NSInteger i = 0; i < self.countOfRow; i++) {
-            [self viewAtRowIndex:i].subviewVSpace = subviewVSpace;
+            [self viewAtRowIndex:i].subviewVSpacing = subviewVSpacing;
         }
     }
 }
 
-- (void)setSubviewHSpace:(CGFloat)subviewHSpace {
-    [super setSubviewHSpace:subviewHSpace];
+- (void)setSubviewHSpacing:(CGFloat)subviewHSpacing {
+    [super setSubviewHSpacing:subviewHSpacing];
     if (self.orientation == MyOrientation_Vert) {
         for (NSInteger i = 0; i < self.countOfRow; i++) {
-            [self viewAtRowIndex:i].subviewHSpace = subviewHSpace;
+            [self viewAtRowIndex:i].subviewHSpacing = subviewHSpacing;
         }
     }
 }
@@ -270,8 +270,8 @@ static CGFloat sColCountTag = -100000;
     NSCAssert(0, @"Constraint exception!! Can't call insertSubview");
 }
 
-- (id)createSizeClassInstance {
-    return [MyTableLayoutTraits new];
+- (Class) myTratisClass {
+    return [MyTableLayoutTraitsImpl class];
 }
 
 @end

@@ -55,7 +55,7 @@
     if (_columnHeightArray == nil) {
         _columnHeightArray = [[NSMutableArray alloc] initWithCapacity:self.numberOfColumn];
         for (int i = 0; i < self.numberOfColumn; i ++) {
-            [_columnHeightArray addObject:@(self.vertSpace)];
+            [_columnHeightArray addObject:@(self.vertSpacing)];
         }
     }
     
@@ -64,7 +64,7 @@
         
         CGFloat totalWidth = self.collectionView.frame.size.width;
         NSUInteger itemCount = [self.collectionView numberOfItemsInSection:0];
-        CGFloat itemWidth = (totalWidth - self.horzSpace) / self.numberOfColumn;
+        CGFloat itemWidth = (totalWidth - self.horzSpacing) / self.numberOfColumn;
         for (int i = 0; i < itemCount; i ++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
             UICollectionViewLayoutAttributes *attribute = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
@@ -91,15 +91,14 @@
             minHeightIndex = j;
         }
     }
-    CGFloat x = minHeightIndex * (preferredAttributes.size.width + self.horzSpace);
+    CGFloat x = minHeightIndex * (preferredAttributes.size.width + self.horzSpacing);
     CGFloat y = minHeight;
     attributes.frame = CGRectMake(x, y, preferredAttributes.size.width, preferredAttributes.size.height);
-    self.columnHeightArray[minHeightIndex] = [NSNumber numberWithFloat:minHeight + preferredAttributes.size.height + self.vertSpace];
+    self.columnHeightArray[minHeightIndex] = [NSNumber numberWithFloat:minHeight + preferredAttributes.size.height + self.vertSpacing];
     return YES;
 }
 
 //- (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
-//    BOOL ok = [super shouldInvalidateLayoutForBoundsChange:newBounds];
 //    return YES;
 //}
 

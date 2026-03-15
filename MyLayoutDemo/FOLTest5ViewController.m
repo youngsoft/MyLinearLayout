@@ -53,7 +53,7 @@
     MyFloatLayout *rootLayout = [[MyFloatLayout alloc] initWithOrientation:MyOrientation_Vert];
     rootLayout.myHorzMargin = 0;  //宽度和滚动条视图保持一致。
     rootLayout.myHeight = MyLayoutSize.wrap;
-    rootLayout.subviewVSpace = 5;
+    rootLayout.subviewVSpacing = 5;
     [scrollView addSubview:rootLayout];
     
     //介绍页

@@ -45,8 +45,8 @@
     MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
     rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap,MyLayoutSize.wrap);
     rootLayout.padding = UIEdgeInsetsMake(10, 20, 30, 40);
-    rootLayout.subviewHSpace = 5;
-    rootLayout.subviewVSpace = 5;
+    rootLayout.subviewHSpacing = 5;
+    rootLayout.subviewVSpacing = 5;
     
     for (int i = 0; i < 3; i++)
     {
@@ -122,7 +122,7 @@
         XCTAssertTrue(label3.frame.size.width == label1.frame.size.width &&
                       label3.frame.size.height == label1.frame.size.height, @"label3.frame = %@",NSStringFromCGRect(label3.frame));
         XCTAssertTrue(label4.frame.size.width == (label2.frame.size.height + 20) &&
-                      label4.frame.size.height == (label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
+                      label4.frame.size.height == _myCGFloatRound(label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
         
         XCTAssertTrue(label5.frame.size.width == (rootLayout1.frame.size.width - 20) &&
                       label5.frame.size.height == label5.frame.size.width, @"label5.frame = %@",NSStringFromCGRect(label5.frame));
@@ -181,7 +181,7 @@
         XCTAssertTrue(label3.frame.size.width == label1.frame.size.width &&
                       label3.frame.size.height == label1.frame.size.height, @"label3.frame = %@",NSStringFromCGRect(label3.frame));
         XCTAssertTrue(label4.frame.size.width == (label2.frame.size.height + 20) &&
-                      label4.frame.size.height == (label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
+                      label4.frame.size.height == _myCGFloatRound(label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
         
         XCTAssertTrue(label5.frame.size.width == (rootLayout1.frame.size.width - 20) &&
                       label5.frame.size.height == label5.frame.size.width, @"label5.frame = %@",NSStringFromCGRect(label5.frame));
@@ -239,7 +239,7 @@
         XCTAssertTrue(label3.frame.size.width == label1.frame.size.width &&
                       label3.frame.size.height == label1.frame.size.height, @"label3.frame = %@",NSStringFromCGRect(label3.frame));
         XCTAssertTrue(label4.frame.size.width == (label2.frame.size.height + 20) &&
-                      label4.frame.size.height == (label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
+                      label4.frame.size.height == _myCGFloatRound(label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
         
         XCTAssertTrue(label5.frame.size.width == (rootLayout1.frame.size.width - 20) &&
                       label5.frame.size.height == label5.frame.size.width, @"label5.frame = %@",NSStringFromCGRect(label5.frame));
@@ -298,7 +298,7 @@
         XCTAssertTrue(label3.frame.size.width == label1.frame.size.width &&
                       label3.frame.size.height == label1.frame.size.height, @"label3.frame = %@",NSStringFromCGRect(label3.frame));
         XCTAssertTrue(label4.frame.size.width == (label2.frame.size.height + 20) &&
-                      label4.frame.size.height == (label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
+                      label4.frame.size.height == _myCGFloatRound(label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
         
         XCTAssertTrue(label5.frame.size.width == (rootLayout1.frame.size.width - 20) &&
                       label5.frame.size.height == label5.frame.size.width, @"label5.frame = %@",NSStringFromCGRect(label5.frame));
@@ -318,7 +318,7 @@
         rootLayout.frame = CGRectMake(0, 0, 110, 0);
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 5, 5);
         rootLayout.mySize = CGSizeMake(110, MyLayoutSize.wrap);
-        rootLayout.subviewSpace = 6;
+        rootLayout.subviewSpacing = 6;
         rootLayout.gravity = MyGravity_Horz_Fill;
         
         UIView *v1 = [UIView new];
@@ -388,7 +388,7 @@
         rootLayout.frame = CGRectMake(0, 0, 0, 110);
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 5, 5);
         rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, 110);
-        rootLayout.subviewSpace = 6;
+        rootLayout.subviewSpacing = 6;
         rootLayout.gravity = MyGravity_Vert_Fill;
         
         UIView *v1 = [UIView new];
@@ -461,8 +461,8 @@
         MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
         layout.frame = CGRectMake(0, 0, 0, 0);
         layout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
-        layout.subviewHSpace = 5;
-        layout.subviewVSpace = 5;
+        layout.subviewHSpacing = 5;
+        layout.subviewVSpacing = 5;
         
         for (int i = 0; i < 1; i++)
         {
@@ -499,8 +499,8 @@
         MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:4];
         layout.frame = CGRectMake(0, 0, 0, 0);
         layout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
-        layout.subviewHSpace = 5;
-        layout.subviewVSpace = 5;
+        layout.subviewHSpacing = 5;
+        layout.subviewVSpacing = 5;
         
         for (int i = 0; i < 1; i++)
         {
@@ -544,7 +544,7 @@
         MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
         rootLayout.frame = CGRectMake(0, 0, 152, 100);
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 5, 5);
-        rootLayout.subviewSpace = 6;
+        rootLayout.subviewSpacing = 6;
         rootLayout.myHeight = MyLayoutSize.wrap;
         
         UIView *v1 = [UIView new];
@@ -633,7 +633,7 @@
         MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:0];
         rootLayout.frame = CGRectMake(0, 0, 100, 152);
         rootLayout.padding = UIEdgeInsetsMake(10, 10, 5, 5);
-        rootLayout.subviewSpace = 6;
+        rootLayout.subviewSpacing = 6;
         rootLayout.myWidth = MyLayoutSize.wrap;
         
         UIView *v1 = [UIView new];
@@ -726,8 +726,8 @@
         MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:1];
         rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
         rootLayout.padding = UIEdgeInsetsMake(10, 5, 5, 10);
-        rootLayout.subviewHSpace = 20;
-        rootLayout.subviewVSpace = 20;
+        rootLayout.subviewHSpacing = 20;
+        rootLayout.subviewVSpacing = 20;
         
         [rootLayout layoutIfNeeded];
         MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));
@@ -787,8 +787,8 @@
         MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:1];
         rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
         rootLayout.padding = UIEdgeInsetsMake(5, 10, 10, 5);
-        rootLayout.subviewHSpace = 20;
-        rootLayout.subviewVSpace = 20;
+        rootLayout.subviewHSpacing = 20;
+        rootLayout.subviewVSpacing = 20;
         
         [rootLayout layoutIfNeeded];
         MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));
@@ -918,8 +918,8 @@
         MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:4];
         layout.frame = CGRectMake(0, 0, 200, 200);
         layout.gravity = MyGravity_Horz_Right;
-        layout.subviewHSpace = 5;
-        layout.subviewVSpace = 5;
+        layout.subviewHSpacing = 5;
+        layout.subviewVSpacing = 5;
         
         UIView *v1 = [UIView new];
         v1.mySize = CGSizeMake(50, 50);
@@ -964,8 +964,8 @@
         MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:4];
         layout.frame = CGRectMake(0, 0, 200, 200);
         layout.gravity = MyGravity_Vert_Bottom;
-        layout.subviewHSpace = 5;
-        layout.subviewVSpace = 5;
+        layout.subviewHSpacing = 5;
+        layout.subviewVSpacing = 5;
         
         UIView *v1 = [UIView new];
         v1.mySize = CGSizeMake(50, 50);
@@ -1011,8 +1011,8 @@
         MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
         layout.frame = CGRectMake(0, 0, 200, 200);
         layout.gravity = MyGravity_Horz_Right;
-        layout.subviewHSpace = 5;
-        layout.subviewVSpace = 5;
+        layout.subviewHSpacing = 5;
+        layout.subviewVSpacing = 5;
         
         UIView *v1 = [UIView new];
         v1.mySize = CGSizeMake(50, 50);
@@ -1057,8 +1057,8 @@
         MyFlowLayout *layout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Horz arrangedCount:0];
         layout.frame = CGRectMake(0, 0, 200, 200);
         layout.gravity = MyGravity_Vert_Bottom;
-        layout.subviewHSpace = 5;
-        layout.subviewVSpace = 5;
+        layout.subviewHSpacing = 5;
+        layout.subviewVSpacing = 5;
         
         UIView *v1 = [UIView new];
         v1.mySize = CGSizeMake(50, 50);

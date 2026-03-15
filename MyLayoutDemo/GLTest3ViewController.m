@@ -194,7 +194,7 @@ static NSInteger sBottomStyleTag = 1003;
     templateGrid1.rightBorderline = borderline;
     [templateGrid1 setTarget:self action:@selector(handleTap:)];
     templateGrid1.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    templateGrid1.subviewSpace = 2;
+    templateGrid1.subviewSpacing = 2;
     [templateGrid1 addRow:MyLayoutSize.wrap];
     [templateGrid1 addRow:MyLayoutSize.wrap];
     [templateGrid1 addRow:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -210,12 +210,12 @@ static NSInteger sBottomStyleTag = 1003;
     templateGrid2.rightBorderline = borderline;
     [templateGrid2 setTarget:self action:@selector(handleTap:)];
     templateGrid2.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    templateGrid2.subviewSpace = 2;
+    templateGrid2.subviewSpacing = 2;
     [templateGrid2 addRow:MyLayoutSize.wrap];
     [templateGrid2 addRow:MyLayoutSize.wrap];
    
     id<MyGrid> tg23 = [templateGrid2 addRow:MyLayoutSize.fill];
-    tg23.subviewSpace = 5;
+    tg23.subviewSpacing = 5;
     [tg23 addCol:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
     [tg23 addCol:MyLayoutSize.fill].padding = UIEdgeInsetsMake(5, 5, 5, 5);
 
@@ -363,8 +363,10 @@ static NSInteger sBottomStyleTag = 1003;
 -(void)handleTap:(id<MyGrid>)sender
 {
     NSString *message = [NSString stringWithFormat:@"您单击了:%@", sender.actionData];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 
 }
 

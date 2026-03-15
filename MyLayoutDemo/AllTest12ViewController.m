@@ -87,7 +87,7 @@
     linelayout.orientation = MyOrientation_Vert;
     linelayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     linelayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    linelayout.subviewSpace = 10;
+    linelayout.subviewSpacing = 10;
 
     sbv1.mySize = CGSizeMake(100, 40);
     sbv2.mySize = CGSizeMake(150, 50);
@@ -140,7 +140,7 @@
     linelayout.orientation = MyOrientation_Vert;
     linelayout.myHeight = MyLayoutSize.wrap;
     linelayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    linelayout.subviewSpace = 10;
+    linelayout.subviewSpacing = 10;
     
     sbv1.mySize = CGSizeMake(100, 40);
     sbv2.mySize = CGSizeMake(150, 50);
@@ -193,7 +193,7 @@
     linelayout.orientation = MyOrientation_Horz;
     linelayout.myWidth = MyLayoutSize.wrap;
     linelayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    linelayout.subviewSpace = 10;
+    linelayout.subviewSpacing = 10;
     linelayout.gravity = MyGravity_Vert_Fill;
     
     

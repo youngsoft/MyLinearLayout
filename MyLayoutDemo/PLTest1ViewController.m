@@ -21,18 +21,7 @@
     /**
      *本例子是介绍MyPathLayout布局视图的。用来建立曲线布局。
      */
-    
 
-    //为了支持iPhoneX而设置附加的安全区缩进。否则根视图将延伸到工具栏下面去了。
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 110000) || (__TV_OS_VERSION_MAX_ALLOWED >= 110000)
-    if (@available(iOS 11.0, *)) {
-    } else {
-        // Fallback on earlier versions
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-#endif
-    
-    
     MyPathLayout *pathLayout = [MyPathLayout new];
     
      self.view  = pathLayout;
@@ -242,7 +231,7 @@
     self.toolbarItems[7].style = UIBarButtonItemStylePlain;
     self.toolbarItems[8].style = UIBarButtonItemStylePlain;
 
-    self.pathLayout.spaceType = [MyPathSpace flexed];   //表示路径布局视图里面的子视图的间距会根据路径曲线自动的调整。
+    self.pathLayout.spacingType = [MyPathSpacing flexed];   //表示路径布局视图里面的子视图的间距会根据路径曲线自动的调整。
     [self.pathLayout layoutAnimationWithDuration:0.5];
 
 }
@@ -253,7 +242,7 @@
     self.toolbarItems[7].style = UIBarButtonItemStyleDone;
     self.toolbarItems[8].style = UIBarButtonItemStylePlain;
 
-    self.pathLayout.spaceType = [MyPathSpace fixed:100]; //表示路径布局视图里面的子视图的间距是固定为80的。
+    self.pathLayout.spacingType = [MyPathSpacing fixed:100]; //表示路径布局视图里面的子视图的间距是固定为80的。
     [self.pathLayout layoutAnimationWithDuration:0.5];
     
 }
@@ -265,7 +254,7 @@
     self.toolbarItems[8].style = UIBarButtonItemStyleDone;
 
     
-    self.pathLayout.spaceType = [MyPathSpace count:6]; //表示路径布局视图里面的子视图的间距会根据尺寸和数量为10来调整。
+    self.pathLayout.spacingType = [MyPathSpacing count:6]; //表示路径布局视图里面的子视图的间距会根据尺寸和数量为10来调整。
     [self.pathLayout layoutAnimationWithDuration:0.5];
 
 }

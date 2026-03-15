@@ -91,7 +91,7 @@
         XCTAssertTrue(label3.frame.size.width == label1.frame.size.width &&
                       label3.frame.size.height == label1.frame.size.height, @"label3.frame = %@",NSStringFromCGRect(label3.frame));
         XCTAssertTrue(label4.frame.size.width == (label2.frame.size.height + 20) &&
-                      label4.frame.size.height == (label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
+                      label4.frame.size.height == _myCGFloatRound(label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
         
         XCTAssertTrue(label5.frame.size.width == (rootLayout1.frame.size.width - 20) &&
                       label5.frame.size.height == label5.frame.size.width, @"label5.frame = %@",NSStringFromCGRect(label5.frame));
@@ -150,7 +150,7 @@
         XCTAssertTrue(label3.frame.size.width == label1.frame.size.width &&
                       label3.frame.size.height == label1.frame.size.height, @"label3.frame = %@",NSStringFromCGRect(label3.frame));
         XCTAssertTrue(label4.frame.size.width == (label2.frame.size.height + 20) &&
-                      label4.frame.size.height == (label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
+                      label4.frame.size.height == _myCGFloatRound(label2.frame.size.width * 0.5 + 10), @"label4.frame = %@",NSStringFromCGRect(label4.frame));
         
         XCTAssertTrue(label5.frame.size.width == (rootLayout1.frame.size.width - 20) &&
                       label5.frame.size.height == label5.frame.size.width, @"label5.frame = %@",NSStringFromCGRect(label5.frame));
@@ -167,7 +167,7 @@
 {
     MyFloatLayout *dectorInfoFloatLayout  = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     dectorInfoFloatLayout.padding = UIEdgeInsetsMake(10.f, 0.f, 10.f, 0.f);
-    dectorInfoFloatLayout.subviewSpace = 10;
+    dectorInfoFloatLayout.subviewSpacing = 10;
     
     
     UILabel *dectorInAttention = [UILabel new];
@@ -222,7 +222,7 @@
 -(void)testExample3
 {
     MyFloatLayout *layout = [[MyFloatLayout alloc] initWithFrame:CGRectMake(0, 0, 375, 667) orientation:MyOrientation_Vert];
-    layout.subviewSpace = 5.f;
+    layout.subviewSpacing = 5.f;
     layout.padding = UIEdgeInsetsMake(10.f, 0.f, 0.f, 0.f);
     
     UIImageView *mobileImageView = [UIImageView new];
@@ -396,7 +396,7 @@
         rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
         rootLayout.widthSize.max(80);
         rootLayout.padding = UIEdgeInsetsMake(10, 5, 5, 10);
-        rootLayout.subviewSpace = 20;
+        rootLayout.subviewSpacing = 20;
         
         [rootLayout layoutIfNeeded];
         MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));
@@ -432,7 +432,7 @@
         rootLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
         rootLayout.heightSize.max(80);
         rootLayout.padding = UIEdgeInsetsMake(5, 10, 10, 5);
-        rootLayout.subviewSpace = 20;
+        rootLayout.subviewSpacing = 20;
         
         [rootLayout layoutIfNeeded];
         MyRectAssert(rootLayout, CGRectMake(0, 0, 15, 15));

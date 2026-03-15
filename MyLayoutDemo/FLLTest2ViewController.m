@@ -93,7 +93,7 @@
 }
 
 
-- (IBAction)handleAdjustSpaceChange:(UISwitch *)sender {
+- (IBAction)handleAdjustSpacingChange:(UISwitch *)sender {
     
     //间距拉伸
     if (sender.isOn)

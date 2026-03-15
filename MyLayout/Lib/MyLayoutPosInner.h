@@ -12,6 +12,8 @@
 //布局位置内部定义
 @interface MyLayoutPos ()
 
+- (instancetype)initWithView:(UIView *)view anchorType:(MyLayoutAnchorType)anchorType;
+
 @property (nonatomic, weak) UIView *view;
 @property (nonatomic, assign) MyLayoutAnchorType anchorType;
 @property (nonatomic, assign) MyLayoutValType valType;

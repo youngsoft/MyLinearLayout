@@ -45,7 +45,7 @@
     MyFlowLayout *rootLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:0];
     rootLayout.isFlex = YES;   //这个属性设置为YES表明让流式布局兼容flexbox的一些特性。
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    rootLayout.subviewSpace = 5;
+    rootLayout.subviewSpacing = 5;
     self.view = rootLayout;
     
     [self createVertContentLayout:rootLayout];

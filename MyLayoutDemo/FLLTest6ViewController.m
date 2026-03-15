@@ -34,7 +34,7 @@
     rootLayout.backgroundColor = [CFTool color:0];
     rootLayout.pagedCount = 9;
     rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));  //上下滚动，每页9个。
-    rootLayout.subviewSpace = 10;
+    rootLayout.subviewSpacing = 10;
     rootLayout.padding = UIEdgeInsetsMake(10, 5, 10, 5);
     rootLayout.leftPos.equalTo(@0).active = YES; //active属性用来表示是否让这个属性设置生效。
     rootLayout.rightPos.equalTo(@0).active = YES;  //这里设置左右的边距是0并生效，表示宽度和父视图相等。
@@ -77,7 +77,7 @@
         self.rootLayout.arrangedCount = 1;
         self.rootLayout.pagedCount = 1;
         self.rootLayout.padding = UIEdgeInsetsZero;
-        self.rootLayout.subviewSpace = 0;
+        self.rootLayout.subviewSpacing = 0;
     
     }
     else
@@ -86,7 +86,7 @@
         self.rootLayout.arrangedCount = 3;
         self.rootLayout.pagedCount = 9;
         self.rootLayout.padding = UIEdgeInsetsMake(10, 5, 10, 5);
-        self.rootLayout.subviewSpace = 10;
+        self.rootLayout.subviewSpacing = 10;
         
     }
    

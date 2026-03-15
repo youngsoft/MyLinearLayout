@@ -29,13 +29,6 @@
     scrollView.contentInset = UIEdgeInsetsMake(0, 0, 10, 0);
     self.view = scrollView;
     
-    if (@available(iOS 11.0, *)) {
-    } else {
-        // Fallback on earlier versions
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-   
-    
     MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     tableLayout.leadingPos.equalTo(@(MyLayoutPos.safeAreaMargin)).offset(10);
     tableLayout.trailingPos.equalTo(@(MyLayoutPos.safeAreaMargin)).offset(10);

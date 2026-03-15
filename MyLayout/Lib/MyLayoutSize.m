@@ -29,11 +29,12 @@
     return -99997; //这么定义纯粹是一个数字没有其他意义
 }
 
-- (id)init {
-    self = [super init];
+- (instancetype)initWithView:(UIView *)view anchorType:(MyLayoutAnchorType)anchorType {
+    self = [self init];
     if (self != nil) {
         _active = YES;
-        _view = nil;
+        _view = view;
+        _anchorType = anchorType;
         _val = nil;
         _valType = MyLayoutValType_Nil;
         _addVal = 0;
@@ -43,6 +44,7 @@
         _shrink = 0.0;
         _priority = MyPriority_Normal;
     }
+    
     return self;
 }
 
@@ -172,23 +174,21 @@
 #pragma mark-- NSCopying
 
 - (id)copyWithZone:(NSZone *)zone {
-    MyLayoutSize *layoutSize = [[[self class] allocWithZone:zone] init];
-    layoutSize->_view = _view;
+    MyLayoutSize *layoutSize = [[[self class] allocWithZone:zone] initWithView:self.view anchorType:self.anchorType];
     layoutSize->_active = _active;
     layoutSize->_shrink = _shrink;
-    layoutSize->_anchorType = _anchorType;
     layoutSize->_addVal = _addVal;
     layoutSize->_multiVal = _multiVal;
     layoutSize->_val = _val;
     layoutSize->_valType = _valType;
     layoutSize->_priority = _priority;
     if (_lBoundVal != nil) {
-        layoutSize->_lBoundVal = [[[self class] allocWithZone:zone] init];
+        layoutSize->_lBoundVal = [[[self class] allocWithZone:zone] initWithView:self.view anchorType:self.anchorType];
         layoutSize->_lBoundVal->_active = _active;
         [[[layoutSize->_lBoundVal _myEqualTo:_lBoundVal.val] _myAdd:_lBoundVal.addVal] _myMultiply:_lBoundVal.multiVal];
     }
     if (_uBoundVal != nil) {
-        layoutSize->_uBoundVal = [[[self class] allocWithZone:zone] init];
+        layoutSize->_uBoundVal = [[[self class] allocWithZone:zone] initWithView:self.view anchorType:self.anchorType];
         layoutSize->_uBoundVal->_active = _active;
         [[[layoutSize->_uBoundVal _myEqualTo:_uBoundVal.val] _myAdd:_uBoundVal.addVal] _myMultiply:_uBoundVal.multiVal];
     }
@@ -240,7 +240,7 @@
 
 - (MyLayoutSize *)lBoundVal {
     if (_lBoundVal == nil) {
-        _lBoundVal = [[MyLayoutSize alloc] init];
+        _lBoundVal = [[MyLayoutSize alloc] initWithView:self.view anchorType:self.anchorType];
         _lBoundVal->_active = _active;
         [_lBoundVal _myEqualTo:@(-CGFLOAT_MAX)];
     }
@@ -249,7 +249,7 @@
 
 - (MyLayoutSize *)uBoundVal {
     if (_uBoundVal == nil) {
-        _uBoundVal = [[MyLayoutSize alloc] init];
+        _uBoundVal = [[MyLayoutSize alloc] initWithView:self.view anchorType:self.anchorType];
         _uBoundVal->_active = _active;
         [_uBoundVal _myEqualTo:@(CGFLOAT_MAX)];
     }
@@ -492,7 +492,7 @@
 
 - (MyLayoutSize * (^)(CGFloat addVal, CGFloat multiVal))clone {
     return ^id(CGFloat addVal, CGFloat multiVal) {
-        MyLayoutSize *clonedAnchor = [[[self class] allocWithZone:nil] init];
+        MyLayoutSize *clonedAnchor = [[[self class] allocWithZone:nil] initWithView:self.view anchorType:self.anchorType];
         clonedAnchor->_addVal = addVal;
         clonedAnchor->_multiVal = multiVal;
         clonedAnchor->_val = self;
@@ -506,8 +506,8 @@
 #pragma mark-- MyLayoutMostSize
 
 @implementation MyLayoutMostSize {
-    NSArray *_dimens;
     BOOL _isMax;
+    NSArray *_dimens;
 }
 
 - (instancetype)initWith:(NSArray *)dimens isMax:(BOOL)isMax {

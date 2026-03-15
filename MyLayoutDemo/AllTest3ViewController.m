@@ -30,7 +30,7 @@
 @property(nonatomic, strong) UILabel *rightFlexedLabel;
 
 //伸缩布局
-@property(nonatomic,strong) MyBaseLayout *shrinkLayout;
+@property(nonatomic,strong) MyFlowLayout *shrinkLayout;
 
 @end
 
@@ -214,7 +214,7 @@
     testLayout.paddingRight = 10;
     testLayout.myHeight = 50;
     testLayout.gravity = MyGravity_Vert_Fill;
-    testLayout.subviewHSpace = 10;
+    testLayout.subviewHSpacing = 10;
     testLayout.myTop = 10;
     [contentLayout addSubview:testLayout];
     
@@ -266,7 +266,7 @@
     testLayout.myHeight = 50;
     testLayout.gravity = MyGravity_Vert_Fill;
     testLayout.shrinkType = MySubviewsShrink_Auto;  //左右2个子视图会根据自身的宽度自动调整。不会产生覆盖和重叠。
-    testLayout.subviewHSpace = 10;
+    testLayout.subviewHSpacing = 10;
     [contentLayout addSubview:testLayout];
     self.flexedLayout = testLayout;
     
@@ -310,9 +310,10 @@
     testLayout.backgroundColor = [UIColor whiteColor];
     testLayout.gravity = MyGravity_Horz_Fill;  //尺寸相等
     testLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    testLayout.subviewHSpace = 10;
-    testLayout.subviewVSpace = 10;
-    testLayout.heightSize.equalTo(@50);
+    testLayout.subviewHSpacing = 10;
+    testLayout.subviewVSpacing = 10;
+    testLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
+    testLayout.maxLines = 2;
     testLayout.clipsToBounds = YES;
     [contentLayout addSubview:testLayout];
     self.shrinkLayout = testLayout;
@@ -464,9 +465,10 @@
 
 -(void)handleTap:(MyBaseLayout*)sender
 {
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"test" message:@"you touched this section" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:@"you touched this section" preferredStyle:UIAlertControllerStyleAlert];
     
-    [av show];
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 -(void)handleTouchDown:(MyBaseLayout*)sender
@@ -540,11 +542,12 @@
 -(void)handleShrinkSwitch:(UISwitch *)sender
 {
     if (sender.isOn)
-        self.shrinkLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
+        self.shrinkLayout.maxLines = NSIntegerMax;
     else
-        self.shrinkLayout.heightSize.equalTo(@50);
+        self.shrinkLayout.maxLines = 2;
     
     [self.shrinkLayout layoutAnimationWithDuration:0.3];
+    [((MyBaseLayout *)self.shrinkLayout.superview) layoutAnimationWithDuration:0.3];
 }
 
 -(void)handleShowPopMenu:(MyBaseLayout*)sender
@@ -585,8 +588,8 @@
     MyFlowLayout *itemLayout = [MyFlowLayout flowLayoutWithOrientation:MyOrientation_Vert arrangedCount:3];
     itemLayout.myHorzMargin = 0;
     itemLayout.gravity = MyGravity_Horz_Fill;
-    itemLayout.subviewHSpace = 10;
-    itemLayout.subviewVSpace = 10;
+    itemLayout.subviewHSpacing = 10;
+    itemLayout.subviewVSpacing = 10;
     itemLayout.myHeight = MyLayoutSize.wrap;
     [scrollView addSubview:itemLayout];
     self.popmenuItemLayout = itemLayout;
@@ -655,7 +658,7 @@
 -(void)handleAddMe:(UIButton*)sender
 {
     UIButton *button = [UIButton new];
-    [button setTitle:[NSString stringWithFormat:NSLocalizedString(@"double tap remove:%d", @""), sender.superview.subviews.count ] forState:UIControlStateNormal];
+    [button setTitle:[NSString stringWithFormat:NSLocalizedString(@"double tap remove:%ld", @""), sender.superview.subviews.count ] forState:UIControlStateNormal];
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
     button.backgroundColor = [CFTool color:2];
     button.layer.cornerRadius = 5;

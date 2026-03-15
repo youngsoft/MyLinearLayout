@@ -38,10 +38,12 @@ typedef enum : int {
     MyFlexGravity_Flex_End,
     /**居中位置对齐或停靠*/
     MyFlexGravity_Center,
-    /**拉伸行或者列之间的间距*/
+    /**拉伸行或者列之间的间距,头尾无间距*/
     MyFlexGravity_Space_Between,
     /**拉伸行或者列之间的间距，头尾间距是其他间距的一半*/
     MyFlexGravity_Space_Around,
+    /**拉伸行或者列之间的间距,头尾有间距*/
+    MyFlexGravity_Space_Evenly,
     /**基线对齐*/
     MyFlexGravity_Baseline,
     /**拉伸条目尺寸*/
@@ -78,8 +80,8 @@ extern const int MyFlex_Auto;
 @property (nonatomic, assign) MyFlexGravity align_content;
 @property (nonatomic, assign) NSInteger item_size;
 @property (nonatomic, assign) UIEdgeInsets padding;
-@property (nonatomic, assign) CGFloat vert_space;
-@property (nonatomic, assign) CGFloat horz_space;
+@property (nonatomic, assign) CGFloat vert_spacing;
+@property (nonatomic, assign) CGFloat horz_spacing;
 
 @end
 
@@ -204,7 +206,7 @@ extern const int MyFlex_Auto;
  */
 - (id<MyFlexBox> (^)(int))flex_flow;
 /**
- 设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式。可选值为：MyFlexGravity_Flex_Start | MyFlexGravity_Flex_End | MyFlexGravity_Center | MyFlexGravity_Space_Between | MyFlexGravity_Space_Around 中的一个，默认值为MyFlexGravity_Flex_Start
+ 设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式。可选值为：MyFlexGravity_Flex_Start | MyFlexGravity_Flex_End | MyFlexGravity_Center | MyFlexGravity_Space_Between | MyFlexGravity_Space_Around | MyFlexGravity_Space_Evenly 中的一个，默认值为MyFlexGravity_Flex_Start
  */
 - (id<MyFlexBox> (^)(MyFlexGravity))justify_content;
 /**
@@ -212,7 +214,7 @@ extern const int MyFlex_Auto;
  */
 - (id<MyFlexBox> (^)(MyFlexGravity))align_items;
 /**
- 设置或检索弹性盒堆叠伸缩行的对齐方式。可选值为：MyFlexGravity_Flex_Start | MyFlexGravity_Flex_End | MyFlexGravity_Center | MyFlexGravity_Between | MyFlexGravity_Around | MyFlexGravity_Stretch中的一个，默认值为MyFlexGravity_Stretch
+ 设置或检索弹性盒堆叠伸缩行的对齐方式。可选值为：MyFlexGravity_Flex_Start | MyFlexGravity_Flex_End | MyFlexGravity_Center | MyFlexGravity_Space_Between | MyFlexGravity_Space_Around | MyFlexGravity_Space_Evenly| MyFlexGravity_Stretch中的一个，默认值为MyFlexGravity_Stretch
  */
 - (id<MyFlexBox> (^)(MyFlexGravity))align_content;
 
@@ -236,11 +238,11 @@ extern const int MyFlex_Auto;
 /**
  设置弹性盒内所有条目视图之间的垂直间距
  */
-- (id<MyFlexBox> (^)(CGFloat))vert_space;
+- (id<MyFlexBox> (^)(CGFloat))vert_spacing;
 /**
  设置弹性盒内所有条目视图之间的水平间距
  */
-- (id<MyFlexBox> (^)(CGFloat))horz_space;
+- (id<MyFlexBox> (^)(CGFloat))horz_spacing;
 
 @end
 

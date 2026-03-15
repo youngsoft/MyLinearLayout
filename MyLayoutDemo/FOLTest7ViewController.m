@@ -33,7 +33,7 @@
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.backgroundColor = [UIColor lightGrayColor];
     rootLayout.gravity = MyGravity_Horz_Fill;  //所有子视图的宽度都和自己相等。
-    rootLayout.subviewVSpace = 10;
+    rootLayout.subviewVSpacing = 10;
     self.view = rootLayout;
     
     MyFloatLayout *vertLayout = [self createVertFloatLayout:rootLayout];
@@ -229,7 +229,7 @@
 {
     MyFloatLayout *floatLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Horz];
     floatLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    floatLayout.subviewSpace = 10;
+    floatLayout.subviewSpacing = 10;
     
     NSArray *names = @[@"minions1",@"minions3",@"minions2",@"minions4",@"p4-23",@"p4-11"];
     for (int i = 0; i < 6; i++)

@@ -97,13 +97,10 @@
      因为cell的高度是自适应的，因此这里通过调用高度为wrap的布局视图的systemLayoutSizeFittingSize来获取真实的高度。
      */
     
-    if (@available(iOS 11.0, *)) {
-        //如果你的界面要支持横屏的话，因为iPhoneX的横屏左右有44的安全区域，所以这里要减去左右的安全区域的值，来作为布局宽度尺寸的评估值。
-        //如果您的界面不需要支持横屏，或者延伸到安全区域外则不需要做这个特殊处理，而直接使用else部分的代码即可。
-       return [self.rootLayout systemLayoutSizeFittingSize:CGSizeMake(targetSize.width - self.safeAreaInsets.left - self.safeAreaInsets.right, targetSize.height) withHorizontalFittingPriority:horizontalFittingPriority verticalFittingPriority:verticalFittingPriority];
-    } else {
-        return [self.rootLayout systemLayoutSizeFittingSize:targetSize withHorizontalFittingPriority:horizontalFittingPriority verticalFittingPriority:verticalFittingPriority];  //如果使用系统自带的分割线，请记得将返回的高度height+1
-    }
+    
+    //如果你的界面要支持横屏的话，因为iPhoneX的横屏左右有44的安全区域，所以这里要减去左右的安全区域的值，来作为布局宽度尺寸的评估值。
+    //如果您的界面不需要支持横屏，或者延伸到安全区域外则不需要做这个特殊处理，而直接使用else部分的代码即可。
+    return [self.rootLayout systemLayoutSizeFittingSize:CGSizeMake(targetSize.width - self.safeAreaInsets.left - self.safeAreaInsets.right, targetSize.height) withHorizontalFittingPriority:horizontalFittingPriority verticalFittingPriority:verticalFittingPriority];
 }
 
 
@@ -141,7 +138,7 @@
     MyLinearLayout *messageLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     messageLayout.weight = 1;
     messageLayout.myLeading = 5;  //前面2行代码描述的是垂直布局占用除头像外的所有宽度，并和头像保持5个点的间距。
-    messageLayout.subviewVSpace = 5; //垂直布局里面所有子视图都保持5个点的间距。
+    messageLayout.subviewVSpacing = 5; //垂直布局里面所有子视图都保持5个点的间距。
     [_rootLayout addSubview:messageLayout];
     
     

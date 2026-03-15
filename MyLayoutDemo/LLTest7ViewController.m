@@ -34,7 +34,7 @@
 -(void)loadView
 {
     /*
-       这个例子用来介绍线性布局提供的均分尺寸和均分间距的功能。这可以通过线性布局里面的equalizeSubviews和equalizeSubviewsSpace方法来实现。
+       这个例子用来介绍线性布局提供的均分尺寸和均分间距的功能。这可以通过线性布局里面的equalizeSubviews和equalizeSubviewsSpacing方法来实现。
        需要注意的是这两个方法只能对当前已经加入了线性布局中的子视图有效。对后续再加入的子视图不会进行均分。因此要想后续加入的子视图也均分就需要再次调用者两个方法。
      */
     
@@ -42,19 +42,20 @@
     rootLayout.backgroundColor = [UIColor whiteColor];
     rootLayout.gravity = MyGravity_Horz_Fill;  //设置里面所有子视图的宽度填充布局视图的宽度。
     rootLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    rootLayout.subviewVSpace = 5;
+    rootLayout.subviewVSpacing = 5;
     self.view = rootLayout;
     
     //创建动作布局
     MyLinearLayout *action1Layout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
     action1Layout.heightSize.equalTo(@(MyLayoutSize.wrap));
-    action1Layout.topPos.equalTo(self.topLayoutGuide);
+   // action1Layout.topPos.equalTo(self.topLayoutGuide); topLyoutGuide is not support!! please use MyLayoutPos.safeAreaMargin
+    action1Layout.topPos.equalTo(@(MyLayoutPos.safeAreaMargin));
     [rootLayout addSubview:action1Layout];
     
-    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&space no centered", @"") tag:100]];
-    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&space centered", @"") tag:200]];
+    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&spacing no centered", @"") tag:100]];
+    [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size&spacing centered", @"") tag:200]];
     [action1Layout addSubview:[self createActionButton:NSLocalizedString(@"average size no centered",@"") tag:300]];
-    [action1Layout equalizeSubviews:NO withSpace:5];  //均分action1Layout中的所有子视图的宽度
+    [action1Layout equalizeSubviews:NO withSpacing:5];  //均分action1Layout中的所有子视图的宽度
 
     //创建动作布局
     MyLinearLayout *action2Layout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
@@ -62,9 +63,9 @@
     [rootLayout addSubview:action2Layout];
     
     [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average size centered",@"") tag:400]];
-    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average space no centered",@"") tag:500]];
-    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average space centered",@"") tag:600]];
-    [action2Layout equalizeSubviews:NO withSpace:5]; //均分action1Layout中的所有子视图的宽度
+    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average spacing no centered",@"") tag:500]];
+    [action2Layout addSubview:[self createActionButton:NSLocalizedString(@"average spacing centered",@"") tag:600]];
+    [action2Layout equalizeSubviews:NO withSpacing:5]; //均分action1Layout中的所有子视图的宽度
    
     //创建供动作测试的布局。
     self.testLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
@@ -76,23 +77,23 @@
     [rootLayout addSubview:self.testLayout];
     
     //这里用到了sizeclass的支持。您可以切换横竖屏看看效果。默认是垂直布局，横屏时是水平布局,并且垂直填充。
-    MyLinearLayout *landscapeSC = [self.testLayout fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+    id<MyLinearLayoutTraits> landscapeSC = [self.testLayout fetchLayoutTraitsInSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
     landscapeSC.orientation = MyOrientation_Horz;
     landscapeSC.gravity = MyGravity_Vert_Fill;
     
     
     UIView *v1 = [self createView:[CFTool color:5] title:@"A"];
     v1.myHeight = 100;
-    [v1 fetchLayoutSizeClass:MySizeClass_Landscape].myWidth = 100;
+    [v1 fetchLayoutTraitsInSizeClass:MySizeClass_Landscape].myWidth = 100;
     [self.testLayout addSubview:v1];
    
     UIView *v2 = [self createView:[CFTool color:6] title:@"B"];
     v2.myHeight = 50;
-    [v2 fetchLayoutSizeClass:MySizeClass_Landscape].myWidth = 50;
+    [v2 fetchLayoutTraitsInSizeClass:MySizeClass_Landscape].myWidth = 50;
     [self.testLayout addSubview:v2];
 
     UIView *v3 = [self createView:[CFTool color:7] title:@"C"];
-    [v3 fetchLayoutSizeClass:MySizeClass_Landscape].myWidth = 70;
+    [v3 fetchLayoutTraitsInSizeClass:MySizeClass_Landscape].myWidth = 70;
     v3.myHeight = 70;
     [self.testLayout addSubview:v3];
     
@@ -146,9 +147,9 @@
     UIView *v2 = arr[1];
     UIView *v3 = arr[2];
     
-    [v1 resetMyLayoutSetting];
-    [v2 resetMyLayoutSetting];
-    [v3 resetMyLayoutSetting];
+    [v1 clearLayoutTraits];
+    [v2 clearLayoutTraits];
+    [v3 clearLayoutTraits];
     
     v1.myHeight = 100;
     v2.myHeight = 50;
@@ -156,13 +157,13 @@
     
     
     //清除所有横屏模式下的布局约束设置。
-    [v1 resetMyLayoutSettingInSizeClass:MySizeClass_Landscape];
-    [v2 resetMyLayoutSettingInSizeClass:MySizeClass_Landscape];
-    [v3 resetMyLayoutSettingInSizeClass:MySizeClass_Landscape];
+    [v1 clearLayoutTraitsInSizeClass:MySizeClass_Landscape];
+    [v2 clearLayoutTraitsInSizeClass:MySizeClass_Landscape];
+    [v3 clearLayoutTraitsInSizeClass:MySizeClass_Landscape];
     
-    [v1 fetchLayoutSizeClass:MySizeClass_Landscape].myWidth = 100;
-    [v2 fetchLayoutSizeClass:MySizeClass_Landscape].myWidth = 50;
-    [v3 fetchLayoutSizeClass:MySizeClass_Landscape].myWidth = 70;
+    [v1 fetchLayoutTraitsInSizeClass:MySizeClass_Landscape].myWidth = 100;
+    [v2 fetchLayoutTraitsInSizeClass:MySizeClass_Landscape].myWidth = 50;
+    [v3 fetchLayoutTraitsInSizeClass:MySizeClass_Landscape].myWidth = 70;
     
     switch (sender.tag) {
         case 100:
@@ -174,20 +175,20 @@
             [self.testLayout equalizeSubviews:YES inSizeClass:MySizeClass_Landscape];  //均分所有子视图的尺寸和间距保留最外间距,横屏模式
             break;
         case 300:
-            [self.testLayout equalizeSubviews:NO withSpace:40]; //均分所有子视图尺寸，固定间距，不保留最外间距
-            [self.testLayout equalizeSubviews:NO withSpace:40 inSizeClass:MySizeClass_Landscape]; //均分所有子视图尺寸，固定间距，不保留最外间距,横屏模式
+            [self.testLayout equalizeSubviews:NO withSpacing:40]; //均分所有子视图尺寸，固定间距，不保留最外间距
+            [self.testLayout equalizeSubviews:NO withSpacing:40 inSizeClass:MySizeClass_Landscape]; //均分所有子视图尺寸，固定间距，不保留最外间距,横屏模式
             break;
         case 400:
-            [self.testLayout equalizeSubviews:YES withSpace:40];  //均分所有子视图尺寸，固定间距，保留最外间距
-            [self.testLayout equalizeSubviews:YES withSpace:40 inSizeClass:MySizeClass_Landscape];  //均分所有子视图尺寸，固定间距，保留最外间距,横屏模式
+            [self.testLayout equalizeSubviews:YES withSpacing:40];  //均分所有子视图尺寸，固定间距，保留最外间距
+            [self.testLayout equalizeSubviews:YES withSpacing:40 inSizeClass:MySizeClass_Landscape];  //均分所有子视图尺寸，固定间距，保留最外间距,横屏模式
             break;
         case 500:
-            [self.testLayout equalizeSubviewsSpace:NO];   //均分所有间距，子视图尺寸不变，不保留最外间距
-            [self.testLayout equalizeSubviewsSpace:NO inSizeClass:MySizeClass_Landscape];   //均分所有间距，子视图尺寸不变，不保留最外间距,横屏模式
+            [self.testLayout equalizeSubviewsSpacing:NO];   //均分所有间距，子视图尺寸不变，不保留最外间距
+            [self.testLayout equalizeSubviewsSpacing:NO inSizeClass:MySizeClass_Landscape];   //均分所有间距，子视图尺寸不变，不保留最外间距,横屏模式
             break;
         case 600:
-            [self.testLayout equalizeSubviewsSpace:YES];  //均分所有间距，子视图尺寸不变，保留最外间距。
-            [self.testLayout equalizeSubviewsSpace:YES inSizeClass:MySizeClass_Landscape];  //均分所有间距，子视图尺寸不变，保留最外间距。横屏模式
+            [self.testLayout equalizeSubviewsSpacing:YES];  //均分所有间距，子视图尺寸不变，保留最外间距。
+            [self.testLayout equalizeSubviewsSpacing:YES inSizeClass:MySizeClass_Landscape];  //均分所有间距，子视图尺寸不变，保留最外间距。横屏模式
             break;
         default:
             break;

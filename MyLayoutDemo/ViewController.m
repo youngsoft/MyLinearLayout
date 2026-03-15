@@ -44,6 +44,7 @@
 #import "FLLTest7ViewController.h"
 #import "FLLTest8ViewController.h"
 #import "FLLTest9ViewController.h"
+#import "FLLTest10ViewController.h"
 
 #import "FLXTest1ViewController.h"
 
@@ -118,7 +119,7 @@
                                              @{@"title":NSLocalizedString(@"6.LinearLayout - Size limit & Flexed margin", @""),
                                                @"class":[LLTest6ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"7.LinearLayout - Average size&space", @""),
+                                             @{@"title":NSLocalizedString(@"7.LinearLayout - Average size&spacing", @""),
                                                @"class":[LLTest7ViewController class]
                                                },
                                              @{@"title":NSLocalizedString(@"8.LinearLayout - Scroll&Dock", @""),
@@ -198,11 +199,14 @@
                                              @{@"title":NSLocalizedString(@"7.FlowLayout - Auto Arrange", @""),
                                                @"class":[FLLTest7ViewController class]
                                                },
-                                             @{@"title":NSLocalizedString(@"8.FlowLayout - Flex space", @""),
+                                             @{@"title":NSLocalizedString(@"8.FlowLayout - Flex spacing", @""),
                                                @"class":[FLLTest8ViewController class]
                                                },
                                              @{@"title":NSLocalizedString(@"9.FlowLayout - Line gravity", @""),
                                                @"class":[FLLTest9ViewController class]
+                                               },
+                                             @{@"title":NSLocalizedString(@"10.FlowLayout - Max Lines", @""),
+                                               @"class":[FLLTest10ViewController class]
                                                }
                                              ]
                             },

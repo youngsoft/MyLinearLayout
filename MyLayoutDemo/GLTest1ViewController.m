@@ -32,15 +32,7 @@
         栅格既然是一个区域，那么栅格布局本身除了是一个视图外，也是一个栅格，我们称栅格布局视图对应的栅格为根栅格。因此栅格布局除了负责管理子视图的添加外，还负责子栅格的建立删除等管理工作。  在栅格布局中，栅格的建立和子视图建立的分开的。子视图所填充的栅格是叶子栅格和设置为anchor属性的非叶子栅格，而填充的顺序是按栅格树的深度优先顺序填充的。 当然你可以用视图组的方式来将某些视图绑定在特定的栅格之中。
      
      */
-    
-    
-    //在iOS11以后因为有安全区的概念，因此不需要设置edgesForExtendedLayout属性了。否则可能出现push一个视图时，出现从下往上移动的动画效果。
-    if (@available(iOS 11.0, *)) {
-    } else {
-        // Fallback on earlier versions
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-    
+        
     UIScrollView *scrollView = [UIScrollView new];
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
@@ -50,7 +42,7 @@
     rootLayout.myHorzMargin = 0;
     rootLayout.myHeight = MyLayoutSize.wrap;
     rootLayout.padding = UIEdgeInsetsMake(10, 10, 10, 10);
-    rootLayout.subviewSpace = 10;  //直接子栅格之间的间隔。
+    rootLayout.subviewSpacing = 10;  //直接子栅格之间的间隔。
     [scrollView addSubview:rootLayout];
     self.rootLayout = rootLayout;
     
@@ -85,7 +77,7 @@
     //建立第三行栅格，高度为固定60
     id<MyGrid> line3 = [rootLayout addRow:60];
     line3.padding = UIEdgeInsetsMake(5, 5, 5, 5);  //设置栅格的内边距。
-    line3.subviewSpace = 5;   //栅格内子栅格的间距为5
+    line3.subviewSpacing = 5;   //栅格内子栅格的间距为5
     line3.anchor = YES;  //表示这个栅格虽然是非叶子栅格，但是添加的子视图可以填充到这个栅格中去。
     
     //第三行栅格内建立一个固定列宽的叶子栅格
@@ -124,7 +116,7 @@
     //建立一个高度由子栅格包裹的行栅格
     id<MyGrid> line4 = [rootLayout addRow:MyLayoutSize.wrap];
     line4.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    line4.subviewSpace = 5;  //子栅格之间的间距为5
+    line4.subviewSpacing = 5;  //子栅格之间的间距为5
     line4.anchor = YES;
     
     //建立一个高度由内容包裹的叶子栅格
@@ -132,7 +124,7 @@
     
     //建立一个高度为30，并且子栅格间隔为10的行栅格
     id<MyGrid> line42 = [line4 addRow:30];
-    line42.subviewSpace = 10;
+    line42.subviewSpacing = 10;
     
     //建立三个宽度均分的列叶子栅格。因为每个子栅格都是填充剩余宽度，因此最终的结果就是来均分父栅格的宽度。
     [line42 addCol:MyLayoutSize.fill];
@@ -208,7 +200,7 @@
    id<MyGrid> line7 = [rootLayout addRow:30];
     line7.gravity = MyGravity_Vert_Center;
     line7.anchor = YES;
-    line7.subviewSpace = 5;
+    line7.subviewSpacing = 5;
     line7.padding = UIEdgeInsetsMake(5, 5, 5, 5);
     
     [line7 addCol:MyLayoutSize.wrap];
@@ -238,7 +230,7 @@
     
     //建立一个高度为30的子栅格。
     id<MyGrid> line8 = [rootLayout addRow:30];
-    line8.subviewSpace = 5;
+    line8.subviewSpacing = 5;
     
     //分别建立一个宽度为20%，30%， 50%的列子栅格，如果measure的值是大于0并且小于1的话就是建立一个占用总体尺寸比例的子栅格
     [line8 addCol:0.2];
@@ -267,7 +259,7 @@
     //上面的栅格演示的是正数百分比，如果值是一个小于0并且大于-1的数则表示的是尺寸占用剩余空间的比例。
     //这里需要记住的是当比例是负数时表示的是剩余空间的比例，而当比例是正数时则表示的是总体空间的比例。！！！！
     id<MyGrid> line9 = [rootLayout addRow:30];
-    line9.subviewSpace = 5;
+    line9.subviewSpacing = 5;
     
     [line9 addCol:-0.2];  //第一列占用剩余空间的20%
     [line9 addCol:-0.375];  //第二列占用剩余空间的37.5%。这里不是30%的原因是因为第一列占用剩余20%后整体还剩余80%，所以要在80%里面占用37.5%才能达到整体占用30%的效果。

@@ -30,7 +30,7 @@
     rootLayout.backgroundColor = [CFTool color:0];
     rootLayout.myHorzMargin = 0;
     rootLayout.heightSize.lBound(scrollView.heightSize,0,1); //默认虽然高度包裹，但是最小的高度要和滚动视图相等。
-    rootLayout.subviewVSpace = 10;
+    rootLayout.subviewVSpacing = 10;
     [scrollView addSubview:rootLayout];
     
     //Create First User Profile type。
@@ -81,8 +81,8 @@
     contentLayout.myHeight = MyLayoutSize.wrap;
     contentLayout.myHorzMargin = 0;
     contentLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    contentLayout.subviewHSpace = 5;
-    contentLayout.subviewVSpace = 5;
+    contentLayout.subviewHSpacing = 5;
+    contentLayout.subviewVSpacing = 5;
     [rootLayout addSubview:contentLayout];
     
     

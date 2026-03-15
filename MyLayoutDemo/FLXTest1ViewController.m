@@ -45,7 +45,7 @@
     
     self.view = MyFlexNew(MyFlexLayout, rootLayout)
     .flex_direction(MyFlexDirection_Column)
-    .vert_space(10)
+    .vert_spacing(10)
     .addItem(MyFlexNew(MyFlexLayout, flexAttrLayout)
              .flex_direction(MyFlexDirection_Row)
              .align_items(MyFlexGravity_Center)
@@ -68,7 +68,7 @@
     //根视图为flexbox布局视图。
     MyFlexLayout *rootLayout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Column)
-    .vert_space(10)
+    .vert_spacing(10)
     .view;
     self.view = rootLayout;
     
@@ -139,6 +139,7 @@
     [justify_contentSeg insertSegmentWithTitle:@"center" atIndex:2 animated:NO];
     [justify_contentSeg insertSegmentWithTitle:@"space-between" atIndex:3 animated:NO];
     [justify_contentSeg insertSegmentWithTitle:@"space-around" atIndex:4 animated:NO];
+    [justify_contentSeg insertSegmentWithTitle:@"space-evenly" atIndex:5 animated:NO];
     [justify_contentSeg addTarget:self action:@selector(handleJustify_Content:) forControlEvents:UIControlEventValueChanged];
     self.justify_contentSeg = justify_contentSeg;
     
@@ -168,7 +169,8 @@
     [align_contentSeg insertSegmentWithTitle:@"center" atIndex:2 animated:NO];
     [align_contentSeg insertSegmentWithTitle:@"space-between" atIndex:3 animated:NO];
     [align_contentSeg insertSegmentWithTitle:@"space-around" atIndex:4 animated:NO];
-    [align_contentSeg insertSegmentWithTitle:@"stretch" atIndex:5 animated:NO];
+    [align_contentSeg insertSegmentWithTitle:@"space-evenly" atIndex:5 animated:NO];
+    [align_contentSeg insertSegmentWithTitle:@"stretch" atIndex:6 animated:NO];
     [align_contentSeg addTarget:self action:@selector(handleAlign_Content:) forControlEvents:UIControlEventValueChanged];
     self.align_contentSeg = align_contentSeg;
 
@@ -201,26 +203,26 @@
     
     [paddingSwitch addTarget:self action:@selector(handlePaddingChange:) forControlEvents:UIControlEventValueChanged];
     
-    MyFlexLayout *spaceLayout = MyFlexLayout.new.myFlex
+    MyFlexLayout *spacingLayout = MyFlexLayout.new.myFlex
     .flex_direction(MyFlexDirection_Row)
     .align_items(MyFlexGravity_Center)
     .width(MyLayoutSize.fill)
     .height(MyLayoutSize.wrap)
     .addTo(rootLayout);
     
-    UILabel *spaceTitleLabel = UILabel.new.myFlex
+    UILabel *spacingTitleLabel = UILabel.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
-    .addTo(spaceLayout);
+    .addTo(spacingLayout);
     
-    spaceTitleLabel.text = @"space:";
+    spacingTitleLabel.text = @"spacing:";
     
-    UISwitch *spaceSwitch = UISwitch.new.myFlex
+    UISwitch *spacingSwitch = UISwitch.new.myFlex
     .width(MyLayoutSize.wrap)
     .height(MyLayoutSize.wrap)
-    .addTo(spaceLayout);
+    .addTo(spacingLayout);
     
-    [spaceSwitch addTarget:self action:@selector(handleSpaceChange:) forControlEvents:UIControlEventValueChanged];
+    [spacingSwitch addTarget:self action:@selector(handleSpacingChange:) forControlEvents:UIControlEventValueChanged];
     
     
     UILabel *flexlayoutStyleDescLabel = UILabel.new.myFlex
@@ -330,6 +332,9 @@
             break;
         case MyFlexGravity_Space_Around:
             strJustifyContent = @"space-around;";
+            break;
+        case MyFlexGravity_Space_Evenly:
+            strJustifyContent = @"space-evenly;";
         default:
             break;
     }
@@ -371,6 +376,9 @@
         case MyFlexGravity_Space_Around:
             strAlignContent = @"space-around;";
             break;
+        case MyFlexGravity_Space_Evenly:
+            strAlignContent = @"space-evenly;";
+            break;
         case MyFlexGravity_Stretch:
             strAlignContent = @"stretch;";
             break;
@@ -395,8 +403,8 @@
     .align_items(MyFlexGravity_Center)
     .flex_wrap(MyFlexWrap_Wrap)
     .padding(UIEdgeInsetsMake(10, 10, 10, 10))
-    .vert_space(10)
-    .horz_space(10)
+    .vert_spacing(10)
+    .horz_spacing(10)
     .width(220)
     .height(MyLayoutSize.wrap)
     .margin_top(80)
@@ -697,6 +705,9 @@
                     break;
                 case MyFlexGravity_Space_Around:
                     self.justify_contentSeg.selectedSegmentIndex = 4;
+                    break;
+                case MyFlexGravity_Space_Evenly:
+                    self.justify_contentSeg.selectedSegmentIndex = 5;
                 default:
                     break;
             }
@@ -745,8 +756,11 @@
                 case MyFlexGravity_Space_Around:
                     self.align_contentSeg.selectedSegmentIndex = 4;
                     break;
-                case MyFlexGravity_Stretch:
+                case MyFlexGravity_Space_Evenly:
                     self.align_contentSeg.selectedSegmentIndex = 5;
+                    break;
+                case MyFlexGravity_Stretch:
+                    self.align_contentSeg.selectedSegmentIndex = 6;
                     break;
                 default:;
             }
@@ -816,6 +830,9 @@
         case 4:
             self.contentLayout.myFlex.justify_content(MyFlexGravity_Space_Around);
             break;
+        case 5:
+            self.contentLayout.myFlex.justify_content(MyFlexGravity_Space_Evenly);
+            break;
         default:
             break;
     }
@@ -868,6 +885,9 @@
             self.contentLayout.myFlex.align_content(MyFlexGravity_Space_Around);
             break;
         case 5:
+            self.contentLayout.myFlex.align_content(MyFlexGravity_Space_Evenly);
+            break;
+        case 6:
             self.contentLayout.myFlex.align_content(MyFlexGravity_Stretch);
             break;
         default:
@@ -877,12 +897,12 @@
     [self updateStyleDesc];
 }
 
--(IBAction)handleSpaceChange:(UISwitch*)sender
+-(IBAction)handleSpacingChange:(UISwitch*)sender
 {
     if (sender.isOn)
-        self.contentLayout.myFlex.vert_space(10).horz_space(10);
+        self.contentLayout.myFlex.vert_spacing(10).horz_spacing(10);
     else
-        self.contentLayout.myFlex.vert_space(0).horz_space(0);
+        self.contentLayout.myFlex.vert_spacing(0).horz_spacing(0);
 }
 
 

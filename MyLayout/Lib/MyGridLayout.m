@@ -17,7 +17,7 @@ NSString *const kMyGridRows = @"rows";
 NSString *const kMyGridCols = @"cols";
 NSString *const kMyGridSize = @"size";
 NSString *const kMyGridPadding = @"padding";
-NSString *const kMyGridSpace = @"space";
+NSString *const kMyGridSpacing = @"spacing";
 NSString *const kMyGridGravity = @"gravity";
 NSString *const kMyGridPlaceholder = @"placeholder";
 NSString *const kMyGridAnchor = @"anchor";
@@ -78,7 +78,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
 
 @interface MyGridLayout () <MyGridNode>
 
-@property (nonatomic, weak) MyGridLayoutTraits *lastSizeClass;
+@property (nonatomic, weak) MyGridLayoutTraitsImpl *lastSizeClass;
 //保存某个标签下对应的 视图组和数据 数组。字典。一个标签下可以有N个视图组。
 @property (nonatomic, strong) NSMutableDictionary<NSNumber*, NSMutableArray<MyViewGroupAndActionData *> *> *tagsDict;
 //这个锁并不是用于同步处理，而是用来区分是外部主动调用删除子视图还是类内部删除子视图。因为二者都会触发willRemoveSubview方法的调用，这个标志
@@ -110,7 +110,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
 }
 
 - (void)removeGridsIn:(MySizeClass)sizeClass {
-    id<MyGridNode> gridNode = (id<MyGridNode>)[self fetchLayoutSizeClass:sizeClass];
+    id<MyGridNode> gridNode = (id<MyGridNode>)[self fetchLayoutTraitsInSizeClass:sizeClass];
     [gridNode.subGrids removeAllObjects];
     gridNode.subGridsType = MySubGridsType_Unknown;
     [self setNeedsLayout];
@@ -127,13 +127,13 @@ NSString *const vMyGridGravityHeightFill = @"height";
     NSAssert([gridNode gridLayoutView] == self, @"oops! 非栅格布局中的栅格");
 #endif
 
-    NSMutableArray *retSbs = [NSMutableArray new];
+    NSMutableArray *retSubviews = [NSMutableArray new];
     for (UIView *subview in self.subviews) {
         if (!subview.isHidden && CGRectContainsRect(gridNode.gridRect, subview.frame)) {
-            [retSbs addObject:subview];
+            [retSubviews addObject:subview];
         }
     }
-    return retSbs;
+    return retSubviews;
 }
 
 - (void)addViewGroup:(NSArray<UIView *> *)viewGroup withActionData:(id)actionData to:(NSInteger)gridTag {
@@ -157,9 +157,9 @@ NSString *const vMyGridGravityHeightFill = @"height";
         }
     }
     
-    for (UIView *sbv in viewGroup) {
-        if (sbv != (UIView *)[NSNull null]) {
-            [self addSubview:sbv];
+    for (UIView *subview in viewGroup) {
+        if (subview != (UIView *)[NSNull null]) {
+            [self addSubview:subview];
         }
     }
 
@@ -189,11 +189,11 @@ NSString *const vMyGridGravityHeightFill = @"height";
     va.actionData = actionData;
 
     if (va.viewGroup != viewGroup) {
-        for (UIView *sbv in viewGroup) {
-            NSUInteger oldIndex = [va.viewGroup indexOfObject:sbv];
+        for (UIView *subview in viewGroup) {
+            NSUInteger oldIndex = [va.viewGroup indexOfObject:subview];
             if (oldIndex == NSNotFound) {
-                if (sbv != (UIView *)[NSNull null]) {
-                    [self addSubview:sbv];
+                if (subview != (UIView *)[NSNull null]) {
+                    [self addSubview:subview];
                 }
             } else {
                 [va.viewGroup removeObjectAtIndex:oldIndex];
@@ -201,9 +201,9 @@ NSString *const vMyGridGravityHeightFill = @"height";
         }
 
         //原来多余的视图删除
-        for (UIView *sbv in va.viewGroup) {
-            if (sbv != (UIView *)[NSNull null]) {
-                [sbv removeFromSuperview];
+        for (UIView *subview in va.viewGroup) {
+            if (subview != (UIView *)[NSNull null]) {
+                [subview removeFromSuperview];
             }
         }
         //将新的视图组给替换掉。
@@ -261,9 +261,9 @@ NSString *const vMyGridGravityHeightFill = @"height";
         MyViewGroupAndActionData *va = viewGroupArray[index];
 
         self.tagsDictLock = YES;
-        for (UIView *sbv in va.viewGroup) {
-            if (sbv != (UIView *)[NSNull null]) {
-                [sbv removeFromSuperview];
+        for (UIView *subview in va.viewGroup) {
+            if (subview != (UIView *)[NSNull null]) {
+                [subview removeFromSuperview];
             }
         }
         self.tagsDictLock = NO;
@@ -288,9 +288,9 @@ NSString *const vMyGridGravityHeightFill = @"height";
     if (viewGroupArray != nil) {
         self.tagsDictLock = YES;
         for (MyViewGroupAndActionData *va in viewGroupArray) {
-            for (UIView *sbv in va.viewGroup) {
-                if (sbv != (UIView *)[NSNull null]) {
-                    [sbv removeFromSuperview];
+            for (UIView *subview in va.viewGroup) {
+                if (subview != (UIView *)[NSNull null]) {
+                    [subview removeFromSuperview];
                 }
             }
         }
@@ -368,162 +368,86 @@ NSString *const vMyGridGravityHeightFill = @"height";
 
 #pragma mark-- MyGrid
 
-- (id)actionData {
-    return self.myDefaultSizeClass.actionData;
-}
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(id, ActionData, actionData)
 
-- (void)setActionData:(id)actionData {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.actionData = actionData;
-}
 
 //添加行。返回新的栅格。
 - (id<MyGrid>)addRow:(CGFloat)measure {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    id<MyGridNode> node = (id<MyGridNode>)[lsc addRow:measure];
+    MyGridLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
+    id<MyGridNode> node = (id<MyGridNode>)[layoutTraits addRow:measure];
     node.superGrid = self;
     return node;
 }
 
 //添加列。返回新的栅格。
 - (id<MyGrid>)addCol:(CGFloat)measure {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    id<MyGridNode> node = (id<MyGridNode>)[lsc addCol:measure];
+    MyGridLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
+    id<MyGridNode> node = (id<MyGridNode>)[layoutTraits addCol:measure];
     node.superGrid = self;
     return node;
 }
 
 - (id<MyGrid>)addRowGrid:(id<MyGrid>)grid {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    id<MyGridNode> node = (id<MyGridNode>)[lsc addRowGrid:grid];
+    MyGridLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
+    id<MyGridNode> node = (id<MyGridNode>)[layoutTraits addRowGrid:grid];
     node.superGrid = self;
     return node;
 }
 
 - (id<MyGrid>)addColGrid:(id<MyGrid>)grid {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    id<MyGridNode> node = (id<MyGridNode>)[lsc addColGrid:grid];
+    MyGridLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
+    id<MyGridNode> node = (id<MyGridNode>)[layoutTraits addColGrid:grid];
     node.superGrid = self;
     return node;
 }
 
 - (id<MyGrid>)addRowGrid:(id<MyGrid>)grid measure:(CGFloat)measure {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    id<MyGridNode> node = (id<MyGridNode>)[lsc addRowGrid:grid measure:measure];
+    MyGridLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
+    id<MyGridNode> node = (id<MyGridNode>)[layoutTraits addRowGrid:grid measure:measure];
     node.superGrid = self;
     return node;
 }
 
 - (id<MyGrid>)addColGrid:(id<MyGrid>)grid measure:(CGFloat)measure {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    id<MyGridNode> node = (id<MyGridNode>)[lsc addColGrid:grid measure:measure];
+    MyGridLayoutTraitsImpl *layoutTraits = self.myDefaultTraits;
+    id<MyGridNode> node = (id<MyGridNode>)[layoutTraits addColGrid:grid measure:measure];
     node.superGrid = self;
     return node;
 }
 
 - (id<MyGrid>)cloneGrid {
-    return [self.myDefaultSizeClass cloneGrid];
+    return [self.myDefaultTraits cloneGrid];
 }
 
 - (void)removeFromSuperGrid {
-    return [self.myDefaultSizeClass removeFromSuperGrid];
+    return [self.myDefaultTraits removeFromSuperGrid];
 }
 
-- (id<MyGrid>)superGrid {
-    return self.myDefaultSizeClass.superGrid;
-}
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(id<MyGrid>, SuperGrid, superGrid)
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(BOOL, Placeholder, placeholder)
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(BOOL, Anchor, anchor)
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(MyGravity, Overlap, overlap)
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(NSDictionary *, GridDictionary, gridDictionary)
 
-- (void)setSuperGrid:(id<MyGridNode>)superGrid {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.superGrid = superGrid;
-}
-
-- (BOOL)placeholder {
-    return self.myDefaultSizeClass.placeholder;
-}
-
-- (void)setPlaceholder:(BOOL)placeholder {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.placeholder = placeholder;
-}
-
-- (BOOL)anchor {
-    return self.myDefaultSizeClass.anchor;
-}
-
-- (void)setAnchor:(BOOL)anchor {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.anchor = anchor;
-}
-
-- (MyGravity)overlap {
-    return self.myDefaultSizeClass.overlap;
-}
-
-- (void)setOverlap:(MyGravity)overlap {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.overlap = overlap;
-}
-
-- (NSDictionary *)gridDictionary {
-    return self.myDefaultSizeClass.gridDictionary;
-}
-
-- (void)setGridDictionary:(NSDictionary *)gridDictionary {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.gridDictionary = gridDictionary;
-}
 
 #pragma mark-- MyGridNode
 
-- (NSMutableArray<id<MyGridNode>> *)subGrids {
-    return (NSMutableArray<id<MyGridNode>> *)(self.myDefaultSizeClass.subGrids);
-}
-
-- (void)setSubGrids:(NSMutableArray<id<MyGridNode>> *)subGrids {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.subGrids = subGrids;
-}
-
-- (MySubGridsType)subGridsType {
-    return self.myDefaultSizeClass.subGridsType;
-}
-
-- (void)setSubGridsType:(MySubGridsType)subGridsType {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.subGridsType = subGridsType;
-}
-
-- (CGFloat)measure {
-    return self.myDefaultSizeClass.measure;
-}
-
-- (void)setMeasure:(CGFloat)measure {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.measure = measure;
-}
-
-- (CGRect)gridRect {
-    return self.myDefaultSizeClass.gridRect;
-}
-
-- (void)setGridRect:(CGRect)gridRect {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    lsc.gridRect = gridRect;
-}
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(NSMutableArray<id<MyGridNode>> *, SubGrids, subGrids)
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(MySubGridsType, SubGridsType, subGridsType)
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(CGFloat, Measure, measure)
+_MYLAYOUT_PROPERTY_GRIDLAYOUT_OVERRIDE(CGRect, GridRect, gridRect)
 
 //更新格子尺寸。
 - (CGFloat)updateGridSize:(CGSize)superSize superGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure {
-    return [self.myDefaultSizeClass updateGridSize:superSize superGrid:superGrid withMeasure:measure];
+    return [self.myCurrentTraits updateGridSize:superSize superGrid:superGrid withMeasure:measure];
 }
 
 - (CGFloat)updateWrapGridSizeInSuperGrid:(id<MyGridNode>)superGrid withMeasure:(CGFloat)measure {
-    return [self.myDefaultSizeClass updateWrapGridSizeInSuperGrid:superGrid withMeasure:measure];
+    return [self.myCurrentTraits updateWrapGridSizeInSuperGrid:superGrid withMeasure:measure];
 }
 
-
 - (CGFloat)updateGridOrigin:(CGPoint)superOrigin superGrid:(id<MyGridNode>)superGrid withOffset:(CGFloat)offset {
-    return [self.myDefaultSizeClass updateGridOrigin:superOrigin superGrid:superGrid withOffset:offset];
+    return [self.myCurrentTraits updateGridOrigin:superOrigin superGrid:superGrid withOffset:offset];
 }
 
 - (UIView *)gridLayoutView {
@@ -535,24 +459,24 @@ NSString *const vMyGridGravityHeightFill = @"height";
 }
 
 - (void)setBorderlineNeedLayoutIn:(CGRect)rect withLayer:(CALayer *)layer {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    [lsc setBorderlineNeedLayoutIn:rect withLayer:layer];
+    MyGridLayoutTraitsImpl *layoutTraits = self.myCurrentTraits;
+    [layoutTraits setBorderlineNeedLayoutIn:rect withLayer:layer];
 }
 
 - (void)showBorderline:(BOOL)show {
-    MyGridLayout *lsc = self.myDefaultSizeClass;
-    [lsc showBorderline:show];
+    MyGridLayoutTraitsImpl *layoutTraits = self.myCurrentTraits;
+    [layoutTraits showBorderline:show];
 }
 
 - (id<MyGrid>)gridHitTest:(CGPoint)point {
-    return [self.myDefaultSizeClass gridHitTest:point];
+    return [self.myCurrentTraits gridHitTest:point];
 }
 
 #pragma mark-- Touches Event
 
 - (id<MyGridNode>)myBestHitGrid:(NSSet *)touches {
     MySizeClass sizeClass = [self myGetGlobalSizeClass];
-    id<MyGridNode> bestSC = (id<MyGridNode>)[self.myEngine fetchView:self bestLayoutSizeClass:sizeClass];
+    id<MyGridNode> bestSC = (id<MyGridNode>)[self.myEngine fetchView:self bestTraitsAt:sizeClass];
 
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
@@ -626,27 +550,15 @@ NSString *const vMyGridGravityHeightFill = @"height";
 - (CGSize)calcLayoutSize:(CGSize)size subviewEngines:(NSMutableArray *)subviewEngines context:(MyLayoutContext *)context {
     CGSize selfSize = [super calcLayoutSize:size subviewEngines:subviewEngines context:context];
     
-    MyGridLayoutTraits<MyGridNode> *layoutTraits = (MyGridLayoutTraits<MyGridNode>  *)context->layoutViewEngine.currentSizeClass;
+    MyGridLayoutTraitsImpl *layoutTraits = context->layoutViewEngine.currentTraits;
     
-       context->paddingTop = layoutTraits.myLayoutPaddingTop;
-       context->paddingBottom = layoutTraits.myLayoutPaddingBottom;
-       context->paddingLeading = layoutTraits.myLayoutPaddingLeading;
-       context->paddingTrailing = layoutTraits.myLayoutPaddingTrailing;
-       context->vertGravity = MYVERTGRAVITY(layoutTraits.gravity);
-       context->horzGravity = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(layoutTraits.gravity)];
-       context->vertSpace = layoutTraits.subviewVSpace;
-       context->horzSpace = layoutTraits.subviewHSpace;
-       if (context->subviewEngines == nil) {
-           context->subviewEngines = [layoutTraits filterEngines:subviewEngines];
-       }
-
     //只有在非评估，并且当sizeclass的数量大于1个，并且当前的sizeclass和lastSizeClass不一致的时候
     if (!context->isEstimate && context->layoutViewEngine.multiple) {
         //将子栅格中的layer隐藏。
-        if (self.lastSizeClass != nil && ((MyGridLayoutTraits *)layoutTraits) != self.lastSizeClass) {
+        if (self.lastSizeClass != nil && layoutTraits != self.lastSizeClass) {
             [((id<MyGridNode>)self.lastSizeClass) showBorderline:NO];
         }
-        self.lastSizeClass = (MyGridLayoutTraits *)layoutTraits;
+        self.lastSizeClass = layoutTraits;
     }
 
     //设置根格子的rect为布局视图的大小。
@@ -660,7 +572,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
     //构造出子视图列表。
     NSMutableArray *subviews = [NSMutableArray arrayWithCapacity:context->subviewEngines.count];
     for (MyLayoutEngine *subviewEngine in context->subviewEngines) {
-        [subviews addObject:subviewEngine.currentSizeClass.view];
+        [subviews addObject:subviewEngine.currentTraits.view];
     }
 
     //遍历尺寸
@@ -686,9 +598,9 @@ NSString *const vMyGridGravityHeightFill = @"height";
         NSInteger viewGroupIndex = viewGroupIndexNumber.integerValue;
         for (NSInteger i = viewGroupIndex; i < viewGroupArray.count; i++) {
             MyViewGroupAndActionData *va = viewGroupArray[i];
-            for (UIView *sbv in va.viewGroup) {
-                if (sbv != (UIView *)[NSNull null]) {
-                    sbv.myEngine.frame = CGRectZero;
+            for (UIView *subview in va.viewGroup) {
+                if (subview != (UIView *)[NSNull null]) {
+                    subview.myEngine.frame = CGRectZero;
 
                     //这里面让所有视图的枚举器也走一遍，解决下面的重复设置的问题。
                     UIView *anyway = enumerator.nextObject;
@@ -699,21 +611,21 @@ NSString *const vMyGridGravityHeightFill = @"height";
     }];
 
     //处理那些剩余没有放入格子的子视图的frame设置为0
-    for (UIView *sbv = enumerator.nextObject; sbv; sbv = enumerator.nextObject) {
-        sbv.myEngine.frame = CGRectZero;
+    for (UIView *subview = enumerator.nextObject; subview; subview = enumerator.nextObject) {
+        subview.myEngine.frame = CGRectZero;
     }
     context->selfSize = selfSize;
     return [self myAdjustLayoutViewSizeWithContext:context];
 }
 
-- (id)createSizeClassInstance {
-    return [MyGridLayoutTraits new];
+- (Class) myTratisClass {
+    return [MyGridLayoutTraitsImpl class];
 }
 
 #pragma mark-- Private Methods
 
 //遍历位置
-- (void)myTraversalGrid:(id<MyGridNode>)grid gridOrigin:(CGPoint)gridOrigin layoutTraits:(MyGridLayoutTraits *)layoutTraits sbvEnumerator:(NSEnumerator<UIView *> *)sbvEnumerator tagViewGroupIndexDict:(NSMutableDictionary *)tagViewGroupIndexDict tagSbvEnumerator:(NSEnumerator<UIView *> *)tagSbvEnumerator withContext:(MyLayoutContext *)context {
+- (void)myTraversalGrid:(id<MyGridNode>)grid gridOrigin:(CGPoint)gridOrigin layoutTraits:(MyGridLayoutTraitsImpl *)layoutTraits sbvEnumerator:(NSEnumerator<UIView *> *)sbvEnumerator tagViewGroupIndexDict:(NSMutableDictionary *)tagViewGroupIndexDict tagSbvEnumerator:(NSEnumerator<UIView *> *)tagSbvEnumerator withContext:(MyLayoutContext *)context {
     //这要优化减少不必要的空数组的建立。。
     NSArray<id<MyGridNode>> *subGrids = nil;
     if (grid.subGridsType != MySubGridsType_Unknown)
@@ -765,18 +677,18 @@ NSString *const vMyGridGravityHeightFill = @"height";
     //处理叶子节点。
     if ((grid.anchor || subGrids.count == 0) && !grid.placeholder) {
         //设置子视图的位置和尺寸。。
-        UIView *sbv = nil;
-        UIView *tagSbv = tagSbvEnumerator.nextObject;
+        UIView *subview = nil;
+        UIView *tagSubview = tagSbvEnumerator.nextObject;
 
-        if (tagSbv != (UIView *)[NSNull null]) {
-            sbv = sbvEnumerator.nextObject;
+        if (tagSubview != (UIView *)[NSNull null]) {
+            subview = sbvEnumerator.nextObject;
         }
-        if (tagSbv != nil && tagSbv != (UIView *)[NSNull null] && tagSbvEnumerator != nil) {
-            sbv = tagSbv;
+        if (tagSubview != nil && tagSubview != (UIView *)[NSNull null] && tagSbvEnumerator != nil) {
+            subview = tagSubview;
         }
-        if (sbv != nil) {
+        if (subview != nil) {
             //调整位置和尺寸。。。
-            MyLayoutEngine *subviewEngine = sbv.myEngine;
+            MyLayoutEngine *subviewEngine = subview.myEngine;
             //取垂直和水平对齐
             MyGravity vertGravity = MYVERTGRAVITY(grid.gravity);
             if (vertGravity == MyGravity_None) {
@@ -786,7 +698,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
             if (horzGravity == MyGravity_None) {
                 horzGravity = MyGravity_Horz_Fill;
             } else {
-                horzGravity = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:horzGravity];
+                horzGravity = [MyViewTraitsImpl convertLeadingTrailingGravityFromLeftRightGravity:horzGravity];
             }
             //如果非叶子栅格设置为anchor则子视图的内容总是填充的
             CGFloat tempPaddingTop = paddingTop;
@@ -804,7 +716,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
             }
             //如果是尺寸为0，并且设置为了anchor的话那么就根据自身
             //如果尺寸是0则因为前面有算出尺寸，所以这里就不进行调整了。
-            if (grid.measure != 0 && [sbv isKindOfClass:[MyBaseLayout class]]) {
+            if (grid.measure != 0 && [subview isKindOfClass:[MyBaseLayout class]]) {
                 context->horzGravity = horzGravity;
                 context->vertGravity = vertGravity;
                 context->selfSize = grid.gridRect.size;
@@ -829,7 +741,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
     if (grid.subGridsType == MySubGridsType_Col) {
         offset = gridOrigin.x + paddingLeading;
 
-        MyGravity horzGravity = [MyViewTraits convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(grid.gravity)];
+        MyGravity horzGravity = [MyViewTraitsImpl convertLeadingTrailingGravityFromLeftRightGravity:MYHORZGRAVITY(grid.gravity)];
         if (horzGravity == MyGravity_Horz_Center || horzGravity == MyGravity_Horz_Trailing) {
             //得出所有子栅格的宽度综合
             CGFloat subGridsWidth = 0;
@@ -838,7 +750,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
             }
 
             if (subGrids.count > 1) {
-                subGridsWidth += grid.subviewSpace * (subGrids.count - 1);
+                subGridsWidth += grid.subviewSpacing * (subGrids.count - 1);
             }
             if (horzGravity == MyGravity_Horz_Center) {
                 offset += (grid.gridRect.size.width - paddingLeading - paddingTrailing - subGridsWidth) / 2;
@@ -859,7 +771,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
             }
 
             if (subGrids.count > 1) {
-                subGridsHeight += grid.subviewSpace * (subGrids.count - 1);
+                subGridsHeight += grid.subviewSpacing * (subGrids.count - 1);
             }
             if (vertGravity == MyGravity_Vert_Center) {
                 offset += (grid.gridRect.size.height - paddingTop - paddingBottom - subGridsHeight) / 2;
@@ -872,16 +784,16 @@ NSString *const vMyGridGravityHeightFill = @"height";
     CGPoint paddingGridOrigin = CGPointMake(gridOrigin.x + paddingLeading, gridOrigin.y + paddingTop);
     for (id<MyGridNode> sbvGrid in subGrids) {
         offset += [sbvGrid updateGridOrigin:paddingGridOrigin superGrid:grid withOffset:offset];
-        offset += grid.subviewSpace;
+        offset += grid.subviewSpacing;
         [self myTraversalGrid:sbvGrid gridOrigin:sbvGrid.gridRect.origin layoutTraits:layoutTraits sbvEnumerator:sbvEnumerator tagViewGroupIndexDict:tagViewGroupIndexDict tagSbvEnumerator:((sbvGrid.tag != 0) ? nil : tagSbvEnumerator) withContext:context];
     }
 
     //如果栅格中的tagSbvEnumerator还有剩余的视图没有地方可填，那么就将尺寸和位置设置为0
     if (grid.tag != 0) {
         //枚举那些剩余的
-        for (UIView *sbv = tagSbvEnumerator.nextObject; sbv; sbv = tagSbvEnumerator.nextObject) {
-            if (sbv != (UIView *)[NSNull null]) {
-                sbv.myEngine.frame = CGRectZero;
+        for (UIView *subview = tagSbvEnumerator.nextObject; subview; subview = tagSbvEnumerator.nextObject) {
+            if (subview != (UIView *)[NSNull null]) {
+                subview.myEngine.frame = CGRectZero;
 
                 //所有子视图枚举器也要移动。
                 UIView *anyway = sbvEnumerator.nextObject;
@@ -923,7 +835,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
  tagViewGroupIndexDict： 记录标签中的视图组索引字典。
  函数返回格子的尺寸值。
  */
-- (CGFloat)myTraversalGrid:(id<MyGridNode>)grid gridSize:(CGSize)gridSize lsc:(MyGridLayoutTraits *)lsc sbs:(NSArray<UIView *> *)sbs pIndex:(NSInteger *)pIndex tagViewGroupIndexDict:(NSMutableDictionary<NSNumber*, NSNumber*> *)tagViewGroupIndexDict tagViewGroup:(NSArray<UIView *> *)tagViewGroup pTagIndex:(NSInteger *)pTagIndex withContext:(MyLayoutContext *)context {
+- (CGFloat)myTraversalGrid:(id<MyGridNode>)grid gridSize:(CGSize)gridSize lsc:(MyGridLayoutTraitsImpl *)lsc sbs:(NSArray<UIView *> *)sbs pIndex:(NSInteger *)pIndex tagViewGroupIndexDict:(NSMutableDictionary<NSNumber*, NSNumber*> *)tagViewGroupIndexDict tagViewGroup:(NSArray<UIView *> *)tagViewGroup pTagIndex:(NSInteger *)pTagIndex withContext:(MyLayoutContext *)context {
     NSArray<id<MyGridNode>> *subGrids = nil;
     if (grid.subGridsType != MySubGridsType_Unknown) {
         subGrids = grid.subGrids;
@@ -949,7 +861,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
     CGFloat fixedMeasure = 0; //固定部分的尺寸
     CGFloat validMeasure = 0; //整体有效的尺寸
     if (subGrids.count > 1) {
-        fixedMeasure += (subGrids.count - 1) * grid.subviewSpace;
+        fixedMeasure += (subGrids.count - 1) * grid.subviewSpacing;
     }
     if (grid.subGridsType == MySubGridsType_Col) {
         fixedMeasure += paddingLeading + paddingTrailing;
@@ -1001,13 +913,13 @@ NSString *const vMyGridGravityHeightFill = @"height";
             if (*pTempIndex < tempSbs.count) {
                 //加这个条件是根栅格如果是叶子栅格的话不处理这种情况。
                 if (grid.superGrid != nil) {
-                    UIView *sbv = tempSbs[*pTempIndex];
-                    if (sbv != (UIView *)[NSNull null]) {
+                    UIView *subview = tempSbs[*pTempIndex];
+                    if (subview != (UIView *)[NSNull null]) {
                         //叶子节点
                         if (!grid.anchor || (grid.measure == 0 && grid.anchor)) {
-                            MyLayoutEngine *subviewEngine = sbv.myEngine;
-                            MyViewTraits *subviewTraits = subviewEngine.currentSizeClass;
-                            subviewEngine.frame = sbv.bounds;
+                            MyLayoutEngine *subviewEngine = subview.myEngine;
+                            MyViewTraitsImpl *subviewTraits = subviewEngine.currentTraits;
+                            subviewEngine.frame = subview.bounds;
 
                             //如果子视图不设置任何约束要进行特殊处理。
                             if (subviewTraits.widthSizeInner.val == nil && subviewTraits.heightSizeInner.val == nil) {
@@ -1017,7 +929,7 @@ NSString *const vMyGridGravityHeightFill = @"height";
                                 } else {
                                     size.height = gridSize.height - paddingTop - paddingBottom;
                                 }
-                                size = [sbv sizeThatFits:size];
+                                size = [subview sizeThatFits:size];
                                 subviewEngine.width = size.width;
                                 subviewEngine.height = size.height;
                                 

@@ -147,7 +147,7 @@ static CGFloat sTagWidth = 70;
     MyLinearLayout *contentLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     contentLayout.backgroundColor = [CFTool color:0];
     contentLayout.gravity = MyGravity_Horz_Fill;
-    contentLayout.subviewVSpace = 10;
+    contentLayout.subviewVSpacing = 10;
     contentLayout.padding = UIEdgeInsetsMake(10, 0, 10, 0);
     [rootLayout addSubview:contentLayout];
     self.contentLayout = contentLayout;
@@ -186,8 +186,8 @@ static CGFloat sTagWidth = 70;
         floatLayout.backgroundColor = [UIColor whiteColor];
         floatLayout.padding = UIEdgeInsetsMake(20, 10, 20, 10);
         floatLayout.myHeight = MyLayoutSize.wrap;
-        floatLayout.subviewHSpace = 30; //设置浮动布局里面子视图之间的水平间距。
-        floatLayout.subviewVSpace = 10; //设置浮动布局里面子视图之间的垂直间距。
+        floatLayout.subviewHSpacing = 30; //设置浮动布局里面子视图之间的水平间距。
+        floatLayout.subviewVSpacing = 10; //设置浮动布局里面子视图之间的垂直间距。
         [contentLayout addSubview:floatLayout];
         
         //添加标题文本。
@@ -210,9 +210,9 @@ static CGFloat sTagWidth = 70;
             {
                 UIView *sectionView = [self createSectionView:sectionTitle image:sectionDict[@"sectionImage"]];
                 //宽度是布局视图宽度的1/4，因为视图之间是有间距的，所以这里每个视图的宽度都要再减去3/4的间距值。
-                sectionView.widthSize.equalTo(floatLayout.widthSize).multiply(1.0 / 4.0).add(-3.0 / 4.0 *floatLayout.subviewHSpace);
+                sectionView.widthSize.equalTo(floatLayout.widthSize).multiply(1.0 / 4.0).add(-3.0 / 4.0 *floatLayout.subviewHSpacing);
                 //高度是标签的2倍，但因为中间还包括了一个垂直间距的高度，所以这里要加上垂直间距的值。
-                sectionView.heightSize.equalTo(@(sTagHeight * 2)).add(floatLayout.subviewVSpace);
+                sectionView.heightSize.equalTo(@(sTagHeight * 2)).add(floatLayout.subviewVSpacing);
                 sectionView.clearFloat = YES;  //因为每个section总是新的一行开始。所以这里要把clearFloat设置为YES。
                 [floatLayout addSubview:sectionView];
                 
@@ -233,7 +233,7 @@ static CGFloat sTagWidth = 70;
             {
                 UIView *tagView = [self createTagView:tagstr];
                 //宽度是布局视图宽度的1/4，因为视图之间是有间距的，所以这里每个视图的宽度都要再减去3/4的间距值。
-                tagView.widthSize.equalTo(floatLayout.widthSize).multiply(1.0 / 4.0).add(-3.0 / 4.0 * floatLayout.subviewHSpace);
+                tagView.widthSize.equalTo(floatLayout.widthSize).multiply(1.0 / 4.0).add(-3.0 / 4.0 * floatLayout.subviewHSpacing);
                 //高度是固定的40
                 tagView.heightSize.equalTo(@(sTagHeight));
                 [floatLayout addSubview:tagView];
@@ -266,14 +266,14 @@ static CGFloat sTagWidth = 70;
         floatLayout.backgroundColor = [UIColor whiteColor];
         floatLayout.padding = UIEdgeInsetsMake(20, 5, 20, 5);
         floatLayout.myHeight = MyLayoutSize.wrap;
-        floatLayout.subviewVSpace = 10; //设置浮动布局里面子视图之间的垂直间距。
-        [floatLayout setSubviewsSize:sTagWidth minSpace:8 maxSpace:CGFLOAT_MAX];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为70，最小的间距为8.
+        floatLayout.subviewVSpacing = 10; //设置浮动布局里面子视图之间的垂直间距。
+        [floatLayout setSubviewsSize:sTagWidth minSpacing:8 maxSpacing:CGFLOAT_MAX];  //这里面水平间距用浮动间距，浮动间距设置为子视图固定宽度为70，最小的间距为8.
         [contentLayout addSubview:floatLayout];
         
         //在学习DEMO时您可以尝试着把下面两句代码解除注释！然后看看横竖屏的区别，这里面用到了SIZECLASS。表示横屏时的最小间距是不一样的。
         //当然如果您要改变子视图的尺寸的话，则要将下面的子视图也要实现对SIZECLASS的支持！！！
-        //  [floatLayout fetchLayoutSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
-        //  [floatLayout setSubviewFloatMargin:sTagWidth minMargin:40 maxSpace:CGFLOAT_MAX inSizeClass:MySizeClass_Landscape];
+        //  [floatLayout fetchLayoutTraitsInSizeClass:MySizeClass_Landscape copyFrom:MySizeClass_wAny | MySizeClass_hAny];
+        //  [floatLayout setSubviewsSize:sTagWidth minSpacing:40 maxSpacing:CGFLOAT_MAX inSizeClass:MySizeClass_Landscape];
         
         //添加标题文本。
         UILabel *titleLabel = [UILabel new];
@@ -295,7 +295,7 @@ static CGFloat sTagWidth = 70;
             {
                 UIView *sectionView = [self createSectionView:sectionTitle image:sectionDict[@"sectionImage"]];
                 sectionView.widthSize.equalTo(@(sTagWidth)); //固定宽度
-                sectionView.heightSize.equalTo(@(sTagHeight * 2)).add(floatLayout.subviewVSpace); //高度是标签的2倍，但因为中间还包括了一个垂直间距的高度，所以这里要加上垂直间距的值。
+                sectionView.heightSize.equalTo(@(sTagHeight * 2)).add(floatLayout.subviewVSpacing); //高度是标签的2倍，但因为中间还包括了一个垂直间距的高度，所以这里要加上垂直间距的值。
 
                 sectionView.clearFloat = YES;  //因为每个section总是新的一行开始。所以这里要把clearFloat设置为YES。
                 [floatLayout addSubview:sectionView];
@@ -337,13 +337,13 @@ static CGFloat sTagWidth = 70;
 {
     MyFloatLayout *actionLayout = [MyFloatLayout floatLayoutWithOrientation:MyOrientation_Vert];
     actionLayout.padding = UIEdgeInsetsMake(5, 5, 5, 5);
-    actionLayout.subviewHSpace = 5;
+    actionLayout.subviewHSpacing = 5;
     actionLayout.myHeight = MyLayoutSize.wrap;
     actionLayout.bottomBorderline = [[MyBorderline alloc] initWithColor:[UIColor blackColor]];
     
     
-    NSArray *actions = @[NSLocalizedString(@"flexed width, fixed space", @""),
-                         NSLocalizedString(@"fixed width, flexed space", @"")
+    NSArray *actions = @[NSLocalizedString(@"flexed width, fixed spacing", @""),
+                         NSLocalizedString(@"fixed width, flexed spacing", @"")
                          ];
     for (NSInteger  i = 0; i < actions.count; i++)
     {
@@ -420,8 +420,10 @@ static CGFloat sTagWidth = 70;
     NSInteger tagIndex = sender.tag % 1000;
     
     NSString *message = [NSString stringWithFormat:@"you have select:\npartIndex:%ld\nsectionIndex:%ld\ntagIndex:%ld", (long)partIndex, (long)sectionIndex, (long)tagIndex];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 
 }
 
@@ -431,8 +433,10 @@ static CGFloat sTagWidth = 70;
     NSInteger sectionIndex = sender.tag % 1000;
     
     NSString *message = [NSString stringWithFormat:@"You have select:\npartIndex:%ld\nsectionIndex:%ld", (long)partIndex, (long)sectionIndex];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 
 }
 

@@ -109,8 +109,7 @@
     UIScrollView *scrollview = [[UIScrollView alloc] init];
     scrollview.backgroundColor = [UIColor blueColor];
     scrollview.myHorzMargin = 0;
-    scrollview.wrapContentHeight = YES;
-    scrollview.heightSize.max(400).min(280);
+    scrollview.heightSize.equalTo(@(MyLayoutSize.wrap)).max(400).min(280);
     [rootLayout addSubview:scrollview];
     
     // 内容C视图
@@ -137,8 +136,8 @@
     .flex_wrap(MyFlexWrap_Wrap)
     .align_content(MyFlexGravity_Center)
     .align_items(MyFlexGravity_Flex_End)
-    .vert_space(10)
-    .horz_space(10)
+    .vert_spacing(10)
+    .horz_spacing(10)
     .padding(UIEdgeInsetsMake(10, 10, 10, 10))
     .margin_top(50)
     .width(MyLayoutSize.fill)
@@ -186,7 +185,7 @@
     MyRelativeLayout *_rootLayout = [MyRelativeLayout new];
     
     _rootLayout.widthSize.equalTo(self.view.widthSize);
-    _rootLayout.wrapContentHeight = YES;
+    _rootLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     _rootLayout.paddingTop = 15;
     _rootLayout.paddingBottom = 15;
     _rootLayout.backgroundColor = [UIColor whiteColor];
@@ -196,10 +195,9 @@
     
     MyLinearLayout *topLayout = [MyLinearLayout linearLayoutWithOrientation:(MyOrientation_Vert)];
     
-    topLayout.wrapContentWidth = YES;
     topLayout.myHorzMargin = 0;
-    topLayout.wrapContentHeight = YES;
-    topLayout.subviewVSpace = 5;
+    topLayout.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
+    topLayout.subviewVSpacing = 5;
     [_rootLayout addSubview:topLayout];
     
     
@@ -207,7 +205,7 @@
     topLable.text = @"宿州学院-皁阳火车站";
     topLable.myTop = 0;
     topLable.myLeft = 11;
-    topLable.wrapContentSize = YES;
+    topLable.mySize = CGSizeMake(MyLayoutSize.wrap, MyLayoutSize.wrap);
     [topLayout addSubview:topLable];
     
 
@@ -224,7 +222,7 @@
     contentLabel.text = @"途径：蒙城、嘎县、阜阳师范学院、嘎县、阜阳师范学院、嘎县、阜阳师范学院";
     contentLabel.myLeft = 11;
     
-    contentLabel.wrapContentHeight= YES;
+    contentLabel.myHeight = MyLayoutSize.wrap;
     contentLabel.myRight = 27;
     contentLabel.hidden = NO;
     [topLayout addSubview:contentLabel];
@@ -241,7 +239,7 @@
     MyLinearLayout *headerLayout = [MyLinearLayout linearLayoutWithOrientation:(MyOrientation_Horz)];
     headerLayout.topPos.equalTo(rootLayout.topPos);
     headerLayout.leftPos.equalTo(rootLayout.leftPos);
-    headerLayout.wrapContentHeight = YES;
+    headerLayout.heightSize.equalTo(@(MyLayoutSize.wrap));
     [rootLayout addSubview:headerLayout];
     
     UIImageView *headerView = UIImageView.alloc.init;

@@ -33,7 +33,7 @@
                 ⥤
  @endcode
  */
-@interface MyLinearLayout : MyBaseLayout
+@interface MyLinearLayout : MyBaseLayout< id<MyLinearLayoutTraits> > <MyLinearLayoutTraits>
 
 /**
  初始化一个线性布局，并指定子视图排列的方向。如果不明确指定方向则默认是建立一个垂直线性布局。
@@ -104,7 +104,7 @@
  MyLinearLayout *horzLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Horz];
  horzLayout.myHorzMargin = 0;
  horzLayout.myHeight = MyLayoutSize.wrap;
- horzLayout.subviewSpace = 10;  //二者的最小间距不能小于20
+ horzLayout.subviewSpacing = 10;  //二者的最小间距不能小于20
  horzLayout.shrinkType = MySubviewsShrink_Auto;
  
  UILabel *A = [UILabel new];
@@ -123,14 +123,14 @@
  [horzLayout addSubview:B];
  @endcode
  
- 5. MySubviewsShrink_Average | MySubviewsShrink_Space (平均压缩间距）
+ 5. MySubviewsShrink_Average | MySubviewsShrink_Spacing (平均压缩间距）
  这种情况下，我们只会压缩那些具有固定间距的视图:A,D的间距，每个子视图的压缩的值是：剩余的尺寸40 / 固定间距的视图的数量2 = 20。 这样：
  @code
  A的最终topPos = 10 - 20 = -10
  D的最终topPos = 20 - 20 = 0
  @endcode
 
- 6. MySubviewsShrink_Weight | MySubviewsShrink_Space: (按比重压缩间距)
+ 6. MySubviewsShrink_Weight | MySubviewsShrink_Spacing: (按比重压缩间距)
  这种情况下，我们只会压缩那些具有固定间距的视图:A,D的间距，这些总的间距为10+20 = 30. 这样：
  @code
  A的最终topPos = 10 - 40 *(10/30) = -3
@@ -165,10 +165,10 @@
  
  @note 这个方法只对已经加入布局的视图有效，方法调用后加入的子视图无效。
  @param centered 指定是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不留出间距。水平线性布局则是指头部和尾部
- @param space 子视图之间的间距。
+ @param spacing 子视图之间的间距。
  */
-- (void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space;
-- (void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space inSizeClass:(MySizeClass)sizeClass;
+- (void)equalizeSubviews:(BOOL)centered withSpacing:(CGFloat)spacing;
+- (void)equalizeSubviews:(BOOL)centered withSpacing:(CGFloat)spacing inSizeClass:(MySizeClass)sizeClass;
 
 /**
  均分子视图之间的间距，上面方法会均分子视图的尺寸以及间距，而这个方法则子视图的尺寸保持不变而间距自动平均分配，也就是用布局视图的剩余空间来均分间距
@@ -177,24 +177,36 @@
 
  @param centered 参数描述是否所有子视图居中，当居中时对于垂直线性布局来说顶部和底部会保留出间距，而不居中时则顶部和底部不保持间距。水平线性布局则是指头部和尾部
  */
-- (void)equalizeSubviewsSpace:(BOOL)centered;
-- (void)equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+- (void)equalizeSubviewsSpacing:(BOOL)centered;
+- (void)equalizeSubviewsSpacing:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
 
 /**
  在一些应用场景中我们希望子视图的宽度是固定的但间距是浮动的，这样就尽可能在一排中容纳更多的子视图。比如设置每个子视图的宽度固定为80，那么在小屏幕下每排只能放3个，而大屏幕则每排能放4个或者5个子视图。 因此您可以通过如下方法来设置子视图的固定尺寸和最小最大浮动间距。这个方法会根据您当前布局的方向不同而具有不同的意义：
  
- 1.如果您的布局方向是垂直的则设置的是每行内子视图的水平浮动间距，其中的subviewSize指定的是子视图的固定宽度；minSpace指定的是最小的水平间距；maxSpace指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于最大间距maxSpace则会缩小subviewSize的宽度值。
+ 1.如果您的布局方向是垂直的则设置的是每行内子视图的水平浮动间距，其中的subviewSize指定的是子视图的固定宽度；minSpacing指定的是最小的水平间距；maxSpacing指定的是最大的水平间距，如果指定的subviewSize计算出的间距大于最大间距maxSpacing则会缩小subviewSize的宽度值。
  
- 2.如果您的布局方向是水平的则设置的是每列内子视图的垂直浮动间距，其中的subviewSize指定的是子视图的固定高度；minSpace指定的是最小的垂直间距；maxSpace指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于最大间距maxSpace则会调整subviewSize的高度值。
+ 2.如果您的布局方向是水平的则设置的是每列内子视图的垂直浮动间距，其中的subviewSize指定的是子视图的固定高度；minSpacing指定的是最小的垂直间距；maxSpacing指定的是最大的垂直间距，如果指定的subviewSize计算出的间距大于最大间距maxSpacing则会调整subviewSize的高度值。
  
  @note 如果您不想使用浮动间距则请将subviewSize设置为0就可以了。
  
- @param subviewSize 指定子视图的尺寸。
- @param minSpace 指定子视图之间的最小间距
- @param maxSpace 指定子视图之间的最大间距
+ @param subviewsSize 指定子视图的尺寸。
+ @param minSpacing 指定子视图之间的最小间距
+ @param maxSpacing 指定子视图之间的最大间距
  @param centered 指定是否所有子视图居中
  */
-- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered;
-- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+- (void)setSubviewsSize:(CGFloat)subviewsSize minSpacing:(CGFloat)minSpacing maxSpacing:(CGFloat)maxSpacing centered:(BOOL)centered;
+- (void)setSubviewsSize:(CGFloat)subviewsSize minSpacing:(CGFloat)minSpacing maxSpacing:(CGFloat)maxSpacing centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass;
+
+@end
+
+
+@interface MyLinearLayout (MyDeprecated)
+
+- (void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space MYDEPRECATED("use equalizeSubviews:withSpacing: instead");
+- (void)equalizeSubviews:(BOOL)centered withSpace:(CGFloat)space inSizeClass:(MySizeClass)sizeClass MYDEPRECATED("use equalizeSubviews:withSpacing:inSizeClass: instead");
+- (void)equalizeSubviewsSpace:(BOOL)centered MYDEPRECATED("use equalizeSubviewsSpacing: instead");
+- (void)equalizeSubviewsSpace:(BOOL)centered inSizeClass:(MySizeClass)sizeClass MYDEPRECATED("use equalizeSubviewsSpacing:inSizeClass: instead");
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered MYDEPRECATED("use setSubviewsSize:minSpacing:maxSpacing:centered: instead");
+- (void)setSubviewsSize:(CGFloat)subviewSize minSpace:(CGFloat)minSpace maxSpace:(CGFloat)maxSpace centered:(BOOL)centered inSizeClass:(MySizeClass)sizeClass MYDEPRECATED("use setSubviewsSize:minSpacing:maxSpacing:centered:inSizeClass: instead");
 
 @end

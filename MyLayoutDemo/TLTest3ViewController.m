@@ -30,14 +30,7 @@
     UIScrollView *scrollView = [UIScrollView new];
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
-    
-    if (@available(iOS 11.0, *)) {
-    } else {
-        // Fallback on earlier versions
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-   
-    
+
     //建立一个垂直表格
     MyTableLayout *tableLayout = [MyTableLayout tableLayoutWithOrientation:MyOrientation_Vert];
     //这里设置表格的左边和右边以及顶部的边距都是在父视图的安全区域外再缩进10个点的位置。你会注意到这里面定义了一个特殊的位置MyLayoutPos.safeAreaMargin。
@@ -138,7 +131,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Space" style:UIBarButtonItemStylePlain target:self action:@selector(handleSpace:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Spacing" style:UIBarButtonItemStylePlain target:self action:@selector(handleSpacing:)];
     
 }
 
@@ -172,19 +165,21 @@
 -(void)handleCellTap:(MyBaseLayout*)sender
 {
     NSString *message = [NSString stringWithFormat:@"您单击了:%@", ((UILabel*)sender.subviews.firstObject).text];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
-
+    
+    UIAlertController *alertVC =  [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
--(void)handleSpace:(id)sender
+-(void)handleSpacing:(id)sender
 {
-    if (self.tableLayout.subviewVSpace == 0)
-        self.tableLayout.subviewVSpace = 5;
-    else if (self.tableLayout.subviewHSpace == 0)
-        self.tableLayout.subviewHSpace = 5;
+    if (self.tableLayout.subviewVSpacing == 0)
+        self.tableLayout.subviewVSpacing = 5;
+    else if (self.tableLayout.subviewHSpacing == 0)
+        self.tableLayout.subviewHSpacing = 5;
     else
-        self.tableLayout.subviewVSpace = self.tableLayout.subviewHSpace = 0;
+        self.tableLayout.subviewVSpacing = self.tableLayout.subviewHSpacing = 0;
     
     [self.tableLayout layoutAnimationWithDuration:0.3];
     

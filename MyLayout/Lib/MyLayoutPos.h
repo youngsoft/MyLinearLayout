@@ -19,7 +19,7 @@
  下面的表格描述了各种布局下的子视图的布局位置对象的equalTo方法可以设置的值。
  为了表示方便我们把：线性布局简写为L、相对布局简写为R、表格布局简写为T、框架布局简写为FR、流式布局简写为FL、浮动布局简写为FO、全部简写为ALL，不支持为-
  +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
- |method\val |NSNumber|NSArray<MyLayoutPos*>|leftPos|topPos|rightPos|bottomPos|centerXPos|centerYPos|UILayoutSupport|UIView|
+ |method\val |NSNumber|NSArray<MyLayoutPos*>|leftPos|topPos|rightPos|bottomPos|centerXPos|centerYPos|UIView|
  +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
  | topPos    | ALL    | -                   | -     | R    |  -     | R       | -        | R        | L/R/FR/FO/FL  |ALL   |
  +-----------+--------+---------------------+-------+------+--------+---------+----------+----------+---------------+------+
@@ -46,7 +46,7 @@
  1.NSNumber: the layout position is equal to a number. e.g. leftPos.equalTo (@100) indicates that the value of the left boundary is 100.
  2.MyLayoutPos: the layout position depends on aother layout position. e.g. A.leftPos.equalTo(B.rightPos) indicates that A is on the right side of B.
  3.NSArray<MyLayoutPos*>: all views in the array and View are centered. e.g. A.centerXPos.equalTo(@[B.centerXPos, C.centerXPos]) indicates that A,B,C are overall horizontal centered.
- 4.id<UILayoutSupport>: you can only set topPos equalTo UIViewController‘s topLayoutGuide or bottomPos equalTo UIViewController‘s bottomLayoutGuide， then the view will always below the nav。
+ 4.id<UILayoutSupport>: is not be supported in v1.9.20 please use @(MyLayoutPos.safeAreaMargin) instead !!!
  5.UIView: the layout position is depends view's relevant position.
  6.nil: the layout position value is clear.
  
@@ -75,6 +75,9 @@
  @endcode
  */
 @interface MyLayoutPos : NSObject <NSCopying>
+
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
 
 /**
  特殊的位置。只用在布局视图和非布局父视图之间的位置约束和没有导航条时的布局视图内子视图的padding设置上。
@@ -135,7 +138,7 @@
  
  3. NSArray<MyLayoutPos*>表示位置和数组里面的其他位置整体居中。
  
- 4. id<UILayoutSupport> 对于iOS7以后视图控制器会根据导航条是否半透明而确定是占据整个屏幕。因此当topPos,bottomPos设置为视图控制器的topLayoutGuide或者bottomLayoutGuide时这样子视图就会偏移出导航条的高度，而如果没有导航条时则不会偏移出导航条的高度。注意的是这个值不能设置在非布局父视图的布局视图中。
+ 4. id<UILayoutSupport> 本类型值不再被支持！！ 请用 @(MyLayoutPos.safeAreaMargin) 代替。
  
  5. UIView表示位置依赖指定视图的对应位置。
  

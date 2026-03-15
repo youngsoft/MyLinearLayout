@@ -187,8 +187,8 @@
     return self;
 }
 
-- (MyMaker *)space {
-    return [self addMethod:@"subviewSpace"];
+- (MyMaker *)spacing {
+    return [self addMethod:@"subviewSpacing"];
 }
 
 - (MyMaker *)shrinkType {
@@ -207,17 +207,30 @@
     return [self addMethod:@"arrangedGravity"];
 }
 
-- (MyMaker *)vertSpace {
-    return [self addMethod:@"subviewVSpace"];
+- (MyMaker *)vertSpacing {
+    return [self addMethod:@"subviewVSpacing"];
 }
 
-- (MyMaker *)horzSpace {
-    return [self addMethod:@"subviewHSpace"];
+- (MyMaker *)horzSpacing {
+    return [self addMethod:@"subviewHSpacing"];
 }
 
 - (MyMaker *)pagedCount {
     return [self addMethod:@"pagedCount"];
 }
+
+- (MyMaker *)maxLines {
+    return [self addMethod:@"maxLines"];
+}
+
+- (MyMaker *)lastlineGravityPolicy {
+    return [self addMethod:@"lastlineGravityPolicy"];
+}
+
+- (MyMaker *)isFlex {
+    return [self addMethod:@"isFlex"];
+}
+
 
 - (MyMaker * (^)(id val))equalTo {
     _clear = YES;
@@ -334,25 +347,6 @@
 }
 
 #pragma mark -- Dreprecated methods
-//
-//- (MyMaker *)topPadding {
-//    return self.paddingTop;
-//}
-//- (MyMaker *)leftPadding {
-//    return self.paddingLeft;
-//}
-//- (MyMaker *)bottomPadding {
-//    return self.paddingBottom;
-//}
-//- (MyMaker *)rightPadding {
-//    return self.paddingRight;
-//}
-//- (MyMaker *)leadingPadding {
-//    return self.paddingLeading;
-//}
-//- (MyMaker *)trailingPadding {
-//    return self.paddingTrailing;
-//}
 
 @end
 

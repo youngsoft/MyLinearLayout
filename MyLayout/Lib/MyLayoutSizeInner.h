@@ -12,6 +12,8 @@
 //尺寸对象内部定义
 @interface MyLayoutSize ()
 
+- (instancetype)initWithView:(UIView *)view anchorType:(MyLayoutAnchorType)anchorType;
+
 @property (nonatomic, weak) UIView *view;
 @property (nonatomic, assign) MyLayoutAnchorType anchorType;
 

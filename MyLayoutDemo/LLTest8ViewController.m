@@ -61,13 +61,8 @@
     scrollView.delegate = self;
     scrollView.backgroundColor = [UIColor whiteColor];
     self.view = scrollView;
-    
-    if (@available(iOS 11.0, *)) {
-        scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    } else {
-        // Fallback on earlier versions
-    }
-    
+    scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+   
     
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.insetsPaddingFromSafeArea = ~UIRectEdgeBottom;  //为了防止拉到底部时iPhoneX设备的抖动发生，不能将底部安全区叠加到padding中去。
@@ -161,8 +156,8 @@
             if (!dockViewInfo.dockView.useFrame) {
                 //创建一个占位视图，占位视图的布局特性和将要停靠的视图的布局特性以及位置要保持一致。同时需要把要停靠的视图放到最顶端的层级，这样剩余视图在滑动时就不会覆盖停靠的视图。
                 UIView *placeholderView = [UIView new];
-                id traits = [dockViewInfo.dockView fetchLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny];
-                [placeholderView setLayoutSizeClass:MySizeClass_wAny | MySizeClass_hAny withValue:[traits copy]];
+                id<MyViewTraits> traits = [dockViewInfo.dockView fetchLayoutTraitsInSizeClass:MySizeClass_wAny | MySizeClass_hAny];
+                [placeholderView setLayoutTraits:[traits copy] inSizeClass:MySizeClass_wAny | MySizeClass_hAny];  //这里必须要执行一次copy否则两个视图会共用一个布局特性。
                 [self.rootLayout insertSubview:placeholderView belowSubview:dockViewInfo.dockView];
                 [self.rootLayout bringSubviewToFront:dockViewInfo.dockView];
                 dockViewInfo.dockView.useFrame = YES;

@@ -49,7 +49,7 @@
 
     MyLinearLayout *rootLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     rootLayout.gravity = MyGravity_Horz_Fill;
-    rootLayout.subviewSpace = 20;
+    rootLayout.subviewSpacing = 20;
     rootLayout.backgroundColor = [UIColor whiteColor];
     self.view = rootLayout;
     
@@ -64,7 +64,7 @@
     flowLayout1.heightSize.equalTo(@(MyLayoutSize.wrap));
     flowLayout1.widthSize.equalTo(@(MyLayoutSize.wrap)).lBound(scrollView1.widthSize, 0, 1);  //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
     flowLayout1.autoArrange = YES;  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
-    flowLayout1.subviewSpace = 10;
+    flowLayout1.subviewSpacing = 10;
     flowLayout1.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [scrollView1 addSubview:flowLayout1];
     [self createItems:titles inFlowLayout:flowLayout1];
@@ -79,7 +79,7 @@
     flowLayout2.backgroundColor = [CFTool color:6];
     flowLayout2.heightSize.equalTo(@(MyLayoutSize.wrap));
     flowLayout2.widthSize.equalTo(@(MyLayoutSize.wrap)).lBound(scrollView2.widthSize, 0, 1);  //虽然尺寸是包裹的，但是最小宽度不能小于父视图的宽度
-    flowLayout2.subviewSpace = 10;
+    flowLayout2.subviewSpacing = 10;
     flowLayout2.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     flowLayout2.arrangedGravity = MyGravity_Horz_Between;  //通过将水平流式布局的arrangeGravity属性设置为MyGravity_Horz_Between，我们将得到里面的子视图在每行都会被紧凑的排列。大家可以看到和上面的将autoArrange设置为YES的不同的效果。
     [scrollView2 addSubview:flowLayout2];
@@ -97,7 +97,7 @@
     flowLayout3.myHorzMargin = 0;
     flowLayout3.gravity = MyGravity_Horz_Fill; //均分宽度。
     flowLayout3.autoArrange = YES;  //通过将流式布局的autoArrange属性设置为YES可以实现里面的子视图进行紧凑的自动排列。
-    flowLayout3.subviewSpace = 10;
+    flowLayout3.subviewSpacing = 10;
     flowLayout3.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [scrollView3 addSubview:flowLayout3];
     [self createItems:titles inFlowLayout:flowLayout3];
@@ -114,7 +114,7 @@
     flowLayout4.myHorzMargin = 0;
     flowLayout4.gravity = MyGravity_Horz_Fill; //均分宽度。
     flowLayout4.arrangedGravity = MyGravity_Vert_Between;  //通过将垂直流式布局的arrangeGravity属性设置为MyGravity_Vert_Between，我们将得到里面的子视图在每列都会被紧凑的排列。大家可以看到和上面的将autoArrange设置为YES的不同的效果。
-    flowLayout4.subviewSpace = 10;
+    flowLayout4.subviewSpacing = 10;
     flowLayout4.padding = UIEdgeInsetsMake(10, 10, 10, 10);
     [scrollView4 addSubview:flowLayout4];
     [self createItems:titles inFlowLayout:flowLayout4];

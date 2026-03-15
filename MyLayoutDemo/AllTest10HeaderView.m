@@ -57,7 +57,7 @@
     MyLinearLayout *messageLayout = [MyLinearLayout linearLayoutWithOrientation:MyOrientation_Vert];
     messageLayout.weight = 1;
     messageLayout.myLeading = 5;
-    messageLayout.subviewVSpace = 5;
+    messageLayout.subviewVSpacing = 5;
     [_rootLayout addSubview:messageLayout];
     
     _nickNameLabel = [UILabel new];
@@ -77,8 +77,8 @@
     _nineFlowLayout = [[MyFlowLayout alloc] initWithOrientation:MyOrientation_Vert arrangedCount:3];
     _nineFlowLayout.gravity = MyGravity_Horz_Fill;
     _nineFlowLayout.myHorzMargin = 0;
-    _nineFlowLayout.subviewHSpace = 5;
-    _nineFlowLayout.subviewVSpace = 5;
+    _nineFlowLayout.subviewHSpacing = 5;
+    _nineFlowLayout.subviewVSpacing = 5;
     _nineFlowLayout.myHeight = MyLayoutSize.wrap;
     [messageLayout addSubview:_nineFlowLayout];
     
@@ -187,13 +187,9 @@
 //如果您的最低支持是iOS8，那么你可以重载这个方法来动态的评估cell的高度，Autolayout内部是通过这个方法来评估高度的，因此如果用MyLayout实现的话就不需要调用基类的方法，而是调用根布局视图的sizeThatFits来评估获取动态的高度。
 - (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority
 {
-    if (@available(iOS 11.0, *)) {
-        //如果你的界面要支持横屏的话，因为iPhoneX的横屏左右有44的安全区域，所以这里要减去左右的安全区域的值，来作为布局宽度尺寸的评估值。
-        //如果您的界面不需要支持横屏，或者延伸到安全区域外则不需要做这个特殊处理，而直接使用else部分的代码即可。
-        return [self.rootLayout sizeThatFits:CGSizeMake(targetSize.width - self.safeAreaInsets.left - self.safeAreaInsets.right, targetSize.height)];
-    } else {
-        return [self.rootLayout sizeThatFits:targetSize];
-    }
+    //如果你的界面要支持横屏的话，因为iPhoneX的横屏左右有44的安全区域，所以这里要减去左右的安全区域的值，来作为布局宽度尺寸的评估值。
+    //如果您的界面不需要支持横屏，或者延伸到安全区域外则不需要做这个特殊处理，而直接使用else部分的代码即可。
+    return [self.rootLayout sizeThatFits:CGSizeMake(targetSize.width - self.safeAreaInsets.left - self.safeAreaInsets.right, targetSize.height)];
 }
 
 - (NSArray *)nineImageViews {
